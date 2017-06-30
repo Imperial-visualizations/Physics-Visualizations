@@ -3,4 +3,8 @@
 __pycache__/
 *.pyc
 
+# Folders
+initial_package_tests
+
+# Files
 test.py
