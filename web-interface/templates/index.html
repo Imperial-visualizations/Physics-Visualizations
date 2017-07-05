@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block main %}
+    <table style = "width:100%">
+        <tr>
+            <th>Symbol</th>
+            <th>Name</th>
+            <th>Shares</th>
+            <th>Current Price</th>
+            <th>Total</th>
+        </tr>
+        
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.symbol }}</td>
+            <td>{{ transaction.name }}</td>
+            <td>{{ transaction.shares }} </td>
+            <td>{{ transaction.current_price }}</td>
+            <td>{{ transaction.total_price }}</td>
+        </tr>
+        
+        {% endfor %}
+        
+        <tr>
+           <td>-</td> 
+           <td>-</td>
+           <td>-</td>
+           <td>-</td>
+           <td>-</td>
+        </tr>
+        
+        <tr>
+           <td><b>CASH</b></td> 
+           <td></td>
+           <td></td>
+           <td></td>
+           <td>{{ user.cash }}</td>
+        </tr>
+        
+        <tr>
+           <td><b>EQUITY</b></td> 
+           <td></td>
+           <td></td>
+           <td></td>
+           <td>{{ equity }}</td>
+        </tr>
+    </table> 
+{% endblock %}
