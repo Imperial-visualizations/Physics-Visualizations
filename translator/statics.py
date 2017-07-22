@@ -5,8 +5,7 @@ Created to generate HTML pages with embedded PlotlyJS using Python commands defi
 This file deals with creating static plots, to which interactive features can be added using other files in the library.
 """
 
-from translate.helpers import jsify, escape, var, Data, Document
-from translate.interaction import Animate
+from translator.helpers import jsify, escape, var, Data, Document
 
 
 class Graph:
@@ -86,12 +85,12 @@ class Graph:
 
         # Setting raw data (lists) to variable names in JS.
         for variable, value in self.data.items():
-            self.script += "var {variable} = {value}; \n".format(variable=var(variable), value=value)
+            self.script += "var {variable} = {value}; \n".format(variable=var(variable, True), value=value)
 
         self.script += "\n"                                     # Beautifying.
 
         for name, obj in self.instance_objects.items():         # Writing JS objects (that will be plotted)
-            obj = var(obj)                                      # Escaping all references to variables
+            obj = var(obj, decode=True)                         # Escaping all references to variables
 
             self.script += obj
             plots += name[1:-1] + ", "
@@ -154,7 +153,7 @@ class Surface(Graph):
             raise TypeError("Expected list of length >= 1, not {type} of length {length}"
                             .format(type=str(type(z)), length=len(z)))
 
-        name_z = "z" + str(len(self.data))
+        name_z = var("z" + str(len(self.data)))
         self.data[name_z] = z
         self.finish_plot(z=var(z), **kwargs)
         return
@@ -198,16 +197,16 @@ class Scatter3D(Graph):
                                     len_x=str(len(x)), len_y=str(len(y)), len_z=str(len(z))))
 
         # Assigning names for JS variables when written to JS script.
-        name_x = "x" + str(len(self.data))
-        name_y = "y" + str(len(self.data))
-        name_z = "z" + str(len(self.data))
+        name_x = var("x" + str(len(self.data)))
+        name_y = var("y" + str(len(self.data)))
+        name_z = var("z" + str(len(self.data)))
 
         # Adding data to instance dictionary.
         self.data[name_x] = x
         self.data[name_y] = y
         self.data[name_z] = z
 
-        self.finish_plot(x=var(name_x), y=var(name_y), z=var(name_z), mode=mode, **kwargs)
+        self.finish_plot(x=name_x, y=name_y, z=name_z, mode=mode, **kwargs)
         return
 
 
@@ -264,37 +263,3 @@ class Scatter2D(Graph):
 
 class Circle(Graph):
     pass
-
-dat = [[8.83, 8.89, 8.81, 8.87, 8.9, 8.87],
-    [8.89, 8.94, 8.85, 8.94, 8.96, 8.92],
-    [8.84, 8.9, 8.82, 8.92, 8.93, 8.91],
-    [8.79, 8.85, 8.79, 8.9, 8.94, 8.92],
-    [8.79, 8.88, 8.81, 8.9, 8.95, 8.92]]
-
-dat2 = [[8.83, 9.89, 10.81, 5.87, 2.9, 3.87],
-    [4.89, 4.94, 2.85, 6.94, 5.96, 3.92],
-    [5.84, 8.9, 8.82, 8.92, 8.93, 3.91],
-    [2.79, 8.85, 8.79, 8.9, 8.94, 8.92]]
-
-dat3 = [[5.84, 8.9, 8.82, 8.92, 8.93, 3.91],
-        [8.79, 8.85, 8.79, 8.9, 8.94, 8.92],
-        [8.79, 8.88, 8.81, 8.9, 8.95, 8.92]]
-
-
-# line = Line2D(div_id="test_surface_plot", x=dat[1], y=dat3[2], showlegend=True)
-# line.plot(x=dat[3], y=dat2[3], showlegend=False)
-# line.show()
-# line.create_document("test2.html")
-# print(line.script)
-# scatter = Scatter3D(x=dat[3], y=dat2[3], z=dat3[2], marker_size=2, showlegend=True)
-# scatter.plot(x=dat[0], y=dat2[1], z=dat3[1], marker_size=4, marker_color="red", type="scatter3d", showlegend=True)
-# graph = scatter.show(title="Test 3")
-# document = Document(div_id="scatter3d_plot", js_graph=graph)
-# document.create("test3.html")
-# print(scatter.script)
-
-line = Scatter2D(x=dat[:4], y=dat2, div_id="scatter", mode="lines+markers",
-                 marker_size=10, showlegend=True)
-line.plot(x=dat[1:5], y=dat2, showlegend=True, marker_size=10)
-line.show(xaxis_range=[0, 10], yaxis_range=[0, 10])
-print(line.script)

@@ -3,20 +3,23 @@ Helper functions to create Javascript files from Python commands.
 """
 
 
-def var(s):
+def var(s, decode=False):
     """
     Puts special character "~" around strings that are to be variable names in JS.
     When called again, removes special character and quotes to indicate that the string is a variable, NOT an object.
     :param s: "str" or "~str~" or "\"~str~\"".
+    :param decode:
     :return: "~str~" or str.
     """
-    if s.find("~") == -1:
+    if s.find("~") == -1 and not decode:
         s = "~" + s + "~"
+        return s
 
-    else:
+    elif s.find("~") != -1 and decode:
         s = s.replace("~\"", "")
         s = s.replace("\"~", "")
         s = s.replace("~", "")
+        return s
 
     return s
 
