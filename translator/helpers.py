@@ -3,20 +3,23 @@ Helper functions to create Javascript files from Python commands.
 """
 
 
-def var(s):
+def var(s, decode=False):
     """
     Puts special character "~" around strings that are to be variable names in JS.
     When called again, removes special character and quotes to indicate that the string is a variable, NOT an object.
     :param s: "str" or "~str~" or "\"~str~\"".
+    :param decode:
     :return: "~str~" or str.
     """
-    if s.find("~") == -1:
+    if s.find("~") == -1 and not decode:
         s = "~" + s + "~"
+        return s
 
-    else:
+    elif s.find("~") != -1 and decode:
         s = s.replace("~\"", "")
         s = s.replace("\"~", "")
         s = s.replace("~", "")
+        return s
 
     return s
 
@@ -259,7 +262,7 @@ class Document:
     source = Tag("script", src="https://cdn.plot.ly/plotly-latest.min.js")  # Defining location of JS source.
     head = Tag("head", value=source.html)                                   # Putting script source in head of HTML.
 
-    def __init__(self, div_id=None, js_graph=None, width=480, height=400):
+    def __init__(self, div_id=None, js_script=None, width=480, height=400):
         """
         :param div_id: ID of div in page where plot will be placed.
         :param js_graph: Graph drawn in JS.
@@ -274,11 +277,11 @@ class Document:
 
         self.page += self.language.open_tag + "\n" + self.head.html + "\n" + self.graph_loc.open_tag + "\n"
 
-        if div_id and js_graph:
-            self.add(div_id, js_graph)
+        if div_id and js_script:
+            self.add(div_id, js_script)
         return
 
-    def add(self, div_id, js_graph):
+    def add(self, div_id, js_script):
         """
         Adding div and corresponding PlotlyJS graph to HTML page.
         :return:
@@ -286,7 +289,7 @@ class Document:
         div_id = escape(div_id)                                     # Div on HTML page where Plotly JS graph is located.
 
         self.page += Tag("div", id=div_id, style=self.div_style).html + "\n"    # Writing div
-        self.page += Tag("script", value=js_graph).html + "\n"                  # Writing graph
+        self.page += Tag("script", value=js_script).html + "\n"                  # Writing graph
         return
 
     def create(self, filename):
