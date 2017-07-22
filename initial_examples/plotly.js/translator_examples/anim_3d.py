@@ -2,7 +2,7 @@
 Example to create moving 3D sine and cosine spiral.
 """
 
-from translator.statics import *
+from translator.statics import Scatter3D, Document
 from translator.interaction import Animate
 import numpy as np
 

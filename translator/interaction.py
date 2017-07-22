@@ -46,7 +46,7 @@ class Animate:
             else:
                 self.variables[key] = [var(variable)]
 
-            self.script = self.script.replace(key + ": " + variable, variable + "[0]")
+            self.script = self.script.replace(key + ": " + variable, key + ": " + variable + "[0]")
 
             # Ensuring data length does not vary for x, y and/or z coords.
             try:
@@ -70,7 +70,7 @@ class Animate:
 
         variables = ""
         for key, value in self.variables.items():
-            variables += "{key}: {value}, ".format(key=key, value=var(value[0], True))
+            variables += "{key}: {value}[j], ".format(key=key, value=var(value[0], True))
         variables = variables[:-2]
 
         # Writing JS to create animation.

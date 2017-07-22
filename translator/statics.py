@@ -100,7 +100,6 @@ class Graph:
 
         self.script += self.layout
         self.script += "Plotly.newPlot({div_name}, {plots}, layout);".format(div_name=escape(self.div_id), plots=plots)
-
         return self.script
 
     def make_layout(self, **kwargs):

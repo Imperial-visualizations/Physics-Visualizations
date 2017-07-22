@@ -2,7 +2,7 @@
 Example to create moving sine wave.
 """
 
-from translator.statics import *
+from translator.statics import Scatter2D, Document
 from translator.interaction import Animate
 import numpy as np
 
