@@ -1,0 +1,20 @@
+<html>
+<head><script src=https://cdn.plot.ly/plotly-latest.min.js></script></head>
+<body>
+<div style="width:480px; height:400px;" id="scatter3d_plot"></div>
+<script>
+var y3 = [5.84, 8.9, 8.82, 8.92, 8.93, 3.91];
+var z3 = [8.83, 8.89, 8.81, 8.87, 8.9, 8.87];
+var x3 = [2.79, 8.85, 8.79, 8.9, 8.94, 8.92];
+var x0 = [8.83, 8.89, 8.81, 8.87, 8.9, 8.87];
+var y0 = [2.79, 8.85, 8.79, 8.9, 8.94, 8.92];
+var z0 = [5.84, 8.9, 8.82, 8.92, 8.93, 3.91];
+
+var scatter3d1 = {z: z3, mode: "lines+markers", marker: {size: 3}, y: y3, type: "scatter3d", x: x3};
+var scatter3d0 = {z: z0, mode: "lines+markers", type: "scatter3d", y: y0, x: x0};
+var layout = {xaxis: {range: [0, 10]}, yaxis: {range: [0, 10]}};
+
+Plotly.newPlot("scatter3d_plot", [scatter3d1, scatter3d0], layout);
+</script>
+</body>
+</html>
