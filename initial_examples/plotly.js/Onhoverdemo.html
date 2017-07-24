@@ -20,7 +20,7 @@ layout = {
      };
     // Import data in json file as "frames" variable (same data structure as initially output in Python)
     var ourRequest = new XMLHttpRequest();
-    ourRequest.open('GET','https://raw.githubusercontent.com/cydcowley/Imperial-Visualizations/master/data_sin.json')
+    ourRequest.open('GET','https://raw.githubusercontent.com/cydcowley/Imperial-Visualizations/master/data_sin.json');
     // what to do when data is loaded
     ourRequest.onload=function(){
       var ourData = JSON.parse(ourRequest.responseText);
@@ -50,7 +50,7 @@ myPlot.on('plotly_hover', function(data){
             console.log(Opacity);
             Plotly.restyle('graph', update, [tn]);
             Opacity[pn]=1.;
-            update = {'marker':{opacity: Opacity, size:16}};
+            update = {marker:{opacity: Opacity, size:16}};
             Plotly.restyle('graph', update, [tn]);
 
 });

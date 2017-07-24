@@ -89,3 +89,59 @@ class Animate:
         self.script += "requestAnimationFrame(update);"                 # Calling animation function for first time.
 
         return self.script
+
+
+class Mouse:
+    def __init__(self, graph, event="hover"):
+        # Sanity check - is the graph of the correct type?
+        if str(graph.__class__.__bases__).find("<class 'translator.statics.Graph'>") == -1:
+            raise TypeError("Object graph is not derived from base class 'Graph', but from {bases}"
+                            .format(bases=str(graph.__class__.__bases__)))
+
+        else:
+            self.graph = graph
+            if event == "hover" or event == "click":
+                self.event = event
+
+            else:
+                raise ValueError("Need events to be type 'hover' or 'click', not {event}".format(event=str(self.event)))
+
+            self.script = graph.script + "\n\n"
+            self.write()
+        return
+
+    def change(self, **kwargs):
+        """
+        Changes value of data at mouse position. New data passed in as keyword arguments.
+        :param kwargs: variable-name=changed-value
+        :return:
+        """
+        # TODO
+        return
+
+    def draw(self, object):
+        """
+        Draws object at current mouse position.
+        :param object:
+        :return:
+        """
+        # TODO
+        return
+
+    def add_data(self):
+        """
+        Adds data at current mouse position.
+        :return:
+        """
+        # TODO
+        return
+
+    def write(self):
+        self.script += "myPlot.on('plotly_{event}', function(data) {{\n\t".format(event=str(self.event))
+
+        return
+
+
+class Button:
+    def __init__(self):
+        return

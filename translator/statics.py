@@ -14,8 +14,6 @@ class Graph:
     def __init__(self, div_id="plot"):
         """
         Sets up HTML
-        :param width: Width of plot (px)
-        :param height: Height of plot (px)
         :param div_id: HTML Id of the div in which graph is placed.
         """
         self.type = escape(type)
@@ -29,48 +27,55 @@ class Graph:
     def __repr__(self):
         return str(self.script)
 
-    def finish_plot(self, name=None, **kwargs):
+    def finish_plot(self, v_name=None, **kwargs):
         """
         Formats objects as JSON, then updates instance and class dictionaries.
-        :param name: Name of JS object.
+        :param v_name: Name of JS object.
         :param kwargs: Attributes of JS object.
         :return:
         """
-        if name:
-            name = str(name)
+        if v_name:
+            v_name = str(v_name)
 
         else:
-            name = str(self.type[1:-1])
+            v_name = str(self.type[1:-1])
 
-        name = "{name}".format(name=name + str(len(self.objects)))
+        v_name = "{v_name}".format(v_name=v_name + str(len(self.objects)))
         data = Data(**kwargs).json                         # Processing keyword arguments and converting to JSON.
-        data_js = jsify(data=data, variable_name=name)     # Making JS data object.
-        name = escape(name)
-        self.objects[name] = str(data_js)                  # Storing current plot's attributes in class' dictionary.
-        self.instance_objects[name] = str(data_js)         # Storing current plot's attributes in instance's dictionary.
+        data_js = jsify(data=data, variable_name=v_name)     # Making JS data object.
+        v_name = escape(v_name)
+        self.objects[v_name] = str(data_js)                # Storing current plot's attributes in class' dictionary.
+        self.instance_objects[v_name] = str(data_js)       # Storing current plot's attributes in instance's dictionary.
         return
 
-    def show_all(self):
+    def show_all(self, **kwargs):
         """
         Writes self.objects dictionary as a JS script, i.e. all plots declared in all instances that inherit from class
         Graph.
         :return:
         """
-        script = ""
         plots = "["
 
-        for name, obj in self.objects.items():
-            script += obj
-            plots += name[1:-1] + ", "
+        # Setting raw data (lists) to variable names in JS.
+        for variable, value in self.objects.items():
+            self.script += "var {variable} = {value}; \n".format(variable=var(variable, True), value=value)
+
+        self.script += "\n"  # Beautifying.
+
+        for v_name, obj in self.objects.items():  # Writing JS objects (that will be plotted)
+            obj = var(obj, decode=True)  # Escaping all references to variables
+
+            self.script += obj
+            plots += v_name[1:-1] + ", "
 
         plots = plots[:-2]
         plots += "]"
 
-        self.script += script
-        self.script += self.layout
-        self.script += "Plotly.newPlot({div_name}, {plots});"\
-            .format(div_name=escape(self.div_id), plots=plots)
+        self.make_layout(**kwargs)
 
+        self.script += self.layout
+        self.script += "Plotly.newPlot({div_v_name}, {plots}, layout);".format(div_v_name=escape(self.div_id),
+                                                                               plots=plots)
         return self.script
 
     def show(self, **kwargs):
@@ -87,11 +92,11 @@ class Graph:
 
         self.script += "\n"                                     # Beautifying.
 
-        for name, obj in self.instance_objects.items():         # Writing JS objects (that will be plotted)
+        for v_v_name, obj in self.instance_objects.items():         # Writing JS objects (that will be plotted)
             obj = var(obj, decode=True)                         # Escaping all references to variables
 
             self.script += obj
-            plots += name[1:-1] + ", "
+            plots += v_v_name[1:-1] + ", "
 
         plots = plots[:-2]
         plots += "]"
@@ -99,7 +104,8 @@ class Graph:
         self.make_layout(**kwargs)
 
         self.script += self.layout
-        self.script += "Plotly.newPlot({div_name}, {plots}, layout);".format(div_name=escape(self.div_id), plots=plots)
+        self.script += "Plotly.newPlot({div_v_name}, {plots}, layout);".format(div_v_name=escape(self.div_id),
+                                                                               plots=plots)
         return self.script
 
     def make_layout(self, **kwargs):
@@ -150,9 +156,9 @@ class Surface(Graph):
             raise TypeError("Expected list of length >= 1, not {type} of length {length}"
                             .format(type=str(type(z)), length=len(z)))
 
-        name_z = var("z" + str(len(self.data)))
-        self.data[name_z] = z
-        self.finish_plot(z=name_z, **kwargs)
+        v_name_z = var("z" + str(len(self.data)))
+        self.data[v_name_z] = z
+        self.finish_plot(z=v_name_z, **kwargs)
         return
 
 
@@ -193,16 +199,16 @@ class Scatter3D(Graph):
                                     len_x=str(len(x)), len_y=str(len(y)), len_z=str(len(z))))
 
         # Assigning names for JS variables when written to JS script.
-        name_x = var("x" + str(len(self.data)))
-        name_y = var("y" + str(len(self.data)))
-        name_z = var("z" + str(len(self.data)))
+        v_name_x = var("x" + str(len(self.data)))
+        v_name_y = var("y" + str(len(self.data)))
+        v_name_z = var("z" + str(len(self.data)))
 
         # Adding data to instance dictionary.
-        self.data[name_x] = x
-        self.data[name_y] = y
-        self.data[name_z] = z
+        self.data[v_name_x] = x
+        self.data[v_name_y] = y
+        self.data[v_name_z] = z
 
-        self.finish_plot(x=name_x, y=name_y, z=name_z, mode=mode, **kwargs)
+        self.finish_plot(x=v_name_x, y=v_name_y, z=v_name_z, mode=mode, **kwargs)
         return
 
 
@@ -246,14 +252,14 @@ class Scatter2D(Graph):
                             .format(type_x=str(type(x)), type_y=str(type(y)), len_x=str(len(x)), len_y=str(len(y))))
 
         # Assigning names for JS variables when written to JS script.
-        name_x = var("x" + str(len(self.data)))
-        name_y = var("y" + str(len(self.data)))
+        v_name_x = var("x" + str(len(self.data)))
+        v_name_y = var("y" + str(len(self.data)))
 
         # Adding data to instance dictionary.
-        self.data[name_x] = x
-        self.data[name_y] = y
+        self.data[v_name_x] = x
+        self.data[v_name_y] = y
 
-        self.finish_plot(x=name_x, y=name_y, mode=mode, **kwargs)
+        self.finish_plot(x=v_name_x, y=v_name_y, mode=mode, **kwargs)
         return
 
 
