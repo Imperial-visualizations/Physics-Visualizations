@@ -1,4 +1,0 @@
-Flask
-Flask-Session
-passlib
-SQLAlchemy

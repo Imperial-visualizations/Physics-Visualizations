@@ -5,6 +5,7 @@
 
 <head>
     <title>Lorentz Attractor</title>
+    <link rel="stylesheet" href="styles/styles.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
@@ -76,10 +77,16 @@
         compute();
 
         Plotly.animate('graph', {
-            data: [{x: x, y: z}]},
-            {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
-            // vastly speeds up animation but won't update any non-animated properties
-        );
+            data: [{x: x, y: z}],
+        }, {
+            transition: {
+                duration: 0
+            },
+            frame: {
+                duration: 0,
+                redraw: false  // vastly speeds up animation but won't update any non-animated properties
+            }
+        });
 
         requestAnimationFrame(update);
     }
