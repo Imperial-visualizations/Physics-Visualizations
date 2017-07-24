@@ -1,0 +1,60 @@
+<html>
+<head>
+<!-- Plotly.js -->
+<!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
+<script src="plotly-latest.min.js"></script>
+
+</head>
+<body>
+<!-- Plotly chart will be drawn inside this DIV -->
+<div id="myDiv" style="width:600px; height:500px;"></div>
+<script>
+
+var a = 1;
+var b = 1;
+var c = 1;
+var d = 10;
+
+z1 = [];
+for (var x=0;x<15;x++) {
+  z1_row = [];
+  for (var y=0;y<6;y++) {
+    z_elem = (d-a*x-b*y)/c
+    z1_row.push(z_elem); //plane eqn: ax+by+cz = d
+  }
+  z1.push(z1_row);
+}
+
+// generating data for other traces..
+z2 = [];
+for (var i=0;i<z1.length;i++ ) {
+    z2_row = [];
+    for(var j=0;j<z1[i].length;j++) {
+        z2_row.push(-1 * (z1[i][j]+5)); //plane eqn: x+y+z = -15
+    }
+    z2.push(z2_row);
+}
+// creating data objects..
+
+var data_z1 = {
+  z: z1,
+  showscale: false,
+  colorscale: 'Reds',
+  type: 'surface'
+};
+
+var data_z2 = {
+  z: z2,
+  showscale: false,
+  colorscale: 'Blues',
+  opacity:0.9,
+  type: 'surface'
+};
+
+// Plotting the surfaces..
+Plotly.newPlot('myDiv', [data_z1, data_z2]);
+
+
+</script>
+</body>
+</html>
