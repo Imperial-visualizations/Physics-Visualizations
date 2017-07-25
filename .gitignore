@@ -8,3 +8,6 @@ initial_package_tests
 
 # Files
 test.py
+
+# Ignore All
+.ipynb_checkpoints
