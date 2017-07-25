@@ -93,7 +93,7 @@ class Graph:
         self.script += "\n"                                     # Beautifying.
 
         for v_v_name, obj in self.instance_objects.items():         # Writing JS objects (that will be plotted)
-            obj = var(obj, decode=True)                         # Escaping all references to variables
+            obj = var(obj, decode=True)                             # Escaping all references to variables
 
             self.script += obj
             plots += v_v_name[1:-1] + ", "
