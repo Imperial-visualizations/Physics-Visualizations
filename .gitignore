@@ -1,4 +1,4 @@
-# PyCharm files 
+# PyCharm files
 .idea/
 __pycache__/
 *.pyc
@@ -8,3 +8,5 @@ initial_package_tests
 
 # Files
 test.py
+
+.ipynb_checkpoints
