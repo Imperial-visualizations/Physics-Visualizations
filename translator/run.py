@@ -18,8 +18,11 @@ dat3 = [[5.84, 8.9, 8.82, 8.92, 8.93, 3.91],
 
 line = Scatter2D(x=dat[:4], y=dat2, div_id="scatter", mode="lines+markers",
                  marker_size=10, showlegend=True, name="random data")
-# ms = Mouse(line, event="click")
-# print(ms.script)
+line.show()
 
-animation = Animate(line, x="x0", y="y0")
-animation.show(transition_duration=0, frame_redraw=False)
+ms = Mouse(line, event="click")
+print(ms.script)
+
+# animation = Animate(line, x="x0", y="y0")
+# animation.show(transition_duration=0, frame_redraw=False)
+#
