@@ -10,5 +10,5 @@ initial_package_tests
 test.py
 
 #Ignore all
-.ipynb_checkpoints
+*/.ipynb_checkpoints/*
 .DS_STORE
