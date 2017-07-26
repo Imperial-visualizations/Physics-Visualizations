@@ -11,5 +11,5 @@ Initial Practice
 test.py
 
 #Ignore all
-.ipynb_checkpoints
+*/.ipynb_checkpoints/*
 .DS_STORE
