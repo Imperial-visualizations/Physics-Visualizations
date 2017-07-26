@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>hello phaser!</title>
+    <script src="js/phaser.min.js"></script>
+    <script src="js/plotly-latest.min.js"></script><style></style>
+</head>
+<body>
+<form id="sim-params">
+    Particle 1 <br>
+    Mass: <input type="number" name="p1mass"> Initial Speed: <input type="number" name="p1speed"><br>
+    Particle 2<br>
+    Mass: <input type="number" name="p2mass"> Initial Speed: <input type="number" name="p2speed"><br>
+    Coefficient of Restitution <input type="number" name="cor"><br>
+    <input type="button" onclick="onClick()" value="Start">
+</form>
+<div id="new"></div>
+
+<script type="text/javascript">
+    var game;
+
+    function onClick() {
+
+        //  Note that this html file is set to pull down Phaser 2.5.0 from the JS Delivr CDN.
+        //  Although it will work fine with this tutorial, it's almost certainly not the most current version.
+        //  Be sure to replace it with an updated version before you start experimenting with adding your own code.
+        var form = document.getElementById("sim-params");
+        var m1 = parseFloat(form.elements[0].value);
+        var u1 = parseFloat(form.elements[1].value);
+        var m2 = parseFloat(form.elements[2].value);
+        var u2 = parseFloat(form.elements[3].value);
+        var e = parseFloat(form.elements[4].value);
+        if(typeof game !== 'undefined'){
+            game.destroy();
+        }
+        game = new Phaser.Game(600, 600, Phaser.AUTO, '', {preload: preload, create: create, update: update});
+
+        var cursors, ball, ball2, redCross, ball2CoM, ballCoM;
+        var collide = false;
+
+        function preload() {
+            game.load.image('logo', 'assets/ball.png');
+            game.load.image('redcross', 'assets/redcross.png');
+            game.stage.backgroundColor = '#FFFFFF';
+        }
+
+        function create() {
+            ball = game.add.sprite(game.world.centerX / 2, game.world.centerY, 'logo');
+            ball2 = game.add.sprite(1.5 * game.world.centerX, game.world.centerY, 'logo');
+            ballCoM = game.add.sprite(game.world.centerX / 2, game.world.centerY + 150, 'logo');
+            ball2CoM = game.add.sprite(game.world.centerX * 1.5, game.world.centerY + 150, 'logo');
+            redCross = game.add.sprite(getCoMPos(), game.world.centerY, 'redcross');
+            ball.anchor.setTo(0.5, 0.5);
+            ball2.anchor.setTo(0.5, 0.5);
+            redCross.anchor.set(0.5, 0.5);
+            cursors = game.input.keyboard.createCursorKeys();
+        }
+
+        function getCoMPos() {
+            return 1.0 / (m1 + m2) * (ball.x * m1 + ball2.x * m2);
+        }
+
+        function update() {
+            ball.x += u1;
+            ball2.x += u2;
+            ballCoM.x = ball.x - getCoMPos() + game.world.centerX;
+            ball2CoM.x = ball2.x - getCoMPos() + game.world.centerX;
+            redCross.x = getCoMPos();
+            if (checkOverlap(ball, ball2) && !collide) {
+                handleCollision();
+            }
+        }
+
+        function checkOverlap(spriteA, spriteB) {
+
+            var boundsA = spriteA.getBounds();
+            var boundsB = spriteB.getBounds();
+
+            return Phaser.Rectangle.intersects(boundsA, boundsB);
+
+        }
+
+        function handleCollision() {
+            var v1 = 1.0 / (m1 + m2) * ((m1 - e * m2) * u1 + (1 + e) * m2 * u2),
+                v2 = 1.0 / (m1 + m2) * ((m2 - e * m1) * u2 + (1 + e) * m1 * u1);
+            u1 = v1;
+            u2 = v2;
+            collide = true;
+
+        }
+    }
+</script>
+
+
+</body></html>
