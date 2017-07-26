@@ -1,11 +1,14 @@
-# PyCharm files 
+# PyCharm files
 .idea/
 __pycache__/
 *.pyc
 
 # Folders
 initial_package_tests
-initial_examples
 
 # Files
 test.py
+
+#Ignore All
+.ipynb_checkpoints/
+.DS_STORE
