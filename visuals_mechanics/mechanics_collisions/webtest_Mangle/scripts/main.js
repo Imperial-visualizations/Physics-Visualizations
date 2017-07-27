@@ -131,7 +131,7 @@ vCal = function(input1, action, input2){
             return new Vector( input2 * input1.x, input2 * input1.y );
             break;
         case "rotate":
-            return new Vector( input1.x * Math.cos(degToRad(input1.getArg)) - input1.y * Math.sin(degToRad(input1.getArg)), input1.x * Math.sin(degToRad(input1.getArg)) + input1.y * Math.cos(degToRad(input1.getArg)) );
+            return new Vector( input1.x * Math.cos(degToRad(input2)) - input1.y * Math.sin(degToRad(input2)), input1.x * Math.sin(degToRad(input2)) + input1.y * Math.cos(degToRad(input2)) );
             break;
         default:
             return false;
