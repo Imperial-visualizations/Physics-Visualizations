@@ -159,10 +159,59 @@ input[type=range]::-ms-track {
 
 
 
+/*
+Dropdown Menu Styles
+*/
 
-
-
-
+.dropdown:after{
+    content:"▾";
+    color: #003E74; 
+    position: relative;
+    right:0;
+    top: 0;
+    margin-left: -2.4em;
+}
+li {
+    position: relative;
+    display: inline-block;
+    background: #fff;
+    border: #003E74 solid 3px; 
+    width: 100px;
+    height: 20px;
+    padding: 4px;
+    font-size: 1em;
+    margin-right: 1em;
+}
+li span {
+    display: inline-block ; 
+    color: #003E74; 
+    text-decoration: none;
+    font-weight: 800;
+    line-height: 20px;
+    cursor: pointer;
+}
+li ul {
+    display: none;
+    position: absolute;
+    top: 1.7em;
+}
+li:hover ul {
+    display: block;   
+}
+li li {
+    display: block;
+    background: #003E74;
+    border: #fff solid 2px;
+    color: #fff; 
+}
+li a {
+    display: inline-block ; 
+    color: #fff; 
+    text-decoration: none;
+    font-weight: 400;
+    line-height: 20px;
+    cursor: pointer;
+}
 
 
 
