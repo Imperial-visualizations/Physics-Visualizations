@@ -8,18 +8,40 @@ var game = new Phaser.Game(canvasWidth, canvasHeight, Phaser.CANVAS, 'CanvasWrap
     update: update
 });
 var ballradius = 40;
-var ball1, ball2, initAngle, vectorCalculations;
+var ball1, ball2, initAngle;
 
 var collide = false;
 
-ball1 = {spriteInstance: undefined, mass: 1, initr: {x: (canvasWidth / 2 - 100), y: canvasHeight / 2}, v: {x: 0, y: 0}};
-ball2 = {spriteInstance: undefined, mass: 1, initr: {x: (canvasWidth / 2 + 100), y: canvasHeight / 2}, v: {x: 0, y: 0}};
+class Vector{
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    get getArg() {
+        return Math.atan2(this.y, this.x);
+    }
+    get getMag(){
+        return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+    }
+}
 
+ball1 = {
+    spriteInstance: undefined, 
+    mass: 1, 
+    initr: new Vector((canvasWidth / 2 - 100),(canvasHeight / 2)),
+    v: new Vector(0,0)
+};
+ball2 = {
+    spriteInstance: undefined, 
+    mass: 1, 
+    initr: new Vector((canvasWidth / 2 + 100),(canvasHeight / 2)),
+    v: new Vector(0,0)
+};
 
 $(".inputs").each(function () {
     // To update the displayed value
     $(this).on('change', function () {
-        $("#" + $(this).attr("id") + "Display").text($(this).val());
+        $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
     });
 });
 $('#ballCollisionAngle').on('change', function () {
@@ -30,10 +52,11 @@ $('#ballCollisionAngle').on('change', function () {
 });
 
 $("#runButton").on('click', function () {
-    ball1.mass = parseFloat($("#ball1Mass").val());
-    ball1.v.x = parseFloat($("#ball1VelocityX").val());
-    ball2.mass = parseFloat($("#ball2Mass").val());
-    initAngle = degToRad(parseFloat($("#ballCollisionAngle").val()));
+    ball1.mass = parseFloat( $("#ball1Mass").val() );
+    ball1.v.x = parseFloat( $("#ball1VelocityX").val() );
+    ball1.v.y = parseFloat( $("#ball1VelocityY").val() );
+    ball2.mass = parseFloat( $("#ball2Mass").val() );
+    initAngle = degToRad( parseFloat($("#ballCollisionAngle").val()) );
 
     isRunning = !isRunning;
 
@@ -47,7 +70,6 @@ $("#runButton").on('click', function () {
 function preload() {
     game.stage.backgroundColor = "#f0f0f0";
 }
-
 function create() {
 
     game.stage.backgroundColor = "#f0f0f0";
@@ -71,16 +93,11 @@ function create() {
     ball2G.drawCircle(0, 0, ballradius);
 
 
-    ball2.spriteInstance = game.add.sprite(ball2.initr.x, (ball2.initr.y), ball2G.generateTexture());
+    ball2.spriteInstance = game.add.sprite(ball2.initr.x, ball2.initr.y, ball2G.generateTexture());
     ball2.spriteInstance.anchor.set(0.5, 0.5);
 
     ball2G.destroy();
 }
-
-function getReducedMass() {
-    return (ball1.mass * ball2.mass) / (ball1.mass + ball2.mass);
-}
-
 function update() {
     if (isRunning) {
         ball1.spriteInstance.x += ball1.v.x;
@@ -94,28 +111,30 @@ function update() {
     }
 }
 
-vectorCal = function(vector1, action, vector2){
+
+
+function getReducedMass() {
+    return (ball1.mass * ball2.mass) / (ball1.mass + ball2.mass);
+}
+
+
+vCal = function(input1, action, input2){
     //Vector Calculations
     switch(action) {
         case "-":
-            return {x: vector1.x - vector2.x, y: vector1.y - vector2.y};
+            return new Vector( input1.x - input2.x, input1.y - input2.y);
             break;
         case "+":
-            return {x: vector1.x + vector2.x, y: vector1.y + vector2.y};
+            return new Vector( input1.x + input2.x, input1.y + input2.y );
             break;
         case "*":
-            return {x: vector2 * vector1.x, y: vector2 * vector1.y};
-            break;
-        case "getMag":
-            return Math.sqrt(Math.pow(vector1.x, 2) + Math.pow(vector1.y, 2));
-            break;
-        case "getArg":
-            return Math.atan2(vector1.y, vector1.x);
+            return new Vector( input2 * input1.x, input2 * input1.y );
             break;
         case "rotate":
-            return {x : vector1.x * Math.Cos(degToRad(getArg(vector1))) - vector1.y * Math.Sin(degToRad(getArg(vector1))), y : vector1.x * Math.Sin(degToRad(getArg(vector1))) + vector1.y * Math.Cos(degToRad(getArg(vector1)))};
+            return new Vector( input1.x * Math.cos(degToRad(input1.getArg)) - input1.y * Math.sin(degToRad(input1.getArg)), input1.x * Math.sin(degToRad(input1.getArg)) + input1.y * Math.cos(degToRad(input1.getArg)) );
             break;
         default:
+            return false;
             
     }
 
@@ -127,13 +146,12 @@ function degToRad(deg) {
 
 function onCollision() {
     var scatterAngle = initAngle * 2;
-    var pCom = scaleVector(subtractVector(ball1.v, ball2.v), getReducedMass());
-    var pCom = scale 
-    var qCom = rotateVector(pCom, scatterAngle);
-    var q1 = addVector(scaleVector(pCom, ball1.mass / ball2.mass), qCom);
-    var q2 = subtractVector(scaleVector(ball1.v, ball1.mass),q1);
+    var pCom = vCal( vCal( ball1.v, "-", ball2.v ), "*", getReducedMass() );
+    var qCom = vCal(pCom, "rotate", scatterAngle);
+    var q1 = vCal( vCal( pCom, "*", ball1.mass / ball2.mass) , "+", qCom);
+    var q2 = vCal( vCal(ball1.v, "*", ball1.mass), "-", q1 );
 
-    ball1.v = scaleVector(q1, 1 / ball1.mass);
-    ball2.v = scaleVector(q2, 1 / ball2.mass);
+    ball1.v = vCal(q1, "*", 1 / ball1.mass);
+    ball2.v = vCal(q2, "*", 1 / ball2.mass);
     collide = true;
 }
