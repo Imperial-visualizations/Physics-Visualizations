@@ -176,7 +176,7 @@ input[type="button"] {
   padding: 0 30px;
   color: #555;
   text-align: center;
-  font-size: 11px;
+  font-size: 20px;
   font-weight: 600;
   line-height: 38px;
   letter-spacing: .1rem;
@@ -187,41 +187,61 @@ input[type="button"] {
   border-radius: 4px;
   border: 1px solid #bbb;
   cursor: pointer;
-  box-sizing: border-box; }
+  box-sizing: border-box; 
+
+  -webkit-appearance: none; 
+  width: 160px;
+  height: 40px;
+  border: #006EAF solid 2px;
+  border-radius: 6px;
+  color: #006EAF ;}
 .button:hover,
 button:hover,
 input[type="submit"]:hover,
 input[type="reset"]:hover,
-input[type="button"]:hover,
-.button:focus,
-button:focus,
-input[type="submit"]:focus,
-input[type="reset"]:focus,
-input[type="button"]:focus {
-  color: #333;
-  border-color: #888;
+input[type="button"]:hover{
+  color: #002147;
+  border-color: #002147;
   outline: 0; }
 .button.button-primary,
 button.button-primary,
 input[type="submit"].button-primary,
 input[type="reset"].button-primary,
 input[type="button"].button-primary {
-  color: #FFF;
-  background-color: #33C3F0;
-  border-color: #33C3F0; }
+  color: #002147;
+  border-color: #002147; }
 .button.button-primary:hover,
 button.button-primary:hover,
 input[type="submit"].button-primary:hover,
 input[type="reset"].button-primary:hover,
-input[type="button"].button-primary:hover,
-.button.button-primary:focus,
-button.button-primary:focus,
-input[type="submit"].button-primary:focus,
-input[type="reset"].button-primary:focus,
-input[type="button"].button-primary:focus {
-  color: #FFF;
-  background-color: #1EAEDB;
-  border-color: #1EAEDB; }
+input[type="button"].button-primary:hover{
+  color: #002147;
+  border-color: #002147; }
+
+
+
+.button:active,
+button:active,
+input[type="submit"]:active,
+input[type="reset"]:active,
+input[type="button"]:active{
+  color: #006EAF;
+  border-color: #006EAF;
+  outline: 0; }
+.button.button-primary,
+button.button-primary,
+input[type="submit"].button-primary,
+input[type="reset"].button-primary,
+input[type="button"].button-primary {
+  color: #006EAF;
+  border-color: #006EAF; }
+.button.button-primary:active,
+button.button-primary:active,
+input[type="submit"].button-primary:active,
+input[type="reset"].button-primary:active,
+input[type="button"].button-primary:active{
+  color: #006EAF;
+  border-color: #006EAF; }
 
 
 /* Forms
@@ -600,30 +620,6 @@ input[type=range]::-ms-track {
   cursor: pointer;
   background: #006EAF;
   border-radius: 1px;
-}
-
-
-/*
-Button Styles
-*/
-
-
-input[type=button] {
-  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
-  width: 120px; /* Specific width is required for Firefox. */
-  height: 40px;
-  background: transparent; /* Otherwise white in Chrome */
-  border: #006EAF solid 2px;
-  border-radius: 6px;
-  color: #006EAF ;
-  font-size: 22px;
-  line-height: 22px;
-  text-align: center;
-
-
-}
-input[type=range]:focus {
-  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
 }
 
 
