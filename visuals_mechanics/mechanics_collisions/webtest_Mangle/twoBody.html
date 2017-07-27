@@ -45,6 +45,10 @@
             <input id="ball2Mass" class="inputs" type="range" value="5" min ="-1" max="10" step ="1"/>
             <br>
 
+            Collision Angle:
+            <span id = "ballCollisionAngleDisplay">0</span>
+            <input id="ballCollisionAngle" class="inputs" type="range" value="0" min="-1" max = "90" step = "5"/>
+            <br>
             Velocity X: 0<br>
             Velocity Y: 0<br>
 
@@ -55,79 +59,6 @@
     <br><br><br>
     <script src="scripts/jquery-2.1.1.js"></script>
     <script src="scripts/phaser.min.js"></script>
-    <script>
-        var isRunning = 0;
-
-        var canvasWidth  = 800;
-        var canvasHeight = 500;
-
-        var game = new Phaser.Game(canvasWidth, canvasHeight, Phaser.CANVAS, 'CanvasWrapper', { preload: preload, create: create, update: update });
-
-        var ball1, ball2;
-
-        ball1 = {spriteInstance: undefined, mass: 1, r: {x: -100, y: 0}, v: {x: 10, y: 0}};
-        ball2 = {spriteInstance: undefined, mass: 1, r: {x: 100, y: 0}, v: {x: 0, y: 0}};
-
-
-        $(".inputs").each(function(){
-            $(this).on('change',function(){ 
-                $("#"+$(this).attr("id")+"Display").text($(this).val()); 
-            });
-        });
-
-        $("#runButton").on('click',function(){
-            ball1.mass = $("#ball1Mass").val();
-            ball1.v.x = $("#ball1VelocityX").val();
-            ball1.v.y = $("#ball1VelocityY").val();
-            ball2.mass = $("#ball2Mass").val();
-            ball2.v.x = $("#ball2VelocityX").val();
-            ball2.v.y = $("#ball2VelocityY").val();
-            isRunning = 1-isRunning;
-            if($("#runButton").val() == "Run"){
-                $("#runButton").val("Stop");
-            }else{
-                $("#runButton").val("Run");
-            }
-        })
-
-        function preload() {
-            game.stage.backgroundColor = "#f0f0f0";
-        }
-
-        function create() {
-
-            game.stage.backgroundColor = "#f0f0f0";
-
-            var ball1G = game.add.graphics(0, 0);
-
-            ball1G.lineStyle(1, 0xE9003A, 1);
-            ball1G.beginFill(0xE9003A, 1);
-            ball1G.drawCircle(0, 0, 40);
-
-
-            ball1.spriteInstance = game.add.sprite((canvasWidth/2 + ball1.r.x), (canvasHeight/2 - ball1.r.y), ball1G.generateTexture());
-            ball1.spriteInstance.anchor.set(0.5,0.5);
-
-            ball1G.destroy();
-
-            var ball2G = game.add.graphics(0, 0);
-
-            ball2G.lineStyle(1, 0x00AEF2, 1);
-            ball2G.beginFill(0x00AEF2, 1);
-            ball2G.drawCircle(0, 0, 40);
-
-
-            ball2.spriteInstance = game.add.sprite((canvasWidth/2 + ball2.r.x), (canvasHeight/2- ball2.r.y), ball2G.generateTexture());
-            ball2.spriteInstance.anchor.set(0.5,0.5);
-
-            ball2G.destroy();
-        }
-
-        function update() {
-            if(isRunning){
-                Code here
-            }
-        }
-    </script>
+    <script src="scripts/main.js"></script>
 </body>
 </html>
