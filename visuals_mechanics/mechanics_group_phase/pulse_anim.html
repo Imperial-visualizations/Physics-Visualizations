@@ -1,0 +1,92 @@
+<html>
+
+<head>
+    <title>Pulse Anim</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+<div id='graph'></div>  <!-- Plotly chart will be drawn inside this DIV -->
+
+<script>
+
+    // Defining variables (need to update later anyway so importing from e.g. json is meaningless)
+    var n = 201;
+    var x = [], y_i = [], y_r = [], y_t = [];
+    var t = 0;
+    var dt = 0.02;
+
+    // var what = document.getElementById("ball2Mass").value;
+
+    for (var i = 0; i < n; i++) {
+        x[i] = i / 20;
+        y_i[i] = (x[i] - 1) * Math.exp(-((x[i] - 1) * (x[i] - 1)) + (x[i] - 1))
+        y_r[i] = (x[i] - 1) * Math.exp(-((x[i] - 1) * (x[i] - 1)) + (x[i] - 1))
+        y_t[i] = (x[i] - 1) * Math.exp(-((x[i] - 1) * (x[i] - 1)) + (x[i] - 1))
+    }
+
+    // Initial plot
+    var incident = {
+        x: x,
+        y: y_i,
+        line: {width: 1, color: '#ff00ff', simplify: false}
+    };
+
+    var reflected = {
+        x: x,
+        y: y_r,
+        line: {width: 1, color: 'blue', simplify: false}
+    };
+
+    var transmitted = {
+        x: x,
+        y: y_t,
+        line: {width: 1, color: 'red', simplify: false}
+    };
+
+    // Plot graph with interactivity
+    Plotly.plot('graph', [incident, reflected, transmitted], {
+                xaxis: {range: [0, 20]},
+//                yaxis: {range: [0, 60]},
+//                updatemenus: [{
+//                    buttons: [
+//                        {method: 'restyle', args: ['line.color', 'blue'], label: 'blue'},
+//                        {method: 'restyle', args: ['line.color', 'green'], label: 'green'},
+//                        {method: 'restyle', args: ['line.color', 'red'], label: 'red'}
+//                    ]
+//                }]
+            },
+            {showlink: false}
+    );
+
+    // Data update function for animation
+    var t_start = t;
+    function compute() {
+        t += dt;
+        if (t < t_start + 11) {
+            for (var i = 0; i < n; i++) {
+                y_i[i] = (x[i] - 1 - t) * Math.exp(-((x[i] - 1 - t) * (x[i] - 1 - t)) + (x[i] - 1 - t))
+            }
+        }
+    }
+
+    // Looping function that updates plot
+    function update() {
+        compute();
+
+        Plotly.animate('graph', {
+                    data: [{y: y_i}, {y: y_r}, {y: y_t}]
+                },
+                {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
+                // vastly speeds up animation but won't update any non-animated properties
+        );
+
+        requestAnimationFrame(update);
+    }
+
+    // The loop
+    requestAnimationFrame(update);
+
+</script>
+</body>
+</html>
