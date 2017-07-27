@@ -12,28 +12,26 @@ var ball1, ball2, initAngle;
 
 var collide = false;
 
-class Vector{
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-    get getArg() {
+function Vector(x,y){
+    this.x=x;
+    this.y=y;
+    this.getArg = function() {
         return Math.atan2(this.y, this.x);
-    }
-    get getMag(){
+    };
+    this.getMag = function(){
         return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
-    }
+    };
 }
 
 ball1 = {
-    spriteInstance: undefined, 
-    mass: 1, 
+    spriteInstance: undefined,
+    mass: 1,
     initr: new Vector((canvasWidth / 2 - 100),(canvasHeight / 2)),
     v: new Vector(0,0)
 };
 ball2 = {
-    spriteInstance: undefined, 
-    mass: 1, 
+    spriteInstance: undefined,
+    mass: 1,
     initr: new Vector((canvasWidth / 2 + 100),(canvasHeight / 2)),
     v: new Vector(0,0)
 };
@@ -52,20 +50,32 @@ $('#ballCollisionAngle').on('change', function () {
 });
 
 $("#runButton").on('click', function () {
-    ball1.mass = parseFloat( $("#ball1Mass").val() );
-    ball1.v.x = parseFloat( $("#ball1VelocityX").val() );
-    ball1.v.y = parseFloat( $("#ball1VelocityY").val() );
-    ball2.mass = parseFloat( $("#ball2Mass").val() );
-    initAngle = degToRad( parseFloat($("#ballCollisionAngle").val()) );
+    ball1.mass = parseFloat($("#ball1Mass").val());
+    ball1.v.x = parseFloat($("#ball1VelocityX").val());
+    ball2.mass = parseFloat($("#ball2Mass").val());
+    initAngle = degToRad(parseFloat($("#ballCollisionAngle").val()));
 
     isRunning = !isRunning;
 
     if ($("#runButton").val() == "Run") {
-        $("#runButton").val("Stop");
+        $("#runButton").val("Reset");
     } else {
+        //Run reset code
+        resetSimulation();
         $("#runButton").val("Run");
     }
 });
+
+function resetSimulation(){
+    ball1.spriteInstance.x = ball1.initr.x;
+    ball1.spriteInstance.y = ball1.initr.y - 0.5*ballradius*Math.sin(initAngle);
+    ball2.spriteInstance.x = ball2.initr.x + 0.5 * ballradius * Math.sin(initAngle);
+    ball2.spriteInstance.y = ball2.initr.y;
+    ball1.v.x = parseFloat($('#ball1VelocityX').val());
+    ball2.v = {x:0,y:0};
+    ball1.v.y = 0;
+}
+
 
 function preload() {
     game.stage.backgroundColor = "#f0f0f0";
@@ -131,14 +141,13 @@ vCal = function(input1, action, input2){
             return new Vector( input2 * input1.x, input2 * input1.y );
             break;
         case "rotate":
-            return new Vector( input1.x * Math.cos(degToRad(input2)) - input1.y * Math.sin(degToRad(input2)), input1.x * Math.sin(degToRad(input2)) + input1.y * Math.cos(degToRad(input2)) );
+            return new Vector( input1.x * Math.cos(input2) - input1.y * Math.sin(input2), input1.x * Math.sin(input2) + input1.y * Math.cos(input2));
             break;
         default:
-            return false;
-            
+
     }
 
-}
+};
 
 function degToRad(deg) {
     return Math.PI * deg / 180;
