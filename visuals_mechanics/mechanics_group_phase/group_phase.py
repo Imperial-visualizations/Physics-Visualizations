@@ -19,7 +19,7 @@ trace1 = go.Scatter(data,
                     mode='lines',
                     line=dict(width=2, color='blue'))
 
-trace2 = go.Scatter(x=lim, y=wave(lim),
+trace2 = go.Scatter(data,
                     name='data2',
                     mode='lines',
                     line=dict(width=2, color='blue'))
