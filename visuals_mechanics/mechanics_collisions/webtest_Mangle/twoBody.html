@@ -21,37 +21,42 @@
         <h1>2 Body Collision</h1> 
         </div>
         <div id="FormWrapper">
-            <h4>Ball 1</h4>
+            <div class="row">
+                <div class="six columns">
+                    <h4>Ball 1</h4>
 
-            Mass: 
-            <span id="ball1MassDisplay">0</span> 
-            <input id="ball1Mass" class="inputs" type="range" value="5" min ="-1" max="10.0" step ="0.1"/>
-            <br>
+                    Mass: 
+                    <span id="ball1MassDisplay">0</span> 
+                    <input id="ball1Mass" class="inputs" type="range" value="5" min ="-1" max="10.0" step ="0.1"/>
+                    <br>
 
-            Velocity X:
-            <span id="ball1VelocityXDisplay">0</span>
-            <input id="ball1VelocityX" class="inputs" type="range" value="5" min ="-1" max="10.0" step ="0.1"/>
-            <br>
+                    Velocity X:
+                    <span id="ball1VelocityXDisplay">0</span>
+                    <input id="ball1VelocityX" class="inputs" type="range" value="5" min ="-1" max="10.0" step ="0.1"/>
+                    <br>
 
-            Velocity Y:
-            <span id="ball1VelocityYDisplay">0</span>
-            <input id="ball1VelocityY" class="inputs" type="range" value="5" min ="-1" max="10.0" step ="0.1"/>
-            <br>
+                    Velocity Y:
+                    <span id="ball1VelocityYDisplay">0</span>
+                    <input id="ball1VelocityY" class="inputs" type="range" value="5" min ="-1" max="10.0" step ="0.1"/>
+                    <br>
 
-            <h4>Ball 2</h4>
+                </div>
+                <div class="six columns">
+                    <h4>Ball 2</h4>
 
-            Mass:
-            <span id="ball2MassDisplay">0</span>
-            <input id="ball2Mass" class="inputs" type="range" value="5" min ="-1" max="10" step ="1"/>
-            <br>
+                    Mass:
+                    <span id="ball2MassDisplay">0</span>
+                    <input id="ball2Mass" class="inputs" type="range" value="5" min ="-1" max="10" step ="1"/>
+                    <br>
 
-            Collision Angle:
-            <span id = "ballCollisionAngleDisplay">0</span>
-            <input id="ballCollisionAngle" class="inputs" type="range" value="0" min="-1" max = "90" step = "5"/>
-            <br>
-            Velocity X: 0<br>
-            Velocity Y: 0<br>
-
+                    Collision Angle:
+                    <span id = "ballCollisionAngleDisplay">0</span>
+                    <input id="ballCollisionAngle" class="inputs" type="range" value="0" min="-1" max = "90" step = "5"/>
+                    <br>
+                    Velocity X: 0<br>
+                    Velocity Y: 0<br>
+                </div>
+            </div>
             <input id="runButton" class="inputs" type="button" value="Run"/>
         </div>
     </div>

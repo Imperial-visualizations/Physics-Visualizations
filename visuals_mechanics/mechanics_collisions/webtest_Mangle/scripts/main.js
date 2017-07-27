@@ -8,20 +8,22 @@ var game = new Phaser.Game(canvasWidth, canvasHeight, Phaser.CANVAS, 'CanvasWrap
     update: update
 });
 var ballradius = 40;
-var ball1, ball2, initAngle;
+var ball1, ball2, initAngle, vectorCalculations;
 
 var collide = false;
 
 ball1 = {spriteInstance: undefined, mass: 1, initr: {x: (canvasWidth / 2 - 100), y: canvasHeight / 2}, v: {x: 0, y: 0}};
-ball2 = {spriteInstance: undefined, mass: 1, initr: {x: canvasWidth / 2 + 100, y: canvasHeight / 2}, v: {x: 0, y: 0}};
+ball2 = {spriteInstance: undefined, mass: 1, initr: {x: (canvasWidth / 2 + 100), y: canvasHeight / 2}, v: {x: 0, y: 0}};
 
 
 $(".inputs").each(function () {
+    // To update the displayed value
     $(this).on('change', function () {
         $("#" + $(this).attr("id") + "Display").text($(this).val());
     });
 });
 $('#ballCollisionAngle').on('change', function () {
+    // To update the position of the balls
     initAngle = degToRad(parseFloat($("#ballCollisionAngle").val()));
     ball1.spriteInstance.y = ball2.initr.y + 0.5 * ballradius * Math.sin(initAngle);
     ball2.spriteInstance.y = ball2.initr.y - 0.5 * ballradius * Math.sin(initAngle);
@@ -82,9 +84,9 @@ function getReducedMass() {
 function update() {
     if (isRunning) {
         ball1.spriteInstance.x += ball1.v.x;
-        ball1.spriteInstance.y += ball1.v.y;
+        ball1.spriteInstance.y -= ball1.v.y;
         ball2.spriteInstance.x += ball2.v.x;
-        ball2.spriteInstance.y += ball2.v.y;
+        ball2.spriteInstance.y -= ball2.v.y;
 
         if (Phaser.Rectangle.intersects(ball1.spriteInstance.getBounds(), ball2.spriteInstance.getBounds()) && !collide) {
             onCollision();
@@ -92,28 +94,31 @@ function update() {
     }
 }
 
-function subtractVector(v1, v2) {
-    return {x: v1.x - v2.x, y: v1.y - v2.y};
-}
+vectorCal = function(vector1, action, vector2){
+    //Vector Calculations
+    switch(action) {
+        case "-":
+            return {x: vector1.x - vector2.x, y: vector1.y - vector2.y};
+            break;
+        case "+":
+            return {x: vector1.x + vector2.x, y: vector1.y + vector2.y};
+            break;
+        case "*":
+            return {x: vector2 * vector1.x, y: vector2 * vector1.y};
+            break;
+        case "getMag":
+            return Math.sqrt(Math.pow(vector1.x, 2) + Math.pow(vector1.y, 2));
+            break;
+        case "getArg":
+            return Math.atan2(vector1.y, vector1.x);
+            break;
+        case "rotate":
+            return {x : vector1.x * Math.Cos(degToRad(getArg(vector1))) - vector1.y * Math.Sin(degToRad(getArg(vector1))), y : vector1.x * Math.Sin(degToRad(getArg(vector1))) + vector1.y * Math.Cos(degToRad(getArg(vector1)))};
+            break;
+        default:
+            
+    }
 
-function addVector(v1, v2) {
-    return {x: v1.x + v2.x, y: v1.y + v2.y};
-}
-
-function scaleVector(vector, scalar) {
-    return {x: scalar * vector.x, y: scalar * vector.y};
-}
-
-function getMagnitude(v) {
-    return Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2));
-}
-
-function getArg(v) {
-    return Math.atan2(v.y, v.x);
-}
-
-function rotateVector(v, angle) {
-    return {x: getMagnitude(v) * Math.cos(angle + getArg(v)), y: getMagnitude(v) * Math.sin(angle + getArg(v))};
 }
 
 function degToRad(deg) {
@@ -123,6 +128,7 @@ function degToRad(deg) {
 function onCollision() {
     var scatterAngle = initAngle * 2;
     var pCom = scaleVector(subtractVector(ball1.v, ball2.v), getReducedMass());
+    var pCom = scale 
     var qCom = rotateVector(pCom, scatterAngle);
     var q1 = addVector(scaleVector(pCom, ball1.mass / ball2.mass), qCom);
     var q2 = subtractVector(scaleVector(ball1.v, ball1.mass),q1);
