@@ -1,8 +1,8 @@
 var isRunning = false;
 
-var canvasWidth = 600;
-var canvasHeight = 500;
-var game = new Phaser.Game(canvasWidth*2, canvasHeight*2, Phaser.CANVAS, 'canvasWrapper', {
+var canvasWidth = 1200;
+var canvasHeight = 1000;
+var game = new Phaser.Game(canvasWidth, canvasHeight, Phaser.CANVAS, 'canvasWrapper', {
     preload: preload,
     create: create,
     update: update
@@ -27,6 +27,7 @@ function Vector(x,y){
 Vector.prototype.toString = function () {
     return "("+this.x.toString()+","+this.y.toString()+")";
 };
+Vector.zero = new Vector(0,0);
 
 ball1 = {
     spriteInstance: undefined,
@@ -46,6 +47,7 @@ ball1CoM ={
     initr:new Vector((canvasWidth / 2 - 100),(canvasHeight* 3 / 4)),
     v:new Vector(0,0)
 };
+
 ball2CoM ={
     spriteInstance:undefined,
     mass:getReducedMass(),
@@ -59,14 +61,14 @@ $(".inputs").each(function () {
         $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
     });
 });
-
+/*
 $('#ballCollisionAngle').on('change', function () {
     // To update the position of the balls
     initAngle = degToRad(parseFloat($("#ballCollisionAngle").val()));
     ball1.spriteInstance.y = ball1.initr.y + 0.5 * ballradius * Math.sin(initAngle);
     ball2.spriteInstance.y = ball2.initr.y - 0.5 * ballradius * Math.sin(initAngle);
 });
-
+*/
 $("#runButton").on('click', function () {
     ball1.mass = parseFloat($("#ball1Mass").val());
     ball2.mass = parseFloat($("#ball2Mass").val());
@@ -102,9 +104,18 @@ function getCoMPosV() {
 
 function resetSimulation(){
     ball1.spriteInstance.x = ball1.initr.x;
-    ball1.spriteInstance.y = ball1.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+    ball1.spriteInstance.y = ball1.initr.y ;
     ball2.spriteInstance.x = ball2.initr.x;
-    ball2.spriteInstance.y = ball2.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+    ball2.spriteInstance.y = ball2.initr.y;
+
+    ball1CoM.spriteInstance.x = ball1CoM.initr.x;
+    ball1CoM.spriteInstance.y = ball1CoM.initr.y;
+    ball2CoM.spriteInstance.x = ball2CoM.initr.x;
+    ball2CoM.spriteInstance.y = ball2CoM.initr.y;
+
+    ball1CoM.v = Vector.zero;
+    ball2CoM.v = Vector.zero;
+
     ball1.v.x = parseFloat($("#ball1VelocityX").val());
     ball1.v.y = parseFloat($("#ball1VelocityY").val());
     ball2.v.x = 0;
