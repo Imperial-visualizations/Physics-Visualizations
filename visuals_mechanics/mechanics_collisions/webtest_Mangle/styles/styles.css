@@ -522,9 +522,10 @@ body::before{
     background-image: url(../images/imperial-white-logo.svg);
     background-size: 100px;
     background-repeat: no-repeat;
+    padding-left: -10px;
     background-position: 10px 10px;
-
     color: #fff;
+    white-space:pre;
     text-align: right;
     line-height: 50px;
 
