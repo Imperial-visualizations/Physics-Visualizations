@@ -1,12 +1,14 @@
 var isRunning = false;
 
-var canvasWidth = 800;
+var canvasWidth = 600;
 var canvasHeight = 500;
-var game = new Phaser.Game(canvasWidth, canvasHeight, Phaser.CANVAS, 'CanvasWrapper', {
+var game = new Phaser.Game(canvasWidth, canvasHeight, Phaser.CANVAS, 'canvasWrapper', {
     preload: preload,
     create: create,
     update: update
 });
+
+
 var ballradius = 40;
 var ball1, ball2, initAngle;
 
@@ -45,14 +47,15 @@ $(".inputs").each(function () {
 $('#ballCollisionAngle').on('change', function () {
     // To update the position of the balls
     initAngle = degToRad(parseFloat($("#ballCollisionAngle").val()));
-    ball1.spriteInstance.y = ball2.initr.y + 0.5 * ballradius * Math.sin(initAngle);
-    ball2.spriteInstance.y = ball2.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+    ball1.spriteInstance.y = ball1.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+    ball2.spriteInstance.y = ball2.initr.y + 0.5 * ballradius * Math.sin(initAngle);
 });
 
 $("#runButton").on('click', function () {
     ball1.mass = parseFloat($("#ball1Mass").val());
-    ball1.v.x = parseFloat($("#ball1VelocityX").val());
     ball2.mass = parseFloat($("#ball2Mass").val());
+    ball1.v.x = parseFloat($("#ball1VelocityX").val());
+    ball1.v.y = parseFloat($("#ball1VelocityY").val());
     initAngle = degToRad(parseFloat($("#ballCollisionAngle").val()));
 
     isRunning = !isRunning;
@@ -68,12 +71,13 @@ $("#runButton").on('click', function () {
 
 function resetSimulation(){
     ball1.spriteInstance.x = ball1.initr.x;
-    ball1.spriteInstance.y = ball1.initr.y - 0.5*ballradius*Math.sin(initAngle);
-    ball2.spriteInstance.x = ball2.initr.x + 0.5 * ballradius * Math.sin(initAngle);
-    ball2.spriteInstance.y = ball2.initr.y;
-    ball1.v.x = parseFloat($('#ball1VelocityX').val());
-    ball2.v = {x:0,y:0};
-    ball1.v.y = 0;
+    ball1.spriteInstance.y = ball1.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+    ball2.spriteInstance.x = ball2.initr.x
+    ball2.spriteInstance.y = ball2.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+    ball1.v.x = parseFloat($("#ball1VelocityX").val());
+    ball1.v.y = parseFloat($("#ball1VelocityY").val());
+    ball2.v.x = 0;
+    ball2.v.y = 0;
 }
 
 
@@ -117,6 +121,7 @@ function update() {
 
         if (Phaser.Rectangle.intersects(ball1.spriteInstance.getBounds(), ball2.spriteInstance.getBounds()) && !collide) {
             onCollision();
+            collide = !collide;
         }
     }
 }
@@ -162,5 +167,5 @@ function onCollision() {
 
     ball1.v = vCal(q1, "*", 1 / ball1.mass);
     ball2.v = vCal(q2, "*", 1 / ball2.mass);
-    collide = true;
+    collide = false;
 }
