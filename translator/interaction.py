@@ -33,6 +33,11 @@ class Animate:
                 self.animate(**kwargs)
         return
 
+    def remove_repeated_data(self):
+        self.graph.remove_repeated_data()
+        self.script = self.graph.show()
+        return
+
     def animate(self, **kwargs):
         """
 

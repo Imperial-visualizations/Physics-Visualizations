@@ -46,11 +46,11 @@ myPlot.on('plotly_hover', function(data){
             for(var i=0;i<=(ourData[0].points[0].x).length;i++){
             Opacity.push(0.1)
             }
-            var update = {'marker':{opacity: Opacity, size:16}};
-            console.log(Opacity);
-            Plotly.restyle('graph', update, [tn]);
+//            var update = {'marker':{opacity: Opacity, size:16}};
+//            console.log(Opacity);
+//            Plotly.restyle('graph', update, [tn]);
             Opacity[pn]=1.;
-            update = {marker:{opacity: Opacity, size:16}};
+            var update = {marker:{opacity: Opacity, size:16}};
             Plotly.restyle('graph', update, [tn]);
 
 });
