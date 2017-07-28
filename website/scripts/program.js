@@ -1,1 +1,1 @@
-document.writeln("And some JS as well!")
+document.getElementById("content").innerHTML += "...And some Javascript as well!!";
