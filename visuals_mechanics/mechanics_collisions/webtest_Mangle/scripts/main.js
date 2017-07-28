@@ -2,7 +2,7 @@ var isRunning = false;
 
 var canvasWidth = 600;
 var canvasHeight = 500;
-var game = new Phaser.Game(canvasWidth, canvasHeight, Phaser.CANVAS, 'canvasWrapper', {
+var game = new Phaser.Game(canvasWidth*2, canvasHeight*2, Phaser.CANVAS, 'canvasWrapper', {
     preload: preload,
     create: create,
     update: update
@@ -83,8 +83,13 @@ function resetSimulation(){
 
 function preload() {
     game.stage.backgroundColor = "#f0f0f0";
+    
 }
 function create() {
+    game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;  
+    game.scale.setUserScale(0.5, 0.5);
+    game.renderer.renderSession.roundPixels = true;  
+    Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
 
     game.stage.backgroundColor = "#f0f0f0";
 
