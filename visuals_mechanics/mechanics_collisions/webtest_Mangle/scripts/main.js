@@ -232,20 +232,36 @@ function create() {
     ball2_CoM.spriteInstance.anchor.set(0.5, 0.5);
     ball2_graph.destroy();
 
-    // var graphics = game.add.graphics(0, 0);
+    var bordersG = game.add.graphics((canvasWidth / 2), (canvasHeight / 2));
 
-    // graphics.beginFill(0xFF3300);
-    // graphics.lineStyle(10, 0xffd900, 1);
-    
-    // graphics.lineStyle(2, 0x0000FF, 1);
-    // graphics.drawRect(50, 250, 100, 100);
+    bordersG.lineStyle(12, 0x003E74, 1);
+    bordersG.moveTo(0,0);
+    bordersG.lineTo(0, (canvasHeight / 1));
+    bordersG.lineTo((canvasWidth / 1), (canvasHeight / 1));
+    bordersG.lineTo((canvasWidth / 1), 0);
+    bordersG.lineTo(0, 0);    
 
-    // //  Then generate a texture from it and apply the texture to the sprite
-    // sprite = game.add.sprite(400, 300, graphics.generateTexture());
-    // sprite.anchor.set(0.5);
+    bordersG.lineStyle(6, 0x003E74, 1);
+    bordersG.moveTo(0, (canvasHeight / 3));
+    bordersG.lineTo((canvasWidth / 1), (canvasHeight / 3));
+    bordersG.moveTo(0, (canvasHeight * 2 / 3));
+    bordersG.lineTo((canvasWidth / 1), (canvasHeight * 2 / 3));
 
-    // //  And destroy the original graphics object
-    // graphics.destroy();
+    borders = game.add.sprite((canvasWidth / 2), (canvasHeight / 2), bordersG.generateTexture());
+    borders.anchor.set(0.5,0.5);
+
+    bordersG.destroy();
+
+    var style = { font: "36px Lato", fill: "#003E74", wordWrap: false, align: "left", backgroundColor: "#f0f0f0" };
+
+    labFrameText = game.add.text(16, 10, "Lab Frame", style);
+    labFrameText.anchor.set(0,0);
+
+    centreOfMassFrameText = game.add.text(16, ( canvasHeight/3 + 10 ), "Centre of Mass Frame", style);
+    centreOfMassFrameText.anchor.set(0,0);
+
+    vectorDiagramText = game.add.text(16, ( canvasHeight*2/3 + 10 ), "Vector Diagram", style);
+    vectorDiagramText.anchor.set(0,0);
 }
 
 function update() {
