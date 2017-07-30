@@ -175,11 +175,23 @@ function onCollision() {
     var q2star = vCal(p2Star,'rotate', Math.PI - initAngle);
     ball1_CoM.v = vCal(q1star,'*',1/ball1_Lab.mass);
     ball2_CoM.v = vCal(q2star,'*',1/ball2_Lab.mass);
-    
+    p1 = vCal(ball1_Lab.v,"*",ball1_Lab.mass);
+
     var coMV = getCoMV();
     ball1_Lab.v = vCal(ball1_CoM.v,'+',coMV);
     ball2_Lab.v = vCal(ball2_CoM.v,'+',coMV);
     isColliding = true;
+
+    q1 = vCal(ball1_Lab.v,"*",ball1_Lab.mass);
+    q2 = vCal(ball2_Lab.v,"*",ball2_Lab.mass);
+
+
+    drawArrow( zeroV() , q1 , "q1" );
+    drawArrow( q1 , q2 , "q2" );
+    drawArrow( zeroV(),vCal(p1Star,"*",(ball1_Lab.mass/ball2_Lab.mass)) , "p_CoM*(m1/m2)" );
+    drawArrow( vCal(p1Star,"*",(ball1_Lab.mass/ball2_Lab.mass)) , p1Star , "p_CoM" );
+    drawArrow( vCal(p1Star,"*",(ball1_Lab.mass/ball2_Lab.mass)) , q1star , "q1_CoM" );
+    drawArrow(new Vector(0,-10),p1,"q1_CoM");
 }
 
 
@@ -262,15 +274,7 @@ function create() {
     vectorDiagramText = game.add.text(16, ( canvasHeight*2/3 + 10 ), "Vector Diagram", style);
     vectorDiagramText.anchor.set(0,0);
 
-    v1 = new Vector(0,0);
-    v2 = new Vector(100,50);
-    drawArrow(v1,v2);
-    v1 = new Vector(0,-50);
-    v2 = new Vector(0,-50);
-    drawArrow(v1,v2);
-    v1 = new Vector(0,0);
-    v2 = new Vector(-20,-150);
-    drawArrow(v1,v2);
+
 }
 
 function update() {
@@ -297,20 +301,36 @@ function update() {
     }
 }
 
-function drawArrow(v1,v2){
-    v1.y = -1 * v1.y;
-    v2.y = -1 * v2.y;
 
+function drawArrow(origin,vector, text){
+    origin.y = -1 * origin.y;
+    vector.y = -1 * vector.y;
+    // Flip directions for canvas y-axis
 
     var arrowG = game.add.graphics(0, 0);
+    var mag = vector.getMag()*200;
 
-    arrowG.lineStyle(6, 0x006EAF, 1);
+    arrowG.lineStyle(2, 0x006EAF, 1);
     arrowG.moveTo(0,0);
-    arrowG.lineTo(v2.getMag(), 0);    
+    arrowG.lineTo(mag, 0);
 
-    arrow = game.add.sprite((canvasWidth / 2 - 100 + v1.x),(canvasHeight * 5 / 6 + 100 + v1.y), arrowG.generateTexture());
+    arrowG.beginFill(0x006EAF);
+    arrowG.moveTo(mag, 0);
+    arrowG.lineTo(mag/2, 0);
+    arrowG.lineTo(mag/2, 6);
+    arrowG.lineTo(mag/2+10, 0);
+    arrowG.lineTo(mag/2, -6);
+    arrowG.lineTo(mag/2, 0);
+    arrowG.endFill();    
+
+    var style = { font: "24px Georgia", fill: "#006EAF", wordWrap: false, align: "centre", backgroundColor: "#f0f0f0" };
+    vectorText = game.add.text((canvasWidth / 2 - 200 + origin.x + vector.x/2), (canvasHeight * 5 / 6 + 100 + origin.y + vector.y/2), text, style);
+    vectorText.anchor.set(1,1);
+
+
+    arrow = game.add.sprite((canvasWidth / 2 - 200 + origin.x),(canvasHeight * 5 / 6 + 100 + origin.y), arrowG.generateTexture());
     arrow.anchor.set(0,0.5);
-    arrow.rotation = v2.getArg();
+    arrow.rotation = vector.getArg();
 
     arrowG.destroy();
 }
