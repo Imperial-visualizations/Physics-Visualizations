@@ -54,7 +54,7 @@ var canvasWidth = 1200;
 var canvasHeight = 1200;
 var ballradius = 40;
 
-var ball1_Lab, ball2_Lab, balls1_CoM, balls2_CoM, initAngle, borders;
+var ball1_Lab, ball2_Lab, ball1_CoM, ball2_CoM, initAngle, borders;
 
 
 ball1_Lab = {
@@ -70,14 +70,14 @@ ball2_Lab = {
     initr: new Vector((canvasWidth / 2 + 100),(canvasHeight / 6)),
     v: new Vector(0,0)
 };
-balls1_CoM ={
+ball1_CoM ={
     spriteInstance: undefined,
     mass: getReducedMass(),
     initr: new Vector((canvasWidth / 2 - 100),(canvasHeight* 3 / 6)),
     v: new Vector(0,0)
 };
 
-balls2_CoM ={
+ball2_CoM ={
     spriteInstance: undefined,
     mass: getReducedMass(),
     initr: new Vector((canvasWidth / 2 + 100),(canvasHeight * 3 / 6)),
@@ -104,8 +104,8 @@ $("#runButton").on('click', function () {
     ball1_Lab.v.x = parseFloat($("#ball1LabVelocityX").val());
     ball1_Lab.v.y = parseFloat($("#ball1LabVelocityY").val());
 
-    balls1_CoM.v = vCal(ball1_Lab.v,'-',getCoMV());
-    balls2_CoM.v = vCal(ball2_Lab.v,'-',getCoMV());
+    ball1_CoM.v = vCal(ball1_Lab.v,'-',getCoMV());
+    ball2_CoM.v = vCal(ball2_Lab.v,'-',getCoMV());
     initAngle = degToRad(parseFloat($("#ballCollisionAngle").val()));
 
     if (!isRunning) {
@@ -142,13 +142,13 @@ function resetSimulation(){
     ball2_Lab.spriteInstance.x = ball2_Lab.initr.x;
     ball2_Lab.spriteInstance.y = ball2_Lab.initr.y;
 
-    balls1_CoM.spriteInstance.x = balls1_CoM.initr.x;
-    balls1_CoM.spriteInstance.y = balls1_CoM.initr.y;
-    balls2_CoM.spriteInstance.x = balls2_CoM.initr.x;
-    balls2_CoM.spriteInstance.y = balls2_CoM.initr.y;
+    ball1_CoM.spriteInstance.x = ball1_CoM.initr.x;
+    ball1_CoM.spriteInstance.y = ball1_CoM.initr.y;
+    ball2_CoM.spriteInstance.x = ball2_CoM.initr.x;
+    ball2_CoM.spriteInstance.y = ball2_CoM.initr.y;
 
-    balls1_CoM.v = zeroV();
-    balls2_CoM.v = zeroV();
+    ball1_CoM.v = zeroV();
+    ball2_CoM.v = zeroV();
     /* 
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     "Vector" should only be one of the follows:
@@ -170,17 +170,16 @@ function resetSimulation(){
 }
 
 function onCollision() {
-    var p1Star = vCal(balls1_CoM.v,'*',balls1_CoM.mass);
-    var p2Star = vCal(balls2_CoM.v,'*',balls2_CoM.mass);
-
+    var p1Star = vCal(ball1_CoM.v,'*',ball1_CoM.mass);
+    var p2Star = vCal(ball2_CoM.v,'*',ball2_CoM.mass);
     var q1star = vCal(p1Star,'rotate', Math.PI - initAngle);
     var q2star = vCal(p2Star,'rotate', Math.PI - initAngle);
-
-    balls1_CoM.v = vCal(q1star,'*',1/getReducedMass());
-    balls2_CoM.v = vCal(q2star,'*',1/getReducedMass());
-
-    ball1_Lab.v = vCal(balls1_CoM.v,'+',getCoMV());
-    ball2_Lab.v = vCal(balls2_CoM.v,'+',getCoMV());
+    ball1_CoM.v = vCal(q1star,'*',1/ball1_Lab.mass);
+    ball2_CoM.v = vCal(q2star,'*',1/ball2_Lab.mass);
+    
+    var coMV = getCoMV();
+    ball1_Lab.v = vCal(ball1_CoM.v,'+',coMV);
+    ball2_Lab.v = vCal(ball2_CoM.v,'+',coMV);
     isColliding = true;
 }
 
@@ -216,9 +215,9 @@ function create() {
 
 
     ball1_Lab.spriteInstance = game.add.sprite( ball1_Lab.initr.x, ball1_Lab.initr.y, ball1_graph.generateTexture() );
-    balls1_CoM.spriteInstance = game.add.sprite( balls1_CoM.initr.x, balls1_CoM.initr.y, ball1_graph.generateTexture() );
+    ball1_CoM.spriteInstance = game.add.sprite( ball1_CoM.initr.x, ball1_CoM.initr.y, ball1_graph.generateTexture() );
     ball1_Lab.spriteInstance.anchor.set(0.5, 0.5);
-    balls1_CoM.spriteInstance.anchor.set(0.5,0.5);
+    ball1_CoM.spriteInstance.anchor.set(0.5,0.5);
     ball1_graph.destroy();
 
     var ball2_graph = game.add.graphics(0, 0);
@@ -227,10 +226,10 @@ function create() {
     ball2_graph.beginFill(0x00AEF2, 1);
     ball2_graph.drawCircle(0, 0, ballradius);
 
-    balls2_CoM.spriteInstance = game.add.sprite( balls2_CoM.initr.x, balls2_CoM.initr.y, ball2_graph.generateTexture() );
+    ball2_CoM.spriteInstance = game.add.sprite( ball2_CoM.initr.x, ball2_CoM.initr.y, ball2_graph.generateTexture() );
     ball2_Lab.spriteInstance = game.add.sprite( ball2_Lab.initr.x, ball2_Lab.initr.y, ball2_graph.generateTexture() );
     ball2_Lab.spriteInstance.anchor.set(0.5, 0.5);
-    balls2_CoM.spriteInstance.anchor.set(0.5, 0.5);
+    ball2_CoM.spriteInstance.anchor.set(0.5, 0.5);
     ball2_graph.destroy();
 
     // var graphics = game.add.graphics(0, 0);
@@ -260,10 +259,10 @@ function update() {
 
         //Centre of mass motion
 
-        balls2_CoM.spriteInstance.x += balls2_CoM.v.x;
-        balls2_CoM.spriteInstance.y -= balls2_CoM.v.y;
-        balls1_CoM.spriteInstance.x += balls1_CoM.v.x;
-        balls1_CoM.spriteInstance.y -= balls1_CoM.v.y;
+        ball2_CoM.spriteInstance.x += ball2_CoM.v.x;
+        ball2_CoM.spriteInstance.y -= ball2_CoM.v.y;
+        ball1_CoM.spriteInstance.x += ball1_CoM.v.x;
+        ball1_CoM.spriteInstance.y -= ball1_CoM.v.y;
 
 
         if (Phaser.Rectangle.intersects(ball1_Lab.spriteInstance.getBounds(), ball2_Lab.spriteInstance.getBounds()) && !isColliding) {
