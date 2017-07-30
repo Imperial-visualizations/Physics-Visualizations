@@ -302,9 +302,11 @@ function update() {
 }
 
 
-function drawArrow(origin,vector, text){
-    origin.y = -1 * origin.y;
-    vector.y = -1 * vector.y;
+function drawArrow(originV ,vectorV, text){
+    origin.x = originV.x;
+    origin.y = originV.y;
+    vector.y = -1 * vectorV.y;
+    vector.x = -1 * vectorV.x;
     // Flip directions for canvas y-axis
 
     var arrowG = game.add.graphics(0, 0);
