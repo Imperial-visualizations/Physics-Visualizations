@@ -102,7 +102,6 @@ $("#runButton").on('click', function () {
     ball1_Lab.mass = parseFloat($("#ball1LabMass").val());
     ball2_Lab.mass = parseFloat($("#ball2LabMass").val());
     ball1_Lab.v.x = parseFloat($("#ball1LabVelocityX").val());
-    ball1_Lab.v.y = parseFloat($("#ball1LabVelocityY").val());
 
     ball1_CoM.v = vCal(ball1_Lab.v,'-',getCoMV());
     ball2_CoM.v = vCal(ball2_Lab.v,'-',getCoMV());
@@ -201,7 +200,7 @@ function preload() {
 
 function create() {
     game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;  
-    game.scale.setUserScale(0.5, 0.5);
+    game.scale.setUserScale(1/window.devicePixelRatio, 1/window.devicePixelRatio);
     game.renderer.renderSession.roundPixels = true;  
     Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
 
@@ -262,6 +261,16 @@ function create() {
 
     vectorDiagramText = game.add.text(16, ( canvasHeight*2/3 + 10 ), "Vector Diagram", style);
     vectorDiagramText.anchor.set(0,0);
+
+    v1 = new Vector(0,0);
+    v2 = new Vector(100,50);
+    drawArrow(v1,v2);
+    v1 = new Vector(0,-50);
+    v2 = new Vector(0,-50);
+    drawArrow(v1,v2);
+    v1 = new Vector(0,0);
+    v2 = new Vector(-20,-150);
+    drawArrow(v1,v2);
 }
 
 function update() {
@@ -286,4 +295,22 @@ function update() {
         }
         console.log(getKE());
     }
+}
+
+function drawArrow(v1,v2){
+    v1.y = -1 * v1.y;
+    v2.y = -1 * v2.y;
+
+
+    var arrowG = game.add.graphics(0, 0);
+
+    arrowG.lineStyle(6, 0x006EAF, 1);
+    arrowG.moveTo(0,0);
+    arrowG.lineTo(v2.getMag(), 0);    
+
+    arrow = game.add.sprite((canvasWidth / 2 - 100 + v1.x),(canvasHeight * 5 / 6 + 100 + v1.y), arrowG.generateTexture());
+    arrow.anchor.set(0,0.5);
+    arrow.rotation = v2.getArg();
+
+    arrowG.destroy();
 }
