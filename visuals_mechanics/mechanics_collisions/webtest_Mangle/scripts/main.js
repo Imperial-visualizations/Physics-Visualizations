@@ -54,7 +54,7 @@ var canvasWidth = 1200;
 var canvasHeight = 1200;
 var ballradius = 40;
 
-var ball1_Lab, ball2_Lab, ball1_CoM, ball2_CoM, initAngle, borders;
+var ball1_Lab, ball2_Lab, ball1_CoM, ball2_CoM, initAngle, borders, arrows;
 
 
 ball1_Lab = {
@@ -86,12 +86,12 @@ ball2_CoM ={
 
 $(".inputs").each(function () {
     // To update the displayed value in HTML
-    $(this).on('change', function () {
+    $(this).on('input', function () {
         $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
     });
 });
 /*
-$('#ballCollisionAngle').on('change', function () {
+$('#ballCollisionAngle').on('input', function () {
     // To update the position of the balls
     initAngle = degToRad(parseFloat($("#ballCollisionAngle").val()));
     ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
@@ -161,10 +161,8 @@ function resetSimulation(){
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     */
 
-    ball1_Lab.v.x = parseFloat($("#ball1LabVelocityX").val());
-    ball1_Lab.v.y = parseFloat($("#ball1LabVelocityY").val());
-    ball2_Lab.v.x = 0;
-    ball2_Lab.v.y = 0;
+    ball1_Lab.v = zeroV();
+    ball2_Lab.v = zeroV();
     isColliding = false;
 }
 
@@ -180,7 +178,6 @@ function onCollision() {
     var coMV = getCoMV();
     ball1_Lab.v = vCal(ball1_CoM.v,'+',coMV);
     ball2_Lab.v = vCal(ball2_CoM.v,'+',coMV);
-    isColliding = true;
 
     q1 = vCal(ball1_Lab.v,"*",ball1_Lab.mass);
     q2 = vCal(ball2_Lab.v,"*",ball2_Lab.mass);
@@ -191,7 +188,10 @@ function onCollision() {
     drawArrow( zeroV(),vCal(p1Star,"*",(ball1_Lab.mass/ball2_Lab.mass)) , "p_CoM*(m1/m2)" );
     drawArrow( vCal(p1Star,"*",(ball1_Lab.mass/ball2_Lab.mass)) , p1Star , "p_CoM" );
     drawArrow( vCal(p1Star,"*",(ball1_Lab.mass/ball2_Lab.mass)) , q1star , "q1_CoM" );
-    drawArrow(new Vector(0,-10),p1,"q1_CoM");
+    drawArrow(new Vector(0,-0.1),p1,"p1");
+
+
+    isColliding = true;
 }
 
 
@@ -303,14 +303,13 @@ function update() {
 
 
 function drawArrow(originV ,vectorV, text){
-    origin.x = originV.x;
-    origin.y = originV.y;
-    vector.y = -1 * vectorV.y;
-    vector.x = -1 * vectorV.x;
+    var origin = new Vector(originV.x, -1 * originV.y);
+    var vector = new Vector(vectorV.x, -1 * vectorV.y);
     // Flip directions for canvas y-axis
 
-    var arrowG = game.add.graphics(0, 0);
-    var mag = vector.getMag()*200;
+    var arrowG = game.add.graphics((canvasWidth / 2 - 500 + origin.x), (canvasHeight * 5 / 6 + 100 + origin.y));
+    var scaleFactor = 100;
+    var mag = vector.getMag()*scaleFactor;
 
     arrowG.lineStyle(2, 0x006EAF, 1);
     arrowG.moveTo(0,0);
@@ -326,13 +325,10 @@ function drawArrow(originV ,vectorV, text){
     arrowG.endFill();    
 
     var style = { font: "24px Georgia", fill: "#006EAF", wordWrap: false, align: "centre", backgroundColor: "#f0f0f0" };
-    vectorText = game.add.text((canvasWidth / 2 - 200 + origin.x + vector.x/2), (canvasHeight * 5 / 6 + 100 + origin.y + vector.y/2), text, style);
-    vectorText.anchor.set(1,1);
+    vectorText = game.add.text((canvasWidth / 2 - 500 + origin.x*scaleFactor + vector.x*scaleFactor/2), (canvasHeight * 5 / 6 + 100 + origin.y*scaleFactor + vector.y*scaleFactor/2), text, style);
 
-
-    arrow = game.add.sprite((canvasWidth / 2 - 200 + origin.x),(canvasHeight * 5 / 6 + 100 + origin.y), arrowG.generateTexture());
+    arrow = game.add.sprite((canvasWidth / 2 - 500 + origin.x*scaleFactor),(canvasHeight * 5 / 6 + 100 + origin.y*scaleFactor), arrowG.generateTexture());
     arrow.anchor.set(0,0.5);
     arrow.rotation = vector.getArg();
-
     arrowG.destroy();
 }
