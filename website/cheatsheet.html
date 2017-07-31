@@ -40,11 +40,17 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
     <section class="header">
-      <h2 class="title">Imperial Visualisation Cheatsheet</h2>
+      <h1 class="title">Imperial Visualisation Cheatsheet</h1>
         <ul class="dropdown">
             <li>
                 <span id="Menu">Menu</span>
                 <ul>
+                <li class="popover-item">
+                  <a class="popover-link" href="#dropdown">Dropdown</a>
+                </li>
+                <li class="popover-item">
+                  <a class="popover-link" href="#GettingStarted">Getting Started</a>
+                </li>
                 <li class="popover-item">
                   <a class="popover-link" href="#grid">Grid</a>
                 </li>
@@ -78,7 +84,7 @@
     </section>
 
     <div id="dropdown">
-      <h6 class="docs-header">The dropdown menu</h6>
+      <h3 class="docs-header">The dropdown menu</h3>
       <p>The drop down menu can be used in combination with plotly to control the graph or as a navigation bar.</p>
 <pre>
 <code>
@@ -92,24 +98,9 @@
                 &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
                   &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#typography&#x22;&#x3E;Typography&#x3C;/a&#x3E;
                 &#x3C;/li&#x3E;
-                &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
-                  &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#buttons&#x22;&#x3E;Buttons&#x3C;/a&#x3E;
-                &#x3C;/li&#x3E;
-                &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
-                  &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#forms&#x22;&#x3E;Forms&#x3C;/a&#x3E;
-                &#x3C;/li&#x3E;
-                &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
-                  &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#lists&#x22;&#x3E;Lists&#x3C;/a&#x3E;
-                &#x3C;/li&#x3E;
-                &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
-                  &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#code&#x22;&#x3E;Code&#x3C;/a&#x3E;
-                &#x3C;/li&#x3E;
-                &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
-                  &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#tables&#x22;&#x3E;Tables&#x3C;/a&#x3E;
-                &#x3C;/li&#x3E;
-                &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
-                  &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#queries&#x22;&#x3E;Queries&#x3C;/a&#x3E;
-                &#x3C;/li&#x3E;
+                .
+                .
+                .
                 &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
                   &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#utilities&#x22;&#x3E;Utilities&#x3C;/a&#x3E;
                 &#x3C;/li&#x3E;
@@ -120,10 +111,86 @@
 </pre>
     </div>
               
+    <!-- README -->
+    <div id="GettingStarted">
+      <h3>Getting Started</h3>
+        <div class="row">
+          <div class="six columns">
+            <p>
+              How to get started:<br>
+              1. open ~/Imperial-Visualizations/website/<br>
+              2. download everything inside (see right)<br>
+              3. open "index.html" with PyCharm or whatever code-editor you like:<br>
+              4. Now you can start copy and paste stuff from this page to your index.html file. Remember to put them inside &#x3C;div class=&#x22;container&#x22;&#x3E; &#x3C;/div&#x3E;.
+            </p>
+          </div>
+          <div class="six columns">
+<pre>
+<code>
++ /Imperial-Visualizations/website/
+| + images/
+| |- imperial-black-logo.svg
+| |- imperial-logo.svg
+| |- imperial-white-logo.svg
+| + scripts/
+| |- program.js
+| + styles/
+| |- styles.css
+| - index.html
+| - cheatsheet.html
+</code>
+</pre>
+          </div>
+        </div>
+        <div class="row">
+          <div class="twelve columns">
+
+<pre>
+<code>
+<strong>index.html</strong>
+
+&#x3C;html&#x3E;
+&#x3C;head&#x3E;
+    &#x3C;meta charset=&#x22;utf-8&#x22;&#x3E;
+    &#x3C;meta name=&#x22;viewport&#x22; content=&#x22;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no&#x22;&#x3E;
+    &#x3C;title&#x3E;Imperial Visualisations&#x3C;/title&#x3E;
+    &#x3C;link rel=&#x22;stylesheet&#x22; href=&#x22;styles/styles.css&#x22;&#x3E;
+    &#x3C;!-- importing style.css --&#x3E;
+    &#x3C;!-- **You are not suppose to change style.css !!**  --&#x3E;
+    &#x3C;style type=&#x22;text/css&#x22;&#x3E;
+        /* overwrite style.css styles*/
+    &#x3C;/style&#x3E;
+&#x3C;/head&#x3E;
+&#x3C;body&#x3E;
+    &#x3C;div class=&#x22;container&#x22;&#x3E;
+        &#x3C;h1&#x3E;Big title&#x3C;/h1&#x3E;
+        &#x3C;div class=&#x22;row&#x22;&#x3E;
+            &#x3C;div class=&#x22;eight columns&#x22;&#x3E;
+                &#x3C;p&#x3E;Put your graph here&#x3C;/p&#x3E;
+            &#x3C;/div&#x3E;
+            &#x3C;div class=&#x22;four columns&#x22;&#x3E;
+                &#x3C;p&#x3E;And probobly put your interface here&#x3C;/p&#x3E;
+            &#x3C;/div&#x3E;
+        &#x3C;/div&#x3E;
+    &#x3C;/div&#x3E;
+    &#x3C;br&#x3E;&#x3C;br&#x3E;&#x3C;br&#x3E;
+    &#x3C;script src=&#x22;scripts/program.js&#x22;&#x3E;&#x3C;/script&#x3E;
+    &#x3C;!-- You should put your javascript code in program.js --&#x3E;
+    &#x3C;script&#x3E;
+        // or you can put your javascript here as well.
+    &#x3C;/script&#x3E;
+&#x3C;/body&#x3E;
+&#x3C;/html&#x3E;
+
+</code>
+</pre>
+          </div>
+        </div>
+    </div>
 
     <!-- Grid -->
     <div class="docs-section" id="grid">
-      <h6 class="docs-header">The grid</h6>
+      <h3 class="docs-header">The grid</h3>
       <p>The grid is a <u>12-column fluid grid with a max width of 960px</u>, that shrinks with the browser/device at smaller sizes. The max width can be changed with one line of CSS and all columns will resize accordingly. The syntax is simple and it makes coding responsive much easier. Go ahead, resize the browser. </p>
       <div class="example-grid docs-example">
         <div class="row">
@@ -214,7 +281,7 @@
 
     <!-- Typography -->
     <div id="typography">
-      <h6>Typography</h6>
+      <h3>Typography</h3>
       <p>Type is all set with the <code>rems</code>, so font-sizes and spacial relationships can be responsively sized based on a single <code>&lt;html&gt;</code> font-size property. Out of the box, Skeleton never changes the <code>&lt;html&gt;</code> font-size, but it's there in case you need it for your project. All measurements are still base 10 though so, an <code>&lt;h1&gt;</code> with <code>5.0rem</code>font-size just means <code>50px</code>.</p>
       <div>
         <div class="row">
@@ -228,7 +295,7 @@
             <h3>Heading<span class="heading-font-size"> <code>&lt;h3&gt;</code> 36rem</span></h3>
             <h4>Heading<span class="heading-font-size"> <code>&lt;h4&gt;</code> 30rem</span></h4>
             <h5>Heading<span class="heading-font-size"> <code>&lt;h5&gt;</code> 24rem</span></h5>
-            <h6>Heading<span class="heading-font-size"> <code>&lt;h6&gt;</code> 15rem</span></h6>
+            <h3>Heading<span class="heading-font-size"> <code>&lt;h3&gt;</code> 15rem</span></h3>
           </div>
         </div>
       </div>
@@ -243,7 +310,7 @@
 &lt;h3&gt;Heading&lt;/h3&gt;
 &lt;h4&gt;Heading&lt;/h4&gt;
 &lt;h5&gt;Heading&lt;/h5&gt;
-&lt;h6&gt;Heading&lt;/h6&gt;
+&lt;h3&gt;Heading&lt;/h3&gt;
 
 &lt;!-- Base type size --&gt;
 &lt;p&gt;The base type is 15px over 1.6 line height (24px)&lt;/p&gt;
@@ -263,7 +330,7 @@
 
     <!-- Buttons -->
     <div class="docs-section" id="buttons">
-      <h6 class="docs-header">Buttons</h6>
+      <h3 class="docs-header">Buttons</h3>
       <p>Buttons come in two basic flavors in Skeleton. The standard <code>&lt;button&gt;</code> element is plain, whereas the <code>.button-primary</code> button is vibrant and prominent. Button styles are applied to a number of appropriate form elements, but can also be arbitrarily attached to anchors with a <code>.button</code> class.</p>
       <div class="docs-example">
         <div>
@@ -305,7 +372,7 @@
 
     <!-- Forms -->
     <div class="docs-section" id="forms">
-      <h6 class="docs-header">Forms</h6>
+      <h3 class="docs-header">Forms</h3>
       <p>Forms are a huge pain, but hopefully these styles make it a bit easier. All inputs, select, and buttons are normalized for a common height cross-browser so inputs can be stacked or placed alongside each other.</p>
       <div class="docs-example docs-example-forms">
         <form>
@@ -343,29 +410,34 @@
 <pre class="code-example">
 <code class="code-example-body prettyprint"><!-- The above form looks like this -->
 &lt;!-- The above form looks like this --&gt;
-&lt;form&gt;
-  &lt;div class="row"&gt;
-    &lt;div class="six columns"&gt;
-      &lt;label for="exampleEmailInput"&gt;Your email&lt;/label&gt;
-      &lt;input class="u-full-width" type="email" placeholder="test@mailbox.com" id="exampleEmailInput"&gt;
-    &lt;/div&gt;
-    &lt;div class="six columns"&gt;
-      &lt;label for="exampleRecipientInput"&gt;Reason for contacting&lt;/label&gt;
-      &lt;select class="u-full-width" id="exampleRecipientInput"&gt;
-        &lt;option value="Option 1"&gt;Questions&lt;/option&gt;
-        &lt;option value="Option 2"&gt;Admiration&lt;/option&gt;
-        &lt;option value="Option 3"&gt;Can I get your number?&lt;/option&gt;
-      &lt;/select&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-  &lt;label for="exampleMessage"&gt;Message&lt;/label&gt;
-  &lt;textarea class="u-full-width" placeholder="Hi Dave …" id="exampleMessage"&gt;&lt;/textarea&gt;
-  &lt;label class="example-send-yourself-copy"&gt;
-    &lt;input type="checkbox"&gt;
-    &lt;span class="label-body"&gt;Send a copy to yourself&lt;/span&gt;
-  &lt;/label&gt;
-  &lt;input class="button-primary" type="submit" value="Submit"&gt;
-&lt;/form&gt;
+        &#x3C;form&#x3E;
+          &#x3C;div class=&#x22;row&#x22;&#x3E;
+            &#x3C;div class=&#x22;six columns&#x22;&#x3E;
+              &#x3C;label for=&#x22;exampleEmailInput&#x22;&#x3E;Your email&#x3C;/label&#x3E;
+              &#x3C;input class=&#x22;u-full-width&#x22; type=&#x22;email&#x22; placeholder=&#x22;test@mailbox.com&#x22; id=&#x22;exampleEmailInput&#x22;&#x3E;
+            &#x3C;/div&#x3E;
+            &#x3C;div class=&#x22;six columns&#x22;&#x3E;
+              &#x3C;label for=&#x22;exampleRecipientInput&#x22;&#x3E;Reason for contacting&#x3C;/label&#x3E;
+              &#x3C;select class=&#x22;u-full-width&#x22; id=&#x22;exampleRecipientInput&#x22;&#x3E;
+                &#x3C;option value=&#x22;Option 1&#x22;&#x3E;Questions&#x3C;/option&#x3E;
+                &#x3C;option value=&#x22;Option 2&#x22;&#x3E;Admiration&#x3C;/option&#x3E;
+                &#x3C;option value=&#x22;Option 3&#x22;&#x3E;Can I get your number?&#x3C;/option&#x3E;
+              &#x3C;/select&#x3E;
+            &#x3C;/div&#x3E;
+          &#x3C;/div&#x3E;
+          &#x3C;label for=&#x22;exampleMessage&#x22;&#x3E;Message&#x3C;/label&#x3E;
+          &#x3C;textarea class=&#x22;u-full-width&#x22; placeholder=&#x22;Hi Dave &#x26;hellip;&#x22; id=&#x22;exampleMessage&#x22;&#x3E;&#x3C;/textarea&#x3E;
+          &#x3C;label class=&#x22;example-send-yourself-copy&#x22;&#x3E;
+            &#x3C;input type=&#x22;checkbox&#x22;&#x3E;
+            &#x3C;span class=&#x22;label-body&#x22;&#x3E;Send a copy to yourself&#x3C;/span&#x3E;
+          &#x3C;/label&#x3E;
+          &#x3C;label class=&#x22;sliderTitle&#x22;&#x3E;Slider:&#x3C;/label&#x3E; 
+          &#x3C;label&#x3E;
+          &#x3C;input id=&#x22;yourID&#x22; type =&#x22;range&#x22; value=&#x22;5&#x22; min =&#x22;-1&#x22; max=&#x22;10.0&#x22; step =&#x22;0.1&#x22;/&#x3E;
+          &#x3C;span class=&#x22;sliderMin&#x22;&#x3E;-1&#x3C;/span&#x3E;&#x3C;span class=&#x22;sliderMax&#x22;&#x3E;10&#x3C;/span&#x3E;
+          &#x3C;/label&#x3E;
+          &#x3C;input class=&#x22;button-primary&#x22; type=&#x22;submit&#x22; value=&#x22;Submit&#x22;&#x3E;
+        &#x3C;/form&#x3E;
 
 &lt;!-- Always wrap checkbox and radio inputs in a label and use a &lt;span class="label-body"&gt; inside of it --&gt;
 
@@ -380,7 +452,7 @@
 
     <!-- Lists -->
     <div class="docs-section" id="lists">
-      <h6 class="docs-header">Lists</h6>
+      <h3 class="docs-header">Lists</h3>
       <div class="row docs-example">
         <div class="six columns">
           <ul>
@@ -437,7 +509,7 @@
 
     <!-- Code -->
     <div class="docs-section" id="code">
-      <h6 class="docs-header">Code</h6>
+      <h3 class="docs-header">Code</h3>
       <p>Code styling is kept basic – just wrap anything in a <code>&lt;code&gt;</code> and it will appear like <code>this</code>. For blocks of code, wrap a <code>&lt;code&gt;</code> with a <code>&lt;pre&gt;</code>.</p>
       <div class="docs-example">
 <pre><code>.some-class {
@@ -464,7 +536,7 @@
 
     <!-- Tables -->
     <div class="docs-section" id="tables">
-      <h6 class="docs-header">Tables</h6>
+      <h3 class="docs-header">Tables</h3>
       <p>Be sure to use properly formed table markup with <code>&lt;thead&gt;</code> and <code>&lt;tbody&gt;</code> when building a <code>table</code>.</p>
       <div class="docs-example">
         <table class="u-full-width">
@@ -531,7 +603,7 @@
 
     <!-- Queries -->
     <div class="docs-section" id="queries">
-      <h6 class="docs-header">Media queries</h6>
+      <h3 class="docs-header">Media queries</h3>
       <p>Skeleton uses media queries to serve its scalable grid, but also has a list of queries for convenience of styling your site across devices. The queries are mobile-first, meaning they target <code>min-width</code>. Mobile-first queries are how Skeleton's grid is built and is the preferrable method of organizing CSS. It means all styles outside of a query apply to all devices, then larger devices are targeted for enhancement. This prevents small devices from having to parse tons of unused CSS. The sizes for the queries are:</p>
       <div class="docs-example row">
         <div class="six columns">
@@ -580,7 +652,7 @@
 
     <!-- Utilities and Misc. -->
     <div class="docs-section" id="utilities">
-      <h6 class="docs-header">Utilities</h6>
+      <h3 class="docs-header">Utilities</h3>
       <p>Skeleton has a number of small utility classes that act as easy-to-use helpers. Sometimes it's better to use a utility class than create a whole new class just to float an element.</p>
 
 
@@ -612,6 +684,10 @@
 </code>
 </pre>
 <!-- ————————————————————————————————————————————————————— -->
+    </div>
+  </div>
+
+
 <br><br><br><br>
 
 
