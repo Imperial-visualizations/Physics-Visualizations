@@ -36,22 +36,24 @@ Plotly.plot('graph', [{
     yaxis: {range: [-2, 2]}}
 );
 
-function randomize() {
+function replotter() {
   for (var i = 1; i < 50; i++){
     Plotly.animate('graph', {
       data:
         [{x: frames[i].x,
-        y: frames[i].y}],
-//        traces: [0],
-        layout: {}
+        y: frames[i].y}]
         }, {
       transition: {
-        duration: 100,
+        duration: 150,
         easing: 'cubic-in-out'
+      },
+      frame: {
+        duration: 0,
+        redraw: false
       }
 
     })
   }
 }
 
-randomize()
+replotter()
