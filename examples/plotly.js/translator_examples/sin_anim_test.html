@@ -30,9 +30,16 @@ function update()
 		 });
 	requestAnimationFrame(update);
  }
-
-requestAnimationFrame(update);
 </script>
+
+<div id="content"></div>
+
+<script>
+    function onstart() {
+        requestAnimationFrame(update);
+    }
+</script>
+<input id="run_button" type="button" value="start" onclick="onstart()"/>
 
 </body>
 </html>

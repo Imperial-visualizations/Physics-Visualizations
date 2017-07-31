@@ -120,8 +120,7 @@ class Graph:
         self.make_layout(**kwargs)
 
         self.script += self.layout
-        self.script += "Plotly.newPlot({div_name}, {plots}, layout);".format(div_name=escape(self.div_id),
-                                                                               plots=plots)
+        self.script += "Plotly.newPlot({div_name}, {plots}, layout);".format(div_name=escape(self.div_id), plots=plots)
         return self.script
 
     def show(self, **kwargs):
