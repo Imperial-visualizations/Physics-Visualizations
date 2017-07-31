@@ -1,0 +1,68 @@
+/**
+* Created by TONY on 12/07/2017.
+*/
+<html>
+
+<head>
+    <title>Sin Wave</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+<div id='graph'></div>  <!-- Plotly chart will be drawn inside this DIV -->
+
+<script>
+    Plotly.d3.json("data_initial.json", function (error, figure) {
+
+        if (error) throw error;
+
+        var trace = {
+            x: figure[0].data.x,
+            y: figure[0].data.y,
+            type: 'scatter',
+            mode: 'lines',
+            line: {width: 1, color: 'blue'}
+        };
+
+        var layout = {
+            xaxis: {showgrid: false},
+            width: 1000,
+            height: 500,
+            margin: {
+                l: 30,
+                r: 20,
+                t: 0,
+                b: 30,
+            }
+        };
+
+        var colour_buttons = {
+            updatemenus: [{
+                pad: {t: 60, r: 30},
+                type: 'buttons',
+                xanchor: 'left',
+                yanchor: 'top',
+                x: 0,
+                y: 0,
+                direction: 'right',
+                buttons: [{
+                    label: 'blue',
+                    method: 'restyle',
+                    args: ['line.color', 'blue']
+                }, {
+                    label: 'green',
+                    method: 'restyle',
+                    args: ['line.color', 'green']
+                }, {
+                    label: 'red',
+                    method: 'restyle',
+                    args: ['line.color', 'red']
+                }]
+            }]
+        };
+
+        Plotly.newPlot('graph', [trace], colour_buttons, layout, {showLink: false});
+    });
+</script>
+</body>
+</html>

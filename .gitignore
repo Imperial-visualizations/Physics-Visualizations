@@ -7,4 +7,9 @@ __pycache__/
 initial_package_tests
 
 # Files
+.ipynb_checkpoints/
 test.py
+
+#Ignore All
+.ipynb_checkpoints/
+.DS_STORE
