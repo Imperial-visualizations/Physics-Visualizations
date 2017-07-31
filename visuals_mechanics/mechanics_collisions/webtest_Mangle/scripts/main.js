@@ -50,8 +50,8 @@ function degToRad(deg) {
 var isRunning = false;
 var isColliding = false;
 
-var canvasWidth = 1200;
-var canvasHeight = 1200;
+var canvasWidth = 800;
+var canvasHeight = 800;
 var ballradius = 40;
 
 var ball1_Lab, ball2_Lab, ball1_CoM, ball2_CoM, initAngle, borders;
@@ -63,18 +63,21 @@ ball1_Lab = {
     spriteInstance: undefined,
     mass: 1,
     initr: new Vector((canvasWidth / 2 - 100),(canvasHeight / 6)),
+    bounds: new Phaser.Rectangle(0,0,canvasWidth,canvasHeight/3 - ballradius),
     v: new Vector(0,0)
 };
 ball2_Lab = {
     spriteInstance: undefined,
     mass: 1,
     initr: new Vector((canvasWidth / 2 + 100),(canvasHeight / 6)),
+    bounds: new Phaser.Rectangle(0,0,canvasWidth,canvasHeight/3 - ballradius),
     v: new Vector(0,0)
 };
 ball1_CoM ={
     spriteInstance: undefined,
     mass: getReducedMass(),
     initr: new Vector((canvasWidth / 2 - 100),(canvasHeight* 3 / 6)),
+    bounds: new Phaser.Rectangle(0,canvasHeight/3 + ballradius,canvasWidth,canvasHeight/3 - ballradius*2),
     v: new Vector(0,0)
 };
 
@@ -82,6 +85,7 @@ ball2_CoM ={
     spriteInstance: undefined,
     mass: getReducedMass(),
     initr: new Vector((canvasWidth / 2 + 100),(canvasHeight * 3 / 6)),
+    bounds: new Phaser.Rectangle(0,canvasHeight/3 + ballradius,canvasWidth,canvasHeight/3 -ballradius*2),
     v: new Vector(0,0)
 };
 
@@ -203,10 +207,6 @@ function onCollision() {
 }
 
 
-
-
-
-
 var game = new Phaser.Game(canvasWidth, canvasHeight, Phaser.CANVAS, 'canvasWrapper', {
     preload: preload,
     create: create,
@@ -255,16 +255,16 @@ function create() {
 
     bordersG.lineStyle(12, 0x003E74, 1);
     bordersG.moveTo(0,0);
-    bordersG.lineTo(0, (canvasHeight / 1));
-    bordersG.lineTo((canvasWidth / 1), (canvasHeight / 1));
-    bordersG.lineTo((canvasWidth / 1), 0);
+    bordersG.lineTo(0, (canvasHeight ));
+    bordersG.lineTo((canvasWidth ), (canvasHeight));
+    bordersG.lineTo((canvasWidth), 0);
     bordersG.lineTo(0, 0);    
 
     bordersG.lineStyle(6, 0x003E74, 1);
     bordersG.moveTo(0, (canvasHeight / 3));
-    bordersG.lineTo((canvasWidth / 1), (canvasHeight / 3));
+    bordersG.lineTo((canvasWidth), (canvasHeight / 3));
     bordersG.moveTo(0, (canvasHeight * 2 / 3));
-    bordersG.lineTo((canvasWidth / 1), (canvasHeight * 2 / 3));
+    bordersG.lineTo((canvasWidth ), (canvasHeight * 2 / 3));
 
     borders = game.add.sprite((canvasWidth / 2), (canvasHeight / 2), bordersG.generateTexture());
     borders.anchor.set(0.5,0.5);
@@ -287,8 +287,6 @@ function create() {
 
 function update() {
     if (isRunning) {
-
-
         ball1_Lab.spriteInstance.x += ball1_Lab.v.x;
         ball1_Lab.spriteInstance.y -= ball1_Lab.v.y;
         ball2_Lab.spriteInstance.x += ball2_Lab.v.x;
@@ -303,6 +301,11 @@ function update() {
 
         $('#ball2labvx').html("Velocity X:" + ball2_Lab.v.x.toString() + "m/s");
         $('#ball2labvy').html("Velocity Y:" + ball2_Lab.v.y.toString() + "m/s");
+
+        ball1_CoM.spriteInstance.visible = Phaser.Rectangle.intersects(ball1_CoM.bounds, ball1_CoM.spriteInstance.getBounds());
+        ball2_CoM.spriteInstance.visible = Phaser.Rectangle.intersects(ball2_CoM.bounds, ball2_CoM.spriteInstance.getBounds());
+        ball1_Lab.spriteInstance.visible = Phaser.Rectangle.intersects(ball1_Lab.bounds, ball1_Lab.spriteInstance.getBounds());
+        ball2_Lab.spriteInstance.visible = Phaser.Rectangle.intersects(ball2_Lab.bounds, ball2_Lab.spriteInstance.getBounds());
 
 
 
@@ -321,7 +324,7 @@ function drawArrow(originV ,vectorV, text){
     // Flip directions for canvas y-axis
 
     var arrowG = game.add.graphics((canvasWidth / 2 - 500 + origin.x), (canvasHeight * 5 / 6 + 100 + origin.y));
-    var scaleFactor = 100;
+    var scaleFactor = 100 * canvasWidth/1600;
     var mag = vector.getMag()*scaleFactor;
 
     arrowG.lineStyle(2, 0x006EAF, 1);
@@ -338,9 +341,9 @@ function drawArrow(originV ,vectorV, text){
     arrowG.endFill();    
 
     var style = { font: "24px Georgia", fill: "#006EAF", wordWrap: false, align: "centre", backgroundColor: "#f0f0f0" };
-    arrowSprites.push( game.add.text((canvasWidth / 2 - 500 + origin.x*scaleFactor + vector.x*scaleFactor/2), (canvasHeight * 5 / 6 + 100 + origin.y*scaleFactor + vector.y*scaleFactor/2), text, style) );
+    arrowSprites.push( game.add.text((canvasWidth / 2 - 500*canvasWidth/1600 + origin.x*scaleFactor + vector.x*scaleFactor/2), (canvasHeight * 5 / 6 + 100*canvasHeight/1600 + origin.y*scaleFactor + vector.y*scaleFactor/2), text, style) );
 
-    arrowSprites.push( game.add.sprite((canvasWidth / 2 - 500 + origin.x*scaleFactor),(canvasHeight * 5 / 6 + 100 + origin.y*scaleFactor), arrowG.generateTexture()) );
+    arrowSprites.push( game.add.sprite((canvasWidth / 2 - 500 *canvasWidth/1600 + origin.x*scaleFactor),(canvasHeight * 5 / 6 + 100*canvasHeight/1600 + origin.y*scaleFactor), arrowG.generateTexture()) );
     arrowSprites[arrowSprites.length-1].anchor.set(0,0.5);
     arrowSprites[arrowSprites.length-1].rotation = vector.getArg();
     arrowG.destroy();
