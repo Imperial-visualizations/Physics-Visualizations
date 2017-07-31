@@ -92,24 +92,9 @@
                 &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
                   &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#typography&#x22;&#x3E;Typography&#x3C;/a&#x3E;
                 &#x3C;/li&#x3E;
-                &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
-                  &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#buttons&#x22;&#x3E;Buttons&#x3C;/a&#x3E;
-                &#x3C;/li&#x3E;
-                &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
-                  &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#forms&#x22;&#x3E;Forms&#x3C;/a&#x3E;
-                &#x3C;/li&#x3E;
-                &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
-                  &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#lists&#x22;&#x3E;Lists&#x3C;/a&#x3E;
-                &#x3C;/li&#x3E;
-                &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
-                  &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#code&#x22;&#x3E;Code&#x3C;/a&#x3E;
-                &#x3C;/li&#x3E;
-                &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
-                  &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#tables&#x22;&#x3E;Tables&#x3C;/a&#x3E;
-                &#x3C;/li&#x3E;
-                &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
-                  &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#queries&#x22;&#x3E;Queries&#x3C;/a&#x3E;
-                &#x3C;/li&#x3E;
+                .
+                .
+                .
                 &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
                   &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#utilities&#x22;&#x3E;Utilities&#x3C;/a&#x3E;
                 &#x3C;/li&#x3E;
@@ -120,6 +105,82 @@
 </pre>
     </div>
               
+    <!-- README -->
+    <div id="README">
+      <h3>README</h3>
+        <div class="row">
+          <div class="six columns">
+            <p>
+              How to get started:<br>
+              1. open ~/Imperial-Visualizations/website/<br>
+              2. download everything inside (see right)<br>
+              3. open "index.html" with PyCharm or whatever code-editor you like:<br>
+              4. Now you can start copy and paste stuff from this page to your index.html file. Remember to put them inside &#x3C;div class=&#x22;container&#x22;&#x3E; &#x3C;/div&#x3E;.
+            </p>
+          </div>
+          <div class="six columns">
+<pre>
+<code>
++ /Imperial-Visualizations/website/
+| + images
+| |- imperial-black-logo.svg
+| |- imperial-logo.svg
+| |- imperial-white-logo.svg
+| + scripts
+| |- program.js
+| + styles
+| |- styles.css
+| - index.html
+| - cheatsheet.html
+</code>
+</pre>
+          </div>
+        </div>
+        <div class="row">
+          <div class="twelve columns">
+
+<pre>
+<code>
+<strong>index.html</strong>
+
+&#x3C;html&#x3E;
+&#x3C;head&#x3E;
+    &#x3C;meta charset=&#x22;utf-8&#x22;&#x3E;
+    &#x3C;meta name=&#x22;viewport&#x22; content=&#x22;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no&#x22;&#x3E;
+    &#x3C;title&#x3E;Imperial Visualisations&#x3C;/title&#x3E;
+    &#x3C;link rel=&#x22;stylesheet&#x22; href=&#x22;styles/styles.css&#x22;&#x3E;
+    &#x3C;!-- importing style.css --&#x3E;
+    &#x3C;!-- **You are not suppose to change style.css !!**  --&#x3E;
+    &#x3C;style type=&#x22;text/css&#x22;&#x3E;
+        /* overwrite style.css styles*/
+    &#x3C;/style&#x3E;
+&#x3C;/head&#x3E;
+&#x3C;body&#x3E;
+    &#x3C;div class=&#x22;container&#x22;&#x3E;
+        &#x3C;h1&#x3E;Big title&#x3C;/h1&#x3E;
+        &#x3C;div class=&#x22;row&#x22;&#x3E;
+            &#x3C;div class=&#x22;eight columns&#x22;&#x3E;
+                &#x3C;p&#x3E;Put your graph here&#x3C;/p&#x3E;
+            &#x3C;/div&#x3E;
+            &#x3C;div class=&#x22;four columns&#x22;&#x3E;
+                &#x3C;p&#x3E;And probobly put your interface here&#x3C;/p&#x3E;
+            &#x3C;/div&#x3E;
+        &#x3C;/div&#x3E;
+    &#x3C;/div&#x3E;
+    &#x3C;br&#x3E;&#x3C;br&#x3E;&#x3C;br&#x3E;
+    &#x3C;script src=&#x22;scripts/program.js&#x22;&#x3E;&#x3C;/script&#x3E;
+    &#x3C;!-- You should put your javascript code in program.js --&#x3E;
+    &#x3C;script&#x3E;
+        // or you can put your javascript here as well.
+    &#x3C;/script&#x3E;
+&#x3C;/body&#x3E;
+&#x3C;/html&#x3E;
+
+</code>
+</pre>
+          </div>
+        </div>
+    </div>
 
     <!-- Grid -->
     <div class="docs-section" id="grid">
@@ -343,29 +404,34 @@
 <pre class="code-example">
 <code class="code-example-body prettyprint"><!-- The above form looks like this -->
 &lt;!-- The above form looks like this --&gt;
-&lt;form&gt;
-  &lt;div class="row"&gt;
-    &lt;div class="six columns"&gt;
-      &lt;label for="exampleEmailInput"&gt;Your email&lt;/label&gt;
-      &lt;input class="u-full-width" type="email" placeholder="test@mailbox.com" id="exampleEmailInput"&gt;
-    &lt;/div&gt;
-    &lt;div class="six columns"&gt;
-      &lt;label for="exampleRecipientInput"&gt;Reason for contacting&lt;/label&gt;
-      &lt;select class="u-full-width" id="exampleRecipientInput"&gt;
-        &lt;option value="Option 1"&gt;Questions&lt;/option&gt;
-        &lt;option value="Option 2"&gt;Admiration&lt;/option&gt;
-        &lt;option value="Option 3"&gt;Can I get your number?&lt;/option&gt;
-      &lt;/select&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-  &lt;label for="exampleMessage"&gt;Message&lt;/label&gt;
-  &lt;textarea class="u-full-width" placeholder="Hi Dave …" id="exampleMessage"&gt;&lt;/textarea&gt;
-  &lt;label class="example-send-yourself-copy"&gt;
-    &lt;input type="checkbox"&gt;
-    &lt;span class="label-body"&gt;Send a copy to yourself&lt;/span&gt;
-  &lt;/label&gt;
-  &lt;input class="button-primary" type="submit" value="Submit"&gt;
-&lt;/form&gt;
+        &#x3C;form&#x3E;
+          &#x3C;div class=&#x22;row&#x22;&#x3E;
+            &#x3C;div class=&#x22;six columns&#x22;&#x3E;
+              &#x3C;label for=&#x22;exampleEmailInput&#x22;&#x3E;Your email&#x3C;/label&#x3E;
+              &#x3C;input class=&#x22;u-full-width&#x22; type=&#x22;email&#x22; placeholder=&#x22;test@mailbox.com&#x22; id=&#x22;exampleEmailInput&#x22;&#x3E;
+            &#x3C;/div&#x3E;
+            &#x3C;div class=&#x22;six columns&#x22;&#x3E;
+              &#x3C;label for=&#x22;exampleRecipientInput&#x22;&#x3E;Reason for contacting&#x3C;/label&#x3E;
+              &#x3C;select class=&#x22;u-full-width&#x22; id=&#x22;exampleRecipientInput&#x22;&#x3E;
+                &#x3C;option value=&#x22;Option 1&#x22;&#x3E;Questions&#x3C;/option&#x3E;
+                &#x3C;option value=&#x22;Option 2&#x22;&#x3E;Admiration&#x3C;/option&#x3E;
+                &#x3C;option value=&#x22;Option 3&#x22;&#x3E;Can I get your number?&#x3C;/option&#x3E;
+              &#x3C;/select&#x3E;
+            &#x3C;/div&#x3E;
+          &#x3C;/div&#x3E;
+          &#x3C;label for=&#x22;exampleMessage&#x22;&#x3E;Message&#x3C;/label&#x3E;
+          &#x3C;textarea class=&#x22;u-full-width&#x22; placeholder=&#x22;Hi Dave &#x26;hellip;&#x22; id=&#x22;exampleMessage&#x22;&#x3E;&#x3C;/textarea&#x3E;
+          &#x3C;label class=&#x22;example-send-yourself-copy&#x22;&#x3E;
+            &#x3C;input type=&#x22;checkbox&#x22;&#x3E;
+            &#x3C;span class=&#x22;label-body&#x22;&#x3E;Send a copy to yourself&#x3C;/span&#x3E;
+          &#x3C;/label&#x3E;
+          &#x3C;label class=&#x22;sliderTitle&#x22;&#x3E;Slider:&#x3C;/label&#x3E; 
+          &#x3C;label&#x3E;
+          &#x3C;input id=&#x22;yourID&#x22; type =&#x22;range&#x22; value=&#x22;5&#x22; min =&#x22;-1&#x22; max=&#x22;10.0&#x22; step =&#x22;0.1&#x22;/&#x3E;
+          &#x3C;span class=&#x22;sliderMin&#x22;&#x3E;-1&#x3C;/span&#x3E;&#x3C;span class=&#x22;sliderMax&#x22;&#x3E;10&#x3C;/span&#x3E;
+          &#x3C;/label&#x3E;
+          &#x3C;input class=&#x22;button-primary&#x22; type=&#x22;submit&#x22; value=&#x22;Submit&#x22;&#x3E;
+        &#x3C;/form&#x3E;
 
 &lt;!-- Always wrap checkbox and radio inputs in a label and use a &lt;span class="label-body"&gt; inside of it --&gt;
 
