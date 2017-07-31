@@ -27,7 +27,7 @@ function zeroV(){
 //     return new Vector(0,0);
 // };
 
-vCal = function(input1, action, input2){
+function vCal(input1, action, input2){
     //Vector Calculations
     switch(action) {
         case "-":
@@ -54,7 +54,8 @@ var canvasWidth = 1200;
 var canvasHeight = 1200;
 var ballradius = 40;
 
-var ball1_Lab, ball2_Lab, ball1_CoM, ball2_CoM, initAngle, borders, arrows;
+var ball1_Lab, ball2_Lab, ball1_CoM, ball2_CoM, initAngle, borders;
+var arrowSprites = [];
 
 
 ball1_Lab = {
@@ -164,10 +165,16 @@ function resetSimulation(){
     ball1_Lab.v = zeroV();
     ball2_Lab.v = zeroV();
     isColliding = false;
+
+    for (var i = 0; i < arrowSprites.length; i++) {
+        arrowSprites[i].destroy();
+    }
+    arrowSprites = [];
 }
 
 function onCollision() {
     var pStar = vCal(vCal(ball2_Lab.v,'-',ball1_Lab.v),'*',getReducedMass());
+    var pStar_reversed = vCal(pStar,'*',"-1");
     var q1star = vCal(pStar,'rotate', initAngle);
     var q2star = vCal(pStar,'rotate', initAngle - Math.PI);
     ball1_CoM.v = vCal(q1star,'*',1/ball1_Lab.mass);
@@ -182,12 +189,13 @@ function onCollision() {
     q2 = vCal(ball2_Lab.v,"*",ball2_Lab.mass);
 
 
+
     drawArrow( zeroV() , q1 , "q1" );
     drawArrow( q1 , q2 , "q2" );
-    drawArrow( zeroV(),vCal(pStar,"*",(ball1_Lab.mass/ball2_Lab.mass)) , "p_CoM*(m1/m2)" );
-    drawArrow( vCal(pStar,"*",(ball1_Lab.mass/ball2_Lab.mass)) , pStar , "p_CoM" );
-    drawArrow( vCal(pStar,"*",(ball1_Lab.mass/ball2_Lab.mass)) , q1star , "q1_CoM" );
-    drawArrow(new Vector(0,-0.1),p1,"p1");
+    drawArrow( zeroV(),vCal(pStar_reversed,"*",(ball1_Lab.mass/ball2_Lab.mass)) , "p_CoM*(m1/m2)" );
+    drawArrow( vCal(pStar_reversed,"*",(ball1_Lab.mass/ball2_Lab.mass)) , pStar_reversed , "p_CoM" );
+    drawArrow( vCal(pStar_reversed,"*",(ball1_Lab.mass/ball2_Lab.mass)) , q1star , "q1_CoM" );
+    drawArrow(new Vector(0,-0.3),p1,"p1");
 
 
     isColliding = true;
@@ -312,7 +320,7 @@ function drawArrow(originV ,vectorV, text){
     var vector = new Vector(vectorV.x, -1 * vectorV.y);
     // Flip directions for canvas y-axis
 
-    var arrowG = game.add.graphics((canvasWidth / 2 - 200 + origin.x), (canvasHeight * 5 / 6 + 100 + origin.y));
+    var arrowG = game.add.graphics((canvasWidth / 2 - 500 + origin.x), (canvasHeight * 5 / 6 + 100 + origin.y));
     var scaleFactor = 100;
     var mag = vector.getMag()*scaleFactor;
 
@@ -330,10 +338,10 @@ function drawArrow(originV ,vectorV, text){
     arrowG.endFill();    
 
     var style = { font: "24px Georgia", fill: "#006EAF", wordWrap: false, align: "centre", backgroundColor: "#f0f0f0" };
-    vectorText = game.add.text((canvasWidth / 2 - 200 + origin.x*scaleFactor + vector.x*scaleFactor/2), (canvasHeight * 5 / 6 + 100 + origin.y*scaleFactor + vector.y*scaleFactor/2), text, style);
+    arrowSprites.push( game.add.text((canvasWidth / 2 - 500 + origin.x*scaleFactor + vector.x*scaleFactor/2), (canvasHeight * 5 / 6 + 100 + origin.y*scaleFactor + vector.y*scaleFactor/2), text, style) );
 
-    arrow = game.add.sprite((canvasWidth / 2 - 200 + origin.x*scaleFactor),(canvasHeight * 5 / 6 + 100 + origin.y*scaleFactor), arrowG.generateTexture());
-    arrow.anchor.set(0,0.5);
-    arrow.rotation = vector.getArg();
+    arrowSprites.push( game.add.sprite((canvasWidth / 2 - 500 + origin.x*scaleFactor),(canvasHeight * 5 / 6 + 100 + origin.y*scaleFactor), arrowG.generateTexture()) );
+    arrowSprites[arrowSprites.length-1].anchor.set(0,0.5);
+    arrowSprites[arrowSprites.length-1].rotation = vector.getArg();
     arrowG.destroy();
 }
