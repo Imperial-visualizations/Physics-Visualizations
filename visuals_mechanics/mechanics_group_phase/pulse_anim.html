@@ -2,24 +2,22 @@
 
 <head>
     <title>Pulse Anim</title>
-
-
 </head>
 <body>
 
-<div id='graph'></div>  <!-- Plotly chart will be drawn inside this DIV -->
+    <div id='graph'></div>  <!-- Plotly chart will be drawn inside this DIV -->
 
-<div id="content"></div>
-    	<!-- Put content here to make them central aligned -->
-        <!--<h1>Home Page</h1> -->
-        alpha: <input id="alpha" type ="range" value="10" min ="0" max="30" step ="1"/>
-        <input id="run_button" type ="button" value="start" onclick="onStart()"/>
-        <input id="reset_button" type ="button" value="reset" onclick="onReset()"/>
-        <input id="pause_button" type ="button" value="pause" onclick="onPause()"/>
+    <div id="content"></div>
+            <!-- Put content here to make them central aligned -->
+            <!--<h1>Home Page</h1> -->
+            alpha: <input id="alpha" type ="range" value="10" min ="0" max="30" step ="1"/>
+            <input id="run_button" type ="button" value="start" onclick="onStart()"/>
+            <input id="reset_button" type ="button" value="reset" onclick="onReset()"/>
+            <input id="pause_button" type ="button" value="pause" onclick="onPause()"/>
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <!--<script src="jquery-2.1.1.js"></script>-->
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="../mechanics_collisions/webtest_Mangle/styles/styles.css">
     <script>
 
     // Defining variables (need to update later anyway so importing from e.g. json is meaningless)
@@ -27,7 +25,7 @@
     var x = [], y_i = [], y_r = [], y_t = [];
     var t = 0.0;
     var dt = 0.02;
-    var v1 = 5.0;
+    var v1 = 5;
     var alpha = valueSlider(parseInt($("#alpha").val()));
     var v2 = alpha*v1;
     var A = (v2-v1)/(v1+v2);
@@ -111,7 +109,7 @@
         y: [-2,2],
         mode: "lines",
         name: "boundary",
-        line: {width: 3, color: 'black', simplify: true}
+        line: {width: 3, color: 'black', simplify: false}
     };
 
     // Plot graph with interactivity
@@ -181,6 +179,15 @@
        is_paused = false;
        requestAnimationFrame(update);
 }
+
+
+// ToDo: Formatting - buttons at the side - same as 2 body collision
+// ToDo: x-axis line
+// ToDo: Double start thing
+// ToDo: Sliders & Values & Show
+// ToDo: Change Initial Wave
+// ToDo: Dispersion
+// ToDo: Python?
 
 </script>
 
