@@ -50,8 +50,8 @@ function degToRad(deg) {
 var isRunning = false;
 var isColliding = false;
 
-var canvasWidth = 1200;
-var canvasHeight = 1200;
+var canvasWidth = 800;
+var canvasHeight = 800;
 var ballradius = 40;
 
 var ball1_Lab, ball2_Lab, ball1_CoM, ball2_CoM, initAngle, borders, arrows;
@@ -114,8 +114,8 @@ $("#runButton").on('click', function () {
         resetSimulation();
         $("#runButton").val("Run");
     }
-
     isRunning = !isRunning;
+    console.log("Pre Collision KE:"+getLabKE().toString());
 });
 
 function getReducedMass() {
@@ -128,7 +128,7 @@ function getCoMV() {
     //return new vCal(new Vector(ball1_Lab.v.x*ball1_Lab.mass + ball2_Lab.v.x*ball2_Lab.mass,ball1_Lab.v.y*ball1_Lab.mass + ball2_Lab.v.y*ball2_Lab.mass),'*',1.0/(ball1_Lab.mass +ball2_Lab.mass));
     return vCal( vCal(vCal(ball1_Lab.v, "*", ball1_Lab.mass ), "+",vCal(ball2_Lab.v, "*", ball2_Lab.mass) ) , "*", 1.0/(ball1_Lab.mass + ball2_Lab.mass) );
 }
-function getKE(){
+function getLabKE(){
     return 0.5*ball1_Lab.mass*Math.pow(ball1_Lab.v.getMag(),2) + 0.5*ball2_Lab.mass*Math.pow(ball2_Lab.v.getMag(),2);
 }
 
@@ -167,10 +167,9 @@ function resetSimulation(){
 }
 
 function onCollision() {
-    var p1Star = vCal(ball1_CoM.v,'*',ball1_CoM.mass);
-    var p2Star = vCal(ball2_CoM.v,'*',ball2_CoM.mass);
-    var q1star = vCal(p1Star,'rotate', Math.PI - initAngle);
-    var q2star = vCal(p2Star,'rotate', Math.PI - initAngle);
+    var pStar = vCal(vCal(ball2_Lab.v,'-',ball1_Lab.v),'*',getReducedMass());
+    var q1star = vCal(pStar,'rotate', initAngle);
+    var q2star = vCal(pStar,'rotate', initAngle - Math.PI);
     ball1_CoM.v = vCal(q1star,'*',1/ball1_Lab.mass);
     ball2_CoM.v = vCal(q2star,'*',1/ball2_Lab.mass);
     p1 = vCal(ball1_Lab.v,"*",ball1_Lab.mass);
@@ -185,13 +184,14 @@ function onCollision() {
 
     drawArrow( zeroV() , q1 , "q1" );
     drawArrow( q1 , q2 , "q2" );
-    drawArrow( zeroV(),vCal(p1Star,"*",(ball1_Lab.mass/ball2_Lab.mass)) , "p_CoM*(m1/m2)" );
-    drawArrow( vCal(p1Star,"*",(ball1_Lab.mass/ball2_Lab.mass)) , p1Star , "p_CoM" );
-    drawArrow( vCal(p1Star,"*",(ball1_Lab.mass/ball2_Lab.mass)) , q1star , "q1_CoM" );
+    drawArrow( zeroV(),vCal(pStar,"*",(ball1_Lab.mass/ball2_Lab.mass)) , "p_CoM*(m1/m2)" );
+    drawArrow( vCal(pStar,"*",(ball1_Lab.mass/ball2_Lab.mass)) , pStar , "p_CoM" );
+    drawArrow( vCal(pStar,"*",(ball1_Lab.mass/ball2_Lab.mass)) , q1star , "q1_CoM" );
     drawArrow(new Vector(0,-0.1),p1,"p1");
 
 
     isColliding = true;
+    console.log("Post collision KE" + getLabKE().toString());
 }
 
 
@@ -293,11 +293,16 @@ function update() {
         ball1_CoM.spriteInstance.x += ball1_CoM.v.x;
         ball1_CoM.spriteInstance.y -= ball1_CoM.v.y;
 
+        $('#ball2labvx').html("Velocity X:" + ball2_Lab.v.x.toString() + "m/s");
+        $('#ball2labvy').html("Velocity Y:" + ball2_Lab.v.y.toString() + "m/s");
+
+
 
         if (Phaser.Rectangle.intersects(ball1_Lab.spriteInstance.getBounds(), ball2_Lab.spriteInstance.getBounds()) && !isColliding) {
             onCollision();
         }
-        console.log(getKE());
+
+
     }
 }
 
