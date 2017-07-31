@@ -572,6 +572,13 @@ body, *{
     -ms-user-select: none;
     user-select: none;
 }
+pre,code{
+    -moz-user-select: -moz-text;
+    -khtml-user-select: text;
+    -webkit-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
 
 body::after{
     content: "Imperial Visualisations   ";
@@ -613,6 +620,7 @@ input[type=range] {
   -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
   width: 100%; /* Specific width is required for Firefox. */
   background: transparent; /* Otherwise white in Chrome */
+  margin-bottom: 0;
 }
 
 input[type=range]::-webkit-slider-thumb {
@@ -701,11 +709,21 @@ span.sliderMin{
   display: inline-block;
   width: 50%;
   text-align: left;
+  margin-top: 0px;
+  position: relative;
+  top: -10px;
+  left: -4px;
 }
 span.sliderMax{
   display: inline-block;
   width: 50%;
   text-align: right;
+  margin-top: 0px;
+  position: relative;
+  top: -10px;
+  right: -8px;
+}
+label.slider{
 }
 
 

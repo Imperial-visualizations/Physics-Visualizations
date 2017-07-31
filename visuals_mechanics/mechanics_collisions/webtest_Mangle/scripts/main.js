@@ -50,8 +50,8 @@ function degToRad(deg) {
 var isRunning = false;
 var isColliding = false;
 
-var canvasWidth = 800;
-var canvasHeight = 800;
+var canvasWidth = 1200;
+var canvasHeight = 1200;
 var ballradius = 40;
 
 var ball1_Lab, ball2_Lab, ball1_CoM, ball2_CoM, initAngle, borders, arrows;
@@ -312,7 +312,7 @@ function drawArrow(originV ,vectorV, text){
     var vector = new Vector(vectorV.x, -1 * vectorV.y);
     // Flip directions for canvas y-axis
 
-    var arrowG = game.add.graphics((canvasWidth / 2 - 500 + origin.x), (canvasHeight * 5 / 6 + 100 + origin.y));
+    var arrowG = game.add.graphics((canvasWidth / 2 - 200 + origin.x), (canvasHeight * 5 / 6 + 100 + origin.y));
     var scaleFactor = 100;
     var mag = vector.getMag()*scaleFactor;
 
@@ -330,9 +330,9 @@ function drawArrow(originV ,vectorV, text){
     arrowG.endFill();    
 
     var style = { font: "24px Georgia", fill: "#006EAF", wordWrap: false, align: "centre", backgroundColor: "#f0f0f0" };
-    vectorText = game.add.text((canvasWidth / 2 - 500 + origin.x*scaleFactor + vector.x*scaleFactor/2), (canvasHeight * 5 / 6 + 100 + origin.y*scaleFactor + vector.y*scaleFactor/2), text, style);
+    vectorText = game.add.text((canvasWidth / 2 - 200 + origin.x*scaleFactor + vector.x*scaleFactor/2), (canvasHeight * 5 / 6 + 100 + origin.y*scaleFactor + vector.y*scaleFactor/2), text, style);
 
-    arrow = game.add.sprite((canvasWidth / 2 - 500 + origin.x*scaleFactor),(canvasHeight * 5 / 6 + 100 + origin.y*scaleFactor), arrowG.generateTexture());
+    arrow = game.add.sprite((canvasWidth / 2 - 200 + origin.x*scaleFactor),(canvasHeight * 5 / 6 + 100 + origin.y*scaleFactor), arrowG.generateTexture());
     arrow.anchor.set(0,0.5);
     arrow.rotation = vector.getArg();
     arrowG.destroy();
