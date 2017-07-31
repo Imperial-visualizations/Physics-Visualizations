@@ -5,6 +5,8 @@
 * Free to use under the MIT license.
 * http://www.opensource.org/licenses/mit-license.php
 * 12/29/2014
+*
+* This css file has been modified by Imperial Virsualisation
 */
 
 
@@ -159,14 +161,14 @@ p {
 /* Links
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 a {
-  color: #1EAEDB; }
+  color: #009CBC; }
 a:hover {
-  color: #0FA0CE; }
+  color: #379F9F; }
 
 
 /* Buttons
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-.button,
+/*.button,
 button,
 input[type="submit"],
 input[type="reset"],
@@ -241,8 +243,68 @@ input[type="submit"].button-primary:active,
 input[type="reset"].button-primary:active,
 input[type="button"].button-primary:active{
   color: #006EAF;
-  border-color: #006EAF; }
+  border-color: #006EAF; }*/
 
+
+
+/* Buttons
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  display: inline-block;
+  height: 38px;
+  padding: 0 30px;
+  color: #003E74;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 32px;
+  letter-spacing: .04rem;
+  text-decoration: none;
+  white-space: nowrap;
+  text-transform: capitalize;
+  background-color: transparent;
+  border-radius: 4px;
+  border: 2px solid #003E74;
+  cursor: pointer;
+  box-sizing: border-box; }
+.button:hover,
+button:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+input[type="button"]:hover,
+.button:active,
+button:active,
+input[type="submit"]:active,
+input[type="reset"]:active,
+input[type="button"]:active {
+  color: #002147;
+  border-color: #002147;
+  outline: 0; }
+.button.button-primary,
+button.button-primary,
+input[type="submit"].button-primary,
+input[type="reset"].button-primary,
+input[type="button"].button-primary {
+  color: #FFF;
+  background-color: #006EAF;
+  border-color: #006EAF; }
+.button.button-primary:hover,
+button.button-primary:hover,
+input[type="submit"].button-primary:hover,
+input[type="reset"].button-primary:hover,
+input[type="button"].button-primary:hover,
+.button.button-primary:active,
+button.button-primary:active,
+input[type="submit"].button-primary:active,
+input[type="reset"].button-primary:active,
+input[type="button"].button-primary:active {
+  color: #FFF;
+  background-color: #0091D4;
+  border-color: #0091D4; }
 
 /* Forms
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -287,7 +349,7 @@ input[type="url"]:focus,
 input[type="password"]:focus,
 textarea:focus,
 select:focus {
-  border: 1px solid #33C3F0;
+  border: 1px solid #006EAF;
   outline: 0; }
 label,
 legend {
@@ -511,9 +573,10 @@ body, *{
     user-select: none;
 }
 
-body::before{
+body::after{
     content: "Imperial Visualisations   ";
     position: fixed;
+    z-index: 1000;
     left: 0;
     bottom: 0;
     height: 50px;
@@ -634,6 +697,16 @@ input[type=range]::-ms-track {
   background: #006EAF;
   border-radius: 1px;
 }
+span.sliderMin{
+  display: inline-block;
+  width: 50%;
+  text-align: left;
+}
+span.sliderMax{
+  display: inline-block;
+  width: 50%;
+  text-align: right;
+}
 
 
 /*
@@ -646,20 +719,29 @@ Dropdown Menu Styles
     position: relative;
     right:0;
     top: 0;
-    margin-left: -2.4em;
+    margin-left: -1.2em;
 }
-li {
+.dropdown>li {
     position: relative;
-    display: inline-block;
-    background: #fff;
-    border: #003E74 solid 3px; 
-    width: 100px;
-    height: 20px;
-    padding: 4px;
-    font-size: 1em;
-    margin-right: 1em;
+  display: inline-block;
+  height: 38px;
+  padding: 0 30px;
+  color: #003E74;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 32px;
+  letter-spacing: .04rem;
+  text-decoration: none;
+  white-space: nowrap;
+  text-transform: capitalize;
+  background-color: transparent;
+  border-radius: 4px;
+  border: 2px solid #003E74;
+  cursor: pointer;
+  box-sizing: border-box;
 }
-li span {
+.dropdown>li>span {
     display: inline-block ; 
     color: #003E74; 
     text-decoration: none;
@@ -667,21 +749,25 @@ li span {
     line-height: 20px;
     cursor: pointer;
 }
-li ul {
+.dropdown>li>ul {
     display: none;
     position: absolute;
-    top: 1.7em;
+    top: 1.0em;
 }
-li:hover ul {
+.dropdown>li:hover>ul {
     display: block;   
 }
-li li {
+.dropdown>li>ul>li {
     display: block;
+    width: 100px;
     background: #003E74;
     border: #fff solid 2px;
     color: #fff; 
+    margin-bottom: 0;
+    padding-left: 10px;
+
 }
-li a {
+.dropdown>li a {
     display: inline-block ; 
     color: #fff; 
     text-decoration: none;
