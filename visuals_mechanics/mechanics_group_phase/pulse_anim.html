@@ -1,29 +1,31 @@
 <html>
 
+
 <head>
     <title>Pulse Anim</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <!--<script src="jquery-2.1.1.js"></script>-->
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="../mechanics_collisions/webtest_Mangle/styles/styles.css">
+
 
 </head>
+
+
 <body>
+    <div id='graph'></div>  <!-- Plotly chart will be drawn inside this DIV -->
 
-<div id='graph'></div>  <!-- Plotly chart will be drawn inside this DIV -->
-
-<div id="content"></div>
-    	<!-- Put content here to make them central aligned -->
-        <!--<h1>Home Page</h1> -->
-        alpha: <input id="alpha" type ="range" value="10" min ="0" max="30" step ="1"/>
-        <input id="run_button" type ="button" value="start" onclick="onStart()"/>
-        <input id="reset_button" type ="button" value="reset" onclick="onReset()"/>
-        <input id="pause_button" type ="button" value="pause" onclick="onPause()"/>
+    <div id="content"></div>
+            <!-- Put content here to make them central aligned -->
+            <!--<h1>Home Page</h1> -->
+            alpha: <input id="alpha" type ="range" value="2" min ="0" max="100.0" step ="0.1"/>
+            <input id="run_button" type ="button" value="start" onclick="onStart()"/>
+            <input id="reset_button" type ="button" value="reset" onclick="onReset()"/>
+            <input id="pause_button" type ="button" value="pause" onclick="onPause()"/>
 
 
-    <script>
-
+<script>
     // Defining variables (need to update later anyway so importing from e.g. json is meaningless)
-    var n = 801;
+    var n = 800;
     var x = [], y_i = [], y_r = [], y_t = [];
     var t = 0.0;
     var dt = 0.02;
@@ -99,18 +101,19 @@
     };
 
     var boundary = {
-        x: [0,0],
-        y: [-2,2],
-        mode: "lines",
+        x: [0, 0],
+        y: [-1.2, 1.2],
+        mode: 'lines',
         name: "boundary",
-        line: {width: 3, color: 'black', simplify: true}
-    }
+        line: {width: 3, color: 'black', simplify: false}
+    };
+
 
     // Plot graph with interactivity
     Plotly.plot('graph', [incident, reflected, transmitted, boundary], {
-                xaxis: {range: [-10, 10]}},
-        {
-                yaxis: {range: [-1.3, 1.3]}}
+                xaxis: {range: [-10, 10]},
+            yaxis: {range: [-1.2, 1.2]},
+            }
     );
 
 
@@ -173,7 +176,8 @@
      requestAnimationFrame(update);
 }
 
-</script>
 
+</script>
 </body>
 </html>
+
