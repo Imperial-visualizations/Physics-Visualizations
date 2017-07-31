@@ -52,6 +52,8 @@ var isColliding = false;
 
 var canvasWidth = 1200;
 var canvasHeight = 1200;
+canvasWidth = $("#canvasWrapper").width()*window.devicePixelRatio;
+canvasHeight = $("#canvasWrapper").width()*window.devicePixelRatio;
 var ballradius = 40;
 
 var ball1_Lab, ball2_Lab, ball1_CoM, ball2_CoM, initAngle, borders;
@@ -90,6 +92,11 @@ $(".inputs").each(function () {
     $(this).on('input', function () {
         $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
     });
+});
+$(".inputs").each(function () {
+    // To update the displayed value in HTML
+    $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
+
 });
 /*
 $('#ballCollisionAngle').on('input', function () {
@@ -219,6 +226,9 @@ function preload() {
 }
 
 function create() {
+    game.canvasWidth = $("#canvasWrapper").width()*window.devicePixelRatio;
+    game.canvasHeight = $("#canvasWrapper").width()*window.devicePixelRatio;
+    console.log($("#canvasWrapper").height());
     game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;  
     game.scale.setUserScale(1/window.devicePixelRatio, 1/window.devicePixelRatio);
     game.renderer.renderSession.roundPixels = true;  
