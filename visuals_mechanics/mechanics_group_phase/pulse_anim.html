@@ -14,14 +14,13 @@
 <div id="content"></div>
     	<!-- Put content here to make them central aligned -->
         <!--<h1>Home Page</h1> -->
-        alpha: <input id="alpha" type ="range" value="2" min ="0" max="100.0" step ="0.1"/>
+        alpha: <input id="alpha" type ="range" value="10" min ="0" max="30" step ="1"/>
         <input id="run_button" type ="button" value="start" onclick="onStart()"/>
         <input id="reset_button" type ="button" value="reset" onclick="onReset()"/>
         <input id="pause_button" type ="button" value="pause" onclick="onPause()"/>
 
 
     <script>
-
 
     // Defining variables (need to update later anyway so importing from e.g. json is meaningless)
     var n = 801;
@@ -34,6 +33,18 @@
     var A = (v2-v1)/(v1+v2);
     var B = 2*v1/(v1+v2);
     var is_paused = false;
+
+    // Log slider
+
+
+    // Slider
+    var alpha_range  =
+    $('#alpha').on('change', function () {
+        alpha = parseFloat($("#alpha").val());
+        v2 = alpha*v1;
+        onReset();
+    });
+    // var what = document.getElementById("ball2Mass").value;
 
 
     function onPause() {
@@ -89,17 +100,17 @@
 
     var boundary = {
         x: [0,0],
-        y: [-1.3,1.3],
+        y: [-2,2],
+        mode: "lines",
         name: "boundary",
         line: {width: 3, color: 'black', simplify: true}
     }
 
-
-
-
     // Plot graph with interactivity
     Plotly.plot('graph', [incident, reflected, transmitted, boundary], {
-                xaxis: {range: [-10, 10]} }
+                xaxis: {range: [-10, 10]}},
+        {
+                yaxis: {range: [-1.3, 1.3]}}
     );
 
 
@@ -135,7 +146,10 @@
            Plotly.animate('graph', {
                    data: [{y: y_i}, {y: y_r}, {y: y_t}]
                },
-               {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
+               {transition: {duration: 0}, frame: {duration: 0, redraw: false} }, {
+                xaxis: {range: [-10, 10]}},
+        {
+                yaxis: {range: [-1.3, 1.3]}}
                // vastly speeds up animation but won't update any non-animated properties
            );
            if (v1 > v2) {
