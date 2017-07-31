@@ -50,11 +50,15 @@ function degToRad(deg) {
 var isRunning = false;
 var isColliding = false;
 
-var canvasWidth = 800;
-var canvasHeight = 800;
+
+var canvasWidth = 1200;
+var canvasHeight = 1200;
+canvasWidth = $("#canvasWrapper").width()*window.devicePixelRatio;
+canvasHeight = $("#canvasWrapper").width()*window.devicePixelRatio;
+
 var ballradius = 40;
 
-var ball1_Lab, ball2_Lab, ball1_CoM, ball2_CoM, initAngle, borders;
+var ball1_Lab, ball2_Lab, ball1_CoM, ball2_CoM, initAngle, borders, centreOfMass1;
 var arrowSprites = [];
 
 
@@ -95,19 +99,19 @@ $(".inputs").each(function () {
         $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
     });
 });
-$(".inputs").each(function () {
-    // To update the displayed value in HTML
-    $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
 
-});
-/*
 $('#ballCollisionAngle').on('input', function () {
     // To update the position of the balls
-    initAngle = degToRad(parseFloat($("#ballCollisionAngle").val()));
-    ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
-    ball2_Lab.spriteInstance.y = ball2_Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+    if(!isRunning){
+        initAngle = degToRad(parseFloat($("#ballCollisionAngle").val()));
+
+        ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+        ball2_Lab.spriteInstance.y = ball2_Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+        ball1_CoM.spriteInstance.y = ball1_CoM.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+        ball2_CoM.spriteInstance.y = ball2_CoM.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+    }
 });
-*/
+
 $("#runButton").on('click', function () {
     ball1_Lab.mass = parseFloat($("#ball1LabMass").val());
     ball2_Lab.mass = parseFloat($("#ball2LabMass").val());
@@ -116,6 +120,12 @@ $("#runButton").on('click', function () {
     ball1_CoM.v = vCal(ball1_Lab.v,'-',getCoMV());
     ball2_CoM.v = vCal(ball2_Lab.v,'-',getCoMV());
     initAngle = degToRad(parseFloat($("#ballCollisionAngle").val()));
+
+
+    ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+    ball2_Lab.spriteInstance.y = ball2_Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+    ball1_CoM.spriteInstance.y = ball1_CoM.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+    ball2_CoM.spriteInstance.y = ball2_CoM.initr.y - 0.5 * ballradius * Math.sin(initAngle);
 
     if (!isRunning) {
         $("#runButton").val("Reset");
@@ -158,6 +168,11 @@ function resetSimulation(){
 
     ball1_CoM.v = zeroV();
     ball2_CoM.v = zeroV();
+
+    ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+    ball2_Lab.spriteInstance.y = ball2_Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+    ball1_CoM.spriteInstance.y = ball1_CoM.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+    ball2_CoM.spriteInstance.y = ball2_CoM.initr.y - 0.5 * ballradius * Math.sin(initAngle);
     /* 
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     "Vector" should only be one of the follows:
@@ -179,6 +194,15 @@ function resetSimulation(){
         arrowSprites[i].destroy();
     }
     arrowSprites = [];
+
+    ball1_CoM.spriteInstance.visible = true;
+    ball2_CoM.spriteInstance.visible = true;
+    ball1_Lab.spriteInstance.visible = true;
+    ball2_Lab.spriteInstance.visible = true;
+
+    centreOfMass1.x = (canvasWidth / 2);
+    centreOfMass1.y = (canvasHeight * 1 / 6);
+
 }
 
 function onCollision() {
@@ -201,10 +225,10 @@ function onCollision() {
 
     drawArrow( zeroV() , q1 , "q1" );
     drawArrow( q1 , q2 , "q2" );
-    drawArrow( zeroV(),vCal(pStar_reversed,"*",(ball1_Lab.mass/ball2_Lab.mass)) , "p_CoM*(m1/m2)" );
-    drawArrow( vCal(pStar_reversed,"*",(ball1_Lab.mass/ball2_Lab.mass)) , pStar_reversed , "p_CoM" );
-    drawArrow( vCal(pStar_reversed,"*",(ball1_Lab.mass/ball2_Lab.mass)) , q1star , "q1_CoM" );
-    drawArrow(new Vector(0,-0.3),p1,"p1");
+    drawArrow( zeroV(),vCal(pStar_reversed,"*",(ball1_Lab.mass/ball2_Lab.mass)) , "p*•(m1/m2)" );
+    drawArrow( vCal(pStar_reversed,"*",(ball1_Lab.mass/ball2_Lab.mass)) , pStar_reversed , "p*" );
+    drawArrow( vCal(pStar_reversed,"*",(ball1_Lab.mass/ball2_Lab.mass)) , q1star , "q1*" );
+    drawArrow(new Vector(0,-0.4),p1,"p1");
 
 
     isColliding = true;
@@ -220,6 +244,7 @@ var game = new Phaser.Game(canvasWidth, canvasHeight, Phaser.CANVAS, 'canvasWrap
 
 function preload() {
     game.stage.backgroundColor = "#f0f0f0";
+    game.load.image('cofmPNG', 'images/cofm.png');
     
 }
 
@@ -233,6 +258,10 @@ function create() {
     Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
 
     game.stage.backgroundColor = "#f0f0f0";
+
+
+    centreOfMass1 = game.add.sprite((canvasWidth / 2),(canvasHeight * 1 / 6), 'cofmPNG');
+    centreOfMass1.anchor.set(0.5,0.5);
 
     var ball1_graph = game.add.graphics(0, 0);
 
@@ -291,6 +320,18 @@ function create() {
     vectorDiagramText.anchor.set(0,0);
 
 
+    $(".inputs").each(function () {
+        // To update the displayed value in HTML
+        $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
+
+    });
+    initAngle = degToRad(parseFloat($("#ballCollisionAngle").val()));
+    ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+    ball2_Lab.spriteInstance.y = ball2_Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+    ball1_CoM.spriteInstance.y = ball1_CoM.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+    ball2_CoM.spriteInstance.y = ball2_CoM.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+
+
 }
 
 function update() {
@@ -299,6 +340,9 @@ function update() {
         ball1_Lab.spriteInstance.y -= ball1_Lab.v.y;
         ball2_Lab.spriteInstance.x += ball2_Lab.v.x;
         ball2_Lab.spriteInstance.y -= ball2_Lab.v.y;
+
+        centreOfMass1.x = getCoMR().x;
+        centreOfMass1.y = getCoMR().y;
 
         //Centre of mass motion
 
@@ -309,6 +353,7 @@ function update() {
 
         $('#ball2labvx').html("Velocity X:" + ball2_Lab.v.x.toString() + "m/s");
         $('#ball2labvy').html("Velocity Y:" + ball2_Lab.v.y.toString() + "m/s");
+        //Is this necessary?
 
         ball1_CoM.spriteInstance.visible = Phaser.Rectangle.intersects(ball1_CoM.bounds, ball1_CoM.spriteInstance.getBounds());
         ball2_CoM.spriteInstance.visible = Phaser.Rectangle.intersects(ball2_CoM.bounds, ball2_CoM.spriteInstance.getBounds());
@@ -337,6 +382,12 @@ function drawArrow(originV ,vectorV, text){
 
     arrowG.lineStyle(2, 0x006EAF, 1);
     arrowG.moveTo(0,0);
+    arrowG.lineTo(0, 4);
+    arrowG.lineTo(0, -4);
+    arrowG.lineTo(0, 0);
+    arrowG.lineTo(mag, 0);
+    arrowG.lineTo(mag, 4);
+    arrowG.lineTo(mag, -4);
     arrowG.lineTo(mag, 0);
 
     arrowG.beginFill(0x006EAF);
