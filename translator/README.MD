@@ -1,1 +1,0 @@
-# Python-Javascript Plotly Translator
