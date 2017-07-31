@@ -40,11 +40,17 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
     <section class="header">
-      <h2 class="title">Imperial Visualisation Cheatsheet</h2>
+      <h1 class="title">Imperial Visualisation Cheatsheet</h1>
         <ul class="dropdown">
             <li>
                 <span id="Menu">Menu</span>
                 <ul>
+                <li class="popover-item">
+                  <a class="popover-link" href="#dropdown">Dropdown</a>
+                </li>
+                <li class="popover-item">
+                  <a class="popover-link" href="#GettingStarted">Getting Started</a>
+                </li>
                 <li class="popover-item">
                   <a class="popover-link" href="#grid">Grid</a>
                 </li>
@@ -78,7 +84,7 @@
     </section>
 
     <div id="dropdown">
-      <h6 class="docs-header">The dropdown menu</h6>
+      <h3 class="docs-header">The dropdown menu</h3>
       <p>The drop down menu can be used in combination with plotly to control the graph or as a navigation bar.</p>
 <pre>
 <code>
@@ -106,8 +112,8 @@
     </div>
               
     <!-- README -->
-    <div id="README">
-      <h3>README</h3>
+    <div id="GettingStarted">
+      <h3>Getting Started</h3>
         <div class="row">
           <div class="six columns">
             <p>
@@ -122,13 +128,13 @@
 <pre>
 <code>
 + /Imperial-Visualizations/website/
-| + images
+| + images/
 | |- imperial-black-logo.svg
 | |- imperial-logo.svg
 | |- imperial-white-logo.svg
-| + scripts
+| + scripts/
 | |- program.js
-| + styles
+| + styles/
 | |- styles.css
 | - index.html
 | - cheatsheet.html
@@ -184,7 +190,7 @@
 
     <!-- Grid -->
     <div class="docs-section" id="grid">
-      <h6 class="docs-header">The grid</h6>
+      <h3 class="docs-header">The grid</h3>
       <p>The grid is a <u>12-column fluid grid with a max width of 960px</u>, that shrinks with the browser/device at smaller sizes. The max width can be changed with one line of CSS and all columns will resize accordingly. The syntax is simple and it makes coding responsive much easier. Go ahead, resize the browser. </p>
       <div class="example-grid docs-example">
         <div class="row">
@@ -275,7 +281,7 @@
 
     <!-- Typography -->
     <div id="typography">
-      <h6>Typography</h6>
+      <h3>Typography</h3>
       <p>Type is all set with the <code>rems</code>, so font-sizes and spacial relationships can be responsively sized based on a single <code>&lt;html&gt;</code> font-size property. Out of the box, Skeleton never changes the <code>&lt;html&gt;</code> font-size, but it's there in case you need it for your project. All measurements are still base 10 though so, an <code>&lt;h1&gt;</code> with <code>5.0rem</code>font-size just means <code>50px</code>.</p>
       <div>
         <div class="row">
@@ -289,7 +295,7 @@
             <h3>Heading<span class="heading-font-size"> <code>&lt;h3&gt;</code> 36rem</span></h3>
             <h4>Heading<span class="heading-font-size"> <code>&lt;h4&gt;</code> 30rem</span></h4>
             <h5>Heading<span class="heading-font-size"> <code>&lt;h5&gt;</code> 24rem</span></h5>
-            <h6>Heading<span class="heading-font-size"> <code>&lt;h6&gt;</code> 15rem</span></h6>
+            <h3>Heading<span class="heading-font-size"> <code>&lt;h3&gt;</code> 15rem</span></h3>
           </div>
         </div>
       </div>
@@ -304,7 +310,7 @@
 &lt;h3&gt;Heading&lt;/h3&gt;
 &lt;h4&gt;Heading&lt;/h4&gt;
 &lt;h5&gt;Heading&lt;/h5&gt;
-&lt;h6&gt;Heading&lt;/h6&gt;
+&lt;h3&gt;Heading&lt;/h3&gt;
 
 &lt;!-- Base type size --&gt;
 &lt;p&gt;The base type is 15px over 1.6 line height (24px)&lt;/p&gt;
@@ -324,7 +330,7 @@
 
     <!-- Buttons -->
     <div class="docs-section" id="buttons">
-      <h6 class="docs-header">Buttons</h6>
+      <h3 class="docs-header">Buttons</h3>
       <p>Buttons come in two basic flavors in Skeleton. The standard <code>&lt;button&gt;</code> element is plain, whereas the <code>.button-primary</code> button is vibrant and prominent. Button styles are applied to a number of appropriate form elements, but can also be arbitrarily attached to anchors with a <code>.button</code> class.</p>
       <div class="docs-example">
         <div>
@@ -366,7 +372,7 @@
 
     <!-- Forms -->
     <div class="docs-section" id="forms">
-      <h6 class="docs-header">Forms</h6>
+      <h3 class="docs-header">Forms</h3>
       <p>Forms are a huge pain, but hopefully these styles make it a bit easier. All inputs, select, and buttons are normalized for a common height cross-browser so inputs can be stacked or placed alongside each other.</p>
       <div class="docs-example docs-example-forms">
         <form>
@@ -446,7 +452,7 @@
 
     <!-- Lists -->
     <div class="docs-section" id="lists">
-      <h6 class="docs-header">Lists</h6>
+      <h3 class="docs-header">Lists</h3>
       <div class="row docs-example">
         <div class="six columns">
           <ul>
@@ -503,7 +509,7 @@
 
     <!-- Code -->
     <div class="docs-section" id="code">
-      <h6 class="docs-header">Code</h6>
+      <h3 class="docs-header">Code</h3>
       <p>Code styling is kept basic – just wrap anything in a <code>&lt;code&gt;</code> and it will appear like <code>this</code>. For blocks of code, wrap a <code>&lt;code&gt;</code> with a <code>&lt;pre&gt;</code>.</p>
       <div class="docs-example">
 <pre><code>.some-class {
@@ -530,7 +536,7 @@
 
     <!-- Tables -->
     <div class="docs-section" id="tables">
-      <h6 class="docs-header">Tables</h6>
+      <h3 class="docs-header">Tables</h3>
       <p>Be sure to use properly formed table markup with <code>&lt;thead&gt;</code> and <code>&lt;tbody&gt;</code> when building a <code>table</code>.</p>
       <div class="docs-example">
         <table class="u-full-width">
@@ -597,7 +603,7 @@
 
     <!-- Queries -->
     <div class="docs-section" id="queries">
-      <h6 class="docs-header">Media queries</h6>
+      <h3 class="docs-header">Media queries</h3>
       <p>Skeleton uses media queries to serve its scalable grid, but also has a list of queries for convenience of styling your site across devices. The queries are mobile-first, meaning they target <code>min-width</code>. Mobile-first queries are how Skeleton's grid is built and is the preferrable method of organizing CSS. It means all styles outside of a query apply to all devices, then larger devices are targeted for enhancement. This prevents small devices from having to parse tons of unused CSS. The sizes for the queries are:</p>
       <div class="docs-example row">
         <div class="six columns">
@@ -646,7 +652,7 @@
 
     <!-- Utilities and Misc. -->
     <div class="docs-section" id="utilities">
-      <h6 class="docs-header">Utilities</h6>
+      <h3 class="docs-header">Utilities</h3>
       <p>Skeleton has a number of small utility classes that act as easy-to-use helpers. Sometimes it's better to use a utility class than create a whole new class just to float an element.</p>
 
 
@@ -678,6 +684,10 @@
 </code>
 </pre>
 <!-- ————————————————————————————————————————————————————— -->
+    </div>
+  </div>
+
+
 <br><br><br><br>
 
 
