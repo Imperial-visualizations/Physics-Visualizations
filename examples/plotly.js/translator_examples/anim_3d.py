@@ -30,6 +30,7 @@ line.show(xaxis_range=[-np.pi, np.pi], xaxis_title="x", xaxis_titlefont_size=18,
 # Animating static plots
 animation = Animate(line, x="x0", y="y0", z="z0")
 animation.animate(x="z1", y="y1", z="x1")
+animation.remove_repeated_data()
 animation.show(transition_duration=10, frame_redraw=False, frame_duration=0)
 
 # Saving to HTML
