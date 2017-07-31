@@ -95,6 +95,11 @@ $(".inputs").each(function () {
         $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
     });
 });
+$(".inputs").each(function () {
+    // To update the displayed value in HTML
+    $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
+
+});
 /*
 $('#ballCollisionAngle').on('input', function () {
     // To update the position of the balls
@@ -219,7 +224,10 @@ function preload() {
 }
 
 function create() {
-    game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;  
+    game.canvasWidth = $("#canvasWrapper").width()*window.devicePixelRatio;
+    game.canvasHeight = $("#canvasWrapper").width()*window.devicePixelRatio;
+    console.log($("#canvasWrapper").height());
+    game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
     game.scale.setUserScale(1/window.devicePixelRatio, 1/window.devicePixelRatio);
     game.renderer.renderSession.roundPixels = true;  
     Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
