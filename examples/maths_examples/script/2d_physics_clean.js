@@ -15,30 +15,26 @@ var frames = (function () {
 console.log(frames);
 
 Plotly.plot('graph', [{
-  x: frames[0].x,
-  y: frames[0].y,
+  x: frames[34].x,
+  y: frames[34].y,
   line: {simplify: false}}],
   {xaxis: {range: [-2, 2]},
     yaxis: {range: [-2, 2]}}
 ).then(function () {
   // Add the frames so we can animate them.
-  Plotly.addFrames('graph', [frames.x[0], frames.y[0]]);
+  Plotly.addFrames('graph', frames);
 });
 
-function randomize() {
-  Plotly.animate('graph', {
-    data:
-      [{x: frames.x[1],
-      y: frames.y[1]}],
-//        traces: [0],
-      layout: {}
-      }, {
+function startAnimation () {
+  Plotly.animate('graph', null, {
     transition: {
-      duration: 100,
-      easing: 'cubic-in-out'
-      }
-
-    })
+      duration: 500,
+      easing: 'linear'
+    },
+    frame: {
+      duration: 500,
+      redraw: false,
+    },
+    mode: 'immediate'
+  });
 }
-
-randomize()
