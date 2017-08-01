@@ -275,15 +275,27 @@ input[type="button"] {
 button:hover,
 input[type="submit"]:hover,
 input[type="reset"]:hover,
-input[type="button"]:hover,
+input[type="button"]:hover{
+  color: #002147;
+  border-color: #002147;
+  outline: 0; 
+  box-shadow: 0 2px 3px #aaa;}
 .button:active,
 button:active,
 input[type="submit"]:active,
 input[type="reset"]:active,
-input[type="button"]:active {
-  color: #002147;
-  border-color: #002147;
-  outline: 0; }
+input[type="button"]:active{
+  color: #003E74;
+  border-color: #003E74;
+  outline: 0; 
+  box-shadow: 0 0px 0px #aaa;}
+.button:focus,
+button:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus,
+input[type="button"]:focus  {
+  color: #003E74;
+  border-color: #003E74;}
 .button.button-primary,
 button.button-primary,
 input[type="submit"].button-primary,
@@ -296,15 +308,30 @@ input[type="button"].button-primary {
 button.button-primary:hover,
 input[type="submit"].button-primary:hover,
 input[type="reset"].button-primary:hover,
-input[type="button"].button-primary:hover,
+input[type="button"].button-primary:hover{
+  color: #FFF;
+  background-color: #0091D4;
+  border-color: #0091D4; 
+  box-shadow: 0 2px 3px #aaa;}
 .button.button-primary:active,
 button.button-primary:active,
 input[type="submit"].button-primary:active,
 input[type="reset"].button-primary:active,
-input[type="button"].button-primary:active {
+input[type="button"].button-primary:active{
+  color: #FFF;
+  background-color: #006EAF;
+  border-color: #006EAF; 
+  outline: 0; 
+  box-shadow: 0 0px 0px #aaa;}
+.button.button-primary:focus,
+button.button-primary:focus,
+input[type="submit"].button-primary:focus,
+input[type="reset"].button-primary:focus,
+input[type="button"].button-primary:focus {
   color: #FFF;
   background-color: #0091D4;
-  border-color: #0091D4; }
+  border-color: #0091D4; 
+}
 
 /* Forms
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
