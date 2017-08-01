@@ -1,23 +1,42 @@
 <html>
 
 <head>
-    <title>Pulse Anim</title>
+    <title>Pulse Animation</title>
+    <link rel="stylesheet" href="./styles.css">
+     <link rel = "icon" href = "../mechanics_collisions/webtest_Mangle/images/favicon.ico" type="image/x-icon">
+
 </head>
 <body>
 
-    <div id='graph'></div>  <!-- Plotly chart will be drawn inside this DIV -->
-
-    <div id="content"></div>
-            <!-- Put content here to make them central aligned -->
-            <!--<h1>Home Page</h1> -->
-            alpha: <input id="alpha" type ="range" value="10" min ="0" max="30" step ="1"/>
-            <input id="run_button" type ="button" value="start" onclick="onStart()"/>
-            <input id="reset_button" type ="button" value="reset" onclick="onReset()"/>
-            <input id="pause_button" type ="button" value="pause" onclick="onPause()"/>
+<h1>Travelling pulse at interface </h1>
+<div class="container">
+<div class="row">
+    <div class="ten columns">
+        <div id='graph'></div>  <!-- Plotly chart will be drawn inside this DIV -->
+    </div>
+    <div class="two columns">
+        <!--<h1>Pulse </h1> -->
+        <label class="sliderTitle">Velocity 1:<span id="v1Display" data-unit="m/s"> 1 m/s</span></label>
+        <label class="slider">
+            <input id="v1" class="inputs" type ="range" value="2" min ="0" max="30" step ="1"/>
+            <span class="sliderMin">0</span><span class="sliderMax">30</span>
+        </label>
+        <label class="sliderTitle">alpha:<span id="alphaDisplay" data-unit="none"> 1</span></label>
+        <label class="slider">
+            <input id="Alpha" class="inputs" type ="range" value="10" min ="0" max="30" step ="1"/>
+            <span class="sliderMin">0</span><span class="sliderMax">120</span>
+        </label>
+        <label>Velocity 2: 1 m/s</label>
+        <input id="run_button" type ="button" value="start" onclick="onStart()"/>
+        <input id="reset_button" type ="button" value="reset" onclick="onReset()"/>
+        <input id="pause_button" type ="button" value="pause" onclick="onPause()"/>
+    </div>
+</div>
+</div>
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-    <link rel="stylesheet" href="../mechanics_collisions/webtest_Mangle/styles/styles.css">
+
     <script>
 
     // Defining variables (need to update later anyway so importing from e.g. json is meaningless)
@@ -32,7 +51,7 @@
     var B = 2*v1/(v1+v2);
     var is_paused = false;
 
-    // Log slider
+    // Slider values (for alpha)
     function valueSlider(position) {
         if (position <= 10) {
             return position*0.1;
@@ -43,9 +62,18 @@
         }
     }
 
-    // Slider
+    // Slider alpha
     $('#alpha').on('change', function () {
         alpha = valueSlider(parseInt($("#alpha").val()));
+        v2 = alpha*v1;
+        A = (v2-v1)/(v1+v2);
+        B = 2*v1/(v1+v2);
+        onReset();
+    })
+
+    // Slider v1
+    $('#v1').on('change', function () {
+        v1 = parseInt($("#v1").val());
         v2 = alpha*v1;
         A = (v2-v1)/(v1+v2);
         B = 2*v1/(v1+v2);
