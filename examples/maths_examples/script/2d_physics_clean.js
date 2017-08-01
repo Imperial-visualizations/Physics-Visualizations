@@ -3,7 +3,7 @@ var frames = (function () {
     $.ajax({
         'async': false,
         'global': false,
-        'url': "rotationtest.json",
+        'url': "rotationtest2.json",
         'dataType': "json",
         'success': function (data) {
             frames = data;  // Python data structure is empty but correct structure for Plotly animation plotting
@@ -15,8 +15,8 @@ var frames = (function () {
 console.log(frames);
 
 Plotly.plot('graph', [{
-  x: frames[34].x,
-  y: frames[34].y,
+  x: frames[0].data[0].x,
+  y: frames[0].data[0].y,
   line: {simplify: false}}],
   {xaxis: {range: [-2, 2]},
     yaxis: {range: [-2, 2]}}
@@ -38,3 +38,5 @@ function startAnimation () {
     mode: 'immediate'
   });
 }
+
+startAnimation()
