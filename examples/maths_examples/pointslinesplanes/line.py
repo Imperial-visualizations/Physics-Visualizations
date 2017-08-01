@@ -18,7 +18,7 @@ class Line:
         @author Nick Metelski
         @since 26.07.17"""
         #TODO import data from layout
-        t = np.linspace(0,1,2) #the parameter
+        t = np.linspace(-10,10,10) #the parameter
         xx = self.offset[0]+t*self.vec[0] #generate xpoints
         yy = self.offset[1]+t*self.vec[1] #for y points
         zz = self.offset[2]+t*self.vec[2] #for z points
