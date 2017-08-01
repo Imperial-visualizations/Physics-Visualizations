@@ -58,7 +58,7 @@ canvasHeight = $("#canvasWrapper").width()*window.devicePixelRatio;
 
 var ballradius = 40;
 
-var ball1_Lab, ball2_Lab, ball1_CoM, ball2_CoM, initAngle, borders, centreOfMass1;
+var ball1_Lab, ball2_Lab, ball1_CoM, ball2_CoM, initAngle, borders, centreOfMass1, textScaleDown;
 var arrowSprites = [];
 var latexSprites = {};
 
@@ -267,6 +267,7 @@ function preload() {
         game.load.image('q1','images/q1latex.png');
         game.load.image('q2','images/q2latex.png');
     }
+    textScaleDown = window.devicePixelRatio;
     
 }
 
@@ -317,14 +318,14 @@ function create() {
 
     var bordersG = game.add.graphics((canvasWidth / 2), (canvasHeight / 2));
 
-    bordersG.lineStyle(12, 0x003E74, 1);
+    bordersG.lineStyle(6*textScaleDown, 0x003E74, 1);
     bordersG.moveTo(0,0);
     bordersG.lineTo(0, (canvasHeight ));
     bordersG.lineTo((canvasWidth ), (canvasHeight));
     bordersG.lineTo((canvasWidth), 0);
     bordersG.lineTo(0, 0);    
 
-    bordersG.lineStyle(6, 0x003E74, 1);
+    bordersG.lineStyle(3*textScaleDown, 0x003E74, 1);
     bordersG.moveTo(0, (canvasHeight / 3));
     bordersG.lineTo((canvasWidth), (canvasHeight / 3));
     bordersG.moveTo(0, (canvasHeight * 2 / 3));
@@ -335,7 +336,7 @@ function create() {
 
     bordersG.destroy();
 
-    var style = { font: "36px Lato", fill: "#003E74", wordWrap: false, align: "left", backgroundColor: "#EBEEEE" };
+    var style = { font: (18*textScaleDown)+"px Lato", fill: "#003E74", wordWrap: false, align: "left", backgroundColor: "#EBEEEE" };
 
     labFrameText = game.add.text(16, 10, "Lab Frame", style);
     labFrameText.anchor.set(0,0);
@@ -432,7 +433,7 @@ function drawArrow(originV ,vectorV, latexID){
 
     var style = { font: "24px Georgia", fill: "#006EAF", wordWrap: false, align: "centre", backgroundColor: "#EBEEEE" };
     arrowSprites.push( game.add.sprite((canvasWidth / 2 - 5*scaleFactor + origin.x*scaleFactor + vector.x*scaleFactor/2), (canvasHeight * 5 / 6 + 1*scaleFactor + origin.y*scaleFactor + vector.y*scaleFactor/2), latexID ));
-    arrowSprites[arrowSprites.length -1].anchor.set(0,0);
+    arrowSprites[arrowSprites.length -1].anchor.set(0.5,0);
 
     arrowG.destroy();
 }
