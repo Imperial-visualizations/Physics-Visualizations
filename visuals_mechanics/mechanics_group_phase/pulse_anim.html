@@ -1,9 +1,9 @@
+<!doctype html>
 <html>
-
 <head>
     <title>Pulse Animation</title>
-    <link rel="stylesheet" href="./styles.css">
-     <link rel = "icon" href = "../mechanics_collisions/webtest_Mangle/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel = "icon" href = "./images/favicon.ico" type="image/x-icon">
 
 </head>
 <body>
@@ -11,25 +11,26 @@
 <h1>Travelling pulse at interface </h1>
 <div class="container">
 <div class="row">
-    <div class="ten columns">
+    <div class="nine columns">
         <div id='graph'></div>  <!-- Plotly chart will be drawn inside this DIV -->
     </div>
-    <div class="two columns">
-        <!--<h1>Pulse </h1> -->
+    <div class="three columns">
+        <!--<h1>Pulse </h1>-->
         <label class="sliderTitle">Velocity 1:<span id="v1Display" data-unit="m/s"> 1 m/s</span></label>
         <label class="slider">
             <input id="v1" class="inputs" type ="range" value="2" min ="0" max="30" step ="1"/>
             <span class="sliderMin">0</span><span class="sliderMax">30</span>
         </label>
-        <label class="sliderTitle">alpha:<span id="alphaDisplay" data-unit="none"> 1</span></label>
+        <label class="sliderTitle">Alpha:<span id="alphaDisplay" data-unit="none"> 1</span></label>
         <label class="slider">
-            <input id="Alpha" class="inputs" type ="range" value="10" min ="0" max="30" step ="1"/>
+            <input id="alpha" class="inputs" type ="range" value="10" min ="0" max="30" step ="1"/>
             <span class="sliderMin">0</span><span class="sliderMax">120</span>
         </label>
         <label>Velocity 2: 1 m/s</label>
-        <input id="run_button" type ="button" value="start" onclick="onStart()"/>
-        <input id="reset_button" type ="button" value="reset" onclick="onReset()"/>
+        <input id="run_button" type ="button" value="play" onclick="onStart()"/>
         <input id="pause_button" type ="button" value="pause" onclick="onPause()"/>
+        <input id="reset_button" type ="button" value="reset" onclick="onReset()"/>
+
     </div>
 </div>
 </div>
@@ -50,6 +51,8 @@
     var A = (v2-v1)/(v1+v2);
     var B = 2*v1/(v1+v2);
     var is_paused = false;
+    //var style = { font: "36px Lato", fill: "#003E74", wordWrap: false, align: "left", backgroundColor: "#f0f0f0" };
+
 
     // Slider values (for alpha)
     function valueSlider(position) {
@@ -63,8 +66,9 @@
     }
 
     // Slider alpha
-    $('#alpha').on('change', function () {
+    $('#alpha').on('input', function () {
         alpha = valueSlider(parseInt($("#alpha").val()));
+        $("#alphaDisplay").text(" " + alpha + " m/s");
         v2 = alpha*v1;
         A = (v2-v1)/(v1+v2);
         B = 2*v1/(v1+v2);
@@ -72,8 +76,9 @@
     })
 
     // Slider v1
-    $('#v1').on('change', function () {
+    $('#v1').on('input', function () {
         v1 = parseInt($("#v1").val());
+        $("#v1Display").text(" " + v1 + " m/s");
         v2 = alpha*v1;
         A = (v2-v1)/(v1+v2);
         B = 2*v1/(v1+v2);
@@ -104,7 +109,8 @@
         Plotly.animate('graph', {
                    data: [{y: y_i}, {y: y_r}, {y: y_t}]
                },
-               {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
+               {transition: {duration: 0}, frame: {duration: 0, redraw: false}
+        }
            );
 
     }
