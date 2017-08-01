@@ -60,7 +60,7 @@ var ballradius = 40;
 
 var ball1_Lab, ball2_Lab, ball1_CoM, ball2_CoM, initAngle, borders, centreOfMass1;
 var arrowSprites = [];
-
+var latexSprites = {};
 
 ball1_Lab = {
     // !! A variable also an object that has 4 properties. !!
@@ -201,7 +201,7 @@ function resetSimulation(){
     ball2_Lab.spriteInstance.visible = true;
 
     centreOfMass1.x = (canvasWidth / 2);
-    centreOfMass1.y = (canvasHeight * 1 / 6);
+    centreOfMass1.y = (canvasHeight / 6);
 
 }
 
@@ -224,10 +224,10 @@ function onCollision() {
 
 
     drawArrow( zeroV() , q1 , "q1" );
-    drawArrow( q1 , q2 , "q2" );
-    drawArrow( zeroV(),vCal(pStar_reversed,"*",(ball1_Lab.mass/ball2_Lab.mass)) , "p*•(m1/m2)" );
-    drawArrow( vCal(pStar_reversed,"*",(ball1_Lab.mass/ball2_Lab.mass)) , pStar_reversed , "p*" );
-    drawArrow( vCal(pStar_reversed,"*",(ball1_Lab.mass/ball2_Lab.mass)) , q1star , "q1*" );
+    drawArrow( q1 , q2 , 'q2' );
+    drawArrow( zeroV(),vCal(pStar_reversed,"*",(ball1_Lab.mass/ball2_Lab.mass)) , "p1m1m2" );
+    drawArrow( vCal(pStar_reversed,"*",(ball1_Lab.mass/ball2_Lab.mass)) , pStar_reversed , "pstar" );
+    drawArrow( vCal(pStar_reversed,"*",(ball1_Lab.mass/ball2_Lab.mass)) , q1star , "qstar" );
     drawArrow(new Vector(0,-0.4),p1,"p1");
 
 
@@ -245,6 +245,12 @@ var game = new Phaser.Game(canvasWidth, canvasHeight, Phaser.CANVAS, 'canvasWrap
 function preload() {
     game.stage.backgroundColor = "#f0f0f0";
     game.load.image('cofmPNG', 'images/cofm.png');
+    game.load.image('p1m1m2','images/p1m1m2latex.png');
+    game.load.image('p1','images/p1latex.png');
+    game.load.image('pstar','images/pstarlatex.png');
+    game.load.image('qstar','images/qstarlatex.png');
+    game.load.image('q1','images/q1latex.png');
+    game.load.image('q2','images/q2latex.png');
     
 }
 
@@ -256,6 +262,9 @@ function create() {
     game.scale.setUserScale(1/window.devicePixelRatio, 1/window.devicePixelRatio);
     game.renderer.renderSession.roundPixels = true;  
     Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
+
+
+
 
     game.stage.backgroundColor = "#f0f0f0";
 
@@ -371,7 +380,7 @@ function update() {
 }
 
 
-function drawArrow(originV ,vectorV, text){
+function drawArrow(originV ,vectorV, latexID){
     var origin = new Vector(originV.x, -1 * originV.y);
     var vector = new Vector(vectorV.x, -1 * vectorV.y);
     // Flip directions for canvas y-axis
@@ -400,7 +409,7 @@ function drawArrow(originV ,vectorV, text){
     arrowG.endFill();    
 
     var style = { font: "24px Georgia", fill: "#006EAF", wordWrap: false, align: "centre", backgroundColor: "#f0f0f0" };
-    arrowSprites.push( game.add.text((canvasWidth / 2 - 500*canvasWidth/1600 + origin.x*scaleFactor + vector.x*scaleFactor/2), (canvasHeight * 5 / 6 + 100*canvasHeight/1600 + origin.y*scaleFactor + vector.y*scaleFactor/2), text, style) );
+    arrowSprites.push( game.add.sprite((canvasWidth / 2 - 500*canvasWidth/1600 + origin.x*scaleFactor + vector.x*scaleFactor/2), (canvasHeight * 5 / 6 + 150*canvasHeight/1600 + origin.y*scaleFactor + vector.y*scaleFactor/2), latexID ));
 
     arrowSprites.push( game.add.sprite((canvasWidth / 2 - 500 *canvasWidth/1600 + origin.x*scaleFactor),(canvasHeight * 5 / 6 + 100*canvasHeight/1600 + origin.y*scaleFactor), arrowG.generateTexture()) );
     arrowSprites[arrowSprites.length-1].anchor.set(0,0.5);
