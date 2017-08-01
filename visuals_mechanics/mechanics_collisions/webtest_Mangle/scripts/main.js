@@ -104,11 +104,11 @@ $('#ballCollisionAngle').on('input', function () {
     // To update the position of the balls
     if(!isRunning){
         initAngle = degToRad(parseFloat($("#ballCollisionAngle").val()));
-
-        ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
-        ball2_Lab.spriteInstance.y = ball2_Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
-        ball1_CoM.spriteInstance.y = ball1_CoM.initr.y + 0.5 * ballradius * Math.sin(initAngle);
-        ball2_CoM.spriteInstance.y = ball2_CoM.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+        //
+        // ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+        // ball2_Lab.spriteInstance.y = ball2_Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+        // ball1_CoM.spriteInstance.y = ball1_CoM.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+        // ball2_CoM.spriteInstance.y = ball2_CoM.initr.y - 0.5 * ballradius * Math.sin(initAngle);
     }
 });
 
@@ -122,10 +122,10 @@ $("#runButton").on('click', function () {
     initAngle = degToRad(parseFloat($("#ballCollisionAngle").val()));
 
 
-    ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
-    ball2_Lab.spriteInstance.y = ball2_Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
-    ball1_CoM.spriteInstance.y = ball1_CoM.initr.y + 0.5 * ballradius * Math.sin(initAngle);
-    ball2_CoM.spriteInstance.y = ball2_CoM.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+    // ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+    // ball2_Lab.spriteInstance.y = ball2_Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+    // ball1_CoM.spriteInstance.y = ball1_CoM.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+    // ball2_CoM.spriteInstance.y = ball2_CoM.initr.y - 0.5 * ballradius * Math.sin(initAngle);
 
     if (!isRunning) {
         $("#runButton").val("Reset");
@@ -169,10 +169,11 @@ function resetSimulation(){
     ball1_CoM.v = zeroV();
     ball2_CoM.v = zeroV();
 
-    ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
-    ball2_Lab.spriteInstance.y = ball2_Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
-    ball1_CoM.spriteInstance.y = ball1_CoM.initr.y + 0.5 * ballradius * Math.sin(initAngle);
-    ball2_CoM.spriteInstance.y = ball2_CoM.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+
+    //ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+    //ball2_Lab.spriteInstance.y = ball2_Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+    //ball1_CoM.spriteInstance.y = ball1_CoM.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+    //ball2_CoM.spriteInstance.y = ball2_CoM.initr.y - 0.5 * ballradius * Math.sin(initAngle);
     /* 
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     "Vector" should only be one of the follows:
@@ -217,6 +218,11 @@ function onCollision() {
     var coMV = getCoMV();
     ball1_Lab.v = vCal(ball1_CoM.v,'+',coMV);
     ball2_Lab.v = vCal(ball2_CoM.v,'+',coMV);
+
+    console.log("Angle p* " + ball1_CoM.v.getArg().toString());
+    console.log("Angle q*" + ball2_CoM.v.getArg().toString());
+    console.log("DeltaAngle:" + (ball1_CoM.v.getArg() - ball2_CoM.v.getArg()).toString());
+
 
     q1 = vCal(ball1_Lab.v,"*",ball1_Lab.mass);
     q2 = vCal(ball2_Lab.v,"*",ball2_Lab.mass);
@@ -410,7 +416,7 @@ function drawArrow(originV ,vectorV, latexID){
 
     var style = { font: "24px Georgia", fill: "#006EAF", wordWrap: false, align: "centre", backgroundColor: "#f0f0f0" };
     arrowSprites.push( game.add.sprite((canvasWidth / 2 - 500*canvasWidth/1600 + origin.x*scaleFactor + vector.x*scaleFactor/2), (canvasHeight * 5 / 6 + 150*canvasHeight/1600 + origin.y*scaleFactor + vector.y*scaleFactor/2), latexID ));
-
+    arrowSprites[arrowSprites.length -1].anchor.set(0,0);
     arrowSprites.push( game.add.sprite((canvasWidth / 2 - 500 *canvasWidth/1600 + origin.x*scaleFactor),(canvasHeight * 5 / 6 + 100*canvasHeight/1600 + origin.y*scaleFactor), arrowG.generateTexture()) );
     arrowSprites[arrowSprites.length-1].anchor.set(0,0.5);
     arrowSprites[arrowSprites.length-1].rotation = vector.getArg();
