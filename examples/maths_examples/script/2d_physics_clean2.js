@@ -20,23 +20,16 @@ Plotly.plot('graph', [{
   line: {simplify: false}}],
   {xaxis: {range: [-2, 2]},
     yaxis: {range: [-2, 2]}}
-).then(function () {
-  // Add the frames so we can animate them.
-  Plotly.addFrames('graph', frames);
-});
+);
 
-function startAnimation () {
-  Plotly.animate('graph', null, {
+  Plotly.animate('graph', frames, {
     transition: {
-      duration: 500,
+      duration: 200,
       easing: 'linear'
     },
     frame: {
-      duration: 500,
+      duration: 200,
       redraw: false,
     },
     mode: 'immediate'
   });
-}
-
-startAnimation()
