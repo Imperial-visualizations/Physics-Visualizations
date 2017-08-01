@@ -104,11 +104,11 @@ $('#ballCollisionAngle').on('input', function () {
     // To update the position of the balls
     if(!isRunning){
         initAngle = degToRad(parseFloat($("#ballCollisionAngle").val()));
-        //
-        // ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
-        // ball2_Lab.spriteInstance.y = ball2_Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
-        // ball1_CoM.spriteInstance.y = ball1_CoM.initr.y + 0.5 * ballradius * Math.sin(initAngle);
-        // ball2_CoM.spriteInstance.y = ball2_CoM.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+        
+        ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+        ball2_Lab.spriteInstance.y = ball2_Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+        ball1_CoM.spriteInstance.y = ball1_CoM.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+        ball2_CoM.spriteInstance.y = ball2_CoM.initr.y - 0.5 * ballradius * Math.sin(initAngle);
     }
 });
 
@@ -122,10 +122,10 @@ $("#runButton").on('click', function () {
     initAngle = degToRad(parseFloat($("#ballCollisionAngle").val()));
 
 
-    // ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
-    // ball2_Lab.spriteInstance.y = ball2_Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
-    // ball1_CoM.spriteInstance.y = ball1_CoM.initr.y + 0.5 * ballradius * Math.sin(initAngle);
-    // ball2_CoM.spriteInstance.y = ball2_CoM.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+    ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+    ball2_Lab.spriteInstance.y = ball2_Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+    ball1_CoM.spriteInstance.y = ball1_CoM.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+    ball2_CoM.spriteInstance.y = ball2_CoM.initr.y - 0.5 * ballradius * Math.sin(initAngle);
 
     if (!isRunning) {
         $("#runButton").val("Reset");
@@ -170,10 +170,10 @@ function resetSimulation(){
     ball2_CoM.v = zeroV();
 
 
-    //ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
-    //ball2_Lab.spriteInstance.y = ball2_Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
-    //ball1_CoM.spriteInstance.y = ball1_CoM.initr.y + 0.5 * ballradius * Math.sin(initAngle);
-    //ball2_CoM.spriteInstance.y = ball2_CoM.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+    ball1_Lab.spriteInstance.y = ball1_Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+    ball2_Lab.spriteInstance.y = ball2_Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
+    ball1_CoM.spriteInstance.y = ball1_CoM.initr.y + 0.5 * ballradius * Math.sin(initAngle);
+    ball2_CoM.spriteInstance.y = ball2_CoM.initr.y - 0.5 * ballradius * Math.sin(initAngle);
     /* 
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     "Vector" should only be one of the follows:
@@ -249,16 +249,28 @@ var game = new Phaser.Game(canvasWidth, canvasHeight, Phaser.CANVAS, 'canvasWrap
 });
 
 function preload() {
-    game.stage.backgroundColor = "#f0f0f0";
-    game.load.image('cofmPNG', 'images/cofm.png');
-    game.load.image('p1m1m2','images/p1m1m2latex.png');
-    game.load.image('p1','images/p1latex.png');
-    game.load.image('pstar','images/pstarlatex.png');
-    game.load.image('qstar','images/qstarlatex.png');
-    game.load.image('q1','images/q1latex.png');
-    game.load.image('q2','images/q2latex.png');
+    game.stage.backgroundColor = "#EBEEEE";
+    if(window.devicePixelRatio >= 1.5){
+        game.load.image('cofmPNG', 'images/cofm.png');
+        game.load.image('p1m1m2','images/p1m1m2latex@2x.png');
+        game.load.image('p1','images/p1latex@2x.png');
+        game.load.image('pstar','images/pstarlatex@2x.png');
+        game.load.image('qstar','images/qstarlatex@2x.png');
+        game.load.image('q1','images/q1latex@2x.png');
+        game.load.image('q2','images/q2latex@2x.png');
+    }else{
+        game.load.image('cofmPNG', 'images/cofm.png');
+        game.load.image('p1m1m2','images/p1m1m2latex.png');
+        game.load.image('p1','images/p1latex.png');
+        game.load.image('pstar','images/pstarlatex.png');
+        game.load.image('qstar','images/qstarlatex.png');
+        game.load.image('q1','images/q1latex.png');
+        game.load.image('q2','images/q2latex.png');
+    }
     
 }
+
+
 
 function create() {
     game.canvasWidth = $("#canvasWrapper").width()*window.devicePixelRatio;
@@ -272,7 +284,7 @@ function create() {
 
 
 
-    game.stage.backgroundColor = "#f0f0f0";
+    game.stage.backgroundColor = "#EBEEEE";
 
 
     centreOfMass1 = game.add.sprite((canvasWidth / 2),(canvasHeight * 1 / 6), 'cofmPNG');
@@ -323,7 +335,7 @@ function create() {
 
     bordersG.destroy();
 
-    var style = { font: "36px Lato", fill: "#003E74", wordWrap: false, align: "left", backgroundColor: "#f0f0f0" };
+    var style = { font: "36px Lato", fill: "#003E74", wordWrap: false, align: "left", backgroundColor: "#EBEEEE" };
 
     labFrameText = game.add.text(16, 10, "Lab Frame", style);
     labFrameText.anchor.set(0,0);
@@ -414,11 +426,13 @@ function drawArrow(originV ,vectorV, latexID){
     arrowG.lineTo(mag/2, 0);
     arrowG.endFill();    
 
-    var style = { font: "24px Georgia", fill: "#006EAF", wordWrap: false, align: "centre", backgroundColor: "#f0f0f0" };
-    arrowSprites.push( game.add.sprite((canvasWidth / 2 - 500*canvasWidth/1600 + origin.x*scaleFactor + vector.x*scaleFactor/2), (canvasHeight * 5 / 6 + 150*canvasHeight/1600 + origin.y*scaleFactor + vector.y*scaleFactor/2), latexID ));
-    arrowSprites[arrowSprites.length -1].anchor.set(0,0);
-    arrowSprites.push( game.add.sprite((canvasWidth / 2 - 500 *canvasWidth/1600 + origin.x*scaleFactor),(canvasHeight * 5 / 6 + 100*canvasHeight/1600 + origin.y*scaleFactor), arrowG.generateTexture()) );
+    arrowSprites.push( game.add.sprite((canvasWidth / 2 - 5*scaleFactor + origin.x*scaleFactor),(canvasHeight * 5 / 6 + 1*scaleFactor + origin.y*scaleFactor), arrowG.generateTexture()) );
     arrowSprites[arrowSprites.length-1].anchor.set(0,0.5);
     arrowSprites[arrowSprites.length-1].rotation = vector.getArg();
+
+    var style = { font: "24px Georgia", fill: "#006EAF", wordWrap: false, align: "centre", backgroundColor: "#EBEEEE" };
+    arrowSprites.push( game.add.sprite((canvasWidth / 2 - 5*scaleFactor + origin.x*scaleFactor + vector.x*scaleFactor/2), (canvasHeight * 5 / 6 + 1*scaleFactor + origin.y*scaleFactor + vector.y*scaleFactor/2), latexID ));
+    arrowSprites[arrowSprites.length -1].anchor.set(0,0);
+
     arrowG.destroy();
 }
