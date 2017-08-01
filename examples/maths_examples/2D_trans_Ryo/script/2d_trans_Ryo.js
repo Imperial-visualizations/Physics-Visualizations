@@ -21,8 +21,11 @@ function rotation(th,vec) {
   return [x,y];
 }
 
+// Scale function returns arrays of similar form to rotation()
+function scale()
+
 // Run arguments here for aniamtion
-var [x,y] = rotation(2,[1,1])
+var [x,y] = rotation(3.14,[1,1])
 
 // custom linspace function, probably will not need it...
 function mylinspace(a,b,n) {
