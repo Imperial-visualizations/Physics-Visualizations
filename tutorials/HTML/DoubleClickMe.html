@@ -9,6 +9,7 @@
   <title>Imperial Visualisation</title>
   <meta name="description" content="">
   <meta name="author" content="">
+  <link rel = "icon" href = "images/favicon.ico" type="image/x-icon">
 
   <!-- Mobile Specific Metas
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -41,6 +42,90 @@
   <div class="container">
     <section class="header">
       <h1 class="title">Imperial Visualisation Cheatsheet</h1>
+    </section>
+              
+    <!-- README -->
+    <div id="GettingStarted">
+      <h3>Getting Started</h3>
+        <div class="row">
+          <div class="six columns">
+            <p>
+              How to get started:<br>
+              1. open ~/Imperial-Visualizations/tutorials/HTML/<br>
+              2. download everything inside (see right)<br>
+              3. open "index.html" with PyCharm or whatever code-editor you like:<br>
+              4. Now you can start copy and paste stuff from this page to your index.html file. Remember to put them inside &#x3C;div class=&#x22;container&#x22;&#x3E; &#x3C;/div&#x3E;.
+            </p>
+          </div>
+          <div class="six columns">
+<pre>
+<code>
++ /Imperial-Visualizations/tutorials/HTML/
+| + images/
+| |- imperial-black-logo.svg
+| |- imperial-logo.svg
+| |- imperial-white-logo.svg
+| + scripts/
+| |- program.js
+| + styles/
+| |- styles.css
+|- index.html
+|- DoubleClickMe.html.html
+</code>
+</pre>
+          </div>
+        </div>
+        <div class="row">
+          <div class="twelve columns">
+
+<pre>
+<code>
+<strong>index.html</strong>
+&#x3C;!doctype html&#x3E;
+&#x3C;!-- **This line is extremely important, it tells the browser to use HTML5 instead of HTML 4.1**  --&#x3E;
+&#x3C;html&#x3E;
+&#x3C;head&#x3E;
+    &#x3C;meta charset=&#x22;utf-8&#x22;&#x3E;
+    &#x3C;meta name=&#x22;viewport&#x22; content=&#x22;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no&#x22;&#x3E;
+    &#x3C;title&#x3E;Imperial Visualisations&#x3C;/title&#x3E;
+    &#x3C;link rel=&#x22;icon&#x22; href=&#x22;images/favicon.ico&#x22; type=&#x22;image/x-icon&#x22;&#x3E;
+    &#x3C;link rel=&#x22;stylesheet&#x22; href=&#x22;styles/styles.css&#x22;&#x3E;
+    &#x3C;!-- importing style.css --&#x3E;
+    &#x3C;!-- **You are not suppose to change style.css !!**  --&#x3E;
+    &#x3C;style type=&#x22;text/css&#x22;&#x3E;
+        /* overwrite style.css styles*/
+    &#x3C;/style&#x3E;
+&#x3C;/head&#x3E;
+&#x3C;body&#x3E;
+    &#x3C;div class=&#x22;container&#x22;&#x3E;
+        &#x3C;h1&#x3E;Big title&#x3C;/h1&#x3E;
+        &#x3C;div class=&#x22;row&#x22;&#x3E;
+            &#x3C;div class=&#x22;eight columns&#x22;&#x3E;
+                &#x3C;p&#x3E;Put your graph here&#x3C;/p&#x3E;
+            &#x3C;/div&#x3E;
+            &#x3C;div class=&#x22;four columns&#x22;&#x3E;
+                &#x3C;p&#x3E;And probobly put your interface here&#x3C;/p&#x3E;
+            &#x3C;/div&#x3E;
+        &#x3C;/div&#x3E;
+    &#x3C;/div&#x3E;
+    &#x3C;br&#x3E;&#x3C;br&#x3E;&#x3C;br&#x3E;
+    &#x3C;script src=&#x22;scripts/program.js&#x22;&#x3E;&#x3C;/script&#x3E;
+    &#x3C;!-- You should put your javascript code in program.js --&#x3E;
+    &#x3C;script&#x3E;
+        // or you can put your javascript here as well.
+    &#x3C;/script&#x3E;
+&#x3C;/body&#x3E;
+&#x3C;/html&#x3E;
+
+</code>
+</pre>
+          </div>
+        </div>
+    </div>
+
+
+    <div id="dropdown">
+      <h3 class="docs-header">The dropdown menu</h3>
         <ul class="dropdown">
             <li>
                 <span id="Menu">Menu</span>
@@ -81,10 +166,6 @@
                 </ul>
             </li>
         </ul>
-    </section>
-
-    <div id="dropdown">
-      <h3 class="docs-header">The dropdown menu</h3>
       <p>The drop down menu can be used in combination with plotly to control the graph or as a navigation bar.</p>
 <pre>
 <code>
@@ -92,101 +173,23 @@
             &#x3C;li&#x3E;
                 &#x3C;span id=&#x22;Menu&#x22;&#x3E;Menu&#x3C;/span&#x3E;
                 &#x3C;ul&#x3E;
-                &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
-                  &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#grid&#x22;&#x3E;Grid&#x3C;/a&#x3E;
+                &#x3C;li &#x3E;
+                  &#x3C;a href=&#x22;#grid&#x22;&#x3E;Grid&#x3C;/a&#x3E;
                 &#x3C;/li&#x3E;
-                &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
-                  &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#typography&#x22;&#x3E;Typography&#x3C;/a&#x3E;
+                &#x3C;li &#x3E;
+                  &#x3C;a href=&#x22;#typography&#x22;&#x3E;Typography&#x3C;/a&#x3E;
                 &#x3C;/li&#x3E;
                 .
                 .
                 .
-                &#x3C;li class=&#x22;popover-item&#x22;&#x3E;
-                  &#x3C;a class=&#x22;popover-link&#x22; href=&#x22;#utilities&#x22;&#x3E;Utilities&#x3C;/a&#x3E;
+                &#x3C;li &#x3E;
+                  &#x3C;a href=&#x22;#utilities&#x22;&#x3E;Utilities&#x3C;/a&#x3E;
                 &#x3C;/li&#x3E;
                 &#x3C;/ul&#x3E;
             &#x3C;/li&#x3E;
 &#x3C;/ul&#x3E;
 </code>
 </pre>
-    </div>
-              
-    <!-- README -->
-    <div id="GettingStarted">
-      <h3>Getting Started</h3>
-        <div class="row">
-          <div class="six columns">
-            <p>
-              How to get started:<br>
-              1. open ~/Imperial-Visualizations/website/<br>
-              2. download everything inside (see right)<br>
-              3. open "index.html" with PyCharm or whatever code-editor you like:<br>
-              4. Now you can start copy and paste stuff from this page to your index.html file. Remember to put them inside &#x3C;div class=&#x22;container&#x22;&#x3E; &#x3C;/div&#x3E;.
-            </p>
-          </div>
-          <div class="six columns">
-<pre>
-<code>
-+ /Imperial-Visualizations/website/
-| + images/
-| |- imperial-black-logo.svg
-| |- imperial-logo.svg
-| |- imperial-white-logo.svg
-| + scripts/
-| |- program.js
-| + styles/
-| |- styles.css
-| - index.html
-| - cheatsheet.html
-</code>
-</pre>
-          </div>
-        </div>
-        <div class="row">
-          <div class="twelve columns">
-
-<pre>
-<code>
-<strong>index.html</strong>
-&#x3C;!doctype html&#x3E;
-&#x3C;!-- **This line is extremely important, it tells the browser to use HTML5 instead of HTML 4.1**  --&#x3E;
-&#x3C;html&#x3E;
-&#x3C;head&#x3E;
-    &#x3C;meta charset=&#x22;utf-8&#x22;&#x3E;
-    &#x3C;meta name=&#x22;viewport&#x22; content=&#x22;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no&#x22;&#x3E;
-    &#x3C;title&#x3E;Imperial Visualisations&#x3C;/title&#x3E;
-    &#x3C;link rel=&#x22;stylesheet&#x22; href=&#x22;styles/styles.css&#x22;&#x3E;
-    &#x3C;!-- importing style.css --&#x3E;
-    &#x3C;!-- **You are not suppose to change style.css !!**  --&#x3E;
-    &#x3C;style type=&#x22;text/css&#x22;&#x3E;
-        /* overwrite style.css styles*/
-    &#x3C;/style&#x3E;
-&#x3C;/head&#x3E;
-&#x3C;body&#x3E;
-    &#x3C;div class=&#x22;container&#x22;&#x3E;
-        &#x3C;h1&#x3E;Big title&#x3C;/h1&#x3E;
-        &#x3C;div class=&#x22;row&#x22;&#x3E;
-            &#x3C;div class=&#x22;eight columns&#x22;&#x3E;
-                &#x3C;p&#x3E;Put your graph here&#x3C;/p&#x3E;
-            &#x3C;/div&#x3E;
-            &#x3C;div class=&#x22;four columns&#x22;&#x3E;
-                &#x3C;p&#x3E;And probobly put your interface here&#x3C;/p&#x3E;
-            &#x3C;/div&#x3E;
-        &#x3C;/div&#x3E;
-    &#x3C;/div&#x3E;
-    &#x3C;br&#x3E;&#x3C;br&#x3E;&#x3C;br&#x3E;
-    &#x3C;script src=&#x22;scripts/program.js&#x22;&#x3E;&#x3C;/script&#x3E;
-    &#x3C;!-- You should put your javascript code in program.js --&#x3E;
-    &#x3C;script&#x3E;
-        // or you can put your javascript here as well.
-    &#x3C;/script&#x3E;
-&#x3C;/body&#x3E;
-&#x3C;/html&#x3E;
-
-</code>
-</pre>
-          </div>
-        </div>
     </div>
 
     <!-- Grid -->
@@ -271,7 +274,9 @@
 
 &lt;/div&gt;
 
-&lt;!-- Note: columns can be nested, but it's not recommended since Skeleton's grid has %-based gutters, meaning a nested grid results in variable with gutters (which can end up being *really* small on certain browser/device sizes) --&gt;
+&lt;!-- Note: columns can be nested, but it's not recommended since Skeleton's grid has %-based gutters, 
+meaning a nested grid results in variable with gutters (which can end up being *really* small on certain 
+browser/device sizes) --&gt;
 
 </code>
 </pre>
