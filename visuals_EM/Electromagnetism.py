@@ -1,5 +1,7 @@
 import numpy as np
 from scipy.integrate import tplquad,dblquad
+import plotly.graph_objs as go
+
 k = 8.987551e9  #coulomb's constant
 m = 1 #kg
 dt = 0.1 #s
@@ -174,10 +176,75 @@ class Field():
             return F
         else:
             return 0
-            ahdfkhdsafkkhdf
-b = Field()
-print(b.force_oncharge(electron))
-positions = {}
-for i in range (0,10):
-    electron.move(b.force_oncharge(electron))
-    print(electron.p)
+            
+            
+class EM_wave:
+    """
+    Args:
+            theta (float) - radians [0, π]
+            phi (float) - radians [0, 2π]
+            rot (float) - radians [0, 2π] - This rotates the wave along its axis
+            width (int) - line thickness
+            color (hex/rgb) - line color
+    """
+    def __init__(self, theta, phi=0, rot=0, width=5, color='rgb(0,0,0)'):
+        self.theta = theta
+        self.phi = phi
+        self.rot = rot
+        self.width = width
+        self.color = color
+
+        n = 100
+        Ex_init = np.linspace(0,1,n)
+        Ey_init = 0.25*np.sin(Ex_init*6.*np.pi)
+        Ez_init = np.zeros(n)
+
+        Bx_init = Ex_init
+        By_init = Ez_init
+        Bz_init = Ey_init
+
+        E_coords_init = [np.array([Ex_init[i], Ey_init[i], Ez_init[i]]) for i in range(0, len(Ex_init))]
+        B_coords_init = [np.array([Bx_init[i], By_init[i], Bz_init[i]]) for i in range(0, len(Bx_init))]
+
+        theta_x = self.rot
+        theta_y = self.phi
+        theta_z = self.theta
+        rotmatrix_x = np.array([[1, 0, 0],
+                            [0, np.cos(theta_x), -np.sin(theta_x)], 
+                            [0, np.sin(theta_x),  np.cos(theta_x)]])
+        rotmatrix_y = np.array([[np.cos(theta_y), 0, np.sin(theta_y)],
+                            [0, 1, 0], 
+                            [-np.sin(theta_y), 0,  np.cos(theta_y)]])
+        rotmatrix_z = np.array([[np.cos(theta_z), -np.sin(theta_z), 0],
+                            [np.sin(theta_z), np.cos(theta_z), 0], 
+                            [0, 0, 1]])
+
+        E_coords_trans = [np.dot(rotmatrix_x,i) for i in E_coords_init]
+        E_coords_trans = [np.dot(rotmatrix_y,i) for i in E_coords_trans]
+        E_coords_trans = [np.dot(rotmatrix_z,i) for i in E_coords_trans]
+        self.Ex = [i[0] for i in E_coords_trans]
+        self.Ey = [i[1] for i in E_coords_trans]
+        self.Ez = [i[2] for i in E_coords_trans]
+
+        B_coords_trans = [np.dot(rotmatrix_x,i) for i in B_coords_init]
+        B_coords_trans = [np.dot(rotmatrix_y,i) for i in B_coords_trans]
+        B_coords_trans = [np.dot(rotmatrix_z,i) for i in B_coords_trans]
+        self.Bx = [i[0] for i in B_coords_trans]
+        self.By = [i[1] for i in B_coords_trans]
+        self.Bz = [i[2] for i in B_coords_trans]
+        
+        self.E_wave = go.Scatter3d(
+            x=self.Ex,
+            y=self.Ey, 
+            z=self.Ez,
+            showlegend=False, mode='lines', line={'width': self.width, 'color': self.color}
+        )
+        
+        self.B_wave = go.Scatter3d(
+            x=self.Bx,
+            y=self.By, 
+            z=self.Bz,
+            showlegend=False, mode='lines', line={'width': self.width, 'color': self.color}
+        )
+        
+        self.data = [self.E_wave, self.B_wave]
