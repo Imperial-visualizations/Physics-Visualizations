@@ -2,10 +2,10 @@
 function rotmat(th) {
   var rotator = [[Math.cos(th),-Math.sin(th)],[Math.sin(th),Math.cos(th)]];
   return rotator;
-  }
+}
 
 // Rotation function returns arrays x,y for smooth transition
-function rotation(th,vec) {
+function rotation(vec,th) {
   // Parameters
   var N = 50;
   var t = numeric.linspace(0,th,N);
@@ -22,10 +22,37 @@ function rotation(th,vec) {
 }
 
 // Scale function returns arrays of similar form to rotation()
-function scale()
+// Arguments must go in of the form (vec, scale1, scale2)
+function scale() {
+  var N = 50;
+  var vec = arguments[0];
+  var x = math.zeros(N);
+  var y = math.zeros(N);
+  if (arguments.length === 2){
+    x = numeric.linspace(vec[0],arguments[1]*vec[0],N);
+    y = numeric.linspace(vec[1],arguments[1]*vec[1],N);
+  } else if (arguments.length === 3) {
+    x = numeric.linspace(vec[0],arguments[1]*vec[0],N);
+    y = numeric.linspace(vec[1],arguments[2]*vec[1],N);
+  }
+  return [x,y]
+}
 
-// Run arguments here for aniamtion
-var [x,y] = rotation(3.14,[1,1])
+function custom(vec,a,b,c,d) {
+  N = 50;
+  var A = [[a,b],[c,d]];
+  var x0 = vec[0];
+  var y0 = vec[1];
+  var newvec = math.multiply(A,math.matrix(vec));
+  var x = numeric.linspace(x0,newvec._data[0],N);
+  var y = numeric.linspace(y0,newvec._data[1],N);
+  return[x,y]
+}
+
+// Run arguments here for animation, try them all!
+//var [x,y] = rotation([1,1],3.14)
+//var [x,y] = scale([1,1],2,3)
+var [x,y] = custom([1,1],2,1,3,2)
 
 // custom linspace function, probably will not need it...
 function mylinspace(a,b,n) {
@@ -58,9 +85,10 @@ Plotly.plot('graph', [{
   x: [x[0],0],
   y: [y[0],0],
   line: {simplify: false}}],
-  {xaxis: {range: [-2, 2]},
-    yaxis: {range: [-2, 2]}}
+  {xaxis: {range: [-5, 5]},
+    yaxis: {range: [-5, 5]}}
 );
+
 // Animation
 function replotter() {
   for (var i = 1; i < 50; i++){
