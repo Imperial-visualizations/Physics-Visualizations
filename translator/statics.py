@@ -27,25 +27,71 @@ class Graph:
     def __repr__(self):
         return str(self.script)
 
-    def finish_plot(self, v_name=None, **kwargs):
+    def remove_repeated_data(self):
+        """
+        From the data in the instance, all duplicated portions in the lists are deleted.
+        :return:
+        """
+        def find_period(data, start, end):
+            """
+            Function to give the non-repeating elements of the input array.
+            :param data: List of lists
+            :param start: Start index
+            :param end: End index
+            :return: Array with just the elements that are repeated
+            """
+            if len(data) == 1 or 0:
+                return data
+
+            def periodic_data(l, period):
+                """
+                Determines whether the data repeats periodically.
+                :param l: Data list
+                :param period: Integer
+                :return: Boolean
+                """
+
+                # checking if element at indexes one period apart are equal
+                for j in range(0, len(l) - period + 1):
+                    if l[j] != l[j + period - 1]:
+                        return False
+                return True
+
+            for i in range(start + 1, end):
+                if data[i] == data[start]:
+                    end_index = i           # finding common element index number
+
+                    if periodic_data(data, end_index + 1):
+                        if end_index == 0:
+                            return [data[end_index]]
+                        return data[:end_index]
+
+            return data
+
+        for key, value in self.data.items():
+            self.data[key] = find_period(value, 0, len(value))
+            self.script = ""
+        return
+
+    def finish_plot(self, o_name=None, **kwargs):
         """
         Formats objects as JSON, then updates instance and class dictionaries.
-        :param v_name: Name of JS object.
+        :param o_name: Name of JS object.
         :param kwargs: Attributes of JS object.
         :return:
         """
-        if v_name:
-            v_name = str(v_name)
+        if o_name:
+            o_name = str(o_name)
 
         else:
-            v_name = str(self.type[1:-1])
+            o_name = str(self.type[1:-1])
 
-        v_name = "{v_name}".format(v_name=v_name + str(len(self.objects)))
+        o_name = "{v_name}".format(v_name=o_name + str(len(self.objects)))
         data = Data(**kwargs).json                         # Processing keyword arguments and converting to JSON.
-        data_js = jsify(data=data, variable_name=v_name)     # Making JS data object.
-        v_name = escape(v_name)
-        self.objects[v_name] = str(data_js)                # Storing current plot's attributes in class' dictionary.
-        self.instance_objects[v_name] = str(data_js)       # Storing current plot's attributes in instance's dictionary.
+        data_js = jsify(data=data, variable_name=o_name)     # Making JS data object.
+        o_name = escape(o_name)
+        self.objects[o_name] = str(data_js)                # Storing current plot's attributes in class' dictionary.
+        self.instance_objects[o_name] = str(data_js)       # Storing current plot's attributes in instance's dictionary.
         return
 
     def show_all(self, **kwargs):
@@ -74,8 +120,7 @@ class Graph:
         self.make_layout(**kwargs)
 
         self.script += self.layout
-        self.script += "Plotly.newPlot({div_v_name}, {plots}, layout);".format(div_v_name=escape(self.div_id),
-                                                                               plots=plots)
+        self.script += "Plotly.newPlot({div_name}, {plots}, layout);".format(div_name=escape(self.div_id), plots=plots)
         return self.script
 
     def show(self, **kwargs):
@@ -90,13 +135,14 @@ class Graph:
         for variable, value in self.data.items():
             self.script += "var {variable} = {value}; \n".format(variable=var(variable, True), value=value)
 
-        self.script += "\n"                                     # Beautifying.
+        traces = list(range(len(self.instance_objects.items())))
+        self.script += "\n"                                         # Beautifying.
 
-        for v_v_name, obj in self.instance_objects.items():         # Writing JS objects (that will be plotted)
-            obj = var(obj, decode=True)                         # Escaping all references to variables
+        for v_name, obj in self.instance_objects.items():           # Writing JS objects (that will be plotted)
+            obj = var(obj, decode=True)                             # Escaping all references to variables
 
             self.script += obj
-            plots += v_v_name[1:-1] + ", "
+            plots += v_name[1:-1] + ", "
 
         plots = plots[:-2]
         plots += "]"
@@ -104,8 +150,11 @@ class Graph:
         self.make_layout(**kwargs)
 
         self.script += self.layout
-        self.script += "Plotly.newPlot({div_v_name}, {plots}, layout);".format(div_v_name=escape(self.div_id),
-                                                                               plots=plots)
+        self.script += "function plot() {{\n\t" \
+                       "Plotly.newPlot({div_name}, {{data: {plots}, traces: {traces}, layout: layout}}); \n\t" \
+                       "}} \n\n" \
+                       "plot();"\
+            .format(div_name=escape(self.div_id), traces=traces, plots=plots)
         return self.script
 
     def make_layout(self, **kwargs):
@@ -156,7 +205,7 @@ class Surface(Graph):
             raise TypeError("Expected list of length >= 1, not {type} of length {length}"
                             .format(type=str(type(z)), length=len(z)))
 
-        v_name_z = var("z" + str(len(self.data)))
+        v_name_z = var("z" + str(len(self.instance_objects)))
         self.data[v_name_z] = z
         self.finish_plot(z=v_name_z, **kwargs)
         return
@@ -199,9 +248,9 @@ class Scatter3D(Graph):
                                     len_x=str(len(x)), len_y=str(len(y)), len_z=str(len(z))))
 
         # Assigning names for JS variables when written to JS script.
-        v_name_x = var("x" + str(len(self.data)))
-        v_name_y = var("y" + str(len(self.data)))
-        v_name_z = var("z" + str(len(self.data)))
+        v_name_x = var("x" + str(len(self.instance_objects)))
+        v_name_y = var("y" + str(len(self.instance_objects)))
+        v_name_z = var("z" + str(len(self.instance_objects)))
 
         # Adding data to instance dictionary.
         self.data[v_name_x] = x
@@ -252,8 +301,8 @@ class Scatter2D(Graph):
                             .format(type_x=str(type(x)), type_y=str(type(y)), len_x=str(len(x)), len_y=str(len(y))))
 
         # Assigning names for JS variables when written to JS script.
-        v_name_x = var("x" + str(len(self.data)))
-        v_name_y = var("y" + str(len(self.data)))
+        v_name_x = var("x" + str(len(self.instance_objects)))
+        v_name_y = var("y" + str(len(self.instance_objects)))
 
         # Adding data to instance dictionary.
         self.data[v_name_x] = x

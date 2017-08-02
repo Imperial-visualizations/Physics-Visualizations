@@ -260,7 +260,8 @@ class Data:
 class Document:
     language = Tag("html")                                                  # Document language declared.
     source = Tag("script", src="https://cdn.plot.ly/plotly-latest.min.js")  # Defining location of JS source.
-    head = Tag("head", value=source.html)                                   # Putting script source in head of HTML.
+    jquery = Tag("script", src="https://code.jquery.com/jquery-latest.min.js")
+    head = Tag("head", value=source.html + jquery.html)                     # Putting script source in head of HTML.
 
     def __init__(self, div_id=None, js_script=None, width=480, height=400):
         """
@@ -288,7 +289,7 @@ class Document:
         """
         div_id = escape(div_id)                                     # Div on HTML page where Plotly JS graph is located.
 
-        self.page += Tag("div", id=div_id, style=self.div_style).html + "\n"    # Writing div
+        self.page += Tag("div", id=div_id, style=self.div_style).html + "\n"     # Writing div
         self.page += Tag("script", value=js_script).html + "\n"                  # Writing graph
         return
 
