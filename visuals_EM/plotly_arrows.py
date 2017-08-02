@@ -3,10 +3,13 @@ import plotly.graph_objs as go
 
 
 def p2c(r, theta, phi):
-   """Convert polar unit vector to cartesians"""
-   return [r * np.sin(theta) * np.cos(phi),
+    """Convert polar unit vector to cartesians"""
+    return [r * np.sin(theta) * np.cos(phi),
            r * np.sin(theta) * np.sin(phi),
            r * np.cos(theta)]
+    # return [-r * np.cos(theta),
+    #         r * np.sin(theta) * np.sin(phi),
+    #         r * np.sin(theta) * np.cos(phi)]
 
 class Arrow:
     def __init__(self, theta, phi, out, width=5, color='rgb(0,0,0)'):
