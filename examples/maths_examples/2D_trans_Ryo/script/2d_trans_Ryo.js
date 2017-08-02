@@ -10,15 +10,16 @@ function rotation(vec,th) {
   var N = 50;
   var t = numeric.linspace(0,th,N);
   // Rotation matrix
-  var x = math.zeros(N);
-  var y = math.zeros(N);
+  var x = [];
+  var y = [];
   var myvec = math.matrix(vec);
   for (var i=0; i<N; i++) {
-    var A = math.multiply(rotmat(t[i]),myvec);
+    var newvec = math.multiply(rotmat(t[i]),myvec);
       // Pull out x and y components
-      x[i] = A._data[0]
-      y[i] = A._data[1]
+        x.push(newvec._data[0])
+        y.push(newvec._data[1])
   }
+  console.log(x)
   return [x,y];
 }
 
@@ -40,6 +41,7 @@ function scale() {
   return [x,y]
 }
 
+// Custom matrix transformation, arguments form matrix [[a,b],[c,d]]
 function custom(vec,a,b,c,d) {
   N = 50;
   var A = [[a,b],[c,d]];
@@ -51,6 +53,7 @@ function custom(vec,a,b,c,d) {
   return[x,y]
 }
 
+// Convert x,y arrays returned from functions in json format for animate
 function jsonformat(x,y) {
   var myjson = [];
   var N = x.length;
@@ -60,15 +63,7 @@ function jsonformat(x,y) {
   return myjson;
 }
 
-// Run arguments here for animation, try them all!
-//var [x,y] = rotation([1,1],3.14)
-//var [x,y] = scale([1,1],2,3)
-var [x,y] = custom([1,1],2,1,3,2)
-
-var myjson = jsonformat(x,y)
-console.log(myjson)
-
-// custom linspace function, probably will not need it...
+// Custom linspace function, probably will not need it...
 function mylinspace(a,b,n) {
   var h = (b-a)/(n-1);
   var myinterval = [];
@@ -78,50 +73,33 @@ function mylinspace(a,b,n) {
   return myinterval;
 }
 
-// Use this to parse JSON file, we don't need this now as we're doing the physics on JS
-//var frames = (function () {
-//    var frames = null;
-//    $.ajax({
-//        'async': false,
-//        'global': false,
-//        'url': "rotationtest.json",
-//        'dataType': "json",
-//        'success': function (data) {
-//            frames = data;  // Python data structure is empty but correct structure for Plotly animation plotting
-//        }
-//    });
-//    return frames;
-//})();
-//
+// Run arguments here for animation, try them all!
+var [x,y] = rotation([1,1],Math.PI)
+//var [x,y] = scale([0.5,0.3],2,3)
+//var [x,y] = custom([1,1],2,1,3,2)
 
-// Plot
+// Convery array to frames, print on console to check values...
+var frames = jsonformat(x,y)
+console.log(frames)
+
+// Initial plot
 Plotly.plot('graph', [{
-  x: [x[0],0],
-  y: [y[0],0],
+  x: frames[0].data[0].x,
+  y: frames[0].data[0].y,
   line: {simplify: false}}],
-  {xaxis: {range: [-5, 5]},
-    yaxis: {range: [-5, 5]}}
+  {xaxis: {range: [-2, 2]},
+    yaxis: {range: [-2, 2]}}
 );
 
 // Animation
-function replotter() {
-  for (var i = 1; i < 50; i++){
-    Plotly.animate('graph', {
-      data:
-        [{x: [x[i],0],
-        y: [y[i],0]}]
-        }, {
-      transition: {
-        duration: 100,
-        easing: 'cubic-in-out'
-      },
-      frame: {
-        duration: 0,
-        redraw: false
-      }
-
-    })
-  }
-}
-// Call animation
-replotter()
+Plotly.animate('graph', frames, {
+  transition: {
+    duration: 100,
+    easing: 'linear'
+  },
+  frame: {
+    duration: 100,
+    redraw: false,
+  },
+  mode: 'immediate'
+});
