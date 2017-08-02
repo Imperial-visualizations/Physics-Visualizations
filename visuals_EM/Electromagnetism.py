@@ -114,6 +114,9 @@ class test_charge:
         self.p = np.array(position)
         self.q_1=charge
         self.v=initial_velocity
+        print(type(self.v))
+        if type(self.v) != np.ndarray:
+            raise Exception('invalid input for velocity')
     def force(self,surface):
         F = list()
         global p,rho,i,q_1  #making sure these values don't get lost in the class by definining them as global.
@@ -151,21 +154,19 @@ class test_charge:
         
         return F
     def move(self,force=[0.,0.,0.]):
-        print(type(self.v))
-        print(self.v)
-        print(type(force))
+        self.p = self.p + self.v*dt
         self.v = self.v + force*dt/m
     
     
     
 def f(x):
     return [3.,3.,3.]
-electron = test_charge(position=[1.,1.,1.],charge=2,initial_velocity=np.array([1.,0.,0.]))
+electron = test_charge(position=[1.,1.,1.],charge=2,initial_velocity=np.array([1.,1.,0.]))
 
 class Field():
-    def __init__(self,type='magnetic',func=f,lim_x =[0,2],lim_y=[0,2],lim_z=[0,2]):
+    def __init__(self,Type='magnetic',func=f,lim_x =[0,2],lim_y=[0,2],lim_z=[0,2]):
         self.func=func
-        self.type=type
+        self.type=Type
         self.lim_x = lim_x
         self.lim_y = lim_y
         self.lim_z=lim_z
