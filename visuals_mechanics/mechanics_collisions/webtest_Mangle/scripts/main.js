@@ -251,12 +251,17 @@ function onCollision() {
 
 
 
-    drawArrow( zeroV() , q1 , "q1" );
-    drawArrow( q1 , q2 , 'q2' );
-    drawArrow( zeroV(),vCal(pStar_reversed,"*",(ball1.Lab.mass/ball2.Lab.mass)) , "p1m1m2" );
-    drawArrow( vCal(pStar_reversed,"*",(ball1.Lab.mass/ball2.Lab.mass)) , pStar_reversed , "pstar" );
-    drawArrow( vCal(pStar_reversed,"*",(ball1.Lab.mass/ball2.Lab.mass)) , q1star , "qstar" );
-    drawArrow(new Vector(0,-0.4),p1,"p1");
+
+
+
+
+
+    drawArrow( zeroV() , q1 ,   3,0xDD2501,"q1" );
+    drawArrow( q1 , q2 , 3,0x0091D4,'q2' );
+    drawArrow( zeroV(),vCal(pStar_reversed,"*",(ball1.Lab.mass/ball2.Lab.mass)),3 ,0xEC7300, "p1m1m2" );
+    drawArrow( vCal(pStar_reversed,"*",(ball1.Lab.mass/ball2.Lab.mass)) , pStar_reversed ,  3,0x960078,"pstar" );
+    drawArrow( vCal(pStar_reversed,"*",(ball1.Lab.mass/ball2.Lab.mass)) , q1star , 3,0x960078, "qstar" );
+    drawArrow(new Vector(0,-0.4),p1, 3,0xE40043,"p1");
 
 
     isColliding = true;
@@ -430,9 +435,7 @@ function update() {
 
     }
 }
-
-
-function drawArrow(originV ,vectorV, latexID){
+function drawArrow(originV,vectorV,rectIndex,color=0x006EAF,latexID = ""){
     var origin = new Vector(originV.x, -1 * originV.y);
     var vector = new Vector(vectorV.x, -1 * vectorV.y);
     // Flip directions for canvas y-axis
@@ -441,7 +444,9 @@ function drawArrow(originV ,vectorV, latexID){
     var scaleFactor = 100 * canvasWidth/1600;
     var mag = vector.getMag()*scaleFactor;
 
-    arrowG.lineStyle(2, 0x006EAF, 1);
+
+
+    arrowG.lineStyle(2, color, 1);
     arrowG.moveTo(0,0);
     arrowG.lineTo(0, 4);
     arrowG.lineTo(0, -4);
@@ -451,7 +456,7 @@ function drawArrow(originV ,vectorV, latexID){
     arrowG.lineTo(mag, -4);
     arrowG.lineTo(mag, 0);
 
-    arrowG.beginFill(0x006EAF);
+    arrowG.beginFill(color);
     arrowG.moveTo(mag, 0);
     arrowG.lineTo(mag/2, 0);
     arrowG.lineTo(mag/2, 6);
@@ -460,12 +465,14 @@ function drawArrow(originV ,vectorV, latexID){
     arrowG.lineTo(mag/2, 0);
     arrowG.endFill();    
 
-    arrowSprites.push( game.add.sprite((canvasWidth / 2 - 5*scaleFactor + origin.x*scaleFactor),(canvasHeight * 5 / 6 + 1*scaleFactor + origin.y*scaleFactor), arrowG.generateTexture()) );
+    arrowSprites.push( game.add.sprite((canvasWidth / 2 - 5*scaleFactor + origin.x*scaleFactor),(canvasHeight * (rectIndex*2 -1)/ 6 + scaleFactor + origin.y*scaleFactor), arrowG.generateTexture()) );
     arrowSprites[arrowSprites.length-1].anchor.set(0,0.5);
     arrowSprites[arrowSprites.length-1].rotation = vector.getArg();
 
-    arrowSprites.push( game.add.sprite((canvasWidth / 2 - 5*scaleFactor + origin.x*scaleFactor + vector.x*scaleFactor/2), (canvasHeight * 5 / 6 + 1*scaleFactor + origin.y*scaleFactor + vector.y*scaleFactor/2), latexID ));
-    arrowSprites[arrowSprites.length-1].anchor.set(0.5,0);
+    if(latexID !== "") {
+        arrowSprites.push(game.add.sprite((canvasWidth / 2 - 5 * scaleFactor + origin.x * scaleFactor + vector.x * scaleFactor / 2), (canvasHeight * 5 / 6 +scaleFactor + origin.y * scaleFactor + vector.y * scaleFactor / 2), latexID));
+        arrowSprites[arrowSprites.length - 1].anchor.set(0.5, 0);
+    }
 
     arrowG.destroy();
 }
