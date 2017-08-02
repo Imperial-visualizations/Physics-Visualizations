@@ -67,11 +67,16 @@ var ballradius = 40;
 var ball1, ball2, initAngle; 
 
 var borders, centreOfMass1, textScaleDown;
+
 var arrowSprites = [];
-var latexSprites = {};
+var traces = [];
+
+var d = new Date();
+var globalT = d.getTime();
 
 ball1 = {
     Lab : {
+        name : "ball1Lab",
         spriteInstance: undefined,
         mass: 1,
         initr: new Vector((canvasWidth / 2 - 100),(canvasHeight / 6)),
@@ -79,6 +84,7 @@ ball1 = {
         v: new Vector(0,0)
     },
     CoM : {
+        name : "ball1CoM",
         spriteInstance: undefined,
         mass: 1,
         initr: new Vector((canvasWidth / 2 - 100),(canvasHeight* 3 / 6)),
@@ -88,6 +94,7 @@ ball1 = {
 };
 ball2 = {
     Lab:{
+        name : "ball2Lab",
         spriteInstance: undefined,
         mass: 1,
         initr: new Vector((canvasWidth / 2 + 100),(canvasHeight / 6)),
@@ -95,6 +102,7 @@ ball2 = {
         v: new Vector(0,0)
     },
     CoM:{
+        name : "ball2CoM",
         spriteInstance: undefined,
         mass: 1,
         initr: new Vector((canvasWidth / 2 + 100),(canvasHeight * 3 / 6)),
@@ -387,13 +395,23 @@ function create() {
 
 
 }
-
+var t = 0;
 function update() {
     if (isRunning) {
-        ball1.Lab.spriteInstance.x += ball1.Lab.v.x;
-        ball1.Lab.spriteInstance.y -= ball1.Lab.v.y;
-        ball2.Lab.spriteInstance.x += ball2.Lab.v.x;
-        ball2.Lab.spriteInstance.y -= ball2.Lab.v.y;
+            ball1.Lab.spriteInstance.x += ball1.Lab.v.x;
+            ball1.Lab.spriteInstance.y -= ball1.Lab.v.y;
+            ball2.Lab.spriteInstance.x += ball2.Lab.v.x;
+            ball2.Lab.spriteInstance.y -= ball2.Lab.v.y;
+
+            console.log( (t % (ball2.Lab.v.getMag()*3)).toFixed(0) );
+
+            if( (t % (ball1.Lab.v.getMag()*3)) < 1){
+                addTrace(ball1.Lab);
+            }
+
+            if( (t % (ball2.Lab.v.getMag()*3)) < 1){
+                addTrace(ball2.Lab);
+            }
 
         centreOfMass1.x = getCoMR().x;
         centreOfMass1.y = getCoMR().y;
@@ -434,6 +452,7 @@ function update() {
 
 
     }
+    t += 1;
 }
 function drawArrow(originV,vectorV,rectIndex,color=0x006EAF,latexID = ""){
     var origin = new Vector(originV.x, -1 * originV.y);
@@ -475,4 +494,20 @@ function drawArrow(originV,vectorV,rectIndex,color=0x006EAF,latexID = ""){
     }
 
     arrowG.destroy();
+}
+function addTrace(ball){
+    var ballG = game.add.graphics(0, 0);
+
+    if(ball.name == "ball1Lab"){
+        color = 0xE9003A;
+    }else if(ball.name == "ball2Lab"){
+        color = 0x00AEF2;
+    }
+    ballG.lineStyle(1, color, 1);
+    ballG.beginFill(color, 1);
+    ballG.drawCircle(0, 0, 10);
+
+    traces.push(game.add.sprite( ball.spriteInstance.x, ball.spriteInstance.y, (ballG.generateTexture()) ));
+
+    ballG.destroy();
 }
