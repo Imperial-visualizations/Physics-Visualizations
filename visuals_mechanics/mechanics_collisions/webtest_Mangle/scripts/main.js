@@ -245,17 +245,17 @@ function onCollision() {
     console.log("Angle q*" + ball2.CoM.v.getArg().toString());
     console.log("DeltaAngle:" + (ball1.CoM.v.getArg() - ball2.CoM.v.getArg()).toString());
 
-
     q1 = vCal(ball1.Lab.v,"*",ball1.Lab.mass);
     q2 = vCal(ball2.Lab.v,"*",ball2.Lab.mass);
+    if($('#vector_draw_enable').prop('checked')){
+        //console.log("Checked");
+        var scalefactor = canvasWidth/16;
+        drawArrow(new Vector(0,1.0),p1,1,0xE40043);
+        drawArrow(new Vector(p1.x,p1.y + 1.0),q1,1,0xE40043);
+        drawArrow(new Vector(p1.x,p1.y + 1.0),q2,1,0x00ACD7);
 
 
-
-
-
-
-
-
+    }
     drawArrow( zeroV() , q1 ,   3,0xDD2501,"q1" );
     drawArrow( q1 , q2 , 3,0x0091D4,'q2' );
     drawArrow( zeroV(),vCal(pStar_reversed,"*",(ball1.Lab.mass/ball2.Lab.mass)),3 ,0xEC7300, "p1m1m2" );
@@ -444,8 +444,6 @@ function drawArrow(originV,vectorV,rectIndex,color=0x006EAF,latexID = ""){
     var scaleFactor = 100 * canvasWidth/1600;
     var mag = vector.getMag()*scaleFactor;
 
-
-
     arrowG.lineStyle(2, color, 1);
     arrowG.moveTo(0,0);
     arrowG.lineTo(0, 4);
@@ -470,9 +468,18 @@ function drawArrow(originV,vectorV,rectIndex,color=0x006EAF,latexID = ""){
     arrowSprites[arrowSprites.length-1].rotation = vector.getArg();
 
     if(latexID !== "") {
-        arrowSprites.push(game.add.sprite((canvasWidth / 2 - 5 * scaleFactor + origin.x * scaleFactor + vector.x * scaleFactor / 2), (canvasHeight * 5 / 6 +scaleFactor + origin.y * scaleFactor + vector.y * scaleFactor / 2), latexID));
+        arrowSprites.push(game.add.sprite((canvasWidth / 2 - 5 * scaleFactor + origin.x * scaleFactor + vector.x * scaleFactor / 2), (canvasHeight * (rectIndex*2 - 1) / 6 + scaleFactor + origin.y * scaleFactor + vector.y * scaleFactor / 2), latexID));
         arrowSprites[arrowSprites.length - 1].anchor.set(0.5, 0);
     }
 
     arrowG.destroy();
+}
+function drawAngle(vecta,vectb,color){
+    var arcG = game.add.graphics(0,0);
+    arcG.lineStyle(8,color);
+    arcG.arc(0,0,50,vectb.getArg, vecta.getArg(),true);
+    arcG.endFill();
+
+
+
 }
