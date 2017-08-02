@@ -2,6 +2,7 @@
 
 <head>
     <title>Two-Dimenstional Transformations</title>
+     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>  // Plotly
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
     <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
@@ -10,9 +11,19 @@
 </head>
 <body>
 
-<div id='graph' style="width:600px; height:600px;"></div>  <!-- Plotly chart will be drawn inside this DIV -->
+<div id='graph' style="width:500px; height:500px;"></div>  <!-- Plotly chart will be drawn inside this DIV -->
 <script src=script/2d_trans_Ryo.js></script>
 
+<div class="container">
+<!--<a class="button" href="#">Anchor button</a>-->
+<!--<button>Button element</button>-->
+<!--<input type="submit" value="submit input">-->
+<input type="button" value="Skew", onclick="plotterskew()">
+    <input type="button" value="Scale", onclick="plotterscale()">
+    <input type="button" value="Rotate", onclick="plotterrotate()">
+    <input type="button" value="Custom", onclick="plottercustom()">
+
+</div>
 
 </body>
 </html>
