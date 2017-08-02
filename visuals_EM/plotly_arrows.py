@@ -12,26 +12,24 @@ def p2c(r, theta, phi):
     #         r * np.sin(theta) * np.cos(phi)]
 
 class Arrow:
-    def __init__(self, theta, phi, out, width=5, color='rgb(0,0,0)'):
+    def __init__(self, theta, out, width=5, color='rgb(0,0,0)'):
         """
         Args:
             theta (float) - radians [0, π]
-            phi (float) - radians [0, 2π]
             out (bool) - True if outgoing, False if incoming (to the origin)
             width (int) - line thickness
             color (hex/rgb) - line color
         """
         self.theta = theta
-        self.phi = phi
         self.out = out
         self.width = width
         self.color = color
 
         wing_length, wing_angle = self._find_wing_coord()
 
-        shaft_xyz = p2c(1., self.theta, self.phi)
-        wings_xyz = [p2c(wing_length, self.theta + wing_angle, self.phi),
-                     p2c(wing_length, self.theta - wing_angle, self.phi)]
+        shaft_xyz = p2c(1., self.theta, 0)
+        wings_xyz = [p2c(wing_length, self.theta + wing_angle, 0),
+                     p2c(wing_length, self.theta - wing_angle, 0)]
 
         self.shaft = go.Scatter3d(
             x=[0, shaft_xyz[0]],
