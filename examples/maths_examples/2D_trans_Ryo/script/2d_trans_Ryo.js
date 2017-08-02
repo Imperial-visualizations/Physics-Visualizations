@@ -15,6 +15,7 @@ function rotation(vec,th) {
   var myvec = math.matrix(vec);
   for (var i=0; i<N; i++) {
     var A = math.multiply(rotmat(t[i]),myvec);
+      // Pull out x and y components
       x[i] = A._data[0]
       y[i] = A._data[1]
   }
@@ -24,6 +25,7 @@ function rotation(vec,th) {
 // Scale function returns arrays of similar form to rotation()
 // Arguments must go in of the form (vec, scale1, scale2)
 function scale() {
+  // Define variables and parameters
   var N = 50;
   var vec = arguments[0];
   var x = math.zeros(N);
@@ -49,10 +51,22 @@ function custom(vec,a,b,c,d) {
   return[x,y]
 }
 
+function jsonformat(x,y) {
+  var myjson = [];
+  var N = x.length;
+  for (var i=0; i<N; i++) {
+    myjson.push({"data": [{"x": [x[i],0],"y": [y[i],0]}],"name": 'frame'+parseInt(i)})
+  }
+  return myjson;
+}
+
 // Run arguments here for animation, try them all!
 //var [x,y] = rotation([1,1],3.14)
 //var [x,y] = scale([1,1],2,3)
 var [x,y] = custom([1,1],2,1,3,2)
+
+var myjson = jsonformat(x,y)
+console.log(myjson)
 
 // custom linspace function, probably will not need it...
 function mylinspace(a,b,n) {
