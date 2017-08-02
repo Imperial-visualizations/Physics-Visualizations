@@ -66,6 +66,8 @@ var ballradius = 40;
 
 var ball1, ball2, initAngle; 
 
+
+
 var borders, centreOfMass1, textScaleDown;
 
 var arrowSprites = [];
@@ -81,7 +83,8 @@ ball1 = {
         mass: 1,
         initr: new Vector((canvasWidth / 2 - 100),(canvasHeight / 6)),
         bounds: new Phaser.Rectangle(0,0,canvasWidth,canvasHeight/3 - ballradius),
-        v: new Vector(0,0)
+        v: new Vector(0,0),
+        postv: new Vector(0,0)
     },
     CoM : {
         name : "ball1CoM",
@@ -89,7 +92,8 @@ ball1 = {
         mass: 1,
         initr: new Vector((canvasWidth / 2 - 100),(canvasHeight* 3 / 6)),
         bounds: new Phaser.Rectangle(0,canvasHeight/3 + ballradius,canvasWidth,canvasHeight/3 - ballradius*2),
-        v: new Vector(0,0)
+        v: new Vector(0,0),
+        postv:new Vector(0,0)
     }
 };
 ball2 = {
@@ -99,7 +103,8 @@ ball2 = {
         mass: 1,
         initr: new Vector((canvasWidth / 2 + 100),(canvasHeight / 6)),
         bounds: new Phaser.Rectangle(0,0,canvasWidth,canvasHeight/3 - ballradius),
-        v: new Vector(0,0)
+        v: new Vector(0,0),
+        postv:new Vector(0,0)
     },
     CoM:{
         name : "ball2CoM",
@@ -107,7 +112,8 @@ ball2 = {
         mass: 1,
         initr: new Vector((canvasWidth / 2 + 100),(canvasHeight * 3 / 6)),
         bounds: new Phaser.Rectangle(0,canvasHeight/3 + ballradius,canvasWidth,canvasHeight/3 -ballradius*2),
-        v: new Vector(0,0)
+        v: new Vector(0,0),
+        postv:new Vector(0,0)
     }
 };
 ball1.CoM.mass = getReducedMass();
@@ -120,7 +126,7 @@ UI handling
 */
 
 function updateScatterAngle(){
-    initAngle = degToRad(parseFloat($("#ballCollisionAngle").val()));
+    initAngle = -degToRad(parseFloat($("#ballCollisionAngle").val()));
     ball1.Lab.spriteInstance.y = ball1.Lab.initr.y + 0.5 * ballradius * Math.sin(initAngle);
     ball2.Lab.spriteInstance.y = ball2.Lab.initr.y - 0.5 * ballradius * Math.sin(initAngle);
     ball1.CoM.spriteInstance.y = ball1.CoM.initr.y + 0.5 * ballradius * Math.sin(initAngle);
@@ -129,28 +135,31 @@ function updateScatterAngle(){
 
 $(".inputs").each(function () {
     // To update the displayed value in HTML
-    $(this).on('input', function () {
-        $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
-        if($(this).attr("id")=="ballCollisionAngle"){
-            // To update the position of the balls
-            if(!isRunning){
-                updateScatterAngle();
-            }
-        }
-    });
+    $(this).on('input', updateLabels);
 });
+
+function updateLabels(){
+    $(".inputs").each(function () {
+    // To update the displayed value in HTML
+    $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
+});
+    if(!isRunning) {
+        ball1.Lab.mass = parseFloat($("#ball1LabMass").val());
+        ball2.Lab.mass = parseFloat($("#ball2LabMass").val());
+        ball1.Lab.v.x = parseFloat($("#ball1LabVelocityX").val());
+
+        ball1.CoM.v = vCal(ball1.Lab.v, '-', getCoMV());
+        ball2.CoM.v = vCal(ball2.Lab.v, '-', getCoMV());
+
+        updateScatterAngle();
+        recalculateVector();
+    }
+}
+
+
 
 
 $("#runButton").on('click', function () {
-    ball1.Lab.mass = parseFloat($("#ball1LabMass").val());
-    ball2.Lab.mass = parseFloat($("#ball2LabMass").val());
-    ball1.Lab.v.x = parseFloat($("#ball1LabVelocityX").val());
-
-    ball1.CoM.v = vCal(ball1.Lab.v,'-',getCoMV());
-    ball2.CoM.v = vCal(ball2.Lab.v,'-',getCoMV());
-    
-    updateScatterAngle();
-
     if (!isRunning) {
         $("#runButton").val("Reset");
     } else if(isRunning){
@@ -200,10 +209,7 @@ function resetSimulation(){
     ball2.Lab.v = zeroV();
     isColliding = false;
 
-    for (var i = 0; i < arrowSprites.length; i++) {
-        arrowSprites[i].destroy();
-    }
-    arrowSprites = [];
+    clearVectors();
 
     ball1.CoM.spriteInstance.visible = true;
     ball2.CoM.spriteInstance.visible = true;
@@ -235,45 +241,13 @@ function getLabKE(){
     return 0.5*ball1.Lab.mass*Math.pow(ball1.Lab.v.getMag(),2) + 0.5*ball2.Lab.mass*Math.pow(ball2.Lab.v.getMag(),2);
 }
 
-
 function onCollision() {
-    var pStar = vCal(vCal(ball2.Lab.v,'-',ball1.Lab.v),'*',getReducedMass());
-    var pStar_reversed = vCal(pStar,'*',"-1");
-    var q1star = vCal(pStar,'rotate', initAngle);
-    var q2star = vCal(pStar,'rotate', initAngle - Math.PI);
-    ball1.CoM.v = vCal(q1star,'*',1/ball1.Lab.mass);
-    ball2.CoM.v = vCal(q2star,'*',1/ball2.Lab.mass);
-    p1 = vCal(ball1.Lab.v,"*",ball1.Lab.mass);
-
-    var coMV = getCoMV();
-    ball1.Lab.v = vCal(ball1.CoM.v,'+',coMV);
-    ball2.Lab.v = vCal(ball2.CoM.v,'+',coMV);
-
-    console.log("Angle p* " + ball1.CoM.v.getArg().toString());
-    console.log("Angle q*" + ball2.CoM.v.getArg().toString());
-    console.log("DeltaAngle:" + (ball1.CoM.v.getArg() - ball2.CoM.v.getArg()).toString());
-
-    q1 = vCal(ball1.Lab.v,"*",ball1.Lab.mass);
-    q2 = vCal(ball2.Lab.v,"*",ball2.Lab.mass);
-    if($('#vector_draw_enable').prop('checked')){
-        //console.log("Checked");
-        var scalefactor = canvasWidth/16;
-        drawArrow(new Vector(0,1.0),p1,1,0xE40043);
-        drawArrow(new Vector(p1.x,p1.y + 1.0),q1,1,0xE40043);
-        drawArrow(new Vector(p1.x,p1.y + 1.0),q2,1,0x00ACD7);
-
-
-    }
-    drawArrow( zeroV() , q1 ,   3,0xDD2501,"q1" );
-    drawArrow( q1 , q2 , 3,0x0091D4,'q2' );
-    drawArrow( zeroV(),vCal(pStar_reversed,"*",(ball1.Lab.mass/ball2.Lab.mass)),3 ,0xEC7300, "p1m1m2" );
-    drawArrow( vCal(pStar_reversed,"*",(ball1.Lab.mass/ball2.Lab.mass)) , pStar_reversed ,  3,0x960078,"pstar" );
-    drawArrow( vCal(pStar_reversed,"*",(ball1.Lab.mass/ball2.Lab.mass)) , q1star , 3,0x960078, "qstar" );
-    drawArrow(new Vector(0,-0.4),p1, 3,0xE40043,"p1");
-
+    ball1.Lab.v = ball1.Lab.postv;
+    ball2.Lab.v = ball2.Lab.postv;
+    ball1.CoM.v = ball1.CoM.postv;
+    ball2.CoM.v = ball2.CoM.postv;
 
     isColliding = true;
-    console.log("Post collision KE" + getLabKE().toString());
 }
 
 
@@ -311,6 +285,14 @@ function preload() {
     textScaleDown = window.devicePixelRatio;
     
 }
+
+function clearVectors(){
+        for (var i = 0; i < arrowSprites.length; i++) {
+        arrowSprites[i].destroy();
+        }
+        arrowSprites = [];
+}
+
 
 function create() {
     game.canvasWidth = $("#canvasWrapper").width()*window.devicePixelRatio;
@@ -386,13 +368,7 @@ function create() {
     vectorDiagramText.anchor.set(0,0);
 
 
-    $(".inputs").each(function () {
-        // To update the displayed value in HTML
-        $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
-
-    });
-    updateScatterAngle();
-
+   updateLabels();
 
 }
 var t = 0;
@@ -498,9 +474,40 @@ function drawAngle(vecta,vectb,color){
     arcG.lineStyle(8,color);
     arcG.arc(0,0,50,vectb.getArg, vecta.getArg(),true);
     arcG.endFill();
+}
+
+function recalculateVector(){
+    var pStar = vCal(vCal(ball2.Lab.v,'-',ball1.Lab.v),'*',getReducedMass());
+    var pStar_reversed = vCal(pStar,'*',-1);
+    var q1star = vCal(pStar,'rotate', initAngle);
+    var q2star = vCal(pStar,'rotate', initAngle - Math.PI);
+    ball1.CoM.postv = vCal(q1star,'*',1/ball1.Lab.mass);
+    ball2.CoM.postv = vCal(q2star,'*',1/ball2.Lab.mass);
+    p1 = vCal(ball1.Lab.v,"*",ball1.Lab.mass);
+
+    var coMV = getCoMV();
+    ball1.Lab.postv = vCal(ball1.CoM.postv,'+',coMV);
+    ball2.Lab.postv = vCal(ball2.CoM.postv,'+',coMV);
+
+    q1 = vCal(ball1.Lab.postv,"*",ball1.Lab.mass);
+    q2 = vCal(ball2.Lab.postv,"*",ball2.Lab.mass);
+    if($('#vector_draw_enable').prop('checked')){
+        //console.log("Checked");
+        var scalefactor = canvasWidth/16;
+        drawArrow(new Vector(0,1.0),p1,1,0xE40043);
+        drawArrow(new Vector(p1.x,p1.y + 1.0),q1,1,0xE40043);
+        drawArrow(new Vector(p1.x,p1.y + 1.0),q2,1,0x00ACD7);
 
 
+    }
 
+    clearVectors();
+    drawArrow( zeroV() , q1 ,   3,0xDD2501,"q1" );
+    drawArrow( q1 , q2 , 3,0x0091D4,'q2' );
+    drawArrow( zeroV(),vCal(pStar_reversed,"*",(ball1.Lab.mass/ball2.Lab.mass)),3 ,0xEC7300, "p1m1m2" );
+    drawArrow( vCal(pStar_reversed,"*",(ball1.Lab.mass/ball2.Lab.mass)) , pStar_reversed ,  3,0x960078,"pstar" );
+    drawArrow( vCal(pStar_reversed,"*",(ball1.Lab.mass/ball2.Lab.mass)) , q1star , 3,0x960078, "qstar" );
+    drawArrow(new Vector(0,-0.4),p1, 3,0xE40043,"p1");
 }
 function addTrace(ball){
     var ballG = game.add.graphics(0, 0);
