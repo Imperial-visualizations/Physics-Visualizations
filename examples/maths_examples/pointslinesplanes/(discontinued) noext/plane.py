@@ -1,7 +1,6 @@
 """plane.py"""
 from org.transcrypt.stubs.browser import __pragma__
 from vector import Vector
-import plputils
 
 class Plane:
     """Planes are defined by their normal and offset vector."""

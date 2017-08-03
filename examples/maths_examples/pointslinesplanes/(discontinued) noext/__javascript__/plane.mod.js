@@ -4,9 +4,7 @@
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
-					var plputils = {};
 					var Vector = __init__ (__world__.vector).Vector;
-					__nest__ (plputils, '', __init__ (__world__.plputils));
 					var Plane = __class__ ('Plane', [object], {
 						get __init__ () {return __get__ (this, function (self, normal, offset) {
 							self.normal = Vector (normal).normalize ();
@@ -100,7 +98,6 @@
 						});}
 					});
 					__pragma__ ('<use>' +
-						'plputils' +
 						'vector' +
 					'</use>')
 					__pragma__ ('<all>')

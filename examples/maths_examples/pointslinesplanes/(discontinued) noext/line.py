@@ -1,4 +1,4 @@
-from org.transcrypt.stubs.browser import __pragma__
+#from org.transcrypt.stubs.browser import __pragma__
 from vector import Vector
 
 class Line:
@@ -10,9 +10,9 @@ class Line:
         self.vec = Vector(vec).normalize() #normalize direction vector
         self.offset = Vector(offset)
         #minimize the offset to be minimum distance
-        __pragma__('opov')
+        #__pragma__('opov')
         self.offset = self.offset - self.vec * self.offset.dot(self.vec)
-        __pragma__('noopov')
+        #__pragma__('noopov')
         
     def getXYZ(self, layout=None):
         """Generate x,y,z data based on the layout box. Returns tuple (x,y,z).

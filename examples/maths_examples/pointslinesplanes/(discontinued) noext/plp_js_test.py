@@ -1,3 +1,4 @@
+__pragma__('opov')
 def point_test():
     import point
     x = float(document.getElementById('point_x').value)
@@ -7,6 +8,7 @@ def point_test():
     document.getElementById('point_pos').innerHTML = "{}: {}".format('Position', pt.pos)
     document.getElementById('point_getXYZ').innerHTML = "{}: {}".format('getXYZ()', pt.getXYZ())
     document.getElementById('point_goify').innerHTML = "{}: {}".format('goify()', pt.goify())
+    Plotly.plot('scatter3d',pt.goify())
 
 def line_test():
     import line
@@ -35,3 +37,4 @@ def plane_test():
     document.getElementById('plane_off').innerHTML = "{}: {}".format('Offset', pl.offset)
     document.getElementById('plane_getXYZ').innerHTML = "{}: {}".format('getXYZ()', pl.getXYZ())
     document.getElementById('plane_goify').innerHTML = "{}: {}".format('goify()', pl.goify())
+__pragma__('noopov')

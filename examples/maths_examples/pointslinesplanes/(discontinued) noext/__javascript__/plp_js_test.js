@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2017-08-01 21:03:35
+// Transcrypt'ed from Python, 2017-08-01 21:54:58
 function plp_js_test () {
    var __symbols__ = ['__py3.6__', '__esv5__'];
     var __all__ = {};
@@ -2438,9 +2438,7 @@ function plp_js_test () {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
-					var plputils = {};
 					var Vector = __init__ (__world__.vector).Vector;
-					__nest__ (plputils, '', __init__ (__world__.plputils));
 					var Plane = __class__ ('Plane', [object], {
 						get __init__ () {return __get__ (this, function (self, normal, offset) {
 							self.normal = Vector (normal).normalize ();
@@ -2534,7 +2532,6 @@ function plp_js_test () {
 						});}
 					});
 					__pragma__ ('<use>' +
-						'plputils' +
 						'vector' +
 					'</use>')
 					__pragma__ ('<all>')
@@ -2607,7 +2604,7 @@ function plp_js_test () {
 							var x = __left0__ [0];
 							var y = __left0__ [1];
 							var z = __left0__ [2];
-							var pt = dict ({'mode': 'markers', 'x': x, 'y': y, 'z': z});
+							var pt = dict ({'type': 'scatter3d', 'mode': 'markers', 'x': x, 'y': y, 'z': z});
 							return pt;
 						});}
 					});
@@ -2748,41 +2745,42 @@ function plp_js_test () {
 		var point = {};
 		var point_test = function () {
 			__nest__ (point, '', __init__ (__world__.point));
-			var x = float (document.getElementById ('point_x').value);
-			var y = float (document.getElementById ('point_y').value);
-			var z = float (document.getElementById ('point_z').value);
-			var pt = point.Point (list ([x, y, z]));
-			document.getElementById ('point_pos').innerHTML = '{}: {}'.format ('Position', pt.pos);
-			document.getElementById ('point_getXYZ').innerHTML = '{}: {}'.format ('getXYZ()', pt.getXYZ ());
-			document.getElementById ('point_goify').innerHTML = '{}: {}'.format ('goify()', pt.goify ());
+			var x = __call__ (float, null, __call__ (document.getElementById, document, 'point_x').value);
+			var y = __call__ (float, null, __call__ (document.getElementById, document, 'point_y').value);
+			var z = __call__ (float, null, __call__ (document.getElementById, document, 'point_z').value);
+			var pt = __call__ (point.Point, point, list ([x, y, z]));
+			__call__ (document.getElementById, document, 'point_pos').innerHTML = __call__ ('{}: {}'.format, '{}: {}', 'Position', pt.pos);
+			__call__ (document.getElementById, document, 'point_getXYZ').innerHTML = __call__ ('{}: {}'.format, '{}: {}', 'getXYZ()', __call__ (pt.getXYZ, pt));
+			__call__ (document.getElementById, document, 'point_goify').innerHTML = __call__ ('{}: {}'.format, '{}: {}', 'goify()', __call__ (pt.goify, pt));
+			__call__ (Plotly.plot, Plotly, 'scatter3d', __call__ (pt.goify, pt));
 		};
 		var line_test = function () {
 			__nest__ (line, '', __init__ (__world__.line));
-			var vx = float (document.getElementById ('line_dir_x').value);
-			var vy = float (document.getElementById ('line_dir_y').value);
-			var vz = float (document.getElementById ('line_dir_z').value);
-			var ox = float (document.getElementById ('line_off_x').value);
-			var oy = float (document.getElementById ('line_off_y').value);
-			var oz = float (document.getElementById ('line_off_z').value);
-			var lin = line.Line (list ([vx, vy, vz]), list ([ox, oy, oz]));
-			document.getElementById ('line_dir').innerHTML = '{}: {}'.format ('Direction', lin.vec);
-			document.getElementById ('line_off').innerHTML = '{}: {}'.format ('Offset', lin.offset);
-			document.getElementById ('line_getXYZ').innerHTML = '{}: {}'.format ('getXYZ()', lin.getXYZ ());
-			document.getElementById ('line_goify').innerHTML = '{}: {}'.format ('goify()', lin.goify ());
+			var vx = __call__ (float, null, __call__ (document.getElementById, document, 'line_dir_x').value);
+			var vy = __call__ (float, null, __call__ (document.getElementById, document, 'line_dir_y').value);
+			var vz = __call__ (float, null, __call__ (document.getElementById, document, 'line_dir_z').value);
+			var ox = __call__ (float, null, __call__ (document.getElementById, document, 'line_off_x').value);
+			var oy = __call__ (float, null, __call__ (document.getElementById, document, 'line_off_y').value);
+			var oz = __call__ (float, null, __call__ (document.getElementById, document, 'line_off_z').value);
+			var lin = __call__ (line.Line, line, list ([vx, vy, vz]), list ([ox, oy, oz]));
+			__call__ (document.getElementById, document, 'line_dir').innerHTML = __call__ ('{}: {}'.format, '{}: {}', 'Direction', lin.vec);
+			__call__ (document.getElementById, document, 'line_off').innerHTML = __call__ ('{}: {}'.format, '{}: {}', 'Offset', lin.offset);
+			__call__ (document.getElementById, document, 'line_getXYZ').innerHTML = __call__ ('{}: {}'.format, '{}: {}', 'getXYZ()', __call__ (lin.getXYZ, lin));
+			__call__ (document.getElementById, document, 'line_goify').innerHTML = __call__ ('{}: {}'.format, '{}: {}', 'goify()', __call__ (lin.goify, lin));
 		};
 		var plane_test = function () {
 			__nest__ (plane, '', __init__ (__world__.plane));
-			var nx = float (document.getElementById ('plane_n_x').value);
-			var ny = float (document.getElementById ('plane_n_y').value);
-			var nz = float (document.getElementById ('plane_n_z').value);
-			var ox = float (document.getElementById ('plane_off_x').value);
-			var oy = float (document.getElementById ('plane_off_y').value);
-			var oz = float (document.getElementById ('plane_off_z').value);
-			var pl = plane.Plane (list ([nx, ny, nz]), list ([ox, oy, oz]));
-			document.getElementById ('plane_normal').innerHTML = '{}: {}'.format ('Normal', pl.normal);
-			document.getElementById ('plane_off').innerHTML = '{}: {}'.format ('Offset', pl.offset);
-			document.getElementById ('plane_getXYZ').innerHTML = '{}: {}'.format ('getXYZ()', pl.getXYZ ());
-			document.getElementById ('plane_goify').innerHTML = '{}: {}'.format ('goify()', pl.goify ());
+			var nx = __call__ (float, null, __call__ (document.getElementById, document, 'plane_n_x').value);
+			var ny = __call__ (float, null, __call__ (document.getElementById, document, 'plane_n_y').value);
+			var nz = __call__ (float, null, __call__ (document.getElementById, document, 'plane_n_z').value);
+			var ox = __call__ (float, null, __call__ (document.getElementById, document, 'plane_off_x').value);
+			var oy = __call__ (float, null, __call__ (document.getElementById, document, 'plane_off_y').value);
+			var oz = __call__ (float, null, __call__ (document.getElementById, document, 'plane_off_z').value);
+			var pl = __call__ (plane.Plane, plane, list ([nx, ny, nz]), list ([ox, oy, oz]));
+			__call__ (document.getElementById, document, 'plane_normal').innerHTML = __call__ ('{}: {}'.format, '{}: {}', 'Normal', pl.normal);
+			__call__ (document.getElementById, document, 'plane_off').innerHTML = __call__ ('{}: {}'.format, '{}: {}', 'Offset', pl.offset);
+			__call__ (document.getElementById, document, 'plane_getXYZ').innerHTML = __call__ ('{}: {}'.format, '{}: {}', 'getXYZ()', __call__ (pl.getXYZ, pl));
+			__call__ (document.getElementById, document, 'plane_goify').innerHTML = __call__ ('{}: {}'.format, '{}: {}', 'goify()', __call__ (pl.goify, pl));
 		};
 		__pragma__ ('<use>' +
 			'line' +

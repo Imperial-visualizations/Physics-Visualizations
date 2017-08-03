@@ -21,6 +21,7 @@ class Point:
         @since 25.07.17"""
         x, y, z = self.getXYZ(layout)
         pt = {
+            'type': 'scatter3d',
             'mode': 'markers',
             'x': x,
             'y': y,

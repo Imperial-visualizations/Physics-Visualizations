@@ -24,7 +24,7 @@
 							var x = __left0__ [0];
 							var y = __left0__ [1];
 							var z = __left0__ [2];
-							var pt = dict ({'mode': 'markers', 'x': x, 'y': y, 'z': z});
+							var pt = dict ({'type': 'scatter3d', 'mode': 'markers', 'x': x, 'y': y, 'z': z});
 							return pt;
 						});}
 					});
