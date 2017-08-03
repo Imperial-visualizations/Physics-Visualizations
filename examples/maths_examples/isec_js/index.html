@@ -1,9 +1,13 @@
 <html>
 	<head>
-		<script src="https://cdn.plot.ly/plotly-latest.js" charset="UTF-8"></script>
+		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 		<script src="intersections.js"></script>
 	</head>
 	<body>
-		<button id="button1" onclick="hey()" text="Clickme"/>
+		<input id="ix" type="number" />
+		<input id="iy" type="number" />
+		<input id="iz" type="number" />
+		<button type="button" id="button1" onclick="calc()">Click me now</button>
+		<div id="out1"> </div>
 	</body>
 </html>
