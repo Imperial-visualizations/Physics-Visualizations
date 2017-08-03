@@ -71,13 +71,13 @@ function custom(vec,a,b,c,d) {
 }
 
 // Convert x,y arrays returned from functions in json format for animate
-function jsonformat(x,y) {
-  var myjson = [];
+function jsonFormat(x,y) {
+  var myJson = [];
   var N = x.length;
   for (var i=0; i<N; i++) {
-    myjson.push({"data": [{"x": [x[i],0],"y": [y[i],0]}],"name": 'frame'+parseInt(i)})
+    myJson.push({"data": [{"x": [x[i],0],"y": [y[i],0]}],"name": 'frame'+parseInt(i)})
   }
-  return myjson;
+  return myJson;
 }
 
 // Custom linspace function, probably will not need it...
@@ -104,7 +104,7 @@ function mylinspace(a,b,n) {
 //
 //
 //// Convert array to frames, print on console to check values...
-//var frames = jsonformat(x,y)
+//var frames = jsonFormat(x,y)
 
 //// Initial plot
 //Plotly.plot('graph', [{
@@ -132,7 +132,7 @@ function mylinspace(a,b,n) {
 
 // Structure of this function goes:
 // (string for transformation, parameters)
-function squaretrans() {
+function squareTrans() {
   if (arguments[0] === "rotate") {
     var th = arguments[1];
     var [x0,y0] = rotation([1,0],th);
@@ -177,24 +177,24 @@ function squaretrans() {
 }
 
 // Test all sub functions
-//var myarray = squaretrans("rotate",2);
-//var myarray = squaretrans("scale",2);
-//var myarray = squaretrans("scale",2,3);
-//var myarray = squaretrans("custom",1,0,1,1);
+//var myarray = squareTrans("rotate",2);
+//var myarray = squareTrans("scale",2);
+//var myarray = squareTrans("scale",2,3);
+//var myarray = squareTrans("custom",1,0,1,1);
 
 
 // Convert x,y arrays returned from functions in json format for animate
-function jsonformat2(x0,x1,x2,y0,y1,y2) {
-  var myjson = [];
+function jsonFormat2(x0,x1,x2,y0,y1,y2) {
+  var myJson = [];
   var N = x0.length;
   for (var i=0; i<N; i++) {
-    myjson.push({"data": [{"x": [0,x0[i],x1[i],x2[i],0],
+    myJson.push({"data": [{"x": [0,x0[i],x1[i],x2[i],0],
       "y": [0,y0[i],y1[i],y2[i],0]}],"name": 'frame'+parseInt(i)})
   }
-  return myjson;
+  return myJson;
 }
 
-function squareplotter(){
+function squarePlotter(){
   Plotly.newPlot('graph', [{
     x : [0,1,1,0,0],
     y : [0,0,1,1,0],
@@ -207,11 +207,9 @@ function squareplotter(){
   )
 }
 
-squareplotter()
-
-function plotterskew() {
-  var myarray = squaretrans("skew",1);
-  var frames = jsonformat2(...myarray);
+function plotterSkew() {
+  var myArray = squareTrans("skew",1);
+  var frames = jsonFormat2(...myArray);
   // Initial plot
   Plotly.newPlot('graph', [{
     x: frames[0].data[0].x,
@@ -238,9 +236,9 @@ function plotterskew() {
   });
 }
 
-function plotterscale() {
-  var myarray = squaretrans("scale",2,3);
-  var frames = jsonformat2(...myarray);
+function plotterScale() {
+  var myArray = squareTrans("scale",2,3);
+  var frames = jsonFormat2(...myArray);
   // Initial plot
   Plotly.newPlot('graph', [{
     x: frames[0].data[0].x,
@@ -267,9 +265,9 @@ function plotterscale() {
   });
 }
 
-function plotterrotate() {
-  var myarray = squaretrans("rotate",1);
-  var frames = jsonformat2(...myarray);
+function plotterRotate() {
+  var myArray = squareTrans("rotate",1);
+  var frames = jsonFormat2(...myarray);
   // Initial plot
   Plotly.newPlot('graph', [{
     x: frames[0].data[0].x,
@@ -296,9 +294,9 @@ function plotterrotate() {
   });
 }
 
-function plottercustom() {
-  var myarray = squaretrans("custom",1,1,1,0);
-  var frames = jsonformat2(...myarray);
+function plotterCustom() {
+  var myArray = squareTrans("custom",1,1,1,0);
+  var frames = jsonFormat2(...myArray);
   // Initial plot
   Plotly.newPlot('graph', [{
     x: frames[0].data[0].x,
@@ -325,9 +323,44 @@ function plottercustom() {
   });
 }
 
-//function mainskew() {
-//  $('.allsliders').hide();
-//  $('.allsliders').slideToggle(400);
-//}
-//
-//$(document).ready(mainskew);
+function main() {
+  $('.sliderSkew').hide();
+  $('.sliderRotate').hide();
+  $('.sliderScale').hide();
+  squarePlotter();
+}
+
+function revealSkew() {
+  squarePlotter();
+  $('.sliderRotate').hide();
+  $('.sliderScale').hide();
+  $('.sliderCustom').hide();
+  $('.sliderSkew').slideToggle(1000);
+
+}
+
+function revealRotate() {
+  squarePlotter();
+  $('.sliderSkew').hide();
+  $('.sliderScale').hide();
+  $('.sliderCustom').hide();
+  $('.sliderRotate').slideToggle(1000);
+}
+
+function revealScale() {
+  squarePlotter();
+  $('.sliderRotate').hide();
+  $('.sliderSkew').hide();
+  $('.sliderCustom').hide();
+  $('.sliderScale').slideToggle(1000)
+}
+
+function revealCustom() {
+  squarePlotter();
+  $('.sliderRotate').hide();
+  $('.sliderSkew').hide();
+  $('.sliderScale').hide();
+  $('.sliderCustom').slideToggle(1000);
+}
+
+$(document).ready(main);
