@@ -194,6 +194,21 @@ function jsonformat2(x0,x1,x2,y0,y1,y2) {
   return myjson;
 }
 
+function squareplotter(){
+  Plotly.newPlot('graph', [{
+    x : [0,1,1,0,0],
+    y : [0,0,1,1,0],
+    line: {simplify: false, color: 'rgb(0,62,116)'},
+    fill:'tonexty',
+    mode: 'lines'
+  }],
+  {xaxis: {range: [-3, 3]},
+      yaxis: {range: [-3, 3]}}
+  )
+}
+
+squareplotter()
+
 function plotterskew() {
   var myarray = squaretrans("skew",1);
   var frames = jsonformat2(...myarray);
@@ -309,3 +324,10 @@ function plottercustom() {
     mode: 'immediate'
   });
 }
+
+//function mainskew() {
+//  $('.allsliders').hide();
+//  $('.allsliders').slideToggle(400);
+//}
+//
+//$(document).ready(mainskew);
