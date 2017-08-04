@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Imperial Visualisation</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel = "icon" href = "images/favicon.ico" type="image/x-icon">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="styles/styles.css">
+  <style type="text/css">
+    .example-grid .column, .example-grid .columns {
+      background: #EEE;
+      text-align: center;
+      border-radius: 4px;
+      font-size: 1rem;
+      text-transform: uppercase;
+      height: 30px;
+      line-height: 30px;
+      margin-bottom: .75rem;
+      font-weight: 600;
+      letter-spacing: .1rem;
+    }
+  </style>
+
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container">
+    <section class="header">
+      <h1 class="title">HTML DOM: CSS, Javascript & JQuery</h1>
+    </section>
+              
+    <!-- README -->
+    <div id="GettingStarted">
+      <h3>Getting Started</h3>
+        <div class="row">
+          <div class="six columns">
+            <p>
+              How to get started:<br>
+              1. Have your files form the HTML tutorial ready, or download them from /Imperial-Visualizations/tutorials/DOM/<br>
+              2. Open "index.html" with PyCharm or whatever code-editor you like:<br>
+              3. If it's from /tutorials/HTML, you need to add one extra line:<br>
+              <pre><code>&#x3C;script src=&#x22;https://code.jquery.com/jquery-3.2.1.min.js&#x22;&#x3E;&#x3C;/script&#x3E;</code></pre> before the line <pre><code>&#x3C;script src=&#x22;scripts/program.js&#x22;&#x3E;&#x3C;/script&#x3E;</code></pre>, which both should be right before the &#x3C;/body&#x3E; tag.<br>
+              4. Start adding Javascript/JQuery codes between the &#x3C;script&#x3E;&#x3C;/script&#x3E; tags.
+            </p>
+          </div>
+          <div class="six columns">
+<pre>
+<code>
++ /Imperial-Visualizations/tutorials/HTML/
+| + images/
+| |- imperial-black-logo.svg
+| |- imperial-logo.svg
+| |- imperial-white-logo.svg
+| + scripts/
+| |- program.js
+| + styles/
+| |- styles.css
+|- index.html
+|- DoubleClickMe.html.html
+</code>
+</pre>
+          </div>
+        </div>
+        <div class="row">
+          <div class="twelve columns">
+
+<pre>
+<code>
+<strong>index.html</strong>
+&#x3C;!doctype html&#x3E;
+&#x3C;!-- **This line is extremely important, it tells the browser to use HTML5 instead of HTML 4.1**  --&#x3E;
+&#x3C;html&#x3E;
+&#x3C;head&#x3E;
+    &#x3C;meta charset=&#x22;utf-8&#x22;&#x3E;
+    &#x3C;meta name=&#x22;viewport&#x22; content=&#x22;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no&#x22;&#x3E;
+    &#x3C;title&#x3E;Imperial Visualisations&#x3C;/title&#x3E;
+    &#x3C;link rel=&#x22;icon&#x22; href=&#x22;images/favicon.ico&#x22; type=&#x22;image/x-icon&#x22;&#x3E;
+    &#x3C;link rel=&#x22;stylesheet&#x22; href=&#x22;styles/styles.css&#x22;&#x3E;
+    &#x3C;!-- importing style.css --&#x3E;
+    &#x3C;!-- **You are not suppose to change style.css !!**  --&#x3E;
+    &#x3C;style type=&#x22;text/css&#x22;&#x3E;
+        /* overwrite style.css styles*/
+    &#x3C;/style&#x3E;
+&#x3C;/head&#x3E;
+&#x3C;body&#x3E;
+    &#x3C;div class=&#x22;container&#x22;&#x3E;
+        &#x3C;h1&#x3E;Big title&#x3C;/h1&#x3E;
+        &#x3C;div class=&#x22;row&#x22;&#x3E;
+            &#x3C;div class=&#x22;eight columns&#x22;&#x3E;
+                &#x3C;p&#x3E;Put your graph here&#x3C;/p&#x3E;
+            &#x3C;/div&#x3E;
+            &#x3C;div class=&#x22;four columns&#x22;&#x3E;
+                &#x3C;p&#x3E;And probobly put your interface here&#x3C;/p&#x3E;
+            &#x3C;/div&#x3E;
+        &#x3C;/div&#x3E;
+    &#x3C;/div&#x3E;
+    &#x3C;br&#x3E;&#x3C;br&#x3E;&#x3C;br&#x3E;
+    &#x3C;script src=&#x22;scripts/program.js&#x22;&#x3E;&#x3C;/script&#x3E;
+    &#x3C;!-- You should put your javascript code in program.js --&#x3E;
+    &#x3C;script&#x3E;
+        // or you can put your javascript here as well.
+    &#x3C;/script&#x3E;
+&#x3C;/body&#x3E;
+&#x3C;/html&#x3E;
+
+</code>
+</pre>
+          </div>
+        </div>
+    </div>
+
+
+
+
+  <script type="text/javascript">
+  </script>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>
