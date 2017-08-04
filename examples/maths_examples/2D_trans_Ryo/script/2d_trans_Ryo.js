@@ -194,6 +194,11 @@ function jsonFormat2(x0,x1,x2,y0,y1,y2) {
   return myJson;
 }
 
+layout = {xaxis: {range: [-3, 3]},
+    yaxis: {range: [-3, 3]},
+    margin: {l:0, r:0, t:0, b:0}
+    };
+
 function squarePlotter(){
   Plotly.newPlot('graph', [{
     x : [0,1,1,0,0],
@@ -202,8 +207,7 @@ function squarePlotter(){
     fill:'tonexty',
     mode: 'lines'
   }],
-  {xaxis: {range: [-3, 3]},
-      yaxis: {range: [-3, 3]}}
+  layout
   )
 }
 
@@ -218,8 +222,7 @@ function plotterSkew() {
     fill:'tonexty',
     mode: 'lines'
     }],
-    {xaxis: {range: [-3, 3]},
-      yaxis: {range: [-3, 3]}}
+    layout
   );
 
   // Animation
@@ -247,8 +250,7 @@ function plotterScale() {
     fill:'tonexty',
     mode: 'lines'
     }],
-    {xaxis: {range: [-3, 3]},
-      yaxis: {range: [-3, 3]}}
+    layout
   );
 
   // Animation
@@ -267,7 +269,7 @@ function plotterScale() {
 
 function plotterRotate() {
   var myArray = squareTrans("rotate",1);
-  var frames = jsonFormat2(...myarray);
+  var frames = jsonFormat2(...myArray);
   // Initial plot
   Plotly.newPlot('graph', [{
     x: frames[0].data[0].x,
@@ -276,8 +278,7 @@ function plotterRotate() {
     fill:'tonexty',
     mode: 'lines'
     }],
-    {xaxis: {range: [-3, 3]},
-      yaxis: {range: [-3, 3]}}
+    layout
   );
 
   // Animation
@@ -305,8 +306,7 @@ function plotterCustom() {
     fill:'tonexty',
     mode: 'lines'
     }],
-    {xaxis: {range: [-3, 3]},
-      yaxis: {range: [-3, 3]}}
+    layout
   );
 
   // Animation
@@ -335,7 +335,7 @@ function revealSkew() {
   $('.sliderRotate').hide();
   $('.sliderScale').hide();
   $('.sliderCustom').hide();
-  $('.sliderSkew').slideToggle(1000);
+  $('.sliderSkew').slideToggle(600);
 
 }
 
@@ -344,7 +344,7 @@ function revealRotate() {
   $('.sliderSkew').hide();
   $('.sliderScale').hide();
   $('.sliderCustom').hide();
-  $('.sliderRotate').slideToggle(1000);
+  $('.sliderRotate').slideToggle(600);
 }
 
 function revealScale() {
@@ -352,7 +352,7 @@ function revealScale() {
   $('.sliderRotate').hide();
   $('.sliderSkew').hide();
   $('.sliderCustom').hide();
-  $('.sliderScale').slideToggle(1000)
+  $('.sliderScale').slideToggle(600)
 }
 
 function revealCustom() {
@@ -360,7 +360,10 @@ function revealCustom() {
   $('.sliderRotate').hide();
   $('.sliderSkew').hide();
   $('.sliderScale').hide();
-  $('.sliderCustom').slideToggle(1000);
+  $('.sliderCustom').slideToggle(600);
 }
+
+var myVar = document.getElementById('sliderID')
+console.log(myVar)
 
 $(document).ready(main);
