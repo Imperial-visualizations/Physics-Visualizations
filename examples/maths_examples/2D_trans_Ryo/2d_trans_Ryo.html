@@ -11,65 +11,99 @@
 </head>
 <body>
 
-<div id='graph' style="width:500px; height:500px;"></div>  <!-- Plotly chart will be drawn inside this DIV -->
-<script src=script/2d_trans_Ryo.js></script>
-
 <div class="container">
-<!--<a class="button" href="#">Anchor button</a>-->
-<!--<button>Button element</button>-->
-<!--<input type="submit" value="submit input">-->
-    <input type="button" value="Reset", onclick="squareplotter()">
-    <input type="button" value="Skew", onclick="revealSkew()">
-    <input type="button" value="Scale", onclick="revealScale()">
-    <input type="button" value="Rotate", onclick="revealRotate()">
-    <input type="button" value="Custom", onclick="revealCustom()">
+    <div class="row">
+        <div class="six columns">
 
+            <div id='graph' style="width:450px; height:450px;"></div>  <!-- Plotly chart will be drawn inside this DIV -->
+            <script src=script/2d_trans_Ryo.js></script>
+        </div>
+
+        <div class="six columns">
+            <h2>2D Transformations</h2>
+            <input type="button" value="Skew", onclick="revealSkew()">
+            <input type="button" value="Scale", onclick="revealScale()">
+            <input type="button" value="Rotate", onclick="revealRotate()">
+            <input type="button" value="Custom", onclick="revealCustom()">
+
+            <div class="sliderSkew">
+                <label class="sliderTitle">Axis:</label>
+                <label>
+                    <input id="skewID" type ="range" value="0" min ="0" max="1" step ="1"/>
+                    <span class="sliderMin">0</span>
+                    <span class="sliderMax">1</span>
+                 </label>
+            </div>
+            <div class="sliderSkew">
+                <input type="button" value="Start", onclick="plotterSkew()">
+            </div>
+
+            <div class="sliderRotate">
+                <label class="sliderTitle">Theta:</label>
+                <label>
+                    <input id="rotateID" type ="range" value="0" min ="0" max="3" step ="0.1"/>
+                    <span class="sliderMin">-1</span>
+                    <span class="sliderMax">10</span>
+
+                </label>
+            </div>
+            <div class="sliderRotate">
+                <input type="button" value="Start", onclick="plotterRotate()">
+            </div>
+
+            <div class="sliderScale">
+                <label class="sliderTitle">Slider:</label>
+                <label>
+                    <input id="yourID" type ="range" value="1" min ="0" max="3" step ="0.1"/>
+                    <span class="sliderMin">-1</span>
+                    <span class="sliderMax">10</span>
+                </label>
+            </div>
+            <div class="sliderScale">
+                <input type="button" value="Start", onclick="plotterScale()">
+            </div>
+
+            <div class="sliderCustom">
+                <label class="sliderTitle">Slider:</label>
+                 <label>
+                     <input id="yourID" type ="range" value="5" min ="-1" max="10.0" step ="0.1"/>
+                     <span class="sliderMin">-1</span>
+                     <span class="sliderMax">10</span>
+
+                 </label>
+            </div>
+            <div class="sliderCustom">
+                <input type="button" value="Start", onclick="plotterCustom()">
+            </div>
+
+            <div>
+                <input type="button" value="Reset", onclick="squarePlotter()">
+            </div>
+        </div>
+    </div>
 </div>
 
 
-<div class="sliderSkew">
-     <label class="sliderTitle">Slider:</label>
-     <label>
-          <input id="yourID" type ="range" value="5" min ="-1" max="10.0" step ="0.1"/>
-          <span class="sliderMin">-1</span>
-          <span class="sliderMax">10</span>
-          <input type="button" value="Start", onclick="plotterSkew()">
-     </label>
+<!--<div class="container">-->
+<!--&lt;!&ndash;<a class="button" href="#">Anchor button</a>&ndash;&gt;-->
+<!--&lt;!&ndash;<button>Button element</button>&ndash;&gt;-->
+<!--&lt;!&ndash;<input type="submit" value="submit input">&ndash;&gt;-->
+    <!--<input type="button" value="Reset", onclick="squareplotter()">-->
+    <!--<input type="button" value="Skew", onclick="revealSkew()">-->
+    <!--<input type="button" value="Scale", onclick="revealScale()">-->
+    <!--<input type="button" value="Rotate", onclick="revealRotate()">-->
+    <!--<input type="button" value="Custom", onclick="revealCustom()">-->
 
-</div>
+<!--</div>-->
 
-<div class="sliderRotate">
-     <label class="sliderTitle">Slider:</label>
-     <label>
-          <input id="yourID" type ="range" value="5" min ="-1" max="10.0" step ="0.1"/>
-          <span class="sliderMin">-1</span>
-          <span class="sliderMax">10</span>
-          <input type="button" value="Start", onclick="plotterRotate()">
-     </label>
 
-</div>
 
-<div class="sliderScale">
-     <label class="sliderTitle">Slider:</label>
-     <label>
-          <input id="yourID" type ="range" value="5" min ="-1" max="10.0" step ="0.1"/>
-          <span class="sliderMin">-1</span>
-          <span class="sliderMax">10</span>
-          <input type="button" value="Start", onclick="plotterScale()">
-     </label>
 
-</div>
 
-<div class="sliderCustom">
-     <label class="sliderTitle">Slider:</label>
-     <label>
-          <input id="yourID" type ="range" value="5" min ="-1" max="10.0" step ="0.1"/>
-          <span class="sliderMin">-1</span>
-          <span class="sliderMax">10</span>
-          <input type="button" value="Start", onclick="plotterCustom()">
-     </label>
 
-</div>
+
+
+
 
 </body>
 </html>
