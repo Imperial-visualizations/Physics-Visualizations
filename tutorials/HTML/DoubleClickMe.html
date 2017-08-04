@@ -9,7 +9,6 @@
   <title>Imperial Visualisation</title>
   <meta name="description" content="">
   <meta name="author" content="">
-  <link rel = "icon" href = "images/favicon.ico" type="image/x-icon">
 
   <!-- Mobile Specific Metas
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -88,7 +87,6 @@
     &#x3C;meta charset=&#x22;utf-8&#x22;&#x3E;
     &#x3C;meta name=&#x22;viewport&#x22; content=&#x22;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no&#x22;&#x3E;
     &#x3C;title&#x3E;Imperial Visualisations&#x3C;/title&#x3E;
-    &#x3C;link rel=&#x22;icon&#x22; href=&#x22;images/favicon.ico&#x22; type=&#x22;image/x-icon&#x22;&#x3E;
     &#x3C;link rel=&#x22;stylesheet&#x22; href=&#x22;styles/styles.css&#x22;&#x3E;
     &#x3C;!-- importing style.css --&#x3E;
     &#x3C;!-- **You are not suppose to change style.css !!**  --&#x3E;
@@ -402,10 +400,10 @@ browser/device sizes) --&gt;
             <input type="checkbox">
             <span class="label-body">Send a copy to yourself</span>
           </label>
-          <label class="sliderTitle">Slider:</label> 
-          <label>
-          <input id="yourID" type ="range" value="5" min ="-1" max="10.0" step ="0.1"/>
-          <span class="sliderMin">-1</span><span class="sliderMax">10</span>
+          <label class="sliderTitle">Size: <span id="yourSliderIDDisplay" data-unit="meter">1meter</span></label> 
+          <label class="slider">
+          <input id="yourSliderID" class="inputs" type="range" value="1" min ="1" max="100" step ="1"/>
+          <span class="sliderMin">1</span><span class="sliderMax">100</span>
           </label>
           <input class="button-primary" type="submit" value="Submit">
         </form>
@@ -437,15 +435,17 @@ browser/device sizes) --&gt;
             &#x3C;input type=&#x22;checkbox&#x22;&#x3E;
             &#x3C;span class=&#x22;label-body&#x22;&#x3E;Send a copy to yourself&#x3C;/span&#x3E;
           &#x3C;/label&#x3E;
-          &#x3C;label class=&#x22;sliderTitle&#x22;&#x3E;Slider:&#x3C;/label&#x3E; 
-          &#x3C;label&#x3E;
-          &#x3C;input id=&#x22;yourID&#x22; type =&#x22;range&#x22; value=&#x22;5&#x22; min =&#x22;-1&#x22; max=&#x22;10.0&#x22; step =&#x22;0.1&#x22;/&#x3E;
-          &#x3C;span class=&#x22;sliderMin&#x22;&#x3E;-1&#x3C;/span&#x3E;&#x3C;span class=&#x22;sliderMax&#x22;&#x3E;10&#x3C;/span&#x3E;
+          &#x3C;label class=&#x22;sliderTitle&#x22;&#x3E;Size: &#x3C;span id=&#x22;yourSliderIDDisplay&#x22; data-unit=&#x22;meter&#x22;&#x3E;1meter&#x3C;/span&#x3E;&#x3C;/label&#x3E; 
+          &#x3C;label class=&#x22;slider&#x22;&#x3E;
+          &#x3C;input id=&#x22;yourSliderID&#x22; class=&#x22;inputs&#x22; type=&#x22;range&#x22; value=&#x22;1&#x22; min =&#x22;1&#x22; max=&#x22;100&#x22; step =&#x22;1&#x22;/&#x3E;
+          &#x3C;span class=&#x22;sliderMin&#x22;&#x3E;1&#x3C;/span&#x3E;&#x3C;span class=&#x22;sliderMax&#x22;&#x3E;100&#x3C;/span&#x3E;
           &#x3C;/label&#x3E;
           &#x3C;input class=&#x22;button-primary&#x22; type=&#x22;submit&#x22; value=&#x22;Submit&#x22;&#x3E;
         &#x3C;/form&#x3E;
 
 &lt;!-- Always wrap checkbox and radio inputs in a label and use a &lt;span class="label-body"&gt; inside of it --&gt;
+&lt;!-- The complete slider includes two label tag, one with class "sliderTitle", one with class "slider". --&gt;
+&lt;!-- The slider value display requires jQuery to work. --&gt;
 
 &lt;!-- Note: The class .u-full-width is just a utility class shorthand for width: 100% --&gt;
 
@@ -540,6 +540,106 @@ browser/device sizes) --&gt;
 
     </div>
 
+
+    <!-- Tabs -->
+<div class="docs-section" id="tabs">
+  <h3 class="docs-header">Tabs</h3>
+  <div class="row docs-example">
+    <div class="six columns">
+      <p>The tab requires jQuery to work properly. If you don't understand jQuery, please see tutorial/DOM/DoubleClickMe.html .</p>
+    </div>
+    <div class="six columns">
+       <ul class="tab-nav">
+          <li>
+            <a class="button active" href="#one">Tab 1</a>
+          </li>
+          <li>
+            <a class="button" href="#two">Tab 2</a>
+          </li>
+          <li>
+            <a class="button" href="#three">Tab 3</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="one">
+            <h5>Tab 1</h5>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque 
+            laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto
+             beatae vitae dicta sunt explicabo.</p>
+          </div>
+          <div class="tab-pane" id="two">
+            <h5>Tab 2</h5>
+            <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
+             consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+          </div>
+          <div class="tab-pane" id="three">
+            <h5>Tab 3</h5>
+            <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci 
+            velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam 
+            quaerat voluptatem.</p>
+          </div>
+        </div> 
+      </div>
+  <div class="row docs-example">
+       <div class="twelve columns">
+<!-- CODE EXAMPLE ———————————————————————————————————————— -->
+Html code:
+<pre class="code-example">
+<code class="code-example-body prettyprint">
+       &#x3C;ul class=&#x22;tab-nav&#x22;&#x3E;
+          &#x3C;li&#x3E;
+            &#x3C;a class=&#x22;button active&#x22; href=&#x22;#one&#x22;&#x3E;Tab 1&#x3C;/a&#x3E;
+          &#x3C;/li&#x3E;
+          &#x3C;li&#x3E;
+            &#x3C;a class=&#x22;button&#x22; href=&#x22;#two&#x22;&#x3E;Tab 2&#x3C;/a&#x3E;
+          &#x3C;/li&#x3E;
+          &#x3C;li&#x3E;
+            &#x3C;a class=&#x22;button&#x22; href=&#x22;#three&#x22;&#x3E;Tab 3&#x3C;/a&#x3E;
+          &#x3C;/li&#x3E;
+        &#x3C;/ul&#x3E;
+        &#x3C;div class=&#x22;tab-content&#x22;&#x3E;
+          &#x3C;div class=&#x22;tab-pane active&#x22; id=&#x22;one&#x22;&#x3E;
+            &#x3C;h5&#x3E;Tab 1&#x3C;/h5&#x3E;
+            &#x3C;p&#x3E;Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium 
+            doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi 
+            architecto beatae vitae dicta sunt explicabo.&#x3C;/p&#x3E;
+          &#x3C;/div&#x3E;
+          &#x3C;div class=&#x22;tab-pane&#x22; id=&#x22;two&#x22;&#x3E;
+            &#x3C;h5&#x3E;Tab 2&#x3C;/h5&#x3E;
+            &#x3C;p&#x3E;Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed 
+            quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.&#x3C;/p&#x3E;
+          &#x3C;/div&#x3E;
+          &#x3C;div class=&#x22;tab-pane&#x22; id=&#x22;three&#x22;&#x3E;
+            &#x3C;h5&#x3E;Tab 3&#x3C;/h5&#x3E;
+            &#x3C;p&#x3E;Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, 
+            adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam 
+            aliquam quaerat voluptatem.&#x3C;/p&#x3E;
+          &#x3C;/div&#x3E;
+        &#x3C;/div&#x3E; 
+
+</code>   
+</pre>
+jQuery code:
+<pre class="code-example">
+<code class="code-example-body prettyprint">
+    $(function() {
+      $('ul.tab-nav li a.button').click(function() {
+          var href = $(this).attr('href');
+
+          $('li a.active.button', $(this).parent().parent()).removeClass('active');
+          $(this).addClass('active');
+
+          $('.tab-pane.active', $(href).parent()).removeClass('active');
+          $(href).addClass('active');
+
+          return false;
+      });
+    });
+</code>   
+</pre>
+    </div>
+  </div>
+</div>
     <!-- Tables -->
     <div class="docs-section" id="tables">
       <h3 class="docs-header">Tables</h3>
@@ -698,7 +798,28 @@ browser/device sizes) --&gt;
 
 
 
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script type="text/javascript">
+    $(function() {
+      $('ul.tab-nav li a.button').click(function() {
+          var href = $(this).attr('href');
+
+          $('li a.active.button', $(this).parent().parent()).removeClass('active');
+          $(this).addClass('active');
+
+          $('.tab-pane.active', $(href).parent()).removeClass('active');
+          $(href).addClass('active');
+
+          return false;
+      });
+    });
+
+    $("input[type=range]").each(function () {
+      $(this).on('input', function(){
+            $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
+      });
+    });
+
   </script>
 
 <!-- End Document
