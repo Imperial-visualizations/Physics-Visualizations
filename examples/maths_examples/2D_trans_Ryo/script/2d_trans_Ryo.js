@@ -211,8 +211,8 @@ function squarePlotter(){
   )
 }
 
-function plotterSkew() {
-  var myArray = squareTrans("skew",1);
+function plotterSkew(axis) {
+  var myArray = squareTrans("skew",axis);
   var frames = jsonFormat2(...myArray);
   // Initial plot
   Plotly.newPlot('graph', [{
@@ -239,8 +239,8 @@ function plotterSkew() {
   });
 }
 
-function plotterScale() {
-  var myArray = squareTrans("scale",2,3);
+function plotterScale(s1,s2) {
+  var myArray = squareTrans("scale",s1,s2);
   var frames = jsonFormat2(...myArray);
   // Initial plot
   Plotly.newPlot('graph', [{
@@ -267,8 +267,8 @@ function plotterScale() {
   });
 }
 
-function plotterRotate() {
-  var myArray = squareTrans("rotate",1);
+function plotterRotate(th) {
+  var myArray = squareTrans("rotate",th);
   var frames = jsonFormat2(...myArray);
   // Initial plot
   Plotly.newPlot('graph', [{
@@ -295,8 +295,8 @@ function plotterRotate() {
   });
 }
 
-function plotterCustom() {
-  var myArray = squareTrans("custom",1,1,1,0);
+function plotterCustom(a,b,c,d) {
+  var myArray = squareTrans("custom",a,b,c,d);
   var frames = jsonFormat2(...myArray);
   // Initial plot
   Plotly.newPlot('graph', [{
@@ -363,7 +363,29 @@ function revealCustom() {
   $('.sliderCustom').slideToggle(600);
 }
 
-var myVar = document.getElementById('sliderID')
-console.log(myVar)
+// Terrible function names...
+function plotRotate() {
+  var x = document.getElementById('rotateID').value;
+  var th = Math.PI*x;
+  plotterRotate(th);
+}
 
+function plotSkew() {
+  var axis = document.getElementById('skewID').value;
+  plotterSkew(Number(axis));
+}
+
+function plotScale() {
+  var scale1 = document.getElementById('scale1ID').value;
+  var scale2 = document.getElementById('scale2ID').value;
+  plotterScale(scale1,scale2);
+}
+
+function plotCustom() {
+  var a = document.getElementById('aID').value;
+  var b = document.getElementById('bID').value;
+  var c = document.getElementById('cID').value;
+  var d = document.getElementById('dID').value;
+  plotterCustom(a,b,c,d);
+}
 $(document).ready(main);
