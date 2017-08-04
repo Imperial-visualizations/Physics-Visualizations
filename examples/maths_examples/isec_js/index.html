@@ -1,13 +1,69 @@
 <html>
 	<head>
 		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-		<script src="intersections.js"></script>
+		<script src="./intersections.js"></script>
 	</head>
 	<body>
 		<input id="ix" type="number" />
 		<input id="iy" type="number" />
-		<input id="iz" type="number" />
-		<button type="button" id="button1" onclick="calc()">Click me now</button>
+		<input id="iz" type="number" /><br>
+		<input id="nx" type="number" />
+		<input id="ny" type="number" />
+		<input id="nz" type="number" />
+		<button type="button" id="button1" onclick="assign()">Assign</button>
+		<button type="button" id="button2" onclick="plot()">Plot</button>
 		<div id="out1"> </div>
+		<div id="tester" style="width:600px;height:250px;"></div>
+		<script type="text/javascript">
+		"use strict";
+		var objs = [];
+		var goified =[];
+		function assign() {
+			var ix = Number(document.getElementById("ix").value);
+			var iy = Number(document.getElementById("iy").value);
+			var iz = Number(document.getElementById("iz").value);
+			var nx = Number(document.getElementById("nx").value);
+			var ny = Number(document.getElementById("ny").value);
+			var nz = Number(document.getElementById("nz").value);
+			var obj = new Line(new Vector(ix,iy,iz), new Vector(nx,ny,nz));
+			objs.push(obj);
+			goified.push(obj.goify())
+		}
+		function plot() {
+			var TESTER = document.getElementById('tester');
+			var data = goified;
+			var layout = {
+				scene: {
+					xaxis:
+					{
+						range: [-1,1]
+					},
+					yaxis:
+					{
+						range: [-1,1]
+					},
+					zaxis:
+					{
+						range: [-1,1]
+					},
+					camera:
+					{
+						up: {
+							x: 0,
+							y: 0,
+							z: 1
+						},
+						eye: {
+							x: -1.7428,
+							y: 1.0707,
+							z: 0.7100
+						}
+					},
+					aspectratio: {x: 1, y: 1, z: 1},
+				},
+				margin: {l:0,r:0,b:0,t:0}};
+			Plotly.newPlot(TESTER, data, layout);
+		}
+		</script>
 	</body>
 </html>
