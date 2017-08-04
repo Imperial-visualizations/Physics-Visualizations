@@ -136,10 +136,16 @@ UI handling
 
 function updateScatterAngle() {
     initAngle = -degToRad(parseFloat($("#ballCollisionAngle").val()));
-    ball1.Lab.spriteInstance.y = ball1.Lab.initr.y + 0.5 * ball2.radius * Math.sin(initAngle);
-    ball2.Lab.spriteInstance.y = ball2.Lab.initr.y - 0.5 * ball1.radius * Math.sin(initAngle);
-    ball1.CoM.spriteInstance.y = ball1.CoM.initr.y + 0.5 * ball2.radius * Math.sin(initAngle);
-    ball2.CoM.spriteInstance.y = ball2.CoM.initr.y - 0.5 * ball1.radius * Math.sin(initAngle);
+    console.log(ball1.radius);
+    console.log(ball2.radius);
+    let yShift = Math.sin(initAngle) * ball2.radius;
+
+    ball1.Lab.spriteInstance.y = ball1.Lab.initr.y + yShift*0.5;
+    ball1.CoM.spriteInstance.y = ball1.CoM.initr.y + yShift*0.5;
+    ball2.Lab.spriteInstance.y = ball2.Lab.initr.y - yShift*0.5;
+    ball2.CoM.spriteInstance.y = ball2.CoM.initr.y - yShift *0.5;
+
+
 }
 
 $(".inputs").each(function () {
@@ -166,6 +172,7 @@ function updateLabels() {
         centreOfMass1.x = getCoMR().x;
         centreOfMass1.y = getCoMR().y;
 
+
         updateRadius(ball1);
         updateRadius(ball2);
 
@@ -186,7 +193,6 @@ function updateRadius(ball) {
     ball.Lab.bounds = new Phaser.Rectangle(0, 0, canvasWidth, canvasHeight / 3 - ball.radius);
     ball.CoM.bounds = new Phaser.Rectangle(0, canvasHeight / 3 + ball.radius, canvasWidth, canvasHeight / 3 - ball.radius * 2);
 
-
     let newBallGraphic = game.add.graphics(0, 0);
 
     newBallGraphic.lineStyle(1, ball.color, 1);
@@ -203,8 +209,8 @@ function updateRadius(ball) {
     ball.CoM.spriteInstance = CoMTmp;
 
 
-    ball1.Lab.spriteInstance.anchor.set(0.5, 0.5);
-    ball1.CoM.spriteInstance.anchor.set(0.5, 0.5);
+    ball.Lab.spriteInstance.anchor.set(0.5, 0.5);
+    ball.CoM.spriteInstance.anchor.set(0.5, 0.5);
     newBallGraphic.destroy();
 
 }
@@ -277,7 +283,6 @@ function resetSimulation() {
 
     updateLabels();
 }
-
 
 /*
 ++++++++++++++++++++++++++++++++++++
