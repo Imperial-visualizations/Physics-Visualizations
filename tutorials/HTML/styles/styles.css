@@ -8,6 +8,9 @@
 *
 * This css file has been modified by Imperial Virsualisation
 */
+/*
+* Imperial Virsulisation Altered Version 1
+*/
 
 
 /* Table of contents
@@ -649,6 +652,9 @@ input[type=range] {
   background: transparent; /* Otherwise white in Chrome */
   margin-bottom: 0;
 }
+input[type=range].disabled{
+  opacity: 0.2;
+}
 
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -822,6 +828,47 @@ Dropdown Menu Styles
 }
 
 
+
+/*
+Tab Menu Styles
+*/
+
+
+ul.tab-nav {
+    list-style: none;
+    border-bottom: 1px solid #bbb;
+    padding-left: 5px;
+}
+
+ul.tab-nav li {
+    display: inline;
+}
+
+ul.tab-nav li a.button {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-bottom: -1px;
+    border-bottom: none;
+}
+ul.tab-nav li a.button:hover {
+    box-shadow: 0 -2px 2px #aaa;
+}
+
+ul.tab-nav li a.active.button {
+    border-bottom: 1px solid #fff;
+}
+ul.tab-nav li a.active.button:hover {
+    box-shadow: 0 -2px 2px #aaa;
+}
+
+
+.tab-content .tab-pane {
+    display: none;
+}
+
+.tab-content .tab-pane.active {
+    display: block;
+}
 
 
 
