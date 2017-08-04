@@ -28,7 +28,6 @@ class Animate:
             self.div_id = graph.div_id
             self.attributes = {}
             self.variables_list = []
-            self.buttons = []
 
             if len(kwargs.items()) > 0:                 # If variables to be animated provided, go ahead and animate.
                 self.animate(**kwargs)
@@ -63,7 +62,7 @@ class Animate:
         anim_attr_js = jsify(self.attributes)
 
         self.script += "\n\n"                            # Beautifying before writing animation code
-        self.script += "var is_paused = true;\n"
+        self.script += "var is_paused = true;\n"         # Boolean for play/pause implementation.
         variables_str = ""
         for plot in self.variables:
             variables_str += "{"
@@ -101,11 +100,11 @@ class Animate:
         self.script += "requestAnimationFrame(update); \n\t}\n}\n"      # End of update function
         self.script += "requestAnimationFrame(update); \n"              # Calling animation function for first time.
 
-        self.graph.script = self.script
-        continuity_buttons = Button(self.graph, self.div_id)
-        self.script = continuity_buttons.add_play_button()
-        self.script = continuity_buttons.add_reset_button()
-        self.graph.script = self.script
+        self.graph.script = self.script                                 # Updating graph script
+        continuity_buttons = Button(self.graph, self.div_id[1:-1] + "_btn")     # Passing graph script to button maker
+        self.script = continuity_buttons.add_play_button()              # Making play button
+        self.script = continuity_buttons.add_reset_button()             # Making reset button
+        self.graph.script = self.script                                 # Updating graph script.
         return self.graph
 
 
@@ -169,7 +168,7 @@ class Button:
                             .format(bases=str(graph.__class__.__bases__)))
 
         self.graph = graph
-        self.div = Tag("div", value=div_id)
+        self.div = Tag("div", id=escape(div_id)).html
         self.buttons = []
 
         if len(kwargs.items()) > 0:
@@ -177,38 +176,46 @@ class Button:
         return
 
     def make(self, **kwargs):
-        button = Tag("input", **kwargs).html
-        self.buttons.append(button)
+        button = Tag("input", **kwargs).html                # Making HTML code for button.
+
+        if self.div not in self.graph.buttons:              # If no buttons in current div, make empty list in which to
+            self.graph.buttons[self.div] = []               # store buttons, with the key as the HTML tag of the div.
+
+        self.graph.buttons[self.div].append(button)         # Adding button to dictionary of buttons.
         return
 
     def add_play_button(self):
-        self.make(id='run', onclick="onToggleRun()", value="Play", type="button")
-        self.graph.script += "function onToggleRun() { \n\t"
-        self.graph.script += "is_paused = !is_paused;\n\t"
+        # Making HTML button.
+        self.make(id=escape('run'), onclick=escape("onToggleRun()"), value=escape("Play"), type=escape("button"))
+
+        self.graph.script += "function onToggleRun() { \n\t"                                # Action when button pressed
+        self.graph.script += "is_paused = !is_paused;\n\t"                                  # Toggle boolean.
+
+        # If paused, set button text to display Play, else display Pause.
         self.graph.script += "document.getElementById('run').value = (is_paused) ? 'Play':'Pause';\n\t"
-        self.graph.script += "requestAnimationFrame(update);\n}\n"
+        self.graph.script += "requestAnimationFrame(update);\n}\n"                          # Running animation.
 
         return self.graph.script
 
     def add_reset_button(self):
-        self.make(id='reset', onclick="onReset()", value="Reset", type="button")
-        self.graph.script += "function onReset() { \n\t"
+        # Making HTML button.
+        self.make(id=escape('reset'), onclick=escape("onReset()"), value=escape("Reset"), type=escape("button"))
+        self.graph.script += "function onReset() { \n\t"                                    # Action when button pressed
 
-        for line in self.graph.script.split("\n"):
+        for line in self.graph.script.split("\n"):                                          # Set all counters to 0.
             if "var counter" in line and " = 0;" in line and "\t" not in line:
                 self.graph.script += line[3:] + "\n\t"
 
-        self.graph.script += "\n\t"
+        self.graph.script += "\n\t"                                                         # Beautifying
 
-        self.graph.script += "if (is_paused) { \n\t"
-
-        for line in self.graph.script.split("\n"):
-            if "Plotly.animate(" in line:
-                self.graph.script += line + "\n\t"
+        self.graph.script += "if (is_paused) { \n\t"                                        # Updating to initial frame
+        for line in self.graph.script.split("\n"):                                          # if animation is paused, by
+            if "Plotly.animate(" in line:                                                   # running Plotly.animate
+                self.graph.script += line + "\n\t"                                          # function just one.
                 break
 
-        self.graph.script += "} \n"
+        self.graph.script += "} \n"                                                         # Closing if conditional
 
-        self.graph.script += "} \n"
+        self.graph.script += "} \n"                                                         # Ending function.
 
         return self.graph.script
