@@ -8,130 +8,89 @@
 	<body>
 		<!-- Globals-->
 		<script type="text/javascript">
-		objs = []
-		var selector = new Selector(objs);
+		var selector = new Selector();
 		</script>
 		<div id="points">
 			<h1>Points</h1>
-			<input id="ix" type="number" value="0.1"/>
-			<input id="iy" type="number" value="0.3"/>
-			<input id="iz" type="number" value="-0.2"/><br>
+			<input id="pix" type="number" value="0.1"/>
+			<input id="piy" type="number" value="0.3"/>
+			<input id="piz" type="number" value="-0.2"/><br>
 			<button type="button" id="generate_point" onclick="pushPoint()">Generate point</button></br>
 			<script type="text/javascript">
 			function pushPoint() {
-				var ix = Number(document.getElementById("ix").value);
-				var iy = Number(document.getElementById("iy").value);
-				var iz = Number(document.getElementById("iz").value);
-				var point = new Point(new Vector(ix,iy,iz));
-				obj.push(point);
+				var ix = Number(document.getElementById("pix").value);
+				var iy = Number(document.getElementById("piy").value);
+				var iz = Number(document.getElementById("piz").value);
+				var point = new Point("noname", new Vector(ix,iy,iz));
+				selector.add([point]);
 			}
 			</script>
 		</div>
 		<div id="lines">
 			<h1>Points</h1>
 			<p>Direction vector</p>
-			<input id="ix" type="number" value="0.1"/>
-			<input id="iy" type="number" value="0.3"/>
-			<input id="iz" type="number" value="-0.2"/><br>
+			<input id="lix" type="number" value="0.1"/>
+			<input id="liy" type="number" value="0.3"/>
+			<input id="liz" type="number" value="-0.2"/><br>
 			<p>Offset vector</p>
-			<input id="nx" type="number" value="0.2" />
-			<input id="ny" type="number" value="0.1"/>
-			<input id="nz" type="number" value="0.4"/><br>
-			<button type="button" id="button1" onclick="pushLine()">Generate Line</button></br>
+			<input id="lnx" type="number" value="0.2" />
+			<input id="lny" type="number" value="0.1"/>
+			<input id="lnz" type="number" value="0.4"/><br>
+			<button type="button" id="generate_line" onclick="pushLine()">Generate Line</button></br>
 			<script type="text/javascript">
 			function pushLine() {
-				var ix = Number(document.getElementById("ix").value);
-				var iy = Number(document.getElementById("iy").value);
-				var iz = Number(document.getElementById("iz").value);
-				var nx = Number(document.getElementById("nx").value);
-				var ny = Number(document.getElementById("ny").value);
-				var nz = Number(document.getElementById("nz").value);
+				var ix = Number(document.getElementById("lix").value);
+				var iy = Number(document.getElementById("liy").value);
+				var iz = Number(document.getElementById("liz").value);
+				var nx = Number(document.getElementById("lnx").value);
+				var ny = Number(document.getElementById("lny").value);
+				var nz = Number(document.getElementById("lnz").value);
 				var line = new Line(new Vector(ix,iy,iz), new Vector(nx,ny,nz));
-				obj.push(line);
+				selector.add([line]);
 			}
 			</script>
 		</div>
 		<div id="planes">
 			<h1>Planes</h1>
 			<p>Normal vector</p>
-			<input id="ix" type="number" value="0.1"/>
-			<input id="iy" type="number" value="0.3"/>
-			<input id="iz" type="number" value="-0.2"/><br>
+			<input id="plix" type="number" value="0.1"/>
+			<input id="pliy" type="number" value="0.3"/>
+			<input id="pliz" type="number" value="-0.2"/><br>
 			<p>Offset vector</p>
-			<input id="nx" type="number" value="0.2" />
-			<input id="ny" type="number" value="0.1"/>
-			<input id="nz" type="number" value="0.4"/><br>
-			<button type="button" id="button1" onclick="pushPlane()">Generate Plane</button></br>
+			<input id="plnx" type="number" value="0.2" />
+			<input id="plny" type="number" value="0.1"/>
+			<input id="plnz" type="number" value="0.4"/><br>
+			<button type="button" id="generate_plane" onclick="pushPlane()">Generate Plane</button></br>
 			<script type="text/javascript">
 			function pushPlane() {
-				var ix = Number(document.getElementById("ix").value);
-				var iy = Number(document.getElementById("iy").value);
-				var iz = Number(document.getElementById("iz").value);
-				var nx = Number(document.getElementById("nx").value);
-				var ny = Number(document.getElementById("ny").value);
-				var nz = Number(document.getElementById("nz").value);
+				var ix = Number(document.getElementById("plix").value);
+				var iy = Number(document.getElementById("pliy").value);
+				var iz = Number(document.getElementById("pliz").value);
+				var nx = Number(document.getElementById("plnx").value);
+				var ny = Number(document.getElementById("plny").value);
+				var nz = Number(document.getElementById("plnz").value);
 				var plane = new Plane(new Vector(ix,iy,iz), new Vector(nx,ny,nz));
-				obj.push(plane);
+				selector.add([plane]);
 			}
 			</script>
 		</div>
-		<button type="button" id="button1" onclick="assign()">Assign</button></br>
-		<button type="button" id="button2" onclick="plot()">Plot</button></br>
-		<button type="button" id="button3" onclick="testPoint()">Test Point</button></br>
-		<button type="button" id="button4" onclick="testLine()">Test Line</button></br>
-		<button type="button" id="button5" onclick="testPlane()">Test Plane</button></br>
-		<button type="button" id="button6" onclick="testSelector()">Test Selector</button></br>
+		<button type="button" id="test_selector" onclick="testSelector()"> Test Selector </button></br>
 		<div id="dropdown"> </div>
-		<div id="out1"> </div>
-		<div id="tester" style="width:600px;height:250px;"></div>
-		<script type="text/javascript">
-		var ix = Number(document.getElementById("ix").value);
-		var iy = Number(document.getElementById("iy").value);
-		var iz = Number(document.getElementById("iz").value);
-		var nx = Number(document.getElementById("nx").value);
-		var ny = Number(document.getElementById("ny").value);
-		var nz = Number(document.getElementById("nz").value);
-		var objs = [];
-		var selector = new Selector(objs);
-		console.log(selector.handle);
-		</script>
-		<script type="text/javascript">
-		var testPoint = function() {
-			var out = document.getElementById('out1');
-			var obj = new Point(new Vector(ix,iy,iz));
-			out.innerHTML = obj.toString();
-		}
-		var testLine = function() {
-			var out = document.getElementById('out1');
-			var obj = new Line(new Vector(ix,iy,iz), new Vector(nx,ny,nz));
-			out.innerHTML = obj.toString();
-		}
-		var testPlane = function() {
-			var out = document.getElementById('out1');
-			var obj = new Plane(new Vector(ix,iy,iz), new Vector(nx,ny,nz));
-			out.innerHTML = obj.toString();
-		}
-		</script>
+		<button type="button" id="test_selector" onclick="plot()"> Plot </button></br>
+		<div id="plot" style="width:600px;height:250px;"></div>
 		<script type="text/javascript">
 		"use strict";
-		var goified =[];
-		function assign() {
-			ix = Number(document.getElementById("ix").value);
-			iy = Number(document.getElementById("iy").value);
-			iz = Number(document.getElementById("iz").value);
-			nx = Number(document.getElementById("nx").value);
-			ny = Number(document.getElementById("ny").value);
-			nz = Number(document.getElementById("nz").value);
-			var obj = new Plane(new Vector(ix,iy,iz), new Vector(nx,ny,nz));
-			objs.push(obj);
-			goified.push(obj.goify())
-		}
 		function testSelector() {
 			var list = document.getElementById('dropdown');
 			list.replaceChild(selector.generate(),list.childNodes[0]);
 		}
 		function plot() {
-			var TESTER = document.getElementById('tester');
+			console.log("plot() called: list to render: ",objs)
+			var goified =[];
+			var TESTER = document.getElementById('plot');
+			for(var obj in objs) {
+				goified.push(objs[obj].goify());
+			}
 			var data = goified;
 			var layout = {
 				scene: {

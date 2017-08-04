@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <script src="./selector.js"></script>
+    <!--<link rel="stylesheet" href="./styles.css">-->
+  </head>
+  <body>
+    <button type="button" onclick="showSelector()">Show</button>
+    <button type="button" onclick="check()">Check</button>
+    <button type="button" onclick="remove()">Check</button>
+    <div id="selector"> </div>
+    <script type="text/javascript">
+    var obj1 = {
+        id: "obj1",
+        toString: function() {return "hehe1"}
+      }
+      var obj2 = {
+        id: "obj2",
+        toString: function() {return "hehe2"}
+      }
+      var obj3 = {
+        id: "obj3",
+        toString: function() {return "hehe3"}
+      }
+      var selector = new Selector()
+      selector.add([obj1,obj2,obj3]);
+    function showSelector() {
+      console.log("showing Selector: ", selector);
+      var out = document.getElementById('selector');
+      out.replaceChild(selector.generate(),out.childNodes[0]);
+    }
+    function check() {
+      console.log(selector.checked());
+    }
+    function remove() {
+      var toRemove = selector.checked();
+      console.log("removing "+toRemove + "from selector "+selector.id)
+      selector.remove(toRemove);
+      showSelector()
+    }
+    </script>
+  </body>
+</html>
