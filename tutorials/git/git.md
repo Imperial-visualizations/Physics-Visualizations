@@ -187,23 +187,21 @@ After completing work in a branch we need to merge it back to the main developme
 
 1. **Current Workflow**
 
-   Our current workflow uses "Long-Running Branches". We currently have master (merge completed visualizations for release) and dev (merge visualizations for testing and feedback) branches as the long running branches. The master branch should only be merged to from dev. Sub-branches include translator and tutorial branches under the "all" subgroup as anyone can contribute to these, and EM (electromagnetism), maths, and mechanics branches under the "visualizations" subgroup. These are the three visualization development streams for the 2017 project. 
+   Our current workflow uses "Long-Running Branches". We currently have master (merge completed work for release) and dev (merge "finished" work for testing and feedback) branches as the long running branches. The master branch should only be merged to from dev. Sub-branches include translator and tutorial branches under the "all" subgroup as anyone can contribute to these, and EM (electromagnetism), maths, and mechanics branches under the "visualizations" subgroup. These are the three visualization development streams for the 2017 project. 
 
        Note: It is recommended to use pull requests for all merging. Currently the dev and master branches are protected to only be merged by pull request.
 
-   --image of long running--
+   --“silo” view of progressive-stability branching from the "Pro Git" book. Available at https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows (2017)--
 
-   This year not everyone was fully comfortable with git so just having branches with an overall purpose for file sharing and control was sufficient. Also, there were no visualizations yet created at this point so discussion and file sharing between the overall group, and particularly within subgroups was very important. Files where everyone should use the same copy of the file were pushed onto the "all/tutorials" branch where e.g. this tutorial and the css stylesheet were worked on. The "all/translator" branch was for a Python-Javascript plotly translator project undertaken this year.
+   The image above shows a "silo" view of a commonly used project workflow known as "Progressive-Stability Branching". This year we used a variation of this since not everyone was fully comfortable with git. Our main work "silos" were just the three long-running visualization subgroup branches with an overall (not singular) purpose. Also, there were no visualizations yet created at this point, so discussion and file sharing between the overall group and particularly within subgroups was very important. Files where everyone should use the same copy of the file were pushed onto the "all/tutorials" branch where e.g. this tutorial and the css stylesheet were worked on. The "all/translator" branch was for a Python-Javascript plotly translator project undertaken this year.
 
    --image of our current structure--
 
 2. **Other Possible Workflows**
 
-   If everyone is comfortable with git it may be better for everyone to create "Topic" branches straight from dev to focus on their individual purpose. Since tutorials and the translator should hopefully be completed this year, there would only be main two long-running branches - master (again merge completed visualisations for release) and dev (merge completed topic branches). This would create a cleaner workflow and makes file sharing easier (all files readily available to everyone on dev), but does require absolutely every team member to be confident with branches. Branches would be deleted once merged since they would no longer be needed (no need to worry - commits are saved in the git history). 
+   If everyone is comfortable with git it may be better to remove the main visualization subgroup branches and have everyone create "Topic" branches straight from dev to focus on their individual purpose. Since tutorials and the translator should hopefully be completed this year, there would only be main two long-running branches - master (again merge completed work for release) and dev (merge completed topic branches). This would create a cleaner workflow and makes file sharing easier (all files readily available to everyone on dev), but does require absolutely every team member to be confident with branches. Branches would be deleted once merged since they would no longer be needed (no need to worry - commits are saved in the git history). 
 
    Another idea may be to fork the Imperial-Visualizations repo to a new repo for each subgroup and then merge any completed work back to the dev branch in the main repo via pull request. This has a similar structure to the previous suggestion but without the repo showing a multitude of different branches which are unrelated to each subgroup's individual work. Since this year the entire team is encountering similar obstacles and thus working closely together it currently makes sense to keep all work in a single repo to instantly share any progress.
-   
-   ---image of this possible structure--
    
        Note: If using these workflows it is reommended to keep the dev and master branches protected to only be merged by pull request.
        
