@@ -21,7 +21,7 @@
 				var ix = Number(document.getElementById("pix").value);
 				var iy = Number(document.getElementById("piy").value);
 				var iz = Number(document.getElementById("piz").value);
-				var point = new Point("noname", new Vector(ix,iy,iz));
+				var point = new Point(new Vector(ix,iy,iz));
 				selector.add([point]);
 			}
 			</script>
@@ -74,21 +74,21 @@
 			}
 			</script>
 		</div>
-		<button type="button" id="test_selector" onclick="testSelector()"> Test Selector </button></br>
 		<div id="dropdown"> </div>
-		<button type="button" id="test_selector" onclick="plot()"> Plot </button></br>
+		<script type="text/javascript">
+		selector.handle = 'dropdown';
+		</script>
+		<button type="button" id="test_selector" onclick="plot(selector.retrieveById(selector.checked()))"> Plot elements </button>
+		<button type="button" id="test_selector" onclick="selector.remove(selector.checked())"> Remove elements </button></br>
 		<div id="plot" style="width:600px;height:250px;"></div>
 		<script type="text/javascript">
 		"use strict";
-		function testSelector() {
-			var list = document.getElementById('dropdown');
-			list.replaceChild(selector.generate(),list.childNodes[0]);
-		}
-		function plot() {
+		function plot(objs) {
 			console.log("plot() called: list to render: ",objs)
 			var goified =[];
-			var TESTER = document.getElementById('plot');
+			var plotarea = document.getElementById('plot');
 			for(var obj in objs) {
+				console.log(obj, objs[obj]);
 				goified.push(objs[obj].goify());
 			}
 			var data = goified;
@@ -122,7 +122,7 @@
 					aspectratio: {x: 1, y: 1, z: 1},
 				},
 				margin: {l:0,r:0,b:0,t:0}};
-			Plotly.newPlot(TESTER, data, layout);
+			Plotly.newPlot(plotarea, data, layout);
 		}
 		</script>
 	</body>

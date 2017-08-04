@@ -2,6 +2,7 @@ var selectorcount = 0;
 function Selector() {
   this.objs = {}; //dictionary of selectable options
   this.id = "selector"+String(selectorcount);
+  this.handle = undefined; //id of the html item selector is linked to
 
   this.generate = function() {
     console.log("generating selector... id: " + this.id);
@@ -30,6 +31,9 @@ function Selector() {
       console.log("add "+array[idx]+" at id "+ array[idx].id +" to "+this);
       this.objs[array[idx].id] = array[idx];
     }
+    if(this.handle != undefined) {
+      this.update();
+    }
     console.log(this.objs)
   }
 
@@ -50,6 +54,27 @@ function Selector() {
     for(var idx in idlist) {
       delete this.objs[idlist[idx]];
     }
+    if(this.handle != undefined) {
+      this.update();
+    }
   }
+  this.retrieveById = function(idlist) {
+    var ans = [];
+    for(var idx in idlist) {
+      ans.push(this.objs[idlist[idx]]);
+    }
+    return ans;
+  }
+  this.update = function(elementid) {
+    if(this.handle!=undefined) {
+      var list = document.getElementById(this.handle);
+      list.replaceChild(selector.generate(),list.childNodes[0]);
+    }
+    else {
+      var list = document.getElementById(elementid);
+      list.replaceChild(selector.generate(),list.childNodes[0]);
+    }
+  }
+
   selectorcount++;
 }

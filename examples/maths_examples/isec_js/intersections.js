@@ -61,8 +61,7 @@ function Vector(x,y,z) {
 	}
 }
 
-function Point(name, pos) {
-	this.name = name;
+function Point(pos) {
 	//pos must be type Vector
 	if(!(pos instanceof Vector)) {
 		throw new Error("Argument error: Point(...) 'pos' argument should be Vector.")
@@ -81,7 +80,7 @@ function Point(name, pos) {
 		}
 	};
 	this.toString = function() {
-		return "Point(name=".concat(this.name).concat(",pos=").concat(this.pos).concat(")");
+		return "Point(pos="+this.pos+")";
 	}
 	this.id = objcounter++;
 	console.log(this)
