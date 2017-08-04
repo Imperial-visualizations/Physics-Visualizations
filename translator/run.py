@@ -25,8 +25,8 @@ animation = Animate(line, x="x0", y="y0", z="z0")
 animation.remove_repeated_data()
 animation.show(transition_duration=10, frame_redraw=False, frame_duration=0)
 
-print(animation.script)
+print(line.buttons)
 
 # Saving to HTML
-html = Document(div_id="scatter", width=700, height=500, js_script=animation.script)
+html = Document(div_id="scatter", width=100, height=500, js_script=animation.script)
 html.create("button_translated.html")

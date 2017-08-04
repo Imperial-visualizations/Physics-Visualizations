@@ -258,12 +258,19 @@ class Data:
 
 
 class Document:
+    language = Tag("html")                                                      # Document language declared.
+    source = Tag("script", src="https://cdn.plot.ly/plotly-latest.min.js")      # Defining location of PlotlyJS source.
+    jquery = Tag("script", src="https://code.jquery.com/jquery-latest.min.js")  # Defining location of JQuery source.
+    head = Tag("head", value=source.html + jquery.html)                         # Putting script source in head of HTML.
+
+
+class Document:
     language = Tag("html")                                                  # Document language declared.
     source = Tag("script", src="https://cdn.plot.ly/plotly-latest.min.js")  # Defining location of JS source.
     jquery = Tag("script", src="https://code.jquery.com/jquery-latest.min.js")
     head = Tag("head", value=source.html + jquery.html)                     # Putting script source in head of HTML.
 
-    def __init__(self, div_id=None, js_script=None, width=480, height=400):
+    def __init__(self, div_id=None, js_script=None, width=90, height=100):
         """
         :param div_id: ID of div in page where plot will be placed.
         :param js_graph: Graph drawn in JS.
@@ -274,7 +281,7 @@ class Document:
         """
         self.page = ""
         self.graph_loc = Tag("body")  # Graph will be in document body by default.
-        self.div_style = escape("width:" + str(width) + "px; " + "height:" + str(height) + "px;")
+        self.div_style = escape("width:" + str(width) + "%; " + "height:" + str(height) + "%")
 
         self.page += self.language.open_tag + "\n" + self.head.html + "\n" + self.graph_loc.open_tag + "\n"
 

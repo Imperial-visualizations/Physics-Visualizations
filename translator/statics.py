@@ -22,6 +22,7 @@ class Graph:
         self.script = ""                                      # Variable to store HTML/JS script as and when generated.
         self.div_id = escape(div_id)                          # HTML div where graph will be located.
         self.layout = "var layout"                            # String to contain layout parameters for graph.
+        self.buttons = {}                                     # Dictionary to store all buttons related to plot
         return
 
     def __repr__(self):
