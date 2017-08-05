@@ -466,9 +466,14 @@ function update() {
         if ((t % (ball1.Lab.v.getMag() * 3)) < 1) {
             addTrace(ball1.Lab);
         }
-
         if ((t % (ball2.Lab.v.getMag() * 3)) < 1) {
             addTrace(ball2.Lab);
+        }
+        if ((t % (ball1.CoM.v.getMag() * 3)) < 1) {
+            addTrace(ball1.CoM);
+        }
+        if ((t % (ball2.CoM.v.getMag() * 3)) < 1) {
+            addTrace(ball2.CoM);
         }
 
         centreOfMass1.x = getCoMR().x;
@@ -616,16 +621,19 @@ function addTrace(ball) {
 
     let ballG = game.add.graphics(0, 0);
 
-    if (ball.name === "ball1Lab") {
+    if (ball.name == "ball1Lab" || ball.name == "ball1CoM") {
         color = 0xE9003A;
-    } else if (ball.name === "ball2Lab") {
+    } else if (ball.name == "ball2Lab" || ball.name == "ball2CoM") {
         color = 0x00AEF2;
     }
-    ballG.lineStyle(1, color, 1);
-    ballG.beginFill(color, 1);
-    ballG.drawCircle(0, 0, 10);
 
-    traces.push(game.add.sprite(ball.spriteInstance.x, ball.spriteInstance.y, (ballG.generateTexture())));
+    if(ball.spriteInstance.visible == true){
+        ballG.lineStyle(1, color, 1);
+        ballG.beginFill(color, 1);
+        ballG.drawCircle(0, 0, 10);
 
-    ballG.destroy();
+        traces.push(game.add.sprite(ball.spriteInstance.x, ball.spriteInstance.y, (ballG.generateTexture())));
+
+        ballG.destroy();
+    }
 }
