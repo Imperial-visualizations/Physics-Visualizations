@@ -324,9 +324,9 @@ function plotterCustom(a,b,c,d) {
 }
 
 function main() {
-  $('.sliderSkew').hide();
-  $('.sliderRotate').hide();
-  $('.sliderScale').hide();
+//  $('.sliderSkew').hide();
+//  $('.sliderRotate').hide();
+//  $('.sliderScale').hide();
   squarePlotter();
 }
 

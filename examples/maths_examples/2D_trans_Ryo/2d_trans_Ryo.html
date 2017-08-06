@@ -2,11 +2,14 @@
 
 <head>
     <title>2D Transformations</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>  // Plotly
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
+    <!-- <link rel="stylesheet" href="skeleton-tabs.css"> -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
     <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script src=script/2d_trans_Ryo.js></script>
+    <script src="skeleton-tabs.js"></script>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <!-- jquery for json importing and parsing -->
 </head>
@@ -17,92 +20,108 @@
         <div class="six columns">
 
             <div id='graph' style="width:450px; height:450px;"></div>  <!-- Plotly chart will be drawn inside this DIV -->
-            <script src=script/2d_trans_Ryo.js></script>
         </div>
 
         <div class="six columns">
             <h2>2D Transformations</h2>
-            <input type="button" value="Skew", onclick="revealSkew()">
+
+            <ul class="tab-nav">
+              <li><a class="button active" href="#skew">Skew</a></li>
+              <li><a class="button" href="#scale">Scale</a></li>
+              <li><a class="button" href="#rotate">Rotate</a></li>
+              <li><a class="button" href="#custom">Custom</a></li>
+            </ul>
+            <!-- <input type="button" value="Skew", onclick="revealSkew()">
             <input type="button" value="Scale", onclick="revealScale()">
             <input type="button" value="Rotate", onclick="revealRotate()">
-            <input type="button" value="Custom", onclick="revealCustom()">
+            <input type="button" value="Custom", onclick="revealCustom()"> -->
 
-            <div class="sliderSkew">
-                <label class="sliderTitle">Axis:</label>
-                <label>
-                    <input id="skewID" type ="range" value="0" min ="0" max="1" step ="1"/>
-                    <span class="sliderMin">0</span><span class="sliderMax">1</span>
-                 </label>
-            </div>
-            <div class="sliderSkew">
-                <input type="button" value="Start", onclick="plotSkew()">
-            </div>
+            <div class="tab-content">
+              <div class="tab-pane active" id="skew">
+                <div class="sliderSkew">
+                    <label class="sliderTitle">Axis:</label>
+                    <label>
+                        <input id="skewID" type ="range" value="0" min ="0" max="1" step ="1"/>
+                        <span class="sliderMin">0</span><span class="sliderMax">1</span>
+                     </label>
+                </div>
+                <div class="sliderSkew">
+                    <input type="button" value="Start", onclick="plotSkew()">
+                    <input type="button" value="Reset", onclick="squarePlotter()">
+                </div>
+              </div>
 
-            <div class="sliderRotate">
-                <label class="sliderTitle">Rotation Angle (θ):</label>
-                <label>
-                    <input id="rotateID" type ="range" value="0" min ="0" max="2" step ="0.1"/>
-                    <span class="sliderMin">0</span><span class="sliderMax">2π</span>
+              <div class="tab-pane" id="rotate">
+                <div class="sliderRotate">
+                    <label class="sliderTitle" >Rotation Angle (θ):</label>
+                    <label>
+                        <input id="rotateID" type ="range" value="0" min ="0" max="2" step ="0.1"/>
+                        <span class="sliderMin">0</span><span class="sliderMax">2π</span>
 
-                </label>
-            </div>
-            <div class="sliderRotate">
-                <!--<input type="button" value="Start", onclick="plotterRotate()">-->
-                <input type="button" value="Start", onclick="plotRotate()">
-            </div>
+                    </label>
+                </div>
+                <div class="sliderRotate">
+                    <!--<input type="button" value="Start", onclick="plotterRotate()">-->
+                    <input type="button" value="Start", onclick="plotRotate()">
+                    <input type="button" value="Reset", onclick="squarePlotter()">
+                </div>
+              </div>
 
-            <div class="sliderScale">
-                <label class="sliderTitle">x-scale:</label>
-                <label>
-                    <input id="scale1ID" type ="range" value="0" min ="-2" max="2" step ="0.1"/>
-                    <span class="sliderMin">-2</span><span class="sliderMax">2</span>
-                </label>
-            </div>
-            <div class="sliderScale">
-                <label class="sliderTitle">y-scale:</label>
-                <label>
-                    <input id="scale2ID" type ="range" value="0" min ="-2" max="2" step ="0.1"/>
-                    <span class="sliderMin">-2</span><span class="sliderMax">2</span>
-                </label>
-            </div>
-            <div class="sliderScale">
-                <input type="button" value="Start", onclick="plotScale()">
-            </div>
+              <div class="tab-pane" id="scale">
+                <div class="sliderScale">
+                    <label class="sliderTitle">x-scale:</label>
+                    <label>
+                        <input id="scale1ID" type ="range" value="0" min ="-2" max="2" step ="0.1"/>
+                        <span class="sliderMin">-2</span><span class="sliderMax">2</span>
+                    </label>
+                </div>
+                <div class="sliderScale">
+                    <label class="sliderTitle">y-scale:</label>
+                    <label>
+                        <input id="scale2ID" type ="range" value="0" min ="-2" max="2" step ="0.1"/>
+                        <span class="sliderMin">-2</span><span class="sliderMax">2</span>
+                    </label>
+                </div>
+                <div class="sliderScale">
+                    <input type="button" value="Start", onclick="plotScale()">
+                    <input type="button" value="Reset", onclick="squarePlotter()">
+                </div>
+              </div>
 
-            <div class="sliderCustom">
-                <label class="sliderTitle">a:</label>
-                 <label>
-                     <input id="aID" type ="range" value="0" min ="-2" max="2" step ="0.1"/>
-                     <span class="sliderMin">-2</span><span class="sliderMax">2</span>
-                 </label>
-            </div>
-            <div class="sliderCustom">
-                <label class="sliderTitle">b:</label>
-                 <label>
-                     <input id="bID" type ="range" value="0" min ="-2" max="2" step ="0.1"/>
-                     <span class="sliderMin">-2</span><span class="sliderMax">2</span>
-                 </label>
-            </div>
-            <div class="sliderCustom">
-                <label class="sliderTitle">c:</label>
-                 <label>
-                     <input id="cID" type ="range" value="0" min ="-2" max="2" step ="0.1"/>
-                     <span class="sliderMin">-2</span><span class="sliderMax">2</span>
-                 </label>
-            </div>
-            <div class="sliderCustom">
-                <label class="sliderTitle">d:</label>
-                 <label>
-                     <input id="dID" type ="range" value="0" min ="-2" max="2" step ="0.1"/>
-                     <span class="sliderMin">-2</span><span class="sliderMax">2</span>
-                 </label>
-            </div>
-            <div class="sliderCustom">
-                <input type="button" value="Start", onclick="plotCustom()">
-            </div>
-
-            <div>
-                <input type="button" value="Reset", onclick="squarePlotter()">
+              <div class="tab-pane" id="custom">
+                <div class="sliderCustom">
+                    <label class="sliderTitle">a:</label>
+                     <label>
+                         <input id="aID" type ="range" value="0" min ="-2" max="2" step ="0.1"/>
+                         <span class="sliderMin">-2</span><span class="sliderMax">2</span>
+                     </label>
+                </div>
+                <div class="sliderCustom">
+                    <label class="sliderTitle">b:</label>
+                     <label>
+                         <input id="bID" type ="range" value="0" min ="-2" max="2" step ="0.1"/>
+                         <span class="sliderMin">-2</span><span class="sliderMax">2</span>
+                     </label>
+                </div>
+                <div class="sliderCustom">
+                    <label class="sliderTitle">c:</label>
+                     <label>
+                         <input id="cID" type ="range" value="0" min ="-2" max="2" step ="0.1"/>
+                         <span class="sliderMin">-2</span><span class="sliderMax">2</span>
+                     </label>
+                </div>
+                <div class="sliderCustom">
+                    <label class="sliderTitle">d:</label>
+                     <label>
+                         <input id="dID" type ="range" value="0" min ="-2" max="2" step ="0.1"/>
+                         <span class="sliderMin">-2</span><span class="sliderMax">2</span>
+                     </label>
+                </div>
+                <div class="sliderCustom">
+                    <input type="button" value="Start", onclick="plotCustom()">
+                    <input type="button" value="Reset", onclick="squarePlotter()">
+                </div>
+              </div>
             </div>
         </div>
     </div>
