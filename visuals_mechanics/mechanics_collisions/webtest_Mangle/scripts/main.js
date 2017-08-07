@@ -87,7 +87,6 @@ ball1 = {
         spriteInstance: undefined,
         mass: 1,
         initr: new Vector((canvasWidth / 2 - 100), (canvasHeight / 6)),
-        bounds: new Phaser.Rectangle(0, 0, canvasWidth, canvasHeight / 3 - ballradius),
         v: new Vector(0, 0),
         postv: new Vector(0, 0)
     },
@@ -96,7 +95,6 @@ ball1 = {
         spriteInstance: undefined,
         mass: 1,
         initr: new Vector((canvasWidth / 2 - 100), (canvasHeight * 3 / 6)),
-        bounds: new Phaser.Rectangle(0, canvasHeight / 3 + ballradius, canvasWidth, canvasHeight / 3 - ballradius * 2),
         v: new Vector(0, 0),
         postv: new Vector(0, 0)
     },
@@ -109,7 +107,7 @@ ball2 = {
         spriteInstance: undefined,
         mass: 1,
         initr: new Vector((canvasWidth / 2 + 100), (canvasHeight / 6)),
-        bounds: new Phaser.Rectangle(0, 0, canvasWidth, canvasHeight / 3 - ballradius),
+
         v: new Vector(0, 0),
         postv: new Vector(0, 0)
     },
@@ -118,7 +116,7 @@ ball2 = {
         spriteInstance: undefined,
         mass: 1,
         initr: new Vector((canvasWidth / 2 + 100), (canvasHeight * 3 / 6)),
-        bounds: new Phaser.Rectangle(0, canvasHeight / 3 + ballradius, canvasWidth, canvasHeight / 3 - ballradius * 2),
+
         v: new Vector(0, 0),
         postv: new Vector(0, 0)
     },
@@ -136,8 +134,6 @@ UI handling
 
 function updateScatterAngle() {
     initAngle = -degToRad(parseFloat($("#ballCollisionAngle").val()));
-    console.log(ball1.radius);
-    console.log(ball2.radius);
 
     ball1.Lab.spriteInstance.y = ball1.Lab.initr.y + Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25;
     ball1.CoM.spriteInstance.y = ball1.CoM.initr.y + Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25;
@@ -188,10 +184,7 @@ function updateLabels() {
 }
 
 function updateRadius(ball) {
-    ball.radius = 40 * Math.sqrt(ball.Lab.mass);
-    ball.Lab.bounds = new Phaser.Rectangle(0, 0, canvasWidth, canvasHeight / 3 - ball.radius);
-    ball.CoM.bounds = new Phaser.Rectangle(0, canvasHeight / 3 + ball.radius, canvasWidth, canvasHeight / 3 - ball.radius * 2);
-
+    ball.radius = 40 *  Math.sqrt(ball.Lab.mass);
     let newBallGraphic = game.add.graphics(0, 0);
 
     newBallGraphic.lineStyle(1, ball.color, 1);
@@ -225,7 +218,7 @@ $("#runButton").on('click', function () {
         resetSimulation();
         $("#runButton").val("Run");
     }
-    console.log("Pre Collision KE:" + getLabKE().toString());
+    //console.log("Pre Collision KE:" + getLabKE().toString());
 });
 
 
@@ -453,6 +446,7 @@ let t = 0;
 
 function update() {
     if (isRunning) {
+
         ball1.Lab.spriteInstance.x += ball1.Lab.v.x;
         ball1.Lab.spriteInstance.y -= ball1.Lab.v.y;
         ball2.Lab.spriteInstance.x += ball2.Lab.v.x;
@@ -500,11 +494,12 @@ function update() {
             i++;
         });
 
-        ball1.CoM.spriteInstance.visible = Phaser.Rectangle.intersects(ball1.CoM.bounds, ball1.CoM.spriteInstance.getBounds());
-        ball2.CoM.spriteInstance.visible = Phaser.Rectangle.intersects(ball2.CoM.bounds, ball2.CoM.spriteInstance.getBounds());
-        ball1.Lab.spriteInstance.visible = Phaser.Rectangle.intersects(ball1.Lab.bounds, ball1.Lab.spriteInstance.getBounds());
-        ball2.Lab.spriteInstance.visible = Phaser.Rectangle.intersects(ball2.Lab.bounds, ball2.Lab.spriteInstance.getBounds());
-
+        if(ball1.Lab.spriteInstance.y + ball1.radius/2 > canvasHeight/3) ball1.Lab.spriteInstance.visible = false;
+        if(ball2.Lab.spriteInstance.y + ball2.radius/2 > canvasHeight/3) ball2.Lab.spriteInstance.visible = false;
+        if(ball1.CoM.spriteInstance.y - ball1.radius/2 < canvasHeight/3) ball1.CoM.spriteInstance.visible = false;
+        if(ball1.CoM.spriteInstance.y + ball1.radius/2 > canvasHeight*2/3) ball1.CoM.spriteInstance.visible = false;
+        if(ball2.CoM.spriteInstance.y  - ball2.radius/2 < canvasHeight/3) ball2.CoM.spriteInstance.visible = false;
+        if(ball2.CoM.spriteInstance.y + ball2.radius/2 > canvasHeight*2/3) ball2.CoM.spriteInstance.visible = false;
 
         if (Phaser.Rectangle.intersects(ball1.Lab.spriteInstance.getBounds(), ball2.Lab.spriteInstance.getBounds()) && !isColliding) {
             onCollision();
@@ -518,8 +513,6 @@ function update() {
 function drawArrow(originV, vectorV, rectIndex, color = 0x006EAF, latexID = "") {
 
     let origin = new Vector(originV.x, -1 * originV.y);
-
-    console.log(originV.toString());
 
     let vector = new Vector(vectorV.x, -1 * vectorV.y);
     // Flip directions for canvas y-axis
@@ -549,8 +542,7 @@ function drawArrow(originV, vectorV, rectIndex, color = 0x006EAF, latexID = "") 
     arrowG.lineTo(mag / 2, -6);
     arrowG.lineTo(mag / 2, 0);
     arrowG.endFill();
-    console.log("X POS" + ((canvasWidth/2)-5*scaleFactor + origin.x *scaleFactor).toString());
-    console.log("Y POS" + (canvasHeight*(rectIndex*2 -1)/6 + scaleFactor + origin.y * scaleFactor));
+
     arrowSprites.push(game.add.sprite((canvasWidth / 2 - 5 * scaleFactor + origin.x * scaleFactor), (canvasHeight * (rectIndex * 2 - 1) / 6 + scaleFactor + origin.y * scaleFactor), arrowG.generateTexture()));
     arrowSprites[arrowSprites.length - 1].anchor.set(0, 0.5);
     arrowSprites[arrowSprites.length - 1].rotation = vector.getArg();
@@ -612,10 +604,10 @@ function recalculateVector() {
 
 function addTrace(ball) {
     let ballG = game.add.graphics(0, 0);
-
-    if (ball.name == "ball1Lab" || ball.name == "ball1CoM") {
+    let color;
+    if (ball.name === "ball1Lab" || ball.name === "ball1CoM") {
         color = 0xE9003A;
-    } else if (ball.name == "ball2Lab" || ball.name == "ball2CoM") {
+    } else if (ball.name === "ball2Lab" || ball.name === "ball2CoM") {
         color = 0x00AEF2;
     }
 
