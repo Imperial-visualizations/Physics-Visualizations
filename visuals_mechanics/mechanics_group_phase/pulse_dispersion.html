@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test4</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    // Plotly
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+</head>
+<body>
+<div id='graph'></div>  <!-- Plotly chart will be drawn inside this DIV -->
+
+<script>
+
+    //input  by user
+    var t = 0;
+    var k = [];
+    var x = [], y_i = [], y_r = [], y_t = [];
+
+    var v1 = 5;
+    var n = 200;
+    var dt = 0.01;
+
+    function compute_k() {
+        for (var i = 0; i < 100; i++) {
+            k[i] = i + 1;
+        }
+    }
+
+    compute_k();
+
+    function compute_data() {
+        for (var i = 0; i < n; i++) {
+            x[i] = -10 + i / 40;
+            y_i[i] = 0;
+            for (var j = 0; j < 100; j++) {
+                y_i[i] += Math.sin(k[j] * x[i] - k[j] * t);
+            }
+            y_r[i] = 0;
+            y_t[i] = 0;
+        }
+    }
+
+    compute_data();
+
+    var layout = {
+        xaxis: {domain: [0, 0.45]},
+        yaxis2: {anchor: 'x2'},
+        xaxis2: {domain: [0.55, 1]}
+    };
+
+    Plotly.plot('graph', [{
+        x: x,
+        y: y_i,
+        line: {simplify: false}
+    }, {
+        x: x,
+        y: y_i,
+        xaxis: 'x2',
+        yaxis: 'y2',
+        line: {simplify: false}
+    }], layout
+
+    );
+
+    function compute() {
+        t += dt;
+        for (var i = 0; i < n; i++) {
+            x[i] = -10 + i / 40;
+            y_i[i] = 0;
+            for (var j = 0; j < 100; j++) {
+                y_i[i] += Math.sin(k[j] * x[i] * t - k[j] * t);
+            }
+            y_r[i] = 0;
+            y_t[i] = 0;
+        }
+    }
+
+    function update() {
+        compute();
+
+        Plotly.animate('graph', {
+            data: [{x: x, y: y_i}, {x: x, y: y_i}]
+        }, {
+            transition: {
+                duration: 75,
+            },
+            frame: {
+                duration: 100,
+                redraw: false,
+            }
+        });
+
+        requestAnimationFrame(update);
+    }
+
+    requestAnimationFrame(update);
+
+</script>
+.
+</body>
+</html>
