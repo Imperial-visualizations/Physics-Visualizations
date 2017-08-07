@@ -138,12 +138,11 @@ function updateScatterAngle() {
     initAngle = -degToRad(parseFloat($("#ballCollisionAngle").val()));
     console.log(ball1.radius);
     console.log(ball2.radius);
-    let yShift = Math.sin(initAngle) * ball2.radius;
 
-    ball1.Lab.spriteInstance.y = ball1.Lab.initr.y + yShift*0.5;
-    ball1.CoM.spriteInstance.y = ball1.CoM.initr.y + yShift*0.5;
-    ball2.Lab.spriteInstance.y = ball2.Lab.initr.y - yShift*0.5;
-    ball2.CoM.spriteInstance.y = ball2.CoM.initr.y - yShift*0.5;
+    ball1.Lab.spriteInstance.y = ball1.Lab.initr.y + Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25;
+    ball1.CoM.spriteInstance.y = ball1.CoM.initr.y + Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25;
+    ball2.Lab.spriteInstance.y = ball2.Lab.initr.y - Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25;
+    ball2.CoM.spriteInstance.y = ball2.CoM.initr.y - Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25;
 
 
 }
@@ -374,14 +373,6 @@ function create() {
     game.stage.backgroundColor = "#EBEEEE";
 
 
-    centreOfMass1 = game.add.sprite((canvasWidth / 2), (canvasHeight  / 6), 'cofmPNG');
-    centreOfMass1.anchor.set(0.5, 0.5);
-
-    centreOfMass2 = game.add.sprite(canvasWidth / 2, canvasHeight / 2, "cofmPNG");
-    centreOfMass2.anchor.set(0.5, 0.5);
-
-
-
     let ball1G = game.add.graphics(0, 0);
 
     ball1G.lineStyle(1, 0xE9003A, 1);
@@ -447,6 +438,11 @@ function create() {
     vectorDiagramText = game.add.text(16, ( canvasHeight * 2 / 3 + 10 ), "Vector Diagram", style);
     vectorDiagramText.anchor.set(0, 0);
 
+    centreOfMass1 = game.add.sprite((canvasWidth / 2), (canvasHeight  / 6), 'cofmPNG');
+    centreOfMass1.anchor.set(0.5, 0.5);
+
+    centreOfMass2 = game.add.sprite(canvasWidth / 2, canvasHeight / 2, "cofmPNG");
+    centreOfMass2.anchor.set(0.5, 0.5);
 
     updateLabels();
 
@@ -600,11 +596,11 @@ function recalculateVector() {
         console.log("Checked");
 
         let scalefactor = canvasWidth / 16;
-        let colPoint = 200 - (ball2.radius + ball1.radius);
+        let colPoint = 100 - (ball2.radius);
 
-        drawArrow(vCal(new Vector(colPoint/scalefactor + 4, 1),'-',p1), p1, 1, 0xE40043);
-        drawArrow(new Vector(colPoint/scalefactor + 4, 1), q1, 1, 0xE40043);
-        drawArrow(new Vector(colPoint/scalefactor + 4, 1), q2, 1, 0x00ACD7);
+        drawArrow(vCal(new Vector(colPoint/scalefactor + 5, 1),'-',p1), p1, 1, 0xE40043);
+        drawArrow(new Vector(colPoint/scalefactor + 5, 1), q1, 1, 0xE40043);
+        drawArrow(new Vector(colPoint/scalefactor + 5, 1), q2, 1, 0x00ACD7);
     }
     drawArrow(zeroV(), q1, 3, 0xDD2501, "q1");
     drawArrow(q1, q2, 3, 0x0091D4, 'q2');
@@ -623,7 +619,7 @@ function addTrace(ball) {
         color = 0x00AEF2;
     }
 
-    if(ball.spriteInstance.visible == true){
+    if(ball.spriteInstance.visible){
         ballG.lineStyle(1, color, 1);
         ballG.beginFill(color, 1);
         ballG.drawCircle(0, 0, 10);
