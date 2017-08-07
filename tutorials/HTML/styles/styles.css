@@ -14,7 +14,7 @@
 
 
 /* Table of contents
-––––––––––––––––––––––––––––––––––––––––––––––––––
+â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“
 - Grid
 - Base Styles
 - Typography
@@ -33,7 +33,7 @@
 @import url('https://fonts.googleapis.com/css?family=Lato');
 
 /* Grid
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“ */
 .container {
   position: relative;
   width: 100%;
@@ -120,7 +120,7 @@
 
 
 /* Base Styles
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“ */
 /* NOTE
 html is set to 62.5% so that all the REM measurements throughout Skeleton
 are based on 10px sizing. So basically 1.5rem = 15px :) */
@@ -135,7 +135,7 @@ body {
 
 
 /* Typography
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“ */
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
   margin-bottom: 2rem;
@@ -162,7 +162,7 @@ p {
 
 
 /* Links
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“ */
 a {
   color: #009CBC; }
 a:hover {
@@ -170,7 +170,7 @@ a:hover {
 
 
 /* Buttons
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“ */
 /*.button,
 button,
 input[type="submit"],
@@ -192,9 +192,9 @@ input[type="button"] {
   border-radius: 4px;
   border: 1px solid #bbb;
   cursor: pointer;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 
-  -webkit-appearance: none; 
+  -webkit-appearance: none;
   width: 160px;
   height: 40px;
   border: #006EAF solid 2px;
@@ -251,7 +251,7 @@ input[type="button"].button-primary:active{
 
 
 /* Buttons
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“ */
 .button,
 button,
 input[type="submit"],
@@ -281,7 +281,7 @@ input[type="reset"]:hover,
 input[type="button"]:hover{
   color: #002147;
   border-color: #002147;
-  outline: 0; 
+  outline: 0;
   box-shadow: 0 2px 3px #aaa;}
 .button:active,
 button:active,
@@ -290,7 +290,7 @@ input[type="reset"]:active,
 input[type="button"]:active{
   color: #003E74;
   border-color: #003E74;
-  outline: 0; 
+  outline: 0;
   box-shadow: 0 0px 0px #aaa;}
 .button:focus,
 button:focus,
@@ -314,7 +314,7 @@ input[type="reset"].button-primary:hover,
 input[type="button"].button-primary:hover{
   color: #FFF;
   background-color: #0091D4;
-  border-color: #0091D4; 
+  border-color: #0091D4;
   box-shadow: 0 2px 3px #aaa;}
 .button.button-primary:active,
 button.button-primary:active,
@@ -323,8 +323,8 @@ input[type="reset"].button-primary:active,
 input[type="button"].button-primary:active{
   color: #FFF;
   background-color: #006EAF;
-  border-color: #006EAF; 
-  outline: 0; 
+  border-color: #006EAF;
+  outline: 0;
   box-shadow: 0 0px 0px #aaa;}
 .button.button-primary:focus,
 button.button-primary:focus,
@@ -333,11 +333,11 @@ input[type="reset"].button-primary:focus,
 input[type="button"].button-primary:focus {
   color: #FFF;
   background-color: #0091D4;
-  border-color: #0091D4; 
+  border-color: #0091D4;
 }
 
 /* Forms
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“ */
 input[type="email"],
 input[type="number"],
 input[type="search"],
@@ -399,7 +399,7 @@ label > .label-body {
 
 
 /* Lists
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“ */
 ul {
   list-style: circle inside; }
 ol {
@@ -418,7 +418,7 @@ li {
 
 
 /* Code
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“ */
 code {
   padding: .2rem .5rem;
   margin: 0 .2rem;
@@ -434,7 +434,7 @@ pre > code {
 
 
 /* Tables
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“ */
 table{
   text-align: right;
 }
@@ -465,7 +465,7 @@ tr > td:first-child{
 
 
 /* Definitions
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“ */
 dl{
 
 }
@@ -479,7 +479,7 @@ dd{
 
 
 /* Spacing
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“ */
 button,
 .button {
   margin-bottom: 1rem; }
@@ -501,7 +501,7 @@ form {
 
 
 /* Utilities
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“ */
 .u-full-width {
   width: 100%;
   box-sizing: border-box; }
@@ -515,7 +515,7 @@ form {
 
 
 /* Misc
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“ */
 hr {
   margin-top: 3rem;
   margin-bottom: 3.5rem;
@@ -524,7 +524,7 @@ hr {
 
 
 /* Clearing
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“ */
 
 /* Self Clearing Goodness */
 .container:after,
@@ -536,7 +536,7 @@ hr {
 
 
 /* Media Queries
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“â€“ */
 /*
 Note: The best way to structure the use of media queries is to create the queries
 near the relevant code. For example, if you wanted to change the styles for buttons
@@ -562,28 +562,28 @@ there.
 
 
 /*
-                                                                                                                 
-                                                                           `.`                                   
-        `--------                                                          ods                    :hhhh:         
-        :yyhddhys`      `   `         ``          ``              ``       .:.          ```        .-dd:         
-           +dh`    shhshdhshhh+ :hhyohhhhs:   `/shhhhy+.   shhy-+yddh-  `shhhy`      +yhhyhho`      `dd:         
-           +dh`    .hdo`sdy`:dh` :dds-`./ddo .ydo.``.odh.  `:ddy+..//`   `.+dh`      ::-..-hd+      `dd:         
-           +dh`    `yd/ ods -dh. .dd:    hdy`:ddysssssss-   -dd-           /dh`     :ydyo+oddo      `dd:         
-        `--odh:-.  -hdo`ody.-dh: .ddh/-:sdd/ `ydy:.`.:+s`  -/dd/--.     .--odh:--`  hdh-``:hds.  `--:dd+--.      
-        :hhhhhhhy` shhy:+hh+-yhy`.ddosyhs+.   `:shhhhys:  .yhhhhhhs    `ohhhhhhhy:  -shhhyo+yho  :yhhhhhhhs      
-                                .:dd/.`                                                                          
-                               `shhhhho                     
-                                                                                                                                                                                           
-                          `.`                                                             `.                                                 `.`                                           
-        `----.  .---.    `ydo                                             .yhhho         `hd/                                 -+-           `yd/                                           
-        /hddh+ `sddhs     -:.         ```  `                    ```        ..sds          -:`         ```  `       ```        sds            -:`          ``            ``                 
-         `yds   .hd-   `yhhhs      `ohhsyhhh-  +hhy` /hhh.   :yhhyhhy-       ods       .hhhh+      .shysyhhh.   -yhhyhhy:  `/ohdhooo+`    .yhhho      .+yhhhhy+.  +hhyohhdh/               
-          -dd/ `sd+     ..sdy      +dd/...:/`  `+dh` `/dd.   ./:...sdh       ods        ..hdo      sdd:...//`   ./:-..odh   :/hdy///:`     ..yds     -hdy-``-sdd: `+dd+.`+dd.              
-           +dh./dy`       ody      `+yhdddhy:   /dh`  -dd.  `ohhs+oydd       ods          ydo      .+yhdddhs-  `ohds+oydd     sds            sds     +dd:    .dds  /dh.  .dd.              
-            ydhdh.     .--sdh---`  /y+` `-ydh   :dd/.-sdd/` +dd/``-sdd-   .--sdy---    ---hds---   +y/` `-hds  /dd+``.odd-    sdh..-/+-   ---ydy---  -hdh:..:ydd: `+dh:``/dd/`             
-            .shy:     `shhhhhhhy-  +hyhyyyyo.    /yhhy+yhy: `+hhhys+yhy. `shhhhhhhy.  .yhhhhhhhy.  ohyhysyy+`  `+yhhys+shy.   .ohhhhyo.  .yhhhhhhhy.  `/shhhhy+.  /hhhy-:yhhy:             
 
-        2017 © Imperial College London                                                                                                                                                                                       
+                                                                           `.`
+        `--------                                                          ods                    :hhhh:
+        :yyhddhys`      `   `         ``          ``              ``       .:.          ```        .-dd:
+           +dh`    shhshdhshhh+ :hhyohhhhs:   `/shhhhy+.   shhy-+yddh-  `shhhy`      +yhhyhho`      `dd:
+           +dh`    .hdo`sdy`:dh` :dds-`./ddo .ydo.``.odh.  `:ddy+..//`   `.+dh`      ::-..-hd+      `dd:
+           +dh`    `yd/ ods -dh. .dd:    hdy`:ddysssssss-   -dd-           /dh`     :ydyo+oddo      `dd:
+        `--odh:-.  -hdo`ody.-dh: .ddh/-:sdd/ `ydy:.`.:+s`  -/dd/--.     .--odh:--`  hdh-``:hds.  `--:dd+--.
+        :hhhhhhhy` shhy:+hh+-yhy`.ddosyhs+.   `:shhhhys:  .yhhhhhhs    `ohhhhhhhy:  -shhhyo+yho  :yhhhhhhhs
+                                .:dd/.`
+                               `shhhhho
+
+                          `.`                                                             `.                                                 `.`
+        `----.  .---.    `ydo                                             .yhhho         `hd/                                 -+-           `yd/
+        /hddh+ `sddhs     -:.         ```  `                    ```        ..sds          -:`         ```  `       ```        sds            -:`          ``            ``
+         `yds   .hd-   `yhhhs      `ohhsyhhh-  +hhy` /hhh.   :yhhyhhy-       ods       .hhhh+      .shysyhhh.   -yhhyhhy:  `/ohdhooo+`    .yhhho      .+yhhhhy+.  +hhyohhdh/
+          -dd/ `sd+     ..sdy      +dd/...:/`  `+dh` `/dd.   ./:...sdh       ods        ..hdo      sdd:...//`   ./:-..odh   :/hdy///:`     ..yds     -hdy-``-sdd: `+dd+.`+dd.
+           +dh./dy`       ody      `+yhdddhy:   /dh`  -dd.  `ohhs+oydd       ods          ydo      .+yhdddhs-  `ohds+oydd     sds            sds     +dd:    .dds  /dh.  .dd.
+            ydhdh.     .--sdh---`  /y+` `-ydh   :dd/.-sdd/` +dd/``-sdd-   .--sdy---    ---hds---   +y/` `-hds  /dd+``.odd-    sdh..-/+-   ---ydy---  -hdh:..:ydd: `+dh:``/dd/`
+            .shy:     `shhhhhhhy-  +hyhyyyyo.    /yhhy+yhy: `+hhhys+yhy. `shhhhhhhy.  .yhhhhhhhy.  ohyhysyy+`  `+yhhys+shy.   .ohhhhyo.  .yhhhhhhhy.  `/shhhhy+.  /hhhy-:yhhy:
+
+        2017 Â© Imperial College London
 
 */
 
@@ -669,7 +669,7 @@ input[type=range]::-ms-track {
   cursor: pointer;
 
   /* Hides the slider so custom styles can be added */
-  background: transparent; 
+  background: transparent;
   border-color: transparent;
   color: transparent;
 }
@@ -678,10 +678,11 @@ input[type=range]::-ms-track {
 /* Special styling for WebKit/Blink */
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
+  overflow: visible;
   border: 3px solid #003E74;
   height: 20px;
   width: 20px;
-  border-radius: 10px;
+  border-radius: 60px;
   background: #ffffff;
   cursor: pointer;
   margin-top: -10px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
@@ -765,8 +766,8 @@ Dropdown Menu Styles
 */
 
 .dropdown:after{
-    content:"▾";
-    color: #003E74; 
+    content:"â–¾";
+    color: #003E74;
     position: relative;
     right:0;
     top: 0;
@@ -793,8 +794,8 @@ Dropdown Menu Styles
   box-sizing: border-box;
 }
 .dropdown>li>span {
-    display: inline-block ; 
-    color: #003E74; 
+    display: inline-block ;
+    color: #003E74;
     text-decoration: none;
     font-weight: 800;
     line-height: 20px;
@@ -806,21 +807,21 @@ Dropdown Menu Styles
     top: 1.0em;
 }
 .dropdown>li:hover>ul {
-    display: block;   
+    display: block;
 }
 .dropdown>li>ul>li {
     display: block;
     width: 100px;
     background: #003E74;
     border: #fff solid 2px;
-    color: #fff; 
+    color: #fff;
     margin-bottom: 0;
     padding-left: 10px;
 
 }
 .dropdown>li a {
-    display: inline-block ; 
-    color: #fff; 
+    display: inline-block ;
+    color: #fff;
     text-decoration: none;
     font-weight: 400;
     line-height: 20px;
@@ -869,7 +870,6 @@ ul.tab-nav li a.active.button:hover {
 .tab-content .tab-pane.active {
     display: block;
 }
-
 
 
 
