@@ -1,17 +1,93 @@
 <html>
 
 <head>
-    <title>Non-Communativeness of 3D Rotational transformations</title>
+    <title>3D Transformations</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
     <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
 <body>
 
-<div id='graph' style="width:500px; height:500px;"></div> 
-<script src=script/rotation3d.js></script>
+  <div class="container">
+    <div class="row">
+      <!--Bottons-->
+      <div class="five columns">
+        <h2>On a Sphere:</h2><!--Main Options-->
+        <input type="button" value="Rotate", onclick="revealRotate(1)">
+        <input type="button" value="Reflect", onclick="revealReflect()">
+        <input type="button" value="Scale", onclick="revealScale()">
+
+        <div class="boxed">
+          <!--Rotation--> <!--x = 1, y = 2, z = 3-->
+          <div class="rotate3D">
+            <input type="button" value="x-axis", onclick="revealRotate(1)">
+            <input type="button" value="y-axis", onclick="revealRotate(2)">
+            <input type="button" value="z-axis", onclick="revealRotate(3)">
+          </div>
+          <div class=rotateSlider>
+            <label class = "sliderTitle">Angle:</lable>
+              <input id="rotator" type="range" value="0" min="-2" max="2" step="0.125"/>
+              <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
+          </div>
+          <div class="rotateCP1">
+              <input type="button" value="Rotate (x)", onclick="plotRotate(1)">
+              <input type="button" value="Stop", onclick="stopAnimation()">
+              <input type="button" value="Reset", onclick="revealRotate(1)">
+          </div>
+          <div class="rotateCP2">
+              <input type="button" value="Rotate (y)", onclick="plotRotate(2)">
+              <input type="button" value="Stop", onclick="stopAnimation()">
+              <input type="button" value="Reset", onclick="revealRotate(2)">
+          </div>
+          <div class="rotateCP3">
+              <input type="button" value="Rotate (z)", onclick="plotRotate(3)">
+              <input type="button" value="Stop", onclick="stopAnimation()">
+              <input type="button" value="Reset", onclick="revealRotate(3)">
+          </div>
+          <div class="rotateCommute">
+            <input type="button" value="Commute?", onclick="revealCommute()">
+            <div class="commuteSliders">
+              <label class="sliderTitle">R1</label>
+              <input id="rotator1" type="range" value="0" min="-2" max="2" step="0.125"/>
+              <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
+              <label class="sliderTitle">R2</label>
+              <input id="rotator2" type="range" value="0" min="-2" max="2" step="0.125"/>
+              <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
+              <input type="button" value="Set", onclick="plotCommute()">
+            </div>
+          </div>
+
+          <!--Reflection-->
+          <div class="reflect3D">
+            <input type="button" value="x = 0", onclick="plotReflect(1)">
+            <input type="button" value="y = 0", onclick="plotReflect(2)">
+            <input type="button" value="z = 0", onclick="plotReflect(3)">
+          </div>
+
+          <!--Scale-->
+          <div class="scale3D">
+            <div class=scaleSlider>
+              <label class = "sliderTitle">Factor:</lable>
+                <input id="scaler" type="range" value="0" min="-5" max="5" step="1"/>
+                <span class="sliderMin">-5</span><span class="sliderMax">5</span>
+            </div>
+            <input type="button" value="x-scale", onclick="plotScale(1)">
+            <input type="button" value="y-scale", onclick="plotScale(2)">
+            <input type="button" value="z-scale", onclick="plotScale(3)">
+          </div>
+        </div>
+      </div>
+
+      <!-- Graph -->
+      <div class="seven columns">
+        <div id='graph' style="width:450px; height:450px;"></div>
+        <script src=script/rotation3d.js></script>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
