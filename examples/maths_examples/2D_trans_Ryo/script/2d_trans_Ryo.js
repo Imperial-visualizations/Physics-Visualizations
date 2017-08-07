@@ -90,44 +90,6 @@ function mylinspace(a,b,n) {
   return myinterval;
 }
 
-//// Run arguments here for animation, try them all!
-//var [x,y] = rotation([3,4],Math.PI)
-//var [x,y] = scale([2,1],2,3)
-//var [x,y] = custom([1,1],2,-1,3,2)
-//var [x,y] = skew([1,1],0);
-
-//// Adjust x and y axes accordingly, remember to spread
-//var xmax = Math.max(Math.max(...x),Math.abs(Math.min(...x)));
-//var ymax = Math.max(Math.max(...y),Math.abs(Math.min(...y)));
-//// Include a bit of margin
-//var supermax = Math.max(xmax,ymax)+1;
-//
-//
-//// Convert array to frames, print on console to check values...
-//var frames = jsonFormat(x,y)
-
-//// Initial plot
-//Plotly.plot('graph', [{
-//  x: frames[0].data[0].x,
-//  y: frames[0].data[0].y,
-//  line: {simplify: false}}],
-//  {xaxis: {range: [-supermax, supermax]},
-//    yaxis: {range: [-supermax, supermax]}}
-//);
-//
-//// Animation
-//Plotly.animate('graph', frames, {
-//  transition: {
-//    duration: 50,
-//    easing: 'linear'
-//  },
-//  frame: {
-//    duration: 50,
-//    redraw: false,
-//  },
-//  mode: 'immediate'
-//});
-
 ///// NOW START TO DEFORM SQUARES WITH FUNCTIONS WE'VE ALREADY WRITTEN /////
 
 // Structure of this function goes:
@@ -176,13 +138,6 @@ function squareTrans() {
 
 }
 
-// Test all sub functions
-//var myarray = squareTrans("rotate",2);
-//var myarray = squareTrans("scale",2);
-//var myarray = squareTrans("scale",2,3);
-//var myarray = squareTrans("custom",1,0,1,1);
-
-
 // Convert x,y arrays returned from functions in json format for animate
 function jsonFormat2(x0,x1,x2,y0,y1,y2) {
   var myJson = [];
@@ -194,11 +149,13 @@ function jsonFormat2(x0,x1,x2,y0,y1,y2) {
   return myJson;
 }
 
+// Layout object to be used for all plots
 var layout = {xaxis: {range: [-4, 4], title:"x"},
     yaxis: {range: [-4, 4], title:"y"},
     margin: {l:30, r:30, t:30, b:30}
     };
 
+// Plots a 1x1 square on the grid
 function squarePlotter(){
   Plotly.newPlot('graph', [{
     x : [0,1,1,0,0],
@@ -211,6 +168,7 @@ function squarePlotter(){
   )
 }
 
+// Plots animated skew
 function plotterSkew(axis) {
   var myArray = squareTrans("skew",axis);
   var frames = jsonFormat2(...myArray);
@@ -239,6 +197,7 @@ function plotterSkew(axis) {
   });
 }
 
+// Plots animated scale
 function plotterScale(s1,s2) {
   var myArray = squareTrans("scale",s1,s2);
   var frames = jsonFormat2(...myArray);
@@ -267,6 +226,7 @@ function plotterScale(s1,s2) {
   });
 }
 
+// Plots animated rotation
 function plotterRotate(th) {
   var myArray = squareTrans("rotate",th);
   var frames = jsonFormat2(...myArray);
@@ -295,6 +255,7 @@ function plotterRotate(th) {
   });
 }
 
+// Plots animated custom
 function plotterCustom(a,b,c,d) {
   var myArray = squareTrans("custom",a,b,c,d);
   var frames = jsonFormat2(...myArray);
@@ -323,6 +284,7 @@ function plotterCustom(a,b,c,d) {
   });
 }
 
+// Main function to run when page is ready
 function main() {
   squarePlotter();
   skewMatrix();
@@ -331,39 +293,7 @@ function main() {
   customMatrix();
 }
 
-function revealSkew() {
-  squarePlotter();
-  $('.sliderRotate').hide();
-  $('.sliderScale').hide();
-  $('.sliderCustom').hide();
-  $('.sliderSkew').slideToggle(600);
-
-}
-
-function revealRotate() {
-  squarePlotter();
-  $('.sliderSkew').hide();
-  $('.sliderScale').hide();
-  $('.sliderCustom').hide();
-  $('.sliderRotate').slideToggle(600);
-}
-
-function revealScale() {
-  squarePlotter();
-  $('.sliderRotate').hide();
-  $('.sliderSkew').hide();
-  $('.sliderCustom').hide();
-  $('.sliderScale').slideToggle(600)
-}
-
-function revealCustom() {
-  squarePlotter();
-  $('.sliderRotate').hide();
-  $('.sliderSkew').hide();
-  $('.sliderScale').hide();
-  $('.sliderCustom').slideToggle(600);
-}
-
+// Function which takes array as input and returns a table
 function makeTableHTML(myArray) {
     var result = "<table><tbody>";
     for(var i=0; i<myArray.length; i++) {
@@ -377,7 +307,7 @@ function makeTableHTML(myArray) {
     return result;
 }
 
-// Terrible function names...
+// Plot the graphs after reading data from sliders
 function plotRotate() {
   var x = document.getElementById('rotateID').value;
   var th = Math.PI*x;
@@ -404,6 +334,7 @@ function plotCustom() {
   plotterCustom(a,b,c,d);
 }
 
+// Create tables which show the transformation matrices
 function skewMatrix() {
   var axis = document.getElementById('skewID').value;
   var numaxis = Number(axis);
@@ -418,13 +349,17 @@ function skewMatrix() {
 function rotateMatrix() {
   var x = document.getElementById('rotateID').value;
   var th = Math.PI*x;
-  document.getElementById('rotatematrix').innerHTML=makeTableHTML(rotmat(th));
+  var rotmatrix = roundedmat(rotmat(th))
+  console.log(rotmatrix)
+  document.getElementById('rotatematrix').innerHTML=makeTableHTML(rotmatrix);
+  th = Math.round(th*100)/100;
+  document.getElementById('rotatematrix2').innerHTML=makeTableHTML([["cos("+String(x)+"π"+")","-sin("+String(x)+"π"+")"],
+    ["sin("+String(x)+"π"+")","cos("+String(x)+"π"+")"]])
   document.getElementById('showtheta').innerHTML = "θ = ";
   document.getElementById('showtheta').innerHTML+=th;
   document.getElementById('showtheta').innerHTML+=" rad or θ =  ";
   document.getElementById('showtheta').innerHTML+=x.toString();
   document.getElementById('showtheta').innerHTML+="π rad";
-
 }
 
 function scaleMatrix() {
@@ -439,6 +374,18 @@ function customMatrix() {
   var c = document.getElementById('cID').value;
   var d = document.getElementById('dID').value;
   document.getElementById('custommatrix').innerHTML=makeTableHTML([[a,b],[c,d]])
+}
+
+// Rounds all elements in a mxn array to 2 d.p.
+function roundedmat(A) {
+  m = A.length
+  n = A[0].length
+  for (i=0; i<m; i++) {
+    for (j=0; j<n; j++) {
+      A[i][j] =  Math.round(A[i][j]*100)/100
+    }
+  }
+  return A
 }
 
 function resetStuff() {

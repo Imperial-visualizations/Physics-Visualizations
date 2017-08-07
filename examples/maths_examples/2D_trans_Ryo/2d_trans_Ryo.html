@@ -23,7 +23,7 @@
         </div>
 
         <div class="six columns">
-            <h2>2D Transformations</h2>
+            <h1>2D Transformations</h1>
 
             <ul class="tab-nav">
               <li><a class="button active" href="#skew">Skew</a></li>
@@ -46,10 +46,10 @@
                      </label>
                 </div>
                 <div class="sliderSkew">
-                    <input type="button" value="Start", onclick="plotSkew()">
+                    <input class="button-primary" type="submit" value="Start", onclick="plotSkew()">
                     <input type="button" value="Reset", onclick="resetStuff()">
                 </div>
-                  <h5>Skew Matrix:</h5>
+                  <h4>Skew Matrix:</h4>
                   <p id="skewmatrix"></p>
 
               </div>
@@ -58,20 +58,31 @@
                 <div class="sliderRotate">
                     <label class="sliderTitle" >Rotation Angle (θ):</label>
                     <label>
-                        <input id="rotateID" type ="range" value="0" min ="0" max="2" step ="0.1" onchange="rotateMatrix()"/>
+                        <input id="rotateID" type ="range" value="0" min ="0" max="2" step ="0.05" onchange="rotateMatrix()"/>
                         <span class="sliderMin">0</span><span class="sliderMax">2π rad</span>
 
                     </label>
                 </div>
                 <div class="sliderRotate">
                     <!--<input type="button" value="Start", onclick="plotterRotate()">-->
-                    <input type="button" value="Start", onclick="plotRotate()">
+                    <input class="button-primary" type="submit" value="Start", onclick="plotRotate()">
                     <input type="button" value="Reset", onclick="resetStuff()">
                 </div>
                   <p id="showtheta"></p>
-                  <h5>Rotation Matrix:</h5>
 
-                  <p id="rotatematrix"></p>
+                  <h4>Rotation Matrix:</h4>
+                  <div class="row">
+                      <div class="six columns">
+                  <h5>Trigonometric Form</h5>
+                          <p id="rotatematrix2"></p>
+                          </div>
+                      <div class="six columns">
+
+                  <h5>Decimal Form</h5>
+                    <p id="rotatematrix"></p>
+                      </div>
+                  </div>
+
               </div>
 
               <div class="tab-pane" id="scale">
@@ -90,10 +101,10 @@
                     </label>
                 </div>
                 <div class="sliderScale">
-                    <input type="button" value="Start", onclick="plotScale()">
+                    <input class="button-primary" type="submit" value="Start", onclick="plotScale()">
                     <input type="button" value="Reset", onclick="resetStuff()">
                 </div>
-                  <h5>Scaling Matrix:</h5>
+                  <h4>Scaling Matrix:</h4>
                   <p id="scalematrix"></p>
               </div>
 
@@ -127,10 +138,10 @@
                      </label>
                 </div>
                 <div class="sliderCustom">
-                    <input type="button" value="Start", onclick="plotCustom()">
+                    <input class="button-primary" type="submit" value="Start", onclick="plotCustom()">
                     <input type="button" value="Reset", onclick="resetStuff()">
                 </div>
-                  <h5>Custom Matrix:</h5>
+                  <h4>Custom Matrix:</h4>
                   <p id="custommatrix"></p>
               </div>
             </div>
