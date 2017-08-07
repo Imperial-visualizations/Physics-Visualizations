@@ -143,7 +143,7 @@ function updateScatterAngle() {
     ball1.Lab.spriteInstance.y = ball1.Lab.initr.y + yShift*0.5;
     ball1.CoM.spriteInstance.y = ball1.CoM.initr.y + yShift*0.5;
     ball2.Lab.spriteInstance.y = ball2.Lab.initr.y - yShift*0.5;
-    ball2.CoM.spriteInstance.y = ball2.CoM.initr.y - yShift *0.5;
+    ball2.CoM.spriteInstance.y = ball2.CoM.initr.y - yShift*0.5;
 
 
 }
@@ -374,7 +374,7 @@ function create() {
     game.stage.backgroundColor = "#EBEEEE";
 
 
-    centreOfMass1 = game.add.sprite((canvasWidth / 2), (canvasHeight * 1 / 6), 'cofmPNG');
+    centreOfMass1 = game.add.sprite((canvasWidth / 2), (canvasHeight  / 6), 'cofmPNG');
     centreOfMass1.anchor.set(0.5, 0.5);
 
     centreOfMass2 = game.add.sprite(canvasWidth / 2, canvasHeight / 2, "cofmPNG");
@@ -518,6 +518,8 @@ function drawArrow(originV, vectorV, rectIndex, color = 0x006EAF, latexID = "") 
 
     let origin = new Vector(originV.x, -1 * originV.y);
 
+    console.log(originV.toString());
+
     let vector = new Vector(vectorV.x, -1 * vectorV.y);
     // Flip directions for canvas y-axis
 
@@ -546,7 +548,8 @@ function drawArrow(originV, vectorV, rectIndex, color = 0x006EAF, latexID = "") 
     arrowG.lineTo(mag / 2, -6);
     arrowG.lineTo(mag / 2, 0);
     arrowG.endFill();
-
+    console.log("X POS" + ((canvasWidth/2)-5*scaleFactor + origin.x *scaleFactor).toString());
+    console.log("Y POS" + (canvasHeight*(rectIndex*2 -1)/6 + scaleFactor + origin.y * scaleFactor));
     arrowSprites.push(game.add.sprite((canvasWidth / 2 - 5 * scaleFactor + origin.x * scaleFactor), (canvasHeight * (rectIndex * 2 - 1) / 6 + scaleFactor + origin.y * scaleFactor), arrowG.generateTexture()));
     arrowSprites[arrowSprites.length - 1].anchor.set(0, 0.5);
     arrowSprites[arrowSprites.length - 1].rotation = vector.getArg();
@@ -587,23 +590,17 @@ function recalculateVector() {
 
     q1 = vCal(ball1.Lab.postv, "*", ball1.Lab.mass);
     q2 = vCal(ball2.Lab.postv, "*", ball2.Lab.mass);
-
+    clearVectors();
     if ($('#vector_draw_enable').is(':checked')) {
         console.log("Checked");
 
         let scalefactor = canvasWidth / 16;
+        let colPoint = 200 - (ball2.radius + ball1.radius);
 
-
-        let colPoint = 200 / ((ball2.Lab.v / ball1.Lab.v) + 1) - 100;
-
-        drawArrow(vCal(p1, '-', new Vector(colPoint, 0)), p1, 1, 0xE40043);
-        drawArrow(new Vector(colPoint, 0), q1, 1, 0xE40043);
-        drawArrow(new Vector(colPoint, 0), q2, 1, 0x00ACD7);
-
-
+        drawArrow(vCal(new Vector(colPoint/scalefactor + 4, 1),'-',p1), p1, 1, 0xE40043);
+        drawArrow(new Vector(colPoint/scalefactor + 4, 1), q1, 1, 0xE40043);
+        drawArrow(new Vector(colPoint/scalefactor + 4, 1), q2, 1, 0x00ACD7);
     }
-
-    clearVectors();
     drawArrow(zeroV(), q1, 3, 0xDD2501, "q1");
     drawArrow(q1, q2, 3, 0x0091D4, 'q2');
     drawArrow(zeroV(), vCal(pStar_reversed, "*", (ball1.Lab.mass / ball2.Lab.mass)), 3, 0xEC7300, "p1m1m2");
@@ -613,7 +610,6 @@ function recalculateVector() {
 }
 
 function addTrace(ball) {
-
     let ballG = game.add.graphics(0, 0);
 
     if (ball.name === "ball1Lab") {
@@ -624,8 +620,6 @@ function addTrace(ball) {
     ballG.lineStyle(1, color, 1);
     ballG.beginFill(color, 1);
     ballG.drawCircle(0, 0, 10);
-
     traces.push(game.add.sprite(ball.spriteInstance.x, ball.spriteInstance.y, (ballG.generateTexture())));
-
     ballG.destroy();
 }
