@@ -194,9 +194,9 @@ function jsonFormat2(x0,x1,x2,y0,y1,y2) {
   return myJson;
 }
 
-layout = {xaxis: {range: [-3, 3]},
-    yaxis: {range: [-3, 3]},
-    margin: {l:0, r:0, t:0, b:0}
+var layout = {xaxis: {range: [-4, 4], title:"x"},
+    yaxis: {range: [-4, 4], title:"y"},
+    margin: {l:30, r:30, t:30, b:30}
     };
 
 function squarePlotter(){
@@ -324,10 +324,11 @@ function plotterCustom(a,b,c,d) {
 }
 
 function main() {
-  $('.sliderSkew').hide();
-  $('.sliderRotate').hide();
-  $('.sliderScale').hide();
   squarePlotter();
+  skewMatrix();
+  rotateMatrix();
+  scaleMatrix();
+  customMatrix();
 }
 
 function revealSkew() {
@@ -363,6 +364,19 @@ function revealCustom() {
   $('.sliderCustom').slideToggle(600);
 }
 
+function makeTableHTML(myArray) {
+    var result = "<table><tbody>";
+    for(var i=0; i<myArray.length; i++) {
+        result += "<tr>";
+        for(var j=0; j<myArray[i].length; j++){
+            result += "<td>"+myArray[i][j]+"</td>";
+        }
+        result += "</tr>";
+    }
+    result += "</tbody></table>";
+    return result;
+}
+
 // Terrible function names...
 function plotRotate() {
   var x = document.getElementById('rotateID').value;
@@ -372,8 +386,9 @@ function plotRotate() {
 
 function plotSkew() {
   var axis = document.getElementById('skewID').value;
-  plotterSkew(Number(axis));
-}
+  var numaxis = Number(axis);
+  plotterSkew(numaxis);
+  }
 
 function plotScale() {
   var scale1 = document.getElementById('scale1ID').value;
@@ -388,4 +403,47 @@ function plotCustom() {
   var d = document.getElementById('dID').value;
   plotterCustom(a,b,c,d);
 }
+
+function skewMatrix() {
+  var axis = document.getElementById('skewID').value;
+  var numaxis = Number(axis);
+  if (numaxis === 0){
+    document.getElementById("skewmatrix").innerHTML=makeTableHTML([[1,1],[0,1]]);
+  }
+  else {
+    document.getElementById("skewmatrix").innerHTML=makeTableHTML([[1,0],[1,1]]);
+  }
+}
+
+function rotateMatrix() {
+  var x = document.getElementById('rotateID').value;
+  var th = Math.PI*x;
+  document.getElementById('rotatematrix').innerHTML=makeTableHTML(rotmat(th));
+  document.getElementById('showtheta').innerHTML = "θ = ";
+  document.getElementById('showtheta').innerHTML+=th;
+  document.getElementById('showtheta').innerHTML+=" rad or θ =  ";
+  document.getElementById('showtheta').innerHTML+=x.toString();
+  document.getElementById('showtheta').innerHTML+="π rad";
+
+}
+
+function scaleMatrix() {
+  var scale1 = document.getElementById('scale1ID').value;
+  var scale2 = document.getElementById('scale2ID').value;
+  document.getElementById('scalematrix').innerHTML=makeTableHTML([[scale1,0],[0,scale2]])
+}
+
+function customMatrix() {
+  var a = document.getElementById('aID').value;
+  var b = document.getElementById('bID').value;
+  var c = document.getElementById('cID').value;
+  var d = document.getElementById('dID').value;
+  document.getElementById('custommatrix').innerHTML=makeTableHTML([[a,b],[c,d]])
+}
+
+function resetStuff() {
+  squarePlotter();
+  $(".skewID").slider('refresh')
+}
+
 $(document).ready(main);

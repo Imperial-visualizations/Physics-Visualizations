@@ -1,0 +1,33 @@
+<html>
+
+<head>
+    <title>Cube Transformation</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+    <!-- jquery for json importing and parsing -->
+</head>
+<body>
+
+<div id='graph'></div>  <!-- Plotly chart will be drawn inside this DIV -->
+
+<script>
+    // Import data in json file as "frames" variable (same data structure as initially output in Python)
+    var json = (function() {
+      var json = null;
+      $.ajax({
+        'async': false,
+        'global': false,
+        'url': "cubeRotation.json",
+        'dataType': "json",
+        'success': function (data) {
+          json = data;
+        }
+      });
+      return json;
+    })();
+
+    // Plot graph
+    Plotly.plot('graph', json);
+</script>
+</body>
+</html>
