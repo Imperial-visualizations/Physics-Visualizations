@@ -12,3 +12,5 @@ test.py
 #Ignore All
 .ipynb_checkpoints/
 .DS_STORE
+
+JSON_data/
