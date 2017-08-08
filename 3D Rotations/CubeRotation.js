@@ -276,7 +276,11 @@ var cubeRotation;
 
 var frames1 = master(scaleXaxis,1,2,xx,yy,zz)
 frames.push(frames1)
-var conceptName = $('#aioConceptName').find(":selected").text();
+var frames2 = master(skewYaxis,0,Math.PI/4,xrot1,yrot1,zrot1)
+frames.push(frames2)
+var frames3 = master(roXaxis,0,Math.PI/4,xrot1,yrot1,zrot1)
+frames.push(frames3)
+
 
 var layout = {
   scene:{
@@ -293,6 +297,7 @@ var layout = {
    zaxis: {
    range: [-3, 3],
   }},
+    margin:  {l: 0, r:0,t:0,b:0}
 };
 
 Plotly.newPlot('graph', initial, layout )
