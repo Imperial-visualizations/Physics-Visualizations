@@ -1,12 +1,16 @@
+<!doctype html>
 <html>
 
 <head>
     <title>3D Transformations</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
+    <link rel="stylesheet" href="skeleton-tabs.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script src=script/rotation3d.js></script>
+    <script src="skeleton-tabs.js"></script>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
 <body>
@@ -15,64 +19,100 @@
     <div class="row">
       <!--Bottons-->
       <div class="five columns">
-        <h2>On a Sphere:</h2><!--Main Options-->
-        <input type="button" value="Rotate", onclick="revealRotate(1)">
-        <input type="button" value="Reflect", onclick="revealReflect()">
-        <input type="button" value="Scale", onclick="revealScale()">
+        <h2>On a Sphere:</h2>
+        <!--Main Options-->
+        <ul class="tab-nav">
+          <li><a class="button active" href="#rotate">Rotate</a></li>
+          <li><a class="button" href="#reflect">Reflect</a></li>
+          <li><a class="button" href="#scale">Scale</a></li>
+        </ul>
 
-        <div class="boxed">
-          <!--Rotation--> <!--x = 1, y = 2, z = 3-->
-          <div class="rotate3D">
-            <input type="button" value="x-axis", onclick="revealRotate(1)">
-            <input type="button" value="y-axis", onclick="revealRotate(2)">
-            <input type="button" value="z-axis", onclick="revealRotate(3)">
-          </div>
-          <div class=rotateSlider>
-            <label class = "sliderTitle">Angle:</lable>
-              <input id="rotator" type="range" value="0" min="-2" max="2" step="0.125"/>
-              <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
-          </div>
-          <div class="rotateCP1">
-              <input type="button" value="Rotate (x)", onclick="plotRotate(1)">
-              <input type="button" value="Stop", onclick="stopAnimation()">
-              <input type="button" value="Reset", onclick="revealRotate(1)">
-          </div>
-          <div class="rotateCP2">
-              <input type="button" value="Rotate (y)", onclick="plotRotate(2)">
-              <input type="button" value="Stop", onclick="stopAnimation()">
-              <input type="button" value="Reset", onclick="revealRotate(2)">
-          </div>
-          <div class="rotateCP3">
-              <input type="button" value="Rotate (z)", onclick="plotRotate(3)">
-              <input type="button" value="Stop", onclick="stopAnimation()">
-              <input type="button" value="Reset", onclick="revealRotate(3)">
-          </div>
-          <div class="rotateCommute">
-            <input type="button" value="Commute?", onclick="revealCommute()">
-            <div class="commuteSliders">
-              <label class="sliderTitle">R1</label>
-              <input id="rotator1" type="range" value="0" min="-2" max="2" step="0.125"/>
-              <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
-              <label class="sliderTitle">R2</label>
-              <input id="rotator2" type="range" value="0" min="-2" max="2" step="0.125"/>
-              <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
-              <input type="button" value="Set", onclick="plotCommute()">
+        <div class="tab-content">
+          <div class="tab-pane active" id="rotate">
+            <!--Rotation--> <!--x = 1, y = 2, z = 3-->
+            <div class="rotate3D">
+              <input type="button" value="x-axis", onclick="revealRotate(1)">
+              <input type="button" value="y-axis", onclick="revealRotate(2)">
+              <input type="button" value="z-axis", onclick="revealRotate(3)">
+            </div>
+            <div class=rotateSlider>
+              <label class="sliderTitle">Angle: <span id="rotatorDisplay" data-unit="π radianº">0π radianº</span></label>
+              <label class="slider">
+                <input id="rotator" class="inputs" type="range" value="0" min="-2" max="2" step="0.125"/>
+                <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
+              </label>
+              <div class="rotateCP1">
+                  <input class="button-primary" type="submit" value="Rotate (x)", onclick="plotRotate(1)">
+                  <input type="button" value="Stop", onclick="stopAnimation()">
+                  <input type="button" value="Reset", onclick="revealRotate(1)">
+              </div>
+              <div class="rotateCP2">
+                  <input class="button-primary" type="submit" value="Rotate (y)", onclick="plotRotate(2)">
+                  <input type="button" value="Stop", onclick="stopAnimation()">
+                  <input type="button" value="Reset", onclick="revealRotate(2)">
+              </div>
+              <div class="rotateCP3">
+                  <input class="button-primary" type="submit" value="Rotate (z)", onclick="plotRotate(3)">
+                  <input type="button" value="Stop", onclick="stopAnimation()">
+                  <input type="button" value="Reset", onclick="revealRotate(3)">
+              </div>
+              <div>
+                <p id="rotateMatrix"></p>
+              </div>
+              <input type="button" value="Commute?", onclick="revealCommute()">
+            </div>
+            <!--Commute?-->
+            <div class="rotateCommute">
+
+              <label>Rotation about y-axis:</label>
+              <!-- <label for="R1Options">[R1] Rotate</label>
+              <select class="u-full-width" id="R1Options">
+                <option value="Option 1">about y-axis</option>
+                <option value="Option 2">about z-axis</option>
+                <option value="Option 3">about x-axis</option>
+              </select> -->
+
+              <label class="sliderTitle">Angle: <span id="rotator1Display" data-unit="π radianº">0π radianº</span></label>
+              <label class="slider">
+                <input id="rotator1" type="range" value="0" min="-2" max="2" step="0.125"/>
+                <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
+              </label>
+
+              <label>Rotation about z-axis:</label>
+              <!-- <label for="R2Options">[R2] Rotate</label>
+              <select class="u-full-width" id="R2Options">
+                <option value="Option 1">about z-axis</option>
+                <option value="Option 2">about x-axis</option>
+                <option value="Option 3">about y-axis</option>
+              </select> -->
+
+              <label class="sliderTitle">Angle: <span id="rotator2Display" data-unit="π radianº">0π radianº</span></label>
+              <label class="slider">
+                <input id="rotator2" type="range" value="0" min="-2" max="2" step="0.125"/>
+                <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
+              </label>
+
+              <input class="button-primary" type="submit" value="Set Angles", onclick="plotCommute()">
+              <input type="button" value="Go Back", onclick="unrevealCommute()">
             </div>
           </div>
 
           <!--Reflection-->
-          <div class="reflect3D">
-            <input type="button" value="x = 0", onclick="plotReflect(1)">
-            <input type="button" value="y = 0", onclick="plotReflect(2)">
-            <input type="button" value="z = 0", onclick="plotReflect(3)">
+          <div class="tab-pane" id="reflect">
+            <input type="button" value="    x = 0    ", onclick="plotReflect(1)">
+            <input type="button" value="    y = 0    ", onclick="plotReflect(2)">
+            <input type="button" value="    z = 0    ", onclick="plotReflect(3)">
           </div>
 
-          <!--Scale-->
-          <div class="scale3D">
+          <!--Scalation-->
+          <div class="tab-pane" id="scale">
+
             <div class=scaleSlider>
-              <label class = "sliderTitle">Factor:</lable>
-                <input id="scaler" type="range" value="0" min="-5" max="5" step="1"/>
-                <span class="sliderMin">-5</span><span class="sliderMax">5</span>
+              <label class="slider">
+                <label class="sliderTitle">Factor: <span id="scalerDisplay" data-unit="x">0x</span></label>
+                <input id="scaler" type="range" value="0" min="-2" max="2" step="0.5"/>
+                <span class="sliderMin">-2</span><span class="sliderMax">2</span>
+              </label>
             </div>
             <input type="button" value="x-scale", onclick="plotScale(1)">
             <input type="button" value="y-scale", onclick="plotScale(2)">
@@ -84,8 +124,8 @@
       <!-- Graph -->
       <div class="seven columns">
         <div id='graph' style="width:450px; height:450px;"></div>
-        <script src=script/rotation3d.js></script>
       </div>
+
     </div>
   </div>
 

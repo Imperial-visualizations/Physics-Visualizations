@@ -2,8 +2,8 @@ function roXaxis(point, theta) {
     var pointVec = point;
     var M = [[1, 0, 0],
                 [0, Math.cos(theta), -Math.sin(theta)], 
-                [0, Math.sin(theta), Math.cos(theta)]
-                ];
+                   [0, Math.sin(theta), Math.cos(theta)]
+                  ];
     var pointRot = math.multiply(M,pointVec);
     return pointRot;
     }
@@ -58,40 +58,10 @@ function skewZaxis(point, theta) {
     return pointRot;
     }
 
-function scaleallaxis(point, scale) {
+function scale(point, scale) {
     var pointVec = point;
     var M = [[scale, 0, 0],
                    [0, scale, 0],
-                   [0, 0 ,scale]
-                  ];
-    var pointRot = math.multiply(M,pointVec);
-    return pointRot;
-    }
-
-function scaleXaxis(point, scale) {
-    var pointVec = point;
-    var M = [[scale, 0, 0],
-                   [0, 1, 0],
-                   [0, 0 ,1]
-                  ];
-    var pointRot = math.multiply(M,pointVec);
-    return pointRot;
-    }
-
-function scaleYaxis(point, scale) {
-    var pointVec = point;
-    var M = [[1, 0, 0],
-                   [0, scale, 0],
-                   [0, 0 ,1]
-                  ];
-    var pointRot = math.multiply(M,pointVec);
-    return pointRot;
-    }
-
-function scaleZaxis(point, scale) {
-    var pointVec = point;
-    var M = [[1, 0, 0],
-                   [0, 1, 0],
                    [0, 0 ,scale]
                   ];
     var pointRot = math.multiply(M,pointVec);
@@ -126,8 +96,7 @@ function master(transformation, initalparam, finalparam,xinit,yinit,zinit){
           [0, 'rgb(255,255,255)'],
           [0.5, 'rgb(0,133,202)'],
           [1, 'rgbrgb(0,62,116)']
-        ],
-        showscale: false
+        ]
         }]
         ;
         name = 'frame' + i;
@@ -140,113 +109,11 @@ function master(transformation, initalparam, finalparam,xinit,yinit,zinit){
     return frames;
 }
 
-function openTrans(evt, TransName) {
-    // Declare all variables
-    var i, tabcontent, tablinks;
-
-    // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-
-    // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-
-    // Show the current tab, and add an "active" class to the button that opened the tab
-    document.getElementById(TransName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
-
-function graphReset(where){
-    xx = [-1., -1., 1., 1., -1., -1., 1., 1.];
-    yy = [-1., 1., 1., -1., -1., 1., 1., -1.];
-    zz = [-1., -1., -1., -1., 1., 1., 1., 1.];
-
-
-    what = [{
-        type: "mesh3d",
-        x: xx,
-        y: yy,
-        z: zz,
-        i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
-        j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
-        k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
-        intensity: [0, 0.14285714285714285, 0.2857142857142857, 0.42857142857142855, 0.5714285714285714, 0.7142857142857143, 0.8571428571428571, 1],
-        colorscale: [
-          [0, 'rgb(255,255,255)'],
-          [0.5, 'rgb(0,133,202)'],
-          [1, 'rgbrgb(0,62,116)']
-        ],
-        showscale: false
-        }]
-    how = {
-  scene:{
-	 aspectmode: "manual",
-   aspectratio: {
-     x: 1, y: 1, z: 1,
-    },
-   xaxis: {
-    range: [-3, 3],
-  },
-   yaxis: {
-    range: [-3, 3],
-  },
-   zaxis: {
-   range: [-3, 3],
-  }},
-};
-    Plotly.newPlot(where, what, how )
-}
-
-function graphThat(xx, yy, zz,){
-
-    what = [{
-        type: "mesh3d",
-        x: xx,
-        y: yy,
-        z: zz,
-        i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
-        j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
-        k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
-        intensity: [0, 0.14285714285714285, 0.2857142857142857, 0.42857142857142855, 0.5714285714285714, 0.7142857142857143, 0.8571428571428571, 1],
-        colorscale: [
-          [0, 'rgb(255,255,255)'],
-          [0.5, 'rgb(0,133,202)'],
-          [1, 'rgbrgb(0,62,116)']
-        ],
-        showscale: false
-        }]
-    layout = {
-  scene:{
-	 aspectmode: "manual",
-   aspectratio: {
-     x: 1, y: 1, z: 1,
-    },
-   xaxis: {
-    range: [-3, 3],
-  },
-   yaxis: {
-    range: [-3, 3],
-  },
-   zaxis: {
-   range: [-3, 3],
-  }},
-};
-    Plotly.newPlot('graph', what, layout )
-}
-
-
-
 
 var xx = [-1., -1., 1., 1., -1., -1., 1., 1.];
 var yy = [-1., 1., 1., -1., -1., 1., 1., -1.];
 var zz = [-1., -1., -1., -1., 1., 1., 1., 1.];
 var data = [];
-
 
 var initial = [{
     type: "mesh3d",
@@ -261,8 +128,7 @@ var initial = [{
       [0, 'rgb(255,255,255)'],
       [0.5, 'rgb(0,133,202)'],
       [1, 'rgbrgb(0,62,116)']
-    ],
-    showscale: false
+    ]
     }]
 
 var frames = []
@@ -274,12 +140,21 @@ var zrot1 = [];
 
 var cubeRotation;
 
-var frames1 = master(scaleXaxis,1,2,xx,yy,zz)
+
+var frames1 = master(roXaxis,0,Math.PI/2,xx,yy,zz)
 frames.push(frames1)
-var frames2 = master(skewYaxis,0,Math.PI/4,xrot1,yrot1,zrot1)
+
+var frames2 = master(roYaxis,0,Math.PI/2,xrot1,yrot1,zrot1)
 frames.push(frames2)
-var frames3 = master(roXaxis,0,Math.PI/4,xrot1,yrot1,zrot1)
+
+var frames3 = master(skewXaxis,0,Math.PI/4,xrot1,yrot1,zrot1)
 frames.push(frames3)
+
+var frames4 = master(skewYaxis,0,Math.PI/4,xrot1,yrot1,zrot1)
+frames.push(frames4)
+
+
+
 
 
 var layout = {
@@ -289,15 +164,14 @@ var layout = {
      x: 1, y: 1, z: 1,
     },
    xaxis: {
-    range: [-3, 3],
+    range: [-2, 2],
   },
    yaxis: {
-    range: [-3, 3],
+    range: [-2, 2],
   },
    zaxis: {
-   range: [-3, 3],
+   range: [-2, 2],
   }},
-    margin:  {l: 0, r:0,t:0,b:0}
 };
 
 Plotly.newPlot('graph', initial, layout )
@@ -308,4 +182,3 @@ Plotly.animate('graph', frames, {transition: {
       duration: 100,
       redraw: false,
     },mode: 'immediate'},layout);
-
