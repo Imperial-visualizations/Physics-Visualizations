@@ -11,6 +11,7 @@ function Selector(handle) {
     console.log("make Ul from: ", this.objs);
     var list = document.createElement('ul');
     list.id = this.id+":ul";
+    list.class = 'dropdown';
     for(var id in this.objs) {
         var item = document.createElement('li');
         item.id = this.id+":"+id+":li";

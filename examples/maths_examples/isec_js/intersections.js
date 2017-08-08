@@ -341,7 +341,8 @@ function intersectList(objlist) {
 					ans.push(toPush);
 				}
 				catch(err) {
-					throw err;
+					//just skip the errors
+					//throw err;
 				}
 			}
 		}
@@ -399,7 +400,7 @@ function _line_point_intersect(obj1, obj2) {
 
 function _line_line_intersect(obj1, obj2) {
 	if(!(obj1 instanceof Line) || !(obj2 instanceof Line)) {
-		throw new Error("Argument error: _point_point_intersect can only take arguments of type Point.")
+		throw new Error("Argument error: _line_line_intersect can only take arguments of type Point.")
 	}
 	else {
 		/*
@@ -407,8 +408,8 @@ function _line_line_intersect(obj1, obj2) {
 		\begin{itemize}
 				\item line 1: $\vec{r}_{1} = \vec{d}_{1} + \vec{v}_{1} t_{1}, t_{1} \in R$
 				\item line 2: $\vec{r}_{2} = \vec{d}_{2} + \vec{v}_{2} t_{2}, t_{2} \in R$
-				\item intersection condition: ??
-				\item intersection point: ??
+				\item intersection condition: distance between lines is zero
+				\item intersection point: found by vector algebra
 		\end{itemize}
 		*/
 		var line1 = obj1;
