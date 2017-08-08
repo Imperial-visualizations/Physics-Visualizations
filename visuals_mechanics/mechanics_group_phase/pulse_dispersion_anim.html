@@ -41,6 +41,7 @@
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
 
 <script>
 
@@ -50,8 +51,9 @@
     var omega = 1.1;
 
     var n = 801;
-    var x = [], y_i = [], y_r = [], y_t = [];
-    var k = [];
+    var y_i = [], y_r = [], y_t = [];
+    var x = numeric.linspace(-40,40,n);
+    var k = numeric.linspace(1,k_len,1);
     var t = 0.0;
     var v1 = 5;
     var alpha = valueSlider(parseInt($("#alpha").val()));
@@ -120,18 +122,13 @@
         onReset();
     });
 
-    function compute_k_values(){
-        for (var i = 0; i < k_len; i++) {
-            k[i] = i + 1;
-        }
-    }
-
     function initial_data(){
         for (var i = 0; i < n; i++) {
-            x[i] = -20 + i / 10;
             y_i[i] = 0;
-            for (var j = 0; j < k_len; j++) {
-                y_i[i] +=  Math.sin(x[i] - t) + Math.sin(k[j] * x[i] - k[j]* t);
+            if (x[i] < 0) {
+                for (var j = 0; j < k_len; j++) {
+                    y_i[i] += Math.sin(x[i] - t) + Math.sin(k[j] * x[i] - k[j] * t);
+                }
             }
             y_r[i] = 0;
             y_t[i] = 0;
@@ -141,15 +138,7 @@
     function onReset() {
         is_paused = true;
         t = 0;
-        for (var i = 0; i < n; i++) {
-            x[i] = -10 + i / 10;
-            y_i[i] = 0;
-            for (var j = 0; j < k_len; j++) {
-                y_i[i] +=  Math.sin(x[i] - t) + Math.sin(k[j] * x[i] - k[j]* t);
-            }
-            y_r[i] = 0;
-            y_t[i] = 0;
-        }
+        initial_data();
         Plotly.animate('graph', {
                     data: [{y: y_i}, {y: y_r}, {y: y_t}]
                 },
@@ -162,7 +151,6 @@
     }
 
     // Data
-    compute_k_values();
     initial_data();
 
     // Initial plot
