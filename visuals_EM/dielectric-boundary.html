@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Imperial Visualisations</title>
+
+  <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
+  <link rel="stylesheet" href="loading-spinner.css">
+
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="dielectric-boundary.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Dielectric boundary</h1>
+
+    <div id="spinner-wrapper">
+      <span class="spinner-span">Loading</span>
+      <div>
+        <div class="spinner-mask"></div>
+        <div id="spinner-bar"></div>
+        <div class="spinner-mask"></div>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div class="eight columns">
+        <div id="graph"></div>
+      </div>
+
+      <div class="four columns">
+        <pre id="interface" style="font-size: 12px;"></pre>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
