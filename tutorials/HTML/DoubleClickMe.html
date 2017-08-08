@@ -396,15 +396,35 @@ browser/device sizes) --&gt;
           </div>
           <label for="exampleMessage">Message</label>
           <textarea class="u-full-width" placeholder="Hi Dave &hellip;" id="exampleMessage"></textarea>
-          <label class="example-send-yourself-copy">
-            <input type="checkbox">
-            <span class="label-body">Send a copy to yourself</span>
+
+          <label class="checkbox">
+              <input type="checkbox" checked /><span for="checkbox"></span>
           </label>
+          <label class="checkboxTitle">Send a copy to yourself</label> 
+
+          <br>
+
+          <label class="radioTitle">My gender is: </label> 
+          <label class="radio">
+              <input type="radio" name="gender" checked /><span for="radio"></span>
+          </label>
+          <label class="radioLabel">Male</label> 
+          <label class="radio">
+              <input type="radio" name="gender" /><span for="radio"></span>
+          </label>
+          <label class="radioLabel">Female</label> 
+          <label class="radio">
+              <input type="radio" name="gender" /><span for="radio"></span>
+          </label>
+          <label class="radioLabel">Else/Prefer not to say</label> 
+
           <label class="sliderTitle">Size: <span id="yourSliderIDDisplay" data-unit="meter">1meter</span></label> 
           <label class="slider">
           <input id="yourSliderID" class="inputs" type="range" value="1" min ="1" max="100" step ="1"/>
           <span class="sliderMin">1</span><span class="sliderMax">100</span>
           </label>
+
+
           <input class="button-primary" type="submit" value="Submit">
         </form>
       </div>
@@ -431,21 +451,47 @@ browser/device sizes) --&gt;
           &#x3C;/div&#x3E;
           &#x3C;label for=&#x22;exampleMessage&#x22;&#x3E;Message&#x3C;/label&#x3E;
           &#x3C;textarea class=&#x22;u-full-width&#x22; placeholder=&#x22;Hi Dave &#x26;hellip;&#x22; id=&#x22;exampleMessage&#x22;&#x3E;&#x3C;/textarea&#x3E;
-          &#x3C;label class=&#x22;example-send-yourself-copy&#x22;&#x3E;
-            &#x3C;input type=&#x22;checkbox&#x22;&#x3E;
-            &#x3C;span class=&#x22;label-body&#x22;&#x3E;Send a copy to yourself&#x3C;/span&#x3E;
+
+          &#x3C;label class=&#x22;checkbox&#x22;&#x3E;
+              &#x3C;input type=&#x22;checkbox&#x22; checked /&#x3E;&#x3C;span for=&#x22;checkbox&#x22;&#x3E;&#x3C;/span&#x3E;
           &#x3C;/label&#x3E;
+          &#x3C;label class=&#x22;checkboxTitle&#x22;&#x3E;Send a copy to yourself&#x3C;/label&#x3E; 
+
+          &#x3C;br&#x3E;
+
+          &#x3C;label class=&#x22;radioTitle&#x22;&#x3E;My gender is: &#x3C;/label&#x3E; 
+          &#x3C;label class=&#x22;radio&#x22;&#x3E;
+              &#x3C;input type=&#x22;radio&#x22; name=&#x22;gender&#x22; checked /&#x3E;&#x3C;span for=&#x22;radio&#x22;&#x3E;&#x3C;/span&#x3E;
+          &#x3C;/label&#x3E;
+          &#x3C;label class=&#x22;radioLabel&#x22;&#x3E;Male&#x3C;/label&#x3E; 
+          &#x3C;label class=&#x22;radio&#x22;&#x3E;
+              &#x3C;input type=&#x22;radio&#x22; name=&#x22;gender&#x22; /&#x3E;&#x3C;span for=&#x22;radio&#x22;&#x3E;&#x3C;/span&#x3E;
+          &#x3C;/label&#x3E;
+          &#x3C;label class=&#x22;radioLabel&#x22;&#x3E;Female&#x3C;/label&#x3E; 
+          &#x3C;label class=&#x22;radio&#x22;&#x3E;
+              &#x3C;input type=&#x22;radio&#x22; name=&#x22;gender&#x22; /&#x3E;&#x3C;span for=&#x22;radio&#x22;&#x3E;&#x3C;/span&#x3E;
+          &#x3C;/label&#x3E;
+          &#x3C;label class=&#x22;radioLabel&#x22;&#x3E;Else/Prefer not to say&#x3C;/label&#x3E; 
+
           &#x3C;label class=&#x22;sliderTitle&#x22;&#x3E;Size: &#x3C;span id=&#x22;yourSliderIDDisplay&#x22; data-unit=&#x22;meter&#x22;&#x3E;1meter&#x3C;/span&#x3E;&#x3C;/label&#x3E; 
           &#x3C;label class=&#x22;slider&#x22;&#x3E;
           &#x3C;input id=&#x22;yourSliderID&#x22; class=&#x22;inputs&#x22; type=&#x22;range&#x22; value=&#x22;1&#x22; min =&#x22;1&#x22; max=&#x22;100&#x22; step =&#x22;1&#x22;/&#x3E;
           &#x3C;span class=&#x22;sliderMin&#x22;&#x3E;1&#x3C;/span&#x3E;&#x3C;span class=&#x22;sliderMax&#x22;&#x3E;100&#x3C;/span&#x3E;
           &#x3C;/label&#x3E;
+
+
           &#x3C;input class=&#x22;button-primary&#x22; type=&#x22;submit&#x22; value=&#x22;Submit&#x22;&#x3E;
         &#x3C;/form&#x3E;
 
 &lt;!-- Always wrap checkbox and radio inputs in a label and use a &lt;span class="label-body"&gt; inside of it --&gt;
 &lt;!-- The complete slider includes two label tag, one with class "sliderTitle", one with class "slider". --&gt;
-&lt;!-- The slider value display requires jQuery to work. --&gt;
+&lt;!-- The slider value display requires the following jQuery to work: --&gt;
+
+$("input[type=range]").each(function () {
+  $(this).on('input', function(){
+        $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
+  });
+});
 
 &lt;!-- Note: The class .u-full-width is just a utility class shorthand for width: 100% --&gt;
 
