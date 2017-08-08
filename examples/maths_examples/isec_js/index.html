@@ -1,9 +1,90 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 		<script src="./intersections.js"></script>
 		<script src="./selector.js"></script>
-		<link rel="stylesheet" href="./styles.css">
+		<link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css">
+		<script>
+		function combine(objlist) {
+			var ans=[];
+			function plane_from_three_points(pt1,pt2,pt3) {
+				var normal = pt3.pos.add(pt1.pos.mul(-1)).cross(pt2.pos.add(pt1.pos.mul(-1)))
+				return new Plane(normal,pt1.pos);
+			}
+			if(objlist.length==1) {
+				window.alert("Select more objects to combine!")
+			}
+			else if(objlist.length==2) {
+				if(objlist[0] instanceof Plane && objlist[1] instanceof Plane) {
+					//plane, plane
+					window.alert("Two Planes don't easily combine.") //maybe line of shortest distance
+				}
+				else if(objlist[0] instanceof Point && objlist[1] instanceof Plane) {
+					//plane, point
+					ans.push(new Line(objlist[1].normal,objlist[0].pos));
+				}
+				else if(objlist[0] instanceof Plane && objlist[1] instanceof Point) {
+					//plane, point (again)
+					ans.push(new Line(objlist[0].normal,objlist[1].pos))
+				}
+				else if(objlist[0] instanceof Point && objlist[1] instanceof Line) {
+					//point,line
+					try {
+						intersect(objlist[0],objlist[1])
+						window.alert("Nothing cool results from point overlapping with a line...")
+					}
+					catch(err) {
+						if (err instanceof NoIntersectionError) {
+							var pt = objlist[0]
+							var line = objlist[1]
+							ans.push(plane_from_three_points(pt,new Point(line.off), new Point(line.off.add(line.dir) )));
+						}
+					}
+				}
+				else if(objlist[1] instanceof Point && objlist[0] instanceof Line) {
+					try {
+						intersect(objlist[0],objlist[1])
+						window.alert("Nothing cool results from point overlapping with a line...")
+					}
+					catch(err) {
+						if (err instanceof NoIntersectionError) {
+							var pt = objlist[1]
+							var line = objlist[0]
+							ans.push(plane_from_three_points(pt,new Point(line.off), new Point(line.off.add(line.dir) )));
+						}
+					}
+				}
+				else if((objlist[0] instanceof Point && objlist[1] instanceof Point) || (objlist[1] instanceof Point && objlist[0] instanceof Point)) {
+					//point,point
+					//points must not coincide
+					var pt1 = objlist[0]
+					var pt2 = objlist[1]
+					try {
+						intersect(pt1,pt2)
+						window.alert("Nothing cool results from two overlapping points...")
+					}
+					catch(err) {
+						if (err instanceof NoIntersectionError) {
+							ans.push(new Line(pt2.pos.add(pt1.pos.mul(-1), pt1.pos)));
+						}
+					}
+				}
+				else {
+					window.alert("Nothing cool results from these objects...")
+				}
+				}
+			else if(objlist.length==3) {
+				if(objlist[0] instanceof Point && objlist[1] instanceof Point && objlist[2] instanceof Point) {
+					ans.push(plane_from_three_points(objlist[0],objlist[1],objlist[2]));
+				}
+				}
+			else {
+					window.alert("Nothing cool results from these objects...")
+				}
+			return ans;
+		}
+		</script>
 	</head>
 	<body>
 		<!-- Globals-->
@@ -12,16 +93,26 @@
 		</script>
 		<div class="container">
 			<div class="row">
-				<div class="four columns">
-					<div id="dropdown" style="overflow-y: auto; height:300px"> </div>
+				<div class="three columns">
+					<div id="dropdown" style="overflow-y: auto; height:250px"> </div>
 					<div style="text-align:center">
-					<button type="button" id="test_selector" onclick="plot(selector.retrieveById(selector.checked()))" style="width:200px;"> Plot elements </button>
-					<button type="button" id="test_selector" onclick="selector.add(intersectList(selector.retrieveById(selector.checked())))" style="width:200px;"> Intersect elements </button>
-					<button type="button" id="test_selector" onclick="selector.rename(selector.checked())" style="width:200px;"> Rename elements </button>
-					<button type="button" id="test_selector" onclick="selector.remove(selector.checked())" style="width:200px;"> Remove elements </button></br>
+					<button type="button" id="plotter" onclick="plot(selector.retrieveById(selector.checked()))" style="width:200px;"> Plot elements </button>
+					<button type="button" id="intersector" onclick="selector.add(intersectList(selector.retrieveById(selector.checked())))" style="width:200px;"> Intersect elements </button>
+					<button type="button" id="combinator" onclick="selector.add(combine(selector.retrieveById(selector.checked())))" style="width:200px;"> Combine elements! </button>
+					<button type="button" id="descriptor" onclick="describe()" style="width:200px;"> Describe elements </button>
+					<script>
+					function describe() {
+						check = selector.checked()
+						for(var idx=0; idx<check.length;idx++) {
+							window.alert(selector.retrieveById([check[idx]])[0].describe())
+						}
+					}
+					</script>
+					<button type="button" id="renamer" onclick="selector.rename(selector.checked())" style="width:200px;"> Rename elements </button>
+					<button type="button" id="remover" onclick="selector.remove(selector.checked())" style="width:200px;"> Remove elements </button></br>
 					</div>
 				</div>
-				<div class="eight columns">
+				<div class="nine columns">
 					<div id="plot" style=""></div>
 				</div>
 			</div>
