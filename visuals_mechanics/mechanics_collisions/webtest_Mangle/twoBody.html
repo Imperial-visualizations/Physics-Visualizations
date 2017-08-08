@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Two Body Collision</title>
-    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
     <link rel = "icon" href = "images/favicon.ico" type="image/x-icon">
     <style type="text/css">
         #canvasWrapper{
@@ -62,8 +62,15 @@
                 <input id="ballCollisionAngle" class="inputs" type="range" value="50" min="-90" max = "90" step = "5"/>
                 <span class="sliderMin">-90º</span><span class="sliderMax">90º</span>
                 </label>
+
+                <label class="checkbox">
+                    <input type="checkbox" value="None" id="vector_draw_enable" name="check" checked /><span for="checkbox"></span>
+                </label>
+                <label class="checkboxTitle">Enable vector drawing</label> 
+
+                
+                <br>
                 <input id="runButton" class="inputs" type="button" value="Run"/>
-                <input type="checkbox" id="vector_draw_enable"> Enable vector drawing
 
     </div>
 </div>     
