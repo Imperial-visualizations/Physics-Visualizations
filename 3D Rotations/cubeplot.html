@@ -1,12 +1,107 @@
+<!doctype html>
 <head>
+    <title>3D Transformations</title>
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
+    <!-- <link rel="stylesheet" href="skeleton-tabs.css"> -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
     <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script src=CubeRotation.js></script>
+    <script src="skeleton-tabs.js"></script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    
 </head>
 
 <body>
-    <div id="myDiv"></div>
-    <script src=cubeplot.js></script>
+    <div class="container">
+    <div class="row">
+        <div class="six columns">
+                        <h1>3D Transformations</h1>
 
+            <div id='graph' style="width:450px; height:450px;"></div>
+                <script src=CubeRotation.js></script>
+       
+    </div>
+        <div class = "six columns">
+        <div class="tab">
+  <button class="tablinks" onclick="openTrans(event, 'Rotate')">Rotate</button>
+  <button class="tablinks" onclick="openTrans(event, 'Skew')">Skew</button>
+  <button class="tablinks" onclick="openTrans(event, 'Scale')">Scale</button>
+</div>
+
+<div id="Rotate" class="tabcontent" style="display: none">
+  <h3>Rotate</h3>
+    <div>
+        <p><strong>Select Axis:</strong></p> 
+        <select name="RotateAxes">
+            <option value="RotXaxis">X Axis</option> 
+            <option value="RotYaxis"> Y Axis</option> 
+            <option value="RotZaxis">Z Axis</option> 
+        </select>
+    </div>
+    <div class="SliderRot">
+        <label class="sliderTitle">Select Angle:</label>
+        <label>
+        <input id="skewID" type ="range" value="0" min ="-2" max="2" step ="0.1" />
+        <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
+        </label>
+    </div>
+        <div><button onclick="graphThat(xrot1, yrot1, zrot1)">Go</button></div>
+
+    
+</div>
+
+<div id="Skew" class="tabcontent" style="display: none">
+  <h3>Skew</h3>
+    <div>
+        <p><strong>Select Axis:</strong></p> 
+        <select name="SkewAxis">
+            <option value="SkewXaxis">X Axis</option> 
+            <option value="SkewYaxis"> Y Axis</option> 
+            <option value="SkewZaxis">Z Axis</option> 
+        </select>
+    </div>
+    <div class="sliderSkew">
+        <label class="sliderTitle">Select Angle:</label>
+        <label>
+        <input id="skewID" type ="range" value="0" min ="0" max="0.5" step ="0.1" />
+        <span class="sliderMin">0</span><span class="sliderMax">π/4</span>
+        </label>
+    </div>
+    <div><button type="button">Go!</button></div>
+
+</div>
+
+<div id="Scale" class="tabcontent" style="display: none">
+  <h3>Scale</h3><div>
+        <p><strong>Select Axis:</strong></p> 
+        <select name="RotationAxis">
+            <option value="ScaleXaxis">X Axis</option> 
+            <option value="ScaleYaxis"> Y Axis</option> 
+            <option value="ScaleZaxis">Z Axis</option> 
+            <option value="ScaleAllAxis">All Axes</option> 
+
+        </select>
+    </div>
+    <div class="sliderSkew">
+        <label class="sliderTitle">Select Scale:</label>
+        <label>
+        <input id="skewID" type ="range" value="0" min ="1" max="5" step ="0.1" />
+        <span class="sliderMin">0.5</span><span class="sliderMax">5</span>
+        </label>
+    </div>
+    <div><button type="button">Go!</button></div>
+
+    
+</div>
+        </div>
+    </div>
+    </div>
+        <div><button onclick="graphReset('graph')">Reset</button></div>
 
 </body>
+
+    
+
+
