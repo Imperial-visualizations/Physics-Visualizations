@@ -394,3 +394,9 @@ function resetStuff() {
 }
 
 $(document).ready(main);
+
+$("input[type=range]").each(function () {
+  $(this).on('input', function(){
+        $("#"+$(this).attr("id") + "Display").text($(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit"));
+  });
+});
