@@ -8,7 +8,7 @@
 	<body>
 		<!-- Globals-->
 		<script type="text/javascript">
-		var selector = new Selector();
+		var selector = new Selector('dropdown');
 		</script>
 		<div id="points">
 			<h1>Points</h1>
@@ -75,11 +75,9 @@
 			</script>
 		</div>
 		<div id="dropdown"> </div>
-		<script type="text/javascript">
-		selector.handle = 'dropdown';
-		</script>
 		<button type="button" id="test_selector" onclick="plot(selector.retrieveById(selector.checked()))"> Plot elements </button>
 		<button type="button" id="test_selector" onclick="selector.remove(selector.checked())"> Remove elements </button></br>
+		<button type="button" id="test_selector" onclick="selector.add(intersectList(selector.retrieveById(selector.checked())))"> Intersect elements </button></br>
 		<div id="plot" style="width:600px;height:250px;"></div>
 		<script type="text/javascript">
 		"use strict";

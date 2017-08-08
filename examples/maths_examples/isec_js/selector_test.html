@@ -6,27 +6,35 @@
   <body>
     <button type="button" onclick="showSelector()">Show</button>
     <button type="button" onclick="check()">Check</button>
-    <button type="button" onclick="remove()">Check</button>
+    <button type="button" onclick="remove()">Remove</button>
+    <button type="button" onclick="add()">Add new</button>
+    <button type="button" onclick="rename()">Rename</button>
     <div id="selector"> </div>
     <script type="text/javascript">
-    var obj1 = {
-        id: "obj1",
-        toString: function() {return "hehe1"}
+    function Obj() {
+      this.toString = function() {
+        if(this.hasOwnProperty('name')) {
+          return this.name;
+        }
+        else {
+          return "something"
+        }
       }
-      var obj2 = {
-        id: "obj2",
-        toString: function() {return "hehe2"}
-      }
-      var obj3 = {
-        id: "obj3",
-        toString: function() {return "hehe3"}
-      }
-      var selector = new Selector()
-      selector.add([obj1,obj2,obj3]);
+    }
+    var selector = new Selector('selector')
+    selector.add([new Obj(),new Obj(),new Obj()]);
     function showSelector() {
       console.log("showing Selector: ", selector);
       var out = document.getElementById('selector');
       out.replaceChild(selector.generate(),out.childNodes[0]);
+    }
+    function rename() {
+      var toRename = selector.checked();
+      console.log("to rename:", toRename, " length: ", toRename.length)
+      selector.rename(toRename);
+    }
+    function add() {
+      selector.add([new Obj()]);
     }
     function check() {
       console.log(selector.checked());

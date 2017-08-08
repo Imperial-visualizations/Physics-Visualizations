@@ -54,12 +54,13 @@ function Vector(x,y,z) {
 		if(!(other instanceof Vector)) {
 			throw new Error("Argument error: Cannot take cross product.")
 		}
-		return new Vector(this.y*other.z-this.z*other.y,this.x*other.z-this.z*other.z,this.x*other.y-this.y*other.x);
+		return new Vector(this.y*other.z-this.z*other.y,this.x*other.z-this.z*other.x,this.x*other.y-this.y*other.x);
 	}
 	this.toString = function(){
 		return "Vector("+this.x.toFixed(3)+","+this.y.toFixed(3)+","+this.z.toFixed(3)+")";
 	}
 }
+const ZERO_VECTOR = new Vector(0,0,0);
 
 function Point(pos) {
 	//pos must be type Vector
@@ -209,67 +210,158 @@ function Plane(normal,off) {
 	this.id = objcounter++;
 }
 
+function NoIntersectionError(message){
+    this.message = message;
+}
+NoIntersectionError.prototype = new Error();
+
+function NotImplementedError(message){
+    this.message = message;
+}
+NotImplementedError.prototype = new Error();
+
 function intersect(obj1, obj2) {
 	//plane-plane
 	if(obj1 instanceof Plane && obj2 instanceof Plane) {
 		return _plane_plane_intersect(obj1,obj2);
 	}
+	//plane-line
+	else if(obj1 instanceof Plane && obj2 instanceof Line) {
+		return _plane_line_intersect(obj1,obj2);
+	}
+	else if(obj1 instanceof Line && obj2 instanceof Plane) {
+		return _plane_line_intersect(obj2,obj1);
+	}
+	//plane-point
+	else if(obj1 instanceof Plane && obj2 instanceof Point) {
+		return _plane_point_intersect(obj1,obj2);
+	}
+	else if(obj1 instanceof Point && obj2 instanceof Plane) {
+		return _plane_point_intersect(obj2,obj1);
+	}
+	//line-line
+	else if(obj1 instanceof Line && obj2 instanceof Line) {
+		return _line_line_intersect(obj1,obj2);
+	}
+	//line-point
+	else if(obj1 instanceof Line && obj2 instanceof Point) {
+		return _line_point_intersect(obj1,obj2);
+	}
+	else if(obj1 instanceof Point && obj2 instanceof Line) {
+		return _line_point_intersect(obj2,obj1);
+	}
 	//pointpoint
-	if(obj1 instanceof Plane && obj2 instanceof Plane) {
+	else if(obj1 instanceof Point && obj2 instanceof Point) {
 		return _point_point_intersect(obj1,obj2);
+	}
+	else {
+		throw new TypeError("Argument error: intersect can only take Point, Line and Plane arguments.")
 	}
 }
 
 function _point_point_intersect(obj1, obj2) {
 	if(!(obj1 instanceof Point) || !(obj2 instanceof Point)) {
-		throw new Error("Argument error: _point_point_intesect can only take arguments of type Point.")
+		throw new TypeError("Argument error: _point_point_intesect can only take arguments of type Point.")
 	}
 	else {
-		if(obj1.x == obj2.x && obj1.y == obj2.y && obj1.z == obj2.z) {
-			return new Point({x: obj1.x,y: obj1.y,z: obj1.z});
+		//renaming variables
+		var pos1 = obj1.pos;
+		var pos2 = obj2.pos;
+		if(pos1.x == pos2.x && pos1.y == pos2.y && pos1.z == pos2.z) {
+			// Point of intersection found
+			return new Point(new Vector(pos1.x,pos1.y,pos1.z));
 		}
 		else {
-			throw Error("Points do not intersect.")
+			//no intersection, sorry
+			throw NoIntersectionError("Points do not intersect.")
 		}
 	}
 }
 
-function _point_line_intersect(obj1, obj2) {
-	if(!(obj1 instanceof Point) || !(obj2 instanceof Line)) {
-		throw new Error("Argument error: _point_point_intesect can only take arguments of type Point.")
+function _line_point_intersect(obj1, obj2) {
+	if(!(obj1 instanceof Line) || !(obj2 instanceof Point)) {
+		throw new TypeError("Argument error: _point_point_intesect can only take arguments of type Point.")
 	}
 	else {
-		var point = obj1;
-		var line = obj2;
+		//renaming
+		var line = obj1;
+		var point = obj2;
+		//algebra
+		/*
+		Idea:
+		\begin{itemize}
+				\item line: $\vec{r}_{l} = \vec{d}_{l} + \vec{v}_{l} t_{l}, t_{l} \in R$
+				\item point: $\vec{r}_{p} = \vec{d}_{p}$
+				\item intersection condition: $\vec{v}_{l} \times (\vec{d}_{p}-\vec{d}_{l}) = 0$
+				\item intersection point: $\vec{r}_{i} = ...$, any point on the line, eg. $\vec{r}_{i} = \vec{d}_{l}$
+		\end{itemize}
+		*/
 		var off_diff = point.pos.add( line.off.mul(-1) );
 		var cross = line.dir.cross(off_diff);
-		if(cross.allclose(new Vector(0,0,0))) {
+		if(cross.allclose(ZERO_VECTOR)) {
 			return new Point(line.off);
 		}
 		else {
-			throw new Error("Point does not intersect Line.")
+			throw new NoIntersectionError("Point "+point.toString()+" does not intersect Line "+line.toString()+".")
 		}
 	}
 }
 
 function _line_line_intersect(obj1, obj2) {
 	if(!(obj1 instanceof Line) || !(obj2 instanceof Line)) {
-		throw new Error("Argument error: _point_point_intesect can only take arguments of type Point.")
+		throw new Error("Argument error: _point_point_intersect can only take arguments of type Point.")
 	}
 	else {
+		/*
+		Idea:
+		\begin{itemize}
+				\item line 1: $\vec{r}_{1} = \vec{d}_{1} + \vec{v}_{1} t_{1}, t_{1} \in R$
+				\item line 2: $\vec{r}_{2} = \vec{d}_{2} + \vec{v}_{2} t_{2}, t_{2} \in R$
+				\item intersection condition: ??
+				\item intersection point: ??
+		\end{itemize}
+		*/
 		var line1 = obj1;
 		var line2 = obj2;
 		var cross = line1.dir.cross(line2.dir); //this is normalized
-		if(cross.allclose(new Vector(0,0,0))) {
+		console.log("Cross, Manual check: ", cross)
+		if(cross.allclose(ZERO_VECTOR)) {
 			//lines parallel
 			try {
-				intersect(line2, new Point(line1.offset)); //this will throw if they are not identical
+				intersect(line2, new Point(line1.off)); //this will throw NoIntersectionError if they are not identical
 				return new Line(line1.dir,line1.off);
 			}
 			catch(err) {
-				throw new Error("Line and Line are parallel, not identical.")
+				if(err instanceof NoIntersectionError) {
+					throw new NoIntersectionError("Line "+line1.toString()+" and Line "+ toString() + " are parallel, not identical.")
+				}
+				else {
+					throw err;
+				}
 			}
 		}
 		//TODO here
+		throw new NotImplementedError("line-line intersections")
 	}
+}
+
+function intersectList(objlist) {
+	var ans =[];
+	for(var idx = 0; idx<objlist.length;idx++) {
+		for(var other = idx; other<objlist.length;other++) {
+			if(idx != other) {
+				console.log("intersecting: "+objlist[idx]+" and "+objlist[other])
+				//for every intersection pair
+				//intersect and catch exceptions if arise
+				try {
+					var toPush = intersect(objlist[idx],objlist[other]);
+					ans.push(toPush);
+				}
+				catch(err) {
+					throw err;
+				}
+			}
+		}
+	}
+	return ans;
 }
