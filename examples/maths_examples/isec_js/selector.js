@@ -1,6 +1,7 @@
 var selectorcount = 0;
-var objscount = 0;
+
 function Selector(handle) {
+  var objscount = 0;
   this.objs = {}; //dictionary of selectable options
   this.id = "selector"+String(selectorcount);
   this.handle = handle; //id of the html item selector is linked to
