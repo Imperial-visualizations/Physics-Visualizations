@@ -23,6 +23,7 @@ for t in range(0, 314):
 # Drawing static 3D line/scatter plots
 line = Scatter3D(x=x, y=y, z=z, div_id="scatter", mode="markers", marker_size=4, line_color='blue', name='spiral')
 line.plot(x=x, y=b, z=c, mode="lines", line_color="red", name="spiral2", type="scatter3d")
+line.show()
 line.show(xaxis_range=[-np.pi, np.pi], xaxis_title="x", xaxis_titlefont_size=18, zaxis_range=[-1, 1], z_axis_title="z",
           yaxis_range=[-1, 1], yaxis_title="y", title="3D Animated Sine/Cos Wave Example")
 

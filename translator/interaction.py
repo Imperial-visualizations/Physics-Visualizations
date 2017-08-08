@@ -93,7 +93,7 @@ class Animate:
 
         anim_script += "Plotly.animate({div_id}, {{data: [".format(div_id=self.div_id)
         anim_script += "{variables}], ".format(variables=variables_str)         # Data to show in current frame.
-        anim_script += "traces: {traces}}}, ".format(traces=traces)             # Labeling traces
+        anim_script += "traces: {traces}}}, ".format(traces=traces)             # Labeling traces.
         anim_script += "{anim_attr}".format(anim_attr=anim_attr_js)             # Adding attributes.
 
         anim_script = anim_script[:-3]                                  # Removing "};" in jsified attributes.
@@ -104,9 +104,9 @@ class Animate:
         self.script[self.div_id] += anim_script
         self.graph.script[self.div_id] = self.script[self.div_id]                    # Updating graph script
 
-        continuity_buttons = Button(self.graph, self.div_id[1:-1] + "_btn")     # Passing graph script to button maker
-        self.script[self.div_id] = continuity_buttons.add_play_button()              # Making play button
-        self.script[self.div_id] = continuity_buttons.add_reset_button()             # Making reset button
+        continuity_buttons = Button(self.graph, self.div_id[1:-1] + "_btn")     # Passing graph script to button maker.
+        self.script[self.div_id] = continuity_buttons.add_play_button()              # Making play button.
+        self.script[self.div_id] = continuity_buttons.add_reset_button()             # Making reset button.
 
         self.graph.script[self.div_id] = self.script[self.div_id]                    # Updating graph script.
         return self.graph
@@ -165,7 +165,6 @@ class Mouse:
 
 class Button:
     def __init__(self, graph, div_id, **kwargs):
-
         # Sanity check - is the graph of the correct type?
         if str(graph.__class__.__bases__).find("<class 'translator.statics.Graph'>") == -1:
             raise TypeError("Object graph is not derived from base class 'Graph', but from {bases}"
@@ -211,7 +210,7 @@ class Button:
             if "var counter" in line and " = 0;" in line and "\t" not in line:
                 self.graph.script[self.gdiv_id] += line[3:] + "\n\t"
 
-        self.graph.script[self.gdiv_id] += "\n\t"                                           # Beautifying
+        self.graph.script[self.gdiv_id] += "\n\t "                                           # Beautifying
 
         self.graph.script[self.gdiv_id] += "if (is_paused) { \n\t"                          # Updating to initial frame
         for line in self.graph.script[self.gdiv_id].split("\n"):                            # if animation is paused, by

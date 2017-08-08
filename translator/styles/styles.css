@@ -388,7 +388,8 @@ fieldset {
   border-width: 0; }
 input[type="checkbox"],
 input[type="radio"] {
-  display: inline; }
+  display: inline;
+}
 label > .label-body {
   display: inline-block;
   margin-left: .5rem;
@@ -648,6 +649,9 @@ input[type=range] {
   width: 100%; /* Specific width is required for Firefox. */
   background: transparent; /* Otherwise white in Chrome */
   margin-bottom: 0;
+}
+input[type=range].disabled{
+  opacity: 0.2;
 }
 
 input[type=range]::-webkit-slider-thumb {
