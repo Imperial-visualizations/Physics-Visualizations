@@ -29,6 +29,14 @@
 
 @import url('https://fonts.googleapis.com/css?family=Lato');
 
+.boxed {
+  border-radius: 4px;
+  border: 2px solid #003E74;
+  margin: 0 auto;
+  padding: 0 10px;
+  /*border-spacing: 10px 30px;*/
+}
+
 /* Grid
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .container {
@@ -189,9 +197,9 @@ input[type="button"] {
   border-radius: 4px;
   border: 1px solid #bbb;
   cursor: pointer;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 
-  -webkit-appearance: none; 
+  -webkit-appearance: none;
   width: 160px;
   height: 40px;
   border: #006EAF solid 2px;
@@ -532,28 +540,28 @@ there.
 
 
 /*
-                                                                                                                 
-                                                                           `.`                                   
-        `--------                                                          ods                    :hhhh:         
-        :yyhddhys`      `   `         ``          ``              ``       .:.          ```        .-dd:         
-           +dh`    shhshdhshhh+ :hhyohhhhs:   `/shhhhy+.   shhy-+yddh-  `shhhy`      +yhhyhho`      `dd:         
-           +dh`    .hdo`sdy`:dh` :dds-`./ddo .ydo.``.odh.  `:ddy+..//`   `.+dh`      ::-..-hd+      `dd:         
-           +dh`    `yd/ ods -dh. .dd:    hdy`:ddysssssss-   -dd-           /dh`     :ydyo+oddo      `dd:         
-        `--odh:-.  -hdo`ody.-dh: .ddh/-:sdd/ `ydy:.`.:+s`  -/dd/--.     .--odh:--`  hdh-``:hds.  `--:dd+--.      
-        :hhhhhhhy` shhy:+hh+-yhy`.ddosyhs+.   `:shhhhys:  .yhhhhhhs    `ohhhhhhhy:  -shhhyo+yho  :yhhhhhhhs      
-                                .:dd/.`                                                                          
-                               `shhhhho                     
-                                                                                                                                                                                           
-                          `.`                                                             `.                                                 `.`                                           
-        `----.  .---.    `ydo                                             .yhhho         `hd/                                 -+-           `yd/                                           
-        /hddh+ `sddhs     -:.         ```  `                    ```        ..sds          -:`         ```  `       ```        sds            -:`          ``            ``                 
-         `yds   .hd-   `yhhhs      `ohhsyhhh-  +hhy` /hhh.   :yhhyhhy-       ods       .hhhh+      .shysyhhh.   -yhhyhhy:  `/ohdhooo+`    .yhhho      .+yhhhhy+.  +hhyohhdh/               
-          -dd/ `sd+     ..sdy      +dd/...:/`  `+dh` `/dd.   ./:...sdh       ods        ..hdo      sdd:...//`   ./:-..odh   :/hdy///:`     ..yds     -hdy-``-sdd: `+dd+.`+dd.              
-           +dh./dy`       ody      `+yhdddhy:   /dh`  -dd.  `ohhs+oydd       ods          ydo      .+yhdddhs-  `ohds+oydd     sds            sds     +dd:    .dds  /dh.  .dd.              
-            ydhdh.     .--sdh---`  /y+` `-ydh   :dd/.-sdd/` +dd/``-sdd-   .--sdy---    ---hds---   +y/` `-hds  /dd+``.odd-    sdh..-/+-   ---ydy---  -hdh:..:ydd: `+dh:``/dd/`             
-            .shy:     `shhhhhhhy-  +hyhyyyyo.    /yhhy+yhy: `+hhhys+yhy. `shhhhhhhy.  .yhhhhhhhy.  ohyhysyy+`  `+yhhys+shy.   .ohhhhyo.  .yhhhhhhhy.  `/shhhhy+.  /hhhy-:yhhy:             
 
-        2017 © Imperial College London                                                                                                                                                                                       
+                                                                           `.`
+        `--------                                                          ods                    :hhhh:
+        :yyhddhys`      `   `         ``          ``              ``       .:.          ```        .-dd:
+           +dh`    shhshdhshhh+ :hhyohhhhs:   `/shhhhy+.   shhy-+yddh-  `shhhy`      +yhhyhho`      `dd:
+           +dh`    .hdo`sdy`:dh` :dds-`./ddo .ydo.``.odh.  `:ddy+..//`   `.+dh`      ::-..-hd+      `dd:
+           +dh`    `yd/ ods -dh. .dd:    hdy`:ddysssssss-   -dd-           /dh`     :ydyo+oddo      `dd:
+        `--odh:-.  -hdo`ody.-dh: .ddh/-:sdd/ `ydy:.`.:+s`  -/dd/--.     .--odh:--`  hdh-``:hds.  `--:dd+--.
+        :hhhhhhhy` shhy:+hh+-yhy`.ddosyhs+.   `:shhhhys:  .yhhhhhhs    `ohhhhhhhy:  -shhhyo+yho  :yhhhhhhhs
+                                .:dd/.`
+                               `shhhhho
+
+                          `.`                                                             `.                                                 `.`
+        `----.  .---.    `ydo                                             .yhhho         `hd/                                 -+-           `yd/
+        /hddh+ `sddhs     -:.         ```  `                    ```        ..sds          -:`         ```  `       ```        sds            -:`          ``            ``
+         `yds   .hd-   `yhhhs      `ohhsyhhh-  +hhy` /hhh.   :yhhyhhy-       ods       .hhhh+      .shysyhhh.   -yhhyhhy:  `/ohdhooo+`    .yhhho      .+yhhhhy+.  +hhyohhdh/
+          -dd/ `sd+     ..sdy      +dd/...:/`  `+dh` `/dd.   ./:...sdh       ods        ..hdo      sdd:...//`   ./:-..odh   :/hdy///:`     ..yds     -hdy-``-sdd: `+dd+.`+dd.
+           +dh./dy`       ody      `+yhdddhy:   /dh`  -dd.  `ohhs+oydd       ods          ydo      .+yhdddhs-  `ohds+oydd     sds            sds     +dd:    .dds  /dh.  .dd.
+            ydhdh.     .--sdh---`  /y+` `-ydh   :dd/.-sdd/` +dd/``-sdd-   .--sdy---    ---hds---   +y/` `-hds  /dd+``.odd-    sdh..-/+-   ---ydy---  -hdh:..:ydd: `+dh:``/dd/`
+            .shy:     `shhhhhhhy-  +hyhyyyyo.    /yhhy+yhy: `+hhhys+yhy. `shhhhhhhy.  .yhhhhhhhy.  ohyhysyy+`  `+yhhys+shy.   .ohhhhyo.  .yhhhhhhhy.  `/shhhhy+.  /hhhy-:yhhy:
+
+        2017 © Imperial College London
 
 */
 
@@ -571,13 +579,6 @@ body, *{
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}
-pre,code{
-    -moz-user-select: -moz-text;
-    -khtml-user-select: text;
-    -webkit-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
 }
 
 body::after{
@@ -635,7 +636,7 @@ input[type=range]::-ms-track {
   cursor: pointer;
 
   /* Hides the slider so custom styles can be added */
-  background: transparent; 
+  background: transparent;
   border-color: transparent;
   color: transparent;
 }
@@ -722,7 +723,7 @@ Dropdown Menu Styles
 
 .dropdown:after{
     content:"▾";
-    color: #003E74; 
+    color: #003E74;
     position: relative;
     right:0;
     top: 0;
@@ -749,8 +750,8 @@ Dropdown Menu Styles
   box-sizing: border-box;
 }
 .dropdown>li>span {
-    display: inline-block ; 
-    color: #003E74; 
+    display: inline-block ;
+    color: #003E74;
     text-decoration: none;
     font-weight: 800;
     line-height: 20px;
@@ -762,29 +763,23 @@ Dropdown Menu Styles
     top: 1.0em;
 }
 .dropdown>li:hover>ul {
-    display: block;   
+    display: block;
 }
 .dropdown>li>ul>li {
     display: block;
     width: 100px;
     background: #003E74;
     border: #fff solid 2px;
-    color: #fff; 
+    color: #fff;
     margin-bottom: 0;
     padding-left: 10px;
 
 }
 .dropdown>li a {
-    display: inline-block ; 
-    color: #fff; 
+    display: inline-block ;
+    color: #fff;
     text-decoration: none;
     font-weight: 400;
     line-height: 20px;
     cursor: pointer;
 }
-
-
-
-
-
-

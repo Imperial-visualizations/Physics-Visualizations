@@ -572,13 +572,6 @@ body, *{
     -ms-user-select: none;
     user-select: none;
 }
-pre,code{
-    -moz-user-select: -moz-text;
-    -khtml-user-select: text;
-    -webkit-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
-}
 
 body::after{
     content: "Imperial Visualisations   ";
