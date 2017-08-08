@@ -9,21 +9,38 @@ function Selector(handle) {
   this.generate = function() {
     console.log("generating selector... id: " + this.id);
     console.log("make Ul from: ", this.objs);
-    var list = document.createElement('ul');
+    var list = document.createElement('div');
     list.id = this.id+":ul";
     list.class = 'dropdown';
     for(var id in this.objs) {
-        var item = document.createElement('li');
+        var item = document.createElement('div');
         item.id = this.id+":"+id+":li";
+
+        var label = document.createElement('label');
+        label.className = 'checkbox';
+
         var cb = document.createElement('input');
         cb.type = 'checkbox';
         cb.id = this.id+":"+id+":checkbox";//addressed by selectorid:objectid:checkbox
+
+        var span = document.createElement('span');
+
+        var label_outside = document.createElement('label');
+        label_outside.className = 'checkboxTitle'
+        label_outside.appendChild(document.createTextNode(this.objs[id].toString()));
+
+        label.appendChild(cb);
+        label.appendChild(span);
+        item.append(label);
+        item.append(label_outside);
+        list.appendChild(item);
+        /*
         var label = document.createElement('label')
         label.htmlFor = this.id+":"+id+":label"; //addressed by selectorid:objectid:label
         label.appendChild(document.createTextNode(this.objs[id].toString()));
         item.appendChild(cb);
         item.appendChild(label);
-        list.appendChild(item);
+        list.appendChild(item);*/
     }
     console.log(list);
     return list;

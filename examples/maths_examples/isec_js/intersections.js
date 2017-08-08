@@ -99,6 +99,11 @@ function Point(pos) {
 			return "Point(pos="+this.pos+")";
 		}
 	}
+	this.describe = function() {
+		var ans = this.toString() + " is a Point.\n"
+			+ "Its position vector is: " + this.pos.toString() + "\n";
+		return ans;
+	}
 	this.id = objcounter++;
 	console.log(this)
 }
@@ -115,10 +120,7 @@ function Line(dir,off) {
 		throw new Error("Argument error: Line(...) 'off' argument should be Vector.");
 	}
 	else {
-		var dot = off.dot(this.dir);
-		var vec = this.dir.mul(dot);
-		var vecneg = vec.mul(-1);
-		this.off = off.add(vecneg);
+		this.off = off.add((this.dir.mul(off.dot(this.dir))).mul(-1));
 	}
 	this.goify = function(layout){
 		var xyz = {x: [], y: [], z: []};
@@ -168,6 +170,12 @@ function Line(dir,off) {
 		else {
 			return "Line(dir="+this.dir+",off="+this.off+")";
 		}
+	}
+	this.describe = function() {
+		var ans = this.toString() + " is a Line.\n"
+			+ "Its direction vector is: " + this.dir.toString() + ".\n"
+			+ "Its offset vector is: " + this.off.toString() + ".\n";
+			return ans;
 	}
 	this.id = objcounter++;
 }
@@ -272,6 +280,12 @@ function Plane(normal,off) {
 		else {
 			return "Plane(normal="+this.normal+",off="+this.off+")";
 		}
+	}
+	this.describe = function() {
+		var ans = this.toString() + " is a Plane.\n"
+			+ "Its normal vector is: " + this.normal.toString() + ".\n"
+			+ "Its offset vector is: " + this.off.toString() + ".\n";
+			return ans;
 	}
 	this.id = objcounter++;
 }
@@ -486,7 +500,22 @@ function _plane_line_intersect(obj1,obj2) {
 		var check = plane.normal.dot(line.dir);
 		if (Math.abs(check) < 1e-6) {
 			//plane and line are parallel or overlap
-			throw new NoIntersectionError("Plane "+plane.toString()+" and Line " + line.toString() + " are parallel.");
+			try {
+				console.log("plane and line - overlap?")
+				intersect(new Point(line.off),plane); //this throws NoIntersectionError
+				return new Line(line.dir,line.off);
+			}
+			catch(err) {
+				if(err instanceof NoIntersectionError) {
+					console.log("plane and line - no overlap, parallel")
+					//do not overlap
+					throw new NoIntersectionError("Plane "+plane.toString()+" and Line " + line.toString() + " are parallel.");
+				}
+				else {
+					console.error(err)
+					throw err;
+				}
+			}
 		}
 		else {
 			//there is an explicit formula for parameter of the line for which intersection is met:
