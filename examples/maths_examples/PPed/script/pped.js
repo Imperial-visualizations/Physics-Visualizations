@@ -1,6 +1,6 @@
-var u = [4,0,0];
-var v = [2,1,0];
-var w = [0,3,5];
+var u = [1,0,0];
+var v = [0,1,0];
+var w = [0,0,1];
 
 var my_pped = {
     u: u,
@@ -23,8 +23,9 @@ var my_pped = {
         "i" : [0, 0, 3, 4, 4, 4, 4, 4, 5, 6, 6, 7],
         "j" : [2, 3, 4, 3, 6, 7, 1, 5, 2, 2, 7, 3],
         "k" : [1, 2, 0, 7, 5, 6, 0, 1, 1, 5, 2, 2],
-        "opacity": 0.8,
-        "colorscale": [[0, "rgb(0,62,116)"], [0.2, 'rgb(40, 40, 40)'], [1, "rgb(255,255,255)"]]
+//        "opacity": 0.8,
+//        "colorscale": [[0, "rgb(0,62,116)"],[1, "rgb(255,255,255)"]]
+//        "colorscale":'Viridis'
         }]
         return data
     },
@@ -45,18 +46,50 @@ var my_pped = {
                 title: 'z',
                 range: [-ubz,ubz]
             },
-            font: {family: "Helvetica Neue"}
+            font: {
+                family: "Lato",
+                size: 12,
+                color: "#003E74",
+                weight: 900}
         }
         return layout
     }
 }
+
 
 function main() {
     var vol = my_pped.volume();
     var data = my_pped.gopped();
     var layout = my_pped.lytpped();
     document.getElementById("volume").innerHTML = String(vol);
-    Plotly.plot('graph',data,layout)
+    Plotly.newPlot('graph',data,layout)
 }
 
+function ppedplotter() {
+    var ux = Number(document.getElementById('ux').value);
+    var uy = Number(document.getElementById('uy').value);
+    var uz = Number(document.getElementById('uz').value);
+    u = [ux,uy,uz];
+
+    var vx = Number(document.getElementById('vx').value);
+    var vy = Number(document.getElementById('vy').value);
+    var vz = Number(document.getElementById('vz').value);
+    v = [vx,vy,vz];
+
+    var wx = Number(document.getElementById('wx').value);
+    var wy = Number(document.getElementById('wy').value);
+    var wz = Number(document.getElementById('wz').value);
+    w = [wx,wy,wz];
+
+    my_pped.u = u;
+    my_pped.v = v;
+    my_pped.w = w;
+
+    var data = my_pped.gopped();
+    var layout = my_pped.lytpped();
+    
+    Plotly.newPlot('graph',data,layout)
+    vol = my_pped.volume();
+    document.getElementById("volume").innerHTML = String(vol);
+}
 $(document).ready(main);
