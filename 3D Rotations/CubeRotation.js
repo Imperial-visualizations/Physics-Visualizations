@@ -1,3 +1,11 @@
+function main() {
+  $("input[type=range]").each(function () {
+    $(this).on('input', function(){
+          $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
+    });
+  });
+}
+
 function roXaxis(point, theta) {
     var pointVec = point;
     var M = [[1, 0, 0],
@@ -100,6 +108,7 @@ function scaleZaxis(point, scale) {
 
 function master(transformation, initalparam, finalparam,xinit,yinit,zinit){
     t = numeric.linspace(initalparam,finalparam  ,10);
+    frames = []
 
     for (var i = 0 ; i < t.length ; i++) {
         xrot1 = []
@@ -162,16 +171,16 @@ function openTrans(evt, TransName) {
 }
 
 function graphReset(where){
-    xx = [-1., -1., 1., 1., -1., -1., 1., 1.];
-    yy = [-1., 1., 1., -1., -1., 1., 1., -1.];
-    zz = [-1., -1., -1., -1., 1., 1., 1., 1.];
+    xrot1 = [-1., -1., 1., 1., -1., -1., 1., 1.];
+    yrot1 = [-1., 1., 1., -1., -1., 1., 1., -1.];
+    zrot1 = [-1., -1., -1., -1., 1., 1., 1., 1.];
 
 
     what = [{
         type: "mesh3d",
-        x: xx,
-        y: yy,
-        z: zz,
+        x: xrot1,
+        y: yrot1,
+        z: zrot1,
         i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
         j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
         k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
@@ -198,6 +207,7 @@ function graphReset(where){
    zaxis: {
    range: [-3, 3],
   }},
+     margin:  {l: 0, r:0,t:0,b:0},
 };
     Plotly.newPlot(where, what, how )
 }
@@ -238,16 +248,136 @@ function graphThat(xx, yy, zz,){
 };
     Plotly.newPlot('graph', what, layout )
 }
+        
+function Rotate(){
+    axisSelector = document.getElementById("RotateSelect").value
+    angleSelector = document.getElementById("RotateSlider").value
+    angle = angleSelector*Math.PI
+    if (axisSelector ==="RotXaxis") {
+        framesnew = master(roXaxis,0,angle,xrot1,yrot1,zrot1)
+        console.log(framesnew)
+        
+        Plotly.animate('graph', framesnew, {transition: {
+          duration: 100,
+          easing: 'linear'
+        },frame: {
+          duration: 100,
+          redraw: false,
+        },mode: 'immediate'},layout);
 
+    } else if (axisSelector === "RotYaxis") {
+        framesnew = master(roYaxis,0,angle,xrot1,yrot1,zrot1)
+        Plotly.animate('graph', framesnew, {transition: {
+          duration: 100,
+          easing: 'linear'
+        },frame: {
+          duration: 100,
+          redraw: false,
+        },mode: 'immediate'},layout);
+        
+    } else {
+        framesnew = master(roZaxis,0,angle,xrot1,yrot1,zrot1)
+        Plotly.animate('graph', framesnew, {transition: {
+          duration: 100,
+          easing: 'linear'
+        },frame: {
+          duration: 100,
+          redraw: false,
+        },mode: 'immediate'},layout);
+    }
+    
 
+    
+}
 
+function Skew(){
+    axisSelector = document.getElementById("SkewSelect").value
+    angleSelector = document.getElementById("SkewSlider").value
+    angle = angleSelector*Math.PI
+    if (axisSelector ==="SkewXaxis") {
+        framesnew = master(skewXaxis,0,angle,xrot1,yrot1,zrot1)
+        Plotly.animate('graph', framesnew, {transition: {
+          duration: 100,
+          easing: 'linear'
+        },frame: {
+          duration: 100,
+          redraw: false,
+        },mode: 'immediate'},layout);
+    } else if (axisSelector === "SkewYaxis") {
+        framesnew = master(skewYaxis,0,angle,xrot1,yrot1,zrot1)
+        Plotly.animate('graph', framesnew, {transition: {
+          duration: 100,
+          easing: 'linear'
+        },frame: {
+          duration: 100,
+          redraw: false,
+        },mode: 'immediate'},layout);
+        
+    } else {
+        framesnew = master(skewZaxis,0,angle,xrot1,yrot1,zrot1)
+        Plotly.animate('graph', framesnew, {transition: {
+          duration: 100,
+          easing: 'linear'
+        },frame: {
+          duration: 100,
+          redraw: false,
+        },mode: 'immediate'},layout);
+    }   
+}
 
+function Scale(){
+    axisSelector = document.getElementById("ScaleSelect").value
+    scaleSelector = document.getElementById("ScaleSlider").value
+    if (axisSelector ==="ScaleXaxis") {
+        framesnew = master(scaleXaxis,1,scaleSelector,xrot1,yrot1,zrot1)
+        Plotly.animate('graph', framesnew, {transition: {
+          duration: 100,
+          easing: 'linear'
+        },frame: {
+          duration: 100,
+          redraw: false,
+        },mode: 'immediate'},layout);
+    } else if (axisSelector === "ScaleYaxis") {
+        framesnew = master(scaleYaxis,1,scaleSelector,xrot1,yrot1,zrot1)
+        Plotly.animate('graph', framesnew, {transition: {
+          duration: 100,
+          easing: 'linear'
+        },frame: {
+          duration: 100,
+          redraw: false,
+        },mode: 'immediate'},layout);
+        
+    } else if (axisSelector === "ScaleZaxis") {
+        framesnew = master(scaleZaxis ,1,scaleSelector,xrot1,yrot1,zrot1)
+        Plotly.animate('graph', framesnew, {transition: {
+          duration: 100,
+          easing: 'linear'
+        },frame: {
+          duration: 100,
+          redraw: false,
+        },mode: 'immediate'},layout);
+    }  else {
+        framesnew = master(scaleallaxis ,1,scaleSelector,xrot1,yrot1,zrot1)
+        Plotly.animate('graph', framesnew, {transition: {
+          duration: 100,
+          easing: 'linear'
+        },frame: {
+          duration: 100,
+          redraw: false,
+        },mode: 'immediate'},layout);
+        
+    }
+}
+
+var axisSelector
+var angleSelector
+var angle
+var scaleSelector
 var xx = [-1., -1., 1., 1., -1., -1., 1., 1.];
 var yy = [-1., 1., 1., -1., -1., 1., 1., -1.];
 var zz = [-1., -1., -1., -1., 1., 1., 1., 1.];
 var data = [];
-
-
+var framesnew
 var initial = [{
     type: "mesh3d",
     x: xx,
@@ -265,23 +395,13 @@ var initial = [{
     showscale: false
     }]
 
-var frames = []
 var name
 var data = [];
-var xrot1 = [];
-var yrot1 = [];
-var zrot1 = [];
+var xrot1 = [-1., -1., 1., 1., -1., -1., 1., 1.];
+var yrot1 = [-1., 1., 1., -1., -1., 1., 1., -1.];
+var zrot1 = [-1., -1., -1., -1., 1., 1., 1., 1.];
 
 var cubeRotation;
-
-var frames1 = master(scaleXaxis,1,2,xx,yy,zz)
-frames.push(frames1)
-var frames2 = master(skewYaxis,0,Math.PI/4,xrot1,yrot1,zrot1)
-frames.push(frames2)
-var frames3 = master(roXaxis,0,Math.PI/4,xrot1,yrot1,zrot1)
-frames.push(frames3)
-
-
 var layout = {
   scene:{
 	 aspectmode: "manual",
@@ -300,12 +420,7 @@ var layout = {
     margin:  {l: 0, r:0,t:0,b:0}
 };
 
-Plotly.newPlot('graph', initial, layout )
-Plotly.animate('graph', frames, {transition: {
-      duration: 100,
-      easing: 'linear'
-    },frame: {
-      duration: 100,
-      redraw: false,
-    },mode: 'immediate'},layout);
 
+$(document).ready(main);
+
+Plotly.newPlot('graph', initial, layout )
