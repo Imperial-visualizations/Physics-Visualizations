@@ -98,20 +98,25 @@ function scaleAll(factorAll) {
 //Transformation algorithms
 function computeFrames(transformation, start, end, initialPoint, frameSize) {
   var intermediate = numeric.linspace(start, end, frameSize);
-  var trace = [initialPoint];
+  var traceLine = [initialPoint];
   var frames =[];
   var name;
+  var newPoint;
 
   for (var i = 0, n = intermediate.length; i < n; ++i) {
-    var newPoint = math.multiply(transformation(intermediate[i]), initialPoint);
+    newPoint = math.multiply(transformation(intermediate[i]), initialPoint);
+    traceLine.push(newPoint);
     name = 'frame' + i;
     frames.push({
       "name": name,
-      "data": [{
-        "x": [newPoint[0]],
-        "y": [newPoint[1]],
-        "z": [newPoint[2]]
-      }]
+      "data": [
+        {
+          "x": [newPoint[0]],
+          "y": [newPoint[1]],
+          "z": [newPoint[2]]
+        },
+        new Line(traceLine).gObject("rgb(255,0,0)")
+      ]
     })
   }
   return frames;
@@ -215,33 +220,38 @@ function computeCommute(rotation1, rotation2, theta1, theta2, frameSize) {
   }];
 
   var layout = {
-    "width": 700,
-    "height": 600,
+    "width": 700, "height": 600,
     "margin": {l:0, r:0, t:0, b:0},
     "hovermode": "closest",
-    "updatemenus": [{
-      "x": 0.0,
-      "y": 1,
-      "xanchor": "left",
-      "yanchor": "top",
-      "showactive": false,
-      "type": "buttons",
-      "pad": {"t": 87, "r": 10},
-      "buttons": [
-        {
-          "method": "animate",
-          "args": [null, {"fromcurrent": true, "transition": {"duration": 50, "easing": "quadratic-in-out"}, "frame": {"duration": 50, "redraw":false}}],
-          "label": "Play"
-        },
-        {
-          "method": "animate",
-          "args":[[null], {"mode": "immediate", "transition": {"duration": 0}, "frame": {"duration": 0, "redraw": false}}],
-          "label": "Pause"
-        }
-    ]
-  }],
-  "showlegend": false,
-  "sliders": sliders
+    "updatemenus": [
+      {
+        "x": 0.0, "y": 1,
+        "xanchor": "left", "yanchor": "top",
+        "showactive": false,
+        "type": "buttons",
+        "pad": {"t": 87, "r": 10},
+        "buttons": [
+          {
+            "method": "animate",
+            "args": [null, {"fromcurrent": true, "transition": {"duration": 50, "easing": "quadratic-in-out"}, "frame": {"duration": 50, "redraw":false}}],
+            "label": "Play"
+          },
+          {
+            "method": "animate",
+            "args":[[null], {"mode": "immediate", "transition": {"duration": 0}, "frame": {"duration": 0, "redraw": false}}],
+            "label": "Pause"
+          }
+        ]
+      }
+    ],
+    "showlegend": false,
+    "sliders": sliders,
+    "scene": {
+      "camera": createView(initialPoint),
+      "xaxis": {range: [-4, 4]},
+      "yaxis": {range: [-4, 4]},
+      "zaxis": {range: [-4, 4]}
+    }
   }
   return [frames, layout];
 }
@@ -250,6 +260,18 @@ function computeCommute(rotation1, rotation2, theta1, theta2, frameSize) {
 var initialPoint = [2., 2., 2.];
 var radius = 2*Math.sqrt(3);
 var animatePause = false;
+var layout = {
+  "width": 700, "height": 600,
+  "margin": {l:0, r:0, t:0, b:0},
+  "hovermode": "closest",
+  "showlegend": false,
+  "scene": {
+    camera: createView(initialPoint),
+    xaxis: {range: [-4, 4]},
+    yaxis: {range: [-4, 4]},
+    zaxis: {range: [-4, 4]}
+  }
+}
 
 //Hide/Show Option (Rotation) - for better interface
 // Rotation
@@ -293,8 +315,10 @@ function revealCommute() {
   showCommute();
   plotCommute();
   rotationType = 0;
+  $('.tab-nav').hide();
 }
 function unrevealCommute() {
+  $('.tab-nav').slideToggle(600);
   $('.rotate3D').slideToggle(600);
   $('.rotateSlider').slideToggle(600);
   revealRotate(1);
@@ -305,11 +329,11 @@ function startAnimation (frames) {
   Plotly.animate('graph', frames,{
     fromcurrent: true,
     transition: {
-      duration: 50,
+      duration: 55,
       easing: "quadratic-in-out"
     },
     frame: {
-      duration: 50,
+      duration: 55,
       redraw: false,
     },
     mode: "immediate"
@@ -319,7 +343,7 @@ function stopAnimation () {
   Plotly.animate('graph', [], {mode: 'next'});
 }
 
-// Plots
+//Plots
 function init() {
   var data = [];
 
@@ -342,25 +366,6 @@ function init() {
 } //Initialise
 function plotInit() {
   var data = init();
-
-  var layout = {
-    "width": 700, "height": 600,
-    "margin": {l:0, r:0, t:0, b:50},
-    "hovermode": "closest",
-    "showlegend": false,
-    "scene":{
-      xaxis: {
-        range: [-4, 4]
-      },
-      yaxis: {
-        range: [-4, 4]
-      },
-      zaxis: {
-        range: [-4, 4]
-      }
-    }
-  }
-
   var figure = {"data": data, "layout": layout}
   Plotly.newPlot('graph', figure,);
 }
@@ -377,6 +382,14 @@ function plotInitialSphere(frames) {
       mode: "markers"
     },
     {
+      x: frames[0].data[1].x,
+      y: frames[0].data[1].y,
+      z: frames[0].data[1].z,
+      marker: {width:7, color:"rgb(255,0,0)"},
+      type: "scatter3d",
+      mode: "lines"
+    },
+    {
       x: frames[0].data[0].x,
       y: frames[0].data[0].y,
       z: frames[0].data[0].z,
@@ -388,28 +401,14 @@ function plotInitialSphere(frames) {
     new Line([[0.,0.,0], [1,0,0]]).gObject("rgb(0,0,0)"),
     new Line([[0.,0.,0], [0,1,0]]).gObject("rgb(0,0,0)"),
     new Line([[0.,0.,0], [0,0,1]]).gObject("rgb(0,0,0)")],
-    {
-      "width": 700, "height": 600,
-      "margin": {l:0, r:0, t:0, b:50},
-      "hovermode": "closest",
-      "showlegend": false,
-      "scene":{
-        xaxis: {
-          range: [-4, 4]
-        },
-        yaxis: {
-          range: [-4, 4]
-        },
-        zaxis: {
-          range: [-4, 4]
-        }
-      }
-    })
+    layout
+  )
 }
 function plotRotate(axis) {
-  var angle = document.getElementById('rotator').value * Math.PI;
+  var slider = document.getElementById('rotator').value;
+  var angle = slider * Math.PI;
   var frames;
-  var frameSize = 30;
+  var frameSize = 24 * Math.abs(slider); //frameSize proportional to angle. multi of "8"
   if (axis === 1) {
     frames = computeFrames(rotationX, 0, angle, initialPoint, frameSize);
   } else if (axis === 2) {
@@ -459,7 +458,6 @@ function plotGraph(data, [frames, layout]) {
     "frames": frames,
     "layout": layout
   }
-
   Plotly.newPlot('graph', figure);
 } //only to plot commute!
 function plotCommute() {
@@ -470,6 +468,15 @@ function plotCommute() {
   data1 = init();
   data2 = computeCommute(rotationY, rotationZ, theta1, theta2, frameSize);
   plotGraph(data1, data2);
+}
+//Layout
+function createView(point) {
+  var norm = Math.sqrt(point[0]**2 + (5*point[1])**2 + point[2]**2);
+  var a = 0.5 + point[0]/norm, b = 1 +  5*point[1]/norm, c = 0.5 + point[2]/norm;
+  var camera = {
+    eye: {x: a, y: b, z: c}
+  }
+  return camera
 }
 
 //Slider Value and Matrix grid Value
@@ -487,28 +494,34 @@ function makeTableHTML(myArray) {
 }
 function displayRotationMatrix() {
   var angle = document.getElementById("rotator").value;
-  var cosAngle = "cos("+String(angle)+"π"+")", sinAngle = "sin(" + String(angle)+"π"+")";
+  var cosAngle = "cos("+String(Math.abs(angle))+"π"+")";
+  var sinAngle1 = "sin(0)", sinAngle2 = "-sin(0)";
+  if (angle > 0) {
+    sinAngle1 = "sin(" + String(angle)+"π)"; sinAngle2 = "-sin(" + String(angle)+"π)";
+  } else if (angle < 0) {
+    sinAngle1 = "-sin(" + String(-angle)+"π)"; sinAngle2 = "sin(" + String(-angle)+"π)";
+  }
   if (rotationType === 1) {
     document.getElementById("rotateMatrix").innerHTML=makeTableHTML(
       [
         ["1", "0", "0"],
-        ["0", cosAngle, "-"+sinAngle],
-        ["0", sinAngle, cosAngle]
+        ["0", cosAngle, sinAngle2],
+        ["0", sinAngle1, cosAngle]
       ]
     )
   } else if (rotationType === 2) {
     document.getElementById("rotateMatrix").innerHTML=makeTableHTML(
       [
-        [cosAngle, "0", sinAngle],
+        [cosAngle, "0", sinAngle1],
         ["0", "1", "0"],
-        ["-"+sinAngle, "0", cosAngle]
+        [sinAngle2, "0", cosAngle]
       ]
     )
   } else if (rotationType === 3) {
     document.getElementById("rotateMatrix").innerHTML=makeTableHTML(
       [
-        [cosAngle, "-"+sinAngle, "0"],
-        [sinAngle, cosAngle, "0"],
+        [cosAngle, sinAngle2, "0"],
+        [sinAngle1, cosAngle, "0"],
         ["0", "0" ,"1"]
       ]
     )

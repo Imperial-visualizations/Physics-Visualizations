@@ -6,7 +6,8 @@
     <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
     <!-- <link rel="stylesheet" href="skeleton-tabs.css"> -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
     <script src=script/2d_trans_Ryo.js></script>
@@ -21,6 +22,9 @@
         <div class="six columns">
             <h1>2D Transformations</h1>
             <div id='graph' style="width:450px; height:450px;"></div>  <!-- Plotly chart will be drawn inside this DIV -->
+            <input class="button-primary" type="submit" value="Show Matrix", onclick="showMatrix()">
+            <!--<h4>Overall Matrix:</h4>-->
+            <!--<p id="overallMatrix"></p>-->
         </div>
 
         <div class="six columns">
@@ -31,17 +35,13 @@
               <li><a class="button" href="#rotate">Rotate</a></li>
               <li><a class="button" href="#custom">Custom</a></li>
             </ul>
-            <!-- <input type="button" value="Skew", onclick="revealSkew()">
-            <input type="button" value="Scale", onclick="revealScale()">
-            <input type="button" value="Rotate", onclick="revealRotate()">
-            <input type="button" value="Custom", onclick="revealCustom()"> -->
 
             <div class="tab-content">
               <div class="tab-pane active" id="skew">
                 <div class="sliderSkew">
                     <label class="sliderTitle">Axis:</label>
                     <label>
-                        <input id="skewID" type ="range" value="0" min ="0" max="1" step ="1" onchange="skewMatrix()"/>
+                        <input id="skewID" class="inputs" type ="range" value="0" min ="0" max="1" step ="1" onchange="skewMatrix()"/>
                         <span class="sliderMin">x</span><span class="sliderMax">y</span>
                      </label>
                 </div>
@@ -51,6 +51,7 @@
                 </div>
                   <h4>Skew Matrix:</h4>
                   <p id="skewmatrix"></p>
+
 
               </div>
 
@@ -114,8 +115,8 @@
                          <input id="aID" type ="range" value="0" min ="-2" max="2" step ="0.1" onchange="customMatrix()"/>
                          <span class="sliderMin">-2</span><span class="sliderMax">2</span>
                      </label>
-                </div>
-                <div class="sliderCustom">
+                <!--</div>-->
+                <!--<div class="sliderCustom">-->
                     <label class="sliderTitle">b:</label>
                      <label>
                          <input id="bID" type ="range" value="0" min ="-2" max="2" step ="0.1" onchange="customMatrix()"/>
@@ -141,7 +142,8 @@
                     <input type="button" value="Reset", onclick="resetStuff()">
                 </div>
                   <h4>Custom Matrix:</h4>
-                  <p id="custommatrix"></p>
+                    <p id="custommatrix"></p>
+
               </div>
             </div>
         </div>
