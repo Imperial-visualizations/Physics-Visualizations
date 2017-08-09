@@ -21,19 +21,25 @@
         </div>
         <div class="three columns">
             <!--<h1>Pulse </h1>-->
-            <label class="sliderTitle">Velocity 1:<span id="v1Display" data-unit="m/s"> 1 m/s</span></label>
+            <label class="sliderTitle">Number of sine waves:<span id="waves_display"> 2 </span></label>
             <label class="slider">
-                <input id="v1" class="inputs" type="range" value="2" min="0" max="20" step="1"/>
-                <span class="sliderMin">0</span><span class="sliderMax">20</span>
+                <input id="slider_waves" class="inputs" type="range" value="2" min="1" max="20" step="1"/>
+                <span class="sliderMin">1</span><span class="sliderMax">20</span>
             </label>
-            <label class="sliderTitle">Alpha:<span id="alphaDisplay" data-unit="none"> 1</span></label>
+            <label class="sliderTitle">Phase Velocity (non-dispersive):<span id="phaseVelocityDisplay" data-unit="m/s"> 1 m/s</span></label>
             <label class="slider">
-                <input id="alpha" class="inputs" type="range" value="10" min="0" max="28" step="1"/>
-                <span class="sliderMin">0</span><span class="sliderMax">100</span>
+                <input id="velocityPhase" class="inputs" type="range" value="1" min="0" max="1" step="0.05"/>
+                <span class="sliderMin">0</span><span class="sliderMax">1</span>
             </label>
             <label> Velocity 2:<span id="v2Display" data-unit="m/s"> 1 m/s</span></label><br>
             <input id="run_button" type="button" value="play" onclick="onStart()" style="width:200px"/>
             <input id="reset_button" type="button" value="reset" onclick="onReset()" style="width:200px"/>
+            <form>
+                omega(k) =  <br>
+                <input id = "function" type="text" name="function"><br>
+                <input id ="submit" type="button" value="submit"/>
+            </form>
+
 
         </div>
     </div>
@@ -45,23 +51,35 @@
 
 <script>
 
+    //Maybe at beginning: need to specify v (ratio of w and k) and how w (/k cause they are
+    // proportional) changes with the added sine wave (example they can both double everytime)
     // Defining variables (need to update later anyway so importing from e.g. json is meaningless)
-    var k_len = 1;
-    var dt = 0.02;
-    var omega = 1.1;
+    // Wave characteristics:
+    var nb_waves = parseInt($("#slider_waves").val());
+    var v = parseFloat($("#velocityPhase").val());
+    var k0 = 1; //define k0
+    var kend = 1.2; //define kend
 
+    var k_array = numeric.linspace(k0, 1.2, nb_waves);
+    var omega_nondisp = numeric.linspace(k0/v, kend/v, nb_waves);
+
+    // Default: non-dispersive?
+    var omega_disp = omega_nondisp.slice();
+
+    // code below changes it for all waves
+//    var omega_disp = [];
+//    for (var i = 0; i < nb_waves; i++) {
+//        omega_disp[i] = k_array[i]/Math.sqrt(1+(k_array[i]/k0/k0));
+//    }
+
+    // x and t coordinates
     var n = 801;
     var y_i = [], y_r = [], y_t = [];
-    var x = numeric.linspace(-40,40,n);
-    var k = numeric.linspace(1,k_len,1);
+    var x = numeric.linspace(-100,100,n);
     var t = 0.0;
-    var v1 = 5;
-    var alpha = valueSlider(parseInt($("#alpha").val()));
-    var v2 = alpha * v1;
-    var A = (v2 - v1) / (v1 + v2);
-    var B = 2 * v1 / (v1 + v2);
+    var dt = 0.02;
     var is_paused = true;
-    //var style = { font: "36px Lato", fill: "#003E74", wordWrap: false, align: "left", backgroundColor: "#f0f0f0" };
+
     var layout =
     {
         autosize: false,
@@ -75,9 +93,9 @@
             pad: 4
         },
         //plot_bgcolor: '#EBEEEE',
-//        xaxis: {
-//            range: [-10, 10]
-//        },
+        xaxis: {
+            range: [-40, 40]
+        },
 //        yaxis: {
 //            range: [-1.6, 1.6]
 //        },
@@ -90,35 +108,33 @@
     };
 
 
-    // Slider values (for alpha)
-    function valueSlider(position) {
-        if (position <= 10) {
-            return (position * 0.1).toFixed(1);
-        } else if (position < 20) {
-            return position - 9;
-        } else {
-            return (position - 20) * 10 + 20;
+    // Submit
+    $('#submit').on('click', function () {
+        for (var i = 0; i < nb_waves; i++) {
+            k = k_array[i];
+            omega_disp[i] = eval($('#function').val());
         }
-    }
-
-    // Slider alpha
-    $('#alpha').on('input', function () {
-        alpha = valueSlider(parseInt($("#alpha").val()));
-        $("#alphaDisplay").text(" " + alpha);
-        v2 = alpha * v1;
-        $("#v2Display").text(" " + v2 + " m/s");
-        A = (v2 - v1) / (v1 + v2);
-        B = 2 * v1 / (v1 + v2);
         onReset();
+        $('#function').val("");
     })
 
-    // Slider v1
-    $('#v1').on('input', function () {
-        v1 = parseInt($("#v1").val());
-        $("#v1Display").text(" " + v1 + " m/s");
-        v2 = alpha * v1;
-        A = (v2 - v1) / (v1 + v2);
-        B = 2 * v1 / (v1 + v2);
+
+    // Slider waves
+    $('#slider_waves').on('input', function () {
+        nb_waves = parseFloat($("#slider_waves").val());
+        $("#waves_display").text(" " + nb_waves);
+        k_array = numeric.linspace(k0, 1.2, nb_waves);
+        omega_nondisp = numeric.linspace(k0/v, kend/v, nb_waves);
+        omega_disp = omega_nondisp.slice();
+        onReset();
+    });
+
+    // Slider phase velocity
+    $('#velocityPhase').on('input', function () {
+        v = parseFloat($("#velocityPhase").val());
+        $("#phaseVelocityDisplay").text(" " + v + " m/s");
+        omega_nondisp = numeric.linspace(k0/v, kend/v, nb_waves);
+        omega_disp = omega_nondisp.slice();
         onReset();
     });
 
@@ -126,8 +142,8 @@
         for (var i = 0; i < n; i++) {
             y_i[i] = 0;
             if (x[i] < 0) {
-                for (var j = 0; j < k_len; j++) {
-                    y_i[i] += Math.sin(x[i] - t) + Math.sin(k[j] * x[i] - k[j] * t);
+                for (var j = 0; j < nb_waves; j++) {
+                    y_i[i] += Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
                 }
             }
             y_r[i] = 0;
@@ -200,24 +216,31 @@
     // Data update function for animation
     var t_start = t;
 
+
+    //Lecture
+    // k=2pi/l
+    // w = k*v (v=lf=w/k --> phase velocity)
     function compute() {
         t += dt;
         // need to find a way to define time limit
-        if (t < t_start + 16) {
+        if (t < t_start + 50) {
             for (var i = 0; i < n; i++) {
                 if (x[i] < 0) {
                     y_i[i] = 0;
                     y_r[i] = 0;
-                    for (var j = 0; j < k_len; j++) {
-                        y_i[i] +=  Math.sin(x[i] - t) + Math.sin(k[j] * x[i] - k[j]* t);
+                    for (var j = 0; j < nb_waves; j++) {
+                        // For the incident (aka not dispersive) v has to be the same
+                        // as v = w/k this means the ratio of w/k has to be a constant
+                        // for all the waves added together
+                        y_i[i] +=  Math.sin(k_array[j]*x[i] - omega_nondisp[j]* t);
 //                        y_r[i] +=  Math.sin(x[i] - t) + Math.sin(1.2 * k[j] * x[i] - omega * k[j]* t);
                     }
                 }
                 else if (x[i] > 0) {
                     y_i[i] = 0;
                     y_t[i] = 0;
-                    for (var j_ = 0; j_ < k_len; j_++) {
-                        y_t[i] +=  Math.sin(x[i] - t) + Math.sin(1.2 * k[j_] * x[i] - omega * k[j_]* t);
+                    for (var j_ = 0; j_ < nb_waves; j_++) {
+                        y_t[i] += Math.sin( k_array[j_] * x[i] - omega_disp[j_] * t);
                     }
                 }
             }
@@ -237,18 +260,7 @@
                     {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
                     // vastly speeds up animation but won't update any non-animated properties
             );
-            if (v1 > v2) {
-                if (t > (7 / v1 + 10 / v2) && y_t[n - 1] < 0.001 && y_t[n - 1] > -0.001) {
-                    onReset();
-                }
-                else requestAnimationFrame(update);
-            }
-            else if (v2 >= v1) {
-                if (t > (17 / v1)) {
-                    onReset();
-                }
-                else requestAnimationFrame(update);
-            }
+            requestAnimationFrame(update);
         }
     }
 
@@ -258,8 +270,7 @@
         requestAnimationFrame(update);
     }
 
-    // ToDo: Linspace
-    // ToDo: Wave on left
+    // ToDo: make wave disperse slowly
     // ToDo: Endpoint
     // ToDo: Change Initial Wave
     // ToDo: Dispersion
