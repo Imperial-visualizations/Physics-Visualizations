@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Imperial Visualisations</title>
+  <title>Dielectric Boundary - Imperial Visualisations</title>
 
-  <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
+  <!-- <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1"> -->
+  <link rel="stylesheet" href="debug-style.css">
   <link rel="stylesheet" href="loading-spinner.css">
 
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -33,7 +34,15 @@
       </div>
 
       <div class="four columns">
-        <pre id="interface" style="font-size: 12px;"></pre>
+        <div id="interface">
+
+          <div id="angle-slider">
+            <label for="angle" class="sliderTitle">Angle of incidence:</label>
+              <input type="range" id="angle" name="angle" min="0" max="90" value="45">
+              <span class="sliderMin">0&deg;</span><span class="sliderMax">90&deg;</span>
+          </div>
+
+        </div>
       </div>
 
     </div>
