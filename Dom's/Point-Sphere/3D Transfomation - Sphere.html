@@ -9,7 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
-    <script src=script/rotation3d.js></script>
+    <script src=script/3DTransformation_S.js></script>
     <script src="skeleton-tabs.js"></script>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
@@ -31,6 +31,7 @@
           <div class="tab-pane active" id="rotate">
             <!--Rotation--> <!--x = 1, y = 2, z = 3-->
             <div class="rotate3D">
+              <label>Rotation about:</label>
               <input type="button" value="x-axis", onclick="revealRotate(1)">
               <input type="button" value="y-axis", onclick="revealRotate(2)">
               <input type="button" value="z-axis", onclick="revealRotate(3)">
@@ -99,9 +100,9 @@
 
           <!--Reflection-->
           <div class="tab-pane" id="reflect">
-            <input type="button" value="    x = 0    ", onclick="plotReflect(1)">
-            <input type="button" value="    y = 0    ", onclick="plotReflect(2)">
-            <input type="button" value="    z = 0    ", onclick="plotReflect(3)">
+            <input type="button" value="x = 0.0", onclick="plotReflect(1)">
+            <input type="button" value="y = 0.0", onclick="plotReflect(2)">
+            <input type="button" value="z = 0.0", onclick="plotReflect(3)">
           </div>
 
           <!--Scalation-->
