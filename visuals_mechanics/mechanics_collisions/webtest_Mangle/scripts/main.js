@@ -79,6 +79,8 @@ let arrowSprites = [];
 let traces = [];
 
 
+let angleSprite,dynamicSF;
+
 let d = new Date();
 
 ball1 = {
@@ -88,6 +90,7 @@ ball1 = {
         mass: 1,
         initr: new Vector((canvasWidth / 2 - 100), (canvasHeight / 6)),
         v: new Vector(0, 0),
+        initV: new Vector(0,0),
         postv: new Vector(0, 0)
     },
     CoM: {
@@ -107,7 +110,7 @@ ball2 = {
         spriteInstance: undefined,
         mass: 1,
         initr: new Vector((canvasWidth / 2 + 100), (canvasHeight / 6)),
-
+        initV:new Vector(0,0),
         v: new Vector(0, 0),
         postv: new Vector(0, 0)
     },
@@ -164,14 +167,16 @@ function updateLabels() {
 
         ball1.CoM.v = vCal(ball1.Lab.v, '-', getCoMV());
         ball2.CoM.v = vCal(ball2.Lab.v, '-', getCoMV());
-        centreOfMass1.x = getCoMR().x;
-        centreOfMass1.y = getCoMR().y;
+
 
 
         updateRadius(ball1);
         updateRadius(ball2);
 
         updateScatterAngle();
+
+        centreOfMass1.x = getCoMR().x;
+        centreOfMass1.y = getCoMR().y;
 
         ball1.CoM.spriteInstance.x = canvasWidth - 100 - getCoMR().x;
         ball1.CoM.spriteInstance.y += canvasHeight / 6 - getCoMR().y;
@@ -504,23 +509,30 @@ function update() {
         if (Phaser.Rectangle.intersects(ball1.Lab.spriteInstance.getBounds(), ball2.Lab.spriteInstance.getBounds()) && !isColliding) {
             onCollision();
         }
-
-
     }
     t += 1;
 }
 
 function drawArrow(originV, vectorV, rectIndex, color = 0x006EAF, latexID = "") {
+    let origin,vector;
 
-    let origin = new Vector(originV.x, -1 * originV.y);
-
-    let vector = new Vector(vectorV.x, -1 * vectorV.y);
-    // Flip directions for canvas y-axis
-
+    if(rectIndex === 3) {
+        vector = new Vector(vectorV.x * 8 /dynamicSF,-1*vectorV.y*8/dynamicSF);
+        if(latexID === 'p1'){
+            origin = new Vector(originV.x,-1*originV.y);
+        }
+        else{
+             origin = new Vector(originV.x * 8/dynamicSF,-1*originV.y * 8/dynamicSF);
+        }
+        // Flip directions for canvas y-axis
+    }else{
+        vector = new Vector(vectorV.x,-1*vectorV.y);
+        origin = new Vector(originV.x, -1 * originV.y);
+    }
 
     let arrowG = game.add.graphics((canvasWidth / 2 - 500 + origin.x), (canvasHeight * 5 / 6 + 100 + origin.y));
 
-    let scaleFactor = 100 * canvasWidth / 1600;
+    let scaleFactor = canvasWidth / 16;
 
     let mag = vector.getMag() * scaleFactor;
 
@@ -555,15 +567,25 @@ function drawArrow(originV, vectorV, rectIndex, color = 0x006EAF, latexID = "") 
     arrowG.destroy();
 }
 
-function drawAngle(vecta, vectb, color) {
-
+function drawAngle(vecta, vectb,pos,color) {
     let arcG = game.add.graphics(0, 0);
     arcG.lineStyle(8, color);
-    arcG.arc(0, 0, 50, vectb.getArg, vecta.getArg(), true);
+    arcG.arc(0, 0, 50, Math.max(vecta.getArg(),vectb.getArg()), Math.min(vecta.getArg(),vectb.getArg()), true);
     arcG.endFill();
+    if(angleSprite != null) angleSprite.destroy();
+    angleSprite =  game.add.sprite(pos.x + canvasWidth/2,pos.y + canvasHeight/6,arcG.generateTexture());
+    angleSprite.anchor.set(0,0.5);
+    arcG.destroy();
+
+}
+
+function getLabP(){
+    return new Vector(ball1.Lab.v.x* ball1.Lab.mass + ball2.Lab.v.x*ball2.Lab.mass,ball2.Lab.v.y*ball2.Lab.mass+ball1.Lab.mass*ball1.Lab.v.y);
 }
 
 function recalculateVector() {
+
+
 
     let pStar = vCal(vCal(ball2.Lab.v, '-', ball1.Lab.v), '*', getReducedMass());
 
@@ -576,23 +598,35 @@ function recalculateVector() {
     ball2.CoM.postv = vCal(q2star, '*', 1 / ball2.Lab.mass);
     p1 = vCal(ball1.Lab.v, "*", ball1.Lab.mass);
 
-
     let coMV = getCoMV();
     ball1.Lab.postv = vCal(ball1.CoM.postv, '+', coMV);
     ball2.Lab.postv = vCal(ball2.CoM.postv, '+', coMV);
 
     q1 = vCal(ball1.Lab.postv, "*", ball1.Lab.mass);
     q2 = vCal(ball2.Lab.postv, "*", ball2.Lab.mass);
+
+    dynamicSF = Math.max(p1.getMag(),
+                        q2.getMag(),
+                        q1.getMag(),
+                        vCal(pStar_reversed, "*", (ball1.Lab.mass / ball2.Lab.mass)).getMag(),
+                        pStar_reversed.getMag(),
+                        q1star.getMag());
+
     clearVectors();
     if ($('#vector_draw_enable').is(':checked')) {
         console.log("Checked");
 
         let scalefactor = canvasWidth / 16;
-        let colPoint = 100 - (ball2.radius);
+        let colPoint = 100 - ball2.radius;
 
-        drawArrow(vCal(new Vector(colPoint/scalefactor + 5, 1),'-',p1), p1, 1, 0xE40043);
-        drawArrow(new Vector(colPoint/scalefactor + 5, 1), q1, 1, 0xE40043);
-        drawArrow(new Vector(colPoint/scalefactor + 5, 1), q2, 1, 0x00ACD7);
+        drawArrow(vCal(new Vector(colPoint/scalefactor + 5, 1 - (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor ),'-',ball1.Lab.v), ball1.Lab.v, 1, 0xE40043);
+        drawArrow(new Vector(colPoint/scalefactor + 5, 1 - (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor ), ball1.Lab.postv, 1, 0xE40043);
+        drawArrow(new Vector((ball2.Lab.spriteInstance.x-canvasWidth*0.5)/scalefactor + 5, 1 + (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor),ball2.Lab.postv, 1, 0x00ACD7);
+        //CoM frame
+        drawArrow(new Vector(5-pStar.x ,1),pStar,2,0x960078,'pstar');
+        drawArrow(new Vector(5+pStar.x,1),vCal(pStar,'*',-1),2,0x960078,'pstar');
+        drawArrow(new Vector(5,1),q1star,2,0x960078,'qstar');
+        drawArrow(new Vector(5,1),q2star,2,0x960078,'qstar');
     }
     drawArrow(zeroV(), q1, 3, 0xDD2501, "q1");
     drawArrow(q1, q2, 3, 0x0091D4, 'q2');
@@ -617,7 +651,7 @@ function addTrace(ball) {
         ballG.drawCircle(0, 0, 10);
 
         traces.push(game.add.sprite(ball.spriteInstance.x, ball.spriteInstance.y, (ballG.generateTexture())));
-
+        traces[traces.length -1].anchor.set(0.5,0.5);
         ballG.destroy();
     }
 }
