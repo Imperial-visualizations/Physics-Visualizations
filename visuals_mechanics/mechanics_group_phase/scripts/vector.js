@@ -1,6 +1,8 @@
 /** *******************************************************************************************************************
- * Created by Akash B to simplify some of the vector calculations frequently used in calculations, e.g. addition,    **
- * subtraction, cos, sin, tan. Soon to include features such as sum (all elements in vector), dot & cross products.  **
+ * Created to simplify some of the vector calculations frequently used in calculations, e.g. addition,
+ * subtraction, cos, sin, tan. Soon to include features such as sum (all elements in vector), dot & cross products.
+ *
+ * - Akash B.
  ******************************************************************************************************************* **/
 
 /** Function to check if input, n, is a finite number. **/
@@ -13,7 +15,10 @@ Vector = function(items) {
     this.items = items;
 };
 
-/** *************************************************** Add function ******************************************** **/
+/** *************************************************** Addition Function ****************************************** **|
+ * Adds one vector/matrix to another.
+ * @return {*} Resulting Array from addition
+ ** **************************************************************************************************************** **/
 Vector.prototype.add = function add(other) {
     // Sanity check - make sure Vectors are of same length.
     if (this.items.length !== other.items.length)
@@ -50,7 +55,10 @@ Vector.prototype.add = function add(other) {
     return new Vector(result);                                                          // Returning the result vector.
 };
 
-/** ************************************* Subtract function *********************************************** **/
+/** *************************************************** Subtract Function ****************************************** **|
+ * Subtracts one vector/matrix from another.
+ * @return {*} Subtracted Array
+ ** **************************************************************************************************************** **/
 Vector.prototype.subtract = function subtract(other) {
     // Sanity check - make sure Vectors are of same length.
     if (this.items.length !== other.items.length)
@@ -87,7 +95,94 @@ Vector.prototype.subtract = function subtract(other) {
     return new Vector(result).items;                                                    // Returning the result vector.
 };
 
-/** *************************************************** Sine function ********************************************** **/
+/** ************************************************* Sum function ************************************************* **|
+ * Adds all elements of vector together. Also can add the all the rows of the matrices.
+ * @returns {*} Summed array.
+|** **************************************************************************************************************** **/
+Vector.prototype.sum = function sum() {
+    var result = [];                                                         // Array where resulting vector is stored.
+    var sum = 0;
+    if (this.items.constructor === Array && isNumber(this.items[0])) {       // Checking element in array is a number.
+        for (var i = 0; i < this.items.length; i++) {
+            // Adding element i of this array to element i of other array.
+            sum += this.items[i];
+        }
+        result.push(sum);
+        return new Vector(result).items
+    }
+
+    else if (this.items.constructor === Array && this.items[0].constructor === Array)
+    {
+        for (var j = 0; j < this.items.length; j++) {
+            this.items[j] = new Vector(this.items[j]);
+            result.push(this.items[j].sum());
+            sum += this.items[j].sum()
+        }
+        return new Vector(result).items
+    }
+};
+
+/** **********************************************  Multiplying function  ****************************************** **|
+ * Performs scalar multiplication of vectors or matrices.
+ * @param other Int.
+ * @returns {*} Result array.
+ ** **************************************************************************************************************** **/
+Vector.prototype.multiply = function multiply(other) {
+
+    var result = [];                                                         // Array where resulting vector is stored.
+
+    // Scalar multiplication.
+    if (this.items.constructor === Array && isNumber(this.items[0]) && isNumber(other)) {
+        // Scalar multiplication of a vector.
+        for (var i = 0; i < this.items.length; i++) {
+            result.push(this.items[i] * other);
+        }
+    }
+
+    // Scalar multiplication of a matrix
+    else if (this.items.constructor === Array && this.items[0].constructor === Array && isNumber(other)) {
+        for (var j = 0; j < this.items.length; j++) {
+            this.items[j] = new Vector(this.items[j]);                              // Converting array to Vector.
+            result.push(this.items[j].multiply(other));
+        }
+    }
+    return new Vector(result).items;                                                // Returning the result vector.
+};
+
+/** ************************************************ Dot Product Function ****************************************** **|
+ * Finds dot product of 2 Vectors.
+ * @return {*} Array with dot product
+ ** **************************************************************************************************************** **/
+Vector.prototype.dot = function dot(other) {
+    if ((this.items.constructor !== Array || other.items.constructor !== Array) &&
+        (!isNumber(this.items[0]) || !isNumber(other.items[0])) ) {
+        console.error("Error: Values must both be vectors. Incompatible data types.");
+        return -2
+    }
+
+    if (this.items.length !== other.items.length) {
+        console.error("Error. Vectors must be of same length.");
+        return -1
+    }
+
+    var result = [];
+
+    for (var i = 0; i < this.items.length; i++) {
+        result.push(this.items[i] * other.items[i])              // Multiplying element i of this to element i of other.
+    }
+
+    return new Vector(result).sum()                              // Summing products and returning array.
+};
+
+
+/**
+ *=====================================================- Trig Functions -===============================================
+ **/
+
+/** ***************************************************** Sin function ********************************************* **|
+ * Calculates sine of all numbers in Vector array.
+ * @returns {*} Array with sin values.
+ ** **************************************************************************************************************** **/
 Vector.prototype.sin = function sin() {
 
     var result = [];                                                         // Array where resulting vector is stored.
@@ -110,7 +205,10 @@ Vector.prototype.sin = function sin() {
     return new Vector(result).items;                                                    // Returning the result vector.
 };
 
-/** ************************************************** Cosine function ********************************************* **/
+/** ***************************************************** Cos function ********************************************* **|
+ * Calculates cosine of all numbers in Vector array.
+ * @returns {*} Array with cos values.
+ ** **************************************************************************************************************** **/
 Vector.prototype.cos = function cos() {
 
     var result = [];                                                         // Array where resulting vector is stored.
@@ -133,7 +231,10 @@ Vector.prototype.cos = function cos() {
     return new Vector(result).items;                                                    // Returning the result vector.
 };
 
-/** ************************************************ Tangent function ********************************************** **/
+/** ***************************************************** Tan function ********************************************* **|
+ * Calculates tangent of all numbers in Vector array.
+ * @returns {*} Array with tan values.
+ ** **************************************************************************************************************** **/
 Vector.prototype.tan = function tan() {
 
     var result = [];                                                         // Array where resulting vector is stored.
@@ -163,44 +264,12 @@ Vector.prototype.tan = function tan() {
     return new Vector(result).items;                                                    // Returning the result vector.
 };
 
-/** ************************************************ Multiplying function ****************************************** **/
-Vector.prototype.multiply = function multiply(other) {
-
-    var result = [];                                                         // Array where resulting vector is stored.
-
-    // Checking if 'other' is a number.
-    // TODO: Scalar multiplication of matrix still broken - other getting changed to 'undefined'. Need fix.
-    if (this.items.constructor === Array && isNumber(other)) {
-
-        // In case of scalar multiplication of matrix/vector.
-        if (isNumber(other)) {
-
-            // Scalar multiplication of a vector.
-            if (this.items.constructor === Array && isNumber(this.items[0])) {
-                for (var i = 0; i < this.items.length; i++) {
-                    result.push(this.items[i] * other);
-                }
-            }
-
-            // Scalar multiplication of a matrix
-            else if (this.items.constructor === Array && this.items[0].constructor === Array) {
-                for (var j = 0; j < this.items.length; j++) {
-                    this.items[j] = new Vector(this.items[j]);                          // Converting array to Vector.
-                    result.push(this.items[j].multiply());
-                }
-            }
-        }
-        return new Vector(result).items;                                                    // Returning the result vector.
-    }
-
-    else if (this.items.constructor === Array && other.items.constructor === Array) {
-        // TODO: Implement matrix multiplication.
-    }
-};
-
+/**
+ * ==============================================- End of Trig Functions -==============================================
+ **/
 
 /**  ************************************************* END ********************************************************* **/
-// var v1 = new Vector([[3.1415, -Math.PI/2, 0.01]]);
-// var v2 = new Vector([10, 12, 13]);
+// var v1 = new Vector([1, 2, 3]);
+// var v2 = new Vector([10, 20, 30]);
 //
-// console.log(v1.multiply(2));
+// console.log(v2.dot(v1));
