@@ -1,3 +1,10 @@
+math.config({matrix:"Matrix"})
+// Global variables for vertices and matrix display
+var vertex1 = [1,0];
+var vertex2 = [1,1];
+var vertex3 = [0,1];
+var my_matrix = math.matrix([[1,0],[0,1]])
+
 // Rotation matrix
 function rotmat(th) {
   var rotator = [[Math.cos(th),-Math.sin(th)],[Math.sin(th),Math.cos(th)]];
@@ -93,49 +100,73 @@ function mylinspace(a,b,n) {
 ///// NOW START TO DEFORM SQUARES WITH FUNCTIONS WE'VE ALREADY WRITTEN /////
 
 // Structure of this function goes:
-// (string for transformation, parameters)
+// (string for transformation, parameters, 3 vertex arguments then matrix)
 function squareTrans() {
   if (arguments[0] === "rotate") {
     var th = arguments[1];
-    var [x0,y0] = rotation([1,0],th);
-    var [x1,y1] = rotation([1,1],th);
-    var [x2,y2] = rotation([0,1],th);
-    return [x0,x1,x2,y0,y1,y2]
+    my_matrix = math.multiply(rotmat(th),my_matrix);
+    var [x0,y0] = rotation(arguments[2],th);
+    vertex1 = [x0[x0.length-1],y0[y0.length-1]]
+    var [x1,y1] = rotation(arguments[3],th);
+    vertex2 = [x1[x1.length-1],y1[y1.length-1]]
+    var [x2,y2] = rotation(arguments[4],th);
+    vertex3 = [x2[x2.length-1],y2[y2.length-1]]
+    return [x0,x1,x2,y0,y1,y2,my_matrix]
   }
   else if (arguments[0] === "scale") {
     // If only 1 scale argument given
-    if (arguments.length === 2) {
+    if (arguments.length === 5) {
       var s = arguments[1];
-      var [x0,y0] = scale([1,0],s);
-      var [x1,y1] = scale([1,1],s);
-      var [x2,y2] = scale([0,1],s);
+      my_matrix = math.multiply([[s,0],[0,s]],my_matrix)
+      var [x0,y0] = scale(arguments[2],s);
+      vertex1 = [x0[x0.length-1],y0[y0.length-1]]
+      var [x1,y1] = scale(arguments[3],s);
+      vertex2 = [x1[x1.length-1],y1[y1.length-1]]
+      var [x2,y2] = scale(arguments[4],s);
+      vertex3 = [x2[x2.length-1],y2[y2.length-1]]
       return [x0,x1,x2,y0,y1,y2]
     }
-    else if (arguments.length === 3){
+    else if (arguments.length === 6){
       var s1 = arguments[1];
       var s2 = arguments[2];
-      var [x0,y0] = scale([1,0],s1,s2);
-      var [x1,y1] = scale([1,1],s1,s2);
-      var [x2,y2] = scale([0,1],s1,s2);
+      my_matrix = math.multiply([[s1,0],[0,s2]],my_matrix)
+      var [x0,y0] = scale(arguments[3],s1,s2);
+      vertex1 = [x0[x0.length-1],y0[y0.length-1]]
+      var [x1,y1] = scale(arguments[4],s1,s2);
+      vertex2 = [x1[x1.length-1],y1[y1.length-1]]
+      var [x2,y2] = scale(arguments[5],s1,s2);
+      vertex3 = [x2[x2.length-1],y2[y2.length-1]]
       return [x0,x1,x2,y0,y1,y2]
     }
   }
   else if (arguments[0] === "custom") {
     var a = arguments[1], b = arguments[2],
      c = arguments[3], d = arguments[4];
-    var [x0,y0] = custom([1,0],a,b,c,d);
-    var [x1,y1] = custom([1,1],a,b,c,d);
-    var [x2,y2] = custom([0,1],a,b,c,d);
+    my_matrix = math.multiply([[a,b],[c,d]],my_matrix)
+    var [x0,y0] = custom(arguments[5],a,b,c,d);
+    vertex1 = [x0[x0.length-1],y0[y0.length-1]]
+    var [x1,y1] = custom(arguments[6],a,b,c,d);
+    vertex2 = [x1[x1.length-1],y1[y1.length-1]]
+    var [x2,y2] = custom(arguments[7],a,b,c,d);
+    vertex3 = [x2[x2.length-1],y2[y2.length-1]]
     return [x0,x1,x2,y0,y1,y2]
   }
   else if (arguments[0] === "skew") {
     var axis = arguments[1];
-    var [x0,y0] = skew([1,0],axis);
-    var [x1,y1] = skew([1,1],axis);
-    var [x2,y2] = skew([0,1],axis);
+    if (axis===0) {
+      my_matrix = math.multiply([[1,1],[0,1]],my_matrix)
+    }
+    else if (axis===1) {
+      my_matrix = math.multiply([[1,0],[1,1]],my_matrix)
+    }
+    var [x0,y0] = skew(arguments[2],axis);
+    vertex1 = [x0[x0.length-1],y0[y0.length-1]]
+    var [x1,y1] = skew(arguments[3],axis);
+    vertex2 = [x1[x1.length-1],y1[y1.length-1]]
+    var [x2,y2] = skew(arguments[4],axis);
+    vertex3 = [x2[x2.length-1],y2[y2.length-1]]
     return [x0,x1,x2,y0,y1,y2]
   }
-
 }
 
 // Convert x,y arrays returned from functions in json format for animate
@@ -152,10 +183,16 @@ function jsonFormat2(x0,x1,x2,y0,y1,y2) {
 // Layout object to be used for all plots
 var layout = {xaxis: {range: [-4, 4], title:"x"},
     yaxis: {range: [-4, 4], title:"y"},
-    margin: {l:30, r:30, t:30, b:30}
+    margin: {l:30, r:30, t:30, b:30},
+    font: {
+      family: "Lato",
+      size: 12,
+      color: "#003E74",
+      weight: 900
+    }
     };
 
-// Plots a 1x1 square on the grid
+// Plots a 1x1 square on the grid and reset vertices
 function squarePlotter(){
   Plotly.newPlot('graph', [{
     x : [0,1,1,0,0],
@@ -169,8 +206,8 @@ function squarePlotter(){
 }
 
 // Plots animated skew
-function plotterSkew(axis) {
-  var myArray = squareTrans("skew",axis);
+function plotterSkew(axis,vertex1,vertex2,vertex3) {
+  var myArray = squareTrans("skew",axis,vertex1,vertex2,vertex3);
   var frames = jsonFormat2(...myArray);
   // Initial plot
   Plotly.newPlot('graph', [{
@@ -198,8 +235,8 @@ function plotterSkew(axis) {
 }
 
 // Plots animated scale
-function plotterScale(s1,s2) {
-  var myArray = squareTrans("scale",s1,s2);
+function plotterScale(s1,s2,vertex1,vertex2,vertex3) {
+  var myArray = squareTrans("scale",s1,s2,vertex1,vertex2,vertex3);
   var frames = jsonFormat2(...myArray);
   // Initial plot
   Plotly.newPlot('graph', [{
@@ -227,8 +264,8 @@ function plotterScale(s1,s2) {
 }
 
 // Plots animated rotation
-function plotterRotate(th) {
-  var myArray = squareTrans("rotate",th);
+function plotterRotate(th,vertex1,vertex2,vertex3) {
+  var myArray = squareTrans("rotate",th,vertex1,vertex2,vertex3);
   var frames = jsonFormat2(...myArray);
   // Initial plot
   Plotly.newPlot('graph', [{
@@ -256,8 +293,8 @@ function plotterRotate(th) {
 }
 
 // Plots animated custom
-function plotterCustom(a,b,c,d) {
-  var myArray = squareTrans("custom",a,b,c,d);
+function plotterCustom(a,b,c,d,vertex1,vertex2,vertex3) {
+  var myArray = squareTrans("custom",a,b,c,d,vertex1,vertex2,vertex3);
   var frames = jsonFormat2(...myArray);
   // Initial plot
   Plotly.newPlot('graph', [{
@@ -311,19 +348,19 @@ function makeTableHTML(myArray) {
 function plotRotate() {
   var x = document.getElementById('rotateID').value;
   var th = Math.PI*x;
-  plotterRotate(th);
+  plotterRotate(th,vertex1,vertex2,vertex3);
 }
 
 function plotSkew() {
   var axis = document.getElementById('skewID').value;
   var numaxis = Number(axis);
-  plotterSkew(numaxis);
+  plotterSkew(numaxis,vertex1,vertex2,vertex3);
   }
 
 function plotScale() {
   var scale1 = document.getElementById('scale1ID').value;
   var scale2 = document.getElementById('scale2ID').value;
-  plotterScale(scale1,scale2);
+  plotterScale(scale1,scale2,vertex1,vertex2,vertex3);
 }
 
 function plotCustom() {
@@ -331,7 +368,8 @@ function plotCustom() {
   var b = document.getElementById('bID').value;
   var c = document.getElementById('cID').value;
   var d = document.getElementById('dID').value;
-  plotterCustom(a,b,c,d);
+  plotterCustom(a,b,c,d,vertex1,vertex2,vertex3);
+
 }
 
 // Create tables which show the transformation matrices
@@ -350,7 +388,6 @@ function rotateMatrix() {
   var x = document.getElementById('rotateID').value;
   var th = Math.PI*x;
   var rotmatrix = roundedmat(rotmat(th))
-  console.log(rotmatrix)
   document.getElementById('rotatematrix').innerHTML=makeTableHTML(rotmatrix);
   th = Math.round(th*100)/100;
   document.getElementById('rotatematrix2').innerHTML=makeTableHTML([["cos("+String(x)+"π"+")","-sin("+String(x)+"π"+")"],
@@ -390,13 +427,25 @@ function roundedmat(A) {
 
 function resetStuff() {
   squarePlotter();
-  $(".skewID").slider('refresh')
+  vertex1 = [1,0];
+  vertex2 = [1,1];
+  vertex3 = [0,1];
+  my_matrix = math.matrix([[1,0],[0,1]]);
 }
 
+function showMatrix() {
+//  var A = roundedmat(my_matrix)
+  var A = [[my_matrix.get([0,0]),my_matrix.get([0,1])],[my_matrix.get([1,0]),my_matrix.get([1,1])]];
+  A = roundedmat(A);
+  alert(math.matrix(A))
+}
 $(document).ready(main);
 
-$("input[type=range]").each(function () {
-  $(this).on('input', function(){
-        $("#"+$(this).attr("id") + "Display").text($(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit"));
-  });
-});
+//$("input[type=range]").each(function () {
+//  $(this).on('input', function(){
+////        $("#"+$(this).attr("id") + "Display").text($(this).val() +
+////          $("#"+$(this).attr("id")+"Display").attr("data-unit"));
+//        $("rotateID").text($(this).val() +
+//          $("rotateID").attr("data-unit"));
+//  });
+//});
