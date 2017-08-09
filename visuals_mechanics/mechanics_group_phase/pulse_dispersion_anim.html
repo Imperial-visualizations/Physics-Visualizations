@@ -35,8 +35,9 @@
             <input id="run_button" type="button" value="play" onclick="onStart()" style="width:200px"/>
             <input id="reset_button" type="button" value="reset" onclick="onReset()" style="width:200px"/>
             <form>
-                omega(k) =  <br>
-                <input id = "function" type="text" name="function"><br>
+                <label>omega(k) = <span id ="dispersionRelation"> </span></label>
+                <input id = "function" name="function"><br>
+                <p id= "error" style="color:#FF0000"></p>
                 <input id ="submit" type="button" value="submit"/>
             </form>
 
@@ -52,7 +53,7 @@
 <script>
 
     //Maybe at beginning: need to specify v (ratio of w and k) and how w (/k cause they are
-    // proportional) changes with the added sine wave (example they can both double everytime)
+    // proportional) changes with the added sine wave
     // Defining variables (need to update later anyway so importing from e.g. json is meaningless)
     // Wave characteristics:
     var nb_waves = parseInt($("#slider_waves").val());
@@ -110,12 +111,25 @@
 
     // Submit
     $('#submit').on('click', function () {
-        for (var i = 0; i < nb_waves; i++) {
-            k = k_array[i];
-            omega_disp[i] = eval($('#function').val());
+        try {
+//            if ($('#function').val().includes('^')) {
+//                var str = $('#function').val().replace('^','Math.power')
+//                $('#function').val(str);
+//            }
+            for (var i = 0; i < nb_waves; i++) {
+                k = k_array[i];
+                omega_disp[i] = eval($('#function').val());
+            }
+            $('#dispersionRelation').text($('#function').val())
+            onReset();
+            $('#function').val("");
+            $('#error').text("");
         }
-        onReset();
-        $('#function').val("");
+        catch(err){
+            $('#error').text(err.message);
+        }
+
+
     })
 
 
