@@ -48,7 +48,6 @@ Now that you have access to the repo you can make changes.
    --folder changes--
 
 2. **Committing**
-
 Now that changes have been made we can now commit (save) the change as part of the project workflow. First select the files you want to commit the changes to and stage them (or use "Stage all changes" to do this for all files). In this example there are no changes to discard (careful since this reverts all changes since the last commit!), but this can be done by right clicking on files individually or by clicking "Discard all changes" to do this for all files. 
 
    --staging file and committing (highlight discard options)--
