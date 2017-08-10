@@ -37,20 +37,14 @@ class Arrow:
             z=[0, shaft_xyz[2]],
             showlegend=False, mode='lines', line={'width': self.width, 'color': self.color}
         )
-        self.wing1 = go.Scatter3d(
-            x=[shaft_xyz[0] / 2., wings_xyz[0][0]],
-            y=[shaft_xyz[1] / 2., wings_xyz[0][1]],
-            z=[shaft_xyz[2] / 2., wings_xyz[0][2]],
-            showlegend=False, mode='lines', line={'width': self.width, 'color': self.color}
-        )
-        self.wing2 = go.Scatter3d(
-            x=[shaft_xyz[0] / 2., wings_xyz[1][0]],
-            y=[shaft_xyz[1] / 2., wings_xyz[1][1]],
-            z=[shaft_xyz[2] / 2., wings_xyz[1][2]],
+        self.wings = go.Scatter3d(
+            x=[wings_xyz[0][0], shaft_xyz[0] / 2., wings_xyz[1][0]],
+            y=[wings_xyz[0][1], shaft_xyz[1] / 2., wings_xyz[1][1]],
+            z=[wings_xyz[0][2], shaft_xyz[2] / 2., wings_xyz[1][2]],
             showlegend=False, mode='lines', line={'width': self.width, 'color': self.color}
         )
 
-        self.data = [self.shaft, self.wing1, self.wing2]
+        self.data = [self.shaft, self.wings]
 
 
     def _find_wing_coord(self):
