@@ -7,40 +7,51 @@
     <style>
 
         #graph {
-            border: 3px solid #003E74;
+            border: 3px solid #003e74;
         }
     </style>
 </head>
 <body>
 
 <h1>Travelling pulse at interface (dispersive)</h1>
+
 <div class="container">
     <div class="row">
+
         <div class="nine columns">
             <div id='graph'></div>  <!-- Plotly chart will be drawn inside this DIV -->
         </div>
+
         <div class="three columns">
+
             <!--<h1>Pulse </h1>-->
             <label class="sliderTitle">Number of sine waves:<span id="waves_display"> 2 </span></label>
             <label class="slider">
-                <input id="slider_waves" class="inputs" type="range" value="2" min="1" max="20" step="1"/>
-                <span class="sliderMin">1</span><span class="sliderMax">20</span>
+                <input id="slider_waves" class="inputs" type="range" value="2" min="1" max="100" step="1"/>
+                <span class="sliderMin">1</span><span class="sliderMax">100</span>
             </label>
-            <label class="sliderTitle">Phase Velocity (non-dispersive):<span id="phaseVelocityDisplay" data-unit="m/s"> 1 m/s</span></label>
+
+            <label class="sliderTitle">Phase Velocity (non-dispersive):
+                <span id="phaseVelocityDisplay" data-unit="m/s"> 1 m/s</span>
+            </label>
+
             <label class="slider">
                 <input id="velocityPhase" class="inputs" type="range" value="1" min="0" max="1" step="0.05"/>
                 <span class="sliderMin">0</span><span class="sliderMax">1</span>
             </label>
+
             <label> Velocity 2:<span id="v2Display" data-unit="m/s"> 1 m/s</span></label><br>
             <input id="run_button" type="button" value="play" onclick="onStart()" style="width:200px"/>
             <input id="reset_button" type="button" value="reset" onclick="onReset()" style="width:200px"/>
+
             <form>
-                <label>omega(k) = <span id ="dispersionRelation"> </span></label>
+                <label>Define Dispersion Relation: <br /> &omega;(k) =
+                    <span id ="dispersionRelation"> </span>
+                </label>
                 <input id = "function" name="function"><br>
-                <p id= "error" style="color:#FF0000"></p>
+                <p id= "error" style="color:#ff0000"></p>
                 <input id ="submit" type="button" value="submit"/>
             </form>
-
 
         </div>
     </div>
@@ -52,8 +63,6 @@
 
 <script>
 
-    //Maybe at beginning: need to specify v (ratio of w and k) and how w (/k cause they are
-    // proportional) changes with the added sine wave
     // Defining variables (need to update later anyway so importing from e.g. json is meaningless)
     // Wave characteristics:
     var nb_waves = parseInt($("#slider_waves").val());
@@ -76,38 +85,38 @@
     // x and t coordinates
     var n = 801;
     var y_i = [], y_r = [], y_t = [];
-    var x = numeric.linspace(-100,100,n);
+    var x = numeric.linspace(-50, -10, n);
     var t = 0.0;
     var dt = 0.02;
     var is_paused = true;
+    var y_range;
 
     var layout =
-    {
-        autosize: false,
-        width: 700,
-        height: 600,
-        margin: {
-            l: 50,
-            r: 50,
-            b: 100,
-            t: 100,
-            pad: 4
-        },
-        //plot_bgcolor: '#EBEEEE',
-        xaxis: {
-            range: [-40, 40]
-        },
-//        yaxis: {
-//            range: [-1.6, 1.6]
-//        },
-        font: {
-            family: 'Lato',
-            size: 18,
-            color: '#003E74',
-            weight: 900
-        }
-    };
-
+        {
+            autosize: false,
+            width: 700,
+            height: 600,
+            margin: {
+                l: 50,
+                r: 50,
+                b: 100,
+                t: 100,
+                pad: 4
+            },
+            //plot_bgcolor: '#EBEEEE',
+            xaxis: {
+                range: [-50, 50]
+            },
+            yaxis: {
+                range: [-y_range, y_range]
+            },
+            font: {
+                family: 'Lato',
+                size: 18,
+                color: '#003E74',
+                weight: 900
+            }
+        };
 
     // Submit
     $('#submit').on('click', function () {
@@ -128,10 +137,7 @@
         catch(err){
             $('#error').text(err.message);
         }
-
-
-    })
-
+    });
 
     // Slider waves
     $('#slider_waves').on('input', function () {
@@ -141,6 +147,7 @@
         omega_nondisp = numeric.linspace(k0/v, kend/v, nb_waves);
         omega_disp = omega_nondisp.slice();
         onReset();
+        update_y_range();
     });
 
     // Slider phase velocity
@@ -165,19 +172,26 @@
         }
     }
 
+    function update_y_range() {
+        if (nb_waves < 4) {
+            y_range = 4
+        }
+        else {
+            y_range = (nb_waves - (nb_waves % 5)) / 5
+        }
+    }
+
     function onReset() {
         is_paused = true;
         t = 0;
         initial_data();
-        Plotly.animate('graph', {
-                    data: [{y: y_i}, {y: y_r}, {y: y_t}]
-                },
-                {
-                    transition: {duration: 0}, frame: {duration: 0, redraw: false}
-                }
+
+        Plotly.animate('graph',
+                {data: [{y: y_i}, {y: y_r}, {y: y_t}],},
+                {layout: [{yaxis: {range: [-y_range, y_range]}}]},
+                {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
         );
         document.getElementById('run_button').value = (is_paused) ? "Play" : "Pause";
-
     }
 
     // Data
@@ -226,12 +240,10 @@
             layout
     );
 
-
     // Data update function for animation
     var t_start = t;
 
-
-    //Lecture
+    // Lecture
     // k=2pi/l
     // w = k*v (v=lf=w/k --> phase velocity)
     function compute() {
@@ -271,6 +283,7 @@
 
             Plotly.animate('graph',
                     {data: [{y: y_i}, {y: y_r}, {y: y_t}]},
+                    {layout: [{yaxis: {range: [-y_range, y_range]}}]},
                     {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
                     // vastly speeds up animation but won't update any non-animated properties
             );
@@ -284,11 +297,13 @@
         requestAnimationFrame(update);
     }
 
-    // ToDo: make wave disperse slowly
     // ToDo: Endpoint
+    // ToDo: make wave disperse slowly
     // ToDo: Change Initial Wave
-    // ToDo: Dispersion
     // ToDo: Python?
+    // ToDo: Speed Up
+    // Maybe at beginning: need to specify v (ratio of w and k) and how w (/k cause they are
+    // proportional) changes with the added sine wave
 
 </script>
 

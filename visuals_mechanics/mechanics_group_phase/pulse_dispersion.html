@@ -15,11 +15,13 @@
     //input  by user
     var t = 0;
     var k = [];
+    var k_len = 10;
+    var omega = 1.1;
     var x = [], y_i = [], y_r = [], y_t = [];
 
-    var v1 = 5;
-    var n = 200;
-    var dt = 0.01;
+    var v1 = 1;
+    var n = 1000;
+    var dt = 0.1;
 
     function compute_k() {
         for (var i = 0; i < 100; i++) {
@@ -31,10 +33,10 @@
 
     function compute_data() {
         for (var i = 0; i < n; i++) {
-            x[i] = -10 + i / 40;
+            x[i] = -10 + i / 20;
             y_i[i] = 0;
-            for (var j = 0; j < 100; j++) {
-                y_i[i] += Math.sin(k[j] * x[i] - k[j] * t);
+            for (var j = 0; j < k_len; j++) {
+                y_i[i] +=  Math.sin(x[i] - t) + Math.sin(1.2 * k[j] * x[i] - omega * k[j]* t);
             }
             y_r[i] = 0;
             y_t[i] = 0;
@@ -66,10 +68,10 @@
     function compute() {
         t += dt;
         for (var i = 0; i < n; i++) {
-            x[i] = -10 + i / 40;
+            x[i] = -10 + i / 20;
             y_i[i] = 0;
-            for (var j = 0; j < 100; j++) {
-                y_i[i] += Math.sin(k[j] * x[i] * t - k[j] * t);
+            for (var j = 0; j < k_len; j++) {
+                y_i[i] +=  Math.sin(x[i] - t) + Math.sin(1.2 * k[j] * x[i] - omega * k[j] * t);
             }
             y_r[i] = 0;
             y_t[i] = 0;
@@ -83,10 +85,10 @@
             data: [{x: x, y: y_i}, {x: x, y: y_i}]
         }, {
             transition: {
-                duration: 75,
+                duration: 0,
             },
             frame: {
-                duration: 100,
+                duration: 0,
                 redraw: false,
             }
         });
