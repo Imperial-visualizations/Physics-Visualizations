@@ -2,14 +2,14 @@ $(window).on('load', function() {
 
     var dom = {
         intface: $("#interface"),
-        loadSpinnerWrapper: $("#spinner-wrapper")
+        loadSpinner: $("#spinner-wrapper")
     };
 
     $.when(
         $.getJSON("https://rawgit.com/binaryfunt/Imperial-Visualizations/master/dielectric_boundary_data.JSON"),
         $.getJSON("https://rawgit.com/binaryfunt/Imperial-Visualizations/master/dielectric_boundary_layout.JSON")
-    ).done(function(data, layout) { // i.e., function(JSON1, JSON2) {}
-        plot(data, layout);
+    ).then(function(data, layout) { // i.e., function(JSON1, JSON2) {}
+        init(data, layout);
 
         $("#interface input#angle").on("change", function(event) {
             var index = input2index($(this), data[0]["p"]);
@@ -40,10 +40,13 @@ $(window).on('load', function() {
             // Plotly.newPlot(div='graph', data[0]["p"][index]);
 
         });
+    }, function() {
+        dom.loadSpinner.children(".spinner-span").html("Error: Failed to load JSON resources");
+        dom.loadSpinner.children("div").fadeOut(0);
     });
 
-    function plot(data, layout) {
-        var plotData = data[0]["p"][4],
+    function init(data, layout) {
+        var plotData = data[0]["p"][10],
             plotLayout = layout[0];
 
         endLoadingScreen();
@@ -54,7 +57,7 @@ $(window).on('load', function() {
     }
 
     function endLoadingScreen() {
-        dom.loadSpinnerWrapper.fadeOut();
+        dom.loadSpinner.fadeOut(0);
     }
 
     function input2index(domInput, array) {
