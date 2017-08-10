@@ -29,6 +29,7 @@ GitKraken is a GUI (Graphic User Interface) git client that greatly speeds up th
 2. Clone the Imperial-Visualizations repo by going to File -> Clone Repo -> Clone -> GitHub.com -> %owner username%/Imperial-Visualizations. Select a folder to clone to and press "Clone the repo!" (in this example I used a "UROP/Imperial Visualizations" folder which now contains a "GitHub-Tutorial" folder - the repo.)
 
    -clone--
+![alt: clone](images/clone_repo.gif)
 
 3. You are now ready to use GitKraken to contribute to the Imperial-Visualizations repo. Although you can simply read the rest of the tutorial, it is recommended to create a test repo and repeat the step 2 (above) for this new repo before continuing. You should first use this test repo to make sure that you understand the git features below. 
 
