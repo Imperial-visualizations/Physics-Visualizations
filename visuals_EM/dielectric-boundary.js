@@ -13,31 +13,37 @@ $(window).on('load', function() {
 
         $("#interface input#angle").on("change", function(event) {
             var index = input2index($(this), data[0]["p"]);
+            console.log("Index", index);
             console.log(data[0]["p"][index]);
-            for (var i = 0; i < data[0].p[index].length - 1; i++) {
+            for (var i = 0; i < data[0].p[index].length - 1; i += 4) {
                 // Length - 1 ignores the mesh3d boundary surface trace
-                // Method 1:
-                var update = {
-                    x: [data[0].p[index][i].x],
-                    y: [data[0].p[index][i].y],
-                    z: [data[0].p[index][i].z]
-                };
-                Plotly.restyle(div="graph", update, i);
 
-                // Method 2:
-                // var update = {
-                //     data: [{
-                //         x: data[0].p[index][i].x,
-                //         y: data[0].p[index][i].y,
-                //         z: data[0].p[index][i].z
-                //     }],
-                //     traces: [0],
-                //     layout: {}
-                // };
-                // Plotly.animate(div="graph", update, {transition: {duration: 0}});
+                console.log("Trace", i);
+
+                var update = {
+                    data: [{
+                        x: data[0].p[index][i].x,
+                        y: data[0].p[index][i].y,
+                        z: data[0].p[index][i].z
+                    }, {
+                        x: data[0].p[index][i+1].x,
+                        y: data[0].p[index][i+1].y,
+                        z: data[0].p[index][i+1].z
+                    }, {
+                        x: data[0].p[index][i+2].x,
+                        y: data[0].p[index][i+2].y,
+                        z: data[0].p[index][i+2].z
+                    }, {
+                        x: data[0].p[index][i+3].x,
+                        y: data[0].p[index][i+3].y,
+                        z: data[0].p[index][i+3].z
+                    }],
+                    traces: [i, i+1, i+2, i+3],
+                    layout: {}
+                };
+                Plotly.animate(div="graph", update, {transition: {duration: 0}, frame: {duration: 0, redraw: false}});
+
             }
-            // Method 3:
-            // Plotly.newPlot(div='graph', data[0]["p"][index]);
 
         });
     }, function() {
