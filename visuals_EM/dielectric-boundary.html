@@ -7,6 +7,7 @@
 
   <!-- <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1"> -->
   <link rel="stylesheet" href="debug-style.css">
+  <link rel="stylesheet" href="toggle-style.css">
   <link rel="stylesheet" href="loading-spinner.css">
 
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -36,10 +37,24 @@
       <div class="four columns">
         <div id="interface">
 
+          <div id="polarisation-switch" class="switch">
+            <label class="sliderTitle">Polarisation:</label>
+            <input type="radio" id="s-polarisation" name="polarisation-switch" checked>
+            <label for="s-polarisation" class="radio-label">s</label>
+            <input type="radio" id="p-polarisation" name="polarisation-switch">
+            <label for="p-polarisation" class="radio-label">p</label>
+          </div>
+
           <div id="angle-slider">
             <label for="angle" class="sliderTitle">Angle of incidence:</label>
               <input type="range" id="angle" name="angle" min="0" max="90" value="45">
               <span class="sliderMin">0&deg;</span><span class="sliderMax">90&deg;</span>
+          </div>
+
+          <div id="n1-slider">
+            <label for="n1" class="sliderTitle">Refractive index:</label>
+              <input type="range" id="n1" name="n1" min="0" max="5" step="0.1" value="1">
+              <span class="sliderMin">0</span><span class="sliderMax">5</span>
           </div>
 
         </div>
