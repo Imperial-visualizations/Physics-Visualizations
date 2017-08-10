@@ -52,7 +52,7 @@ Vector.prototype.add = function add(other) {
             result.push(this.items[j].add(other.items[j]).items)                        // Adding arrays recursively.
         }
     }
-    return new Vector(result);                                                          // Returning the result vector.
+    return new Vector(result).items;                                                    // Returning the resultant array
 };
 
 /** *************************************************** Subtract Function ****************************************** **|
@@ -115,11 +115,44 @@ Vector.prototype.sum = function sum() {
     {
         for (var j = 0; j < this.items.length; j++) {
             this.items[j] = new Vector(this.items[j]);
-            result.push(this.items[j].sum());
-            sum += this.items[j].sum()
+            sum += this.items[j].sum()[0];
         }
+        result.push([sum]);
         return new Vector(result).items
     }
+};
+
+/** Column Summation Function
+ *
+ * @returns {*}
+ */
+Vector.prototype.colsum = function () {
+
+    // Sanity check.
+    if (this.items.constructor !== Array || this.items[0].constructor !== Array || this.items.length < 1)
+    {
+        console.error("Expected to get Vector of length >= 1.");
+        return -1;
+    }
+
+    var result = [];
+    for (var i = 1; i < this.items.length; i++) {
+        this.items[i] = new Vector(this.items[i]).add(new Vector(this.items[i - 1]));
+    }
+    result.push(this.items[this.items.length - 1]);
+    return new Vector(result).items
+};
+
+Vector.prototype.rowsum = function() {
+    var result = [];
+    if (this.items.constructor === Array && this.items[0].constructor === Array)
+    {
+        for (var j = 0; j < this.items.length; j++) {
+            this.items[j] = new Vector(this.items[j]);
+            result.push(this.items[j].sum());
+        }
+    }
+    return new Vector(result).items
 };
 
 /** **********************************************  Multiplying function  ****************************************** **|
@@ -269,7 +302,7 @@ Vector.prototype.tan = function tan() {
  **/
 
 /**  ************************************************* END ********************************************************* **/
-// var v1 = new Vector([1, 2, 3]);
-// var v2 = new Vector([10, 20, 30]);
-//
-// console.log(v2.dot(v1));
+var v1 = new Vector([[[1, 2, 3], [2, 4, 5], [4, 5, 6], [9, 10, 11]]]);
+var v2 = new Vector([10, 20, 30]);
+
+console.log(v1.sin());
