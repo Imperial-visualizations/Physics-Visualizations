@@ -122,6 +122,18 @@ Vector.prototype.sum = function sum() {
     return sum
 };
 
+Vector.prototype.norm = function normal() {
+    if (this.items.constructor !== Array || !isNumber(this.items[0])) {
+        console.log("This function is only for vectors! Please enter 1D array.");
+        return -1
+    }
+
+    var result = [];
+    return Math.sqrt(new Vector(this.power(2)).sum());
+
+    return result[0]
+};
+
 Vector.prototype.power = function power(number) {
     if (!isNumber(number)) {
         console.error("Exponent " + number + " is not valid.");
@@ -504,6 +516,6 @@ Vector.prototype.atan = function atan() {
 
 /**  ************************************************* END ********************************************************* **/
 // var v1 = new Vector([[[1, 2, 3], [2, 4, 5], [4, 5, 6], [9, 10, 11]]]);
-// var v2 = new Vector([1, 2, 3]);
-//
-// console.log(v1.power(2));
+var v2 = new Vector([3, 4, 5]);
+
+console.log(v2.norm());
