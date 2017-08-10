@@ -121,21 +121,26 @@
     // Submit
     $('#submit').on('click', function () {
         try {
-//            if ($('#function').val().includes('^')) {
-//                var str = $('#function').val().replace('^','Math.power')
-//                $('#function').val(str);
-//            }
+//            // All the characters allowed are in the square brackets (apart from ^)
+            if(/[^0-9ksqrt().*/+-]/.test($('#function').val())) {
+                throw new Error;
+            }
+            var funct = $('#function').val();
+            if ($('#function').val().includes('sqrt')) {
+                var str = $('#function').val().replace('sqrt','Math.sqrt')
+                $('#function').val(str);
+            }
             for (var i = 0; i < nb_waves; i++) {
                 k = k_array[i];
                 omega_disp[i] = eval($('#function').val());
             }
-            $('#dispersionRelation').text($('#function').val())
+            $('#dispersionRelation').text(funct);
             onReset();
             $('#function').val("");
             $('#error').text("");
         }
         catch(err){
-            $('#error').text(err.message);
+            $('#error').text('Invalid equation');
         }
     });
 
