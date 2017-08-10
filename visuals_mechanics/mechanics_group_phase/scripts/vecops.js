@@ -100,38 +100,62 @@ Vector.prototype.subtract = function subtract(other) {
  * @returns {*} Summed array.
 |** **************************************************************************************************************** **/
 Vector.prototype.sum = function sum() {
-    var result = [];                                                         // Array where resulting vector is stored.
     var sum = 0;
+
+    // Sum of elements in a vector
     if (this.items.constructor === Array && isNumber(this.items[0])) {       // Checking element in array is a number.
         for (var i = 0; i < this.items.length; i++) {
             // Adding element i of this array to element i of other array.
             sum += this.items[i];
         }
-        result.push(sum);
-        return new Vector(result).items
     }
 
+    // Sum of elements in a matrix.
     else if (this.items.constructor === Array && this.items[0].constructor === Array)
     {
         for (var j = 0; j < this.items.length; j++) {
             this.items[j] = new Vector(this.items[j]);
-            sum += this.items[j].sum()[0];
+            sum += this.items[j].sum();
         }
-        result.push([sum]);
-        return new Vector(result).items
     }
+
+    return sum
 };
 
-/** Column Summation Function
- *
- * @returns {*}
- */
+Vector.prototype.power = function power(number) {
+    if (!isNumber(number)) {
+        console.error("Exponent " + number + " is not valid.");
+        return -1
+    }
+
+    var result = [];
+
+    if (this.items.constructor === Array && isNumber(this.items[0])) {
+        for (var i = 0; i < this.items.length; i++) {
+            result.push(Math.pow(this.items[i], number));
+        }
+    }
+
+    else if (this.items.constructor === Array && this.items[0].constructor === Array) {
+        for (var j = 0; j < this.items.length; j++) {
+            this.items[j] = new Vector(this.items[j]);
+            result.push(this.items[j].power(number));
+        }
+    }
+
+    return new Vector(result).items
+};
+
+/** ******************************************** Column Summation Function ***************************************** **|
+ * Adds columns of a 2D matrix.
+ * @returns {*} Resultant matrix.
+ ** **************************************************************************************************************** **/
 Vector.prototype.colsum = function () {
 
     // Sanity check.
-    if (this.items.constructor !== Array || this.items[0].constructor !== Array || this.items.length < 1)
+    if (this.items.constructor !== Array || this.items[0].constructor !== Array || this.items.length < 2)
     {
-        console.error("Expected to get Vector of length >= 1.");
+        console.error("Expected to get Vector of length >= 2.");
         return -1;
     }
 
@@ -143,6 +167,10 @@ Vector.prototype.colsum = function () {
     return new Vector(result).items
 };
 
+/** ********************************************  Row Summation Function  ****************************************** **|
+ * Adds columns of a 2D matrix.
+ * @returns {*} Resultant matrix.
+ ** **************************************************************************************************************** **/
 Vector.prototype.rowsum = function() {
     var result = [];
     if (this.items.constructor === Array && this.items[0].constructor === Array)
@@ -297,12 +325,185 @@ Vector.prototype.tan = function tan() {
     return new Vector(result).items;                                                    // Returning the result vector.
 };
 
+/** **************************************************** Sinh function ********************************************* **|
+ * Calculates hyperbolic sine of all numbers in Vector array.
+ * @returns {*} Array with sinh values.
+ ** **************************************************************************************************************** **/
+Vector.prototype.sinh = function sinh() {
+
+    var result = [];                                                         // Array where resulting vector is stored.
+    if (this.items.constructor === Array && isNumber(this.items[0])) {
+
+        for (var i = 0; i < this.items.length; i++) {
+            result.push(Math.sinh(this.items[i]));
+        }
+    }
+
+    // Case if the element in the arrays are more arrays (i.e. matrices).
+    else if (this.items.constructor === Array && this.items[0].constructor === Array) {
+
+        for (var j = 0; j < this.items.length; j++) {
+            this.items[j] = new Vector(this.items[j]);                                  // Converting array to Vector.
+            result.push(this.items[j].sinh());
+        }
+    }
+    return new Vector(result).items;                                                    // Returning the result vector.
+};
+
+/** **************************************************** Cosh function ********************************************* **|
+ * Calculates hyperbolic cosine of all numbers in Vector array.
+ * @returns {*} Array with cosh values.
+ ** **************************************************************************************************************** **/
+Vector.prototype.cosh = function cosh() {
+
+    var result = [];                                                         // Array where resulting vector is stored.
+    if (this.items.constructor === Array && isNumber(this.items[0])) {
+
+        for (var i = 0; i < this.items.length; i++) {
+            result.push(Math.cosh(this.items[i]));
+
+        }
+    }
+
+    // Case if the element in the arrays are more arrays (i.e. matrices).
+    else if (this.items.constructor === Array && this.items[0].constructor === Array) {
+
+        for (var j = 0; j < this.items.length; j++) {
+            this.items[j] = new Vector(this.items[j]);                                  // Converting array to Vector.
+            result.push(this.items[j].cosh());
+        }
+    }
+    return new Vector(result).items;                                                    // Returning the result vector.
+};
+
+/** **************************************************** Tanh function ********************************************* **|
+ * Calculates hyperbolic tangent of all numbers in Vector array.
+ * @returns {*} Array with tanh values.
+ ** **************************************************************************************************************** **/
+Vector.prototype.tanh = function tanh() {
+
+    var result = [];                                                         // Array where resulting vector is stored.
+    if (this.items.constructor === Array && isNumber(this.items[0])) {
+
+        for (var i = 0; i < this.items.length; i++) {
+            result.push(Math.tanh(this.items[i]));
+
+        }
+    }
+
+    // Case if the element in the arrays are more arrays (i.e. matrices).
+    else if (this.items.constructor === Array && this.items[0].constructor === Array) {
+
+        for (var j = 0; j < this.items.length; j++) {
+            this.items[j] = new Vector(this.items[j]);                                  // Converting array to Vector.
+            result.push(this.items[j].tanh());
+        }
+    }
+    return new Vector(result).items;                                                    // Returning the result vector.
+};
+
 /**
  * ==============================================- End of Trig Functions -==============================================
  **/
 
-/**  ************************************************* END ********************************************************* **/
-var v1 = new Vector([[[1, 2, 3], [2, 4, 5], [4, 5, 6], [9, 10, 11]]]);
-var v2 = new Vector([10, 20, 30]);
+/**
+ *==============================================- Inverse Trig Functions -==============================================
+ **/
 
-console.log(v1.sin());
+/** ************************************************* arcsin function ********************************************** **|
+ * Calculates inverse sine of all numbers in Vector array.
+ * @returns {*} Array with arcsine values.
+ ** **************************************************************************************************************** **/
+Vector.prototype.asin = function asin() {
+
+    var result = [];                                                         // Array where resulting vector is stored.
+    if (this.items.constructor === Array && isNumber(this.items[0])) {
+
+        for (var i = 0; i < this.items.length; i++) {
+            // Putting error message on console when value outside domain detected.
+            if (Math.abs(this.items[i]) > 1) {
+                console.error("Value " + this.items[i] + " is outside domain of arcsin.")
+            }
+
+            // Calculating arcsin of every numerical element in the array
+            result.push(Math.asin(this.items[i]));
+        }
+    }
+
+    // Case if the element in the arrays are more arrays (i.e. matrices).
+    else if (this.items.constructor === Array && this.items[0].constructor === Array) {
+
+        for (var j = 0; j < this.items.length; j++) {
+            this.items[j] = new Vector(this.items[j]);                                  // Converting array to Vector.
+            result.push(this.items[j].asin());
+        }
+    }
+    return new Vector(result).items;                                                    // Returning the result vector.
+};
+
+/** ************************************************* arccos function ********************************************** **|
+ * Calculates inverse cosine of all numbers in Vector array.
+ * @returns {*} Array with arccos values.
+ ** **************************************************************************************************************** **/
+Vector.prototype.acos = function acos() {
+
+    var result = [];                                                         // Array where resulting vector is stored.
+    if (this.items.constructor === Array && isNumber(this.items[0])) {
+
+        for (var i = 0; i < this.items.length; i++) {
+            // Putting error message on console when value outside domain detected.
+            if (Math.abs(this.items[i]) > 1) {
+                console.error("Value " + this.items[i] + " is outside domain of arcsin.")
+            }
+
+            // Calculating arccos of every numerical element in the array
+            result.push(Math.acos(this.items[i]));
+        }
+    }
+
+    // Case if the element in the arrays are more arrays (i.e. matrices).
+    else if (this.items.constructor === Array && this.items[0].constructor === Array) {
+
+        for (var j = 0; j < this.items.length; j++) {
+            this.items[j] = new Vector(this.items[j]);                                  // Converting array to Vector.
+            result.push(this.items[j].acos());
+        }
+    }
+    return new Vector(result).items;                                                    // Returning the result vector.
+};
+
+/** ************************************************* arctan function ********************************************** **|
+ * Calculates inverse tangent of all numbers in Vector array.
+ * @returns {*} Array with arctan values.
+ ** **************************************************************************************************************** **/
+Vector.prototype.atan = function atan() {
+
+    var result = [];                                                         // Array where resulting vector is stored.
+    if (this.items.constructor === Array && isNumber(this.items[0])) {
+
+        for (var i = 0; i < this.items.length; i++) {
+            // Calculating arctan of every numerical element in the array
+            result.push(Math.atan(this.items[i]));
+        }
+    }
+
+    // Case if the element in the arrays are more arrays (i.e. matrices).
+    else if (this.items.constructor === Array && this.items[0].constructor === Array) {
+
+        for (var j = 0; j < this.items.length; j++) {
+            this.items[j] = new Vector(this.items[j]);                                  // Converting array to Vector.
+            result.push(this.items[j].atan());
+        }
+    }
+    return new Vector(result).items;                                                    // Returning the result vector.
+};
+
+/**
+ * ==========================================- End of Inverse Trig Functions -==========================================
+ **/
+
+/**  ************************************************* END ********************************************************* **/
+// var v1 = new Vector([[[1, 2, 3], [2, 4, 5], [4, 5, 6], [9, 10, 11]]]);
+// var v2 = new Vector([1, 2, 3]);
+//
+// console.log(v1.power(2));
