@@ -30,7 +30,7 @@
 - Media Queries
 */
 
-@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,600&subset=greek,greek-ext');
 
 /* Grid
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -130,7 +130,7 @@ body {
   font-size: 1.5em; /* currently ems cause chrome bug misinterpreting rems on body element */
   line-height: 1.6;
   font-weight: 400;
-  font-family: 'Lato', "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Fira Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #222; }
 
 
