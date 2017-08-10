@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="./styles/styles.css">
     <link rel="icon" href="./images/favicon.ico" type="image/x-icon">
     <style>
-
         #graph {
             border: 3px solid #003e74;
         }
@@ -85,7 +84,7 @@
     // x and t coordinates
     var n = 801;
     var y_i = [], y_r = [], y_t = [];
-    var x = numeric.linspace(-50, 0, n);
+    var x = numeric.linspace(-50, 50, n);
     var t = 0.0;
     var dt = 0.02;
     var is_paused = true;
@@ -110,7 +109,10 @@
             yaxis: {
                 autorange: false,
                 range: [-4, 4]
+                domain: [0.45, 0]
             },
+            xaxis2: {domain: [1, 0.55]},
+            yaxis2: {anchor: 'x2'},
             font: {
                 family: 'Lato',
                 size: 18,
@@ -172,7 +174,7 @@
     });
 
     function initial_data(){
-        for (var i = 0; i < n; i++) {
+        for (var i = 0; i <= n / 3; i++) {
             y_i[i] = 0;
             if (x[i] < 0) {
                 for (var j = 0; j < nb_waves; j++) {
@@ -189,7 +191,7 @@
             y_range = 4
         }
         else {
-            y_range = (nb_waves - (nb_waves % 5))
+            y_range = (nb_waves - (nb_waves % 5)) + 5
         }
     }
 
@@ -232,7 +234,7 @@
 
     var boundary = {
         x: [0, 0],
-        y: [-4, 4],
+        y: [-10, 10],
         mode: "lines",
         name: "boundary",
         line: {width: 3, color: 'black', simplify: false}
@@ -270,20 +272,22 @@
                         // For the incident (aka not dispersive) v has to be the same
                         // as v = w/k this means the ratio of w/k has to be a constant
                         // for all the waves added together
-                        y_i[i] +=  Math.sin(k_array[j]*x[i] - omega_nondisp[j]* t);
+                        y_i[i] +=  Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
 //                        y_r[i] +=  Math.sin(x[i] - t) + Math.sin(1.2 * k[j] * x[i] - omega * k[j]* t);
                     }
                 }
-                else if (x[i] > 0) {
+                else if (x[i] >= 0) {
                     y_i[i] = 0;
                     y_t[i] = 0;
                     for (var j_ = 0; j_ < nb_waves; j_++) {
-                        y_t[i] += Math.sin( k_array[j_] * x[i] - omega_disp[j_] * t);
+                        y_t[i] += (2 * omega_disp[j_] / k_array[j_]) / (omega_disp[j_] / k_array[j_] + omega_nondisp[j_]
+                                / k_array[j_]) * Math.sin(k_array[j_] * ((omega_nondisp[j_] / k_array[j_])
+                                        / (omega_disp[j_] / k_array[j_])) * x[i] - omega_nondisp[j_] / k_array[j_] *
+                                        omega_nondisp[j_] * t);
                     }
                 }
             }
         }
-
     }
 
     // Looping function that updates plot
@@ -308,14 +312,17 @@
         requestAnimationFrame(update);
     }
 
-    // ToDo: sum sine waves
-    // ToDo: Endpoint
-    // ToDo: Interface
-    // ToDo: make wave disperse slowly
+    // ToDo: Subplots
+    // ToDo: Border height change with plot
+    // ToDo: Endpoint / Move to Interface
     // ToDo: v1, v2
+    // ToDo: make wave disperse slowly
     // ToDo: Change Initial Wave
+    // ToDo: Current omega
     // ToDo: Python?
+    // ToDo: Numeric
     // ToDo: Speed Up
+    // ToDo: Wave at Interface (If Possible)
     // Maybe at beginning: need to specify v (ratio of w and k) and how w (/k cause they are
     // proportional) changes with the added sine wave
 
