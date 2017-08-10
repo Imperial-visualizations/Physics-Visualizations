@@ -48,11 +48,11 @@ Now that you have access to the repo you can make changes.
 
 2. **Committing**
 
-   Now that changes have been made we can now commit (save) the change as part of the project workflow. First select the files you want to commit the changes to and stage them (or use "Stage all changes" to do this for all files). In this example there are no changes to discard (careful since this reverts all changes since the last commit!), but this can be done by right clicking on files individually or by clicking "Discard all changes" to do this for all files. 
+Now that changes have been made we can now commit (save) the change as part of the project workflow. First select the files you want to commit the changes to and stage them (or use "Stage all changes" to do this for all files). In this example there are no changes to discard (careful since this reverts all changes since the last commit!), but this can be done by right clicking on files individually or by clicking "Discard all changes" to do this for all files. 
 
    --staging file and committing (highlight discard options)--
    
-       Note: Clicking on a file before staging also tells you what changes have been made since the last commit.
+>Note: Clicking on a file before staging also tells you what changes have been made since the last commit.
 
    Now add a useful commit message and description so that others can see what changes have been made. The change can then be committed, which will appear as a new node in the directed acrylic graph (DAG).
    
@@ -87,7 +87,7 @@ Now that you have access to the repo you can make changes.
 
    --fix merge remote & auto stash and pop--
    
-        Life Pro Tip: Pull before you Commit, Commit before you Push.
+>Life Pro Tip: Pull before you Commit, Commit before you Push.
 
 ### Local and Remote Files
 
@@ -119,7 +119,7 @@ Branches are a very powerful tool for software development but can be quite tric
 
    Branches are generally created in order to focus on or solve a particular issue. Pulling, committing, and pushing is separate for each individual branch, so all commits in a branch should be related to its singular purpose. This avoids people pulling or seeing changes that are unrelated to their current goal. Also if it turns out that e.g. a particular feature isn't possible we can simply discontinue that branch, keeping the main development branch clean and focused.
 
-       Note: This also allows for commits to be cleaned up (e.g. squashed) before rebasing or merging to the main development branch (more on merging and workflows later).
+>Note: This also allows for commits to be cleaned up (e.g. squashed) before rebasing or merging to the main development branch (more on merging and workflows later).
 
    --separate commits--
 
@@ -189,7 +189,7 @@ After completing work in a branch we need to merge it back to the main developme
 
    Our current workflow uses "Long-Running Branches". We currently have master (merge completed work for release) and dev (merge "finished" work for testing and feedback) branches as the long running branches. The master branch should only be merged to from dev. Sub-branches include translator and tutorial branches under the "all" subgroup as anyone can contribute to these, and EM (electromagnetism), maths, and mechanics branches under the "visualizations" subgroup. These are the three visualization development streams for the 2017 project. 
 
-       Note: It is recommended to use pull requests for all merging. Currently the dev and master branches are protected to only be merged by pull request.
+>Note: It is recommended to use pull requests for all merging. Currently the dev and master branches are protected to only be merged by pull request.
 
    --“silo” view of progressive-stability branching from the "Pro Git" book. Available at https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows (2017)--
 
@@ -203,8 +203,8 @@ After completing work in a branch we need to merge it back to the main developme
 
    Another idea may be to fork the Imperial-Visualizations repo to a new repo for each subgroup and then merge any completed work back to the dev branch in the main repo via pull request. This has a similar structure to the previous suggestion but without the repo showing a multitude of different branches which are unrelated to each subgroup's individual work. Since this year the entire team is encountering similar obstacles and thus working closely together it currently makes sense to keep all work in a single repo to instantly share any progress.
    
-       Note: If using these workflows it is reommended to keep the dev and master branches protected to only be merged by pull request.
-       
+>Note: If using these workflows it is reommended to keep the dev and master branches protected to only be merged by pull request.
+
 ## Further Reading
 
 You've now reached the end of this tutorial, which has hopefully covered all the core features of git that you will need for this project. As mentioned at the very beginning, if you want to know more about anything covered in this tutorial or just more about git in general, the "Pro Git" book by Scott Chacon and Ben Straub is available at https://git-scm.com/book/en/v2. It is a fantastic resource and I highly recommend having a look if time allows.
