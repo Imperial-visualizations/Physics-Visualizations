@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.integrate import tplquad,dblquad
+
 k = 8.987551e9  #coulomb's constant
 m = 1 #kg
 dt = 0.1 #s
@@ -174,10 +175,65 @@ class Field():
             return F
         else:
             return 0
-            ahdfkhdsafkkhdf
 b = Field()
 print(b.force_oncharge(electron))
 positions = {}
 for i in range (0,10):
     electron.move(b.force_oncharge(electron))
     print(electron.p)
+    
+
+#you either do it through a circle or draw specifc current elements 
+
+a = 2 ; #a is the radius of the circle 
+
+shape = "circle" 
+perm = 4*np.pi*10e-7 
+current = 2; 
+
+#end goal is to make a shape class and define these functions within them 
+
+def Create_Parameter_Axis(shape):
+    phi = np.linspace(0, 2 * np.pi, 35)
+    x = y = np.linspace(0,1,35)
+    if shape == "circle": 
+        parameter = phi 
+    elif shape == "triangle":
+        parameter = [x,y]
+    elif shape == "rectangle":
+        parameter = [x,y]
+    else: 
+        print " you entered the wrong parameter "
+    return parameter 
+
+def Draw_current_loop(parameter,shape) 
+        
+def calc_this(shape):
+    if shape == "circle":
+        a = 2
+        dI= np.array([-a*np.sin(phi),a*np.cos(phi),0])
+        r_vec = np.array([-a*np.cos(phi),a*np.sin(phi),z])
+        
+    return dI,r_vec 
+
+    
+def Biot_equation (current,perm,r_scal,dI,r_vec):
+    xprod = np.cross (dI,r_vec)
+    dB = (perm*current/(4*np.pi)*r_scal**2) * xprod
+    return dB
+
+"""Do the integration using a for loop like before and do it for the different dimensions """
+"""DO THE DRAWING BITS """
+
+
+phi = np.linspace(0, 2 * np.pi, 35)
+xc = a*np.cos(phi); 
+yc = a*np.sin(phi); 
+zc = 0; 
+
+trace4 = go.Scatter3d(x = xc ,
+                      y = yc,
+                      z = zc,
+                      name = "h", 
+                      line = dict(width = 6, color = 'rgb(0,0,0)'),
+                    );
