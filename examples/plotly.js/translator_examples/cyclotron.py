@@ -40,10 +40,17 @@ def elec(r, orientation):
 
     return E
 
+<<<<<<< HEAD
 r0 = np.array([0, 0, 0])
 v0 = np.array([0, 0, 0])
 p = particle(r0, v0, 1, 1)
 dt = 0.01
+=======
+r0 = np.array([0, -2, 0])
+v0 = np.array([0, 0, 0])
+p = particle(r0, v0, 1, 1)
+dt = 0.03
+>>>>>>> mechanics
 totalt = 10
 end = totalt / dt
 
@@ -87,6 +94,7 @@ for t in range(0, int(end)):
 
 line = Scatter2D(x=x, y=y, div_id="scatter", mode="lines", line_width=1, line_color='blue', name="sine")
 line.show(xaxis_range=[-8, 8], xaxis_title="x",
+<<<<<<< HEAD
           yaxis_range=[-8, 8], yaxis_title="y", title="Cyclotron")
 
 animation = Animate(line)
@@ -95,4 +103,14 @@ animation.animate(x="x0", y="y0")
 animation.show(transition_duration=0, frame_redraw=False, frame_duration=0)
 
 html = Document(line, title="Cyclotron", width=50, height=320)
+=======
+          yaxis_range=[-8, 8], yaxis_title="y", title="Animated Sine Wave Example")
+
+animation = Animate(line)
+animation.remove_repeated_data()
+animation.animate(x="x0", y="y0")
+animation.show(transition_duration=0, frame_redraw=False, frame_duration=0)
+
+html = Document(line, title="Cyclotron", width=50, height=80)
+>>>>>>> mechanics
 html.create("cyclotron.html")
