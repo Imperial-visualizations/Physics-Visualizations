@@ -642,7 +642,7 @@ function recalculateVector() {
     if('comLab' in toolTips){
         toolTips['comLab'].updatePosition(getCoMR());
     }else {
-        toolTips['comLab'] = new ToolTip(new Vector(getCoMR().x,getCoMR().y),"Centre of Mass","Lol idk");
+        toolTips['comLab'] = new ToolTip(new Vector(getCoMR().x,getCoMR().y),"Centre of Mass","The single point in the system where\n all the total mass of the object can\n be taken to act at.");
     }
 
     clearVectors();
