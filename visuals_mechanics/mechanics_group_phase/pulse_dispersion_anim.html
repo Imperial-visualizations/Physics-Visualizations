@@ -59,6 +59,7 @@
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+<script src="./calculator.js"></script>
 
 <script>
 
@@ -132,27 +133,39 @@
     $('#submit').on('click', function () {
         try {
 //            // All the characters allowed are in the square brackets (apart from ^)
-            if(/[^0-9ksqrt().*/+-]/.test($('#function').val())) {
+            if(/[^0-9ksqrt().*/+-^]/.test($('#function').val())) {
                 throw new Error;
             }
             var funct = $('#function').val();
             if ($('#function').val().includes('sqrt')) {
-                var str = $('#function').val().replace('sqrt','Math.sqrt')
-                $('#function').val(str);
+                funct = $('#function').val().replace('sqrt','Math.sqrt');
             }
-            for (var i = 0; i < nb_waves; i++) {
-                k = k_array[i];
-                omega_disp[i] = eval($('#function').val());
+            if ($('#function').val().includes('^')) {
+                for (var i = 0; i < nb_waves; i++) {
+                    if ($('#function').val().includes('k')) {
+                        var str2 = funct.replace(/k/g,k_array[i]);
+                        omega_disp[i] = calculator.parse(str2);
+                    }
+                }
             }
-            $('#dispersionRelation').text(funct);
+            else {
+                    for (var i = 0; i < nb_waves; i++) {
+                        k = k_array[i];
+                        omega_disp[i] = eval(funct);
+                    }
+                }
+            $('#dispersionRelation').text($('#function').val());
             onReset();
             $('#function').val("");
             $('#error').text("");
         }
         catch(err){
-            $('#error').text('Invalid equation');
+            $('#error').text(err.message);
         }
-    });
+
+
+    })
+
 
     // Slider waves
     $('#slider_waves').on('input', function () {
