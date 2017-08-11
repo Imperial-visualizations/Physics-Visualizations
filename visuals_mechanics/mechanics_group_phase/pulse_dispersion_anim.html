@@ -55,12 +55,17 @@
             </label>
             <input id = "k0_input" >
              <p id= "error_k0" style="color:#ff0000"></p>
+
             <!--kend-->
              kend =
                 <span id ="kend"> </span>
             </label>
             <input id = "kend_input" >
              <p id= "error_kend" style="color:#ff0000"></p>
+
+            <!--Checkbox-->
+            <input type="checkbox">
+
 
         </div>
     </div>
@@ -90,6 +95,7 @@
     var dt = 0.02;
     var is_paused = true;
     var y_range = 1;
+    var omega_input = false;
 
     var layout =
         {
@@ -138,6 +144,7 @@
     // k0
     $("#k0_input").on('keyup',function () {
         if(event.keyCode == 13) {
+            // Check it is a number
             if (isNaN(parseFloat($('#k0_input').val()))) {
                 $('#error_k0').text('Invalid input: k0 needs to be a number');
             }
@@ -155,6 +162,7 @@
     // kend
     $("#kend_input").on('keyup',function () {
         if(event.keyCode == 13) {
+            // Check it is a number
             if (isNaN(parseFloat($('#kend_input').val()))) {
                 $('#error_kend').text('Invalid input: kend needs to be a number');
             }
@@ -199,6 +207,7 @@
                 onReset();
                 $('#function').val("");
                 $('#error_omega').text("");
+                omega_input = true;
             }
             catch (err) {
                 $('#error_omega').text('Invalid equation');
@@ -233,8 +242,10 @@
     function initial_data(){
         k_array = numeric.linspace(k0, kend, nb_waves);
         omega_nondisp = numeric.linspace(k0*v, kend*v, nb_waves);
-        // Default: non-dispersive
-        omega_disp = omega_nondisp.slice();
+        if (omega_input === false) {
+             // Default: non-dispersive
+            omega_disp = omega_nondisp.slice();
+        }
         for (var i = 0; i <= n; i++) {
             y_i[i] = 0;
             y_t[i] = 0;
