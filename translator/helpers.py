@@ -263,7 +263,9 @@ class Document:
     source = Tag("script", src="https://cdn.plot.ly/plotly-latest.min.js")      # Defining location of PlotlyJS source.
     jquery = Tag("script", src="https://code.jquery.com/jquery-latest.min.js")  # Defining location of JQuery source.
     head = Tag("head", val=source.html + jquery.html)                           # Putting script source in head of HTML.
-    css = Tag("link", rel="stylesheet", href="styles/styles.css").open_tag      # Including CSS file path
+
+    # Including CSS file path
+    css = Tag("link", rel="stylesheet", href="https://manglekuo.com/i-v/styles.css?v=2").open_tag
 
     def __init__(self, graph, title=None, width=90, height=100):
         self.graph = graph

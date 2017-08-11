@@ -13,6 +13,7 @@ var isNumber = function (n) {
 // Defining function to create new object
 Vector = function(items) {
     this.items = items;
+    this.length = this.items.length;
 };
 
 /** *************************************************** Addition Function ****************************************** **|
@@ -130,8 +131,6 @@ Vector.prototype.norm = function normal() {
 
     var result = [];
     return Math.sqrt(new Vector(this.power(2)).sum());
-
-    return result[0]
 };
 
 Vector.prototype.power = function power(number) {
@@ -156,6 +155,25 @@ Vector.prototype.power = function power(number) {
     }
 
     return new Vector(result).items
+};
+
+Vector.prototype.rotate = function rotate(theta) {
+
+    var new_x = 0;
+    var new_y = 0;
+
+    // 2D rotation
+    if (this.items.length === 2 && isNumber(this.items[0])) {
+        console.log((this.items[0] * Math.cos(theta)) + (this.items[1] * Math.sin(theta)));
+        new_x = (this.items[0] * Math.cos(theta)) - (this.items[1] * Math.sin(theta));
+        new_y = (this.items[0] * Math.sin(theta)) + (this.items[1] * Math.cos(theta));
+        return new Vector([new_x, new_y]).items
+    }
+
+    else {
+        console.error("Sorry, only supports 2D rotation for now!");
+        return -1;
+    }
 };
 
 /** ******************************************** Column Summation Function ***************************************** **|
@@ -516,6 +534,5 @@ Vector.prototype.atan = function atan() {
 
 /**  ************************************************* END ********************************************************* **/
 // var v1 = new Vector([[[1, 2, 3], [2, 4, 5], [4, 5, 6], [9, 10, 11]]]);
-var v2 = new Vector([3, 4, 5]);
-
-console.log(v2.norm());
+// var v2 = new Vector([1, 0]);
+// console.log(v2.rotate(Math.PI/2));
