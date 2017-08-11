@@ -1,0 +1,62 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Imperial Visualisations</title>
+    <link rel="stylesheet" href="debug-style.css">
+    <style type="text/css"></style>
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Fresnel Curves</h1>
+        <div class="row">
+            <div class="eight columns">
+                 <div id="graph"></div>
+            </div>
+            <div class="four columns">
+                <input id="angle" type ="range" value="2" min ="2" max="176" step ="1"/>
+                <input id = "brewster" type="button" value="brewster",style="width: 0px;">
+            </div>
+        </div>
+    </div>
+    <br><br><br>
+    <script>
+
+      var layout = {
+        width: 600,
+        height: 500,
+        autosize: true,
+        xaxis: {range: [0, 90], title: "Angle"},
+        yaxis: {range: [-0.3, 1]},
+        margin: {},
+        showlegend: true
+      };
+
+      var ourRequest = new XMLHttpRequest();
+      ourRequest.open('GET','https://rawgit.com/EdKeys/Imperial-Visualizations/master/fresnel_data.JSON')
+
+      ourRequest.onload=function(){
+        var data = JSON.parse(ourRequest.responseText);
+        plot_data = [data[2], data[0], data[1]]
+        Plotly.plot(div='graph', plot_data, layout);
+        plot_data.push(data[0])
+
+        $('#angle').on('input', function() {
+          i = $(this).val();
+          Plotly.restyle(graph, {x: [data[i]['x']], y: [data[i]['y']]}, [0] )
+        });
+
+        $('#brewster').on('click', function() {
+          Plotly.restyle(graph, {x: [data[101]['x']], y: [data[101]['y']]}, [0] )
+          $("#angle").val(101)
+        });
+      }
+      ourRequest.send();
+
+
+    </script>
+</body>
+</html>
