@@ -3,24 +3,11 @@
 Pre-defined classes
 ++++++++++++++++++++++++++++++++++++
 */
-function Vector(x, y) {
-    this.x = x;
-    this.y = y;
-    this.getArg = function () {
-        return Math.atan2(this.y, this.x);
-    };
-    this.getMag = function () {
-        return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
-    };
-    this.toString = function () {
-        return "(" + this.x.toString() + "," + this.y.toString() + ")";
-    };
-}
 
 class ToolTip{
-    constructor(position,showRect,title,text){
+    constructor(position,title,text){
         this.position = position;
-        this.showRect = showRect;
+        this.showRect = new Phaser.Rectangle(position.x - showRange/2,position.y - showRange/2,showRange,showRange);
         let roundedRectG =  game.add.graphics(0,0);
         roundedRectG.beginFill(0x003E74);
         roundedRectG.drawRoundedRect(0,0,200,(fontSize + 7)*4,5);
@@ -49,7 +36,7 @@ class ToolTip{
     }
     updatePosition(position){
         this.position = position;
-        this.showRect = new Phaser.Rectangle(position.x,position.y,this.showRect.width,this.showRect.height);
+        this.showRect = new Phaser.Rectangle(position.x - showRange/2,position.y - showRange/2,this.showRect.width,this.showRect.height);
         this.sprite.x = position.x;
         this.sprite.y = position.y;
         this.title.x = position.x + 5;
@@ -71,22 +58,6 @@ function zeroV() {
     return new Vector(0, 0);
 }
 
-function vCal(input1, action, input2) {
-    //Vector Calculations
-    switch (action) {
-        case "-":
-            return new Vector(input1.x - input2.x, input1.y - input2.y);
-        case "+":
-            return new Vector(input1.x + input2.x, input1.y + input2.y);
-        case "*":
-            return new Vector(input2 * input1.x, input2 * input1.y);
-        case "rotate":
-            return new Vector(input1.x * Math.cos(input2) - input1.y * Math.sin(input2), input1.x * Math.sin(input2) + input1.y * Math.cos(input2));
-        default:
-            console.log("undefined operation, " + action);
-
-    }
-}
 
 function degToRad(deg) {
     return Math.PI * deg / 180;
@@ -114,7 +85,7 @@ let ballradius = 40;
 let ball1, ball2, initAngle;
 
 const fontSize = 15;
-
+const showRange = 40;
 let borders, centreOfMass1, textScaleDown;
 
 let uiGroup,mainGroup,markerGroup;
@@ -643,15 +614,12 @@ function getLabP(){
 }
 
 function recalculateVector() {
-    let pStar = vCal(vCal(ball2.Lab.v, '-', ball1.Lab.v), '*', getReducedMass());
 
-    let pStar_reversed = vCal(pStar, '*', -1);
+    let results = doPhysics({mass:ball1.Lab.mass,initV:ball1.Lab.v},{mass:ball2.Lab.mass,initV:ball2.Lab.v},initAngle);
 
-    let q1star = vCal(pStar, 'rotate', initAngle);
 
-    let q2star = vCal(pStar, 'rotate', initAngle - Math.PI);
-    ball1.CoM.postv = vCal(q1star, '*', 1 / ball1.Lab.mass);
-    ball2.CoM.postv = vCal(q2star, '*', 1 / ball2.Lab.mass);
+    ball1.CoM.postv = results[0];
+    ball2.CoM.postv = results[1];
     p1 = vCal(ball1.Lab.v, "*", ball1.Lab.mass);
 
     let coMV = getCoMV();
@@ -661,18 +629,21 @@ function recalculateVector() {
     q1 = vCal(ball1.Lab.postv, "*", ball1.Lab.mass);
     q2 = vCal(ball2.Lab.postv, "*", ball2.Lab.mass);
 
+    let pStar = vCal(vCal(ball2.Lab.v, '-', ball1.Lab.v), '*', getReducedMass());
+    let q2Star = vCal(vCal(ball2.Lab.postv,'-',ball1.Lab.postv),'*',getReducedMass());
+    let q1Star = vCal(q2Star,'*',-1);
+
     dynamicSF = Math.max(p1.getMag(),
                         q2.getMag(),
                         q1.getMag(),
-                        vCal(pStar_reversed, "*", (ball1.Lab.mass / ball2.Lab.mass)).getMag(),
-                        pStar_reversed.getMag(),
-                        q1star.getMag()) + 0.5;
+                        vCal(vCal(pStar,'*',-1), "*", (ball1.Lab.mass / ball2.Lab.mass)).getMag(),
+                        pStar.getMag(),
+                        q1Star.getMag()) + 0.5;
     if('comLab' in toolTips){
         toolTips['comLab'].updatePosition(getCoMR());
     }else {
-        toolTips['comLab'] = new ToolTip(getCoMR(),new Phaser.Rectangle(getCoMR().x, getCoMR().y, 20, 20), 'Centre of Mass', 'Lorem Ipsum');
+        toolTips['comLab'] = new ToolTip(new Vector(getCoMR().x,getCoMR().y),"Centre of Mass","Lol idk");
     }
-
 
     clearVectors();
     if ($('#vector_draw_enable').is(':checked')) {
@@ -687,14 +658,14 @@ function recalculateVector() {
         //CoM frame
         drawArrow(new Vector(5-pStar.x ,1.5),pStar,2,0x960078,'pstar');
         drawArrow(new Vector(5+pStar.x,1.5),vCal(pStar,'*',-1),2,0x960078,'pstar');
-        drawArrow(new Vector(5,1.5),q1star,2,0x960078,'qstar');
-        drawArrow(new Vector(5,1.5),q2star,2,0x960078,'qstar');
+        drawArrow(new Vector(5,1.5),q1Star,2,0x960078,'qstar');
+        drawArrow(new Vector(5,1.5),q2Star,2,0x960078,'qstar');
     }
     drawArrow(zeroV(), q1, 3, 0xDD2501, "q1");
     drawArrow(q1, q2, 3, 0x0091D4, 'q2');
-    drawArrow(zeroV(), vCal(pStar_reversed, "*", (ball1.Lab.mass / ball2.Lab.mass)), 3, 0xEC7300, "p1m1m2");
-    drawArrow(vCal(pStar_reversed, "*", (ball1.Lab.mass / ball2.Lab.mass)), pStar_reversed, 3, 0x960078, "pstar");
-    drawArrow(vCal(pStar_reversed, "*", (ball1.Lab.mass / ball2.Lab.mass)), q1star, 3, 0x960078, "qstar");
+    drawArrow(zeroV(), vCal(vCal(pStar,'*',-1), "*", (ball1.Lab.mass / ball2.Lab.mass)), 3, 0xEC7300, "p1m1m2");
+    drawArrow(vCal(vCal(pStar,'*',-1), "*", (ball1.Lab.mass / ball2.Lab.mass)),vCal(pStar,'*',-1), 3, 0x960078, "pstar");
+    drawArrow(vCal(vCal(pStar,'*',-1), "*", (ball1.Lab.mass / ball2.Lab.mass)), q1Star, 3, 0x960078, "qstar");
     drawArrow(new Vector(0, -0.4), p1, 3, 0xE40043, "p1");
 }
 
