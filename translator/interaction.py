@@ -222,3 +222,35 @@ class Button:
         self.graph.script[self.gdiv_id] += "} \n"                                            # Ending function.
 
         return self.graph.script[self.gdiv_id]
+
+
+class Draw:
+    variables = []  # List of dictionaries
+
+    def __init__(self, graph, **kwargs):
+        """
+
+        :param graph: An object whose base class is Graph.
+        :param kwargs: Names of variables that are to be animated.
+        """
+        # Sanity check - is the graph of the correct type?
+        if str(graph.__class__.__bases__).find("<class 'translator.statics.Graph'>") == -1:
+            raise TypeError("Object graph is not derived from base class 'Graph', but from {bases}"
+                            .format(bases=str(graph.__class__.__bases__)))
+
+        else:
+            self.graph = graph  # Graph object
+            self.script = graph.script  # JS script for Graph
+            self.div_id = graph.div_id  # HTML div where graph is located.
+            self.attributes = {}
+            self.variables_list = []  # Name of variables to be animated.
+            self.vars = kwargs
+
+            if len(kwargs.items()) > 0:  # If variables to be animated provided, go ahead and animate.
+                self.animate(**kwargs)
+        return
+
+    def draw(self):
+
+    def show(self):
+

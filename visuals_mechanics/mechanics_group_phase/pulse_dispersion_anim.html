@@ -2,10 +2,9 @@
 <html>
 <head>
     <title>Pulse Animation</title>
-    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
     <link rel="icon" href="./images/favicon.ico" type="image/x-icon">
     <style>
-
         #graph {
             border: 3px solid #003e74;
         }
@@ -60,6 +59,7 @@
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+<script src="./calculator.js"></script>
 
 <script>
 
@@ -85,7 +85,7 @@
     // x and t coordinates
     var n = 801;
     var y_i = [], y_r = [], y_t = [];
-    var x = numeric.linspace(-50, 0, n);
+    var x = numeric.linspace(-50, 50, n);
     var t = 0.0;
     var dt = 0.02;
     var is_paused = true;
@@ -95,21 +95,31 @@
         {
             autosize: false,
             width: 700,
-            height: 600,
+            height: 400,
             margin: {
                 l: 50,
                 r: 50,
-                b: 100,
-                t: 100,
+                b: 40,
+                t: 40,
                 pad: 4
             },
             //plot_bgcolor: '#EBEEEE',
             xaxis: {
-                range: [-50, 50]
+                range: [-50, 0],
             },
             yaxis: {
                 autorange: false,
-                range: [-4, 4]
+                range: [-4, 4],
+                domain: [0.6, 1],
+            },
+            xaxis2: {
+                range: [0, 50],
+                anchor: 'y2',
+            },
+            yaxis2: {
+                autorange: false,
+                range: [-4, 4],
+                domain: [0, 0.4],
             },
             font: {
                 family: 'Lato',
@@ -123,27 +133,39 @@
     $('#submit').on('click', function () {
         try {
 //            // All the characters allowed are in the square brackets (apart from ^)
-            if(/[^0-9ksqrt().*/+-]/.test($('#function').val())) {
+            if(/[^0-9ksqrt().*/+-^]/.test($('#function').val())) {
                 throw new Error;
             }
             var funct = $('#function').val();
             if ($('#function').val().includes('sqrt')) {
-                var str = $('#function').val().replace('sqrt','Math.sqrt')
-                $('#function').val(str);
+                funct = $('#function').val().replace('sqrt','Math.sqrt');
             }
-            for (var i = 0; i < nb_waves; i++) {
-                k = k_array[i];
-                omega_disp[i] = eval($('#function').val());
+            if ($('#function').val().includes('^')) {
+                for (var i = 0; i < nb_waves; i++) {
+                    if ($('#function').val().includes('k')) {
+                        var str2 = funct.replace(/k/g,k_array[i]);
+                        omega_disp[i] = calculator.parse(str2);
+                    }
+                }
             }
-            $('#dispersionRelation').text(funct);
+            else {
+                    for (var i = 0; i < nb_waves; i++) {
+                        k = k_array[i];
+                        omega_disp[i] = eval(funct);
+                    }
+                }
+            $('#dispersionRelation').text($('#function').val());
             onReset();
             $('#function').val("");
             $('#error').text("");
         }
         catch(err){
-            $('#error').text('Invalid equation');
+            $('#error').text(err.message);
         }
-    });
+
+
+    })
+
 
     // Slider waves
     $('#slider_waves').on('input', function () {
@@ -157,7 +179,8 @@
         if (is_paused === true) {
             Plotly.animate('graph',
                     {layout: {yaxis: {range: [-y_range, y_range]}}},
-                    {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
+                    {layout: {yaxis2: {range: [-y_range, y_range]}}},
+                    {transition: {duration: 0}, frame: {duration: 0, redraw: false}},
             )
         }
     });
@@ -172,15 +195,13 @@
     });
 
     function initial_data(){
-        for (var i = 0; i < n; i++) {
+        for (var i = 0; i <= n; i++) {
             y_i[i] = 0;
-            if (x[i] < 0) {
-                for (var j = 0; j < nb_waves; j++) {
-                    y_i[i] += Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
-                }
-            }
-            y_r[i] = 0;
             y_t[i] = 0;
+            for (var j = 0; j < nb_waves; j++) {
+                y_i[i] += Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
+                y_t[i] += Math.sin(k_array[j] * x[i] - omega_disp[j] * t);
+            }
         }
     }
 
@@ -189,7 +210,7 @@
             y_range = 4
         }
         else {
-            y_range = (nb_waves - (nb_waves % 5))
+            y_range = (nb_waves - (nb_waves % 5)) + 5
         }
     }
 
@@ -199,7 +220,7 @@
         initial_data();
 
         Plotly.animate('graph',
-                {data: [{y: y_i}, {y: y_r}, {y: y_t}],},
+                {data: [{y: y_i}, {y: y_t}]},
                 {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
         );
         document.getElementById('run_button').value = (is_paused) ? "Play" : "Pause";
@@ -230,25 +251,19 @@
         line: {width: 2, color: '#00ACD7', simplify: false}
     };
 
-    var boundary = {
-        x: [0, 0],
-        y: [-4, 4],
-        mode: "lines",
-        name: "boundary",
-        line: {width: 3, color: 'black', simplify: false}
-    };
-
-    var xline = {
-        x: [-15, 15],
-        y: [0, 0],
-        mode: "lines",
-        showlegend: false,
-        line: {width: 2, color: '#003E74', simplify: false}
-    };
-
     // Plot graph with interactivity
-    Plotly.plot('graph',
-            [incident, reflected, transmitted, boundary, xline],
+    Plotly.plot('graph', [
+            {
+                x: x,
+                y: y_i,
+                line: {simplify: false}
+            }, {
+                x: x,
+                y: y_t,
+                xaxis: 'x2',
+                yaxis: 'y2',
+                line: {simplify: false}
+            }],
             layout
     );
 
@@ -263,27 +278,17 @@
         // need to find a way to define time limit
         if (t < t_start + 50) {
             for (var i = 0; i < n; i++) {
-                if (x[i] < 0) {
-                    y_i[i] = 0;
-                    y_r[i] = 0;
-                    for (var j = 0; j < nb_waves; j++) {
+                y_i[i] = 0;
+                y_t[i] = 0;
+                for (var j = 0; j < nb_waves; j++) {
                         // For the incident (aka not dispersive) v has to be the same
                         // as v = w/k this means the ratio of w/k has to be a constant
                         // for all the waves added together
-                        y_i[i] +=  Math.sin(k_array[j]*x[i] - omega_nondisp[j]* t);
-//                        y_r[i] +=  Math.sin(x[i] - t) + Math.sin(1.2 * k[j] * x[i] - omega * k[j]* t);
-                    }
-                }
-                else if (x[i] > 0) {
-                    y_i[i] = 0;
-                    y_t[i] = 0;
-                    for (var j_ = 0; j_ < nb_waves; j_++) {
-                        y_t[i] += Math.sin( k_array[j_] * x[i] - omega_disp[j_] * t);
-                    }
+                        y_i[i] +=  Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
+                        y_t[i] += Math.sin(k_array[j] * x[i] - omega_disp[j] * t);
                 }
             }
         }
-
     }
 
     // Looping function that updates plot
@@ -294,7 +299,7 @@
             compute();
 
             Plotly.animate('graph',
-                    {data: [{y: y_i}, {y: y_r}, {y: y_t}]},
+                    {data: [{y: y_i}, {y: y_t}]},
                     {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
                     // vastly speeds up animation but won't update any non-animated properties
             );
@@ -308,14 +313,15 @@
         requestAnimationFrame(update);
     }
 
-    // ToDo: sum sine waves
-    // ToDo: Endpoint
-    // ToDo: Interface
+    // ToDo: initial plot when phase velocity 0
+    // ToDo: tooltips for input boxes
     // ToDo: make wave disperse slowly
-    // ToDo: v1, v2
     // ToDo: Change Initial Wave
+    // ToDo: Current Omega (Fix Button)
     // ToDo: Python?
+    // ToDo: Numeric (Clean Up)
     // ToDo: Speed Up
+    // ToDo: Wave at Interface (if possible) -> (v1, v2, endpoint and moving window, border height change with plot)
     // Maybe at beginning: need to specify v (ratio of w and k) and how w (/k cause they are
     // proportional) changes with the added sine wave
 

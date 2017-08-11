@@ -17,6 +17,50 @@ function Vector(x, y) {
     };
 }
 
+class ToolTip{
+    constructor(position,showRect,title,text){
+        this.position = position;
+        this.showRect = showRect;
+        let roundedRectG =  game.add.graphics(0,0);
+        roundedRectG.beginFill(0x003E74);
+        roundedRectG.drawRoundedRect(0,0,200,(fontSize + 7)*4,5);
+        this.sprite = uiGroup.create(position.x,position.y,roundedRectG.generateTexture());
+        this.title = game.add.text(position.x + 5,position.y,title,{font:"20px Lato",fill:"#ffffff"});
+        uiGroup.add(this.title);
+        this.text = game.add.text(position.x + 5,position.y + fontSize+10,text,{font:"12px Lato",fill:"#ffffff"});
+        uiGroup.add(this.text);
+        roundedRectG.destroy();
+    }
+    update(){
+        if(game.input.mousePointer.x < this.showRect.x ||
+           game.input.mousePointer.x > this.showRect.x + this.showRect.width ||
+            game.input.mousePointer.y < this.showRect.y ||
+            game.input.mousePointer.y > this.showRect.y + this.showRect.height) {
+                this.sprite.visible = false;
+                this.text.visible = false;
+                this.title.visible = false;
+
+        }else{
+            this.sprite.visible = true;
+            this.text.visible = true;
+            this.title.visible = true;
+
+        }
+    }
+    updatePosition(position){
+        this.position = position;
+        this.showRect = new Phaser.Rectangle(position.x,position.y,this.showRect.width,this.showRect.height);
+        this.sprite.x = position.x;
+        this.sprite.y = position.y;
+        this.title.x = position.x + 5;
+        this.title.y = position.y;
+        this.text.x = position.x + 5;
+        this.text.y = position.y + fontSize + 10;
+
+    }
+}
+
+
 /*
 ++++++++++++++++++++++++++++++++++++
 Basic functions
@@ -69,15 +113,16 @@ let ballradius = 40;
 
 let ball1, ball2, initAngle;
 
-
+const fontSize = 15;
 
 let borders, centreOfMass1, textScaleDown;
 
+let uiGroup,mainGroup,markerGroup;
 
 let arrowSprites = [];
 
 let traces = [];
-
+let toolTips = {};
 
 let angleSprite,dynamicSF;
 
@@ -197,9 +242,9 @@ function updateRadius(ball) {
     newBallGraphic.drawCircle(0, 0, ball.radius);
 
 
-    let labTmp = game.add.sprite(ball.Lab.spriteInstance.x, ball.Lab.spriteInstance.y, newBallGraphic.generateTexture());
+    let labTmp = mainGroup.create(ball.Lab.spriteInstance.x, ball.Lab.spriteInstance.y, newBallGraphic.generateTexture());
 
-    let CoMTmp = game.add.sprite(ball.CoM.spriteInstance.x, ball.CoM.spriteInstance.y, newBallGraphic.generateTexture());
+    let CoMTmp = mainGroup.create(ball.CoM.spriteInstance.x, ball.CoM.spriteInstance.y, newBallGraphic.generateTexture());
     ball.Lab.spriteInstance.destroy();
     ball.CoM.spriteInstance.destroy();
     ball.Lab.spriteInstance = labTmp;
@@ -326,7 +371,6 @@ let game = new Phaser.Game(canvasWidth, canvasHeight, Phaser.CANVAS, 'canvasWrap
     create: create,
     update: update
 });
-
 function preload() {
     game.stage.backgroundColor = "#EBEEEE";
     if (window.devicePixelRatio >= 1.5) {
@@ -360,6 +404,10 @@ function clearVectors() {
 
 
 function create() {
+    markerGroup = game.add.group();
+    mainGroup = game.add.group();
+    uiGroup = game.add.group();
+
     game.canvasWidth = $("#canvasWrapper").width() * window.devicePixelRatio;
     game.canvasHeight = $("#canvasWrapper").width() * window.devicePixelRatio;
     game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
@@ -378,8 +426,8 @@ function create() {
     ball1G.drawCircle(0, 0, ball1.radius);
 
 
-    ball1.Lab.spriteInstance = game.add.sprite(ball1.Lab.initr.x, ball1.Lab.initr.y, ball1G.generateTexture());
-    ball1.CoM.spriteInstance = game.add.sprite(ball1.CoM.initr.x, ball1.CoM.initr.y, ball1G.generateTexture());
+    ball1.Lab.spriteInstance = mainGroup.create(ball1.Lab.initr.x, ball1.Lab.initr.y, ball1G.generateTexture());
+    ball1.CoM.spriteInstance = mainGroup.create(ball1.CoM.initr.x, ball1.CoM.initr.y, ball1G.generateTexture());
     ball1.Lab.spriteInstance.anchor.set(0.5, 0.5);
     ball1.CoM.spriteInstance.anchor.set(0.5, 0.5);
     ball1G.destroy();
@@ -391,8 +439,8 @@ function create() {
     ball2G.beginFill(0x00AEF2, 1);
     ball2G.drawCircle(0, 0, ball2.radius);
 
-    ball2.CoM.spriteInstance = game.add.sprite(ball2.CoM.initr.x, ball2.CoM.initr.y, ball2G.generateTexture());
-    ball2.Lab.spriteInstance = game.add.sprite(ball2.Lab.initr.x, ball2.Lab.initr.y, ball2G.generateTexture());
+    ball2.CoM.spriteInstance = mainGroup.create(ball2.CoM.initr.x, ball2.CoM.initr.y, ball2G.generateTexture());
+    ball2.Lab.spriteInstance = mainGroup.create(ball2.Lab.initr.x, ball2.Lab.initr.y, ball2G.generateTexture());
     ball2.Lab.spriteInstance.anchor.set(0.5, 0.5);
     ball2.CoM.spriteInstance.anchor.set(0.5, 0.5);
     ball2G.destroy();
@@ -429,19 +477,27 @@ function create() {
 
     labFrameText = game.add.text(16, 10, "Lab Frame", style);
     labFrameText.anchor.set(0, 0);
+    uiGroup.add(labFrameText);
 
     centreOfMassFrameText = game.add.text(16, ( canvasHeight / 3 + 10 ), "Centre of Mass Frame", style);
     centreOfMassFrameText.anchor.set(0, 0);
+    uiGroup.add(centreOfMassFrameText);
 
     vectorDiagramText = game.add.text(16, ( canvasHeight * 2 / 3 + 10 ), "Vector Diagram", style);
     vectorDiagramText.anchor.set(0, 0);
+    uiGroup.add(vectorDiagramText);
 
-    centreOfMass1 = game.add.sprite((canvasWidth / 2), (canvasHeight  / 6), 'cofmPNG');
+    centreOfMass1 = mainGroup.create((canvasWidth / 2), (canvasHeight  / 6), 'cofmPNG');
+    centreOfMass1.z = 1;
     centreOfMass1.anchor.set(0.5, 0.5);
 
-    centreOfMass2 = game.add.sprite(canvasWidth / 2, canvasHeight / 2, "cofmPNG");
+
+
+    centreOfMass2 = mainGroup.create(canvasWidth / 2, canvasHeight / 2, "cofmPNG");
+    centreOfMass2.z = 1;
     centreOfMass2.anchor.set(0.5, 0.5);
 
+    mainGroup.sort();
     updateLabels();
 
 }
@@ -450,8 +506,11 @@ function create() {
 let t = 0;
 
 function update() {
-    if (isRunning) {
-
+    game.world.sort('z',Phaser.Group.SORT_ASCENDING);
+    for(let key in toolTips){
+        toolTips[key].update();
+    }
+    if (isRunning){
         ball1.Lab.spriteInstance.x += ball1.Lab.v.x;
         ball1.Lab.spriteInstance.y -= ball1.Lab.v.y;
         ball2.Lab.spriteInstance.x += ball2.Lab.v.x;
@@ -517,12 +576,12 @@ function drawArrow(originV, vectorV, rectIndex, color = 0x006EAF, latexID = "") 
     let origin,vector;
 
     if(rectIndex === 3) {
-        vector = new Vector(vectorV.x * 8 /dynamicSF,-1*vectorV.y*8/dynamicSF);
+        vector = new Vector(vectorV.x * 7 /dynamicSF,-1*vectorV.y*7/dynamicSF);
         if(latexID === 'p1'){
             origin = new Vector(originV.x,-1*originV.y);
         }
         else{
-             origin = new Vector(originV.x * 8/dynamicSF,-1*originV.y * 8/dynamicSF);
+             origin = new Vector(originV.x * 7/dynamicSF,-1*originV.y * 7 /dynamicSF);
         }
         // Flip directions for canvas y-axis
     }else{
@@ -555,12 +614,12 @@ function drawArrow(originV, vectorV, rectIndex, color = 0x006EAF, latexID = "") 
     arrowG.lineTo(mag / 2, 0);
     arrowG.endFill();
 
-    arrowSprites.push(game.add.sprite((canvasWidth / 2 - 5 * scaleFactor + origin.x * scaleFactor), (canvasHeight * (rectIndex * 2 - 1) / 6 + scaleFactor + origin.y * scaleFactor), arrowG.generateTexture()));
+    arrowSprites.push(markerGroup.create((canvasWidth / 2 - 5 * scaleFactor + origin.x * scaleFactor), (canvasHeight * (rectIndex * 2 - 1) / 6 + scaleFactor*1.5 + origin.y * scaleFactor), arrowG.generateTexture()));
     arrowSprites[arrowSprites.length - 1].anchor.set(0, 0.5);
     arrowSprites[arrowSprites.length - 1].rotation = vector.getArg();
 
     if (latexID !== "") {
-        arrowSprites.push(game.add.sprite((canvasWidth / 2 - 5 * scaleFactor + origin.x * scaleFactor + vector.x * scaleFactor / 2), (canvasHeight * (rectIndex * 2 - 1) / 6 + scaleFactor + origin.y * scaleFactor + vector.y * scaleFactor / 2), latexID));
+        arrowSprites.push(markerGroup.create((canvasWidth / 2 - 5 * scaleFactor + origin.x * scaleFactor + vector.x * scaleFactor / 2), (canvasHeight * (rectIndex * 2 - 1) / 6 + scaleFactor*1.5 + origin.y * scaleFactor + vector.y * scaleFactor / 2), latexID));
         arrowSprites[arrowSprites.length - 1].anchor.set(0.5, 0);
     }
 
@@ -573,7 +632,7 @@ function drawAngle(vecta, vectb,pos,color) {
     arcG.arc(0, 0, 50, Math.max(vecta.getArg(),vectb.getArg()), Math.min(vecta.getArg(),vectb.getArg()), true);
     arcG.endFill();
     if(angleSprite != null) angleSprite.destroy();
-    angleSprite =  game.add.sprite(pos.x + canvasWidth/2,pos.y + canvasHeight/6,arcG.generateTexture());
+    angleSprite =  markerGroup.create(pos.x + canvasWidth/2,pos.y + canvasHeight/6,arcG.generateTexture());
     angleSprite.anchor.set(0,0.5);
     arcG.destroy();
 
@@ -584,9 +643,6 @@ function getLabP(){
 }
 
 function recalculateVector() {
-
-
-
     let pStar = vCal(vCal(ball2.Lab.v, '-', ball1.Lab.v), '*', getReducedMass());
 
     let pStar_reversed = vCal(pStar, '*', -1);
@@ -610,7 +666,13 @@ function recalculateVector() {
                         q1.getMag(),
                         vCal(pStar_reversed, "*", (ball1.Lab.mass / ball2.Lab.mass)).getMag(),
                         pStar_reversed.getMag(),
-                        q1star.getMag());
+                        q1star.getMag()) + 0.5;
+    if('comLab' in toolTips){
+        toolTips['comLab'].updatePosition(getCoMR());
+    }else {
+        toolTips['comLab'] = new ToolTip(getCoMR(),new Phaser.Rectangle(getCoMR().x, getCoMR().y, 20, 20), 'Centre of Mass', 'Lorem Ipsum');
+    }
+
 
     clearVectors();
     if ($('#vector_draw_enable').is(':checked')) {
@@ -619,14 +681,14 @@ function recalculateVector() {
         let scalefactor = canvasWidth / 16;
         let colPoint = 100 - ball2.radius;
 
-        drawArrow(vCal(new Vector(colPoint/scalefactor + 5, 1 - (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor ),'-',ball1.Lab.v), ball1.Lab.v, 1, 0xE40043);
-        drawArrow(new Vector(colPoint/scalefactor + 5, 1 - (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor ), ball1.Lab.postv, 1, 0xE40043);
-        drawArrow(new Vector((ball2.Lab.spriteInstance.x-canvasWidth*0.5)/scalefactor + 5, 1 + (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor),ball2.Lab.postv, 1, 0x00ACD7);
+        drawArrow(vCal(new Vector(colPoint/scalefactor + 5, 1.5 - (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor ),'-',ball1.Lab.v), ball1.Lab.v, 1, 0xE40043);
+        drawArrow(new Vector(colPoint/scalefactor + 5, 1.5 - (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor ), ball1.Lab.postv, 1, 0xE40043);
+        drawArrow(new Vector((ball2.Lab.spriteInstance.x-canvasWidth*0.5)/scalefactor + 5, 1.5 + (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor),ball2.Lab.postv, 1, 0x00ACD7);
         //CoM frame
-        drawArrow(new Vector(5-pStar.x ,1),pStar,2,0x960078,'pstar');
-        drawArrow(new Vector(5+pStar.x,1),vCal(pStar,'*',-1),2,0x960078,'pstar');
-        drawArrow(new Vector(5,1),q1star,2,0x960078,'qstar');
-        drawArrow(new Vector(5,1),q2star,2,0x960078,'qstar');
+        drawArrow(new Vector(5-pStar.x ,1.5),pStar,2,0x960078,'pstar');
+        drawArrow(new Vector(5+pStar.x,1.5),vCal(pStar,'*',-1),2,0x960078,'pstar');
+        drawArrow(new Vector(5,1.5),q1star,2,0x960078,'qstar');
+        drawArrow(new Vector(5,1.5),q2star,2,0x960078,'qstar');
     }
     drawArrow(zeroV(), q1, 3, 0xDD2501, "q1");
     drawArrow(q1, q2, 3, 0x0091D4, 'q2');
@@ -648,9 +710,9 @@ function addTrace(ball) {
     if(ball.spriteInstance.visible){
         ballG.lineStyle(1, color, 1);
         ballG.beginFill(color, 1);
-        ballG.drawCircle(0, 0, 10);
+        ballG.drawCircle(0, 0, 7);
 
-        traces.push(game.add.sprite(ball.spriteInstance.x, ball.spriteInstance.y, (ballG.generateTexture())));
+        traces.push(markerGroup.create(ball.spriteInstance.x, ball.spriteInstance.y, (ballG.generateTexture())));
         traces[traces.length -1].anchor.set(0.5,0.5);
         ballG.destroy();
     }

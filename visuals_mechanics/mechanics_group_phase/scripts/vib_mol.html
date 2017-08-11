@@ -1,0 +1,186 @@
+<!doctype html>
+<head>
+    <title>Diatomic Molecule Vibration and Rotation</title>
+    <script src = "./vecops.js"></script>
+</head>
+
+<div id="physics"></div>
+<script>
+    /**
+     * Class to describe attributes of atoms that can be used to make up molecules.
+     * @param pos: Vector with Cartesian position coordinates
+     * @param radius: Radius of atom.
+     * @param mass: Mass of atom.
+     * @param charge: Charge on atom (ion).
+     * @constructor: Atom
+     */
+    Atom = function(pos, radius, mass, charge) {
+    // Making position and force vectors.
+    this.pos = new Vector(pos);                 // Position vector.
+
+    var spring_f = [];
+    for (var i = 0; i < pos.items.length; i++) {
+        spring_f.push(0);
+    }
+    this.spring_f = new Vector(spring_f);       // Restoring force (Hooke's Law)
+
+    // Checking for unphysical parameters.
+    if (radius <= 0 || mass <= 0 || charge < 0) {
+        console.error("Unphysical system detected! Please check radius, mass and charge values.")
+    }
+
+    this.r = radius;                            // Atom radius.
+    this.m = mass;                              // Atom mass.
+    this.q = charge;                            // Charge on atom (making it an ion!)
+    };
+
+    /**
+     * Calculates restoring force when atoms modelled by two particles attached by spring have an extension.
+     * @param COM: Vector Centre of Mass
+     * @param k: Spring constant.
+     * @returns {Vector}
+     */
+    Atom.prototype.calculateRestoringForce = function(COM, k) {
+
+        // Checking COM is a Vector
+        if (!COM.constructor === Vector) {
+            console.error("COM should be entered as a Vector!");
+
+            // In case COM is an Array.
+            if (COM.constructor === Array && isNumber(COM[0]) && 1 <= COM.length <= 3) {
+                COM = Vector(COM);
+            }
+        }
+
+        x = new Vector(this.pos.subtract(COM));    // Calculate extension Vector
+        f = x.multiply(k);                         // Restoring force
+        return new Vector(f)
+    };
+
+    Atom.prototype.calculateSpringEnergy = function() {
+        return this.f.multiply(0.5)
+    };
+
+    /**
+     * Class to make molecule out of atoms, with a spring constant that defines strength of bonds, and instantiated with
+     * rotational and vibrational E.
+     * @param atoms: Array containing all atoms in molecules.
+     * @param spring_const: Spring constant, k.
+     * @param vibrational_E: Vibrational kinetic energy.
+     * @param rotational_E: Rotational kinetic energy.
+     * @constructor
+     */
+    Molecule = function(atoms, spring_const, vibrational_E, rotational_E) {
+
+        // Checking objects of class Atom passed in in the list.
+        if (atoms.constructor === Array || atoms[0].constructor === Atom)
+        {
+            this.atoms = atoms;                                                             // Atoms.
+
+            // Calculating scalar distance between atoms.
+            this.r = new Vector(this.atoms[0].pos.subtract(this.atoms[1].pos)).norm();      // Atom separation.
+
+            this.COM = [];                                                  // Centre of mass initialised as 0 vector.
+            for (var i = 0; i < this.atoms[0].items.length; i++)
+            {
+                this.COM.push(0)
+            }
+            this.COM = new Vector(this.COM);                                // Centre of mass.
+        }
+
+        this.I = 0;                                                         // Moment of inertia initialised as 0.
+        this.w = 0;                                                         // Angular velocity.
+        this.k = spring_const;                                              // Spring Constant.
+        this.E_v = vibrational_E;                                           // Vibrational energy.
+        this.E_r = rotational_E;                                            // Rotational energy.
+    };
+
+    /**
+     * Calculates Moment of Inertia.
+     * @returns {number} I
+     */
+    Molecule.prototype.calculateMoI = function() {
+        var I = 0;                                                          // Moment of Inertia.
+        for (var i = 0; i < this.atoms.length; i++) {
+            var r_i = new Vector(this.atoms[i].pos.subtract(this.COM));     // Distance between this atom and COM.
+            I += this.atoms[i].m * Math.pow(r_i.norm(), 2);                 // m*r**2 contribution for this atom.
+        }
+        return I                                                            // Return Moment of Inertia (scalar).
+    };
+
+    /**
+     * Calculates angualar velocity from moment of inertia.
+     * @returns {number} Omega, angular velocity.
+     */
+    Molecule.prototype.calculateAngVel = function() {
+        // E_r = I * w ** 2
+        var w_sq = this.E_r/this.I;                                         // Calculating w**2 (omega squared)
+        return Math.sqrt(w_sq)                                              // Return angular velocity.
+    };
+
+    /**
+     * Calculates new position of each atom after
+     * @param t: Time elapsed.
+     * @returns {Array} New position of each atom.
+     */
+    Molecule.prototype.calculateRotCoords = function (t) {
+        var theta = this.w * t;                                             // Radians.
+        var rotd_posns = [];                                                //
+        for (var i = 0; i < this.atoms.length; i++) {
+            rotd_posns.push(new Vector(this.pos.rotate(theta)));            // Pushing each atom's new position.
+        }
+        return rotd_posns
+    };
+
+    /**
+     * Calculates Centre of Mass coordinates.
+     * @returns {Vector} Centre of Mass
+     */
+    Molecule.prototype.calculateCOM = function() {
+        var total_m = 0;                                                    // Total mass of system.
+
+        var total_mx = [];                                                  // Total mass * position (mx) of system.
+        for (var j = 0; j < this.atoms[0].pos.items.length; j++) {
+            total_mx.push(0)
+        }
+        total_mx = new Vector(total_mx);                                    // mx initialised as 0 vector.
+
+        // Summing mx and m.
+        for (var i = 0; i < this.atoms.length; i++) {
+            total_m += this.atoms[i].m;
+            var mx = new Vector(this.atoms[i].pos.multiply(this.atoms[i].m));
+            total_mx = new Vector(total_mx.add(mx));
+        }
+
+        return new Vector(total_mx.multiply(1 / total_m));                  // Return Vector coordinates of COM.
+    };
+
+    Molecule.prototype.update = function() {
+        //TODO: Calculate rotation angle given the rotational KE
+        //TODO: Calculate the vibration amplitude given the vibrational KE
+        //TODO: Update position due to vibrational motion.
+        //TODO: Update position due to rotational motion.
+        //TODO: Check if vibrational energy greater than restoring energy (Hooke's Law)
+    };
+</script>
+
+<div id="phaser"></div>
+<script>
+    a1 = new Atom([0, 0], [0, 0], 1, 1, 0);
+    a2 = new Atom([3, 4], [0, 0], 1, 1, 0);
+    mol1 = new Molecule([a1, a2], 2);
+
+    var com = mol1.calculateCOM();
+    mol1.COM = com;
+    alert("Old COM is " + mol1.COM.items);
+
+    mol1.atoms[0].pos = new Vector([4, 5]);
+    alert("Changing a1.pos to " + mol1.atoms[0].pos.items);
+    com = mol1.calculateCOM();
+    mol1.COM = com;
+    alert("New COM is " + mol1.COM.items);
+</script>
+
+<body>
+
+</body>
