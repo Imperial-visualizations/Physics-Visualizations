@@ -18,7 +18,7 @@
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="styles/styles.css?v=2">
+  <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
   <style type="text/css">
     .example-grid .column, .example-grid .columns {
       background: #EEE;
@@ -33,18 +33,83 @@
       letter-spacing: .1rem;
     }
 
-    .playPauseButton{
+    .playStopButton{
       width: 100px;
       height: 40px;
       box-sizing: border-box;
       color: #fff;
-      line-height: 36px;
-      text-align: center;
-      border-bottom: 4px solid #9F004E;
       background-color: #C81E78;
-      transition: all 100ms linear;
+      text-align: center;
+
+      line-height: 36px;
+      border-bottom: 4px solid #9F004E;
+      text-shadow: 0px 1px 0px #9F004E;
+      transition: all 100ms linear; /*This is the magic bit that makes the button
+                                      get "pressed" smoothly. 
+                                      It means "give all properties of matching elements
+                                      a transition, with 100ms duration, and let the
+                                      f(t) function be linear."*/
     }
-    .playPauseButton.pressed{
+    .playStopButton.pressed{ /* Select elements that has both 
+                                "playStopButton" and "pressed" class
+                                at the same time*/
+      border-top: 4px solid #9F004E;
+      border-bottom: none;
+    }
+
+    .playStopButtonV1{ /* Use css to chose the element(s) with class playStopButton
+                        "." for class, "#" for id, nothing for tag,
+                        e.g. <button id="openMenu" class="openButton">Open Menu</button>
+                        can be selected by using button{} or #openMenu{} or .openButton{} 
+                        inside {} are the styles you want for those elements which matches the
+                        selector.
+                        The later ones will overwrites the ones before. */
+      width: 100px;
+      height: 40px;
+      background-color: #C81E78;
+      color: #ffffff; /* Text colour */
+      text-align: center;
+    }
+
+    .playStopButtonV2{
+      width: 100px;
+      height: 40px;
+      background-color: #C81E78;
+      color: #ffffff; 
+      text-align: center;
+
+      box-sizing: border-box;
+      line-height: 36px;
+      border-bottom: 4px solid #9F004E;
+      text-shadow: 0px 1px 0px #9F004E;
+    }
+    .playStopButtonV2:active{ /* The ":active" selector actives when the element 
+                                  is being clicked.
+                                */
+      border-top: 4px solid #9F004E;
+      border-bottom: none;
+    }
+
+    .playStopButtonV3{
+      width: 100px;
+      height: 40px;
+      box-sizing: border-box;
+      color: #fff;
+      background-color: #C81E78;
+      text-align: center;
+
+      line-height: 36px;
+      border-bottom: 4px solid #9F004E;
+      text-shadow: 0px 1px 0px #9F004E;
+      transition: all 100ms linear; /*This is the magic bit that makes the button
+                                      get "pressed" smoothly. 
+                                      It means "give all properties of matching elements
+                                      a transition, with 100ms duration, and let the
+                                      f(t) function be linear."*/
+    }
+    .playStopButtonV3.pressed{ /* Select elements that has both 
+                                "playStopButton" and "pressed" class
+                                at the same time*/
       border-top: 4px solid #9F004E;
       border-bottom: none;
     }
@@ -57,8 +122,8 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
       <h1 class="title">HTML DOM: CSS, Javascript & JQuery</h1>
-        <div class="row">
           <h2 id="getting-started">Getting Started</h2>
+        <div class="row">
           <div class="six columns">
 <ol>
 <li><p>Have your files form the HTML tutorial ready, or download them from <em>/Imperial-Visualizations/tutorials/DOM/</em></p>
@@ -147,14 +212,115 @@ For this tutorial, you'll need:
 <p>As you have seen, often the property of the HTML element you&#39;ll need to change is a CSS style, which is why we are talking about them all at the same time in this tutorial.</p>
 <p>You write HTML tags to represent the structure of your website, write Javascript/jQuery code to do dynamic stuff, and write css to style them.</p>
 <h2 id="simple-button">Simple Button</h2>
+<h3 id="final-result">Final result</h3>
 <p>Let's try to create something which look like this (sound effect not included in this tutorial): </p>
-          <div class="playPauseButton">▶︎ PLAY</div>
+          <div class="playStopButton">▶︎ PLAY</div>
 <br>
+<h3 id="1-create-html">1. Create HTML</h3>
 <p>Let's first start by creating an HTML tag:</p>
-<p><code>&lt;div class=&quot;playPauseButton&quot;&gt;▶︎ PLAY&lt;/div&gt;</code></p>
+<p><code>&lt;div class=&quot;playStopButton&quot;&gt;▶︎ PLAY&lt;/div&gt;</code></p>
 <p>Put it somewhere nice, for example in your <em>four columns</em>. Now you should only see a line of text:</p>
-<div style="">▶︎ PLAY</div>
+<div style="">▶︎ PLAY</div><br>
+<h3 id="2-add-css">2. Add CSS</h3>
+<p>Now let's start adding some styles. Put the following code inside your <code>&lt;style type=&quot;text/css&quot;&gt;&lt;/style&gt;</code></p>
+<pre><code>.playStopButton{ /* Use css to chose the element(s) with class playStopButton
+                    &quot;.&quot; for class, &quot;#&quot; for id, nothing for tag,
+                    e.g. &lt;button id=&quot;openMenu&quot; class=&quot;openButton&quot;&gt;Open Menu&lt;/button&gt;
+                    can be selected by using button{} or #openMenu{} or .openButton{} 
+                    inside {} are the styles you want for those elements which matches the
+                    selector.
+                    The later ones will overwrites the ones before. */
+  width: 100px;
+  height: 40px;
+  background-color: #C81E78;
+  color: #ffffff; /* Text colour */
+  text-align: center;
+}
+</code></pre>
+<p>Now if you run your HTML file (double click it to open with a browser OR run it on a localhost server (recommended)), you should see something that look like this:</p>
+<div class="playStopButtonV1">▶︎ PLAY</div><br>
+<p>Now let's add in more css to make it nicer. Expand the css code for your .playStopButton:</p>
+<pre><code>.playStopButton{
+  width: 100px;
+  height: 40px;
+  background-color: #C81E78;
+  color: #ffffff; 
+  text-align: center;
 
+  box-sizing: border-box;
+  line-height: 36px;
+  border-bottom: 4px solid #9F004E;
+  text-shadow: 0px 1px 0px #9F004E;
+}
+.playStopButton:active{ /* The &quot;:active&quot; selector actives when the element 
+                              is being clicked.
+                            */
+  border-top: 4px solid #9F004E;
+  border-bottom: none;
+}
+</code></pre>
+<div class="playStopButtonV2">▶︎ PLAY</div>
+(Try click it)
+<br><br>
+<p>It might look a bit confusing now because some of the stuff we&#39;ve added might not make sense, or you might think they are badly named. This is highly due to the legacy from the first version of HTML we had, which was created at CERN. Luckily, after more then two decades of development, HTML, CSS and Javascript, the three cornerstones of the web world are probably some of the most well documented programming languages in the world. </p>
+<p>If you have any problems with CSS or Javascript or jQuery, just Google it. Most likely someone else have had the same problems. For now, read through <a href="https://www.w3schools.com/cssref/css_selectors.asp">w3schools css-selectors</a>, <a href="https://www.w3schools.com/cssref/css3_pr_box-sizing.asp">w3schools box-sizing</a>, <a href="https://stackoverflow.com/questions/8865458/how-do-i-vertically-center-text-with-css">stackoverflow line-height</a> to understand what css we&#39;ve used here to achieved the style we wanted. Edit the css, try changing the css to understand what each one of them do.</p>
+<h3 id="3-write-javascript-jquery">3. Write Javascript/jQuery</h3>
+<p>Hopefully you should have a rough understanding of the css by now, it&#39;s nice that the css have the selector that actives when the mouse is pressed down, but if we want the &quot;pressed&quot; status to stay, as well as changing the text inside the button, we will have to use Javascript.</p>
+<p>The best way to achieve any sort of changing in style with Javascript, is to write a class for that style, then use Javascript to change the class of that element.</p>
+<p>First, replace the :active css selector with .pressed :</p>
+<pre><code>.playStopButton{
+  width: 100px;
+  height: 40px;
+  box-sizing: border-box;
+  color: #fff;
+  background-color: #C81E78;
+  text-align: center;
+
+  line-height: 36px;
+  border-bottom: 4px solid #9F004E;
+  text-shadow: 0px 1px 0px #9F004E;
+  transition: all 100ms linear; /*This is the magic bit that makes the button
+                                  get &quot;pressed&quot; smoothly. 
+                                  It means &quot;give all properties of matching elements
+                                  a transition, with 100ms duration, and let the
+                                  f(t) function be linear.&quot;*/
+}
+.playStopButton.pressed{ /* Select elements that has both 
+                            "playStopButton" and "pressed" class
+                            at the same time*/
+  border-top: 4px solid #9F004E;
+  border-bottom: none;
+}
+</code></pre>
+<p>Second, write Javascript/jQuery code to add/remove class when clicked:</p>
+<pre><code>$(&quot;.playStopButton&quot;).on(&#39;click&#39;,function(){
+  $(this).toggleClass(&quot;pressed&quot;);
+});
+</code></pre><p>Here, we are using jQuery, which is a library of Javascript that provides a simpler way to access DOM. It allows you to write less code to achieve the same thing, as well as giving you a lot of useful functions to access the DOM.</p>
+<p>If you write the same code in Javascript it would look like this:</p>
+<pre><code>document.getElementsByClassName(&quot;playStopButton&quot;)[0].onclick = function(){
+  if(document.getElementsByClassName(&quot;playStopButton&quot;)[0].className == &quot;playStopButton pressed&quot;){
+    document.getElementsByClassName(&quot;playStopButton&quot;)[0].className = &quot;playStopButton&quot;;
+  }else{
+    document.getElementsByClassName(&quot;playStopButton&quot;)[0].className = &quot;playStopButton pressed&quot;;
+  }
+};
+</code></pre><p>which is bulky so <strong>just use jQuery</strong>!!!</p>
+<p>Now, let&#39;s add the text changing bit:</p>
+<pre><code>$(&quot;.playStopButton&quot;).on(&#39;click&#39;,function(){
+  $(this).toggleClass(&quot;pressed&quot;);
+  if($(this).hasClass(&quot;pressed&quot;)){
+    //Pressed ▶︎︎ PLAY
+    $(this).text(&quot;◼︎︎ STOP&quot;);
+  }else{
+    //Pressed ◼︎︎ STOP
+    $(this).text(&quot;▶︎︎ PLAY&quot;);
+  }
+});
+</code></pre>
+<h3 id="4-ta-dah">4. Ta-dah</h3>
+<div class="playStopButtonV3">▶︎ PLAY</div>
+(Sorry you don't get the sound effect)
           </div>
         </div>
     </div>
@@ -165,15 +331,15 @@ For this tutorial, you'll need:
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script type="text/javascript">    
   var paki = document.createElement('audio');
-    paki.setAttribute('src', 'images/paki.mp3');
+      paki.setAttribute('src', 'images/paki.mp3');
   var paku = document.createElement('audio');
-    paku.setAttribute('src', 'images/paku.mp3');
+      paku.setAttribute('src', 'images/paku.mp3');
   var climbing = document.createElement('audio');
-    climbing.setAttribute('src', 'images/climbing.mp3');
-  climbing.loop = true;
+      climbing.setAttribute('src', 'images/climbing.mp3');
+      climbing.loop = true;
 
     
-    $(".playPauseButton").on('click',function(){
+    $(".playStopButton").on('click',function(){
       $(this).toggleClass("pressed");
       if($(this).hasClass("pressed")){
         //Pressed Play
@@ -188,6 +354,18 @@ For this tutorial, you'll need:
         climbing.currentTime = 0;
       }
     });
+    
+    $(".playStopButtonV3").on('click',function(){
+      $(this).toggleClass("pressed");
+      if($(this).hasClass("pressed")){
+        //Pressed Play
+        $(this).text("◼︎︎ STOP");
+      }else{
+        //Pressed Stop
+        $(this).text("▶︎︎ PLAY");
+      }
+    });
+
   </script>
 
 <!-- End Document
