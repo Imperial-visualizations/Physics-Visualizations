@@ -40,14 +40,13 @@
 
       ourRequest.onload=function(){
         var data = JSON.parse(ourRequest.responseText);
-        var init = data[2]
-        plot_data = [init, data[0], data[1]]
+        plot_data = [data[2], data[0], data[1]]
         Plotly.plot(div='graph', plot_data, layout);
         plot_data.push(data[0])
 
         $('#angle').on('input', function() {
           i = $(this).val();
-          Plotly.restyle(graph, {x: [data[i]['x']], y: [data[i]['y']]}, [3] )
+          Plotly.restyle(graph, {x: [data[i]['x']], y: [data[i]['y']]}, [0] )
         });
 
         $('#brewster').on('click', function() {
