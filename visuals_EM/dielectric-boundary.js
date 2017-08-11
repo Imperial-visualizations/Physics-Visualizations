@@ -15,7 +15,6 @@ $(window).on('load', function() {
     ).then(function(data, layout) { // i.e., function(JSON1, JSON2) {// success}, function() {// error}
 
         init(data, layout);
-        console.log(data);
 
         $("#polarisation-switch input").on("change", function() {
             if (this.value === "s-polarisation") {
@@ -40,8 +39,6 @@ $(window).on('load', function() {
 
         endLoadingScreen();
 
-        // dom.intface.html(JSON.stringify(plotLayout, null, 2));
-        // console.log(input2index($("#interface input#angle"), data[0]["p"]));
         Plotly.plot(div='graph', plotData, layout=plotLayout);
     }
 
@@ -61,18 +58,17 @@ $(window).on('load', function() {
 
 
     function updatePlot(data, index) {
-
         var updateData = {};
         for (var i = 0; i < data[index].length - 1; i++) {
             updateData[i] = {
-                    x: data[index][i].x,
-                    y: data[index][i].y,
-                    z: data[index][i].z
+                x: data[index][i].x,
+                y: data[index][i].y,
+                z: data[index][i].z
             };
         }
         Plotly.animate(div="graph", {
-            data: Object.keys(updateData).map(function(key) {return updateData[key];}),
-            traces: Object.keys(updateData).map(Number),
+            data: getObjValues(updateData),
+            traces: getObjKeys(updateData),
             layout: {}
         }, {
             transition: {duration: 0},
@@ -84,6 +80,16 @@ $(window).on('load', function() {
     function JSONLoadError() {
         dom.loadSpinner.children(".spinner-span").html("Error: Failed to load JSON resources");
         dom.loadSpinner.children("div").fadeOut(0);
+    }
+
+
+    function getObjKeys(obj) {
+        return Object.keys(obj).map(Number);
+    }
+    function getObjValues(obj) {
+        return Object.keys(obj).map(function(key) {
+            return obj[key];
+        });
     }
 
 });
