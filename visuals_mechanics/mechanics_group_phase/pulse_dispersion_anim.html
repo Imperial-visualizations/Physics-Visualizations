@@ -111,21 +111,11 @@
             },
             //plot_bgcolor: '#EBEEEE',
             xaxis: {
-                range: [-50, 0],
+                range: [-50, 50],
             },
             yaxis: {
                 autorange: false,
                 range: [-4, 4],
-                domain: [0.6, 1],
-            },
-            xaxis2: {
-                range: [0, 50],
-                anchor: 'y2',
-            },
-            yaxis2: {
-                autorange: false,
-                range: [-4, 4],
-                domain: [0, 0.4],
             },
             legend: {
                 orientation: 'h',
@@ -155,7 +145,6 @@
                 $('#k0_input').val('');
                 $('#error_k0').text('');
             }
-
         }
     });
 
@@ -226,7 +215,6 @@
         if (is_paused === true) {
             Plotly.relayout('graph', {
                 "yaxis.range": [-y_range, y_range],
-                "yaxis2.range": [-y_range, y_range],
             }
             )
         }
@@ -247,11 +235,19 @@
             omega_disp = omega_nondisp.slice();
         }
         for (var i = 0; i <= n; i++) {
-            y_i[i] = 0;
-            y_t[i] = 0;
-            for (var j = 0; j < nb_waves; j++) {
-                y_i[i] += Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
-                y_t[i] += Math.sin(k_array[j] * x[i] - omega_disp[j] * t);
+            if (x[i] < 0) {
+                y_i[i] = 0;
+                for (var j = 0; j < nb_waves; j++) {
+                    y_i[i] += Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
+                }
+            }
+            else if (x[i] >= 0){
+                y_t[i] = 0;
+                for (var j_ = 0; j_ < nb_waves; j_++) {
+                    B = (2 * omega_disp[j_] / (omega_nondisp[j_] + omega_disp[j_]));
+                    y_t[i] += B * Math.sin((omega_nondisp[j_] / omega_disp[j_]) * k_array[j_] * x[i] - (
+                            omega_nondisp[j_] / k_array[j_]) * omega_disp[j_] * t);
+                }
             }
         }
     }
@@ -272,7 +268,7 @@
 
         Plotly.animate('graph',
                 {data: [{y: y_i}, {y: y_t}]},
-                {transition: {duration: 0}, frame: {duration: 1, redraw: false}}
+                {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
         );
         document.getElementById('run_button').value = (is_paused) ? "Play" : "Pause";
     }
@@ -302,23 +298,25 @@
         line: {width: 2, color: '#00ACD7', simplify: false}
     };
 
+    var boundary = {
+        x: [0, 0],
+        y: [-10, 10],
+        mode: "lines",
+        name: "boundary",
+        line: {width: 3, color: 'black', simplify: false}
+    };
+
+    var xline = {
+        x: [-15, 15],
+        y: [0, 0],
+        mode: "lines",
+        showlegend: false,
+        line: {width: 2, color: '#003E74', simplify: false}
+    };
+
+
     // Plot graph with interactivity
-    Plotly.plot('graph', [
-            {
-                x: x,
-                y: y_i,
-                name: "non-dispersive",
-                line: {simplify: false}
-            }, {
-                x: x,
-                y: y_t,
-                xaxis: 'x2',
-                yaxis: 'y2',
-                name: "dispersive",
-                line: {simplify: false}
-            }],
-            layout
-    );
+    Plotly.plot('graph', [incident, reflected, transmitted, boundary, xline], layout);
 
     // Data update function for animation
     var t_start = t;
@@ -328,11 +326,19 @@
         // need to find a way to define time limit
         if (t < t_start + 50) {
             for (var i = 0; i < n; i++) {
-                y_i[i] = 0;
-                y_t[i] = 0;
-                for (var j = 0; j < nb_waves; j++) {
-                        y_i[i] +=  Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
-                        y_t[i] += Math.sin(k_array[j] * x[i] - omega_disp[j] * t);
+                if (x[i] < 0) {
+                    y_i[i] = 0;
+                    for (var j = 0; j < nb_waves; j++) {
+                        y_i[i] += Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
+                    }
+                }
+                else if (x[i] >= 0) {
+                    y_t[i] = 0;
+                    for (var j_ = 0; j_ < nb_waves; j_++) {
+                        B = (2 * omega_disp[j_] / (omega_nondisp[j_] + omega_disp[j_]));
+                        y_t[i] += B * Math.sin((omega_nondisp[j_] / omega_disp[j_]) * k_array[j_] * x[i] - (
+                                        omega_nondisp[j_] / k_array[j_]) * omega_disp[j_] * t);
+                    }
                 }
             }
         }
@@ -361,7 +367,6 @@
     }
 
     // ToDo: tooltips for input boxes
-    // ToDo: make wave disperse slowly
     // ToDo: Change Initial Wave
     // ToDo: Python?
     // ToDo: Numeric (Clean Up)
@@ -372,6 +377,7 @@
 
     // http://www.phikwadraat.nl/
     // http://physics.usask.ca/~hirose/ep225/animation/dispersion/anim-dispersion.html
+    // https://en.wikipedia.org/wiki/Dispersion_relation
 
 </script>
 
