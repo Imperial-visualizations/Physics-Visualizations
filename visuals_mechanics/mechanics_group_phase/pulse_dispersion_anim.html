@@ -85,7 +85,7 @@
     // x and t coordinates
     var n = 801;
     var y_i = [], y_r = [], y_t = [];
-    var x = numeric.linspace(-50, -10, n);
+    var x = numeric.linspace(-50, 0, n);
     var t = 0.0;
     var dt = 0.02;
     var is_paused = true;
@@ -108,7 +108,8 @@
                 range: [-50, 50]
             },
             yaxis: {
-                range: [-y_range, y_range]
+                autorange: false,
+                range: [-4, 4]
             },
             font: {
                 family: 'Lato',
@@ -121,21 +122,26 @@
     // Submit
     $('#submit').on('click', function () {
         try {
-//            if ($('#function').val().includes('^')) {
-//                var str = $('#function').val().replace('^','Math.power')
-//                $('#function').val(str);
-//            }
+//            // All the characters allowed are in the square brackets (apart from ^)
+            if(/[^0-9ksqrt().*/+-]/.test($('#function').val())) {
+                throw new Error;
+            }
+            var funct = $('#function').val();
+            if ($('#function').val().includes('sqrt')) {
+                var str = $('#function').val().replace('sqrt','Math.sqrt')
+                $('#function').val(str);
+            }
             for (var i = 0; i < nb_waves; i++) {
                 k = k_array[i];
                 omega_disp[i] = eval($('#function').val());
             }
-            $('#dispersionRelation').text($('#function').val())
+            $('#dispersionRelation').text(funct);
             onReset();
             $('#function').val("");
             $('#error').text("");
         }
         catch(err){
-            $('#error').text(err.message);
+            $('#error').text('Invalid equation');
         }
     });
 
@@ -148,6 +154,12 @@
         omega_disp = omega_nondisp.slice();
         onReset();
         update_y_range();
+        if (is_paused === true) {
+            Plotly.animate('graph',
+                    {layout: {yaxis: {range: [-y_range, y_range]}}},
+                    {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
+            )
+        }
     });
 
     // Slider phase velocity
@@ -177,7 +189,7 @@
             y_range = 4
         }
         else {
-            y_range = (nb_waves - (nb_waves % 5)) / 5
+            y_range = (nb_waves - (nb_waves % 5))
         }
     }
 
@@ -188,7 +200,6 @@
 
         Plotly.animate('graph',
                 {data: [{y: y_i}, {y: y_r}, {y: y_t}],},
-                {layout: [{yaxis: {range: [-y_range, y_range]}}]},
                 {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
         );
         document.getElementById('run_button').value = (is_paused) ? "Play" : "Pause";
@@ -236,7 +247,8 @@
     };
 
     // Plot graph with interactivity
-    Plotly.plot('graph', [incident, reflected, transmitted, boundary, xline],
+    Plotly.plot('graph',
+            [incident, reflected, transmitted, boundary, xline],
             layout
     );
 
@@ -283,7 +295,6 @@
 
             Plotly.animate('graph',
                     {data: [{y: y_i}, {y: y_r}, {y: y_t}]},
-                    {layout: [{yaxis: {range: [-y_range, y_range]}}]},
                     {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
                     // vastly speeds up animation but won't update any non-animated properties
             );
@@ -297,13 +308,19 @@
         requestAnimationFrame(update);
     }
 
+    // ToDo: sum sine waves
     // ToDo: Endpoint
+    // ToDo: Interface
     // ToDo: make wave disperse slowly
+    // ToDo: v1, v2
     // ToDo: Change Initial Wave
     // ToDo: Python?
     // ToDo: Speed Up
     // Maybe at beginning: need to specify v (ratio of w and k) and how w (/k cause they are
     // proportional) changes with the added sine wave
+
+    // http://www.phikwadraat.nl/
+    // http://physics.usask.ca/~hirose/ep225/animation/dispersion/anim-dispersion.html
 
 </script>
 
