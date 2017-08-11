@@ -3,6 +3,10 @@ $(window).on('load', function() {
     var dom = {
         intface: $("#interface"),
         loadSpinner: $("#spinner-wrapper")
+    },
+        phys = {
+        polarisation: "s",
+        angleIndex: 10
     };
 
     $.when(
@@ -11,17 +15,27 @@ $(window).on('load', function() {
     ).then(function(data, layout) { // i.e., function(JSON1, JSON2) {// success}, function() {// error}
 
         init(data, layout);
+        console.log(data);
+
+        $("#polarisation-switch input").on("change", function() {
+            if (this.value === "s-polarisation") {
+                phys.polarisation = "s";
+            } else if (this.value === "p-polarisation") {
+                phys.polarisation = "p";
+            }
+            updatePlot(data[0][phys.polarisation], phys.angleIndex);
+        });
 
         $("#interface input#angle").on("input", function() {
-            var index = input2index($(this), data[0].p);
-            updatePlot(data[0].p, index);
+            phys.angleIndex = input2index($(this), data[0][phys.polarisation]);
+            updatePlot(data[0][phys.polarisation], phys.angleIndex);
         });
 
     }, JSONLoadError);
 
 
     function init(data, layout) {
-        var plotData = data[0]["p"][10],
+        var plotData = data[0][phys.polarisation][phys.angleIndex],
             plotLayout = layout[0];
 
         endLoadingScreen();
