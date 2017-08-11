@@ -131,7 +131,9 @@ body {
   line-height: 1.6;
   font-weight: 400;
   font-family: 'Lato', "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #222; }
+  color: #222; 
+  margin-bottom: 50px;
+}
 
 
 /* Typography
@@ -146,6 +148,27 @@ h3 { font-size: 3.0rem; line-height: 1.3;  letter-spacing: -.1rem; }
 h4 { font-size: 2.4rem; line-height: 1.35; letter-spacing: -.08rem; }
 h5 { font-size: 1.8rem; line-height: 1.5;  letter-spacing: -.05rem; }
 h6 { font-size: 1.5rem; line-height: 1.6;  letter-spacing: 0; }
+h1{
+  font-weight: 100;
+  border-bottom: 1px #aaa solid;
+}
+h2{
+  font-weight: 600;
+  border-bottom: 1px #aaa solid;
+}
+h3{
+  font-weight: 500;
+}
+h4{
+  font-weight: 600;
+}
+h5{
+  font-weight: 600;
+}
+h6{
+  font-weight: 700;
+  text-transform: uppercase;
+}
 
 /* Larger than phablet */
 @media (min-width: 550px) {
@@ -158,8 +181,42 @@ h6 { font-size: 1.5rem; line-height: 1.6;  letter-spacing: 0; }
 }
 
 p {
-  margin-top: 0; }
+  margin-top: 0; 
+  }
+li p:first-child{
+  display: inline;
+}
 
+hr{
+  border: none;
+  border-top: medium double #E1E1E1;
+  color: #E1E1E1;
+  text-align: center;
+}
+em{
+    font-family: Georgia, Utopia, 'Times New Roman', Times, serif;
+}
+strong{
+  font-weight: 600;
+}
+blockquote {
+  background: #f9f9f9;
+  border-left: 10px solid #ccc;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C""\201D""\2018""\2019";
+}
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+blockquote p {
+  display: inline;
+}
 
 /* Links
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -313,7 +370,6 @@ input[type="radio"] {
   display: inline; 
   -webkit-appearance: none;
 }
-
 .checkbox {
   width: 12px;
   height: 12px;
@@ -352,6 +408,12 @@ input[type="radio"] {
 }
 .checkbox input[type=checkbox] {
   visibility: hidden;
+}
+.checkbox input[type=checkbox]:after{
+  visibility: visible;
+  content: " ";
+  widows: 10px;
+  height: 10px;
 }
 .checkbox input[type=checkbox]:checked + span:after {
   opacity: 1;
@@ -533,6 +595,14 @@ form {
 .u-full-width {
   width: 100%;
   box-sizing: border-box; }
+.u-half-width {
+  width: 50%;
+  box-sizing: border-box; 
+}
+.u-quarter-width {
+  width: 25%;
+  box-sizing: border-box; 
+}
 .u-max-full-width {
   max-width: 100%;
   box-sizing: border-box; }
@@ -678,7 +748,9 @@ input[type=range] {
   -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
   width: 100%; /* Specific width is required for Firefox. */
   background: transparent; /* Otherwise white in Chrome */
-  margin-bottom: 0;
+  margin-bottom: 0px;
+  min-height: 20px;
+  padding: 10px 0;
 }
 input[type=range].disabled{
   opacity: 0.2;
@@ -690,18 +762,8 @@ input[type=range]::-webkit-slider-thumb {
 
 input[type=range]:focus {
   outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+  background-color: ;
 }
-
-input[type=range]::-ms-track {
-  width: 100%;
-  cursor: pointer;
-
-  /* Hides the slider so custom styles can be added */
-  background: transparent; 
-  border-color: transparent;
-  color: transparent;
-}
-
 
 /* Special styling for WebKit/Blink */
 input[type=range]::-webkit-slider-thumb {
@@ -711,7 +773,7 @@ input[type=range]::-webkit-slider-thumb {
   border: 3px solid #003E74;
   height: 20px;
   width: 20px;
-  border-radius: 60px;
+  border-radius: 50%;
   background: #ffffff;
   cursor: pointer;
   margin-top: -10px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
@@ -728,7 +790,7 @@ input[type=range]::-webkit-slider-runnable-track {
 }
 
 input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #005E9F;
+  box-shadow: 0px 0px 3px 0px #449ECF;
 }
 
 
@@ -750,47 +812,67 @@ input[type=range]::-moz-range-track {
   background: #006EAF;
   border-radius: 1px;
 }
+input[type=range]:focus::-moz-range-track {
+  box-shadow: 0px 0px 3px 0px #449ECF;
+}
 
 
 /* All the same stuff for IE */
 input[type=range]::-ms-thumb {
-  box-shadow: 0px 2px 3px #cccccc;
+  box-shadow: 0 2px 3px #cccccc;
   border: 3px solid #003E74;
   height: 20px;
-  width: 20px;  border-radius: 10px;
+  width: 20px;
   background: #ffffff;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 input[type=range]::-ms-track {
   width: 100%;
   height: 4px;
   cursor: pointer;
+  background: transparent; 
+  border-color: transparent;
+  color: transparent;
   background: #006EAF;
   border-radius: 1px;
+  box-sizing: border-box;
 }
-span.sliderMin{
+input[type=range]:focus::-ms-track {
+  box-shadow: 0px 0px 3px 0px #449ECF;
+}
+
+input[type=range]::-ms-fill-lower {
+  background: #006EAF;
+}
+
+
+span.sliderMin {
   display: inline-block;
   width: 50%;
+  height: 1px;
   text-align: left;
-  margin-top: 0px;
+  margin-top: 0;
   position: relative;
-  top: -10px;
+  top: -28px;
   left: -4px;
-  z-index:-1000;
+  z-index: -1000;
 }
-span.sliderMax{
+span.sliderMax {
   display: inline-block;
   width: 50%;
+  height: 1px;
   text-align: right;
-  margin-top: 0px;
+  margin-top: 0;
   position: relative;
-  top: -10px;
+  top: -28px;
   right: -8px;
-  z-index:-1000;
+  z-index: -1000;
 }
 label.slider{
 }
+
 
 
 /*

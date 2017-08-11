@@ -18,7 +18,7 @@
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="styles/styles.css">
+  <link rel="stylesheet" href="styles/styles.css?v=2">
   <style type="text/css">
     .example-grid .column, .example-grid .columns {
       background: #EEE;
@@ -32,6 +32,22 @@
       font-weight: 600;
       letter-spacing: .1rem;
     }
+
+    .playPauseButton{
+      width: 100px;
+      height: 40px;
+      box-sizing: border-box;
+      color: #fff;
+      line-height: 36px;
+      text-align: center;
+      border-bottom: 4px solid #9F004E;
+      background-color: #C81E78;
+      transition: all 100ms linear;
+    }
+    .playPauseButton.pressed{
+      border-top: 4px solid #9F004E;
+      border-bottom: none;
+    }
   </style>
 
 </head>
@@ -40,94 +56,138 @@
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
-    <section class="header">
       <h1 class="title">HTML DOM: CSS, Javascript & JQuery</h1>
-    </section>
-              
-    <!-- README -->
-    <div id="GettingStarted">
-      <h3>Getting Started</h3>
         <div class="row">
+          <h2 id="getting-started">Getting Started</h2>
           <div class="six columns">
-            <p>
-              How to get started:<br>
-              1. Have your files form the HTML tutorial ready, or download them from /Imperial-Visualizations/tutorials/DOM/<br>
-              2. Open "index.html" with PyCharm or whatever code-editor you like:<br>
-              3. If it's from /tutorials/HTML, you need to add one extra line:<br>
-              <pre><code>&#x3C;script src=&#x22;https://code.jquery.com/jquery-3.2.1.min.js&#x22;&#x3E;&#x3C;/script&#x3E;</code></pre> before the line <pre><code>&#x3C;script src=&#x22;scripts/program.js&#x22;&#x3E;&#x3C;/script&#x3E;</code></pre>, which both should be right before the &#x3C;/body&#x3E; tag.<br>
-              4. Start adding Javascript/JQuery codes between the &#x3C;script&#x3E;&#x3C;/script&#x3E; tags.
-            </p>
+<ol>
+<li><p>Have your files form the HTML tutorial ready, or download them from <em>/Imperial-Visualizations/tutorials/DOM/</em></p>
+</li>
+<li><p>Open <em>index.html</em> with PyCharm or whatever code-editor you like:</p>
+</li>
+<li><p>If your <em>index.html</em> is from <em>/tutorials/HTML/</em>, you need to add one extra line:</p>
+<pre><code> &lt;script src=&quot;https://code.jquery.com/jquery-3.2.1.min.js&quot;&gt;&lt;/script&gt;
+</code></pre><p> before the <code>&lt;script src=&quot;scripts/program.js&quot;&gt;&lt;/script&gt;</code>.</p>
+</li>
+<li><p>Start adding Javascript/JQuery codes between the <code>&lt;script&gt;// javascript or jQuery here.&lt;/script&gt;</code> tags.</p>
+</li>
+</ol>
           </div>
           <div class="six columns">
 <pre>
 <code>
-+ /Imperial-Visualizations/tutorials/HTML/
+For this tutorial, you'll need:
+
++ /Imperial-Visualizations/tutorials/DOM/
 | + images/
-| |- imperial-black-logo.svg
-| |- imperial-logo.svg
 | |- imperial-white-logo.svg
+| |- favicon.ico
 | + scripts/
 | |- program.js
 | + styles/
 | |- styles.css
 |- index.html
-|- DoubleClickMe.html.html
+|- DoubleClickMe.html
 </code>
 </pre>
           </div>
         </div>
         <div class="row">
           <div class="twelve columns">
+<p>5. This is what your <em>index.html</em> should look like right now:</p>
+<pre><code>&lt;!doctype html&gt;
+&lt;!-- **This line is extremely important, it tells the browser to use HTML5 instead of HTML 4.1**  --&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot;&gt;
+    &lt;title&gt;Imperial Visualisations&lt;/title&gt;
+    &lt;link rel=&quot;icon&quot; href=&quot;images/favicon.ico&quot; type=&quot;image/x-icon&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://manglekuo.com/i-v/styles.css?v=1&quot;&gt;
+    &lt;style type=&quot;text/css&quot;&gt;
+        /* css here */
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class=&quot;container&quot;&gt;
+        &lt;h1&gt;jQuery examples&lt;/h1&gt;
+        &lt;div class=&quot;row&quot;&gt;
+            &lt;div class=&quot;eight columns&quot;&gt;
+                &lt;p&gt;I am some content&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;h4&gt;Controllers&lt;/h4&gt;
+            &lt;div class=&quot;four columns&quot;&gt;
+                &lt;label class=&quot;sliderTitle&quot;&gt;Size: &lt;span id=&quot;textSizeDisplay&quot; data-unit=&quot;px&quot;&gt;1px&lt;/span&gt;&lt;/label&gt; 
+                &lt;label class=&quot;slider&quot;&gt;
+                &lt;input id=&quot;textSize&quot; class=&quot;inputs&quot; type=&quot;range&quot; value=&quot;1&quot; min =&quot;1&quot; max=&quot;100&quot; step =&quot;1&quot;/&gt;
+                &lt;span class=&quot;sliderMin&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;sliderMax&quot;&gt;100&lt;/span&gt;
+                &lt;/label&gt;
+                &lt;input id=&quot;toggleColourButton&quot; class=&quot;inputs&quot; type=&quot;button&quot; value=&quot;toggleColour&quot;/&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;br&gt;&lt;br&gt;&lt;br&gt;
+    &lt;script src=&quot;https://code.jquery.com/jquery-3.2.1.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;scripts/program.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+        // javascript or jQuery here.
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;pre
+</code></>
+          </div>
+        </div>
+        <div class="row">
+          <div class="twelve columns">
+            <h2 id="html-dom-document-object-model">HTML DOM (Document Object Model)</h2>
+<p>It just means you can access the properties of HTML tags (or elements) by using dot notation, like you did for object/class in Python. For example put <code>document.body.background = &quot;#ff0000&quot;;</code> inside your Javascript codes (where the <code>&lt;script&gt;// javascript or jQuery here.&lt;/script&gt;</code> is) would allows you to change the background colour of the page to red. The # thing is the common way to represent colour in HTML. #FF0000 = full red, #00FF00 = full green, #0000FF = full blue, #000000 = black, #FFFFFF = white. You use two digits of hexadecimal number (0123456789abcdef instead of 0123456789) to represent the amount of each colour you want. So #00FFFF would be full blue + full green = full yellow.</p>
+<p>
+  See the <a href="#Colour">Colour</a> section for more about colours.
+</p>
+<p>As you have seen, often the property of the HTML element you&#39;ll need to change is a CSS style, which is why we are talking about them all at the same time in this tutorial.</p>
+<p>You write HTML tags to represent the structure of your website, write Javascript/jQuery code to do dynamic stuff, and write css to style them.</p>
+<h2 id="simple-button">Simple Button</h2>
+<p>Let's try to create something which look like this (sound effect not included in this tutorial): </p>
+          <div class="playPauseButton">▶︎ PLAY</div>
+<br>
+<p>Let's first start by creating an HTML tag:</p>
+<p><code>&lt;div class=&quot;playPauseButton&quot;&gt;▶︎ PLAY&lt;/div&gt;</code></p>
+<p>Put it somewhere nice, for example in your <em>four columns</em>. Now you should only see a line of text:</p>
+<div style="">▶︎ PLAY</div>
 
-<pre>
-<code>
-<strong>index.html</strong>
-&#x3C;!doctype html&#x3E;
-&#x3C;!-- **This line is extremely important, it tells the browser to use HTML5 instead of HTML 4.1**  --&#x3E;
-&#x3C;html&#x3E;
-&#x3C;head&#x3E;
-    &#x3C;meta charset=&#x22;utf-8&#x22;&#x3E;
-    &#x3C;meta name=&#x22;viewport&#x22; content=&#x22;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no&#x22;&#x3E;
-    &#x3C;title&#x3E;Imperial Visualisations&#x3C;/title&#x3E;
-    &#x3C;link rel=&#x22;icon&#x22; href=&#x22;images/favicon.ico&#x22; type=&#x22;image/x-icon&#x22;&#x3E;
-    &#x3C;link rel=&#x22;stylesheet&#x22; href=&#x22;styles/styles.css&#x22;&#x3E;
-    &#x3C;!-- importing style.css --&#x3E;
-    &#x3C;!-- **You are not suppose to change style.css !!**  --&#x3E;
-    &#x3C;style type=&#x22;text/css&#x22;&#x3E;
-        /* overwrite style.css styles*/
-    &#x3C;/style&#x3E;
-&#x3C;/head&#x3E;
-&#x3C;body&#x3E;
-    &#x3C;div class=&#x22;container&#x22;&#x3E;
-        &#x3C;h1&#x3E;Big title&#x3C;/h1&#x3E;
-        &#x3C;div class=&#x22;row&#x22;&#x3E;
-            &#x3C;div class=&#x22;eight columns&#x22;&#x3E;
-                &#x3C;p&#x3E;Put your graph here&#x3C;/p&#x3E;
-            &#x3C;/div&#x3E;
-            &#x3C;div class=&#x22;four columns&#x22;&#x3E;
-                &#x3C;p&#x3E;And probobly put your interface here&#x3C;/p&#x3E;
-            &#x3C;/div&#x3E;
-        &#x3C;/div&#x3E;
-    &#x3C;/div&#x3E;
-    &#x3C;br&#x3E;&#x3C;br&#x3E;&#x3C;br&#x3E;
-    &#x3C;script src=&#x22;scripts/program.js&#x22;&#x3E;&#x3C;/script&#x3E;
-    &#x3C;!-- You should put your javascript code in program.js --&#x3E;
-    &#x3C;script&#x3E;
-        // or you can put your javascript here as well.
-    &#x3C;/script&#x3E;
-&#x3C;/body&#x3E;
-&#x3C;/html&#x3E;
-
-</code>
-</pre>
           </div>
         </div>
     </div>
+<br><br><br>
 
 
 
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript">    
+  var paki = document.createElement('audio');
+    paki.setAttribute('src', 'images/paki.mp3');
+  var paku = document.createElement('audio');
+    paku.setAttribute('src', 'images/paku.mp3');
+  var climbing = document.createElement('audio');
+    climbing.setAttribute('src', 'images/climbing.mp3');
+  climbing.loop = true;
 
-  <script type="text/javascript">
+    
+    $(".playPauseButton").on('click',function(){
+      $(this).toggleClass("pressed");
+      if($(this).hasClass("pressed")){
+        //Pressed Play
+        $(this).text("◼︎︎ STOP");
+        paki.play();
+        climbing.play();
+      }else{
+        //Pressed Stop
+        $(this).text("▶︎︎ PLAY");
+        paku.play();
+        climbing.pause();
+        climbing.currentTime = 0;
+      }
+    });
   </script>
 
 <!-- End Document
