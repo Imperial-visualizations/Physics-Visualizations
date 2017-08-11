@@ -4,6 +4,7 @@
     <script src = "./vecops.js"></script>
 </head>
 
+<div id="physics"></div>
 <script>
     /**
      * Class to describe attributes of atoms that can be used to make up molecules.
@@ -45,7 +46,7 @@
         if (!COM.constructor === Vector) {
             console.error("COM should be entered as a Vector!");
 
-            // Incase COM is an Array.
+            // In case COM is an Array.
             if (COM.constructor === Array && isNumber(COM[0]) && 1 <= COM.length <= 3) {
                 COM = Vector(COM);
             }
@@ -79,8 +80,7 @@
             // Calculating scalar distance between atoms.
             this.r = new Vector(this.atoms[0].pos.subtract(this.atoms[1].pos)).norm();      // Atom separation.
 
-            // Centre of mass initialised as 0 vector.
-            this.COM = [];
+            this.COM = [];                                                  // Centre of mass initialised as 0 vector.
             for (var i = 0; i < this.atoms[0].items.length; i++)
             {
                 this.COM.push(0)
@@ -125,7 +125,7 @@
      */
     Molecule.prototype.calculateRotCoords = function (t) {
         var theta = this.w * t;                                             // Radians.
-        var rotd_posns = [];
+        var rotd_posns = [];                                                //
         for (var i = 0; i < this.atoms.length; i++) {
             rotd_posns.push(new Vector(this.pos.rotate(theta)));            // Pushing each atom's new position.
         }
@@ -164,6 +164,7 @@
     };
 </script>
 
+<div id="phaser"></div>
 <script>
     a1 = new Atom([0, 0], [0, 0], 1, 1, 0);
     a2 = new Atom([3, 4], [0, 0], 1, 1, 0);

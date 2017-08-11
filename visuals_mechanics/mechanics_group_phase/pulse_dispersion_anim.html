@@ -35,22 +35,32 @@
             </label>
 
             <label class="slider">
-                <input id="velocityPhase" class="inputs" type="range" value="1" min="0" max="1" step="0.05"/>
+                <input id="velocityPhase" class="inputs" type="range" value="1" min="0.0" max="1" step="0.05"/>
                 <span class="sliderMin">0</span><span class="sliderMax">1</span>
             </label>
 
-            <label> Velocity 2:<span id="v2Display" data-unit="m/s"> 1 m/s</span></label><br>
             <input id="run_button" type="button" value="play" onclick="onStart()" style="width:200px"/>
             <input id="reset_button" type="button" value="reset" onclick="onReset()" style="width:200px"/>
 
-            <form>
-                <label>Define Dispersion Relation: <br /> &omega;(k) =
-                    <span id ="dispersionRelation"> </span>
-                </label>
-                <input id = "function" name="function"><br>
-                <p id= "error" style="color:#ff0000"></p>
-                <input id ="submit" type="button" value="submit"/>
-            </form>
+            <!--Dispersion Relation-->
+            <label>Define Dispersion Relation: <br /> &omega;(k) =
+                <span id ="dispersionRelation"> </span>
+            </label>
+            <input id = "function" name="function"><br>
+            <p id= "error_omega" style="color:#ff0000"></p>
+
+            <!--k0-->
+            <label>Define wave number: <br /> k0 =
+                <span id ="k0"> </span>
+            </label>
+            <input id = "k0_input" >
+             <p id= "error_k0" style="color:#ff0000"></p>
+            <!--kend-->
+             kend =
+                <span id ="kend"> </span>
+            </label>
+            <input id = "kend_input" >
+             <p id= "error_kend" style="color:#ff0000"></p>
 
         </div>
     </div>
@@ -62,25 +72,15 @@
 <script src="./calculator.js"></script>
 
 <script>
-
     // Defining variables (need to update later anyway so importing from e.g. json is meaningless)
     // Wave characteristics:
     var nb_waves = parseInt($("#slider_waves").val());
     var v = parseFloat($("#velocityPhase").val());
     var k0 = 1; //define k0
-    var kend = 1.2; //define kend
-
-    var k_array = numeric.linspace(k0, 1.2, nb_waves);
-    var omega_nondisp = numeric.linspace(k0/v, kend/v, nb_waves);
-
-    // Default: non-dispersive?
-    var omega_disp = omega_nondisp.slice();
-
-    // code below changes it for all waves
-//    var omega_disp = [];
-//    for (var i = 0; i < nb_waves; i++) {
-//        omega_disp[i] = k_array[i]/Math.sqrt(1+(k_array[i]/k0/k0));
-//    }
+    var kend = 1.2; //define
+    var k_array = [];
+    var omega_nondisp = [];
+    var omega_disp = [];
 
     // x and t coordinates
     var n = 801;
@@ -135,48 +135,83 @@
             }
         };
 
-    // Submit
-    $('#submit').on('click', function () {
-        try {
-//            // All the characters allowed are in the square brackets (apart from ^)
-            if(/[^0-9ksqrt().*/+-^]/.test($('#function').val())) {
-                throw new Error;
-            }
-            var funct = $('#function').val();
-            if ($('#function').val().includes('sqrt')) {
-                funct = $('#function').val().replace('sqrt','Math.sqrt');
-            }
-            if ($('#function').val().includes('^')) {
-                for (var i = 0; i < nb_waves; i++) {
-                    if ($('#function').val().includes('k')) {
-                        var str2 = funct.replace(/k/g,k_array[i]);
-                        omega_disp[i] = calculator.parse(str2);
-                    }
-                }
+    // k0
+    $("#k0_input").on('keyup',function () {
+        if(event.keyCode == 13) {
+            if (isNaN(parseFloat($('#k0_input').val()))) {
+                $('#error_k0').text('Invalid input: k0 needs to be a number');
             }
             else {
+                k0 = parseFloat($('#k0_input').val());
+                onReset();
+                $('#k0').text(k0);
+                $('#k0_input').val('');
+                $('#error_k0').text('');
+            }
+
+        }
+    });
+
+    // kend
+    $("#kend_input").on('keyup',function () {
+        if(event.keyCode == 13) {
+            if (isNaN(parseFloat($('#kend_input').val()))) {
+                $('#error_kend').text('Invalid input: kend needs to be a number');
+            }
+            else {
+                kend = parseFloat($('#kend_input').val());
+                onReset();
+                $('#kend').text(kend);
+                $('#kend_input').val('');
+                $('#error_kend').text('');
+            }
+
+        }
+    });
+
+    // Dispersion relation
+    $("#function").on('keyup', function () {
+        if(event.keyCode == 13) {
+            try {
+                //            // All the characters allowed are in the square brackets (apart from ^)
+                if (/[^0-9ksqrt().*/+-^]/.test($('#function').val())) {
+                    throw new Error;
+                }
+                var funct = $('#function').val();
+                if ($('#function').val().includes('sqrt')) {
+                    funct = $('#function').val().replace('sqrt', 'Math.sqrt');
+                }
+                if ($('#function').val().includes('^')) {
+                    for (var i = 0; i < nb_waves; i++) {
+                        if ($('#function').val().includes('k')) {
+                            var str2 = funct.replace(/k/g, k_array[i]);
+                            omega_disp[i] = calculator.parse(str2);
+                        }
+                    }
+                }
+                else {
                     for (var i = 0; i < nb_waves; i++) {
                         k = k_array[i];
                         omega_disp[i] = eval(funct);
                     }
                 }
-            $('#dispersionRelation').text($('#function').val());
-            onReset();
-            $('#function').val("");
-            $('#error').text("");
+                $('#dispersionRelation').text($('#function').val());
+                onReset();
+                $('#function').val("");
+                $('#error_omega').text("");
+            }
+            catch (err) {
+                $('#error_omega').text('Invalid equation');
+            }
         }
-        catch(err){
-            $('#error').text(err.message);
-        }
-    });
+
+    })
+
 
     // Slider waves
     $('#slider_waves').on('input', function () {
         nb_waves = parseFloat($("#slider_waves").val());
         $("#waves_display").text(" " + nb_waves);
-        k_array = numeric.linspace(k0, 1.2, nb_waves);
-        omega_nondisp = numeric.linspace(k0/v, kend/v, nb_waves);
-        omega_disp = omega_nondisp.slice();
         onReset();
         update_y_range();
         if (is_paused === true) {
@@ -192,12 +227,14 @@
     $('#velocityPhase').on('input', function () {
         v = parseFloat($("#velocityPhase").val());
         $("#phaseVelocityDisplay").text(" " + v + " m/s");
-        omega_nondisp = numeric.linspace(k0/v, kend/v, nb_waves);
-        omega_disp = omega_nondisp.slice();
         onReset();
     });
 
     function initial_data(){
+        k_array = numeric.linspace(k0, kend, nb_waves);
+        omega_nondisp = numeric.linspace(k0*v, kend*v, nb_waves);
+        // Default: non-dispersive
+        omega_disp = omega_nondisp.slice();
         for (var i = 0; i <= n; i++) {
             y_i[i] = 0;
             y_t[i] = 0;
@@ -275,9 +312,6 @@
     // Data update function for animation
     var t_start = t;
 
-    // Lecture
-    // k=2pi/l
-    // w = k*v (v=lf=w/k --> phase velocity)
     function compute() {
         t += dt;
         // need to find a way to define time limit
@@ -286,9 +320,6 @@
                 y_i[i] = 0;
                 y_t[i] = 0;
                 for (var j = 0; j < nb_waves; j++) {
-                        // For the incident (aka not dispersive) v has to be the same
-                        // as v = w/k this means the ratio of w/k has to be a constant
-                        // for all the waves added together
                         y_i[i] +=  Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
                         y_t[i] += Math.sin(k_array[j] * x[i] - omega_disp[j] * t);
                 }
