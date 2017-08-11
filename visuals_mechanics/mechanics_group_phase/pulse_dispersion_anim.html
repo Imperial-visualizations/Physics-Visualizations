@@ -89,7 +89,7 @@
     var t = 0.0;
     var dt = 0.02;
     var is_paused = true;
-    var y_range;
+    var y_range = 1;
 
     var layout =
         {
@@ -97,9 +97,9 @@
             width: 700,
             height: 400,
             margin: {
-                l: 50,
-                r: 50,
-                b: 40,
+                l: 60,
+                r: 35,
+                b: 50,
                 t: 40,
                 pad: 4
             },
@@ -121,9 +121,15 @@
                 range: [-4, 4],
                 domain: [0, 0.4],
             },
+            legend: {
+                orientation: 'h',
+                x: -0.05,
+                y: 1.2,
+                fontsize: 25
+            },
             font: {
                 family: 'Lato',
-                size: 18,
+                size: 16,
                 color: '#003E74',
                 weight: 900
             }
@@ -209,10 +215,10 @@
         onReset();
         update_y_range();
         if (is_paused === true) {
-            Plotly.animate('graph',
-                    {layout: {yaxis: {range: [-y_range, y_range]}}},
-                    {layout: {yaxis2: {range: [-y_range, y_range]}}},
-                    {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
+            Plotly.relayout('graph', {
+                "yaxis.range": [-y_range, y_range],
+                "yaxis2.range": [-y_range, y_range],
+            }
             )
         }
     });
@@ -255,7 +261,7 @@
 
         Plotly.animate('graph',
                 {data: [{y: y_i}, {y: y_t}]},
-                {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
+                {transition: {duration: 0}, frame: {duration: 1, redraw: false}}
         );
         document.getElementById('run_button').value = (is_paused) ? "Play" : "Pause";
     }
@@ -290,12 +296,14 @@
             {
                 x: x,
                 y: y_i,
+                name: "non-dispersive",
                 line: {simplify: false}
             }, {
                 x: x,
                 y: y_t,
                 xaxis: 'x2',
                 yaxis: 'y2',
+                name: "dispersive",
                 line: {simplify: false}
             }],
             layout
@@ -341,10 +349,9 @@
         requestAnimationFrame(update);
     }
 
-    // ToDo: input box for k0 and kend
-    // ToDo: some kind of select for cos sine and exp (sum)
-    // ToDO: input own function
     // ToDo: tooltips for input boxes
+    // ToDo: make wave disperse slowly
+    // ToDo: Change Initial Wave
     // ToDo: Python?
     // ToDo: Numeric (Clean Up)
     // ToDo: Speed Up
