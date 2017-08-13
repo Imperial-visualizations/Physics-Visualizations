@@ -1,0 +1,367 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Linear algebra - Intersections</title>
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
+    <link rel="stylesheet" href="./css/font-awesome.min.css">
+    <link rel = "icon" href = "images/favicon.ico" type="image/x-icon">
+    <style type="text/css">
+        #canvasWrapper{
+            width: 100%;
+            height: 600px;
+            margin: 0 auto;
+            background-color: #eee;
+        }
+        panel{
+            display: block;
+            border: 4px solid #fff;
+            border-radius: 4px;
+            box-sizing: border-box;
+            width: 100%;
+            height: 528px;
+        }
+        #panelHeadWrapper{
+            height: 40px;
+            box-sizing: border-box;
+            border-bottom: 4px solid #fff;
+            padding: 4px;
+        }
+        #panelHeadWrapper>label{
+            font-size: 26px;
+            line-height: 26px;
+            font-weight: 600;
+        }
+
+
+        #panelItemsWrapper{
+            height: 390px;
+            box-sizing: border-box;
+            border: 1px solid #000;
+            overflow: scroll;
+        }
+        #panelItemsWrapper>item{
+            box-sizing: border-box;
+            width: 100%;
+            height: 30px;
+            border: 1px solid #000;
+            display: block;
+        }
+        #panelItemsWrapper>item:last-child{
+            box-sizing: border-box;
+            border-bottom: 2px solid #000;
+        }
+        #panelItemsWrapper>item>span{
+            height: 28px;
+            width: 28px;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: #000;
+            line-height: 24px;
+            text-align: center;
+            float: left;
+            border-right: 2px solid #000;
+            cursor: pointer;
+            transition: all 100ms;
+        }
+        #panelItemsWrapper>item>span.deactived{
+            color: #ddd;
+        }
+
+        #panelItemsWrapper>item>label{
+            box-sizing: border-box;
+            display: block;
+            height: 28px;
+            padding-left: 4px;
+            overflow: hidden;
+            transition: all 100ms;
+        }
+        #panelItemsWrapper>item>label:hover{
+            font-weight: 1000;
+        }
+        #panelItemsWrapper>item>label:active{
+            background-color: #ccc;
+        }
+        #panelItemsWrapper>item>label.selected{
+            background-color: #ccc;
+
+        }
+
+
+        #panelItemsWrapper>p{
+            margin: 0 auto;
+            width: 200px;
+        }
+
+
+        #panelActionsWrapper{
+            height: 70px;
+            box-sizing: border-box;
+            border-top: 4px solid #006EAF;
+            text-align: right;
+            padding: 4px;
+            padding-right: 8px;
+        }
+        #panelActionsWrapper>a,#panelActionsWrapper>a:visited{
+            color: #bccfda;
+            font-size: 16px;
+            text-decoration: none;
+            margin-left: 8px;
+            text-shadow: 0px 0px 0px #bccfda;
+            transition: all 100ms;
+            cursor: not-allowed;
+        }
+
+        #panelActionsWrapper>a.active{
+            color: #006EAF;
+            text-shadow: 0px 1px 0px #bccfda;
+            cursor: pointer;
+
+        }
+        #panelActionsWrapper>a.active:hover{
+            color: #006EAF;
+            text-shadow: 0px 2px 0px #bccfda;
+        }
+        #panelActionsWrapper>a.active:active{
+            color: #006EAF;
+            text-shadow: 0px 0px 2px #bccfda;
+        }
+
+    </style>
+</head>
+<body>
+
+<h1>Linear algebra - Intersections</h1>
+<div class="container">
+<div class="row">
+    <div class="eight columns">
+            <div id="canvasWrapper">This is where the graph goes</div>
+    </div>
+    <div class="four columns">
+                <panel>
+                    <div id="panelHeadWrapper">
+                        <!--<label>Control Panel</label>-->
+                    </div>
+                    <div id="panelItemsWrapper">
+
+                    </div>
+                    <div id="panelActionsWrapper">
+                        <a class="active" title="Add Point" id="addPoint"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>Point</a>
+                        <a class="active" title="Add Line" id="addLine"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>Line</a>
+                        <a class="active" title="Add Plane" id="addPlane"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>Plane</a><br>
+                        <a class="active" title="Clear" id="clear"><i class="fa fa-repeat  fa-fw" aria-hidden="true"></i>Clear</a>
+                        <a class="" title="Intersect" id="intersect"><i class="fa fa-compress fa-fw" aria-hidden="true"></i>Intersect</a>
+                        <a class="" title="Delete" id="delete"><i class="fa fa-trash fa-fw" aria-hidden="true"></i>Delete</a><br>
+                        <a class="active" title="Save" id="save"><i class="fa fa-floppy-o fa-fw" aria-hidden="true"></i>Save</a>
+                    </div>
+                </panel>
+                <h6 id="info"></h6>
+                <h6>Hold CTRL to select multiple. </h6>
+
+    </div>
+</div>
+</div>
+    <br><br><br>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="./intersections.js"></script>
+    <script type="text/javascript">
+        var algObjs = {}
+        var points = {0: new Point(new Vector(1,2,3))}
+        var lines = {0: new Line(new Vector(1,0,2), new Vector(2,1,2))}
+        var planes = {0: new Plane(new Vector(1,1,2), new Vector(1,1,1))}
+
+        var ctrlPressed = false;
+
+        $(document).ready(function(){
+            console.log("Document ready!")
+            if(sessionStorage.lastSaved != undefined){
+                console.log("there is a saved state... retrieving")
+                algObjs = JSON.parse(sessionStorage.getItem("algObjs"));
+                points = JSON.parse(sessionStorage.getItem("points"));
+                lines = JSON.parse(sessionStorage.getItem("lines"));
+                planes = JSON.parse(sessionStorage.getItem("planes"));
+                redisplay();
+            } else{
+                console.log("no saved state... defaulting")
+                points = {d0: new Point(new Vector(1,2,3))}
+                lines = {l0: new Line(new Vector(1,0,2), new Vector(2,1,2))}
+                planes = {p0: new Plane(new Vector(1,1,2), new Vector(1,1,1))}
+
+                save();
+            }
+            $(document).on('keydown',function(event) {
+                if ( (event.which == 91 || event.which == 17) || (event.ctrlKey||event.metaKey) ) {
+                    ctrlPressed = true;
+                }
+            });
+            $(document).on('keyup',function(event) {
+                if ( (event.which == 91 || event.which == 17) || (event.ctrlKey||event.metaKey) ) {
+                    ctrlPressed = false;
+                }
+            });
+            $("#addPoint").on('click',function(){
+                var newPoint = new Point(new Vector(Math.random(),Math.random(),Math.random()));
+                algObjs[newPoint.id] = newPoint;
+                //points[newPoint.id] = newPoint;
+                addAlgObj(algObjs[newPoint.id])
+                //addPoint(points[newPoint.id]);
+            });
+            $("#addLine").on('click',function(){
+                var index = "l"+Object.keys(lines).length;
+                lines[index] = {index:index,id:"line"+index,displayText:("Line "+index),x:Math.random(),y:0,z:0,i:1,j:0,k:0};
+                addLine(lines[index]);
+            });
+            $("#addPlane").on('click',function(){
+                var index = "p"+Object.keys(planes).length;
+                planes[index] = {index:index,id:"plane"+index,displayText:("Plane "+index),i:Math.random(),j:0,k:0,r:2};
+                addPlane(planes[index]);
+            });
+            $("#clear").on('click',function(){
+                for (i in points) {
+                    console.log(i);
+                    $( "#"+points[i].id ).parent().remove();
+                    delete points[i];
+                }
+                for (j in lines) {
+                    console.log(j);
+                    $( "#"+lines[j].id ).parent().remove();
+                    delete lines[j];
+                }
+                for (k in planes) {
+                    console.log(k);
+                    $( "#"+planes[k].id ).parent().remove();
+                    delete planes[k];
+                }
+                //save(); //TODO decide whether save or not after clear
+                redisplay();
+            });
+            $("#save").on('click',function(){
+                save();
+            });
+        });
+
+
+        function save(){
+            sessionStorage.setItem("algObjs", JSON.stringify(algObjs));
+            sessionStorage.setItem("points", JSON.stringify(points));
+            sessionStorage.setItem("lines", JSON.stringify(lines));
+            sessionStorage.setItem("planes", JSON.stringify(planes));
+            console.log(sessionStorage)
+
+            var currentdate = new Date();
+            var datetime = "" + currentdate.getDate() + "/"
+                                + (currentdate.getMonth()+1)  + "/"
+                                + currentdate.getFullYear() + " @ "
+                                + currentdate.getHours() + ":"
+                                + currentdate.getMinutes() + ":"
+                                + currentdate.getSeconds();
+            sessionStorage.lastSaved = datetime;
+
+            $("#info").text("Last Saved: "+sessionStorage.lastSaved);
+        }
+        function itemsAddEventListener(){
+            $("#panelItemsWrapper>item>span").each(function(index){
+                $(this).off();
+                $(this).on('click',function(event){
+                    $(this).toggleClass("deactived");
+                    event.preventDefault();
+                });
+            });
+            $("#panelItemsWrapper>item>label").each(function(index){
+                $(this).off();
+                $(this).on('click',function(event){
+                    if(ctrlPressed == false){
+                        $("#panelItemsWrapper>item>label").each(function(index){
+                            $(this).removeClass("selected");
+                        });
+                        $(this).addClass("selected");
+                    }else{
+                        $(this).toggleClass("selected");
+                    }
+                    event.stopPropagation();
+                    event.preventDefault();
+                    var counts = 0;
+                    $("#panelItemsWrapper>item>label").each(function(index){
+                        if($(this).hasClass("selected")){counts += 1;}
+                    });
+                    if(counts != 0){
+                        $("#delete").addClass("active");
+                    }else{
+                        $("#delete").removeClass("active");
+                    }
+                });
+            });
+            $("#panelItemsWrapper").each(function(index){
+                $(this).off();
+                $(this).on('click',function(event){
+                    $("#panelItemsWrapper>item>label").each(function(index){
+                        $(this).removeClass("selected");
+                    });
+                    $("#delete").removeClass("active");
+                });
+            });
+        }
+        function redisplay(){
+            console.log("redisplaying panel...")
+            //if(Object.keys(points).length+Object.keys(lines).length+Object.keys(planes).length == 0){
+            if(Object.keys(algObjs).length == 0){
+                $("#panelItemsWrapper").html('<p ><br>Press the <i class="fa fa-plus fa-fw" aria-hidden="true"></i> buttons to add point, line or plane.</p>');
+            }else{
+                $("#panelItemsWrapper").html("");
+
+                for(i in algObjs) {
+                  console.log(algObjs[i]);
+                  addAlgObj(algObjs[i]);
+                }
+                /*
+                for (i in points) {
+                    console.log(points[i]);
+                    addPoint(points[i]);
+                }
+                for (j in lines) {
+                    console.log(lines[i]);
+                    addLine(lines[i]);
+                }
+                for (k in planes) {
+                    console.log(planes[i]);
+                    addPlane(planes[i]);
+                }
+                */
+            }
+
+        }
+        funtion addAlgObj(object) {
+          console.log("addAlgObj, ", object.toString());
+          $("#panelItemsWrapper>p").remove();
+          // $("#canvasWrapper").html($("#canvasWrapper").html()+"<br>Point #"+object.id+" added: ("+object.x+","+object.y+","+object.z+")");
+          $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
+          itemsAddEventListener();
+        }
+        /*
+        function addPoint(object){
+            console.log("addPoint, ", object.toString());
+            $("#panelItemsWrapper>p").remove();
+            // $("#canvasWrapper").html($("#canvasWrapper").html()+"<br>Point #"+object.id+" added: ("+object.x+","+object.y+","+object.z+")");
+            $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
+            itemsAddEventListener();
+        }
+        function addLine(object){
+            console.log("addLine, ", object.toString());
+            $("#panelItemsWrapper>p").remove();
+            // $("#canvasWrapper").html($("#canvasWrapper").html()+"<br>Line #"+object.id+" added: ");
+            $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
+            itemsAddEventListener();
+        }
+        function addPlane(object){
+            console.log("addPlane, ", object.toString());
+            $("#panelItemsWrapper>p").remove();
+            // $("#canvasWrapper").html($("#canvasWrapper").html()+"<br>Plane #"+object.id+" added: ");
+            $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
+            itemsAddEventListener();
+        }
+        */
+                        // <item class=""><span><i id="line001Eye" class="fa fa-eye" aria-hidden="true"></i></span><label id="line001" data-type="line">Line 001</label></item>
+    </script>>
+</body>
+</html>
