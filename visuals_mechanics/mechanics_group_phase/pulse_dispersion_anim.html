@@ -96,6 +96,7 @@
     var is_paused = true;
     var y_range = 1;
     var omega_input = false;
+    var funct;
 
     var layout =
         {
@@ -174,15 +175,15 @@
                 if (/[^0-9ksqrt().*/+-^]/.test($('#function').val())) {
                     throw new Error;
                 }
-                var funct = $('#function').val();
+                funct = $('#function').val();
                 if ($('#function').val().includes('sqrt')) {
                     funct = $('#function').val().replace('sqrt', 'Math.sqrt');
                 }
                 if ($('#function').val().includes('^')) {
                     for (var i = 0; i < nb_waves; i++) {
                         if ($('#function').val().includes('k')) {
-                            var str2 = funct.replace(/k/g, k_array[i]);
-                            omega_disp[i] = calculator.parse(str2);
+                            funct = funct.replace(/k/g, k_array[i]);
+                            omega_disp[i] = calculator.parse(funct);
                         }
                     }
                 }
@@ -193,10 +194,10 @@
                     }
                 }
                 $('#dispersionRelation').text($('#function').val());
-                onReset();
                 $('#function').val("");
                 $('#error_omega').text("");
                 omega_input = true;
+                onReset();
             }
             catch (err) {
                 $('#error_omega').text('Invalid equation');
@@ -230,9 +231,25 @@
     function initial_data(){
         k_array = numeric.linspace(k0, kend, nb_waves);
         omega_nondisp = numeric.linspace(k0*v, kend*v, nb_waves);
-        if (omega_input === false) {
+        if (omega_input == false) {
              // Default: non-dispersive
             omega_disp = omega_nondisp.slice();
+        }
+        else {
+            if ($('#function').val().includes('^')) {
+                    for (var i = 0; i < nb_waves; i++) {
+                        if ($('#function').val().includes('k')) {
+                            funct = funct.replace(/k/g, k_array[i]);
+                            omega_disp[i] = calculator.parse(funct);
+                        }
+                    }
+                }
+                else {
+                    for (var i = 0; i < nb_waves; i++) {
+                        k = k_array[i];
+                        omega_disp[i] = eval(funct);
+                    }
+                }
         }
         for (var i = 0; i <= n; i++) {
             if (x[i] < 0) {
