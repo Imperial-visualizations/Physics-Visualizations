@@ -147,7 +147,7 @@
 
                     </div>
                     <div id="panelActionsWrapper">
-                        <a class="active" title="Add Point" id="addPoint"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>Point</a>
+                        <a class="active" title="Add Dot" id="addPoint"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>Point</a>
                         <a class="active" title="Add Line" id="addLine"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>Line</a>
                         <a class="active" title="Add Plane" id="addPlane"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>Plane</a><br>
                         <a class="active" title="Clear" id="clear"><i class="fa fa-repeat  fa-fw" aria-hidden="true"></i>Clear</a>
@@ -166,29 +166,53 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="./intersections.js"></script>
     <script type="text/javascript">
-        var algObjs = {}
-        var points = {0: new Point(new Vector(1,2,3))}
-        var lines = {0: new Line(new Vector(1,0,2), new Vector(2,1,2))}
-        var planes = {0: new Plane(new Vector(1,1,2), new Vector(1,1,1))}
-
+        var algObjs = {};
+        var algObjsCounter = 0; //counter to keep track of ids
         var ctrlPressed = false;
 
         $(document).ready(function(){
             console.log("Document ready!")
             if(sessionStorage.lastSaved != undefined){
-                console.log("there is a saved state... retrieving")
-                algObjs = JSON.parse(sessionStorage.getItem("algObjs"));
-                points = JSON.parse(sessionStorage.getItem("points"));
-                lines = JSON.parse(sessionStorage.getItem("lines"));
-                planes = JSON.parse(sessionStorage.getItem("planes"));
+                console.log("there is a saved state... retrieving,",sessionStorage)
+                retrieveAlgObjs = JSON.parse(sessionStorage.getItem("algObjsSaved"));
+                retrieveAlgObjsCounter = JSON.parse(sessionStorage.getItem("algObjsCounterSaved"));
+                algObjsCounter = retrieveAlgObjsCounter;
+                function rebuildAlgObj(obj) {
+                  if(obj.hasOwnProperty('pos')) {
+                    //it's a point
+                    var rebuild = new Point(new Vector(obj.pos.x,obj.pos.y,obj.pos.z));
+                    rebuild.panelId = obj.panelId;
+                    return rebuild;
+                  }
+                  if(obj.hasOwnProperty('dir')) {
+                    //it's a line
+                    var rebuild = new Line(new Vector(obj.dir.x,obj.dir.y,obj.dir.z), new Vector(obj.off.x,obj.off.y,obj.off.z));
+                    rebuild.panelId = obj.panelId;
+                    return rebuild;
+                  }
+                  if(obj.hasOwnProperty('normal')) {
+                    //it's a line
+                    var rebuild = new Plane(new Vector(obj.normal.x,obj.normal.y,obj.normal.z), new Vector(obj.off.x,obj.off.y,obj.off.z));
+                    rebuild.panelId = obj.panelId;
+                    return rebuild;
+                  }
+                  else {
+                    //we don't know what it is
+                    return obj;
+                  }
+                }
+                function rebuildAlgObjs(objs) {
+                  var ans = {};
+                  for(idx in objs) {
+                    //rebuild everything
+                    ans[objs[idx].panelId] = rebuildAlgObj(objs[idx]);
+                  }
+                  return ans;
+                }
+                algObjs = rebuildAlgObjs(retrieveAlgObjs);
                 redisplay();
             } else{
                 console.log("no saved state... defaulting")
-                points = {d0: new Point(new Vector(1,2,3))}
-                lines = {l0: new Line(new Vector(1,0,2), new Vector(2,1,2))}
-                planes = {p0: new Plane(new Vector(1,1,2), new Vector(1,1,1))}
-
-                save();
             }
             $(document).on('keydown',function(event) {
                 if ( (event.which == 91 || event.which == 17) || (event.ctrlKey||event.metaKey) ) {
@@ -202,38 +226,43 @@
             });
             $("#addPoint").on('click',function(){
                 var newPoint = new Point(new Vector(Math.random(),Math.random(),Math.random()));
-                algObjs[newPoint.id] = newPoint;
-                //points[newPoint.id] = newPoint;
-                addAlgObj(algObjs[newPoint.id])
-                //addPoint(points[newPoint.id]);
+                var newid = newPoint.constructor.name + (++algObjsCounter);
+                newPoint.panelId = newid;
+                algObjs[newid] = newPoint;
+                //we could call addAlgObj(algObjs[newid]) but it's obsolete
+                redisplay();
             });
             $("#addLine").on('click',function(){
-                var index = "l"+Object.keys(lines).length;
-                lines[index] = {index:index,id:"line"+index,displayText:("Line "+index),x:Math.random(),y:0,z:0,i:1,j:0,k:0};
-                addLine(lines[index]);
+                var newLine = new Line(new Vector(Math.random(),Math.random(),Math.random()), new Vector(Math.random(),Math.random(),Math.random()));
+                var newid = newLine.constructor.name + (++algObjsCounter);
+                newLine.panelId = newid;
+                algObjs[newid] = newLine;
+                //we could call addAlgObj(algObjs[newid]) but it's obsolete
+                redisplay();
             });
             $("#addPlane").on('click',function(){
-                var index = "p"+Object.keys(planes).length;
-                planes[index] = {index:index,id:"plane"+index,displayText:("Plane "+index),i:Math.random(),j:0,k:0,r:2};
-                addPlane(planes[index]);
+                var newPlane = new Plane(new Vector(Math.random(),Math.random(),Math.random()), new Vector(Math.random(),Math.random(),Math.random()));
+                var newid = newPlane.constructor.name + (++algObjsCounter);
+                newPlane.panelId = newid;
+                algObjs[newid] = newPlane;
+                //we could call addAlgObj(algObjs[newid]) but it's obsolete
+                redisplay();
             });
             $("#clear").on('click',function(){
-                for (i in points) {
-                    console.log(i);
-                    $( "#"+points[i].id ).parent().remove();
-                    delete points[i];
+                for (i in algObjs) {
+                    console.log("idx: ", i, ", object: ", algObjs[i].toString());
+                    $( "#"+i ).parent().remove();
+                    delete algObjs[i];
                 }
-                for (j in lines) {
-                    console.log(j);
-                    $( "#"+lines[j].id ).parent().remove();
-                    delete lines[j];
+                redisplay();
+            });
+            $("#delete").on('click',function(){
+              $('.selected').each(
+                function() {
+                  console.log("deleting at id", $(this)[0].id, ", object:", algObjs[$(this)[0].id]);
+                  delete algObjs[$(this)[0].id];
                 }
-                for (k in planes) {
-                    console.log(k);
-                    $( "#"+planes[k].id ).parent().remove();
-                    delete planes[k];
-                }
-                //save(); //TODO decide whether save or not after clear
+              );
                 redisplay();
             });
             $("#save").on('click',function(){
@@ -241,14 +270,10 @@
             });
         });
 
-
         function save(){
-            sessionStorage.setItem("algObjs", JSON.stringify(algObjs));
-            sessionStorage.setItem("points", JSON.stringify(points));
-            sessionStorage.setItem("lines", JSON.stringify(lines));
-            sessionStorage.setItem("planes", JSON.stringify(planes));
-            console.log(sessionStorage)
-
+            console.log("save: current state", sessionStorage)
+            sessionStorage.setItem("algObjsSaved", JSON.stringify(algObjs));
+            sessionStorage.setItem("algObjsCounterSaved", JSON.stringify(algObjsCounter));
             var currentdate = new Date();
             var datetime = "" + currentdate.getDate() + "/"
                                 + (currentdate.getMonth()+1)  + "/"
@@ -304,63 +329,36 @@
         }
         function redisplay(){
             console.log("redisplaying panel...")
-            //if(Object.keys(points).length+Object.keys(lines).length+Object.keys(planes).length == 0){
             if(Object.keys(algObjs).length == 0){
                 $("#panelItemsWrapper").html('<p ><br>Press the <i class="fa fa-plus fa-fw" aria-hidden="true"></i> buttons to add point, line or plane.</p>');
-            }else{
+            } else{
                 $("#panelItemsWrapper").html("");
-
-                for(i in algObjs) {
-                  console.log(algObjs[i]);
-                  addAlgObj(algObjs[i]);
+                for (i in algObjs) {
+                    console.log("redisplay: ", algObjs[i]);
+                    function AlgObj(object){
+                        console.log("AlgObj with id "+object.panelId+", ", object.toString());
+                        $("#panelItemsWrapper>p").remove();
+                        // $("#canvasWrapper").html($("#canvasWrapper").html()+"<br>Point #"+object.id+" added: ("+object.x+","+object.y+","+object.z+")");
+                        $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.panelId+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.panelId+"'>"+object.toString()+"</label></item>");
+                        itemsAddEventListener();
+                    }
+                    AlgObj(algObjs[i]);
                 }
-                /*
-                for (i in points) {
-                    console.log(points[i]);
-                    addPoint(points[i]);
-                }
-                for (j in lines) {
-                    console.log(lines[i]);
-                    addLine(lines[i]);
-                }
-                for (k in planes) {
-                    console.log(planes[i]);
-                    addPlane(planes[i]);
-                }
-                */
             }
 
         }
-        funtion addAlgObj(object) {
-          console.log("addAlgObj, ", object.toString());
-          $("#panelItemsWrapper>p").remove();
-          // $("#canvasWrapper").html($("#canvasWrapper").html()+"<br>Point #"+object.id+" added: ("+object.x+","+object.y+","+object.z+")");
-          $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
-          itemsAddEventListener();
-        }
-        /*
-        function addPoint(object){
-            console.log("addPoint, ", object.toString());
+        function addAlgObj(object){
+          //obsolete!!
+            throw new Error("addAlgObj is obsolete, use redisplay() instead;")
+
+
+            console.log("addAlgObj with id "+object.panelId+", ", object.toString());
             $("#panelItemsWrapper>p").remove();
             // $("#canvasWrapper").html($("#canvasWrapper").html()+"<br>Point #"+object.id+" added: ("+object.x+","+object.y+","+object.z+")");
-            $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
+            $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.panelId+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.panelId+"'>"+object.toString()+"</label></item>");
             itemsAddEventListener();
         }
-        function addLine(object){
-            console.log("addLine, ", object.toString());
-            $("#panelItemsWrapper>p").remove();
-            // $("#canvasWrapper").html($("#canvasWrapper").html()+"<br>Line #"+object.id+" added: ");
-            $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
-            itemsAddEventListener();
-        }
-        function addPlane(object){
-            console.log("addPlane, ", object.toString());
-            $("#panelItemsWrapper>p").remove();
-            // $("#canvasWrapper").html($("#canvasWrapper").html()+"<br>Plane #"+object.id+" added: ");
-            $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
-            itemsAddEventListener();
-        }
-        */
+
                         // <item class=""><span><i id="line001Eye" class="fa fa-eye" aria-hidden="true"></i></span><label id="line001" data-type="line">Line 001</label></item>
     </script>>
 </body>
