@@ -128,9 +128,13 @@ Vector.prototype.norm = function normal() {
         console.log("This function is only for vectors! Please enter 1D array.");
         return -1
     }
-
-    var result = [];
     return Math.sqrt(new Vector(this.power(2)).sum());
+};
+
+Vector.prototype.unit = function unit() {
+    var magnitude = this.norm();
+    var vector = this.multiply(1/magnitude);
+    return new Vector(vector)
 };
 
 Vector.prototype.power = function power(number) {
@@ -164,7 +168,6 @@ Vector.prototype.rotate = function rotate(theta) {
 
     // 2D rotation
     if (this.items.length === 2 && isNumber(this.items[0])) {
-        console.log((this.items[0] * Math.cos(theta)) + (this.items[1] * Math.sin(theta)));
         new_x = (this.items[0] * Math.cos(theta)) - (this.items[1] * Math.sin(theta));
         new_y = (this.items[0] * Math.sin(theta)) + (this.items[1] * Math.cos(theta));
         return new Vector([new_x, new_y]).items
@@ -534,5 +537,5 @@ Vector.prototype.atan = function atan() {
 
 /**  ************************************************* END ********************************************************* **/
 // var v1 = new Vector([[[1, 2, 3], [2, 4, 5], [4, 5, 6], [9, 10, 11]]]);
-// var v2 = new Vector([1, 0]);
-// console.log(v2.rotate(Math.PI/2));
+// var v2 = new Vector([3, 4]);
+// console.log(v2.unit().items);
