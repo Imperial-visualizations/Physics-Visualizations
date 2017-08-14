@@ -1,6 +1,7 @@
 <!doctype html>
 <head>
     <title>Diatomic Molecule Vibration and Rotation</title>
+    <script src = "https://github.com/photonstorm/phaser-ce/releases/download/v2.8.3/phaser.min.js"></script>
     <script src = "./vecops.js"></script>
     <script src = "./potentials.js"></script>
 </head>
@@ -16,7 +17,7 @@
      * @param potential: Object defining potential type at atom (e.g. LJ, harmonic, etc.)
      * @constructor: Atom
      */
-    Atom = function(pos, radius, mass, potential) {
+    Atom = function(pos, radius, mass, potential,color) {
         // Making position and force vectors.
         this.pos = new Vector(pos);                 // Atom position Vector.
 
@@ -28,11 +29,11 @@
             radius = -radius;
             mass = -mass;
         }
-
+        this.color = color;
         this.r = radius;                            // Atom radius.
         this.m = mass;                              // Atom mass.
-
-        this.V = potential                          // Setting potential centre of atom.
+        this.sprite = addAtom(this);
+        this.V = potential;                          // Setting potential centre of atom.
     };
 
     /**
@@ -51,15 +52,15 @@
             this.atoms = atoms;                                                             // Atoms.
 
             // Calculating scalar distance between atoms.
-            this.r = new Vector(this.atoms[0].pos.subtract(this.atoms[1].pos)).norm();      // Atom separation.
+            this.r = new Vector(this.atoms[0].pos.subtract(this.atoms[1].pos)).mag();      // Atom separation.
 
             this.COM = this.calcCOM();                                      // Centre of mass initialised as 0 vector.
         }
-
         this.I = this.calcMoI();                                            // Moment of inertia initialised as 0.
         this.E_v = vibrational_E;                                           // Vibrational energy.
         this.E_r = rotational_E;                                            // Rotational energy.
-        this.PE = this.calcPE()                                             // Potential energy.
+        this.PE = this.calcPE();                                             // Potential energy.
+        this.Lsq = 2 * rotational_E*this.I;
     };
 
     /** =============================================== Class Methods ================================================*/
@@ -71,7 +72,7 @@
      */
     Molecule.prototype.calcSeparation = function(atom1, atom2) {
         var r = atom1.pos.subtract(atom2.pos);
-        return new Vector(r).norm()
+        return new Vector(r).mag();
     };
 
     /**
@@ -82,7 +83,7 @@
      */
     Molecule.prototype.calcUnitVect = function(atom1, atom2) {
         var r = atom1.pos.subtract(atom2.pos);
-        return new Vector(r).unit()
+        return new Vector(r).unit();
     };
 
     /**
@@ -109,6 +110,9 @@
 
     Molecule.prototype.calcRotKE = function() {
         // TODO: Implement function to calculate KE
+        return this.Lsq/(2*this.I);
+
+
     };
 
     /**
@@ -118,7 +122,7 @@
      */
     Molecule.prototype.calcRotCoords = function(t) {
         // E_r = 0.5 * I * w ** 2
-        var w = 2 * this.E_r / this.I;                                           // Angular velocity, w
+        var w = Math.sqrt(2 * this.E_r / this.I);                                           // Angular velocity, w
         var angle = w * t;                                                       // Rotation angle around COM (radians)
 
         // Rotation of atoms about COM.
@@ -140,8 +144,9 @@
         var I = 0;                                                          // Moment of Inertia.
         for (var i = 0; i < this.atoms.length; i++) {
             var r_i = new Vector(this.atoms[i].pos.subtract(this.COM));     // Distance between this atom and COM.
-            I += this.atoms[i].m * Math.pow(r_i.norm(), 2);                 // m*r**2 contribution for this atom.
-            alert(I);
+            var r_i = new Vector(this.atoms[i].pos.subtract(this.COM));     // Distance between this atom and COM
+            I += this.atoms[i].m * Math.pow(r_i.mag(), 2);                 // m*r**2 contribution for this atom.
+            console.log(I);
         }
         return I                                                            // Return Moment of Inertia (scalar).
     };
@@ -170,27 +175,23 @@
 
         return new Vector(total_mx.multiply(1 / total_m));                  // Return Vector coordinates of COM.
     };
+    /**
+     *
+     * @param deltaTime: time passed between this frame and last frame important for incrementing physics.
+     */
 
-    Molecule.prototype.update = function() {
+    Molecule.prototype.update = function(deltaTime) {
         //TODO: Calculate rotation angle given the rotational KE
         //TODO: Calculate the vibration amplitude given the vibrational KE
         //TODO: Update position due to vibrational motion.
         //TODO: Update position due to rotational motion.
         //TODO: Check if vibrational energy greater than restoring energy (Hooke's Law)
+
     };
 </script>
 
 <div id="phaser"></div>
-<script>
-    potential = new LJ(2, 4);
-    a1 = new Atom([0, 0], 2, 1, potential);
-    a2 = new Atom([3, 4], 1, 1, potential);
-    mol1 = new Molecule([a1, a2], 2, 2);
-
-    alert(" COM is " + mol1.COM.items);
-    alert(" I is " + mol1.I);
-</script>
-
+<script src="./graphics.js"></script>
 <body>
 
 </body>

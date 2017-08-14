@@ -46,7 +46,7 @@ Parabolic = function (equilibrium, force_constant) {
 
     // Sanity check.
     if (!isNumber(equilibrium) || !isNumber(force_constant)) {
-        console.error("Error! Sigma and Epsilon values invalid!");
+        console.error("Error! Equilibrium and k values invalid!");
     }
 
     if (equilibrium < 0 || force_constant < 0) {

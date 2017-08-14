@@ -123,7 +123,7 @@ Vector.prototype.sum = function sum() {
     return sum
 };
 
-Vector.prototype.norm = function normal() {
+Vector.prototype.mag = function normal() {
     if (this.items.constructor !== Array || !isNumber(this.items[0])) {
         console.log("This function is only for vectors! Please enter 1D array.");
         return -1
@@ -132,7 +132,7 @@ Vector.prototype.norm = function normal() {
 };
 
 Vector.prototype.unit = function unit() {
-    var magnitude = this.norm();
+    var magnitude = this.mag();
     var vector = this.multiply(1/magnitude);
     return new Vector(vector)
 };
