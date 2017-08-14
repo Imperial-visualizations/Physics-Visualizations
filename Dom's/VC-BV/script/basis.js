@@ -73,14 +73,16 @@ var layout = {
   "showlegend": false,
   "scene": {
     camera: createView(initialPoint),
-    xaxis: {range: [-4, 4]},
-    yaxis: {range: [-4, 4]},
-    zaxis: {range: [-4, 4]}
+    xaxis: {range: [-10, 10]},
+    yaxis: {range: [-10, 10]},
+    zaxis: {range: [-10, 10]}
   }
 }
+var coorType = 0; //(1 = Cartesian, 2 = Cylindrical, 3 = Spherical
 
 //Plots
-function plotInit() {
+function plotInit(coorType) {
+
     var x = parseFloat(document.getElementById('xController').value);
     var y = parseFloat(document.getElementById('yController').value);
     var z = parseFloat(document.getElementById('zController').value);
@@ -90,8 +92,8 @@ function plotInit() {
             new Line([[x, y, z], [x, y + 1, z]]).gObject("rgb(0,255,0)"),
             new Line([[x, y, z], [x, y, z + 1]]).gObject("rgb(0,0,255)")
         ],
-    layout
-  )
+        layout
+    )
 
 }
 //Plot for planes:
@@ -100,27 +102,27 @@ function plotPlane(plane) {
     if (plane === 1) {
         data.push({
             x: [0, 0],
-            y: [-4, 4],
-            z: [[-4, 4],
-                [-4, 4]],
+            y: [-10, 10],
+            z: [[-10, 10],
+                [-10, 10]],
             colorscale: "Blues",
             showscale: false,
             type: "surface"
         });
     } else if (plane === 2) {
         data.push({
-            x: [-4, 4],
+            x: [-10, 10],
             y: [0, 0],
-            z: [[-4, -4],
-                [4, 4]],
+            z: [[-10, -10],
+                [10, 10]],
             colorscale: "Blues",
             showscale: false,
             type: "surface"
         });
     } else if (plane === 3) {
         data.push({
-            x: [-4, 4],
-            y: [-4, 4],
+            x: [-10, 10],
+            y: [-10, 10],
             z: [[0, 0],
                 [0, 0]],
             colorscale: "Blues",
@@ -172,6 +174,7 @@ function main() {
                 displayEl = "(" + $(this).val()*8 + "/8)" + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit");
             }
             $("#"+$(this).attr("id") + "DisplayA1").text( displayEl );
+            plotInit();
     });
   });
 

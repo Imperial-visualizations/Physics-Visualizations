@@ -586,7 +586,7 @@ function plotPlane(plane) {
 }
 //Layout
 function createView(point) {
-  var norm = Math.sqrt(point[0]**2 + (5*point[1])**2 + point[2]**2);
+  var norm = Math.sqrt(point[0]*point[0] + (5*point[1])*(5*point[1]) + point[2]*point[2]);
   var a = 0.5 + point[0]/norm, b = 1 +  5*point[1]/norm, c = 0.5 + point[2]/norm;
   var camera = {
     up: {x: 0, y: 0, z: 1},
