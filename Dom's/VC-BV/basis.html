@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>VC: Coordinate Systems</title>
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+        <!-- Graph -->
+        <div class="six columns">
+            <h1>Coordinate Systems:</h1>
+            <div id='graph' style="width:450px; height:450px;"></div>
+        </div>
+
+        <!--Bottons-->
+        <div class="six columns">
+            <!--Main Options-->
+            <ul class="tab-nav">
+                <li><a class="button active" href="#carte">Cartesian</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="carte" onclick="">
+                    <h5 style="border-left: solid 5px rgb(255,0,0); padding-left: 8px;">x-coor:</h5>
+                    <label class="sliderTitle">x:&nbsp;
+                        <span id="xControllerDisplay" data-unit="">0</span>
+                    </label>
+                    <label class="slider">
+                        <input id="xController" class="inputs" type="range" value="0" min="-3" max="3" step="0.2" onchange="plotInit()"/>
+                        <span class="sliderMin">-3</span><span class="sliderMax">3</span>
+                    </label>
+                    <h5 style="border-left: solid 5px rgb(0,255,0); padding-left: 8px;">y-coor:</h5>
+                    <label class="sliderTitle">y:&nbsp;
+                        <span id="yControllerDisplay" data-unit="">0</span>
+                    </label>
+                    <label class="slider">
+                        <input id="yController" class="inputs" type="range" value="0" min="-3" max="3" step="0.2" onchange="plotInit()"/>
+                        <span class="sliderMin">-3</span><span class="sliderMax">3</span>
+                    </label>
+                    <h5 style="border-left: solid 5px rgb(0,0,255); padding-left: 8px;">z-coor:</h5>
+                    <label class="sliderTitle">z:&nbsp;
+                        <span id="zControllerDisplay" data-unit="">0</span>
+                    </label>
+                    <label class="slider">
+                        <input id="zController" class="inputs" type="range" value="0" min="-3" max="3" step="0.2" onchange="plotInit()"/>
+                        <span class="sliderMin">-3</span><span class="sliderMax">3</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+<script src=script/basis.js></script>
+</body>
+
+</html>
