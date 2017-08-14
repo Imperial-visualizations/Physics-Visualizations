@@ -66,7 +66,7 @@ function Vector(x,y,z) {
 		}
 	}
 }
-const ZERO_VECTOR = new Vector(0,0,0);
+const ZERO_VECTOR = new Vector(0.0,0.0,0.0);
 
 function Point(pos) {
 	//pos must be type Vector
@@ -457,7 +457,7 @@ function _line_line_intersect(obj1, obj2) {
 			var d2 = line2.off;
 			var s = d2.add(d1.mul(-1)); //$\vec{s} = \vec{d}_{2} - \vec{d}_{1}$ = sample vector
 			var dist = Math.abs(s.dot(cross)); //distance between lines
-			console.log("distance between lines: ", dist)
+			//console.log("distance between lines: ", dist)
 			if (Math.abs(dist) < 1e-6) {
 				if(s.allclose(ZERO_VECTOR)) {
 					// Sample is zero, so this must be the intersection
@@ -505,13 +505,13 @@ function _plane_line_intersect(obj1,obj2) {
 		if (Math.abs(check) < 1e-6) {
 			//plane and line are parallel or overlap
 			try {
-				console.log("plane and line - overlap?")
+				//console.log("plane and line - overlap?")
 				intersect(new Point(line.off),plane); //this throws NoIntersectionError
 				return new Line(line.dir,line.off);
 			}
 			catch(err) {
 				if(err instanceof NoIntersectionError) {
-					console.log("plane and line - no overlap, parallel")
+					//console.log("plane and line - no overlap, parallel")
 					//do not overlap
 					throw new NoIntersectionError("Plane "+plane.toString()+" and Line " + line.toString() + " are parallel.");
 				}
@@ -557,7 +557,7 @@ function _plane_plane_intersect(obj1,obj2) {
 			}
 		}
 		else {
-			console.log("plane-plane intersection case")
+			//console.log("plane-plane intersection case")
 			//ok, so there is an intersection
 			//premise: the line has to intersect at least one of the planes: xy, yz, or xz.
 			function det(mat) {
@@ -576,7 +576,7 @@ function _plane_plane_intersect(obj1,obj2) {
 			//try no x
 			var determinant = det(coeffMatrix_nox);
 			if(determinant != 0 ) {
-				console.log("case no-x")
+				//console.log("case no-x")
 				var y = det([[rhs[0],p1.normal.z],
 										 [rhs[1],p2.normal.z]])/determinant;
 				var z = det([[p1.normal.y,rhs[0]],
@@ -587,7 +587,7 @@ function _plane_plane_intersect(obj1,obj2) {
 				//no x failed; try no y
 				var determinant = det(coeffMatrix_noy);
 				if(determinant != 0 ) {
-					console.log("case no-y")
+					//console.log("case no-y")
 					var x = det([[rhs[0],p1.normal.z],
 											 [rhs[1],p2.normal.z]])/determinant;
 					var z = det([[p1.normal.x,rhs[0]],
@@ -598,7 +598,7 @@ function _plane_plane_intersect(obj1,obj2) {
 					//x and y failed; z must work
 					var determinant = det(coeffMatrix_noz);
 					if(determinant != 0 ) {
-						console.log("case no-z")
+						//console.log("case no-z")
 						var x = det([[rhs[0],p1.normal.y],
 												 [rhs[1],p2.normal.y]])/determinant;
 						var y = det([[p1.normal.x,rhs[0]],[p2.normal.x,rhs[1]]])/determinant;
