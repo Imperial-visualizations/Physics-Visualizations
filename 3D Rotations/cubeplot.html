@@ -1,7 +1,7 @@
 <!doctype html>
 <head>
     <title>3D Transformations</title>
-    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
     <!-- <link rel="stylesheet" href="skeleton-tabs.css"> -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -9,101 +9,153 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
     <script src=CubeRotation.js></script>
     <script src="skeleton-tabs.js"></script>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">  
 </head>
 
 <body>
     <div class="container">
     <div class="row">
         <div class="six columns">
-                        <h1>3D Transformations</h1>
-
+            <h1>3D Transformations</h1>
             <div id='graph' style="width:450px; height:450px;"></div>
-                <script src=CubeRotation.js></script>
-       
-    </div>
-        <div class = "six columns">
+            <script src=CubeRotation.js></script>  
+        </div>
+    <div class = "six columns">
+    <div> </div>
         <div class="tab">
-  <button class="tablinks" onclick="openTrans(event, 'Rotate')">Rotate</button>
-  <button class="tablinks" onclick="openTrans(event, 'Skew')">Skew</button>
-  <button class="tablinks" onclick="openTrans(event, 'Scale')">Scale</button>
-</div>
+            <button class="tablinks" onclick="openTrans(event, 'Rotate')">Rotate</button>
+            <button class="tablinks" onclick="openTrans(event, 'Skew')">Skew</button>
+            <button class="tablinks" onclick="openTrans(event, 'Scale')">Scale</button>
+        </div>
 
-<div id="Rotate" class="tabcontent" style="display: none">
-  <h3>Rotate</h3>
-    <div>
-        <p><strong>Select Axis:</strong></p> 
-        <select id = "RotateSelect">
-            <option value="RotXaxis">X Axis</option> 
-            <option value="RotYaxis"> Y Axis</option> 
-            <option value="RotZaxis">Z Axis</option> 
-        </select>
-    </div>
-    <div class="SliderRot">
-        <label class="sliderTitle">Select Angle: <span id="RotateSliderDisplay" data-unit="π radian">0π radian</span></label>
-        <label class='slider'>
-        <input id="RotateSlider" class='inputs' type ="range" value="0" min ="-2" max="2" step ="0.1" />
-        <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
-        </label>
-        
-    </div>
-        <div><button onclick="Rotate()">Go</button></div>
+        <div id="Rotate" class="tabcontent" style="display: none">
+            <h3>Rotate</h3>
+            <div>
+                <p><strong>Select Axis:</strong></p> 
+                <select id = "RotateSelect">
+                    <option value="RotXaxis">X Axis</option> 
+                    <option value="RotYaxis"> Y Axis</option> 
+                    <option value="RotZaxis">Z Axis</option> 
+                </select>
+            </div>
+            <div class="SliderRot">
+                <label class="sliderTitle">Select Angle: <span id="RotateSliderDisplay" data-unit="π radian">0π radian</span></label>
+                <label class='slider'>
+                <input id="RotateSlider" class='inputs' type ="range" value="0" min ="-2" max="2" step ="0.1" onchange="rotatematrix()" />
+                <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
+                </label>
 
-    
-</div>
+            </div>
+            <h7> This is the transformation matrix.</h7>
+            <div>
+                <table id = "rotateTable">
+                    <tr>
+                        <td align = "center">1</td>
+                        <td align = "center">0</td>
+                        <td align = "center">0</td>
+                    </tr>
+                    <tr>
+                        <td align = "center">0</td>
+                        <td align = "center">1</td>
+                        <td align = "center">0</td>
+                    </tr>
+                    <tr>
+                        <td align = "center">0</td>
+                        <td align = "center">0</td>
+                        <td align = "center">1</td>
+                    </tr>
+                </table>
+            </div>
+            <div><button onclick="Rotate()">Go</button></div>    
+        </div>
 
-<div id="Skew" class="tabcontent" style="display: none">
-  <h3>Skew</h3>
-    <div>
-        <p><strong>Select Axis:</strong></p> 
-        <select id = "SkewSelect">
-            <option value="SkewXaxis">X Axis</option> 
-            <option value="SkewYaxis"> Y Axis</option> 
-            <option value="SkewZaxis">Z Axis</option> 
-        </select>
-    </div>
-    <div class="sliderSkew">
-        <label class="sliderTitle">Select Angle: <span id="SkewSliderDisplay" data-unit="π radian">0π radian</span></label>
-        <label class = Slider>
-        <input id="SkewSlider" class = 'inputs' type ="range" value="0" min ="0" max="0.5" step ="0.05" />
-        <span class="sliderMin">0</span><span class="sliderMax">π/4</span>
-        </label>
-    </div>
-    <div><button onclick = "Skew()">Go!</button></div>
-    
+        <div id="Skew" class="tabcontent" style="display: none">
+          <h3>Skew</h3>
+            <div>
+                <p><strong>Select Axis:</strong></p> 
+                <select id = "SkewSelect">
+                    <option value="SkewXaxis">X Axis</option> 
+                    <option value="SkewYaxis"> Y Axis</option> 
+                    <option value="SkewZaxis">Z Axis</option> 
+                </select>
+            </div>
+            <div class="sliderSkew">
+                <label class="sliderTitle">Select Angle: <span id="SkewSliderDisplay" data-unit="π radian">0π radian</span></label>
+                <label class = Slider>
+                <input id="SkewSlider" class = 'inputs' type ="range" value="0" min ="0" max="0.25" step ="0.025" onchange="skewmatrix()" />
+                <span class="sliderMin">0</span><span class="sliderMax">π/4</span>
+                </label>
+            </div>
+            <h7> This is the transformation matrix.</h7>
+            <div>
+                <table id = "skewTable">
+                    <tr>
+                        <td align = "center">1</td>
+                        <td align = "center">0</td>
+                        <td align = "center">0</td>
+                    </tr>
+                    <tr>
+                        <td align = "center">0</td>
+                        <td align = "center">1</td>
+                        <td align = "center">0</td>
+                    </tr>
+                    <tr>
+                        <td align = "center">0</td>
+                        <td align = "center">0</td>
+                        <td align = "center">1</td>
+                    </tr>
+                </table>
+            </div>
+            <div><button onclick = "Skew()">Go!</button></div>
 
-</div>
 
-<div id="Scale" class="tabcontent" style="display: none">
-  <h3>Scale</h3><div>
-        <p><strong>Select Axis:</strong></p> 
-        <select id ="ScaleSelect">
-            <option value="ScaleXaxis">X Axis</option> 
-            <option value="ScaleYaxis"> Y Axis</option> 
-            <option value="ScaleZaxis">Z Axis</option> 
-            <option value="ScaleAllAxis">All Axes</option> 
+        </div>
 
-        </select>
-    </div>
-    <div class="sliderSkew">
-        <label class="sliderTitle">Select Scale:<span id="ScaleSliderDisplay" data-unit="x">1x</span></label>
-        <label class = Slider>
-        <input id="ScaleSlider" class = 'input' type ="range" value="1" min ="0.5" max="5" step ="0.1" />
-        <span class="sliderMin">0.5</span><span class="sliderMax">5</span>
-        </label>
-    </div>
-    <div><button onclick = "Scale()">Go!</button></div>
+        <div id="Scale" class="tabcontent" style="display: none">
+          <h3>Scale</h3><div>
+                <p><strong>Select Axis:</strong></p> 
+                <select id ="ScaleSelect">
+                    <option value="ScaleXaxis">X Axis</option> 
+                    <option value="ScaleYaxis"> Y Axis</option> 
+                    <option value="ScaleZaxis">Z Axis</option> 
+                    <option value="ScaleAllAxis">All Axes</option> 
 
-    
-</div>
+                </select>
+            </div>
+            <div class="sliderScale">
+                <label class="sliderTitle">Select Scale:<span id="ScaleSliderDisplay" data-unit="x">1x</span></label>
+                <label class = Slider>
+                <input id="ScaleSlider" class = 'input' type ="range" value="1" min ="0.5" max="5" step ="0.1" onchange= "scalematrix()" />
+                <span class="sliderMin">0.5</span><span class="sliderMax">5</span>
+                </label>
+            </div>
+            <h7> This is the transformation matrix.</h7>
+
+            <div>
+                <table id = "scaleTable">
+                    <tr>
+                        <td align = "center">1</td>
+                        <td align = "center">0</td>
+                        <td align = "center">0</td>
+                    </tr>
+                    <tr>
+                        <td align = "center">0</td>
+                        <td align = "center">1</td>
+                        <td align = "center">0</td>
+                    </tr>
+                    <tr>
+                        <td align = "center">0</td>
+                        <td align = "center">0</td>
+                        <td align = "center">1</td>
+                    </tr>
+                </table>
+            </div>
+            <div><button onclick = "Scale()">Go!</button></div>    
         </div>
     </div>
     </div>
-        <div><button onclick="graphReset('graph')">Reset</button></div>
+    </div>
+    
+<div><button onclick="graphReset('graph')">Reset</button></div>
 
 </body>
-
-    
-
-
