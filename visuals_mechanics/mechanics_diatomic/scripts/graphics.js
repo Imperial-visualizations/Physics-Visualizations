@@ -7,10 +7,20 @@ var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS,"phaser",{preloa
 var a1,a2,mol1,potential;
 var zoom  = 20;
 
+
+/**
+ * This function is the first function called when phaser starts and should only be used for initialising textures to be used
+ * for sprites. All other code that should be called before the first update call should be placed in create. Not all phaser features have loaded
+ * at this point so should not be used for any phaser code other than loading textures.
+ */
 function preload(){
 
 }
 
+/**
+ * Function called after preload and before the first update call. Should be used for initialising objects and variables that will be used
+ * in the simulation as well as for creating sprites. phaserInstance has fully loaded at this point so all phaser features can be used.
+ */
 function create(){
     potential = new LJ(2, 4);
     a1 = new Atom([0, 0], 2, 1, potential,0xffffff);
@@ -21,6 +31,11 @@ function create(){
     console.log(" I is " + mol1.I);
 }
 
+/**
+ *
+ * @param atom : atom object to add to the simulation.
+ * @returns {Sprite} sprite object that represents the visual representation of the atom.
+ */
 function addAtom(atom) {
     if(phaserInstance === null){
         console.error("phaserInstance has not been created yet");
@@ -35,10 +50,14 @@ function addAtom(atom) {
     return sprite;
 }
 
+/**
+ * This function is called once per frame.
+ */
 function update(){
     mol1.update(phaserInstance.time.elapsed/1000);//requests molecule update, sends deltaTime to mol1.
-
-    //TODO:Update a1 and a2 sprite position based off chanegs in mol1.
-
+    a1.sprite.x = a1.pos.items[0];
+    a1.sprite.y = a1.pos.items[1];
+    a2.sprite.x = a2.pos.items[0];
+    a2.sprite.y = a2.pos.items[1];
 }
 
