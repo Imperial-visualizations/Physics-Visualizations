@@ -3,18 +3,16 @@ $(window).on('load', function() {
     var dom = {
         intface: $("#interface"),
         loadSpinner: $("#spinner-wrapper"),
-        polarisationSwitch: $("#polarisation-switch"),
-        sliderInputs: {
-            angle: $("#angle-slider input"),
-            refractiveIndex: $("#refractive-index-slider input")
-        }
+        polarisationSwitchInputs: $("#polarisation-switch input"),
+        refractiveIndexInput: $("input#refractive-index"),
+        angleInput: $("input#angle")
     },
         plt = {
         MaxTraceNo: 12
     },
         phys = {
         polarisation: "s",
-        refractiveIndexIndex: 5,
+        refractiveIndexIndex: 6,
         angleIndex: 10,
         data: [],
         setPolarisation: function(polarisation) {
@@ -40,28 +38,9 @@ $(window).on('load', function() {
 
         init(data, layout);
 
-        $("#polarisation-switch input").on("change", function() {
-            if (this.value === "s-polarisation") {
-                phys.setPolarisation("s");
-            } else if (this.value === "p-polarisation") {
-                phys.setPolarisation("p");
-            }
-            updatePlot();
-        });
-
-        $("input#refractive-index").on("input", function () {
-            phys.setRefractiveIndexIndex(
-                input2index($(this), phys.data[phys.polarisation])
-            );
-            updatePlot();
-        });
-
-        $("input#angle").on("input", function() {
-            phys.setAngleIndex(
-                input2index($(this), phys.data[phys.polarisation][phys.refractiveIndexIndex])
-            );
-            updatePlot();
-        });
+        dom.polarisationSwitchInputs.on("change", handlePolarisationSwitch);
+        dom.refractiveIndexInput.on("input", handleRefractiveIndexSlider);
+        dom.angleInput.on("input", handleAngleSlider);
 
     }, showJSONLoadError);
 
@@ -74,6 +53,30 @@ $(window).on('load', function() {
         endLoadingScreen();
 
         Plotly.plot(div='graph', phys.getPlotData(), layout=layout);
+    }
+
+
+    function handlePolarisationSwitch() {
+        if (this.value === "s-polarisation") {
+            phys.setPolarisation("s");
+        } else if (this.value === "p-polarisation") {
+            phys.setPolarisation("p");
+        }
+        updatePlot();
+    }
+
+    function handleRefractiveIndexSlider() {
+        phys.setRefractiveIndexIndex(
+            input2index($(this), phys.data[phys.polarisation])
+        );
+        updatePlot();
+    }
+
+    function handleAngleSlider() {
+        phys.setAngleIndex(
+            input2index($(this), phys.data[phys.polarisation][phys.refractiveIndexIndex])
+        );
+        updatePlot();
     }
 
 
@@ -113,15 +116,6 @@ $(window).on('load', function() {
         }, {
             transition: {duration: 0},
             frame: {duration: 0, redraw: false}
-        });
-    }
-
-
-    function updateSliderSteps() { // NOTE Don't do this, just choose everything in advance
-        getObjKeys(dom.sliderInputs).forEach(function(key) {
-            var sliderInput = dom.sliderInputs[key];
-
-            // sliderInput.attr("step", )
         });
     }
 
