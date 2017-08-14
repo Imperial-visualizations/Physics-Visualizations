@@ -2,44 +2,75 @@ $(window).on('load', function() {
 
     var dom = {
         intface: $("#interface"),
-        loadSpinner: $("#spinner-wrapper")
+        loadSpinner: $("#spinner-wrapper"),
+        polarisationSwitch: $("#polarisation-switch"),
+        sliderInputs: {
+            angle: $("#angle-slider input"),
+            refractiveIndex: $("#refractive-index-slider input")
+        }
     },
         phys = {
         polarisation: "s",
-        angleIndex: 10
+        refractiveIndexIndex: 5,
+        angleIndex: 10,
+        data: [],
+        setPolarisation: function(polarisation) {
+            this.polarisation = polarisation;
+        },
+        setRefractiveIndexIndex: function(index) {
+            this.refractiveIndexIndex = index;
+        },
+        setAngleIndex: function(index) {
+            this.angleIndex = index;
+        },
+        getPlotData: function() {
+            return this.data[this.polarisation][this.refractiveIndexIndex][this.angleIndex];
+        }
     };
 
     $.when(
-        $.getJSON("https://rawgit.com/binaryfunt/Imperial-Visualizations/master/dielectric_boundary_data.JSON"),
+        $.getJSON("https://rawgit.com/binaryfunt/Imperial-Visualizations/master/dielectric_boundary_data2.JSON"),
         $.getJSON("https://rawgit.com/binaryfunt/Imperial-Visualizations/master/dielectric_boundary_layout.JSON")
     ).then(function(data, layout) { // i.e., function(JSON1, JSON2) {// success}, function() {// error}
+        data = data[0];
+        layout = layout[0];
 
         init(data, layout);
 
         $("#polarisation-switch input").on("change", function() {
             if (this.value === "s-polarisation") {
-                phys.polarisation = "s";
+                phys.setPolarisation("s");
             } else if (this.value === "p-polarisation") {
-                phys.polarisation = "p";
+                phys.setPolarisation("p");
             }
-            updatePlot(data[0][phys.polarisation], phys.angleIndex);
+            updatePlot();
         });
 
-        $("#interface input#angle").on("input", function() {
-            phys.angleIndex = input2index($(this), data[0][phys.polarisation]);
-            updatePlot(data[0][phys.polarisation], phys.angleIndex);
+        $("input#refractive-index").on("input", function () {
+            phys.setRefractiveIndexIndex(
+                input2index($(this), phys.data[phys.polarisation])
+            );
+            updatePlot();
         });
 
-    }, JSONLoadError);
+        $("input#angle").on("input", function() {
+            phys.setAngleIndex(
+                input2index($(this), phys.data[phys.polarisation][phys.refractiveIndexIndex])
+            );
+            updatePlot();
+        });
+
+    }, showJSONLoadError);
 
 
     function init(data, layout) {
-        var plotData = data[0][phys.polarisation][phys.angleIndex],
-            plotLayout = layout[0];
+        console.log(data);
+        phys.data = data;
 
+        //updateSliderSteps(data); // NOTE Don't do this, just choose everything in advance
         endLoadingScreen();
 
-        Plotly.plot(div='graph', plotData, layout=plotLayout);
+        Plotly.plot(div='graph', phys.getPlotData(), layout=layout);
     }
 
 
@@ -57,18 +88,20 @@ $(window).on('load', function() {
     }
 
 
-    function updatePlot(data, index) {
+    function updatePlot() {
         var updateData = {};
-        for (var i = 0; i < data[index].length - 1; i++) {
-            updateData[i] = {
-                x: data[index][i].x,
-                y: data[index][i].y,
-                z: data[index][i].z
+        for (var trace = 0; trace < phys.getPlotData().length - 1; trace++) {
+            updateData[trace] = {
+                x: phys.getPlotData()[trace].x,
+                y: phys.getPlotData()[trace].y,
+                z: phys.getPlotData()[trace].z
             };
         }
+        console.log(updateData);
+        console.log(getObjKeysAsInts(updateData));
         Plotly.animate(div="graph", {
             data: getObjValues(updateData),
-            traces: getObjKeys(updateData),
+            traces: getObjKeysAsInts(updateData),
             layout: {}
         }, {
             transition: {duration: 0},
@@ -77,13 +110,25 @@ $(window).on('load', function() {
     }
 
 
-    function JSONLoadError() {
+    function updateSliderSteps() { // NOTE Don't do this, just choose everything in advance
+        getObjKeys(dom.sliderInputs).forEach(function(key) {
+            var sliderInput = dom.sliderInputs[key];
+
+            // sliderInput.attr("step", )
+        });
+    }
+
+
+    function showJSONLoadError() {
         dom.loadSpinner.children(".spinner-span").html("Error: Failed to load JSON resources");
         dom.loadSpinner.children("div").fadeOut(0);
     }
 
 
     function getObjKeys(obj) {
+        return Object.keys(obj);
+    }
+    function getObjKeysAsInts(obj) {
         return Object.keys(obj).map(Number);
     }
     function getObjValues(obj) {
