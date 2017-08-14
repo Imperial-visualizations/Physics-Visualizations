@@ -9,6 +9,9 @@ $(window).on('load', function() {
             refractiveIndex: $("#refractive-index-slider input")
         }
     },
+        plt = {
+        MaxTraceNo: 12
+    },
         phys = {
         polarisation: "s",
         refractiveIndexIndex: 5,
@@ -94,11 +97,15 @@ $(window).on('load', function() {
             updateData[trace] = {
                 x: phys.getPlotData()[trace].x,
                 y: phys.getPlotData()[trace].y,
-                z: phys.getPlotData()[trace].z
+                z: phys.getPlotData()[trace].z,
+                opacity: 1
             };
         }
-        console.log(updateData);
-        console.log(getObjKeysAsInts(updateData));
+        for (var trace = phys.getPlotData().length - 1; trace < plt.MaxTraceNo; trace++) {
+            updateData[trace] = {
+                opacity: 0
+            };
+        }
         Plotly.animate(div="graph", {
             data: getObjValues(updateData),
             traces: getObjKeysAsInts(updateData),
