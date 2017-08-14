@@ -9,10 +9,10 @@ var my_pped = {
     volume: function() {
         var crossp = math.cross(this.v,this.w);
         var vol = math.dot(this.u,crossp);
-        return vol
+        return Math.abs(vol)
     },
     gopped: function() {
-        var data = [{
+        var data = {
         type: "mesh3d",
         "x" : [0,this.u[0],this.u[0]+this.v[0],this.v[0],this.w[0],this.w[0]+this.u[0],this.w[0]+this.u[0]+this.v[0],
              this.v[0]+this.w[0]],
@@ -23,10 +23,10 @@ var my_pped = {
         "i" : [0, 0, 3, 4, 4, 4, 4, 4, 5, 6, 6, 7],
         "j" : [2, 3, 4, 3, 6, 7, 1, 5, 2, 2, 7, 3],
         "k" : [1, 2, 0, 7, 5, 6, 0, 1, 1, 5, 2, 2],
-//        "opacity": 0.8,
+        "opacity": 0.6,
 //        "colorscale": [[0, "rgb(0,62,116)"],[1, "rgb(255,255,255)"]]
 //        "colorscale":'Viridis'
-        }]
+        }
         return data
     },
     lytpped: function() {
@@ -50,19 +50,73 @@ var my_pped = {
                 family: "Lato",
                 size: 12,
                 color: "#003E74",
-                weight: 900}
+                weight: 900
+                },
+                fill : 'tonexty',
+                showlegend: false
         }
         return layout
     }
 }
 
+//  Arrow prototype
+function Arrow(start,end) {
+    this.start = start;
+    this.end = end;
+    // Method to return data for the arrow shaft
+    this.shaft_data = function() {
+        var x = [this.start[0],this.end[0]];
+        var y = [this.start[1],this.end[1]];
+        var z = [this.start[2],this.end[2]];
+        var data = {
+            x: x,
+            y: y,
+            z: z,
+            type: 'scatter3d',
+            mode: 'lines',
+            line: {
+                width: 10,
+                color: "rgb(0,62,116)"
+            }
+        }
+    return data
+    }
+    // Method to return data for arrow head
+    this.head_data = function() {
+        var x
+    }
+    // Merge data for arrow with current plot, probably unnecessary...
+    this.merge = function(data) {
+        var new_data = [data,this.shaft_data()];
+        return new_data
+    }
+}
+
+// Completely useless at the moment
+function getImage() {
+    var x = document.createElement("ppedImage");
+    x.setAttribute("src","pped_image.png");
+    x.setAttribute("height","300")
+    x.setAttribute("height","300")
+    document.getElementById("panel").appendChild(x);
+}
 
 function main() {
     var vol = my_pped.volume();
-    var data = my_pped.gopped();
+    var arrow1 = new Arrow([0,0,0],u);
+    var arrow2 = new Arrow([0,0,0],v);
+    var arrow3 = new Arrow([0,0,0],w);
+
+    var data = [my_pped.gopped(),arrow1.shaft_data(),arrow2.shaft_data(),arrow3.shaft_data()];
+
     var layout = my_pped.lytpped();
     document.getElementById("volume").innerHTML = String(vol);
     Plotly.newPlot('graph',data,layout)
+    $("#panel").hide()
+    $("#reveal").click(function() {
+        $("#panel").slideToggle("slow");
+    });
+    getImage();
 }
 
 function ppedplotter() {
@@ -85,9 +139,14 @@ function ppedplotter() {
     my_pped.v = v;
     my_pped.w = w;
 
-    var data = my_pped.gopped();
+    var vol = my_pped.volume();
+    var arrow1 = new Arrow([0,0,0],u);
+    var arrow2 = new Arrow([0,0,0],v);
+    var arrow3 = new Arrow([0,0,0],w);
+    // Arrow data and PPed data
+    var data = [my_pped.gopped(),arrow1.shaft_data(),arrow2.shaft_data(),arrow3.shaft_data()];
     var layout = my_pped.lytpped();
-    
+
     Plotly.newPlot('graph',data,layout)
     vol = my_pped.volume();
     document.getElementById("volume").innerHTML = String(vol);

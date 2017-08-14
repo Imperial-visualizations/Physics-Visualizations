@@ -437,7 +437,7 @@ function showMatrix() {
 //  var A = roundedmat(my_matrix)
   var A = [[my_matrix.get([0,0]),my_matrix.get([0,1])],[my_matrix.get([1,0]),my_matrix.get([1,1])]];
   A = roundedmat(A);
-  alert(math.matrix(A))
+  alert(math.matrix(A));
 }
 $(document).ready(main);
 
