@@ -1,5 +1,5 @@
 from translator.statics import Scatter2D, Document
-from translator.interaction import Animate
+from translator.interaction import Draw
 import numpy as np
 
 
@@ -40,17 +40,11 @@ def elec(r, orientation):
 
     return E
 
-<<<<<<< HEAD
 r0 = np.array([0, 0, 0])
 v0 = np.array([0, 0, 0])
 p = particle(r0, v0, 1, 1)
 dt = 0.01
-=======
-r0 = np.array([0, -2, 0])
-v0 = np.array([0, 0, 0])
-p = particle(r0, v0, 1, 1)
-dt = 0.03
->>>>>>> mechanics
+
 totalt = 10
 end = totalt / dt
 
@@ -80,37 +74,16 @@ for t in range(0, int(end)):
     B = mag(p.r)
     p.update(E, B, dt)
 
-    if len(x) == 0:
-        x.append([p.r[0]])
-        y.append([p.r[1]])
+    x.append(p.r[0])
+    y.append(p.r[1])
 
-    else:
-        a = x[-1][:]
-        a.append(p.r[0])
-        x.append(a)
-        b = y[-1][:]
-        b.append(p.r[1])
-        y.append(b)
+line = Scatter2D(x=x, y=y, div_id="particle", mode="lines", line_width=2, line_color='blue', name="Particle")
+line.show(xaxis_range=[min(x), max(x)], xaxis_title="x", yaxis_range=[min(y), max(y)], yaxis_title="y",
+          title="Charged Particle in Cyclotron")
 
-line = Scatter2D(x=x, y=y, div_id="scatter", mode="lines", line_width=1, line_color='blue', name="sine")
-line.show(xaxis_range=[-8, 8], xaxis_title="x",
-<<<<<<< HEAD
-          yaxis_range=[-8, 8], yaxis_title="y", title="Cyclotron")
-
-animation = Animate(line)
-# animation.remove_repeated_data()
-animation.animate(x="x0", y="y0")
-animation.show(transition_duration=0, frame_redraw=False, frame_duration=0)
-
-html = Document(line, title="Cyclotron", width=50, height=320)
-=======
-          yaxis_range=[-8, 8], yaxis_title="y", title="Animated Sine Wave Example")
-
-animation = Animate(line)
-animation.remove_repeated_data()
-animation.animate(x="x0", y="y0")
+animation = Draw(line)
+animation.draw(x="x0", y="y0")
 animation.show(transition_duration=0, frame_redraw=False, frame_duration=0)
 
 html = Document(line, title="Cyclotron", width=50, height=80)
->>>>>>> mechanics
-html.create("cyclotron.html")
+html.create("cyclotron")

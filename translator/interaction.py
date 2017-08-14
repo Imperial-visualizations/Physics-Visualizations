@@ -201,14 +201,19 @@ class Button:
 
         return self.graph.script[self.gdiv_id]
 
-    def add_reset_button(self):
+    def add_reset_button(self, idx=0):
+        """
+
+        :param idx: Index to return graph to.
+        :return:
+        """
         # Making HTML button.
         self.make(id=escape('reset'), onclick=escape("onReset()"), value=escape("Reset"), type=escape("button"))
         self.graph.script[self.gdiv_id] += "function onReset() { \n\t"                      # Action when button pressed
 
         for line in self.graph.script[self.gdiv_id].split("\n"):                            # Set all counters to 0.
             if "var counter" in line and " = 0;" in line and "\t" not in line:
-                self.graph.script[self.gdiv_id] += line[3:] + "\n\t"
+                self.graph.script[self.gdiv_id] += line[3:-2] + "{idx};\n\t".format(idx=idx)
 
         self.graph.script[self.gdiv_id] += "\n\t "                                           # Beautifying
 
@@ -247,10 +252,79 @@ class Draw:
             self.vars = kwargs
 
             if len(kwargs.items()) > 0:  # If variables to be animated provided, go ahead and animate.
-                self.animate(**kwargs)
+                self.draw(**kwargs)
         return
 
-    def draw(self):
+    def draw(self, **kwargs):
+        """
 
-    def show(self):
+        :param kwargs: Names of variables that are to be animated.
+        :return:
+        """
+        # Modifying existing script to ensure the first frame is defined by data points in index 0 of data list.
+        tmp = {}                                                    # Temporary dictionary.
+        for key, variable in kwargs.items():
+            tmp[key] = var(variable)                                # Putting each variable in dictionary as a variable
 
+        self.variables.append(tmp)
+        return
+
+    def show(self, **kwargs):
+        """
+
+        :param kwargs: Attributes of Plotly.animate function
+        :return:
+        """
+        self.attributes = Data(**kwargs).json
+        anim_attr_js = jsify(self.attributes)
+
+        self.script[self.div_id] += "\n\n"                      # Beautifying before writing animation code
+        self.script[self.div_id] += "var is_paused = true;\n"   # Boolean for play/pause implementation.
+        variables_str = ""
+        for plot in self.variables:
+            variables_str += "{"
+            for key, variable in plot.items():
+                variables_str += "{key}: {var}.slice(0, counter_{var}), ".format(key=key, var=var(variable, True))
+
+                # Making counter for every variable
+                self.script[self.div_id] += "var counter_{var} = 0;\n".format(var=var(variable, True))
+
+                # Setting up maximum value for counter for each variable
+                self.script[self.div_id] += "var counter_{var}_lim = {var}.length;\n".format(
+                    var=var(variable, True))
+
+            variables_str = variables_str[:-2]
+            variables_str += "}, "  # Making ready to write next object.
+
+        variables_str = variables_str[:-2]
+        traces = list(range(len(self.variables)))
+
+        # Writing JS to create animation.
+        anim_script = "function update() { \n\t if (!is_paused) {\n\t\t"                   # Function to show next frame
+
+        for i in range(0, len(self.variables)):
+            for key, variable in self.variables[i].items():
+                anim_script += "counter_{var}++; \n\t\t".format(var=var(variable, True))   # Increment counter.
+                # If last index reached, reset index and hence loop animation.
+                anim_script += "if (counter_{var} === counter_{var}_lim) {{\n\t\t\t" \
+                               "counter_{var} = 0;\n\t\t}}\n\t\t".format(var=var(variable, True))
+
+        anim_script += "Plotly.animate({div_id}, {{data: [".format(div_id=self.div_id)
+        anim_script += "{variables}], ".format(variables=variables_str)     # Data to show in current frame.
+        anim_script += "traces: {traces}}}, ".format(traces=traces)         # Labeling traces.
+        anim_script += "{anim_attr}".format(anim_attr=anim_attr_js)         # Adding attributes.
+
+        anim_script = anim_script[:-3]                                      # Removing "};" in jsified attributes.
+        anim_script += "}); \n\t\t"                                         # End of Plotly.animate function.
+        anim_script += "requestAnimationFrame(update); \n\t}\n}\n"          # End of update function
+        anim_script += "requestAnimationFrame(update); \n"                  # Calling animation function for first time.
+
+        self.script[self.div_id] += anim_script
+        self.graph.script[self.div_id] = self.script[self.div_id]           # Updating graph script
+
+        continuity_buttons = Button(self.graph, self.div_id[1:-1] + "_btn")  # Passing graph script to button maker.
+        self.script[self.div_id] = continuity_buttons.add_play_button()      # Making play button.
+        self.script[self.div_id] = continuity_buttons.add_reset_button(1)    # Making reset button.
+
+        self.graph.script[self.div_id] = self.script[self.div_id]            # Updating graph script.
+        return self.graph
