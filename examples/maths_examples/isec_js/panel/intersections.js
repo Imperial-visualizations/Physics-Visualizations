@@ -4,6 +4,7 @@ function Vector(x,y,z) {
 	this.x = x;
 	this.y = y;
 	this.z = z;
+	console.log("New Alg Object: ", this)
 	this.allclose = function(other){
 		if(!(other instanceof Vector)) {
 			throw new Error("Argument error: Cannot compare Vector to no-vector.");
@@ -104,8 +105,8 @@ function Point(pos) {
 			+ "Its position vector is: " + this.pos.toString() + "\n";
 		return ans;
 	}
-	this.id = objcounter++;
-	console.log(this)
+	this.id = (objcounter++) + "point";
+	console.log("New Alg Object: ", this)
 }
 
 function Line(dir,off) {
@@ -177,7 +178,8 @@ function Line(dir,off) {
 			+ "Its offset vector is: " + this.off.toString() + ".\n";
 			return ans;
 	}
-	this.id = objcounter++;
+	this.id = (objcounter++) + "line";
+	console.log("New Alg Object: ", this)
 }
 
 function Plane(normal,off) {
@@ -222,7 +224,7 @@ function Plane(normal,off) {
 					throw new Error("Normal vector is zero vector.")
 					}
 				else {
-					console.log("plane case: no z or y direction in normal vector")
+					console.log("plane goify: no z or y direction in normal vector")
 					//cannot generate z or y but can x, try generating x for yz mesh
 					var mesh = mesh2d(ylim,zlim)
 					var yy = mesh[0];
@@ -235,7 +237,7 @@ function Plane(normal,off) {
 				}
 			}
 			else {
-				console.log("plane case: no z direction in normal vector")
+				console.log("plane goify: no z direction in normal vector")
 				//cannot generate z but can y, try generating y for xz mesh
 				var mesh = mesh2d(xlim,zlim)
 				var xx = mesh[0];
@@ -248,7 +250,7 @@ function Plane(normal,off) {
 			}
 		}
 		else {
-			console.log("plane case: usual case")
+			console.log("plane goify: z generation (usual case)")
 			//try generating z
 			var mesh = mesh2d(xlim,ylim)
 			var xx = mesh[0];
@@ -287,7 +289,8 @@ function Plane(normal,off) {
 			+ "Its offset vector is: " + this.off.toString() + ".\n";
 			return ans;
 	}
-	this.id = objcounter++;
+	this.id = (objcounter++)+"plane";
+	console.log("New Alg Object: ", this)
 }
 
 function NoIntersectionError(message){
@@ -343,6 +346,7 @@ function intersect(obj1, obj2) {
 }
 
 function intersectList(objlist) {
+	console.log("intersectList called")
 	var ans =[];
 	for(var idx = 0; idx<objlist.length;idx++) {
 		for(var other = idx; other<objlist.length;other++) {

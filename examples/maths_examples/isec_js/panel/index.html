@@ -127,7 +127,6 @@
             color: #006EAF;
             text-shadow: 0px 0px 2px #bccfda;
         }
-
     </style>
 </head>
 <body>
@@ -170,33 +169,28 @@
     <script src="./intersections.js"></script>
     <script type="text/javascript">
         var algObjs = {};
-        var algObjsCounter = 0; //counter to keep track of ids
         var ctrlPressed = false;
 
         $(document).ready(function(){
             console.log("Document ready!")
             if(sessionStorage.lastSaved != undefined){
                 console.log("there is a saved state... retrieving,",sessionStorage)
-                retrieveAlgObjs = JSON.parse(sessionStorage.getItem("algObjsSaved"));
-                retrieveAlgObjsCounter = JSON.parse(sessionStorage.getItem("algObjsCounterSaved"));
-                algObjsCounter = retrieveAlgObjsCounter;
+                var retrieveAlgObjs = JSON.parse(sessionStorage.getItem("algObjsSaved"));
+                objcounter = JSON.parse(sessionStorage.getItem("algObjsCounterSaved"));
                 function rebuildAlgObj(obj) {
                   if(obj.hasOwnProperty('pos')) {
                     //it's a point
                     var rebuild = new Point(new Vector(obj.pos.x,obj.pos.y,obj.pos.z));
-                    rebuild.panelId = obj.panelId;
                     return rebuild;
                   }
                   if(obj.hasOwnProperty('dir')) {
                     //it's a line
                     var rebuild = new Line(new Vector(obj.dir.x,obj.dir.y,obj.dir.z), new Vector(obj.off.x,obj.off.y,obj.off.z));
-                    rebuild.panelId = obj.panelId;
                     return rebuild;
                   }
                   if(obj.hasOwnProperty('normal')) {
                     //it's a line
                     var rebuild = new Plane(new Vector(obj.normal.x,obj.normal.y,obj.normal.z), new Vector(obj.off.x,obj.off.y,obj.off.z));
-                    rebuild.panelId = obj.panelId;
                     return rebuild;
                   }
                   else {
@@ -204,15 +198,13 @@
                     return obj;
                   }
                 }
-                function rebuildAlgObjs(objs) {
-                  var ans = {};
-                  for(idx in objs) {
-                    //rebuild everything
-                    ans[objs[idx].panelId] = rebuildAlgObj(objs[idx]);
-                  }
-                  return ans;
+                rebuild = {}
+                for(idx in retrieveAlgObjs) {
+                  //rebuild everything
+                  var newobj = rebuildAlgObj(retrieveAlgObjs[idx])
+                  rebuild[newobj.id] = newobj;
                 }
-                algObjs = rebuildAlgObjs(retrieveAlgObjs);
+                algObjs = rebuild;
                 redisplay();
             } else{
                 console.log("no saved state... defaulting")
@@ -229,28 +221,22 @@
             });
             $("#addPoint").on('click',function(){
                 var newPoint = new Point(new Vector(Math.random(),Math.random(),Math.random()));
-                var newid = newPoint.constructor.name + (++algObjsCounter);
-                newPoint.panelId = newid;
+                var newid = newPoint.id;
                 algObjs[newid] = newPoint;
-                addAlgObjToPlot(algObjs[newid])
                 //we could call addAlgObj(algObjs[newid]) but it's obsolete
                 redisplay();
             });
             $("#addLine").on('click',function(){
                 var newLine = new Line(new Vector(Math.random(),Math.random(),Math.random()), new Vector(Math.random(),Math.random(),Math.random()));
-                var newid = newLine.constructor.name + (++algObjsCounter);
-                newLine.panelId = newid;
+                var newid = newLine.id;
                 algObjs[newid] = newLine;
-                addAlgObjToPlot(algObjs[newid])
                 //we could call addAlgObj(algObjs[newid]) but it's obsolete
                 redisplay();
             });
             $("#addPlane").on('click',function(){
                 var newPlane = new Plane(new Vector(Math.random(),Math.random(),Math.random()), new Vector(Math.random(),Math.random(),Math.random()));
-                var newid = newPlane.constructor.name + (++algObjsCounter);
-                newPlane.panelId = newid;
+                var newid = newPlane.id;
                 algObjs[newid] = newPlane;
-                addAlgObjToPlot(algObjs[newid])
                 //we could call addAlgObj(algObjs[newid]) but it's obsolete
                 redisplay();
             });
@@ -279,7 +265,7 @@
         function save(){
             console.log("save: current state", sessionStorage)
             sessionStorage.setItem("algObjsSaved", JSON.stringify(algObjs));
-            sessionStorage.setItem("algObjsCounterSaved", JSON.stringify(algObjsCounter));
+            sessionStorage.setItem("algObjsCounterSaved", JSON.stringify(objcounter));
             var currentdate = new Date();
             var datetime = "" + currentdate.getDate() + "/"
                                 + (currentdate.getMonth()+1)  + "/"
@@ -334,30 +320,31 @@
             });
         }
         function redisplay(){
-            console.log("redisplaying panel...")
+            console.log("redisplaying panel...", algObjs)
             if(Object.keys(algObjs).length == 0){
                 $("#panelItemsWrapper").html('<p ><br>Press the <i class="fa fa-plus fa-fw" aria-hidden="true"></i> buttons to add point, line or plane.</p>');
             } else{
                 $("#panelItemsWrapper").html("");
                 for (i in algObjs) {
                     console.log("redisplay: ", algObjs[i]);
-                    function AlgObj(object){
-                        console.log("AlgObj with id "+object.panelId+", ", object.toString());
+                    function algObjToPanel(object){
+                        //console.log("AlgObj with id "+object.id+", ", object.toString());
                         $("#panelItemsWrapper>p").remove();
-                        $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.panelId+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.panelId+"'>"+object.toString()+"</label></item>");
+                        $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
                         itemsAddEventListener();
                     }
-                    AlgObj(algObjs[i]);
+                    algObjToPanel(algObjs[i]);
                 }
             }
-            redrawPlot()
+            console.log("redisplaying graph...")
+            redrawPlot();
         }
         function addAlgObj(object){
           //obsolete!!
             throw new Error("addAlgObj is obsolete, use redisplay() instead;")
-            console.log("addAlgObj with id "+object.panelId+", ", object.toString());
+            console.log("addAlgObj with id "+object.id+", ", object.toString());
             $("#panelItemsWrapper>p").remove();
-            $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.panelId+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.panelId+"'>"+object.toString()+"</label></item>");
+            $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
             itemsAddEventListener();
         }
     </script>
@@ -391,26 +378,27 @@ var layout = {
     },
     margin: {l:0,r:0,b:0,t:0}
   };
-var addAlgObjToPlot = null;
-var redrawPlot = null;
-var removeAlgObjFromPlot = null;
+function redrawPlot() {
+  goified = []
+  for(idx in algObjs) {
+    goified.push(algObjs[idx].goify(layout));
+  }
+  console.log("canvasWrapper: redraw. goified: ",goified);
+  Plotly.newPlot('canvasWrapper', goified, layout);
+}
 $('#canvasWrapper').ready(function(){
-  var goified = []
   function init() {
     var emptytrace = {
       x: [],
       y: [],
       type: 'scatter3d'
     };
-    Plotly.plot('canvasWrapper', [emptytrace], layout);
+    Plotly.newPlot('canvasWrapper', [emptytrace], layout);
   }; init()
+  /*
   function add(obj) {
-    console.log("canvasWrapper: adding "+obj)
-    goified.push({idx: obj.goify(layout)});
-  }
-  function redraw() {
-    console.log("canvasWrapper: redraw");
-    Plotly.addTraces('canvasWrapper', goified)
+    console.log("canvasWrapper: adding ",obj)
+    goified.push(obj.goify(layout));
   }
   function remove() {
     Plotly.purge('canvasWrapper')
@@ -418,6 +406,7 @@ $('#canvasWrapper').ready(function(){
   addAlgObjToPlot = add;
   redrawPlot = redraw;
   removeAlgObjFromPlot = remove;
+  */
   });
 </script>
 </html>
