@@ -136,7 +136,9 @@
 <div class="container">
 <div class="row">
     <div class="eight columns">
-            <div id="canvasWrapper">This is where the graph goes</div>
+            <div id="canvasWrapper">
+              This is where the graph goes
+            </div>
     </div>
     <div class="four columns">
                 <panel>
@@ -164,6 +166,7 @@
 </div>
     <br><br><br>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="./intersections.js"></script>
     <script type="text/javascript">
         var algObjs = {};
@@ -229,6 +232,7 @@
                 var newid = newPoint.constructor.name + (++algObjsCounter);
                 newPoint.panelId = newid;
                 algObjs[newid] = newPoint;
+                addAlgObjToPlot(algObjs[newid])
                 //we could call addAlgObj(algObjs[newid]) but it's obsolete
                 redisplay();
             });
@@ -237,6 +241,7 @@
                 var newid = newLine.constructor.name + (++algObjsCounter);
                 newLine.panelId = newid;
                 algObjs[newid] = newLine;
+                addAlgObjToPlot(algObjs[newid])
                 //we could call addAlgObj(algObjs[newid]) but it's obsolete
                 redisplay();
             });
@@ -245,6 +250,7 @@
                 var newid = newPlane.constructor.name + (++algObjsCounter);
                 newPlane.panelId = newid;
                 algObjs[newid] = newPlane;
+                addAlgObjToPlot(algObjs[newid])
                 //we could call addAlgObj(algObjs[newid]) but it's obsolete
                 redisplay();
             });
@@ -257,13 +263,13 @@
                 redisplay();
             });
             $("#delete").on('click',function(){
-              $('.selected').each(
+              $("#panelItemsWrapper>item>label.selected").each(
                 function() {
-                  console.log("deleting at id", $(this)[0].id, ", object:", algObjs[$(this)[0].id]);
+                  console.log("deleting at id", $(this)[0].id, ", object:", algObjs[$(this)[0].id])
                   delete algObjs[$(this)[0].id];
                 }
               );
-                redisplay();
+              redisplay();
             });
             $("#save").on('click',function(){
                 save();
@@ -301,7 +307,7 @@
                             $(this).removeClass("selected");
                         });
                         $(this).addClass("selected");
-                    }else{
+                    } else{
                         $(this).toggleClass("selected");
                     }
                     event.stopPropagation();
@@ -338,28 +344,80 @@
                     function AlgObj(object){
                         console.log("AlgObj with id "+object.panelId+", ", object.toString());
                         $("#panelItemsWrapper>p").remove();
-                        // $("#canvasWrapper").html($("#canvasWrapper").html()+"<br>Point #"+object.id+" added: ("+object.x+","+object.y+","+object.z+")");
                         $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.panelId+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.panelId+"'>"+object.toString()+"</label></item>");
                         itemsAddEventListener();
                     }
                     AlgObj(algObjs[i]);
                 }
             }
-
+            redrawPlot()
         }
         function addAlgObj(object){
           //obsolete!!
             throw new Error("addAlgObj is obsolete, use redisplay() instead;")
-
-
             console.log("addAlgObj with id "+object.panelId+", ", object.toString());
             $("#panelItemsWrapper>p").remove();
-            // $("#canvasWrapper").html($("#canvasWrapper").html()+"<br>Point #"+object.id+" added: ("+object.x+","+object.y+","+object.z+")");
             $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.panelId+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.panelId+"'>"+object.toString()+"</label></item>");
             itemsAddEventListener();
         }
-
-                        // <item class=""><span><i id="line001Eye" class="fa fa-eye" aria-hidden="true"></i></span><label id="line001" data-type="line">Line 001</label></item>
-    </script>>
+    </script>
 </body>
+
+<script>
+var layout = {
+  scene: {
+    xaxis: {
+      range: [-10,10]
+    },
+    yaxis: {
+      range: [-10,10]
+    },
+    zaxis: {
+      range: [-10,10]
+    },
+    camera: {
+      up: {
+        x: 0,
+        y: 0,
+        z: 1
+      },
+      eye: {
+        x: -1.7428,
+        y: 1.0707,
+        z: 0.7100
+      }
+    },
+    aspectratio: {x: 1, y: 1, z: 1},
+    },
+    margin: {l:0,r:0,b:0,t:0}
+  };
+var addAlgObjToPlot = null;
+var redrawPlot = null;
+var removeAlgObjFromPlot = null;
+$('#canvasWrapper').ready(function(){
+  var goified = []
+  function init() {
+    var emptytrace = {
+      x: [],
+      y: [],
+      type: 'scatter3d'
+    };
+    Plotly.plot('canvasWrapper', [emptytrace], layout);
+  }; init()
+  function add(obj) {
+    console.log("canvasWrapper: adding "+obj)
+    goified.push({idx: obj.goify(layout)});
+  }
+  function redraw() {
+    console.log("canvasWrapper: redraw");
+    Plotly.addTraces('canvasWrapper', goified)
+  }
+  function remove() {
+    Plotly.purge('canvasWrapper')
+  }
+  addAlgObjToPlot = add;
+  redrawPlot = redraw;
+  removeAlgObjFromPlot = remove;
+  });
+</script>
 </html>
