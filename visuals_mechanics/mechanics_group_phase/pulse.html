@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test4</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    // Plotly
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+</head>
+<body>
+<div id='graph'></div>  <!-- Plotly chart will be drawn inside this DIV -->
+
+<script>
+
+    //input  by user
+    var amp = 1;
+    var omega = 1;
+    var t = 0;
+    var k = 1;
+
+    var n = 200;
+    var x = [];
+    var y = [];
+    var dt = 0.015;
+
+
+    for (var i = 0; i < n; i += 1) {
+        x[i] = i * 1 / 20;
+        y[i] = ((x[i] - 0.0) - 1.0 * (1 - 0.0)) * Math.exp(-( (x[i] - 0.0) - 1.0 * (1 - 0.0)) * ((x[i] - 0.0) - 1.0 * (1.0 - 0.0)) + ((x[i] - 0.0) - 1.0 * (1.0 - 0.0)))
+    }
+
+    var layout = {
+        xaxis: {domain: [0, 0.45]},
+        yaxis2: {anchor: 'x2'},
+        xaxis2: {domain: [0.55, 1]}
+    };
+
+    Plotly.plot('graph', [{
+        x: x,
+        y: y,
+        line: {simplify: false}
+    }, {
+        x: x,
+        y: y,
+        xaxis: 'x2',
+        yaxis: 'y2',
+        line: {simplify: false}
+    }], layout
+//    {
+//  xaxis: {range: [0, 10]},
+//  yaxis: {range: [-1.1, 1,1]}
+//}
+    )
+
+    function compute() {
+        t += dt;
+        for (var i = 0; i < n; i++) {
+            y[i] = (((x[i] - t) - 0.0) - 1.0 * (1 - 0.0)) * Math.exp(-( ((x[i] - t) - 0.0) - 1.0 * (1 - 0.0)) * (((x[i] - t) - 0.0) - 1.0 * (1.0 - 0.0)) + (((x[i] - t) - 0.0) - 1.0 * (1.0 - 0.0)));
+        }
+    }
+
+    function update() {
+        compute();
+
+        Plotly.animate('graph', {
+            data: [{x: x, y: y}, {x: x, y: y}]
+        }, {
+            transition: {
+                duration: 75,
+            },
+            frame: {
+                duration: 100,
+                redraw: false,
+            }
+        });
+
+        requestAnimationFrame(update);
+    }
+
+    requestAnimationFrame(update);
+</script>
+.
+</body>
+</html>

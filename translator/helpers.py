@@ -76,10 +76,10 @@ def jsify(data, variable_name=None):
         attributes_js = "{"
         for key, value in d.items():
             if str(type(value)) == "<class 'dict'>":
-                attributes_js += "{key}: {value}, ".format(key=key, value=process(value))
+                attributes_js += "{key}: {val}, ".format(key=key, val=process(value))
 
             else:
-                attributes_js += "{key}: {value}, ".format(key=key, value=escape(value))
+                attributes_js += "{key}: {val}, ".format(key=key, val=escape(value))
 
         attributes_js = attributes_js[:-2]
         attributes_js += "}"
@@ -96,7 +96,7 @@ class Tag:
     open_tag = ""
     close_tag = ""
 
-    def __init__(self, tag, value="", **kwargs):
+    def __init__(self, tag, val="", **kwargs):
         """
         Generates HTML tags with their attributes and value.
         :param tag: HTML Tag.
@@ -105,7 +105,7 @@ class Tag:
         """
         self.tag = str(tag)
         self.attributes = []
-        self.value = str(value)
+        self.value = str(val)
 
         for name, value in kwargs.items():
             # Treating quotes as string literals - escape.
@@ -235,8 +235,8 @@ class Data:
 
                             else:
                                 if d[key] != value:
-                                    print("Warning: Clobbering value of {key} with {value}"
-                                          .format(key=key, value=value))
+                                    print("Warning: Clobbering value of {key} with {val}"
+                                          .format(key=key, val=value))
                                 d[key] = value
 
                         else:
@@ -258,38 +258,67 @@ class Data:
 
 
 class Document:
-    language = Tag("html")                                                  # Document language declared.
-    source = Tag("script", src="https://cdn.plot.ly/plotly-latest.min.js")  # Defining location of JS source.
-    head = Tag("head", value=source.html)                                   # Putting script source in head of HTML.
+    doctype = Tag("!doctype html")                                              # Making sure CSS3 and HTML5 recognised
+    language = Tag("html")                                                      # Document language declared.
+    source = Tag("script", src="https://cdn.plot.ly/plotly-latest.min.js")      # Defining location of PlotlyJS source.
+    jquery = Tag("script", src="https://code.jquery.com/jquery-latest.min.js")  # Defining location of JQuery source.
+    head = Tag("head", val=source.html + jquery.html)                           # Putting script source in head of HTML.
 
-    def __init__(self, div_id=None, js_script=None, width=480, height=400):
-        """
-        :param div_id: ID of div in page where plot will be placed.
-        :param js_graph: Graph drawn in JS.
-        :param filename: Name of html file.
-        :param width: Width of div (px)
-        :param height: Height of div (px)
-        :param div_id: HTML Id of the div in which graph is placed.
-        """
-        self.page = ""
-        self.graph_loc = Tag("body")  # Graph will be in document body by default.
-        self.div_style = escape("width:" + str(width) + "px; " + "height:" + str(height) + "px;")
+    # Including CSS file path
+    css = Tag("link", rel="stylesheet", href="https://manglekuo.com/i-v/styles.css?v=2").open_tag
 
-        self.page += self.language.open_tag + "\n" + self.head.html + "\n" + self.graph_loc.open_tag + "\n"
+    def __init__(self, graph, title=None, width=90, height=100):
+        self.graph = graph
+        self.div_id = graph.div_id
+        self.graph_loc = Tag("body")                                        # Graph will be in document body by default.
+        self.div_style = escape("width:" + str(width) + "%; " + "height:" + str(height) + "%")
 
-        if div_id and js_script:
-            self.add(div_id, js_script)
+        # Creating first few lines of HTML
+        self.page = self.doctype.open_tag + "\n"
+        self.page += self.language.open_tag + "\n"
+
+        if title:
+            self.title = Tag("title", val=title)
+
+        else:
+            self.title = Tag("title", val="PlotlyJS Plot")
+
+        self.head = Tag("head",
+                        val=self.source.html + "\n" +
+                        self.jquery.html + "\n" +
+                        self.title.html + "\n" +
+                        self.css + "\n")
+
+        self.page += self.head.html + "\n" + self.graph_loc.open_tag + "\n"
+
+        self.add_plots()
+        self.add_buttons()
+        self.add_sliders()
+
         return
 
-    def add(self, div_id, js_script):
+    def add_plots(self):
         """
         Adding div and corresponding PlotlyJS graph to HTML page.
         :return:
         """
-        div_id = escape(div_id)                                     # Div on HTML page where Plotly JS graph is located.
+        for div, plots in self.graph.script.items():
+            self.page += Tag("div", id=div, style=self.div_style).html + "\n"
+            self.page += Tag("script", val=plots).html + "\n"
+        return
 
-        self.page += Tag("div", id=div_id, style=self.div_style).html + "\n"    # Writing div
-        self.page += Tag("script", value=js_script).html + "\n"                  # Writing graph
+    def add_buttons(self):
+        """
+        Adding div and corresponding buttons to HTML page
+        :return:
+        """
+        for div, plot_buttons in self.graph.buttons.items():
+            self.page += div + "\n"
+            for button in plot_buttons:
+                self.page += button + "\n"
+        return
+
+    def add_sliders(self):
         return
 
     def create(self, filename):
