@@ -58,7 +58,7 @@
     var alpha = valueSlider(parseInt($("#alpha").val()));
     var v2 = alpha*v1;
     var A = (v2-v1)/(v1+v2);
-    var B = 2*v1/(v1+v2);
+    var B = 2*v1/(v1+1.2/1.1);
     var is_paused = true;
     var layout =
         {
@@ -74,7 +74,7 @@
             },
             //plot_bgcolor: '#EBEEEE',
             xaxis: {
-                range: [-10, 10]
+                range: [-50, 50]
             },
             yaxis: {
                 range: [-1.6, 1.6]
@@ -111,7 +111,7 @@
         v2 = alpha*v1;
          $("#v2Display").text(" " + v2.toFixed(1) + " m/s");
         A = (v2-v1)/(v1+v2);
-        B = 2*v1/(v1+v2);
+        B = (2*v1)/(v1+v2*1.1/1.2);
         onReset();
     })
 
@@ -121,7 +121,7 @@
         $("#v1Display").text(" " + v1 + " m/s");
         v2 = alpha*v1;
         A = (v2-v1)/(v1+v2);
-        B = 2*v1/(v1+v2);
+        B = 2*v1/(v1+(1.2/1.1));
         onReset();
     });
 
@@ -139,7 +139,7 @@
 
 
     for (var i = 0; i < n; i++) {
-        x[i] = -10 + i / 40;
+        x[i] = -50 + i *100/n;
         y_i[i] = D*(x[i] + 6 + C) * Math.exp(-1*((x[i] + 6) * (x[i] + 6)) + (x[i] + 6));
         //y_i[i] = (x[i]+3)*Math.exp(-( x[i]+3)*(x[i]+3)+(x[i]+3));
         y_r[i] = 0;
@@ -150,7 +150,7 @@
         is_paused = true;
         t = 0;
         for (var i = 0; i < n; i++) {
-            x[i] = -10 + i / 40;
+            x[i] = -50 + i *100/ n;
             y_i[i] = D*(x[i] + 6 + C) * Math.exp(-1*((x[i] + 6) * (x[i] + 6)) + (x[i] + 6));
             y_r[i] = 0;
             y_t[i] = 0;
@@ -219,11 +219,11 @@
        if (t < t_start + 16) {
            for (var i = 0; i < n; i++) {
                if (x[i] < 0) {
-                   y_i[i] = D*(x[i] + 6 - v1 * t + C) * Math.exp(-1*((x[i] + 6 - v1 * t) * (x[i] + 6 - v1 * t)) + (x[i] + 6 - v1 * t));
-                   y_r[i] = D*A * (-1*x[i] + 6 - v1 * t + C) * Math.exp(-1*((-1*x[i] + 6 - v1 * t) * (-1*x[i] + 6 - v1 * t)) + (-1*x[i] + 6 - v1 * t));
+                   y_i[i] = D*(Math.sin((x[i] - t)) + Math.sin(1.1 * x[i] - 1.1 * t));
+                   y_r[i] = D*A * Math.exp(((-1*x[i] + 6 - v1 * t) * (-1*x[i] + 6 - v1 * t)) + (-1*x[i] + 6 - v1 * t));
                }
                else if (x[i] > 0) {
-                   y_t[i] = D* B * (v1 / v2 * x[i] + 6 - v1 * t + C) * Math.exp(-1*((v1 / v2 * x[i] + 6 - v1 * t) * (v1 / v2 * x[i] + 6 - v1 * t)) + (v1 / v2 * x[i] + 6 - v1 * t));
+                   y_t[i] = D* B * (Math.sin((v1 *1.1/1.2 * x[i]  - 1.2/1.1 * v1 * t)) + Math.sin(v1 / (1.2/1.1)  * 1.1 * x[i] - 1.2 * v1 * t));
                }
            }
        }

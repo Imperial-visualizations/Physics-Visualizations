@@ -254,16 +254,18 @@
         for (var i = 0; i <= n; i++) {
             if (x[i] < 0) {
                 y_i[i] = 0;
+                y_r[i] = 0;
                 for (var j = 0; j < nb_waves; j++) {
                     y_i[i] += Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
+                    y_r[i] += Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
                 }
             }
             else if (x[i] >= 0){
                 y_t[i] = 0;
                 for (var j_ = 0; j_ < nb_waves; j_++) {
-                    B = (2 * omega_disp[j_] / (omega_nondisp[j_] + omega_disp[j_]));
-                    y_t[i] += B * Math.sin((omega_nondisp[j_] / omega_disp[j_]) * k_array[j_] * x[i] - (
-                            omega_nondisp[j_] / k_array[j_]) * omega_disp[j_] * t);
+                    var omega_test = 2 * k_array[j_];
+                    B = (2 * (omega_test / k_array[j_]) / (v + (omega_test / k_array[j_])));
+                    y_t[i] += B * Math.sin((v / (omega_test / k_array[j_])) * k_array[j_] * x[i] - v * omega_test * t);
                 }
             }
         }
@@ -284,7 +286,7 @@
         initial_data();
 
         Plotly.animate('graph',
-                {data: [{y: y_i}, {y: y_t}]},
+                {data: [{y: y_i}, {y: y_r}, {y: y_t}]},
                 {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
         );
         document.getElementById('run_button').value = (is_paused) ? "Play" : "Pause";
@@ -317,7 +319,7 @@
 
     var boundary = {
         x: [0, 0],
-        y: [-10, 10],
+        y: [-105, 105],  // more efficient than updating it when axis change
         mode: "lines",
         name: "boundary",
         line: {width: 3, color: 'black', simplify: false}
@@ -345,16 +347,18 @@
             for (var i = 0; i < n; i++) {
                 if (x[i] < 0) {
                     y_i[i] = 0;
+                    y_r[i] = 0;
                     for (var j = 0; j < nb_waves; j++) {
                         y_i[i] += Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
+                        y_r[i] += Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
                     }
                 }
                 else if (x[i] >= 0) {
                     y_t[i] = 0;
                     for (var j_ = 0; j_ < nb_waves; j_++) {
-                        B = (2 * omega_disp[j_] / (omega_nondisp[j_] + omega_disp[j_]));
-                        y_t[i] += B * Math.sin((omega_nondisp[j_] / omega_disp[j_]) * k_array[j_] * x[i] - (
-                                        omega_nondisp[j_] / k_array[j_]) * omega_disp[j_] * t);
+                        var omega_test = 2 * k_array[j_];
+                        B = (2 * (omega_test / k_array[j_]) / (v + (omega_test / k_array[j_])));
+                        y_t[i] += B * Math.sin((v / (omega_test / k_array[j_])) * k_array[j_] * x[i] - v * omega_test * t);
                     }
                 }
             }
@@ -369,7 +373,7 @@
             compute();
 
             Plotly.animate('graph',
-                    {data: [{y: y_i}, {y: y_t}]},
+                    {data: [{y: y_i}, {y: y_r}, {y: y_t}]},
                     {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
                     // vastly speeds up animation but won't update any non-animated properties
             );
@@ -383,6 +387,7 @@
         requestAnimationFrame(update);
     }
 
+    // ToDo: update boundary
     // ToDo: tooltips for input boxes
     // ToDo: Change Initial Wave
     // ToDo: Python?
