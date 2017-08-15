@@ -3,9 +3,9 @@ var layout = {
   height: 450,
   autosize: true,
   scene: {
-    xaxis: {range: [-2, 2], autorange:false, zeroline:false},
-    yaxis: {range: [-2, 2], autorange:false, zeroline:false},
-    zaxis: {range: [-2, 2], autorange:false, zeroline:false},
+    xaxis: {range: [-1, 1], autorange:false, zeroline:false},
+    yaxis: {range: [-1, 1], autorange:false, zeroline:false},
+    zaxis: {range: [0, 1.5], autorange:false, zeroline:false},
     aspectmode: 'cube',
     camera: {center: {x:0,y:0,z:0},eye: {x: 1,y: -1,z: 0.1}}
   },
