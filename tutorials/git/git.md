@@ -169,7 +169,7 @@ Stashing and Popping can be used to store work for later without committing, but
 
 3. **Stash Navigation**
 
-   When stashes are present they will also appear on the lefthand toolbar under *STASH*, which will be located below the *REMOTE* tab (see [Branch Navigation](https://anthonyli358.github.io/Imperial-Visualizations/git/git#branch-navigation "Branch Navigation") where there are no stashes so the tab is automatically hidden). 
+   When stashes are present they will also appear on the lefthand toolbar under *STASH*, which will be located just below the *REMOTE* tab (see [Branch Navigation](https://anthonyli358.github.io/Imperial-Visualizations/git/git#branch-navigation "Branch Navigation") where there are no stashes so the tab is automatically hidden). 
    
    Stashes can be easily deleted by right clicking on them and clicking *Delete Stash*, but be careful to first make sure that all the stashed work is not needed or has been committed.
 
