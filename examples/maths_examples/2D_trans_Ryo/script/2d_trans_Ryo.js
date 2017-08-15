@@ -434,18 +434,9 @@ function resetStuff() {
 }
 
 function showMatrix() {
-//  var A = roundedmat(my_matrix)
   var A = [[my_matrix.get([0,0]),my_matrix.get([0,1])],[my_matrix.get([1,0]),my_matrix.get([1,1])]];
   A = roundedmat(A);
   alert(math.matrix(A));
 }
 $(document).ready(main);
 
-//$("input[type=range]").each(function () {
-//  $(this).on('input', function(){
-////        $("#"+$(this).attr("id") + "Display").text($(this).val() +
-////          $("#"+$(this).attr("id")+"Display").attr("data-unit"));
-//        $("rotateID").text($(this).val() +
-//          $("rotateID").attr("data-unit"));
-//  });
-//});
