@@ -4,7 +4,8 @@ __pycache__/
 *.pyc
 
 # Folders
-initial_package_tests
+examples/
+translator/
 visuals_mechanics/test
 
 # Files
@@ -15,10 +16,6 @@ test.py
 .ipynb_checkpoints/
 .DS_STORE
 .ipynb
-=======
-#Ignore All
-.ipynb_checkpoints/
-.DS_STORE
 
+# EM
 JSON_data/
->>>>>>> EM
