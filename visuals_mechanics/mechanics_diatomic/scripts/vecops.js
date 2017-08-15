@@ -16,6 +16,17 @@ Vector = function(items) {
     this.length = this.items.length;
 };
 
+Vector.prototype.toString = function () {
+    var string = "[";
+    for(var i = 0;i < this.length;i++){
+        string += this.items[0].toString();
+        if(i < this.length - 1) string += ",";
+    }
+
+    string += "]";
+    return string;
+};
+
 /** *************************************************** Addition Function ****************************************** **|
  * Adds one vector/matrix to another.
  * @return {*} Resulting Array from addition
@@ -53,14 +64,15 @@ Vector.prototype.add = function add(other) {
             result.push(this.items[j].add(other.items[j]).items)                        // Adding arrays recursively.
         }
     }
-    return new Vector(result).items;                                                    // Returning the resultant array
+    ;
+    return new Vector(result);                                                    // Returning the resultant array
 };
 
 /** *************************************************** Subtract Function ****************************************** **|
  * Subtracts one vector/matrix from another.
  * @return {*} Subtracted Array
  ** **************************************************************************************************************** **/
-Vector.prototype.subtract = function subtract(other) {
+Vector.prototype.subtract = function(other) {
     // Sanity check - make sure Vectors are of same length.
     if (this.items.length !== other.items.length)
     {
@@ -93,7 +105,7 @@ Vector.prototype.subtract = function subtract(other) {
             result.push(this.items[j].subtract(other.items[j]).items)                   // Adding arrays recursively.
         }
     }
-    return new Vector(result).items;                                                    // Returning the result vector.
+    return new Vector(result);                                                    // Returning the result vector.
 };
 
 /** ************************************************* Sum function ************************************************* **|
@@ -125,22 +137,22 @@ Vector.prototype.sum = function sum() {
 
 Vector.prototype.mag = function normal() {
     if (this.items.constructor !== Array || !isNumber(this.items[0])) {
-        console.log("This function is only for vectors! Please enter 1D array.");
+        console.log("This function is only for vectors! Please enter a Vector.");
         return -1
     }
-    return Math.sqrt(new Vector(this.power(2)).sum());
+    return Math.sqrt(this.power(2).sum());
 };
 
 Vector.prototype.unit = function unit() {
     var magnitude = this.mag();
     var vector = this.multiply(1/magnitude);
-    return new Vector(vector)
+    return vector;
 };
 
 Vector.prototype.power = function power(number) {
     if (!isNumber(number)) {
         console.error("Exponent " + number + " is not valid.");
-        return -1
+        return -1;
     }
 
     var result = [];
@@ -158,7 +170,7 @@ Vector.prototype.power = function power(number) {
         }
     }
 
-    return new Vector(result).items
+    return new Vector(result);
 };
 
 Vector.prototype.rotate = function rotate(theta) {
@@ -170,7 +182,7 @@ Vector.prototype.rotate = function rotate(theta) {
     if (this.items.length === 2 && isNumber(this.items[0])) {
         new_x = (this.items[0] * Math.cos(theta)) - (this.items[1] * Math.sin(theta));
         new_y = (this.items[0] * Math.sin(theta)) + (this.items[1] * Math.cos(theta));
-        return new Vector([new_x, new_y]).items
+        return new Vector([new_x, new_y]);
     }
 
     else {
@@ -197,7 +209,7 @@ Vector.prototype.colsum = function () {
         this.items[i] = new Vector(this.items[i]).add(new Vector(this.items[i - 1]));
     }
     result.push(this.items[this.items.length - 1]);
-    return new Vector(result).items
+    return result;
 };
 
 /** ********************************************  Row Summation Function  ****************************************** **|
@@ -213,7 +225,7 @@ Vector.prototype.rowsum = function() {
             result.push(this.items[j].sum());
         }
     }
-    return new Vector(result).items
+    return result;
 };
 
 /** **********************************************  Multiplying function  ****************************************** **|
@@ -240,7 +252,8 @@ Vector.prototype.multiply = function multiply(other) {
             result.push(this.items[j].multiply(other));
         }
     }
-    return new Vector(result).items;                                                // Returning the result vector.
+
+    return new Vector(result);                                            // Returning the result vector.
 };
 
 /** ************************************************ Dot Product Function ****************************************** **|
@@ -262,10 +275,10 @@ Vector.prototype.dot = function dot(other) {
     var result = [];
 
     for (var i = 0; i < this.items.length; i++) {
-        result.push(this.items[i] * other.items[i])              // Multiplying element i of this to element i of other.
+        result.push(this.items[i] * other.items[i]) ;             // Multiplying element i of this to element i of other.
     }
 
-    return new Vector(result).sum()                              // Summing products and returning array.
+    return result.sum();                              // Summing products and returning array.
 };
 
 

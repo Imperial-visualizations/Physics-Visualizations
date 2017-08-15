@@ -53,7 +53,7 @@
         {
             this.atoms = atoms;                                                             // Atoms
             // Calculating scalar distance between atoms.
-            this.r = new Vector(this.atoms[0].pos.subtract(this.atoms[1].pos)).mag();      // Atom separation.
+            this.r = this.atoms[0].pos.subtract(this.atoms[1].pos).mag();      // Atom separation.
             this.COM = this.calcCOM();                                      // Centre of mass initialised as 0 vector.
         }
 
@@ -75,7 +75,7 @@
             return 1/muInv;
         };
 
-        this.elasped = 0;
+        this.elapsed = 0;
         this.I = this.calcMoI();                                            // Moment of inertia initialised as 0.
         this.E_v = vibrational_E;                                           // Vibrational energy.
         this.E_r = rotational_E;                                            // Rotational energy.
@@ -83,7 +83,7 @@
         this.Lsq = 2 * rotational_E * this.I;                               // Square of Angular Momentum.
 
         // Magnitude of linear momentum for each Atom object.
-        this.p_i = Math.sqrt((this.E_r * 2 * this.tot_m) / (Math.pow(this.atoms.length, 2)));
+        this.p_i = Math.sqrt((this.E_r * 2 * this.tot_m()) / (Math.pow(this.atoms.length, 2)));
         for (var i = 0; i < this.atoms.length; i++) {
             this.atoms[i].p = this.p_i;                                     // Setting each atom's momentum.
         }
@@ -100,7 +100,7 @@
      */
     Molecule.prototype.calcSeparation = function(atom1, atom2) {
         var r = atom1.pos.subtract(atom2.pos);
-        return new Vector(r).mag();
+        return r.mag();
     };
 
     /**
@@ -111,7 +111,7 @@
      */
     Molecule.prototype.calcUnitVect = function(atom1, atom2) {
         var r = atom1.pos.subtract(atom2.pos);
-        return new Vector(r).unit();
+        return r.unit();
     };
 
     /**
@@ -157,9 +157,7 @@
         // Rotation of atoms about COM.
         for (var i = 0; i < this.atoms.length; i++)
         {
-            this.atoms[i].pos = this.atoms[i].pos.subtract(this.COM);            // Find atom coords with COM at Origin
-            this.atoms[i].pos = new Vector(this.atoms[i].pos.rotate(d_Angle));   // Updating atoms coords after rotation
-            this.atoms[i].pos = this.atoms[i].pos.add(this.COM);                 // Moving COM back to original coords
+            this.atoms[i].pos = this.atoms[i].pos.subtract(this.COM).rotate(d_Angle).add(this.COM);            // Find atom coords with COM at Origin
         }
 
         return this.atoms
@@ -172,7 +170,7 @@
     Molecule.prototype.calcMoI = function() {
         var I = 0;                                                          // Moment of Inertia.
         for (var i = 0; i < this.atoms.length; i++) {                       // Distance between this atom and COM.
-            var r_i = new Vector(this.atoms[i].pos.subtract(this.COM));     // Distance between this atom and COM
+            var r_i = this.atoms[i].pos.subtract(this.COM);     // Distance between this atom and COM
             I += this.atoms[i].m * Math.pow(r_i.mag(), 2);                  // m*r**2 contribution for this atom.
             console.log(I);
         }
@@ -195,11 +193,11 @@
         // Summing mx and m.
         for (var i = 0; i < this.atoms.length; i++) {
             total_m += this.atoms[i].m;
-            var mx = new Vector(this.atoms[i].pos.multiply(this.atoms[i].m));
-            total_mx = new Vector(total_mx.add(mx));
+            var mx = this.atoms[i].pos.multiply(this.atoms[i].m);
+            total_mx = total_mx.add(mx);
         }
 
-        this.COM = new Vector(total_mx.multiply(1 / total_m));              // Updating instance COM coords.
+        this.COM = total_mx.multiply(1 / total_m);              // Updating instance COM coords.
         return this.COM;                                                    // Return Vector coordinates of COM.
     };
 
@@ -225,24 +223,26 @@
 
         var s = [];                                               // Array to store new coordinates.
         for (var i = 0; i < this.atoms.length; i++) {
-            for (var j = 0; j < this.atoms.length; i++) {
+            for (var j = 0; j < this.atoms.length; j++) {
                 if (i !== j) {
-                    var r = new Vector(this.atoms[i].pos.subtract(this.atoms[j]));        // Vector to other atom.
-                    var dir = new Vector(r.unit());               // Unit vector to other atom
+                    var r = this.atoms[i].pos.subtract(this.atoms[j].pos);        // Vector to other atom.
+                    var dir = r.unit();               // Unit vector to other atom
 
                     var f_s = this.atoms[i].V.calcF(r.mag());     // Scalar Force on atom[j] due to atom[i]
 
                     var a = f_s * (1 / this.atoms[j].m);          // Acceleration scalar: F=ma
+                    console.log(a);
                     var u = this.atoms[j].p / this.atoms[j].m;    // Old scalar velocity of atom: p = m * u
-                    var v = u + (a.mag() * dT);                   // New scalar velocity: v = u + at
-                    var s_s = (Math.pow(v, 2) - Math.pow(u, 2)) / (2 * a.mag());          // Scalar displacement.
-                    s.push(dir.multiply(new Vector(s_s)));        // Vector displacement pushed to array.
+                    var v = u + (a * dT);
+                    // New scalar velocity: v = u + at
+                    var s_s = (Math.pow(v, 2) - Math.pow(u, 2)) / (2 * a);          // Scalar displacement.
+                    console.log(s_s);
+                    s.push(dir.multiply(s_s));        // Vector displacement pushed to array.
                 }
             }
         }
-
         // Calculating new coords for each atom.
-        for (var k = 0; k < this.atoms.length; i++) {
+        for (var k = 0; k < this.atoms.length; k++) {
             this.atoms[k].pos = this.atoms[k].pos.add(s[k]);
         }
         return s
@@ -254,9 +254,9 @@
      * @param deltaTime : time passed between this frame and the last frame for incrementing physics.
      */
     Molecule.prototype.update = function(deltaTime) {
-        this.elasped += deltaTime;
-        calcRotCoords(deltaTime,elapsed);
-        //TODO: Calculate the vibration amplitude given the vibrational KE
+        this.elapsed += deltaTime;
+        this.calcRotCoords(deltaTime,this.elapsed);
+        this.calcExtCoords(deltaTime);
         //TODO: Update position due to vibrational motion.
         //TODO: Update position due to rotational motion.
         //TODO: Check if vibrational energy greater than restoring energy (Hooke's Law)
