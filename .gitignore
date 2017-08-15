@@ -4,8 +4,6 @@ __pycache__/
 *.pyc
 
 # Folders
-examples/
-translator/
 visuals_mechanics/test
 
 # Files
