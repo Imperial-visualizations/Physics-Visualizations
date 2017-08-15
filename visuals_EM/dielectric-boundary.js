@@ -1,33 +1,33 @@
 $(window).on('load', function() {
 
     var dom = {
-        intface: $("#interface"),
-        loadSpinner: $("#spinner-wrapper"),
-        polarisationSwitchInputs: $("#polarisation-switch input"),
-        refractiveIndexInput: $("input#refractive-index"),
-        angleInput: $("input#angle")
-    },
+            intface: $("#interface"),
+            loadSpinner: $("#spinner-wrapper"),
+            polarisationSwitchInputs: $("#polarisation-switch input"),
+            refractiveIndexInput: $("input#refractive-index"),
+            angleInput: $("input#angle")
+        },
         plt = {
-        MaxTraceNo: 12
-    },
+            MaxTraceNo: 12
+        },
         phys = {
-        polarisation: "s",
-        refractiveIndexIndex: 6,
-        angleIndex: 10,
-        data: [],
-        setPolarisation: function(polarisation) {
-            this.polarisation = polarisation;
-        },
-        setRefractiveIndexIndex: function(index) {
-            this.refractiveIndexIndex = index;
-        },
-        setAngleIndex: function(index) {
-            this.angleIndex = index;
-        },
-        getPlotData: function() {
-            return this.data[this.polarisation][this.refractiveIndexIndex][this.angleIndex];
-        }
-    };
+            polarisation: "s",
+            refractiveIndexIndex: 6,
+            angleIndex: 10,
+            data: [],
+            setPolarisation: function(polarisation) {
+                this.polarisation = polarisation;
+            },
+            setRefractiveIndexIndex: function(index) {
+                this.refractiveIndexIndex = index;
+            },
+            setAngleIndex: function(index) {
+                this.angleIndex = index;
+            },
+            getPlotData: function() {
+                return this.data[this.polarisation][this.refractiveIndexIndex][this.angleIndex];
+            }
+        };
 
     $.when(
         $.getJSON("https://rawgit.com/binaryfunt/Imperial-Visualizations/master/dielectric_boundary_data2.JSON"),
@@ -46,13 +46,11 @@ $(window).on('load', function() {
 
 
     function init(data, layout) {
-        console.log(data);
         phys.data = data;
 
-        //updateSliderSteps(data); // NOTE Don't do this, just choose everything in advance
         endLoadingScreen();
 
-        Plotly.plot(div='graph', phys.getPlotData(), layout=layout);
+        Plotly.plot(div='graph', deepCopy(phys.getPlotData()), layout=layout);
     }
 
 
@@ -89,29 +87,31 @@ $(window).on('load', function() {
         // Compute the corresponding JSON array index for a given input value, rounding to the nearest integer
         var inputValue = domInput.val(),
             maxInput = domInput.attr("max"),
+            minInput = domInput.attr("min"),
             arrayLen = array.length;
-        return Math.round((inputValue / maxInput) * (arrayLen - 1));
+        return Math.round(((inputValue - minInput) / (maxInput - minInput)) * (arrayLen - 1));
     }
 
 
     function updatePlot() {
-        var updateData = {};
-        for (var trace = 0; trace < phys.getPlotData().length - 1; trace++) {
-            updateData[trace] = {
-                x: phys.getPlotData()[trace].x,
-                y: phys.getPlotData()[trace].y,
-                z: phys.getPlotData()[trace].z,
+        var update = {},
+            plotData = phys.getPlotData();
+        for (var trace = 0; trace < plotData.length - 1; trace++) {
+            update[trace] = {
+                x: plotData[trace].x,
+                y: plotData[trace].y,
+                z: plotData[trace].z,
                 opacity: 1
             };
         }
-        for (var trace = phys.getPlotData().length - 1; trace < plt.MaxTraceNo; trace++) {
-            updateData[trace] = {
+        for (var trace = plotData.length - 1; trace < plt.MaxTraceNo; trace++) {
+            update[trace] = {
                 opacity: 0
             };
         }
         Plotly.animate(div="graph", {
-            data: getObjValues(updateData),
-            traces: getObjKeysAsInts(updateData),
+            data: getObjValues(update),
+            traces: getObjKeysAsInts(update),
             layout: {}
         }, {
             transition: {duration: 0},
@@ -136,6 +136,10 @@ $(window).on('load', function() {
         return Object.keys(obj).map(function(key) {
             return obj[key];
         });
+    }
+
+    function deepCopy(obj) {
+        return JSON.parse(JSON.stringify(obj));
     }
 
 });
