@@ -1,17 +1,20 @@
-# PyCharm files 
+# PyCharm files
 .idea/
 __pycache__/
 *.pyc
 
 # Folders
-initial_package_tests
+examples/
+translator/
 visuals_mechanics/test
 
 # Files
-.ipynb_checkpoints/
 test.py
 
 # Ignore All
 .ipynb_checkpoints/
 .DS_STORE
 .ipynb
+
+# EM
+JSON_data/

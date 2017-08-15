@@ -19,9 +19,12 @@ class Graph:
         self.type = escape(type)
         self.instance_objects = {}
         self.data = {}                                        # Dictionary that contains all data objects w/ attributes.
-        self.script = ""                                      # Variable to store HTML/JS script as and when generated.
+        self.script = dict()                                  # Variable to store HTML/JS script as and when generated.
         self.div_id = escape(div_id)                          # HTML div where graph will be located.
+        self.script[self.div_id] = ""
         self.layout = "var layout"                            # String to contain layout parameters for graph.
+        self.buttons = {}                                     # Dictionary to store all buttons related to plot
+        self.slider = {}
         return
 
     def __repr__(self):
@@ -64,13 +67,17 @@ class Graph:
                     if periodic_data(data, end_index + 1):
                         if end_index == 0:
                             return [data[end_index]]
-                        return data[:end_index]
+                        return data[:end_index]     # returning non-repeating periodic array
 
             return data
 
         for key, value in self.data.items():
             self.data[key] = find_period(value, 0, len(value))
-            self.script = ""
+
+        # Clearing already written script to make way for the modified data.
+        self.script[self.div_id] = ""
+        self.show()
+
         return
 
     def finish_plot(self, o_name=None, **kwargs):
@@ -104,14 +111,14 @@ class Graph:
 
         # Setting raw data (lists) to variable names in JS.
         for variable, value in self.objects.items():
-            self.script += "var {variable} = {value}; \n".format(variable=var(variable, True), value=value)
+            self.script[self.div_id] += "var {variable} = {value}; \n".format(variable=var(variable, True), value=value)
 
-        self.script += "\n"  # Beautifying.
+        self.script[self.div_id] += "\n"  # Beautifying.
 
         for v_name, obj in self.objects.items():  # Writing JS objects (that will be plotted)
             obj = var(obj, decode=True)  # Escaping all references to variables
 
-            self.script += obj
+            self.script[self.div_id] += obj
             plots += v_name[1:-1] + ", "
 
         plots = plots[:-2]
@@ -119,8 +126,9 @@ class Graph:
 
         self.make_layout(**kwargs)
 
-        self.script += self.layout
-        self.script += "Plotly.newPlot({div_name}, {plots}, layout);".format(div_name=escape(self.div_id), plots=plots)
+        self.script[self.div_id] += self.layout
+        self.script[self.div_id] += "Plotly.newPlot({div_name}, {plots}, layout);"\
+            .format(div_name=escape(self.div_id), plots=plots)
         return self.script
 
     def show(self, **kwargs):
@@ -133,15 +141,15 @@ class Graph:
 
         # Setting raw data (lists) to variable names in JS.
         for variable, value in self.data.items():
-            self.script += "var {variable} = {value}; \n".format(variable=var(variable, True), value=value)
+            self.script[self.div_id] += "var {variable} = {value}; \n".format(variable=var(variable, True), value=value)
 
         traces = list(range(len(self.instance_objects.items())))
-        self.script += "\n"                                     # Beautifying.
+        self.script[self.div_id] += "\n"                                         # Beautifying.
 
-        for v_name, obj in self.instance_objects.items():         # Writing JS objects (that will be plotted)
+        for v_name, obj in self.instance_objects.items():           # Writing JS objects (that will be plotted)
             obj = var(obj, decode=True)                             # Escaping all references to variables
 
-            self.script += obj
+            self.script[self.div_id] += obj
             plots += v_name[1:-1] + ", "
 
         plots = plots[:-2]
@@ -149,9 +157,13 @@ class Graph:
 
         self.make_layout(**kwargs)
 
-        self.script += self.layout
-        self.script += "Plotly.newPlot({div_name}, {{data: {plots}, traces: {traces}, layout: layout}});"\
+        self.script[self.div_id] += self.layout
+        self.script[self.div_id] += "function plot() {{\n\t" \
+            "Plotly.newPlot({div_name}, {{data: {plots}, traces: {traces}, layout: layout}}); \n\t " \
+            "}} \n\n" \
+            "plot();"\
             .format(div_name=escape(self.div_id), traces=traces, plots=plots)
+
         return self.script
 
     def make_layout(self, **kwargs):

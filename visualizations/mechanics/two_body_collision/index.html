@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Two Body Collision</title>
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
+    <link rel = "icon" href = "images/favicon.ico" type="image/x-icon">
+    <style type="text/css">
+        #canvasWrapper{
+            width: 100%;
+            margin: 0 auto;
+        }
+        input[type=range]{
+        }
+        .velocityDisplay{
+        }
+        .ball1Title{
+            padding-left: 8px;
+            font-weight:400;
+            border-left: 8px solid #E9003A;
+        }
+        .ball2Title{
+            padding-left: 8px;
+            font-weight:400;
+            border-left: 8px solid #00AEF2;
+        }
+    </style>
+</head>
+<body>
+
+<h1>2 Body Collision</h1> 
+<div class="container">
+<div class="row">
+    <div class="eight columns">
+            <div id="canvasWrapper"></div>
+    </div>
+    <div class="four columns">
+                <h4 class="ball1Title">Ball 1</h4>
+                <label class="sliderTitle">Mass: <span id="ball1LabMassDisplay" data-unit="kg">1kg</span></label> 
+                <label class="slider">
+                <input id="ball1LabMass" class="inputs" type="range" value="2" min ="0.1" max="10.0" step ="0.1"/>
+                <span class="sliderMin">0.1</span><span class="sliderMax">10</span>
+                </label>
+                <label class="sliderTitle">Velocity X (lab frame): <span id="ball1LabVelocityXDisplay" class="velocityDisplay" data-unit="m/s">0m/s</span></label> 
+                <label class="slider">
+                <input id="ball1LabVelocityX" class="inputs" type="range" value="4" min ="0" max="10.0" step ="0.1"/>
+                <span class="sliderMin">0</span><span class="sliderMax">10</span>
+                </label>
+                <label>Velocity Y (lab frame): <span id="ball1LabVelocityYDisplay" class="velocityDisplay" data-unit="m/s">0m/s</span></label>
+                <br>
+                <h4 class="ball2Title">Ball 2</h4>
+                <label class="sliderTitle">Mass: <span id="ball2LabMassDisplay" data-unit="kg">1kg</span></label> 
+                <label class="slider">
+                <input id="ball2LabMass" class="inputs" type="range" value="1" min ="0.1" max="10" step ="0.1"/>
+                <span class="sliderMin">0.1</span><span class="sliderMax">10</span>
+                </label>
+                <label>Velocity X (lab frame): <span id="ball2LabVelocityXDisplay" class="velocityDisplay" data-unit="m/s">0m/s</span></label>
+                <label>Velocity Y (lab frame): <span id="ball2LabVelocityYDisplay" class="velocityDisplay" data-unit="m/s">0m/s</span></label>
+                <label class="sliderTitle">Scattering Angle: <span id="ballCollisionAngleDisplay" data-unit="º">0º</span></label> 
+                <label class="slider">
+                <input id="ballCollisionAngle" class="inputs" type="range" value="50" min="-90" max = "90" step = "5"/>
+                <span class="sliderMin">-90º</span><span class="sliderMax">90º</span>
+                </label>
+
+                <label class="checkbox">
+                    <input type="checkbox" value="None" id="vector_draw_enable" name="check" checked /><span for="checkbox"></span>
+                </label>
+                <label class="checkboxTitle">Enable vector drawing</label>
+
+
+                <br>
+                <input id="runButton" class="inputs" type="button" value="Run"/>
+
+    </div>
+</div>     
+</div>
+    <br><br><br>
+    <script src="scripts/jquery-2.1.1.js?"></script>
+    <script src="scripts/phaser.min.js"></script>
+    <script src="scripts/physics.js"></script>
+    <script src="scripts/main.js?v=4"></script>
+</body>
+</html>

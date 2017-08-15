@@ -24,9 +24,11 @@ surface = Surface(z=z, div_id="surface_plot")
 surface.show(xaxis_range=[-np.pi, np.pi], yaxis_range=[1, -1], zaxis_range=[1, -1], title="Example Animated Surface")
 
 # Animating surface
-animation = Animate(surface, z="z0")
-animation.show(transition_duration=100, frame_redraw=True, frame_duration=100)
+animation = Animate(surface)
+animation.remove_repeated_data()   # Feature not working on surface plots yet
+animation.animate(z="z0")
+animation.show(transition_duration=0, frame_redraw=False, frame_duration=0)
 
 # Writing JS to HTML file
-html = Document(div_id="surface_plot", js_script=animation.script, width=700, height=600)
-html.create("surface_anim_test.html")
+html = Document(surface, title="Surface Animation", width=90, height=80)
+html.create("surface_anim.html")

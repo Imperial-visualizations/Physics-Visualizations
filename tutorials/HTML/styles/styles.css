@@ -310,6 +310,7 @@ fieldset {
   border-width: 0; }
 input[type="checkbox"],
 input[type="radio"] {
+<<<<<<< HEAD:tutorials/HTML/styles/styles.css
   display: inline; 
   -webkit-appearance: none;
 }
@@ -420,6 +421,10 @@ input[type="radio"] {
 }
 
 
+=======
+  display: inline;
+}
+>>>>>>> dev:visuals_mechanics/mechanics_collisions/webtest_Mangle/styles/styles.css
 label > .label-body {
   display: inline-block;
   margin-left: .5rem;
@@ -777,7 +782,10 @@ span.sliderMin{
   position: relative;
   top: -10px;
   left: -4px;
+<<<<<<< HEAD:tutorials/HTML/styles/styles.css
   z-index:-1000;
+=======
+>>>>>>> dev:visuals_mechanics/mechanics_collisions/webtest_Mangle/styles/styles.css
 }
 span.sliderMax{
   display: inline-block;
@@ -787,7 +795,10 @@ span.sliderMax{
   position: relative;
   top: -10px;
   right: -8px;
+<<<<<<< HEAD:tutorials/HTML/styles/styles.css
   z-index:-1000;
+=======
+>>>>>>> dev:visuals_mechanics/mechanics_collisions/webtest_Mangle/styles/styles.css
 }
 label.slider{
 }
