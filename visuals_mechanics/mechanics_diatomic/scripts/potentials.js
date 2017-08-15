@@ -36,6 +36,12 @@ LJ.prototype.calcV = function(r) {
     return 4 * this.e * (repulsive + attractive);     // Calculating LJ potential at distance r.
 };
 
+LJ.prototype.calcF = function(r) {
+    var repulsive = -12 * Math.pow(this.s / r, 11);
+    var attractive = 6 * Math.pow(this.s / r, 6);
+    return 4 * this.e * (repulsive + attractive)
+};
+
 /**
  * Harmonic potential class.
  * @param equilibrium: Equilibrium distance of pair of atoms.

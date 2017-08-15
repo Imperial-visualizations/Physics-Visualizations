@@ -22,40 +22,40 @@ layout = {
     var ourRequest = new XMLHttpRequest();
     ourRequest.open('GET','https://raw.githubusercontent.com/cydcowley/Imperial-Visualizations/master/data_sin.json');
     // what to do when data is loaded
-    ourRequest.onload=function(){
-      var ourData = JSON.parse(ourRequest.responseText);
-      console.log(ourData[0]);
-      var Opacity = 0.1;
+    ourRequest.onload=function() {
+        var ourData = JSON.parse(ourRequest.responseText);
+        console.log(ourData[0]);
+        var Opacity = 0.1;
 
-      var myPlot = document.getElementById('graph'),
-      trace1 = {
-        x: ourData[0].points[0].x,
-        y: ourData[0].points[0].y,
-        type: 'scatter',
-        mode: 'markers',
-        marker: {
-          opacity: Opacity,
-          size:16
-        }
-      };
-Plotly.newPlot('graph', [trace1],layout);
-myPlot.on('plotly_hover', function(data){
-        var pn = data.points[0].pointNumber,
-            tn = data.points[0].curveNumber,
-            Opacity = [];
-            for(var i=0;i<=(ourData[0].points[0].x).length;i++){
-            Opacity.push(0.1)
+        var myPlot = document.getElementById('graph'),
+            trace1 = {
+                x: ourData[0].points[0].x,
+                y: ourData[0].points[0].y,
+                type: 'scatter',
+                mode: 'markers',
+                marker: {
+                    opacity: Opacity,
+                    size: 16
+                }
+            };
+        Plotly.newPlot('graph', [trace1], layout);
+        myPlot.on('plotly_hover', function (data) {
+            var pn = data.points[0].pointNumber,
+                tn = data.points[0].curveNumber,
+                Opacity = [];
+            for (var i = 0; i <= (ourData[0].points[0].x).length; i++) {
+                Opacity.push(0.1)
             }
-            var update = {'marker':{opacity: Opacity, size:16}};
+            var update = {'marker': {opacity: Opacity, size: 16}};
             console.log(Opacity);
             Plotly.restyle('graph', update, [tn]);
-            Opacity[pn]=1.;
-            update = {marker:{opacity: Opacity, size:16}};
+            Opacity[pn] = 1.;
+            update = {marker: {opacity: Opacity, size: 16}};
             Plotly.restyle('graph', update, [tn]);
 
-});
+        });
 
-};
+    };
     ourRequest.send();
 
 

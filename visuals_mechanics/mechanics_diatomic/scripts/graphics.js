@@ -33,12 +33,12 @@ function create(){
 
 /**
  *
- * @param atom : atom object to add to the simulation.
+ * @param atom: object to add to the simulation.
  * @returns {Sprite} sprite object that represents the visual representation of the atom.
  */
 function addAtom(atom) {
     if(phaserInstance === null){
-        console.error("phaserInstance has not been created yet");
+        console.error("phaser Instance has not been created yet");
         return -1;
     }
     var atomG = phaserInstance.add.graphics(0,0);

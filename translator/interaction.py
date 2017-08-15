@@ -113,7 +113,7 @@ class Animate:
 
 
 class Mouse:
-    def __init__(self, graph, event="hover"):
+    def __init__(self, graph, div_id="plot", event="hover"):
         # Sanity check - is the graph of the correct type?
         if str(graph.__class__.__bases__).find("<class 'translator.statics.Graph'>") == -1:
             raise TypeError("Object graph is not derived from base class 'Graph', but from {bases}"
@@ -121,6 +121,8 @@ class Mouse:
 
         else:
             self.graph = graph
+            self.gdiv_id = div_id
+
             if event == "hover" or event == "click":
                 self.event = event
 
@@ -128,7 +130,6 @@ class Mouse:
                 raise ValueError("Need events to be type 'hover' or 'click', not {event}".format(event=str(self.event)))
 
             self.script = graph.script + "\n\n"
-            self.write()
         return
 
     def change(self, **kwargs):
@@ -157,9 +158,30 @@ class Mouse:
         # TODO
         return
 
-    def write(self):
-        self.script += "myPlot.on('plotly_{event}', function(data) {{\n\t".format(event=str(self.event))
+    def change_opacity(self, h_value):
+        """
+        Changes opacity of the data point.
+        :param h_value: Value of opacity to change to when hovered on.
+        :return:
+        """
+        script = "\t"
 
+        script += "var trace_num = data.points[0].traceNumber \n\t"
+        script += "var point_num = data.points[0].pointNumber \n\t"
+        script += "var opacity = []; \n\n\t"
+
+        script += "for (var i = 0; i < {variable}.length; i++) {{ \n\t\t".format(variable="x0")
+        script += "opacity.push({unhover_value}) \n\t".format(unhover_value=str(h_value))
+        script += "} \n\t"
+        script += "var update = {marker:{opacity: opacity}}; \n\t"
+        script += "Plotly.restyle({div_id}, update, [tn]); \n"
+        script += "}); \n"
+        return
+
+    def write(self, script):
+        self.script += "myPlot.on('plotly_{event}', function(data) {{\n\t".format(event=self.event)
+        self.script += script
+        self.script += "};"
         return
 
 
