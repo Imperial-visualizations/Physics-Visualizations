@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +8,7 @@
   <title>Imperial Visualisation</title>
   <meta name="description" content="">
   <meta name="author" content="">
+  <link rel = "icon" href = "https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
 
   <!-- Mobile Specific Metas
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -17,7 +17,8 @@
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="styles/styles.css">
+  <!-- <link rel="stylesheet" href="styles/styles.css"> -->
+  <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=3">
   <style type="text/css">
     .example-grid .column, .example-grid .columns {
       background: #EEE;
@@ -41,82 +42,74 @@
   <div class="container">
     <section class="header">
       <h1 class="title">Imperial Visualisation Cheatsheet</h1>
+      <h6>Declaration: This page is an alternation of the contents on <a href="http://getskeleton.com/#">http://getskeleton.com/</a>, which is also what the Imperial Visualisation css style is based on.</h6>
     </section>
               
     <!-- README -->
     <div id="GettingStarted">
       <h3>Getting Started</h3>
         <div class="row">
-          <div class="six columns">
-            <p>
-              How to get started:<br>
-              1. open ~/Imperial-Visualizations/tutorials/HTML/<br>
-              2. download everything inside (see right)<br>
-              3. open "index.html" with PyCharm or whatever code-editor you like:<br>
-              4. Now you can start copy and paste stuff from this page to your index.html file. Remember to put them inside &#x3C;div class=&#x22;container&#x22;&#x3E; &#x3C;/div&#x3E;.
-            </p>
+          <div class="seven columns">
+<ol>
+<li><p>Right click -> Save As <a href="./index.html">THIS FILE</a> as <em>index.html</em>.</p>
+</li>
+<li><p>Open <em>index.html</em> with PyCharm or whatever code-editor you like:</p>
+</li>
+<li><p>Start adding HTML elements by copy and paste from this page in between the <code>&lt;div class=&quot;container&quot;&gt; &lt;/div&gt;</code> tags.</p>
+</li>
+</ol>
           </div>
-          <div class="six columns">
+          <div class="five columns">
 <pre>
 <code>
-+ /Imperial-Visualizations/tutorials/HTML/
-| + images/
-| |- imperial-black-logo.svg
-| |- imperial-logo.svg
-| |- imperial-white-logo.svg
+Recommonded folder structure for your <em>index.html</em>:
+
++ HTML/
+| + assets/
 | + scripts/
 | |- program.js
 | + styles/
-| |- styles.css
 |- index.html
-|- DoubleClickMe.html.html
 </code>
 </pre>
           </div>
         </div>
         <div class="row">
           <div class="twelve columns">
-
-<pre>
-<code>
-<strong>index.html</strong>
-&#x3C;!doctype html&#x3E;
-&#x3C;!-- **This line is extremely important, it tells the browser to use HTML5 instead of HTML 4.1**  --&#x3E;
-&#x3C;html&#x3E;
-&#x3C;head&#x3E;
-    &#x3C;meta charset=&#x22;utf-8&#x22;&#x3E;
-    &#x3C;meta name=&#x22;viewport&#x22; content=&#x22;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no&#x22;&#x3E;
-    &#x3C;title&#x3E;Imperial Visualisations&#x3C;/title&#x3E;
-    &#x3C;link rel=&#x22;stylesheet&#x22; href=&#x22;styles/styles.css&#x22;&#x3E;
-    &#x3C;!-- importing style.css --&#x3E;
-    &#x3C;!-- **You are not suppose to change style.css !!**  --&#x3E;
-    &#x3C;style type=&#x22;text/css&#x22;&#x3E;
-        /* overwrite style.css styles*/
-    &#x3C;/style&#x3E;
-&#x3C;/head&#x3E;
-&#x3C;body&#x3E;
-    &#x3C;div class=&#x22;container&#x22;&#x3E;
-        &#x3C;h1&#x3E;Big title&#x3C;/h1&#x3E;
-        &#x3C;div class=&#x22;row&#x22;&#x3E;
-            &#x3C;div class=&#x22;eight columns&#x22;&#x3E;
-                &#x3C;p&#x3E;Put your graph here&#x3C;/p&#x3E;
-            &#x3C;/div&#x3E;
-            &#x3C;div class=&#x22;four columns&#x22;&#x3E;
-                &#x3C;p&#x3E;And probobly put your interface here&#x3C;/p&#x3E;
-            &#x3C;/div&#x3E;
-        &#x3C;/div&#x3E;
-    &#x3C;/div&#x3E;
-    &#x3C;br&#x3E;&#x3C;br&#x3E;&#x3C;br&#x3E;
-    &#x3C;script src=&#x22;scripts/program.js&#x22;&#x3E;&#x3C;/script&#x3E;
-    &#x3C;!-- You should put your javascript code in program.js --&#x3E;
-    &#x3C;script&#x3E;
-        // or you can put your javascript here as well.
-    &#x3C;/script&#x3E;
-&#x3C;/body&#x3E;
-&#x3C;/html&#x3E;
-
-</code>
-</pre>
+<p>4. This is what your <em>index.html</em> should look like right now:</p>
+<pre><code><strong>index.html</strong>
+&lt;!doctype html&gt;
+&lt;!-- **This line is extremely important, it tells the browser to use HTML5 instead of HTML 4.1**  --&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot;&gt;
+    &lt;title&gt;Imperial Visualisations&lt;/title&gt;
+    &lt;link rel=&quot;icon&quot; href=&quot;https://www.imperial.ac.uk/T4Assets/favicon-196x196.png&quot; type=&quot;image/x-icon&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://manglekuo.com/i-v/styles.css?v=1&quot;&gt;
+    &lt;style type=&quot;text/css&quot;&gt;
+        /* css here */
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class=&quot;container&quot;&gt;
+        &lt;h1&gt;Primary titles&lt;/h1&gt;
+        &lt;div class=&quot;row&quot;&gt;
+            &lt;div class=&quot;twelve columns&quot;&gt;
+              Your Stuffs
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;br&gt;&lt;br&gt;&lt;br&gt;
+    &lt;script src=&quot;scripts/program.js&quot;&gt;&lt;/script&gt;&lt;!-- You can iether put your code 
+                                                    inside this file ( which you&#39;ll 
+                                                    have to create yourself) --&gt;
+    &lt;script&gt;
+        // Or put your javascript code here.
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
           </div>
         </div>
     </div>
@@ -129,10 +122,10 @@
                 <span id="Menu">Menu</span>
                 <ul>
                 <li class="popover-item">
-                  <a class="popover-link" href="#dropdown">Dropdown</a>
+                  <a class="popover-link" href="#GettingStarted">Getting Started</a>
                 </li>
                 <li class="popover-item">
-                  <a class="popover-link" href="#GettingStarted">Getting Started</a>
+                  <a class="popover-link" href="#dropdown">Dropdown</a>
                 </li>
                 <li class="popover-item">
                   <a class="popover-link" href="#grid">Grid</a>
@@ -153,7 +146,10 @@
                   <a class="popover-link" href="#code">Code</a>
                 </li>
                 <li class="popover-item">
-                  <a class="popover-link" href="#tables">Tables</a>
+                  <a class="popover-link" href="#tabs">Tabs</a>
+                </li>
+                <li class="popover-item">
+                  <a class="popover-link" href="#tablesNmatrix">Tables & Matrix</a>
                 </li>
                 <li class="popover-item">
                   <a class="popover-link" href="#queries">Queries</a>
@@ -382,50 +378,106 @@ browser/device sizes) --&gt;
         <form>
           <div class="row">
             <div class="six columns">
-              <label for="exampleEmailInput">Your email</label>
-              <input class="u-full-width" type="email" placeholder="test@mailbox.com" id="exampleEmailInput">
+              <label>School email</label>
+              <input class="u-full-width" type="email" placeholder="ab1219@ic.ac.uk" id="email">
             </div>
             <div class="six columns">
-              <label for="exampleRecipientInput">Reason for contacting</label>
-              <select class="u-full-width" id="exampleRecipientInput">
-                <option value="Option 1">Questions</option>
-                <option value="Option 2">Admiration</option>
-                <option value="Option 3">Can I get your number?</option>
+              <label>Department</label>
+              <select class="u-full-width" id="department">
+              <optgroup label="Faculty of Engineering">
+                <option value="Aeronautics">Aeronautics</option>
+                <option value="Bioengineering">Bioengineering</option>
+                <option value="Chemical Engineering">Chemical Engineering</option>
+                <option value="Civil and Environmental Engineering">Civil and Environmental Engineering</option>
+                <option value="Computing">Computing</option>
+                <option value="Dyson School of Design Engineering">Dyson School of Design Engineering</option>
+                <option value="Earth Science and Engineering">Earth Science and Engineering</option>
+                <option value="Electrical and Electronic Engineering">Electrical and Electronic Engineering</option>
+                <option value="Materials">Materials</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+              </optgroup>
+              <optgroup label="Faculty of Medicine">
+                <option value="Institute of Clinical Sciences">Institute of Clinical Sciences</option>
+                <option value="Department of Medicine">Department of Medicine</option>
+                <option value="National Heart and Lung Institute">National Heart and Lung Institute</option>
+                <option value="School of Public Health">School of Public Health</option>
+                <option value="Department of Surgery and Cancer">Department of Surgery and Cancer</option>
+                <option value="Lee Kong Chian School of Medicine - London Office">Lee Kong Chian School of Medicine - London Office</option>
+                <option value="Imperial College Academic Health Science Centre">Imperial College Academic Health Science Centre</option>
+                <option value="Imperial College Healthcare NHS Trust">Imperial College Healthcare NHS Trust</option>
+              </optgroup>
+              <optgroup label="Faculty of Natural Sciences">
+                <option value="Chemistry">Chemistry</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Physics">Physics</option>
+                <option value="Life Sciences">Life Sciences</option>
+                <option value="Centre for Environmental Policy">Centre for Environmental Policy</option>
+              </optgroup>
+              <optgroup label="Imperial College Business School">
+                <option value="Finance">Finance</option>
+                <option value="Innovation and Entrepreneurship">Innovation and Entrepreneurship</option>
+                <option value="Management">Management</option>
+              </optgroup>
+              <optgroup label="Global challenge institutes">
+                <option value="Data Science Institute">Data Science Institute</option>
+                <option value="Grantham Institute - Climate Change and the Environment">Grantham Institute - Climate Change and the Environment</option>
+                <option value="Institute of Global Health Innovation">Institute of Global Health Innovation</option>
+                <option value="Energy Futures Lab">Energy Futures Lab</option>
+                <option value="Institute for Security Science and Technology">Institute for Security Science and Technology</option>
+                <option value="Institute for Molecular Science and Engineering">Institute for Molecular Science and Engineering</option>            
+              </optgroup>
+              <optgroup label="Education centres and schools">
+                <option value="Careers Service">Careers Service</option>
+                <option value="Centre for Academic English">Centre for Academic English</option>
+                <option value="Centre for Languages, Culture and Communication">Centre for Languages, Culture and Communication</option>
+                <option value="Educational Development Unit">Educational Development Unit</option>
+                <option value="Graduate School">Graduate School</option>
+                <option value="Library">Library</option>
+                <option value="Post Doc Development Centre">Post Doc Development Centre</option>
+                <option value="School of Professional Development">School of Professional Development</option>
+              </optgroup>
               </select>
             </div>
           </div>
-          <label for="exampleMessage">Message</label>
-          <textarea class="u-full-width" placeholder="Hi Dave &hellip;" id="exampleMessage"></textarea>
-
-          <label class="checkbox">
-              <input type="checkbox" checked /><span for="checkbox"></span>
-          </label>
-          <label class="checkboxTitle">Send a copy to yourself</label> 
-
-          <br>
-
-          <label class="radioTitle">My gender is: </label> 
-          <label class="radio">
-              <input type="radio" name="gender" checked /><span for="radio"></span>
-          </label>
-          <label class="radioLabel">Male</label> 
-          <label class="radio">
-              <input type="radio" name="gender" /><span for="radio"></span>
-          </label>
-          <label class="radioLabel">Female</label> 
-          <label class="radio">
-              <input type="radio" name="gender" /><span for="radio"></span>
-          </label>
-          <label class="radioLabel">Else/Prefer not to say</label> 
-
-          <label class="sliderTitle">Size: <span id="yourSliderIDDisplay" data-unit="meter">1meter</span></label> 
-          <label class="slider">
-          <input id="yourSliderID" class="inputs" type="range" value="1" min ="1" max="100" step ="1"/>
-          <span class="sliderMin">1</span><span class="sliderMax">100</span>
-          </label>
-
-
-          <input class="button-primary" type="submit" value="Submit">
+          <div class="row">
+            <div class="twelve columns"> 
+              <label>Feedbacks</label>
+              <textarea class="u-full-width" placeholder="Hi Dave &hellip;" id="feedbacks"></textarea>
+            </div>
+          </div>
+          <div class="row">
+          <div class="six columns">
+            <label class="radioTitle">My gender is: </label> 
+            <label class="radio">
+                <input type="radio" name="gender" checked /><span for="radio"></span>
+            </label>
+            <label class="radioLabel">Male</label> 
+            <label class="radio">
+                <input type="radio" name="gender" /><span for="radio"></span>
+            </label>
+            <label class="radioLabel">Female</label> 
+            <label class="radio">
+                <input type="radio" name="gender" /><span for="radio"></span>
+            </label>
+            <label class="radioLabel">Else/Prefer not to say</label> 
+          </div>
+          <div class="six columns">
+            <label class="sliderTitle">Overall Ranking: <span id="rankingDisplay" data-unit=" stars">1 stars</span></label> 
+            <label class="slider">
+            <input id="ranking" class="inputs" type="range" value="10" min ="0" max="10" step ="1"/>
+            <span class="sliderMin">0(worst)</span><span class="sliderMax">10(satisfactory)</span>
+            </label>
+          </div>
+          <div class="row">
+          <div class="twelve columns">
+            <label class="checkbox">
+                <input type="checkbox" id="sendAnonymously" checked /><span for="checkbox"></span>
+            </label>
+            <label class="checkboxTitle">Send anonymously</label> 
+            <br>
+            <input class="button-primary" type="button" value="Submit">
+          </div>
+          </div>
         </form>
       </div>
 
@@ -483,17 +535,21 @@ browser/device sizes) --&gt;
           &#x3C;input class=&#x22;button-primary&#x22; type=&#x22;submit&#x22; value=&#x22;Submit&#x22;&#x3E;
         &#x3C;/form&#x3E;
 
-&lt;!-- Always wrap checkbox and radio inputs in a label and use a &lt;span class="label-body"&gt; inside of it --&gt;
-&lt;!-- The complete slider includes two label tag, one with class "sliderTitle", one with class "slider". --&gt;
-&lt;!-- The slider value display requires the following jQuery to work: --&gt;
+&lt;!-- Note: The class .u-full-width is just a utility class shorthand for width: 100% --&gt;
 
+</code>
+</pre>
+<p> Always wrap checkbox and radio inputs in a label and use a <code>&lt;span class="label-body"&gt;&#x3C;/span&#x3E;</code> inside of it </p>
+<p> The complete slider includes two label tag, one with class "sliderTitle", one with class "slider". In the sliderTitle the ID of the span has to be the ID of the input element + "Display", for the value display to work. </p>
+<p> The slider value display requires the following jQuery to work: </p>
+
+<pre>
+<code>
 $("input[type=range]").each(function () {
   $(this).on('input', function(){
         $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
   });
 });
-
-&lt;!-- Note: The class .u-full-width is just a utility class shorthand for width: 100% --&gt;
 
 </code>
 </pre>
@@ -686,9 +742,9 @@ jQuery code:
     </div>
   </div>
 </div>
-    <!-- Tables -->
-    <div class="docs-section" id="tables">
-      <h3 class="docs-header">Tables</h3>
+    <!-- Tables & Matrix -->
+    <div class="docs-section" id="tablesNmatrix">
+      <h3 class="docs-header">Tables & Matrix</h3>
       <p>Be sure to use properly formed table markup with <code>&lt;thead&gt;</code> and <code>&lt;tbody&gt;</code> when building a <code>table</code>.</p>
       <div class="docs-example">
         <table class="u-full-width">
@@ -749,6 +805,126 @@ jQuery code:
 </code>
 </pre>
 <!-- ————————————————————————————————————————————————————— -->
+
+      <div class="docs-example">
+        <p>For matrix, just add the class &quot;matrix&quot; to the <code>&lt;table&gt;</code> tag, and use only <code>&lt;tbody&gt;</code>, <code>&lt;tr&gt;</code> and <code>&lt;td&gt;</code> inside it. Do not use <code>&lt;thead&gt;</code> or <code>&lt;th&gt;</code>. Here we are showing how you can wrap your matrices inside another table with the class &quot;matrixWrapper&quot; for easy formatting.</p>
+
+        <table class="matrixWrapper">
+          <tbody>
+            <tr>
+              <td>
+
+                    <table class="matrix">
+                      <tbody>
+                        <tr>
+                          <td>cos(θ)</td>
+                          <td>-sin(θ)</td>
+                        </tr>
+                        <tr>
+                          <td>sin(θ)</td>
+                          <td>cos(θ)</td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+              </td>
+              <td>×</td>
+              <td>
+
+                    <table class="matrix">
+                      <tbody>
+                        <tr>
+                          <td>x</td>
+                        </tr>
+                        <tr>
+                          <td>y</td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+              </td>
+              <td>＝</td>
+              <td>
+
+                    <table class="matrix">
+                      <tbody>
+                        <tr>
+                          <td>x cos(θ) - y sin(θ)</td>
+                        </tr>
+                        <tr>
+                          <td>x sin(θ) + y cos(θ)</td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+
+<!-- CODE EXAMPLE ———————————————————————————————————————— -->
+<pre class="code-example">
+<code class="code-example-body prettyprint">        &lt;table class=&quot;matrixWrapper&quot;&gt;
+          &lt;tbody&gt;
+            &lt;tr&gt;
+              &lt;td&gt;
+
+                    &lt;table class=&quot;matrix&quot;&gt;
+                      &lt;tbody&gt;
+                        &lt;tr&gt;
+                          &lt;td&gt;cos(θ)&lt;/td&gt;
+                          &lt;td&gt;-sin(θ)&lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr&gt;
+                          &lt;td&gt;sin(θ)&lt;/td&gt;
+                          &lt;td&gt;cos(θ)&lt;/td&gt;
+                        &lt;/tr&gt;
+                      &lt;/tbody&gt;
+                    &lt;/table&gt;
+
+              &lt;/td&gt;
+              &lt;td&gt;×&lt;/td&gt;
+              &lt;td&gt;
+
+                    &lt;table class=&quot;matrix&quot;&gt;
+                      &lt;tbody&gt;
+                        &lt;tr&gt;
+                          &lt;td&gt;x&lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr&gt;
+                          &lt;td&gt;y&lt;/td&gt;
+                        &lt;/tr&gt;
+                      &lt;/tbody&gt;
+                    &lt;/table&gt;
+
+              &lt;/td&gt;
+              &lt;td&gt;＝&lt;/td&gt;
+              &lt;td&gt;
+
+                    &lt;table class=&quot;matrix&quot;&gt;
+                      &lt;tbody&gt;
+                        &lt;tr&gt;
+                          &lt;td&gt;x cos(θ) - y sin(θ)&lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr&gt;
+                          &lt;td&gt;x sin(θ) + y cos(θ)&lt;/td&gt;
+                        &lt;/tr&gt;
+                      &lt;/tbody&gt;
+                    &lt;/table&gt;
+
+              &lt;/td&gt;
+            &lt;/tr&gt;
+          &lt;/tbody&gt;
+        &lt;/table&gt;
+</code>
+</pre>
+
+
+
+
 
 
     </div>
