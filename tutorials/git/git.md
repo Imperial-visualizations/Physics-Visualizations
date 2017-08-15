@@ -2,7 +2,7 @@
 
 *This is a basic tutorial to using git for file history and version control in this project. If you really want to make the most of this powerful tool I recommend reading and working through the "Pro Git" book by Scott Chacon and Ben Straub, particularly chapters 1, 2, and 3. It is available online at https://git-scm.com/book/en/v2.*
 
-In this tutorial the % sign is used to signify a placeholder. For example %username% would mean to use the relevant name.
+In this tutorial the % sign is used to signify a placeholder. For example %username% would mean to use the applicable username.
 
 ## Introduction
 
@@ -14,7 +14,7 @@ Git is a version control system (VCS) used for tracking and coordinating changes
 
 2. Contact Caroline Clewley with your GitHub username/email to be added to the Imperial-Visualizations repo.
 
-3. The owner of the repo can add collaborators by going to Repositories -> Imperial-Visualizations -> Settings -> Collaborators -> (scroll to bottom) Search by username, full name, or email address.
+3. The owner of the repo can add collaborators by going to *Repositories -> Imperial-Visualizations -> Settings -> Collaborators -> (scroll to bottom) Search by username, full name, or email address*.
 
 4. Work through the GitHub "Hello World" guide available at https://guides.github.com/activities/hello-world/ to get to grips with the basic concepts. 
 
@@ -26,17 +26,17 @@ GitKraken is a GUI (Graphic User Interface) git client that greatly speeds up th
 
 1. Download GitKraken https://www.gitkraken.com/ and log in with your GitHub account.
 
-2. Clone the Imperial-Visualizations repo by going to File -> Clone Repo -> Clone -> GitHub.com -> %owner username%/Imperial-Visualizations. Select a folder to clone to and press "Clone the repo!" (in this example I used a "UROP/Imperial Visualizations" folder which now contains a "GitHub-Tutorial" folder - the repo.)
+2. Clone the Imperial-Visualizations repo by going to *File -> Clone Repo -> Clone -> GitHub.com -> %owner username%/Imperial-Visualizations*. Select a folder to clone to and press *Clone the repo!* (in this example I used a *UROP/Imperial Visualizations* folder which now contains a *GitKraken-Tutorial* folder - the repo.)
 
  ![alt: clone-repo](images/gitkraken_2_clonerepo.gif)
 
-3. You are now ready to use GitKraken to contribute to the Imperial-Visualizations repo. Although you can simply read the rest of the tutorial, it is recommended to create a test repo and repeat the step 2 (above) for this new repo before continuing. You should first use this test repo to make sure that you understand the git features below. 
+3. You are now ready to use GitKraken to contribute to the Imperial-Visualizations repo. Although you can simply read the rest of the tutorial, it is recommended to create a test repo and repeat the step 2 (above) to clone this new repo before continuing. You should use this test repo to test, break, and mess around with git to make sure that you understand the features outlined below. 
 
    --create test repo-- 
 
 ## The Basics 
 
-This is the most important part of the whole tutorial. The content covered above is fairly straightforwards, but it is essential that you understand this section in order to make sure that your time spent using git to work collaboratively on this project goes as smoothly as possible.
+This is the most important part of the whole tutorial. The content covered above is fairly straightforwards, but it is essential that you understand this section (hopefully by working through it using a test repo) in order to make sure that your time spent using git to work collaboratively on this project goes as smoothly as possible. 
 
 ### Committing, Pushing, and Pulling 
 
@@ -48,23 +48,23 @@ Now that you have access to the repo you can make changes.
 
 2. **Committing**
 
-   Now that changes have been made we can now commit (save) the change as part of the project workflow. First select the files you want to commit the changes to and stage them (or use "Stage all changes" to do this for all files). In this example there are no changes to discard (careful since this reverts all changes since the last commit!), but this can be done by right clicking on files individually or by clicking "Discard all changes" to do this for all files.
+   Now that changes have been made we can now commit (save) the change as part of the project workflow. First select the files you want to commit the changes to and stage them (or use *Stage all changes* to do this for all files). In this example there are no changes to discard (careful since this reverts all changes since the last commit!), but this can be done by right clicking on files individually or by clicking *Discard all changes* to do this for all files.
 
  ![alt: stage-changes](images/basics_commit_2_stage.gif)
    
  >*Note*: Clicking on a file before staging also tells you what changes have been made since the last commit.
 
-   Now add a useful commit message and description so that others can see what changes have been made. The change can then be committed, which will appear as a new node in the directed acrylic graph (DAG).
+   Now add a useful commit message and description so that others can see what changes have been made. The change can then be committed, which will appear as a new node in the directed acyclic graph (DAG).
    
  ![alt: commit-changes](images/basics_commit_2_commit.gif)
    
-   Using commits means that our work at that stage is saved as part of the project workflow. This allows us to revert back to that repo (and hence file) state if anything goes wrong. To do this right click on the node, go to "reset %branch% to this commit" and choose how strongly to revert changes. In this case we are working on the master branch (more on branches later). 
+   Using commits means that our work at that stage is saved as part of the project workflow. This allows us to revert back to that repo (and hence file) state if anything goes wrong. To do this right click on the node, go to *reset %branch% to this commit* and choose how strongly to revert changes. In this case we are working on the master branch (more on branches later). 
    
    --revert changes to a commit--
    
 3. **Pushing**
 
-   Although the changes have been committed they have not yet been pushed online, so other collaborators accessing the repo cannot see them. This is the difference between local and remote files (covered in the next [section](https://anthonyli358.github.io/Imperial-Visualizations/git/git#local-and-remote-files "The Basics/Local and Remote Files")) and in order for other collaborators to see our changes we must first "Push" them. 
+   Although the changes have been committed they have not yet been pushed online, so other collaborators accessing the repo cannot see them. This is the difference between local and remote files (covered in the [next section](https://anthonyli358.github.io/Imperial-Visualizations/git/git#local-and-remote-files "The Basics/Local and Remote Files")) and in order for other collaborators to see our changes we must first *Push* them. 
 
    You can also perform multiple commits before pushing. This is especially useful for squashing fairly insignificant commits together or even completely resetting commits themselves, neither of which can be done once the commits are pushed online.
    
@@ -73,7 +73,7 @@ Now that you have access to the repo you can make changes.
 
 4. **Pulling**
 
-   If another collaborator pushes changes they will appear as remote changes. In this example imagine the changes made on the GitHub website represent those made by another collaborator. In order to apply these changes to our local files we must first "Pull" them to our local files. 
+   If another collaborator pushes changes they will appear as remote changes. In this example imagine the changes made on the GitHub website represent those made by another collaborator. In order to apply these changes to our local files we must first *Pull* them to our local files. 
 
    --make and pulls some changes--
    
@@ -89,7 +89,7 @@ Now that you have access to the repo you can make changes.
 
 ### Local and Remote Files
 
-We discussed these a lot in the previous [section](https://anthonyli358.github.io/Imperial-Visualizations/git/git#the-basics "The Basics") but what exactly is the difference?
+We discussed these a lot in the [previous section](https://anthonyli358.github.io/Imperial-Visualizations/git/git#the-basics "The Basics") but what exactly is the difference?
 
 1. **Local Files** 
 
@@ -109,7 +109,7 @@ Branches are a very powerful tool for software development but can be quite tric
 
 1. **Starting a Branch**  
 
-   A branch can be started from any commit by right clicking and selecting "Create branch here". After naming the branch (ideally with its purpose or following a defined branch naming convention) this copies the repo state at that commit to a new branch. You must first push a locally created branch to have it appear in the remote repo.
+   A branch can be started from any commit by right clicking and selecting *Create branch here*. After naming the branch (ideally with its purpose or following a defined branch naming convention) this copies the repo state at that commit to a new branch. You must first push a locally created branch to have it appear in the remote repo.
 
    -- starting branch--
 
@@ -123,13 +123,13 @@ Branches are a very powerful tool for software development but can be quite tric
 
 3. **Branch Navigation**
 
-   To create branches under an overarching subgroup, folders can be created by naming the branch using "%subgroup%/%purpose%" e.g.  "fix/particle_physics" would create a "particle_physics" branch under a "fix" folder. All branches in the repo are shown in GitKraken under "REMOTE" on the lefthand toolbar. To pull a branch to your computer double click on it and it should now also appear under "LOCAL". 
+   To create branches under an overarching subgroup, folders can be created by naming the branch using *%subgroup%/%purpose%* e.g.  *fix/particle_physics* would create a *particle_physics* branch under a *fix* folder. All branches in the repo are shown in GitKraken under *REMOTE* on the lefthand toolbar. To pull a branch to your computer double click on it and it should now also appear under *LOCAL*. 
    
  ![alt: local-remote-branches](images/other_branches_3_local_remote.png)
    
-   In order to stay on task you should ideally only pull branches that you're working on to your "LOCAL". You can also freely delete branches from your "LOCAL" and this won't affect any "REMOTE" branches but will help keep your number of working branches a bit cleaner.
+   In order to stay on task you should ideally only pull branches that you're working on to your *LOCAL*. You can also freely delete local branches and this won't affect any *REMOTE* branches but will help keep your number of working branches a bit cleaner.
    
-   For each branch GitKraken will automatically tell you if you're behind remote (have commits to pull) or ahead (have commits to push). In the example above, the local "fix/particle_physics" branch is 1 commit ahead of remote whilst "bugs/plotly" is 3 commits behind. GitKraken also shows the position of the local and remote branches on the DAG, with the repo owner's GitHub avatar for remote and a computer icon for the local branch.
+   For each branch GitKraken will automatically tell you if you're behind remote (have commits to pull) or ahead (have commits to push). In the example above, the local *fix/particle_physics* branch is 1 commit ahead of remote whilst *bugs/plotly* is 3 commits behind. GitKraken also shows the position of the local and remote branches on the DAG, with the repo owner's GitHub avatar for remote and a computer icon for the local branch.
 
 4. **Switching Branches**
 
@@ -137,15 +137,15 @@ Branches are a very powerful tool for software development but can be quite tric
    
    --double click --
    
-   Occasionally if you personally want to move a specific file from another branch for reference you can 'cheat' by copying that file outside your "%local repo%" folder. Then when you switch branches the file is still there (since it is no longer in the local repo which is being changed), and you can then copy that file back into the local repo to your own working branch for reference. 
+   Occasionally if you personally want to move a specific file from another branch for reference you can 'cheat' by copying that file outside your *%local repo%* folder. Upon switching branches the file will still be there (since it is no longer in the local repo which is being changed), and you can then copy that file back into the local repo for your own working branch for reference. 
    
    --cheating--
    
 5. **Hiding Branches**
 
-   Hiding branches is a useful tool to ensure you only look at branches relevant to your own work. For example if you're working on the "fix/particle_physics" branch and don't want to see any updates to the "bugs/plotly" branch you can hide that branch. Local and remote branches must be hidden separately. 
+   Hiding branches is a useful tool to ensure you only look at branches relevant to your own work. For example if you're working on the *fix/particle_physics* branch and don't want to see any updates to the *bugs/plotly* branch you can hide that branch. Local and remote branches must be hidden separately. 
    
-   It makes sense to first delete the branch it from "LOCAL" since if you're hiding it generally means you're not working on it. Then you can freely hide it from "REMOTE". You can also hide the branch from "LOCAL" if for example not working on it is a temporary. In the example below we delete the local "bugs/plotly" branch but hide the local "bugs/particle_plotting" branch, then hide remote for a similar result.
+   It makes sense to first delete the branch it from *LOCAL* since if you're hiding it generally means you're not working on it. Then you can freely hide it from *REMOTE*. You can also hide the local branches if for example you are only not working on it temporarily. In the example below we delete the local *bugs/plotly* branch but hide the local *bugs/particle_plotting* branch, then hide remote for a similar result.
    
    --hiding branches--
 
@@ -155,41 +155,43 @@ Stashing and Popping can be used to store work for later without committing, but
 
 1. **Stashing WIP to Switch Branches**
 
-   If you have WIP and attempt to change branches, you will receive an error message saying "Checkout Failed". This is because we need to first commit any WIP but if the work isn't useful enough to commit yet then we can "Stash" it for later.
+   If you have WIP and attempt to change branches, you will receive an error message saying *Checkout Failed*. This is because we need to first commit any WIP but if the work isn't useful enough to commit yet then we can *Stash* it for later.
 
    --attempt to switch, then stash and switch--
 
 2. **Popping a Stash**
 
-   Stashes appear as a dotted square node on the DAG. Upon returning to the branch with the stashed work we can "Pop" the stash to retrieve our WIP.
+   Stashes appear as a dotted square node on the DAG. Upon returning to the branch with the stashed work we can *Pop* the stash to retrieve our WIP.
 
    --return to branch, pop stash and show work returning to WIP--
+   
+   It is also possible to pop stashes onto other branches but this is rarely used since the development of a file usually differs between branches.
 
 3. **Stash Navigation**
 
-   Any stashes will also appear on the left under "STASH".
-
-   --show stash list--
+   When stashes are present they will also appear on the lefthand toolbar under *STASH*, which will be located below the *REMOTE* tab (see [Branch Navigation](https://anthonyli358.github.io/Imperial-Visualizations/git/git#branch-navigation "Branch Navigation") where there are no stashes so the tab is automatically hidden). 
+   
+   Stashes can be easily deleted by right clicking on them and clicking *Delete Stash*, but be careful to first make sure that all the stashed work is not needed or has been committed.
 
 ### Merging and Pull Requests
 
-After completing work in a branch we need to merge it back to the main development branch. This ensures that the overall project workflow is in a single place, in this case a branch. For example, currently when a subgroup completes a visualization it is merged to the dev (development) branch. To avoid losing any work only someone who is comfortable with how git works should merge branches (and ideally by pull request - see [Workflow](https://anthonyli358.github.io/Imperial-Visualizations/git/git#workflow "Workflow")). 
+After completing work in a branch we need to merge it back to the main development branch. This ensures that the overall project workflow is in a single place, in this case a branch. For example, currently when a subgroup completes a visualization it is merged to the *dev* (development) branch. To avoid losing any work only someone who is comfortable with how git works should merge branches (and ideally by pull request - see [Workflow](https://anthonyli358.github.io/Imperial-Visualizations/git/git#workflow "Workflow")). 
 
 1. **Merging Branches**
 
-   To merge a branch to another branch, first work in the branch that you want to merge to (e.g. dev) and right click on the branch you want to merge to it. Then simply click on "Merge %branch% to into %branch%" and commit the change. 
+   To merge a branch to another branch, first work in the branch that you want to merge to (e.g. dev) and right click on the branch you want to merge to it. Then simply click on *Merge %branch% to into %branch%* and commit the change. 
 
    --right click and merge--
 
 2. **Resolving Merge Conflicts**
 
-   Merge conflicts will arise if a file has been changed both in the branch being merged and in the branch being merged to. GitKraken has a very useful tool which allows us to see and resolve these conflicts. Simply click on the conflicted file and a view of the file in both branches will be opened. Conflicted code will be highlighted so simply tick the code that you want to keep (you can even keep the code from both branches) then click on the "Save and mark resolved" button when done. You can now commit the change.
+   Merge conflicts will arise if a file has been changed both in the branch being merged and in the branch being merged to. GitKraken has a very useful tool which allows us to see and resolve these conflicts. Simply click on the conflicted file and a view of the file in both branches will be opened. Conflicted code will be highlighted so simply tick the code that you want to keep (you can even keep the code from both branches) then click on the *Save and mark resolved* button when done. You can now commit the change.
    
    --mark some as resolved and save and commit--
 
 3. **Pull Requests** 
 
-   It is also possible to merge via a pull request Here when right clicking we use "Push %branch% and start a pull request to %branch%" instead of simply merging. This starts a pull request online where everyone collaborating on the repo can view the commits that have been made to the branch being merged. They can then review and comment on the commits to suggest their thoughts or possible changes, ensuring that everyone agrees that the commits should be applied before a merge is completed. 
+   It is also possible to merge via a pull request Here when right clicking we use *Push %branch% and start a pull request to %branch%* instead of simply merging. This starts a pull request online where everyone collaborating on the repo can view the commits that have been made to the branch being merged. They can then review and comment on the commits to suggest their thoughts or possible changes, ensuring that everyone agrees that the commits should be applied before a merge is completed. 
    
    --show and pull request--
    
@@ -199,23 +201,23 @@ After completing work in a branch we need to merge it back to the main developme
 
 1. **Current Workflow**
 
-   Our current workflow uses "Long-Running Branches". We currently have master (merge completed work for release) and dev (merge "finished" work for testing and feedback) branches as the long running branches. The master branch should only be merged to from dev. Sub-branches include translator and tutorial branches under the "all" subgroup as anyone can contribute to these, and EM (electromagnetism), maths, and mechanics branches under the "visualizations" subgroup. These are the three visualization development streams for the 2017 project. 
+   Our current workflow uses "Long-Running Branches". We currently have *master* (merge completed work for release) and *dev* (merge 'finished' work for testing and feedback) branches as the long running branches. The master branch should only be merged to from dev. Sub-branches include translator and tutorial branches under the *all* subgroup as anyone can contribute to these, and EM (electromagnetism), maths, and mechanics branches under the *visualizations* subgroup. These are the three visualization development streams for the 2017 project. 
 
 >*Note*: It is recommended to use pull requests for all merging. Currently the dev and master branches are protected to only be merged by pull request.
 
-![alt: progressive-stability-branching](images/other_workflows_1_silo.png)
+ ![alt: progressive-stability-branching](images/other_workflows_1_silo.png)
 
-   --“silo” view of progressive-stability branching from the "Pro Git" book. Available at https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows (2017)--
+   A “silo” view of progressive-stability branching from the "Pro Git" book (2014). Available at https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows {July 2017}.
 
-   The image above shows a "silo" view of a commonly used project workflow known as "Progressive-Stability Branching". This year we used a variation of this since not everyone was fully comfortable with git. Our main work "silos" were just the three long-running visualization subgroup branches with an overall (not singular) purpose. Also, there were no visualizations yet created at this point, so discussion and file sharing between the overall group and particularly within subgroups was very important. Files where everyone should use the same copy of the file were pushed onto the "all/tutorials" branch where e.g. this tutorial and the css stylesheet were worked on. The "all/translator" branch was for a Python-Javascript plotly translator project undertaken this year.
+   The image above shows a "silo" view of a commonly used project workflow known as progressive-stability branching. This year we used a variation of this since not everyone was fully comfortable with git. Our main work "silos" were just the three long-running visualization subgroup branches with an overall (not singular) purpose. Also, there were no visualizations yet created at this point, so discussion and file sharing between the overall group and particularly within subgroups was very important. Files where everyone should use the same copy of the file were pushed onto the *all/tutorials* branch where e.g. this tutorial and the css stylesheet were worked on. The *all/translator* branch was for a Python-Javascript plotly translator project undertaken this year.
 
-![alt: current-branching-structure](images/other_workflows_1_current.png)
+ ![alt: current-branching-structure](images/other_workflows_1_current.png)
    
-   The branching structure used this year, to keep the DAG in GitKraken focused we currently use the "Hide" feature outlined [previously](https://anthonyli358.github.io/Imperial-Visualizations/git/git#hiding-branches "Hiding Branches") to hide branches unrelated to our personal work.
+   The branching structure used this year, to keep the DAG in GitKraken focused we currently use the *Hide* feature [outlined previously](https://anthonyli358.github.io/Imperial-Visualizations/git/git#hiding-branches "Hiding Branches") to hide branches unrelated to our personal work.
 
 2. **Other Possible Workflows**
 
-   If everyone is comfortable with git it may be better to remove the main visualization subgroup branches and have everyone create "Topic" branches straight from dev to focus on their individual purpose. Since tutorials and the translator should hopefully be completed this year, there would only be main two long-running branches - master (again merge completed work for release) and dev (merge completed topic branches). This would create a cleaner workflow and makes file sharing easier (all files readily available to everyone on dev), but does require absolutely every team member to be confident with branches. Branches would be deleted once merged since they would no longer be needed (no need to worry - commits are saved in the git history). An example branch naming convention is outlined below:
+   If everyone is comfortable with git it may be better to remove the main visualization subgroup branches and have everyone create "Topic" branches straight from dev to focus on their individual purpose. Since tutorials and the translator should hopefully be completed this year, there would only be main two long-running branches - *master* (again merge completed work for release) and *dev* (merge completed topic branches). This would create a cleaner workflow and makes file sharing easier (all files readily available to everyone on dev), but does require absolutely every team member to be confident with branches. Branches would be deleted once merged since they would no longer be needed (no need to worry - commits are saved in the git history). An example branch naming convention is outlined below:
    
 >**Branch naming convention:**  
 >* feat: Feature being added or expanded
@@ -231,7 +233,7 @@ After completing work in a branch we need to merge it back to the main developme
 
 ## Further Reading
 
-You've now reached the end of this tutorial, which has hopefully covered all the core features of git that you will need for this project. As mentioned at the very beginning, if you want to know more about anything covered in this tutorial or just more about git in general, the "Pro Git" book by Scott Chacon and Ben Straub is available at https://git-scm.com/book/en/v2. It is a fantastic resource and I highly recommend having a look if time allows.
+You've now reached the end of this tutorial, which has hopefully covered all the core features of git that you will need for this project. As mentioned at the very beginning, if you want to know more about anything covered in this tutorial or just more about git in general, the "Pro Git" book by Scott Chacon and Ben Straub is available at https://git-scm.com/book/en/v2. It is a fantastic resource and I highly suggest having a look if time allows.
 
 _________________________________________________________________________________________________
 
