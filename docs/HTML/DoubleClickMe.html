@@ -41,6 +41,7 @@
   <div class="container">
     <section class="header">
       <h1 class="title">Imperial Visualisation Cheatsheet</h1>
+      <h6>This page is an alternation of the contents on <a href="http://getskeleton.com/#">http://getskeleton.com/</a>, which is also what the Imperial Visualisation css style is based on.</h6>
     </section>
               
     <!-- README -->
@@ -151,6 +152,9 @@
                 </li>
                 <li class="popover-item">
                   <a class="popover-link" href="#code">Code</a>
+                </li>
+                <li class="popover-item">
+                  <a class="popover-link" href="#tabs">Tabs</a>
                 </li>
                 <li class="popover-item">
                   <a class="popover-link" href="#tables">Tables</a>
@@ -382,50 +386,106 @@ browser/device sizes) --&gt;
         <form>
           <div class="row">
             <div class="six columns">
-              <label for="exampleEmailInput">Your email</label>
-              <input class="u-full-width" type="email" placeholder="test@mailbox.com" id="exampleEmailInput">
+              <label>School email</label>
+              <input class="u-full-width" type="email" placeholder="ab1219@ic.ac.uk" id="email">
             </div>
             <div class="six columns">
-              <label for="exampleRecipientInput">Reason for contacting</label>
-              <select class="u-full-width" id="exampleRecipientInput">
-                <option value="Option 1">Questions</option>
-                <option value="Option 2">Admiration</option>
-                <option value="Option 3">Can I get your number?</option>
+              <label>Department</label>
+              <select class="u-full-width" id="department">
+              <optgroup label="Faculty of Engineering">
+                <option value="Aeronautics">Aeronautics</option>
+                <option value="Bioengineering">Bioengineering</option>
+                <option value="Chemical Engineering">Chemical Engineering</option>
+                <option value="Civil and Environmental Engineering">Civil and Environmental Engineering</option>
+                <option value="Computing">Computing</option>
+                <option value="Dyson School of Design Engineering">Dyson School of Design Engineering</option>
+                <option value="Earth Science and Engineering">Earth Science and Engineering</option>
+                <option value="Electrical and Electronic Engineering">Electrical and Electronic Engineering</option>
+                <option value="Materials">Materials</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+              </optgroup>
+              <optgroup label="Faculty of Medicine">
+                <option value="Institute of Clinical Sciences">Institute of Clinical Sciences</option>
+                <option value="Department of Medicine">Department of Medicine</option>
+                <option value="National Heart and Lung Institute">National Heart and Lung Institute</option>
+                <option value="School of Public Health">School of Public Health</option>
+                <option value="Department of Surgery and Cancer">Department of Surgery and Cancer</option>
+                <option value="Lee Kong Chian School of Medicine - London Office">Lee Kong Chian School of Medicine - London Office</option>
+                <option value="Imperial College Academic Health Science Centre">Imperial College Academic Health Science Centre</option>
+                <option value="Imperial College Healthcare NHS Trust">Imperial College Healthcare NHS Trust</option>
+              </optgroup>
+              <optgroup label="Faculty of Natural Sciences">
+                <option value="Chemistry">Chemistry</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Physics">Physics</option>
+                <option value="Life Sciences">Life Sciences</option>
+                <option value="Centre for Environmental Policy">Centre for Environmental Policy</option>
+              </optgroup>
+              <optgroup label="Imperial College Business School">
+                <option value="Finance">Finance</option>
+                <option value="Innovation and Entrepreneurship">Innovation and Entrepreneurship</option>
+                <option value="Management">Management</option>
+              </optgroup>
+              <optgroup label="Global challenge institutes">
+                <option value="Data Science Institute">Data Science Institute</option>
+                <option value="Grantham Institute - Climate Change and the Environment">Grantham Institute - Climate Change and the Environment</option>
+                <option value="Institute of Global Health Innovation">Institute of Global Health Innovation</option>
+                <option value="Energy Futures Lab">Energy Futures Lab</option>
+                <option value="Institute for Security Science and Technology">Institute for Security Science and Technology</option>
+                <option value="Institute for Molecular Science and Engineering">Institute for Molecular Science and Engineering</option>            
+              </optgroup>
+              <optgroup label="Education centres and schools">
+                <option value="Careers Service">Careers Service</option>
+                <option value="Centre for Academic English">Centre for Academic English</option>
+                <option value="Centre for Languages, Culture and Communication">Centre for Languages, Culture and Communication</option>
+                <option value="Educational Development Unit">Educational Development Unit</option>
+                <option value="Graduate School">Graduate School</option>
+                <option value="Library">Library</option>
+                <option value="Post Doc Development Centre">Post Doc Development Centre</option>
+                <option value="School of Professional Development">School of Professional Development</option>
+              </optgroup>
               </select>
             </div>
           </div>
-          <label for="exampleMessage">Message</label>
-          <textarea class="u-full-width" placeholder="Hi Dave &hellip;" id="exampleMessage"></textarea>
-
-          <label class="checkbox">
-              <input type="checkbox" checked /><span for="checkbox"></span>
-          </label>
-          <label class="checkboxTitle">Send a copy to yourself</label> 
-
-          <br>
-
-          <label class="radioTitle">My gender is: </label> 
-          <label class="radio">
-              <input type="radio" name="gender" checked /><span for="radio"></span>
-          </label>
-          <label class="radioLabel">Male</label> 
-          <label class="radio">
-              <input type="radio" name="gender" /><span for="radio"></span>
-          </label>
-          <label class="radioLabel">Female</label> 
-          <label class="radio">
-              <input type="radio" name="gender" /><span for="radio"></span>
-          </label>
-          <label class="radioLabel">Else/Prefer not to say</label> 
-
-          <label class="sliderTitle">Size: <span id="yourSliderIDDisplay" data-unit="meter">1meter</span></label> 
-          <label class="slider">
-          <input id="yourSliderID" class="inputs" type="range" value="1" min ="1" max="100" step ="1"/>
-          <span class="sliderMin">1</span><span class="sliderMax">100</span>
-          </label>
-
-
-          <input class="button-primary" type="submit" value="Submit">
+          <div class="row">
+            <div class="twelve columns"> 
+              <label>Feedbacks</label>
+              <textarea class="u-full-width" placeholder="Hi Dave &hellip;" id="feedbacks"></textarea>
+            </div>
+          </div>
+          <div class="row">
+          <div class="six columns">
+            <label class="radioTitle">My gender is: </label> 
+            <label class="radio">
+                <input type="radio" name="gender" checked /><span for="radio"></span>
+            </label>
+            <label class="radioLabel">Male</label> 
+            <label class="radio">
+                <input type="radio" name="gender" /><span for="radio"></span>
+            </label>
+            <label class="radioLabel">Female</label> 
+            <label class="radio">
+                <input type="radio" name="gender" /><span for="radio"></span>
+            </label>
+            <label class="radioLabel">Else/Prefer not to say</label> 
+          </div>
+          <div class="six columns">
+            <label class="sliderTitle">Overall Ranking: <span id="rankingDisplay" data-unit=" stars">1 stars</span></label> 
+            <label class="slider">
+            <input id="ranking" class="inputs" type="range" value="10" min ="0" max="10" step ="1"/>
+            <span class="sliderMin">0(worst)</span><span class="sliderMax">10(satisfactory)</span>
+            </label>
+          </div>
+          <div class="row">
+          <div class="twelve columns">
+            <label class="checkbox">
+                <input type="checkbox" id="sendAnonymously" checked /><span for="checkbox"></span>
+            </label>
+            <label class="checkboxTitle">Send anonymously</label> 
+            <br>
+            <input class="button-primary" type="button" value="Submit">
+          </div>
+          </div>
         </form>
       </div>
 

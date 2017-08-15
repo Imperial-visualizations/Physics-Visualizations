@@ -1,4 +1,4 @@
-
+ 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +9,7 @@
   <title>Imperial Visualisation</title>
   <meta name="description" content="">
   <meta name="author" content="">
-  <link rel = "icon" href = "images/favicon.ico" type="image/x-icon">
+  <link rel = "icon" href = "https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
 
   <!-- Mobile Specific Metas
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -134,11 +134,8 @@
     }
     .colourTiles:hover{
       box-shadow:  0 1px 5px rgba(0,0,0,.1),
-                   0 1px 3px rgba(0,0,0,.3),
-                   0 3px 5px rgba(0,0,0,.2),
                    0 5px 10px rgba(0,0,0,.25),
-                   0 10px 10px rgba(0,0,0,.2),
-                   0 20px 20px rgba(0,0,0,.15);
+                   0 10px 10px rgba(0,0,0,.2);
     }
     .colourTiles:active{
       box-shadow:  0 0px 0px #fff;
@@ -182,13 +179,13 @@
       <h1 class="title">HTML DOM: CSS, Javascript & jQuery</h1>
           <h2 id="getting-started">Getting Started</h2>
         <div class="row">
-          <div class="six columns">
+          <div class="seven columns">
 <ol>
-<li><p>Have your files form the HTML tutorial ready, or download them from <em>/Imperial-Visualizations/tutorials/DOM/</em></p>
+<li><p>Right click -> Save As <a href="./index.html">THIS FILE</a> as <em>index.html</em>.</p>
 </li>
 <li><p>Open <em>index.html</em> with PyCharm or whatever code-editor you like:</p>
 </li>
-<li><p>If your <em>index.html</em> is from <em>/tutorials/HTML/</em>, you need to add one extra line:</p>
+<li><p>If you didn't do right click save as but have your <em>index.html</em> from the HTML tutorial instead, you need to add one extra line:</p>
 <pre><code> &lt;script src=&quot;https://code.jquery.com/jquery-3.2.1.min.js&quot;&gt;&lt;/script&gt;
 </code></pre><p> before the <code>&lt;script src=&quot;scripts/program.js&quot;&gt;&lt;/script&gt;</code>.</p>
 </li>
@@ -196,21 +193,17 @@
 </li>
 </ol>
           </div>
-          <div class="six columns">
+          <div class="five columns">
 <pre>
 <code>
-For this tutorial, you'll need:
+Recommonded folder structure for your <em>index.html</em>:
 
-+ /Imperial-Visualizations/tutorials/DOM/
++ DOM/
 | + images/
-| |- imperial-white-logo.svg
-| |- favicon.ico
 | + scripts/
 | |- program.js
 | + styles/
-| |- styles.css
 |- index.html
-|- DoubleClickMe.html
 </code>
 </pre>
           </div>
@@ -225,7 +218,7 @@ For this tutorial, you'll need:
     &lt;meta charset=&quot;utf-8&quot;&gt;
     &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot;&gt;
     &lt;title&gt;Imperial Visualisations&lt;/title&gt;
-    &lt;link rel=&quot;icon&quot; href=&quot;images/favicon.ico&quot; type=&quot;image/x-icon&quot;&gt;
+    &lt;link rel=&quot;icon&quot; href=&quot;https://www.imperial.ac.uk/T4Assets/favicon-196x196.png&quot; type=&quot;image/x-icon&quot;&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://manglekuo.com/i-v/styles.css?v=1&quot;&gt;
     &lt;style type=&quot;text/css&quot;&gt;
         /* css here */
@@ -233,31 +226,27 @@ For this tutorial, you'll need:
 &lt;/head&gt;
 &lt;body&gt;
     &lt;div class=&quot;container&quot;&gt;
-        &lt;h1&gt;jQuery examples&lt;/h1&gt;
+        &lt;h1&gt;DOM examples&lt;/h1&gt;
         &lt;div class=&quot;row&quot;&gt;
             &lt;div class=&quot;eight columns&quot;&gt;
-                &lt;p&gt;I am some content&lt;/p&gt;
+                &lt;p&gt;I could be your graph&lt;/p&gt;
             &lt;/div&gt;
-            &lt;h4&gt;Controllers&lt;/h4&gt;
             &lt;div class=&quot;four columns&quot;&gt;
-                &lt;label class=&quot;sliderTitle&quot;&gt;Size: &lt;span id=&quot;textSizeDisplay&quot; data-unit=&quot;px&quot;&gt;1px&lt;/span&gt;&lt;/label&gt; 
-                &lt;label class=&quot;slider&quot;&gt;
-                &lt;input id=&quot;textSize&quot; class=&quot;inputs&quot; type=&quot;range&quot; value=&quot;1&quot; min =&quot;1&quot; max=&quot;100&quot; step =&quot;1&quot;/&gt;
-                &lt;span class=&quot;sliderMin&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;sliderMax&quot;&gt;100&lt;/span&gt;
-                &lt;/label&gt;
-                &lt;input id=&quot;toggleColourButton&quot; class=&quot;inputs&quot; type=&quot;button&quot; value=&quot;toggleColour&quot;/&gt;
+                I could be your controllers
             &lt;/div&gt;
         &lt;/div&gt;
     &lt;/div&gt;
     &lt;br&gt;&lt;br&gt;&lt;br&gt;
     &lt;script src=&quot;https://code.jquery.com/jquery-3.2.1.min.js&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;scripts/program.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;scripts/program.js&quot;&gt;&lt;/script&gt;&lt;!-- You can iether put your code 
+                                                    inside this file ( which you&#39;ll 
+                                                    have to create yourself) --&gt;
     &lt;script&gt;
-        // javascript or jQuery here.
+        // Or put your javascript/jQuery code here.
     &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;pre
-</code></>
+&lt;/html&gt;
+</code></pre>
           </div>
         </div>
         <div class="row">
@@ -379,6 +368,255 @@ For this tutorial, you'll need:
 <h3 id="4-ta-dah">4. Ta-dah</h3>
 <div class="playStopButtonV3">▶︎ PLAY</div>
 (Sorry you don't get the sound effect)
+<br><br><br>
+          </div>
+        </div>
+        <h2 id="css-basics">CSS Basics</h2>
+        <div class="row">
+          <div class="twelve columns">
+<p><strong> Go to <a href="https://www.w3schools.com/css/">https://www.w3schools.com/css/</a></strong></p>
+          </div>
+        </div>
+        <h2 id="javascript-basics">Javascript Basics</h2>
+        <div class="row">
+          <div class="twelve columns">
+<p><strong> This section tells you what you <em>need</em> to know when coding with Javascript </strong></p>
+<h5 id="keep-in-mind-">Keep in mind..</h5>
+<ol>
+<li>Don&#39;t forget to add semi-colon(;) at the end of each statement.</li>
+<li>parseFloat() before summation. (Javascript uses &quot;+&quot; for both string joining and number summation)</li>
+<li>Use || for &quot;or&quot;, &amp;&amp; for &quot;and&quot; in if statement</li>
+<li>It&#39;s a dynamic typed programming language. (See below)</li>
+<li>Don&#39;t use ** or ^ for power</li>
+<li>Variables outside any functions are global by default, and can be accessed within any defined functions.</li>
+</ol>
+<h3 id="1-it-uses-instead-of-whitespaces-indent-to-indicate-block-of-code-">1. It uses &quot;{}&quot; instead of whitespaces/indent to indicate block of code.</h3>
+<p>If statement in Python:</p>
+<pre><code>    if variableA == variableB:
+        return &quot;Yes they are equal&quot;
+</code></pre><p>If statement in Javascript:</p>
+<pre><code>    if(variableA == variableB){
+        return &quot;Yes they are equal&quot;;
+    }
+</code></pre><p>In Javascript, the whitespaces and new lines are not that important. They are more for human to read instead of your browser. It&#39;s totally fine to have your entire js file written in one line. When importing packages from online, often you&#39;ll see two downloading options, &quot;xxxx.js&quot; and &quot;xxxx.min.js&quot;, the second one would be the squashed version of the first file with just one single line of code, so the file size is minimized.</p>
+<p>For the same if statement shown above, you can just do</p>
+<pre><code>if(variableA==variableB){return &quot;Yes they are equal&quot;;}
+</code></pre><h3 id="2-it-s-object-oriented-">2. It&#39;s object oriented.</h3>
+<p>In Javsacript, everything can be treated as an object (things with dot notation), i.e.:</p>
+<p>&#39;&gt;&#39; and &#39;&lt;&#39; means the input and output in Javascript console, 
+which you can access in your browser by 
+doing <em>right click</em> -&gt; <em>Inspect</em> -&gt; <em>Console</em></p>
+<pre><code>
+&gt; var str = &quot;hello&quot;;
+&gt; str.length 
+&lt; 5
+
+function add(a,b){
+    return a+b;
+}
+//is the same as
+var add = function(a,b){
+    return a+b;
+};
+
+//defining a class:
+var Shape = function(area,colour){
+    this.area = area;
+    this.colour = colour;
+    this.turnBlack = function(){
+        this.colour = &quot;#000000&quot;;
+    };
+}
+
+//inheriting a class:
+var Square = function(sideLength,colour){
+    Shape.call(this,Math.pow(sideLength,2),colour);
+    this.getDiagonal = function(){
+        return Math.sqrt(Math.pow(sideLength,2)+Math.pow(sideLength,2));
+    };
+}
+
+//defining a object with properties:
+var myObj = {
+    index: 12,
+    id: &quot;aj49adsf&quot;,
+    getID: function(){
+        return this.id;
+    }
+};
+
+&gt; myObj.index
+&lt; 12
+&gt; myObj.getID()
+&gt; &quot;aj49adsf&quot;
+</code></pre><h3 id="3-it-doesn-t-have-or-as-power">3. It doesn&#39;t have ** or ^ as power</h3>
+<p>Well, technically it does in newest version of Javascript, which is supported by the newest version of Chrome, FireFox, Safari, but for supportability it&#39;s always better to just use <code>Math.</code> instead.</p>
+<pre><code>// It looks like Math is a library but it&#39;s 
+// build in in Javascript, and you don&#39;t need 
+// to import anything.
+
+&gt; Math.pow(2,3)
+&lt; 8
+
+&gt; Math.sqrt(16)
+&lt; 4
+
+&gt; Math.round(14.353)
+&lt; 14
+
+&gt; Math.PI
+&lt; 3.141592653589793
+
+&gt; Math.E
+&lt; 2.718281828459045
+
+&gt; Math.sin(Math.PI)
+&lt; 1.2246467991473532e-16
+// Which is basically 0.
+</code></pre><p>Javascript has <code>Math.atan(y/x)</code> and <code>Math.atan2(y,x)</code>, which are different (Google if you&#39;re curious). Use atan2.</p>
+<pre><code>// Math.atan2(y,x):The arctangent of the quotient of the given arguments.
+&gt; Math.atan2(1,0)
+&lt; 1.5707963267948966
+&gt; Math.atan2(0,1)
+&lt; 0
+&gt; Math.atan2(0,-1)
+&lt; 3.141592653589793
+&gt; Math.atan2(-1,0)
+&lt; -1.5707963267948966
+</code></pre><p>For random numbers, use <code>Math.random()</code> to generate a random number between 0 (inclusive) and 1 (exclusive), then scale the number to the range you want to.</p>
+<pre><code>&gt; Math.random()
+&lt; 0.09621543534727861
+</code></pre><h3 id="4-it-s-dynamic-typed">4. It&#39;s dynamic typed</h3>
+<p>When doing calculation or comparison, Javascript will automatic convert the type of the object if they&#39;re convertible. See the following examples.</p>
+<pre><code>&gt; &quot;14&quot; == 14
+&lt; true
+
+&gt; &quot;14&quot; === 14
+&lt; false
+
+&gt; 1 == true
+&lt; true
+
+&gt; 0 == false
+&lt; true
+
+&gt; 0 === false
+&lt; false
+
+&gt; 5 == true
+&lt; false
+
+&gt; &quot;hello&quot; == true
+&lt; false
+
+&gt; &quot;&quot; == false
+&lt; true
+
+&gt; true == undefined
+&lt; false
+
+&gt; !undefined
+&lt; true
+
+&gt; &quot;hello&quot; + 14.5
+&lt; &quot;hello14.5&quot;
+
+&gt; &quot;4&quot; + 5
+&lt; &quot;45&quot;
+
+&gt; 15-&quot;4&quot;
+&lt; 11
+
+&gt; 14.5 + 9
+&lt; 23.5
+
+&gt; 0xff + 0
+&lt; 255
+</code></pre>
+          </div>
+        </div>
+        <h2 id="jquery-basics">jQuery basics</h2>
+        <div class="row">
+          <div class="twelve columns">
+<h3 id="console-">Console:</h3>
+<p><code>right-click on your webpage -&gt; &quot;inspect&quot; -&gt; &quot;console&quot;</code>
+This will take you to the javascript console. Try typing in <code>console.log(&#39;Hello World&#39;);</code>. Use this to help you debug your bugzzz.</p>
+<h3 id="for-an-element-">For an element:</h3>
+<p>for the element <code>&lt;div id=&quot;yellowButton&quot; data-message=&quot;hahaha&quot;&gt;I am a yellow button&lt;/div&gt;</code>, you can do:</p>
+<pre><code>$(&quot;#yellowButton&quot;).text();
+// returns &quot;I am a yellow button&quot;
+
+$(&quot;#yellowButton&quot;).text(&quot;&lt;em&gt;I am a blue button&lt;/em&gt;&quot;);
+// set the inner html to &quot;&amp;lt;em&amp;gt;I am a blue button&amp;lt;/em&amp;gt;&quot;
+
+$(&quot;#yellowButton&quot;).html(&quot;&lt;em&gt;I am a blue button&lt;/em&gt;&quot;);
+// set the inner html to &quot;&lt;em&gt;I am a blue button&lt;/em&gt;&quot;
+
+$(&quot;#yellowButton&quot;).css(&quot;background-color&quot;,&quot;#002147&quot;);
+// change the background color to Imperial Blue.
+
+$(&quot;#yellowButton&quot;).addClass(&quot;big blue button&quot;);
+// add classes &quot;big&quot;, &quot;blue&quot; and &quot;button&quot;
+
+$(&quot;#yellowButton&quot;).removeClass(&quot;big&quot;);
+// remove classes &quot;big&quot;
+
+$(&quot;#yellowButton&quot;).toggleClass(&quot;pressed&quot;);
+// add/remove the class &quot;pressed&quot; depending on whether the element has the class &quot;pressed&quot;
+
+$(&quot;#yellowButton&quot;).hasClass(&quot;button&quot;);
+// returns true
+
+$(&quot;#yellowButton&quot;).on(&quot;click&quot;,function(){
+    // stuff:
+    $(this).toggleClass(&quot;pressed&quot;);
+});
+// bind the action &quot;click&quot; to the stuff
+/* Other actions you can bind to using .on():
+        focus
+        blur
+        focusin
+        focusout
+        change
+        input        //Useful for range element
+        dblclick
+        mouseenter
+        mouseleave
+        keydown
+        keypress
+        keyup
+        mousemove
+        mouseout
+        mouseover
+        mouseup
+        resize
+        scroll
+        select
+        submit 
+    Note that not all of them are supported by all
+    types of elements. Please look them up yourself.
+*/
+
+$(&quot;#yellowButton&quot;).attr(&quot;data-message&quot;);
+// returns &quot;hahaha&quot;
+
+$(&quot;#yellowButton&quot;).width();
+// returns whatever the width of the element is in px
+
+$(&quot;#yellowButton&quot;).height();
+// returns whatever the height of the element is in px
+</code></pre><p>for the element <code>&lt;input id=&quot;someSlider&quot; class=&quot;inputs&quot; type=&quot;range&quot; value=&quot;10&quot; min =&quot;0&quot; max=&quot;10&quot; step =&quot;1&quot;/&gt;</code>, you can do:</p>
+<pre><code>$(&quot;#someSlider&quot;).val();
+// returns 10
+
+$(&quot;#someSlider&quot;).val(0);
+// set the slider value to 0
+
+$(&quot;#someSlider&quot;).on(&#39;input&#39;,function(){
+    console.log($(this).val());
+});
+// Print the value in the console as someone drags the slider.
+</code></pre>
           </div>
         </div>
         <h2 id="colour">Colour</h2>
