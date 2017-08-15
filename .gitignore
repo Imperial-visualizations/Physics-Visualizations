@@ -5,11 +5,12 @@ __pycache__/
 
 # Folders
 initial_package_tests
+visuals_mechanics/test
 
 # Files
-.ipynb_checkpoints/
 test.py
 
-#Ignore All
+# Ignore All
 .ipynb_checkpoints/
 .DS_STORE
+.ipynb
