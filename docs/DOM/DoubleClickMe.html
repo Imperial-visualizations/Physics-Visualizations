@@ -168,6 +168,10 @@
       font-family: Georgia, Utopia, 'Times New Roman', Times, serif;
       display: none;
     }
+
+    img{
+      width: 100%;
+    }
   </style>
 
 </head>
@@ -199,7 +203,7 @@
 Recommonded folder structure for your <em>index.html</em>:
 
 + DOM/
-| + images/
+| + assets/
 | + scripts/
 | |- program.js
 | + styles/
@@ -621,18 +625,46 @@ $(&quot;#someSlider&quot;).on(&#39;input&#39;,function(){
         </div>
         <h2 id="colour">Colour</h2>
         <div class="row">
-          <div class="twelve columns">
+          <div class="six columns">
         <p>The following colours are colours from the <a href="https://www.imperial.ac.uk/media/imperial-college/staff/brand-and-style-guide/public/Branding-Guidelines-2016.pdf">IMPERIAL COLLEGE LONDON Visual identity guidelines</a>, please read through it before start using these colours. If you&#39;re not confident in choosing colour, please stick with the default colour that plotly has. However, when making customised UI instead of using &#39;red&#39; which usually means #FF0000, please use one of the options from below. </p>
 <p>Most of the time you&#39;ll only need to work with HEX, which you&#39;ll see as #FFFFFF or 0xFFFFFF, rarely you&#39;ll need to work with RGB (255,255,255)) or RGBa (rgba(255,255,255,1), the last one being opacity or alpha value, a measure of how not-transparent something is). CMYK stands for cyan, magenta, yellow, and key (black), which is used in printing, and PMS is the Pantone Matching System, which is used for cross-platform colour matching and referencing colour for paint or materials.</p>
-<p>Click the tiles to copy the colour in <select class="" id="colourCopyingOptions">
-                <option value="color">#FFFFFF</option>
-                <option value="rgb">rgb(255,255,255)</option>
-                <option value="cmyk">cmyk(100,100,100,100)</option>
-                <option value="pms">Pantone</option>
-              </select> formats.</p>
+<p>On the right you can see what the the following colour platte looks like for two type of colour blinded people, please do take them into account when choosing colours for your user interface or graphs.</p>
+          </div>
+          <div class="six columns">
+             <ul class="tab-nav">
+                <li>
+                  <a class="button active" href="#normal">Normal</a>
+                </li>
+                <li>
+                  <a class="button" href="#protanopia">Protanopia</a>
+                </li>
+                <li>
+                  <a class="button" href="#deuteranopia">Deuteranopia</a>
+                </li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active" id="normal">
+                  <img src="./assets/ColourPalette.png" title="Normal"/>
+                </div>
+                <div class="tab-pane" id="protanopia">
+                  <img src="./assets/ColourPaletteProtanopia.png" title="Protanopia Colour Blind"/>
+                </div>
+                <div class="tab-pane" id="deuteranopia">
+                  <img src="./assets/ColourPaletteDeuteranopia.png" title="Deuteranopia Colour Blind"/>
+                </div>
+              </div> 
           </div>
         </div>
-
+        <div class="row">
+          <div class="twelve columns">
+            <p>Click the tiles to copy the colour in <select class="" id="colourCopyingOptions">
+                  <option value="color">#FFFFFF</option>
+                  <option value="rgb">rgb(255,255,255)</option>
+                  <option value="cmyk">cmyk(100,100,100,100)</option>
+                  <option value="pms">Pantone</option>
+                </select> formats.</p>
+          </div>
+        </div>
         <div class="row">
           <div class="six columns colourTiles" data-color="#002147" data-rgb="rgb(0,33,71)" data-cmyk="cmyk(100,55,0,85)" data-pms="539"><span class="tileTitle">Navy</span></div>
 
@@ -777,6 +809,20 @@ $(&quot;#someSlider&quot;).on(&#39;input&#39;,function(){
           }
       });
 
+    });
+
+    $(function() {
+      $('ul.tab-nav li a.button').click(function() {
+          var href = $(this).attr('href');
+
+          $('li a.active.button', $(this).parent().parent()).removeClass('active');
+          $(this).addClass('active');
+
+          $('.tab-pane.active', $(href).parent()).removeClass('active');
+          $(href).addClass('active');
+
+          return false;
+      });
     });
 
 
