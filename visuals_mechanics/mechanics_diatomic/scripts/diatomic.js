@@ -119,7 +119,7 @@ Molecule.prototype.calcUnitVect = function(atom1, atom2) {
  */
 Molecule.prototype.calcExtCoords = function (dT) {
     // TODO: Calculated separation vector after extension.
-};
+    };
 
 /**
  * Calculates the potential energy of the system using the potential function instantiated to the molecule.
