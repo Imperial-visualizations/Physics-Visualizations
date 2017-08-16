@@ -106,7 +106,7 @@ function scaleZaxis(point, scale) {
 
 
 //This is the master function, which takes in a transformation function, inital and final parameters to transform about, and the inital points of the cube
-function master(transformation, initalparam, finalparam,xinit,yinit,zinit){
+function master(transformation, initalparam, finalparam,xinit1,yinit1,zinit1){
     t = numeric.linspace(initalparam,finalparam  ,10); //The linspace to generate the intermediate points
     frames = []
 
@@ -114,14 +114,16 @@ function master(transformation, initalparam, finalparam,xinit,yinit,zinit){
         xrot1 = []
         yrot1 = []
         zrot1 = []
+
         var point, pointOut;
         for (var j = 0 ; j < 8 ; j++) {  //This is to loop through 8 points of the cube
-            point = [xinit[j],yinit[j],zinit[j]];
+            point = [xinit1[j],yinit1[j],zinit1[j]];
             pointOut = transformation(point,t[i]);
             xrot1.push(pointOut[0]);
             yrot1.push(pointOut[1]);
             zrot1.push(pointOut[2]);
         }
+
         cubeRotation = [{  //This generates the cube
         type: "mesh3d",
         x: xrot1,
@@ -177,7 +179,7 @@ function graphReset(where){
     xrot1 = [-1., -1., 1., 1., -1., -1., 1., 1.];
     yrot1 = [-1., 1., 1., -1., -1., 1., 1., -1.];
     zrot1 = [-1., -1., -1., -1., 1., 1., 1., 1.];
-
+    scaleSelector = 1
 
     what = [{
         type: "mesh3d",
@@ -191,9 +193,9 @@ function graphReset(where){
         colorscale: [
           [0, 'rgb(255,255,255)'],
           [0.5, 'rgb(0,133,202)'],
-          [1, 'rgbrgb(0,62,116)']
+          [1, 'rgb(0,62,116)']
         ],
-
+        opacity: 0.6,
         showscale: false
         }]
     
@@ -244,7 +246,6 @@ function Rotate(){
     angle = angleSelector*Math.PI
     if (axisSelector ==="RotXaxis") {
         framesnew = master(roXaxis,0,angle,xrot1,yrot1,zrot1)
-        console.log(framesnew)
         
         Plotly.animate('graph', framesnew, {transition: {
           duration: 100,
@@ -253,6 +254,7 @@ function Rotate(){
           duration: 100,
           redraw: false,
         },mode: 'immediate'},layout);
+
 
     } else if (axisSelector === "RotYaxis") {
         framesnew = master(roYaxis,0,angle,xrot1,yrot1,zrot1)
@@ -263,9 +265,11 @@ function Rotate(){
           duration: 100,
           redraw: false,
         },mode: 'immediate'},layout);
+
         
     } else {
         framesnew = master(roZaxis,0,angle,xrot1,yrot1,zrot1)
+
         Plotly.animate('graph', framesnew, {transition: {
           duration: 100,
           easing: 'linear'
@@ -273,6 +277,7 @@ function Rotate(){
           duration: 100,
           redraw: false,
         },mode: 'immediate'},layout);
+
     }
     
 
@@ -284,7 +289,15 @@ function Skew(){
     angle = angleSelector*Math.PI
     if (axisSelector ==="SkewXaxis") {
         framesnew = master(skewXaxis,0,angle,xrot1,yrot1,zrot1)
+
         Plotly.animate('graph', framesnew, {transition: {
+          duration: 100,
+          easing: 'linear'
+        },frame: {
+          duration: 100,
+          redraw: false,
+        },mode: 'immediate'},layout);
+        Plotly.animate('graph', framesnew2, {transition: {
           duration: 100,
           easing: 'linear'
         },frame: {
@@ -315,7 +328,28 @@ function Skew(){
 function Scale(){
     axisSelector = document.getElementById("ScaleSelect").value
     scaleSelector = document.getElementById("ScaleSlider").value
+
+    if (axisSelector ==="ScaleXaxis") ){
+        alert("Sorry, don't scale too much this program isn't perfect")
+        return;
+    }
+    if ((scaleTotalY > 2.5) && (scaleSelector > 1) && (axisSelector ==="ScaleYaxis")){
+        alert("Sorry, don't scale too much this program isn't perfect")
+        return;
+    }
+    if ((scaleTotalZ > 2.5) && (scaleSelector > 1) && (axisSelector ==="ScaleZaxis")){
+        alert("Sorry, don't scale too much this program isn't perfect")
+        return;
+    }
+        if  ((axisSelector ==="ScaleZaxis") && ((scaleTotalZ > 2.5) ||(scaleTotalZ > 2.5)||(scaleTotalZ > 2.5))){
+        alert("Sorry, don't scale too much this program isn't perfect")
+        return;
+    }
+    
+    
+    
     if (axisSelector ==="ScaleXaxis") {
+        scaleTotalX = scaleTotalX*scaleSelector
         framesnew = master(scaleXaxis,1,scaleSelector,xrot1,yrot1,zrot1)
         Plotly.animate('graph', framesnew, {transition: {
           duration: 100,
@@ -325,6 +359,7 @@ function Scale(){
           redraw: false,
         },mode: 'immediate'},layout);
     } else if (axisSelector === "ScaleYaxis") {
+        scaleTotalY = scaleTotalY*scaleSelector
         framesnew = master(scaleYaxis,1,scaleSelector,xrot1,yrot1,zrot1)
         Plotly.animate('graph', framesnew, {transition: {
           duration: 100,
@@ -336,6 +371,7 @@ function Scale(){
         
     } else if (axisSelector === "ScaleZaxis") {
         framesnew = master(scaleZaxis ,1,scaleSelector,xrot1,yrot1,zrot1)
+        scaleTotalZ = scaleTotalZ*scaleSelector
         Plotly.animate('graph', framesnew, {transition: {
           duration: 100,
           easing: 'linear'
@@ -345,6 +381,11 @@ function Scale(){
         },mode: 'immediate'},layout);
     }  else {
         framesnew = master(scaleallaxis ,1,scaleSelector,xrot1,yrot1,zrot1)
+        scaleTotalX = scaleTotalX*scaleSelector
+        scaleTotalY = scaleTotalY*scaleSelector
+        scaleTotalZ = scaleTotalZ*scaleSelector
+
+
         Plotly.animate('graph', framesnew, {transition: {
           duration: 100,
           easing: 'linear'
@@ -570,6 +611,8 @@ var axisSelector, angleSelector, angle, scaleSelector,framesnew, name, xmax, yma
 var xx = [-1., -1., 1., 1., -1., -1., 1., 1.];
 var yy = [-1., 1., 1., -1., -1., 1., 1., -1.];
 var zz = [-1., -1., -1., -1., 1., 1., 1., 1.];
+
+
 var data = [];
 var initial = [{
     type: "mesh3d",
@@ -588,26 +631,34 @@ var initial = [{
         ],
 
     showscale: false
-    }];
+    }]
 var data = [];
+var scaleTotalX = 1
+var scaleTotalY = 1
+var scaleTotalZ = 1
+
 var xrot1 = [-1., -1., 1., 1., -1., -1., 1., 1.];
 var yrot1 = [-1., 1., 1., -1., -1., 1., 1., -1.];
 var zrot1 = [-1., -1., -1., -1., 1., 1., 1., 1.];
+
+
 layout = {
       scene:{
-         aspectmode: "manual",
+         aspectmode: "cube",
        aspectratio: {
          x: 1, y: 1, z: 1,
         },
-       xaxis: {
-        range: [-3, 3],
+        xaxis: {
+          range: [-3.5,3.5]
+    
       },
-       yaxis: {
-        range: [-3, 3],
+        yaxis: {
+            range: [-3.5 , 3.5]
+        },
+        zaxis: {
+            range: [-3.5,3.5]
+        } 
       },
-       zaxis: {
-       range: [-3, 3],
-      }},
         margin:  {l: 0, r:0,t:0,b:0}
     };
 $(document).ready(main);
