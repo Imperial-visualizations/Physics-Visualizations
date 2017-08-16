@@ -25,6 +25,11 @@ LJ = function (sigma, epsilon) {
     this.e = epsilon;
 };
 
+LJ.prototype.add = function (sigma,epsilon) {
+    this.s = (this.s + sigma)/2;
+    this.e = Math.sqrt(this.e * epsilon);
+};
+
 /**
  * Calculate LJ potential.
  * @param r: Distance from LJ centre.
@@ -41,6 +46,11 @@ LJ.prototype.calcF = function(r) {
     var attractive = 6 * Math.pow(this.s / r, 6);
     return 4 * this.e * (repulsive + attractive)
 };
+LJ.prototype.getR_0 = function(){
+    return Math.pow(2,-1/6) * this.s;
+};
+
+
 
 /**
  * Harmonic potential class.
@@ -74,4 +84,8 @@ Parabolic = function (equilibrium, force_constant) {
 Parabolic.prototype.calcV = function (r) {
     var parabola = Math.pow(r - this.eqR, 2);                   // Shape of harmonic potential
     return this.k * parabola;                                   // Calculating harmonic potential at distance r.
+};
+
+Parabolic.prototype.calcF = function(r) {
+    return -1 * this.k * r;
 };
