@@ -1,14 +1,4 @@
-<!doctype html>
-<head>
-    <title>Diatomic Molecule Vibration and Rotation</title>
-    <script src = "https://github.com/photonstorm/phaser-ce/releases/download/v2.8.3/phaser.min.js"></script>
-    <script src = "./vecops.js"></script>
-    <script src = "./potentials.js"></script>
-</head>
-
-<div id="physics"></div>
-<script>
-    /** ============================================ Class Declarations ==============================================*/
+/** ============================================ Class Declarations ==============================================*/
     /**
      * Class to describe attributes of atoms that can be used to make up molecules.
      * @param pos: Vector with Cartesian position coordinates
@@ -18,7 +8,7 @@
      * @param color: Color of atom for phaser code.(cosmetic only)
      * @constructor: Atom
      */
-    Atom = function(pos, radius, mass, potential, color) {
+    Atom = function(radius, mass, potential, color) {
         // Making position and force vectors.
         this.pos = new Vector(pos);                 // Atom position Vector.
 
@@ -160,7 +150,7 @@
             this.atoms[i].pos = this.atoms[i].pos.subtract(this.COM).rotate(d_Angle).add(this.COM);
         }
 
-        return this.atoms
+        return this.atoms;
     };
 
     /**
@@ -173,7 +163,7 @@
             var r_i = this.atoms[i].pos.subtract(this.COM);                 // Distance between this atom and COM
             I += this.atoms[i].m * Math.pow(r_i.mag(), 2);                  // m*r**2 contribution for this atom.
         }
-        return I                                                            // Return Moment of Inertia (scalar).
+        return I ;                                                           // Return Moment of Inertia (scalar).
     };
 
     /**
@@ -240,15 +230,10 @@
      */
     Molecule.prototype.update = function(deltaTime) {
         this.elapsed += deltaTime;
+        this.calcRotCoords(deltaTime,this.elapsed);
+        this.calcExtCoords(deltaTime);
         //TODO: Update position due to vibrational motion.
         //TODO: Update position due to rotational motion.
         //TODO: Check if vibrational energy greater than restoring energy (Hooke's Law)
 
     };
-</script>
-
-<div id="phaser"></div>
-<script src="./graphics.js"></script>
-<body>
-
-</body>
