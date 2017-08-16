@@ -30,31 +30,38 @@
             radius = -radius;
             mass = -mass;
         }
+
         this.color = color;
         this.r = radius;                            // Atom radius.
         this.m = mass;                              // Atom mass.
         this.sprite = addAtom(this);
-        this.V = potential;                         // Setting potential centre of atom.
-        this.p = 0;                                 // Momentum of atom initially 0.
+        this.v = 0;                                 // Momentum of atom initially 0.
+        this.f_net = 0;                             // Net force on atom - initially 0.
     };
 
     /**
      * Class to make molecule out of atoms, with a spring constant that defines strength of bonds, and instantiated with
      * rotational and vibrational E.
      * @param atoms: Array containing all atoms in molecules.
+     * @param potential: Potential describing bond between atoms.
      * @param vibrational_E: Vibrational kinetic energy.
      * @param rotational_E: Rotational kinetic energy.
      * @constructor
      */
-    Molecule = function(atoms, vibrational_E, rotational_E) {
+    Molecule = function(atoms, potential, vibrational_E, rotational_E) {
 
         // Checking objects of class Atom passed in in the list.
         if (atoms.constructor === Array || atoms[0].constructor === Atom)
         {
             this.atoms = atoms;                                                             // Atoms
             // Calculating scalar distance between atoms.
-            this.r = this.atoms[0].pos.subtract(this.atoms[1].pos).mag();      // Atom separation.
-            this.COM = this.calcCOM();                                      // Centre of mass initialised as 0 vector.
+            this.r = this.atoms[0].pos.subtract(this.atoms[1].pos).mag();     // Atom separation.
+            this.COM = this.calcCOM();                                        // Centre of mass initialised as 0 vector.
+        }
+
+        // Sanity check
+        if (this.atoms.length !== 2) {
+            console.error("Sorry, currently only support diatomic molecules! Please ensure you enter 2 atoms in array.")
         }
 
         // Finding total mass of the system.
@@ -65,6 +72,7 @@
             }
             return m
         };
+        this.tot_m = this.tot_m();
 
         // Finding system's reduced mass.
         this.reducedM = function () {
@@ -75,17 +83,20 @@
             return 1/muInv;
         };
 
+        this.V = potential;                                                 // Only for diatomic molecule for now.
+
         this.elapsed = 0;
         this.I = this.calcMoI();                                            // Moment of inertia initialised as 0.
         this.E_v = vibrational_E;                                           // Vibrational energy.
         this.E_r = rotational_E;                                            // Rotational energy.
         this.PE = this.calcPE();                                            // Potential energy.
         this.Lsq = 2 * rotational_E * this.I;                               // Square of Angular Momentum.
+        this.w = 0;                                                         // Angular velocity, initially 0.
 
         // Magnitude of linear momentum for each Atom object.
-        this.p_i = Math.sqrt((this.E_r * 2 * this.tot_m()) / (Math.pow(this.atoms.length, 2)));
+        this.p_i = Math.sqrt((this.E_v * 2 * this.tot_m) / (Math.pow(this.atoms.length, 2)));
         for (var i = 0; i < this.atoms.length; i++) {
-            this.atoms[i].p = this.p_i;                                     // Setting each atom's momentum.
+            this.atoms[i].v = this.p_i / this.atoms[i].m;                   // Setting each atom's momentum.
         }
 
     };
@@ -115,33 +126,21 @@
     };
 
     /**
-     * Calculates the potential energy of the system using the potential functions instantiated to each atom.
+     * Calculates the potential energy of the system using the potential function instantiated to the molecule.
      * @returns {Number} System PE.
      */
     Molecule.prototype.calcPE = function() {
-        var pot_energy = 0;                                                         // Potential energy.
-
-        // Pairwise potential calculation.
-        for (var i = 0; i < this.atoms.length; i++) {
-            for (var j = 0; j < this.atoms.length; j++) {
-                // Avoiding calculating potential between the same atom (r = 0, V --> inf)
-                if (i !== j) {
-                    var r = this.calcSeparation(this.atoms[i], this.atoms[j]);      // Scalar distance between atoms.
-                    pot_energy += this.atoms[i].V.calcV(r);                         // Calculating potential energy.
-                }
-            }
-        }
-        this.PE = pot_energy;
-        return this.PE;
+        var r = this.calcSeparation(this.atoms[0], this.atoms[1]);          // Distance between atoms.
+        this.PE = this.V.calcV(r);                                          // Potential energy calculation.
+        return this.PE
     };
     /**
      * @returns {Number} Current value of the rotational kinetic energy of the system.
      *
      */
     Molecule.prototype.calcRotKE = function() {
-        return this.Lsq/(2*this.I);
-
-
+        this.E_r = this.Lsq / (2 * this.I);                                 // Using L^2 = 2 * I * KE_rot
+        return this.E_r;
     };
 
     /**
@@ -151,13 +150,14 @@
      */
     Molecule.prototype.calcRotCoords = function(t) {
         // E_r = 0.5 * I * w ** 2
-        var w = Math.sqrt(2 * this.E_r / this.I);                                 // Angular velocity, w
-        var d_Angle = w * t;                                                      // Rotation angle around COM (radians)
+        this.calcRotKE();                                                    // Update KE_rot value.
+        this.w = Math.sqrt(2 * this.E_r / this.I);                           // Angular velocity, w.
+        var d_Angle = this.w * t;                                            // Rotation angle around COM (radians).
 
         // Rotation of atoms about COM.
-        for (var i = 0; i < this.atoms.length; i++)
-        {
-            this.atoms[i].pos = this.atoms[i].pos.subtract(this.COM).rotate(d_Angle).add(this.COM);            // Find atom coords with COM at Origin
+        for (var i = 0; i < this.atoms.length; i++) {
+            // Find new atom coords after rotation around COM.
+            this.atoms[i].pos = this.atoms[i].pos.subtract(this.COM).rotate(d_Angle).add(this.COM);
         }
 
         return this.atoms
@@ -170,9 +170,8 @@
     Molecule.prototype.calcMoI = function() {
         var I = 0;                                                          // Moment of Inertia.
         for (var i = 0; i < this.atoms.length; i++) {                       // Distance between this atom and COM.
-            var r_i = this.atoms[i].pos.subtract(this.COM);     // Distance between this atom and COM
+            var r_i = this.atoms[i].pos.subtract(this.COM);                 // Distance between this atom and COM
             I += this.atoms[i].m * Math.pow(r_i.mag(), 2);                  // m*r**2 contribution for this atom.
-            console.log(I);
         }
         return I                                                            // Return Moment of Inertia (scalar).
     };
@@ -197,55 +196,41 @@
             total_mx = total_mx.add(mx);
         }
 
-        this.COM = total_mx.multiply(1 / total_m);              // Updating instance COM coords.
+        this.COM = total_mx.multiply(1 / total_m);                          // Updating instance COM coords.
         return this.COM;                                                    // Return Vector coordinates of COM.
     };
-
-//    /**
-//     * @param elapsed: time that the molecule has been alive for
-//     * @param deltaTime: time passed between this frame and last frame important for incrementing physics.
-//     */
-//
-//    Molecule.prototype.calculateDisplacement = function(deltaTime,elapsed){
-//        var amplitude = Math.sqrt(2*this.E_v/kval);
-//        var natFreq = Math.sqrt(kVal / this.reducedM);
-//        var dx = -1 * amplitude * Math.sin(natFreq*elapsed) * deltaTime;
-//        //get seperation vector and subtract dx*unitvector in direction of sep vector to create oscillation.
-//        var r_i_new = calcSeperation() - calcUnitVector() * dx;
-//
-//    };
 
     /**
      * Function to calculate extended coordinates due to vibrational energy.
      * @param dT: Time elapsed since previous timestep.
      */
     Molecule.prototype.calcExtCoords = function (dT) {
-
         var s = [];                                               // Array to store new coordinates.
         for (var i = 0; i < this.atoms.length; i++) {
             for (var j = 0; j < this.atoms.length; j++) {
                 if (i !== j) {
-                    var r = this.atoms[i].pos.subtract(this.atoms[j].pos);        // Vector to other atom.
-                    var dir = r.unit();               // Unit vector to other atom
+                    var r_s = this.calcSeparation(this.atoms[i], this.atoms[j]);              // Distance to other atom.
+                    var k_i = new Vector(this.calcUnitVect(this.atoms[i], this.atoms[j]));    // Unit vector
 
-                    var f_s = this.atoms[i].V.calcF(r.mag());     // Scalar Force on atom[j] due to atom[i]
+                    this.atoms[j].f_net = this.V.calcF(r_s);                             // |F| on atom due to other atom.
 
-                    var a = f_s * (1 / this.atoms[j].m);          // Acceleration scalar: F=ma
-                    console.log(a);
-                    var u = this.atoms[j].p / this.atoms[j].m;    // Old scalar velocity of atom: p = m * u
-                    var v = u + (a * dT);
-                    // New scalar velocity: v = u + at
-                    var s_s = (Math.pow(v, 2) - Math.pow(u, 2)) / (2 * a);          // Scalar displacement.
-                    console.log(s_s);
-                    s.push(dir.multiply(s_s));        // Vector displacement pushed to array.
+                    // Centrifugal displacement.
+                    var r_cf = this.atoms[j].f_net / (this.reducedM() * Math.pow(this.w, 2));
+                    var r_cf_v = new Vector(k_i.multiply(-1 * r_cf));
+
+                    var a_s = this.atoms[j].f / this.atoms[j].m;                     // Scalar acceleration.
+                    this.atoms[j].v = this.atoms[j].v + (a_s * dT);                  // v = u + at
+
+                    // Calculating vector displacement.
+                    var displacement = new Vector(new Vector(k_i.multiply(this.atoms[j].v)).multiply(dT));
+                    s.push(displacement.add(r_cf_v))
                 }
             }
         }
-        // Calculating new coords for each atom.
-        for (var k = 0; k < this.atoms.length; k++) {
-            this.atoms[k].pos = this.atoms[k].pos.add(s[k]);
+
+        for (var k = 0; k < s.length; k++) {
+            this.atoms[k].pos = s[k].add(this.atoms[k].pos);                         // Updating atom coordinates.
         }
-        return s
     };
 
     /**
@@ -255,8 +240,6 @@
      */
     Molecule.prototype.update = function(deltaTime) {
         this.elapsed += deltaTime;
-        this.calcRotCoords(deltaTime,this.elapsed);
-        this.calcExtCoords(deltaTime);
         //TODO: Update position due to vibrational motion.
         //TODO: Update position due to rotational motion.
         //TODO: Check if vibrational energy greater than restoring energy (Hooke's Law)

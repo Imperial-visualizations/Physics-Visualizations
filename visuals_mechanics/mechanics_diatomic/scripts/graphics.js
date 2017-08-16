@@ -6,6 +6,7 @@ var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS,"phaser",{preloa
 
 var a1,a2,mol1,potential;
 var zoom  = 10;
+var BLACK = 0xffffff;
 
 
 /**
@@ -27,8 +28,8 @@ function create(){
 
 
     potential = new LJ(2, 4);
-    a1 = new Atom([0, 0], 2, 1, potential,0xffffff);
-    a2 = new Atom([3, 4], 1, 1, potential,0xffffff);
+    a1 = new Atom([0, 0], 2, 1, potential, BLACK);
+    a2 = new Atom([3, 4], 1, 1, potential, BLACK);
     mol1 = new Molecule([a1, a2], 2, 2);
 
     console.log(" COM is " + mol1.COM.items);
