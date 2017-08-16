@@ -25,33 +25,90 @@
             <!--Main Options-->
             <ul class="tab-nav">
                 <li><a class="button active" href="#carte">Cartesian</a></li>
+                <li><a class="button" href="#cylin">Cylindrical</a></li>
+                <li><a class="button" href="#spher">Spherical</a></li>
             </ul>
 
             <div class="tab-content">
-                <div class="tab-pane active" id="carte" onclick="">
-                    <h5 style="border-left: solid 5px rgb(255,0,0); padding-left: 8px;">x-coor:</h5>
+                <div class="tab-pane active" id="carte">
+                    <h5 style="border-left: solid 5px rgb(255,0,0); padding-left: 8px;">x-coordinate:</h5>
                     <label class="sliderTitle">x:&nbsp;
-                        <span id="xControllerDisplay" data-unit="">0</span>
+                        <span id="xControllerDisplay" data-unit="">1</span>
                     </label>
                     <label class="slider">
-                        <input id="xController" class="inputs" type="range" value="0" min="-3" max="3" step="0.2"/>
+                        <input id="xController" class="inputs" type="range" value="1" min="-3" max="3" step="0.2"/>
                         <span class="sliderMin">-3</span><span class="sliderMax">3</span>
                     </label>
-                    <h5 style="border-left: solid 5px rgb(0,255,0); padding-left: 8px;">y-coor:</h5>
+                    <h5 style="border-left: solid 5px rgb(0,255,0); padding-left: 8px;">y-coordinate:</h5>
                     <label class="sliderTitle">y:&nbsp;
-                        <span id="yControllerDisplay" data-unit="">0</span>
+                        <span id="yControllerDisplay" data-unit="">1</span>
                     </label>
                     <label class="slider">
-                        <input id="yController" class="inputs" type="range" value="0" min="-3" max="3" step="0.2"/>
+                        <input id="yController" class="inputs" type="range" value="1" min="-3" max="3" step="0.2"/>
                         <span class="sliderMin">-3</span><span class="sliderMax">3</span>
                     </label>
-                    <h5 style="border-left: solid 5px rgb(0,0,255); padding-left: 8px;">z-coor:</h5>
+                    <h5 style="border-left: solid 5px rgb(0,0,255); padding-left: 8px;">z-coordinate:</h5>
                     <label class="sliderTitle">z:&nbsp;
-                        <span id="zControllerDisplay" data-unit="">0</span>
+                        <span id="zControllerDisplay" data-unit="">1</span>
                     </label>
                     <label class="slider">
-                        <input id="zController" class="inputs" type="range" value="0" min="-3" max="3" step="0.2"/>
+                        <input id="zController" class="inputs" type="range" value="1" min="-3" max="3" step="0.2"/>
                         <span class="sliderMin">-3</span><span class="sliderMax">3</span>
+                    </label>
+                </div>
+                <div class="tab-pane" id="cylin">
+                    <h5 style="border-left: solid 5px rgb(255,0,0); padding-left: 8px;">ρ-coordinate:</h5>
+                    <label class="sliderTitle">ρ:&nbsp;
+                        <span id="rhoControllerDisplay" data-unit="">0</span>
+                    </label>
+                    <label class="slider">
+                        <input id="rhoController" class="inputs" type="range" value="0" min="0" max="4.4" step="0.2"/>
+                        <span class="sliderMin">0</span><span class="sliderMax">4.4</span>
+                    </label>
+                    <h5 style="border-left: solid 5px rgb(0,255,0); padding-left: 8px;">φ-coordinate:</h5>
+                    <label class="sliderTitle">φ:&nbsp;
+                        <span id="phiControllerDisplayA1" data-unit="π rad">0π rad</span>&nbsp;or&nbsp;
+                        <span id="phiControllerDisplayA2" data-unit="º">0º</span>
+                    </label>
+                    <label class="slider">
+                        <input id="phiController" class="inputs" type="range" value="0" min="0" max="2" step="0.125"/>
+                        <span class="sliderMin">0</span><span class="sliderMax">2π</span>
+                    </label>
+                    <h5 style="border-left: solid 5px rgb(0,0,255); padding-left: 8px;">z-coordinate:</h5>
+                    <label class="sliderTitle">z:&nbsp;
+                        <span id="z1ControllerDisplay" data-unit="">1</span>
+                    </label>
+                    <label class="slider">
+                        <input id="z1Controller" class="inputs" type="range" value="1" min="-3" max="3" step="0.2"/>
+                        <span class="sliderMin">-3</span><span class="sliderMax">3</span>
+                    </label>
+                </div>
+                <div class="tab-pane" id="spher">
+                    <h5 style="border-left: solid 5px rgb(255,0,0); padding-left: 8px;">r-coordinate:</h5>
+                    <label class="sliderTitle">r:&nbsp;
+                        <span id="rControllerDisplay" data-unit="">0</span>
+                    </label>
+                    <label class="slider">
+                        <input id="rController" class="inputs" type="range" value="0" min="0" max="5.2" step="0.2"/>
+                        <span class="sliderMin">0</span><span class="sliderMax">5.2</span>
+                    </label>
+                    <h5 style="border-left: solid 5px rgb(0,0,255); padding-left: 8px;">θ-coordinate:</h5>
+                    <label class="sliderTitle">θ:&nbsp;
+                        <span id="thetaControllerDisplayA1" data-unit="π rad">0π rad</span>&nbsp;or&nbsp;
+                        <span id="thetaControllerDisplayA2" data-unit="º">0º</span>
+                    </label>
+                    <label class="slider">
+                        <input id="thetaController" class="inputs" type="range" value="0" min="0" max="1" step="0.125"/>
+                        <span class="sliderMin">0</span><span class="sliderMax">1π</span>
+                    </label>
+                    <h5 style="border-left: solid 5px rgb(0,255,0); padding-left: 8px;">φ-coordinate:</h5>
+                    <label class="sliderTitle">φ:&nbsp;
+                        <span id="phi1ControllerDisplayA1" data-unit="π rad">0π rad</span>&nbsp;or&nbsp;
+                        <span id="phi1ControllerDisplayA2" data-unit="º">0º</span>
+                    </label>
+                    <label class="slider">
+                        <input id="phi1Controller" class="inputs" type="range" value="0" min="0" max="2" step="0.125"/>
+                        <span class="sliderMin">0</span><span class="sliderMax">2π</span>
                     </label>
                 </div>
             </div>
@@ -59,6 +116,7 @@
     </div>
     </div>
 <script src=script/basis.js></script>
+<script src=../util/objects.js></script>
 </body>
 
 </html>

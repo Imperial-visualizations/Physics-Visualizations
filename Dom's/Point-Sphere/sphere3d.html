@@ -31,6 +31,7 @@
             </ul>
 
             <div class="tab-content">
+                <!--Detail-->
                 <div class="tab-pane" id="detail">
                     <label>Initial Position:</label>
                     <h3>(2, 2, 2)</h3><br>
@@ -48,6 +49,7 @@
                     <input type="button" value="Undo", onclick="undo()">
                     <input type="button" value="Reset", onclick="plotInit()">
                 </div>
+                <!--Rotation-->
                 <div class="tab-pane active" id="rotate">
                     <!--Rotation--> <!--x = 1, y = 2, z = 3-->
                     <div class="rotate3D">
@@ -114,7 +116,6 @@
                         <input type="button" value="Go Back", onclick="unrevealCommute()">
                     </div>
                 </div>
-
                 <!--Reflection-->
                 <div class="tab-pane" id="reflect">
                     <label>Reflection across the:</label>
@@ -143,7 +144,6 @@
                         <p id="reflectMatrix"></p>
                     </div>
                 </div>
-
                 <!--Scalation-->
                 <div class="tab-pane" id="scale">
                     <div class=scaleSlider>
@@ -185,6 +185,7 @@
     </div>
     </div>
 <script src=script/sphere3d.js></script>
+<script src=../util/objects.js></script>
 </body>
 
 </html>
