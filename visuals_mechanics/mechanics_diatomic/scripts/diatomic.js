@@ -22,8 +22,8 @@ Atom = function(pos, radius, mass, potential, color) {
     }
 
     this.color = color;
-    this.r = radius;                            // Atom radius.
-    this.m = mass;                              // Atom mass.
+    this.radius = radius;                            // Atom radius.
+    this.mass = mass;                              // Atom mass.
     this.sprite = addAtom(this);
 };
 
@@ -36,12 +36,13 @@ Atom = function(pos, radius, mass, potential, color) {
  * @param rotational_E: Rotational kinetic energy.
  * @constructor
  */
-Molecule = function(atoms, potential, vibrational_E, rotational_E) {
+Molecule = function(a1,a2, potential, keVib_0,keRot_0) {
+
+
 
     // Checking objects of class Atom passed in in the list.
-    if (atoms.constructor === Array || atoms[0].constructor === Atom)
-    {
-        this.atoms = atoms;                                               // Atoms
+    if (a1.constructor !== Atom || a2.constructor !== Atom){
+        console.error("Can't run simulation without two valid atom objects");
     }
 
     // Sanity check
@@ -49,44 +50,41 @@ Molecule = function(atoms, potential, vibrational_E, rotational_E) {
         console.error("Sorry, currently only support diatomic molecules! Please ensure you enter 2 atoms in array.")
     }
 
+    this.V = potential;
+
     // Finding total mass of the system.
     this.tot_m = function () {
-        var m = 0;
-        for (var i = 0; i < this.atoms.length; i++) {
-            m += this.atoms[i].m;
-        }
-        return m
+        return a1.mass + a2.mass;
     };
-    this.tot_m = this.tot_m();
-
     // Finding system's reduced mass.
     this.reducedM = function () {
-        var muInv = 0;
-        for(var i = 0; i < this.atoms.length;i++){
-            muInv += 1/this.atoms.m;
-        }
-        return 1/muInv;
+        return a1.mass*a2.mass /(a1.mass+a2.mass);
     };
 
-    this.V = potential;                                                 // Only for diatomic molecule for now.
-
-    this.elapsed = 0;
-    this.COM = this.calcCOM();                                          // Centre of mass.
-
-    this.I = this.calcMoI();                                            // Moment of inertia initialised as 0.
-    this.E_r = rotational_E;                                            // Rotational energy.
-    this.Lsq = 2 * rotational_E * this.I;                               // Square of Angular Momentum.
-    this.w = this.calcAngVel();                                         // Angular velocity, w.
-
-    this.E_v = vibrational_E;                                           // Vibrational energy.
-    this.PE = this.calcPE();                                            // Potential energy.
-    this.r = this.V.getR_0();                                           // Separation vector.
-
-    // Magnitude of linear speed for each Atom object.
-    this.p_i = Math.sqrt((this.E_v * 2 * this.tot_m) / (Math.pow(this.atoms.length, 2)));
-    for (var i = 0; i < this.atoms.length; i++) {
-        this.atoms[i].v = this.p_i / this.atoms[i].m;                   // Setting each atom's speed.
+    this.init_r_0 = function () {
+        //TODO:Solve the equation needed to calculate this.
     }
+    
+    this.I_0 = function () {
+        return this.reducedM() *  Math.pow(this.V.getR_0(),2);
+    };
+    this.omega_0 = function () {
+        return Math.sqrt( 2* keRot_0/this.I);
+    };
+    this.I = this.I_0();
+    this.L = this.I * this.omega_0();
+    this.r = new Vector(0,1).multiply(this.init_r_0());
+    this.v = Math.sqrt( 2* keVib_0 / this.reducedM());
+    this.omega = this.omega_0();
+
+    a1.pos = this.r.multiply(a1.mass/this.tot_m());
+    a2.pos = this.r.multiply(-a2.mass/this.tot_m());
+
+    // // Magnitude of linear speed for each Atom object.
+    // this.p_i = Math.sqrt((this.E_v * 2 * this.tot_m()) / (Math.pow(this.atoms.length, 2)));
+    // for (var i = 0; i < this.atoms.length; i++) {
+    //     this.atoms[i].v = this.p_i / this.atoms[i].m;                   // Setting each atom's speed.
+    // }
 
 };
 
@@ -118,13 +116,26 @@ Molecule.prototype.calcUnitVect = function(atom1, atom2) {
  * @param dT: Time elapsed since previous timestep.
  */
 Molecule.prototype.calcExtCoords = function (dT) {
-    // TODO: Calculated separation vector after extension.
-    };
+    var a = this.V.calcF(this.r.mag())/this.reducedM() + Math.pow(this.omega,2)*this.r.mag();
+    this.v = a*dT;
+    this.r = this.r.add(this.v * dT);
+};
 
 /**
  * Calculates the potential energy of the system using the potential function instantiated to the molecule.
  * @returns {Number} System PE.
  */
+Molecule.prototype.update = function(deltaTime){
+    this.I = this.calcMoI();
+    this.omega = this.calcAngVel();
+    this.calcRotCoords(deltaTime);
+    this.calcExtCoords(deltaTime);
+    a1.pos = this.r.multiply(a1.mass/this.tot_m());
+    a2.pos = this.r.multiply(-a2.mass/this.tot_m());
+};
+
+
+
 Molecule.prototype.calcPE = function() {
     this.PE = this.V.calcV(this.r.mag());                                // Potential energy calculation.
     return this.PE
@@ -132,20 +143,13 @@ Molecule.prototype.calcPE = function() {
 
 /**
  * Updates KE_rot and I, and finally outputs rotated separation vector.
- * @param t: Timestep
+ * @param dt: Timestep
  * @returns {Vector} Separation vector, r.
  */
-Molecule.prototype.calcRotCoords = function(t) {
-    // E_r = 0.5 * I * w ** 2
-    this.calcRotKE();                                                    // Update KE_rot value.
-    this.calcMoI();                                                      // Update Moment of Inertia.
-    this.calcAngVel();                                                   // Updates Angular velocity, w.
-    var d_Angle = this.w * t;                                            // Rotation angle around COM (radians).
-
-    // Rotation of separation vector about COM.
-    this.r = this.r.subtract(this.COM).rotate(d_Angle).add(this.COM);
-    return this.r
+Molecule.prototype.calcRotCoords = function(dt) {
+    this.r = this.r.rotate(this.omega * dt);
 };
+
 
 /**
  * Calculates the rotational kinetic energy of system, using the conservation of Angular Momentum.
@@ -162,14 +166,7 @@ Molecule.prototype.calcRotKE = function() {
  * @returns {number} I
  */
 Molecule.prototype.calcMoI = function() {
-    this.calcCOM();
-    var I = 0;                                                          // Moment of Inertia.
-    for (var i = 0; i < this.atoms.length; i++) {                       // Distance between this atom and COM.
-        var r_i = this.atoms[i].pos.subtract(this.COM);                 // Distance between this atom and COM
-        I += this.atoms[i].m * Math.pow(r_i.mag(), 2);                  // m*r**2 contribution for this atom.
-    }
-    this.I = I;
-    return I;                                                           // Return Moment of Inertia (scalar).
+    return this.reducedMass() * Math.pow(this.r,2);                                                       // Return Moment of Inertia (scalar).
 };
 
 /**
@@ -177,8 +174,7 @@ Molecule.prototype.calcMoI = function() {
  * @returns {Number} Angular velocity, rad s^(-1)
  */
 Molecule.prototype.calcAngVel = function () {
-    this.w = Math.sqrt(2 * this.E_r / this.I);
-    return this.w;
+    return this.L / this.I;
 };
 
 /**
