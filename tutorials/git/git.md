@@ -12,7 +12,7 @@ Git is a version control system (VCS) used for tracking and coordinating changes
 
 1. Create a GitHub account https://github.com/. You can also use your student email address to activate the Student Develop Pack https://education.github.com/pack which comes with a multitude of software development tools and perks such as private repos (lasts a limited time).
 
-2. Contact Caroline Clewley with your GitHub username/email to be added to the Imperial-Visualizations repo.
+2. Contact Caroline Clewley (@c.clewley) with your GitHub username/email to be added to the Imperial-Visualizations repo.
 
 3. The owner of the repo can add collaborators by going to *Repositories -> Imperial-Visualizations -> Settings -> Collaborators -> (scroll to bottom) Search by username, full name, or email address*.
 
