@@ -1,0 +1,402 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Linear algebra - Intersections</title>
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
+    <link rel="stylesheet" href="./css/font-awesome.min.css">
+    <link rel = "icon" href = "images/favicon.ico" type="image/x-icon">
+    <style type="text/css">
+        #canvasWrapper{
+            width: 100%;
+            height: 600px;
+            margin: 0 auto;
+            background-color: #eee;
+        }
+        panel{
+            display: block;
+            border: 4px solid #fff;
+            border-radius: 4px;
+            box-sizing: border-box;
+            width: 100%;
+            height: 528px;
+        }
+        #panelHeadWrapper{
+            height: 40px;
+            box-sizing: border-box;
+            border-bottom: 4px solid #fff;
+            padding: 4px;
+        }
+        #panelHeadWrapper>label{
+            font-size: 26px;
+            line-height: 26px;
+            font-weight: 600;
+        }
+
+
+        #panelItemsWrapper{
+            height: 390px;
+            box-sizing: border-box;
+            border: 1px solid #000;
+            overflow: scroll;
+        }
+        #panelItemsWrapper>item{
+            box-sizing: border-box;
+            width: 100%;
+            height: 30px;
+            border: 1px solid #000;
+            display: block;
+        }
+        #panelItemsWrapper>item:last-child{
+            box-sizing: border-box;
+            border-bottom: 2px solid #000;
+        }
+        #panelItemsWrapper>item>span{
+            height: 28px;
+            width: 28px;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: #000;
+            line-height: 24px;
+            text-align: center;
+            float: left;
+            border-right: 2px solid #000;
+            cursor: pointer;
+            transition: all 100ms;
+        }
+        #panelItemsWrapper>item>span.deactived{
+            color: #ddd;
+        }
+
+        #panelItemsWrapper>item>label{
+            box-sizing: border-box;
+            display: block;
+            height: 28px;
+            padding-left: 4px;
+            overflow: hidden;
+            transition: all 100ms;
+        }
+        #panelItemsWrapper>item>label:hover{
+            font-weight: 1000;
+        }
+        #panelItemsWrapper>item>label:active{
+            background-color: #ccc;
+        }
+        #panelItemsWrapper>item>label.selected{
+            background-color: #ccc;
+
+        }
+
+
+        #panelItemsWrapper>p{
+            margin: 0 auto;
+            width: 200px;
+        }
+
+
+        #panelActionsWrapper{
+            height: 70px;
+            box-sizing: border-box;
+            border-top: 4px solid #006EAF;
+            text-align: right;
+            padding: 4px;
+            padding-right: 8px;
+        }
+        #panelActionsWrapper>a,#panelActionsWrapper>a:visited{
+            color: #bccfda;
+            font-size: 16px;
+            text-decoration: none;
+            margin-left: 8px;
+            text-shadow: 0px 0px 0px #bccfda;
+            transition: all 100ms;
+            cursor: not-allowed;
+        }
+
+        #panelActionsWrapper>a.active{
+            color: #006EAF;
+            text-shadow: 0px 1px 0px #bccfda;
+            cursor: pointer;
+
+        }
+        #panelActionsWrapper>a.active:hover{
+            color: #006EAF;
+            text-shadow: 0px 2px 0px #bccfda;
+        }
+        #panelActionsWrapper>a.active:active{
+            color: #006EAF;
+            text-shadow: 0px 0px 2px #bccfda;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Linear algebra - Intersections</h1>
+<div class="container">
+<div class="row">
+    <div class="eight columns">
+            <div id="canvasWrapper">
+              This is where the graph goes
+            </div>
+    </div>
+    <div class="four columns">
+                <panel>
+                    <div id="panelHeadWrapper">
+                        <!--<label>Control Panel</label>-->
+                    </div>
+                    <div id="panelItemsWrapper">
+
+                    </div>
+                    <div id="panelActionsWrapper">
+                        <a class="active" title="Add Dot" id="addPoint"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>Point</a>
+                        <a class="active" title="Add Line" id="addLine"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>Line</a>
+                        <a class="active" title="Add Plane" id="addPlane"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>Plane</a><br>
+                        <a class="active" title="Clear" id="clear"><i class="fa fa-repeat  fa-fw" aria-hidden="true"></i>Clear</a>
+                        <a class="" title="Intersect" id="intersect"><i class="fa fa-compress fa-fw" aria-hidden="true"></i>Intersect</a>
+                        <a class="" title="Delete" id="delete"><i class="fa fa-trash fa-fw" aria-hidden="true"></i>Delete</a><br>
+                        <a class="active" title="Save" id="save"><i class="fa fa-floppy-o fa-fw" aria-hidden="true"></i>Save</a>
+                    </div>
+                </panel>
+                <h6 id="info"></h6>
+                <h6>Hold CTRL to select multiple. </h6>
+
+    </div>
+</div>
+</div>
+    <br><br><br>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="./intersections.js"></script>
+    <script type="text/javascript">
+        var algObjs = {};
+        var ctrlPressed = false;
+
+        $(document).ready(function(){
+            console.log("Document ready!")
+            if(sessionStorage.lastSaved != undefined){
+                console.log("there is a saved state... retrieving,",sessionStorage)
+                var retrieveAlgObjs = JSON.parse(sessionStorage.getItem("algObjsSaved"));
+                objcounter = JSON.parse(sessionStorage.getItem("algObjsCounterSaved"));
+                function rebuildAlgObj(obj) {
+                  if(obj.hasOwnProperty('pos')) {
+                    //it's a point
+                    var rebuild = new Point(new Vector(obj.pos.x,obj.pos.y,obj.pos.z));
+                    return rebuild;
+                  }
+                  if(obj.hasOwnProperty('dir')) {
+                    //it's a line
+                    var rebuild = new Line(new Vector(obj.dir.x,obj.dir.y,obj.dir.z), new Vector(obj.off.x,obj.off.y,obj.off.z));
+                    return rebuild;
+                  }
+                  if(obj.hasOwnProperty('normal')) {
+                    //it's a line
+                    var rebuild = new Plane(new Vector(obj.normal.x,obj.normal.y,obj.normal.z), new Vector(obj.off.x,obj.off.y,obj.off.z));
+                    return rebuild;
+                  }
+                  else {
+                    //we don't know what it is
+                    return obj;
+                  }
+                }
+                rebuild = {}
+                for(idx in retrieveAlgObjs) {
+                  //rebuild everything
+                  var newobj = rebuildAlgObj(retrieveAlgObjs[idx])
+                  rebuild[newobj.id] = newobj;
+                }
+                algObjs = rebuild;
+                redisplay();
+            } else{
+                console.log("no saved state... defaulting")
+            }
+            $(document).on('keydown',function(event) {
+                if ( (event.which == 91 || event.which == 17) || (event.ctrlKey||event.metaKey) ) {
+                    ctrlPressed = true;
+                }
+            });
+            $(document).on('keyup',function(event) {
+                if ( (event.which == 91 || event.which == 17) || (event.ctrlKey||event.metaKey) ) {
+                    ctrlPressed = false;
+                }
+            });
+            $("#addPoint").on('click',function(){
+                var newPoint = new Point(new Vector(Math.random(),Math.random(),Math.random()));
+                var newid = newPoint.id;
+                algObjs[newid] = newPoint;
+                //we could call addAlgObj(algObjs[newid]) but it's obsolete
+                redisplay();
+            });
+            $("#addLine").on('click',function(){
+                var newLine = new Line(new Vector(Math.random(),Math.random(),Math.random()), new Vector(Math.random(),Math.random(),Math.random()));
+                var newid = newLine.id;
+                algObjs[newid] = newLine;
+                //we could call addAlgObj(algObjs[newid]) but it's obsolete
+                redisplay();
+            });
+            $("#addPlane").on('click',function(){
+                var newPlane = new Plane(new Vector(Math.random(),Math.random(),Math.random()), new Vector(Math.random(),Math.random(),Math.random()));
+                var newid = newPlane.id;
+                algObjs[newid] = newPlane;
+                //we could call addAlgObj(algObjs[newid]) but it's obsolete
+                redisplay();
+            });
+            $("#clear").on('click',function(){
+                for (i in algObjs) {
+                    console.log("idx: ", i, ", object: ", algObjs[i].toString());
+                    $( "#"+i ).parent().remove();
+                    delete algObjs[i];
+                }
+                redisplay();
+            });
+            $("#delete").on('click',function(){
+              $("#panelItemsWrapper>item>label.selected").each(
+                function() {
+                  console.log("deleting at id", $(this)[0].id, ", object:", algObjs[$(this)[0].id])
+                  delete algObjs[$(this)[0].id];
+                }
+              );
+              redisplay();
+            });
+            $("#save").on('click',function() {
+                save();
+            });
+        });
+
+        function save(){
+            console.log("save: current state", sessionStorage)
+            sessionStorage.setItem("algObjsSaved", JSON.stringify(algObjs));
+            sessionStorage.setItem("algObjsCounterSaved", JSON.stringify(objcounter));
+            var currentdate = new Date();
+            var datetime = "" + currentdate.getDate() + "/"
+                                + (currentdate.getMonth()+1)  + "/"
+                                + currentdate.getFullYear() + " @ "
+                                + currentdate.getHours() + ":"
+                                + currentdate.getMinutes() + ":"
+                                + currentdate.getSeconds();
+            sessionStorage.lastSaved = datetime;
+
+            $("#info").text("Last Saved: "+sessionStorage.lastSaved);
+        }
+        function itemsAddEventListener(){
+            $("#panelItemsWrapper>item>span").each(function(index){
+                $(this).off();
+                $(this).on('click',function(event){
+                    $(this).toggleClass("deactived");
+                    event.preventDefault();
+                });
+            });
+            $("#panelItemsWrapper>item>label").each(function(index){
+                $(this).off();
+                $(this).on('click',function(event){
+                    if(ctrlPressed == false){
+                        $("#panelItemsWrapper>item>label").each(function(index){
+                            $(this).removeClass("selected");
+                        });
+                        $(this).addClass("selected");
+                    } else{
+                        $(this).toggleClass("selected");
+                    }
+                    event.stopPropagation();
+                    event.preventDefault();
+                    var counts = 0;
+                    $("#panelItemsWrapper>item>label").each(function(index){
+                        if($(this).hasClass("selected")){counts += 1;}
+                    });
+                    if(counts != 0){
+                        $("#delete").addClass("active");
+                    }else{
+                        $("#delete").removeClass("active");
+                    }
+                });
+            });
+            $("#panelItemsWrapper").each(function(index){
+                $(this).off();
+                $(this).on('click',function(event){
+                    $("#panelItemsWrapper>item>label").each(function(index){
+                        $(this).removeClass("selected");
+                    });
+                    $("#delete").removeClass("active");
+                });
+            });
+        }
+        function redisplay(){
+            console.log("redisplaying panel...", algObjs)
+            if(Object.keys(algObjs).length == 0){
+                $("#panelItemsWrapper").html('<p ><br>Press the <i class="fa fa-plus fa-fw" aria-hidden="true"></i> buttons to add point, line or plane.</p>');
+            } else{
+                $("#panelItemsWrapper").html("");
+                for (i in algObjs) {
+                    console.log("redisplay: ", algObjs[i]);
+                    function algObjToPanel(object){
+                        //console.log("AlgObj with id "+object.id+", ", object.toString());
+                        $("#panelItemsWrapper>p").remove();
+                        $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
+                        itemsAddEventListener();
+                    }
+                    algObjToPanel(algObjs[i]);
+                }
+            }
+            console.log("redisplaying graph...")
+            redrawPlot();
+        }
+        function addAlgObj(object){
+          //obsolete!!
+            throw new Error("addAlgObj is obsolete, use redisplay() instead;")
+            console.log("addAlgObj with id "+object.id+", ", object.toString());
+            $("#panelItemsWrapper>p").remove();
+            $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
+            itemsAddEventListener();
+        }
+    </script>
+</body>
+
+<script>
+var layout = {
+  scene: {
+    xaxis: {
+      range: [-10,10]
+    },
+    yaxis: {
+      range: [-10,10]
+    },
+    zaxis: {
+      range: [-10,10]
+    },
+    camera: {
+      up: {
+        x: 0,
+        y: 0,
+        z: 1
+      },
+      eye: {
+        x: -1.7428,
+        y: 1.0707,
+        z: 0.7100
+      }
+    },
+    aspectratio: {x: 1, y: 1, z: 1},
+    },
+  showlegend: false,
+  margin: {l:0,r:0,b:0,t:0}
+  };
+function redrawPlot() {
+  goified = []
+  if(algObjs.length == 0) {
+    Plotly.newPlot(
+      'canvasWrapper',
+      [{
+        x: [],
+        y: [],
+        type: 'scatter3d'
+      }],
+      layout);
+  } else {
+    for(idx in algObjs) {
+      goified.push(algObjs[idx].goify(layout));
+    }
+    console.log("canvasWrapper: redraw. goified: ",goified);
+  }
+  Plotly.newPlot('canvasWrapper', goified, layout);
+}
+</script>
+</html>

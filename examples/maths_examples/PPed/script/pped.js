@@ -1,34 +1,38 @@
+// Draw a 1x1x1 cube as default, global variables
 var u = [1,0,0];
 var v = [0,1,0];
 var w = [0,0,1];
 
+// Parallelipiped object
 var my_pped = {
     u: u,
     v: v,
     w: w,
+    // Method to find volume
     volume: function() {
         var crossp = math.cross(this.v,this.w);
         var vol = math.dot(this.u,crossp);
         return Math.abs(vol)
     },
+    // Method to return object to plot on plotly
     gopped: function() {
         var data = {
         type: "mesh3d",
-        "x" : [0,this.u[0],this.u[0]+this.v[0],this.v[0],this.w[0],this.w[0]+this.u[0],this.w[0]+this.u[0]+this.v[0],
+        x : [0,this.u[0],this.u[0]+this.v[0],this.v[0],this.w[0],this.w[0]+this.u[0],this.w[0]+this.u[0]+this.v[0],
              this.v[0]+this.w[0]],
-        "y" : [0,this.u[1],this.u[1]+this.v[1],this.v[1],this.w[1],this.w[1]+this.u[1],this.w[1]+this.u[1]+this.v[1],
+        y : [0,this.u[1],this.u[1]+this.v[1],this.v[1],this.w[1],this.w[1]+this.u[1],this.w[1]+this.u[1]+this.v[1],
              this.v[1]+this.w[1]],
-        "z" : [0,this.u[2],this.u[2]+this.v[2],this.v[2],this.w[2],this.w[2]+this.u[2],this.w[2]+this.u[2]+this.v[2],
+        z : [0,this.u[2],this.u[2]+this.v[2],this.v[2],this.w[2],this.w[2]+this.u[2],this.w[2]+this.u[2]+this.v[2],
              this.v[2]+this.w[2]],
-        "i" : [0, 0, 3, 4, 4, 4, 4, 4, 5, 6, 6, 7],
-        "j" : [2, 3, 4, 3, 6, 7, 1, 5, 2, 2, 7, 3],
-        "k" : [1, 2, 0, 7, 5, 6, 0, 1, 1, 5, 2, 2],
-        "opacity": 0.6,
-//        "colorscale": [[0, "rgb(0,62,116)"],[1, "rgb(255,255,255)"]]
-//        "colorscale":'Viridis'
+        i : [0, 0, 3, 4, 4, 4, 4, 4, 5, 6, 6, 7],
+        j : [2, 3, 4, 3, 6, 7, 1, 5, 2, 2, 7, 3],
+        k : [1, 2, 0, 7, 5, 6, 0, 1, 1, 5, 2, 2],
+        opacity: 0.6,
+        showlegend: true
         }
         return data
     },
+    // Layout object
     lytpped: function() {
         var ubx = Math.abs(this.u[0])+Math.abs(this.v[0])+Math.abs(this.w[0]);
         var uby = Math.abs(this.u[1])+Math.abs(this.v[1])+Math.abs(this.w[1]);
@@ -51,44 +55,11 @@ var my_pped = {
                 size: 12,
                 color: "#003E74",
                 weight: 900
-                },
-                fill : 'tonexty',
-                showlegend: false
+            },
+            fill : 'tonexty',
+            showlegend: true
         }
         return layout
-    }
-}
-
-//  Arrow prototype
-function Arrow(start,end) {
-    this.start = start;
-    this.end = end;
-    // Method to return data for the arrow shaft
-    this.shaft_data = function() {
-        var x = [this.start[0],this.end[0]];
-        var y = [this.start[1],this.end[1]];
-        var z = [this.start[2],this.end[2]];
-        var data = {
-            x: x,
-            y: y,
-            z: z,
-            type: 'scatter3d',
-            mode: 'lines',
-            line: {
-                width: 10,
-                color: "rgb(0,62,116)"
-            }
-        }
-    return data
-    }
-    // Method to return data for arrow head
-    this.head_data = function() {
-        var x
-    }
-    // Merge data for arrow with current plot, probably unnecessary...
-    this.merge = function(data) {
-        var new_data = [data,this.shaft_data()];
-        return new_data
     }
 }
 
@@ -101,15 +72,23 @@ function getImage() {
     document.getElementById("panel").appendChild(x);
 }
 
+
 function main() {
     var vol = my_pped.volume();
-    var arrow1 = new Arrow([0,0,0],u);
-    var arrow2 = new Arrow([0,0,0],v);
-    var arrow3 = new Arrow([0,0,0],w);
 
-    var data = [my_pped.gopped(),arrow1.shaft_data(),arrow2.shaft_data(),arrow3.shaft_data()];
+    // Give arrows names as well for legends
+    var arrow1 = new Arrow3D(u[0],u[1],u[2],[0,0,0], 5,'rgb(0,62,116)',true);
+    arrow1.shaft['name'] = 'u⃗'
+    var arrow2 = new Arrow3D(v[0],v[1],v[2],[0,0,0], 5,'rgb(2,137,59)',true);
+    arrow2.shaft['name'] = 'v⃗'
+    var arrow3 = new Arrow3D(w[0],w[1],w[2],[0,0,0], 5,'rgb(221,37,1)',true);
+    arrow3.shaft['name'] = 'w⃗'
+
+    var data = [my_pped.gopped(),arrow1.data.shaft,arrow1.data.wings,arrow2.data.shaft,arrow2.data.wings
+        ,arrow3.data.shaft,arrow3.data.wings];
 
     var layout = my_pped.lytpped();
+
     document.getElementById("volume").innerHTML = String(vol);
     Plotly.newPlot('graph',data,layout)
     $("#panel").hide()
@@ -140,11 +119,17 @@ function ppedplotter() {
     my_pped.w = w;
 
     var vol = my_pped.volume();
-    var arrow1 = new Arrow([0,0,0],u);
-    var arrow2 = new Arrow([0,0,0],v);
-    var arrow3 = new Arrow([0,0,0],w);
+
+    var arrow1 = new Arrow3D(u[0],u[1],u[2],[0,0,0], 5,'rgb(0,62,116)',true);
+    arrow1.shaft['name'] = 'u⃗'
+    var arrow2 = new Arrow3D(v[0],v[1],v[2],[0,0,0], 5,'rgb(2,137,59)',true);
+    arrow2.shaft['name'] = 'v⃗'
+    var arrow3 = new Arrow3D(w[0],w[1],w[2],[0,0,0], 5,'rgb(221,37,1)',true);
+    arrow3.shaft['name'] = 'w⃗'
+
     // Arrow data and PPed data
-    var data = [my_pped.gopped(),arrow1.shaft_data(),arrow2.shaft_data(),arrow3.shaft_data()];
+    var data = [my_pped.gopped(),arrow1.data.shaft,arrow1.data.wings,arrow2.data.shaft,arrow2.data.wings
+        ,arrow3.data.shaft,arrow3.data.wings];
     var layout = my_pped.lytpped();
 
     Plotly.newPlot('graph',data,layout)
