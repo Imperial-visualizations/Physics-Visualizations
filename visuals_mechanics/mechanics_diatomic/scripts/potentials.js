@@ -42,10 +42,11 @@ LJ.prototype.calcV = function(r) {
 };
 
 LJ.prototype.calcF = function(r) {
-    var repulsive = -12 * Math.pow(this.s / r, 11);
+    var repulsive = -12 * Math.pow(this.s / r, 12);
     var attractive = 6 * Math.pow(this.s / r, 6);
-    return 4 * this.e * (repulsive + attractive)
+    return 4 * this.e * (repulsive + attractive)/r;
 };
+
 LJ.prototype.getR_0 = function(){
     return Math.pow(2,-1/6) * this.s;
 };
