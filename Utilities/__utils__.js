@@ -84,20 +84,6 @@ function c2p(x, y) {
 }
 
 
-//// Vector field function in 2D
-//function vectorField2D(x, y) {
-//    // Vector field function to be used put here...
-//    return [x, y]
-//}
-//
-//
-//// Vector field function in 3D
-//function vectorField3D(x, y, z) {
-//    // Vector field function to be used put here...
-//    return [x, y, z]
-//}
-
-
 // Generate a vector field for given arrays X, Y, Z and a function of (x,y,z) called vectorField3D and place in one array
 function genVel2D(X, Y, vectorField2D) {
     var vecs = [];
