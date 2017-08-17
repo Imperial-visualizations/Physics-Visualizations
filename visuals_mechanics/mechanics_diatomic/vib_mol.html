@@ -1,0 +1,58 @@
+<!doctype html>
+<head>
+    <title>Diatomic Molecule Vibration and Rotation</title>
+    <script src = "https://github.com/photonstorm/phaser-ce/releases/download/v2.8.3/phaser.min.js"></script>
+    <script src = "./scripts/vecops.js"></script>
+    <script src = "./scripts/potentials.js"></script>
+    <script src=https://code.jquery.com/jquery-latest.min.js></script>
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
+    <link rel = "icon" href = "images/favicon.ico" type="image/x-icon">
+
+    <script>
+        function showhide(btn) {
+            var btn_class = $(btn).attr('class');
+            var expandable = '.' + btn_class + '#expand';
+            $(expandable).slideToggle("fast");
+
+            if (btn.innerText === 'Hide') {
+                btn.innerText = 'Show';
+            }
+
+            else {
+                btn.innerText = 'Hide';
+            }
+        }
+    </script>
+
+    <script src = "scripts/molecule.js"></script>
+    <script src="scripts/graphics.js"></script>
+</head>
+
+<body>
+<button class="LJ" id="showhide" onclick="showhide(this);">Hide</button>
+<div class = "LJ" id="expand">
+    Graph
+</div>
+<br>
+
+<button class="vibE" id="showhide" onclick="showhide(this);">Hide</button>
+<div class="vibE" id="expand">
+    Graph 2
+</div>
+<br>
+
+<button class="rotE" id="showhide" onclick="showhide(this);">Hide</button>
+<div class="rotE" id="expand">
+    Graph 3
+</div>
+<br>
+
+<button class="potE" id="showhide" onclick="showhide(this);">Hide</button>
+<div class="potE" id="expand">
+    Graph 4
+</div>
+<br>
+
+
+
+</body>
