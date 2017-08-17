@@ -15,6 +15,7 @@ $(window).on('load', function() {
             refractiveIndexIndex: 6,
             angleIndex: 10,
             data: [],
+            dataFres: [],
             setPolarisation: function(polarisation) {
                 this.polarisation = polarisation;
             },
@@ -26,17 +27,28 @@ $(window).on('load', function() {
             },
             getPlotData: function() {
                 return this.data[this.polarisation][this.refractiveIndexIndex][this.angleIndex];
+            },
+            getFresPlotData: function() {
+                return [this.dataFres[this.polarisation][this.refractiveIndexIndex][this.angleIndex]];
+            },
+            getCurvePlotData: function(){
+                var plotData = this.dataFres.Curves[this.polarisation][this.refractiveIndexIndex].concat(
+                    [this.dataFres[this.polarisation][this.refractiveIndexIndex][this.angleIndex]]);
+                console.log(plotData);
+                return plotData;
             }
         };
 
     $.when(
         $.getJSON("https://rawgit.com/binaryfunt/Imperial-Visualizations/master/dielectric_boundary_data2.JSON"),
-        $.getJSON("https://rawgit.com/binaryfunt/Imperial-Visualizations/master/dielectric_boundary_layout.JSON")
-    ).then(function(data, layout) { // i.e., function(JSON1, JSON2) {// success}, function() {// error}
+        $.getJSON("https://rawgit.com/binaryfunt/Imperial-Visualizations/master/dielectric_boundary_layout.JSON"),
+        $.getJSON("https://rawgit.com/EdKeys/Imperial-Visualizations/master/fresnel_data.JSON")
+    ).then(function(data, layout, dataFres) { // i.e., function(JSON1, JSON2) {// success}, function() {// error}
         data = data[0];
+        dataFres = dataFres[0];
         layout = layout[0];
 
-        init(data, layout);
+        init(data, layout, dataFres);
 
         dom.polarisationSwitchInputs.on("change", handlePolarisationSwitch);
         dom.refractiveIndexInput.on("input", handleRefractiveIndexSlider);
@@ -45,12 +57,19 @@ $(window).on('load', function() {
     }, showJSONLoadError);
 
 
-    function init(data, layout) {
+    function init(data, layout, dataFres) {
         phys.data = data;
-
+        phys.dataFres = dataFres;
+        // layout['showlegend']=true;
+        layout['width']=600;
+        layout['height']=500;
+        layout['xaxis'] = {range: [0, 90], title: "Angle"};
+        layout['yaxis'] = {range: [-1, 2.1]};
         endLoadingScreen();
 
         Plotly.plot(div='graph', deepCopy(phys.getPlotData()), layout=layout);
+        Plotly.plot(div='graph2', deepCopy(phys.getCurvePlotData()), layout=layout);
+        // Plotly.plot(div='graph2', deepCopy(phys.getFresPlotData()), layout=layout);
     }
 
 
@@ -117,6 +136,28 @@ $(window).on('load', function() {
             transition: {duration: 0},
             frame: {duration: 0, redraw: false}
         });
+
+        var update2 = {},
+            plotData2 = phys.getCurvePlotData();
+        for (var trace2 = 0; trace2 < plotData2.length - 1; trace2++) {
+            update2[trace2] = {
+                x: plotData2[trace2].x,
+                y: plotData2[trace2].y,
+                z: plotData2[trace2].z,
+                opacity: 1
+            };
+        }
+        Plotly.animate(div="graph2", {
+            data: getObjValues(update2),
+            traces: getObjKeysAsInts(update2),
+            layout: {}
+        }, {
+            transition: {duration: 0},
+            frame: {duration: 0, redraw: false}
+        });
+        Plotly.restyle(div="graph2", {x: [phys.dataFres[phys.polarisation][phys.refractiveIndexIndex][phys.angleIndex]['x']],
+                                y: [phys.dataFres[phys.polarisation][phys.refractiveIndexIndex][phys.angleIndex]['y']]},
+                                [2]);
     }
 
 
