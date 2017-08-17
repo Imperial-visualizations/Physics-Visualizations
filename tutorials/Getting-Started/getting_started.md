@@ -2,11 +2,13 @@
 
 *This is a quick guide to getting started with the Imperial-Visualizations project to speed up set-up time.*
 
-In this tutorial the % sign is used to signify a placeholder. For example %username% would mean to use the applicable username. Aside from this tutorial a multitude of other tutorials are available [here](https://anthonyli358.github.io/Imperial-Visualizations/tutorials "tutorials").
+In this tutorial the % sign is used to signify a placeholder. For example, %username% would mean to use the applicable username. Various other tutorials are available [here](https://anthonyli358.github.io/Imperial-Visualizations/tutorials "tutorials").
+
 
 ## Introduction
 
 The Imperial-Visualizations project is a team project in which collaboration and staying up-to-date with each other (especially within subteams) is vital. In order to co-ordinate this we are currently using Slack and Trello. Coding in Python and Jupyter Notebooks also needs to standardised so we use the most recent Anaconda installation.
+
 
 ## Team Apps
 
@@ -33,6 +35,7 @@ Trello essentially a todo list that organises projects into various boards. This
 3. Once you have joined the team you will see various project boards. Current boards are *Core Team* (no longer in use as set-up process is completed), *E&M group*, *Math group*, *Mechanics and V\&W*. If a board for your development stream doesn't yet exist feel free to make your own.
 
 4. When you create a Trello account it will automatically create a welcome board for you. It is recommended to take the 5 minutes to work through the examples on this board to rapidly learn what Trello can offer.
+
 
 ## Coding Apps
 
@@ -68,6 +71,7 @@ Javascript is *the* client-side programming language. In order to create fully i
 
 1. You don't need to install anything to work in HTML/Javascript. Just make sure that you have a good IDE to make your coding life easier and that you save the files as .html or .js files just as you would use the .py extension when saving Python files.
 
+
 ## Development
 
 All coding collaboration is done via GitHub. See the [git tutorial](https://anthonyli358.github.io/Imperial-Visualizations/git/git#local-and-remote-files "git tutorial") for more details. 
@@ -78,9 +82,11 @@ The final aim of the project is to create standalone interactive web apps for le
 
 1. Since the Jupyter Notebook should be easier to code (coding interactivity isn't required since students will be changing code, variables, equations.etc themselves) it makes sense to first create a proof of concept for the visualization in Python. We also found that many people are more comfortable working with classes, objects.etc in Python. The key here is to make sure the concept is well-explained in the visualization.
 
-2. Either when the code is done or during coding it is important to add explanations of the concept and what each segment of code is doing. Here .py files should be converted to .ipynb files and code carefully split into appropriate sections. This year we left some time near the end of the project to end all coding and focus on visualization feedback, clear explanations, and consistent formatting. 
+2. At this point consider whether the visualizations will be computationally intensive or not. If it's intensive you will need to first export the plotting data to a json data file to eliminate the delay due to long computation times. Generate this using Python to reduce the workload when creating a Jupyter Notebook (the physics enabling the data output is sufficient here). If it's not intensive it is possible continuously update the data in Javascript and have the user update it themselves in a completely separate Jupyter Notebook. This also removes any loading times.
 
-3. Javascript is required to create standalone interactive web apps. In order to do this Javascript is coded within a HTMl web page references a CSS file for styling. Get started with HTML and Javascript by following the [HTML/Javascript tutorial](https://anthonyli358.github.io/Imperial-Visualizations/HTML/DoubleClickMe "HTML/Javascript tutorial").  
+3. Either when the code is done or during coding, it is important to add explanations of the concept and what each segment of code is doing. Here .py files should be converted to .ipynb files and code carefully split into appropriate sections. This year we left some time near the end of the project to end all coding and focus on visualization feedback, clear explanations, and consistent formatting. 
+
+4. Javascript is required to create standalone interactive web apps. In order to do this Javascript is coded within a HTMl web page references a CSS file for styling. Get started with HTML and Javascript by following the [HTML/Javascript tutorial](https://anthonyli358.github.io/Imperial-Visualizations/HTML/DoubleClickMe "HTML/Javascript tutorial").  
 
 ### Coding
 

@@ -2,11 +2,13 @@
 
 *This is a basic tutorial to using git for file history and version control in this project. If you really want to make the most of this powerful tool I recommend reading and working through the "Pro Git" book by Scott Chacon and Ben Straub, particularly chapters 1, 2, and 3. It is available online at https://git-scm.com/book/en/v2.*
 
-In this tutorial the % sign is used to signify a placeholder. For example %username% would mean to use the applicable username. Aside from this tutorial a multitude of other tutorials are available [here](https://anthonyli358.github.io/Imperial-Visualizations/tutorials "tutorials").
+In this tutorial the % sign is used to signify a placeholder. For example, %username% would mean to use the applicable username. Various other tutorials are available [here](https://anthonyli358.github.io/Imperial-Visualizations/tutorials "tutorials").
+
 
 ## Introduction
 
 Git is a version control system (VCS) used for tracking and coordinating changes in computer files, and is particularly useful for work involving multiple people. For this Imperial Visualizations project we will be using GitHub - a web based version control repository (repo) and internet hosting service. 
+
 
 ## Getting Started
 
@@ -19,6 +21,7 @@ Git is a version control system (VCS) used for tracking and coordinating changes
 4. Work through the GitHub "Hello World" guide available at https://guides.github.com/activities/hello-world/ to get to grips with the basic concepts. 
 
 5. Have a look at the other guides available at https://guides.github.com/ (non-essential).  
+
 
 ## GitKraken
 
@@ -33,6 +36,7 @@ GitKraken is a GUI (Graphic User Interface) git client that greatly speeds up th
 3. You are now ready to use GitKraken to contribute to the Imperial-Visualizations repo. Although you can simply read the rest of the tutorial, it is recommended to create a test repo and repeat the step 2 (above) to clone this new repo before continuing. You should use this test repo to test, break, and mess around with git to make sure that you understand the features outlined below. 
 
    --create test repo-- 
+
 
 ## The Basics 
 
@@ -99,6 +103,7 @@ We discussed these a lot in the [previous section](https://anthonyli358.github.i
 
    Remote files are online in the GitHub repo and any pushed commits will affect these files. This is the repo that everyone is working together on and changes made by other collaborators are pulled to local from here. 
    
+   
 ## Important Notes
 
 This section covers some important features of git (not necessarily GitKraken) which it is important to be aware of.
@@ -120,6 +125,7 @@ In the highest level of each branch of the repo should be a nameless file with t
 1. \# is a comment (like in Python), . refers to a file, and / refers to a folder. * is a wildcard, so *.pyc means that anything with the extension .pyc will be ignored by git. 
 
 2. By adding .ipynb_checkpoints/ to the .gitignore, the clutter from any .ipynb_checkpoint files for Jupyter Notebooks is successfully ignored when using git.
+
 
 ## Other Key Features
 
@@ -252,6 +258,7 @@ After completing work in a branch we need to merge it back to the main developme
    Another idea may be to fork the Imperial-Visualizations repo to a new repo for each subgroup and then merge any completed work back to the dev branch in the main repo via pull request. This has a similar structure to the previous suggestion but without the repo showing a multitude of different branches which are unrelated to each subgroup's individual work. Since this year the entire team is encountering similar obstacles and thus working closely together it currently makes sense to keep all work in a single repo to instantly share any progress.
    
 >*Note*: If using these workflows it is recommended to keep the dev and master branches protected to only be merged by pull request.
+
 
 ## Further Reading
 
