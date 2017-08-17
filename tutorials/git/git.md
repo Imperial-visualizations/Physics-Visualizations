@@ -2,7 +2,7 @@
 
 *This is a basic tutorial to using git for file history and version control in this project. If you really want to make the most of this powerful tool I recommend reading and working through the "Pro Git" book by Scott Chacon and Ben Straub, particularly chapters 1, 2, and 3. It is available online at https://git-scm.com/book/en/v2.*
 
-In this tutorial the % sign is used to signify a placeholder. For example %username% would mean to use the applicable username.
+In this tutorial the % sign is used to signify a placeholder. For example %username% would mean to use the applicable username. Aside from this tutorial a multitude of other tutorials are available [here](https://anthonyli358.github.io/Imperial-Visualizations/tutorials "tutorials").
 
 ## Introduction
 
@@ -12,7 +12,7 @@ Git is a version control system (VCS) used for tracking and coordinating changes
 
 1. Create a GitHub account https://github.com/. You can also use your student email address to activate the Student Develop Pack https://education.github.com/pack which comes with a multitude of software development tools and perks such as private repos (lasts a limited time).
 
-2. Contact Caroline Clewley with your GitHub username/email to be added to the Imperial-Visualizations repo.
+2. Contact Caroline Clewley (@c.clewley) with your GitHub username/email to be added to the Imperial-Visualizations repo.
 
 3. The owner of the repo can add collaborators by going to *Repositories -> Imperial-Visualizations -> Settings -> Collaborators -> (scroll to bottom) Search by username, full name, or email address*.
 
@@ -99,6 +99,28 @@ We discussed these a lot in the [previous section](https://anthonyli358.github.i
 
    Remote files are online in the GitHub repo and any pushed commits will affect these files. This is the repo that everyone is working together on and changes made by other collaborators are pulled to local from here. 
    
+## Important Notes
+
+This section covers some important features of git (not necessarily GitKraken) which it is important to be aware of.
+
+### git-diff
+
+You will notice that when file are ready to be staged you can click on them to see what changes have been made since the last commit. This git-diff is an incredibly useful feature but has its issues when it comes to Jupyter Notebooks (.ipynb files).
+
+1. Jupyter Notebooks automatically create .ipynb_checkpoint files inside a *.ipynb_checkpoints* folder when any changes are made. However, saving the notebooks themselves are still saved as the initial .ipynb files so these checkpoints create unnecessary clutter. 
+
+2. Whenever a Jupyter Notebook is opened the notebook saves any changes to the cell output (even if the notebook has not necessarily been run). This appears as fairly meaningless base 64 in the git-diff, making it difficult to actually see what useful changes (markdown and code) have been made. 
+
+3. In order to solve this issue @rd1313 made some changes to the jupyter_notebook_config.py file to allow changes made to Jupyter Notebooks to meaningfully seen in the gif-diff. This file can be seen as the first pinned item on the *#general* channel in Slack and should be copied to the *.jupyter* installation folder, which on windows is usually found under *C:/Users/%User%/.jupyter* (I'm afraid I don't know where it is for other OS). 
+
+### .gitignore
+
+In the highest level of each branch of the repo should be a nameless file with the extension .gitignore, which is checked by git checks to see what folders to ignore. If you open this file (using notepad is good) you will see a list of files and folders. If your file isn't appearing in GitKraken/your changes aren't recognised by git, it's a good idea to check the .gitignore file as this is usually the culprit.
+
+1. \# is a comment (like in Python), . refers to a file, and / refers to a folder. * is a wildcard, so *.pyc means that anything with the extension .pyc will be ignored by git. 
+
+2. By adding .ipynb_checkpoints/ to the .gitignore, the clutter from any .ipynb_checkpoint files for Jupyter Notebooks is successfully ignored when using git.
+
 ## Other Key Features
 
 This section covers the rest of the features that you will need to understand what exactly is going on when you use git throughout this project.
@@ -123,7 +145,7 @@ Branches are a very powerful tool for software development but can be quite tric
 
 3. **Branch Navigation**
 
-   To create branches under an overarching subgroup, folders can be created by naming the branch using *%subgroup%/%purpose%* e.g.  *fix/particle_physics* would create a *particle_physics* branch under a *fix* folder. All branches in the repo are shown in GitKraken under *REMOTE* on the lefthand toolbar. To pull a branch to your computer double click on it and it should now also appear under *LOCAL*. 
+   To create branches under an overarching subgroup, folders can be created by naming the branch using *%subgroup%/%purpose%* e.g.  *fix/particle_physics* would create a *particle_physics* branch under a *fix* folder. All branches in the repo are shown in GitKraken under *REMOTE* on the left-hand toolbar. To pull a branch to your computer double click on it and it should now also appear under *LOCAL*. 
    
  ![alt: local-remote-branches](images/other_branches_3_local_remote.png)
    
@@ -169,7 +191,7 @@ Stashing and Popping can be used to store work for later without committing, but
 
 3. **Stash Navigation**
 
-   When stashes are present they will also appear on the lefthand toolbar under *STASH*, which will be located just below the *REMOTE* tab (see [Branch Navigation](https://anthonyli358.github.io/Imperial-Visualizations/git/git#branch-navigation "Branch Navigation") where there are no stashes so the tab is automatically hidden). 
+   When stashes are present they will also appear on the left-hand toolbar under *STASH*, which will be located just below the *REMOTE* tab (see [Branch Navigation](https://anthonyli358.github.io/Imperial-Visualizations/git/git#branch-navigation "Branch Navigation") where there are no stashes so the tab is automatically hidden). 
    
    Stashes can be easily deleted by right clicking on them and clicking *Delete Stash*, but be careful to first make sure that all the stashed work is not needed or has been committed.
 
@@ -229,7 +251,7 @@ After completing work in a branch we need to merge it back to the main developme
 
    Another idea may be to fork the Imperial-Visualizations repo to a new repo for each subgroup and then merge any completed work back to the dev branch in the main repo via pull request. This has a similar structure to the previous suggestion but without the repo showing a multitude of different branches which are unrelated to each subgroup's individual work. Since this year the entire team is encountering similar obstacles and thus working closely together it currently makes sense to keep all work in a single repo to instantly share any progress.
    
->*Note*: If using these workflows it is reommended to keep the dev and master branches protected to only be merged by pull request.
+>*Note*: If using these workflows it is recommended to keep the dev and master branches protected to only be merged by pull request.
 
 ## Further Reading
 
