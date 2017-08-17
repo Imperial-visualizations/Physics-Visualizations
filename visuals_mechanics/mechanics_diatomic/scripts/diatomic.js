@@ -8,7 +8,7 @@
  * @param color: Color of atom for phaser code.(cosmetic only)
  * @constructor: Atom
  */
-Atom = function(pos, radius, mass, potential, color) {
+Atom = function(pos, radius, mass, color) {
     // Making position and force vectors.
     this.pos = new Vector(pos);                 // Atom position Vector.
 
@@ -38,16 +38,9 @@ Atom = function(pos, radius, mass, potential, color) {
  */
 Molecule = function(a1,a2, potential, keVib_0,keRot_0) {
 
-
-
     // Checking objects of class Atom passed in in the list.
     if (a1.constructor !== Atom || a2.constructor !== Atom){
         console.error("Can't run simulation without two valid atom objects");
-    }
-
-    // Sanity check
-    if (this.atoms.length !== 2) {
-        console.error("Sorry, currently only support diatomic molecules! Please ensure you enter 2 atoms in array.")
     }
 
     this.V = potential;
@@ -62,24 +55,36 @@ Molecule = function(a1,a2, potential, keVib_0,keRot_0) {
     };
 
     this.init_r_0 = function () {
-        //TODO:Solve the equation needed to calculate this.
-    }
-    
+        var val = this.V.getR_0();
+
+        for(var i =0; i < 10; i++){
+            val -= (this.reducedM()*Math.pow(this.omega,2)*Math.pow(val,14) - 12*this.V.e*Math.pow(this.V.getR_0()*val,6)- 12*this.V.e*Math.pow(this.V.getR_0(),12))/
+                    (14*this.reducedM()*Math.pow(this.omega,2)*Math.pow(val,13)-72*this.V.e*Math.pow(val,5) * Math.pow(this.V.getR_0(),6));
+        }
+        return val;
+    };
+
+    /**
+     * @return {number}
+     */
     this.I_0 = function () {
-        return this.reducedM() *  Math.pow(this.V.getR_0(),2);
+        return this.reducedM() * Math.pow(this.V.getR_0(),2);
     };
     this.omega_0 = function () {
-        return Math.sqrt( 2* keRot_0/this.I);
+        return Math.sqrt( 2*keRot_0/this.I);
     };
     this.I = this.I_0();
-    this.L = this.I * this.omega_0();
-    this.r = new Vector(0,1).multiply(this.init_r_0());
-    this.v = Math.sqrt( 2* keVib_0 / this.reducedM());
     this.omega = this.omega_0();
+    this.L = this.I * this.omega;
+
+    this.r = new Vector([0,1]).multiply(this.init_r_0());;
+    this.v = Math.sqrt(2* keVib_0 / this.reducedM());
 
     a1.pos = this.r.multiply(a1.mass/this.tot_m());
     a2.pos = this.r.multiply(-a2.mass/this.tot_m());
 
+
+    console.log(this.r.toString());
     // // Magnitude of linear speed for each Atom object.
     // this.p_i = Math.sqrt((this.E_v * 2 * this.tot_m()) / (Math.pow(this.atoms.length, 2)));
     // for (var i = 0; i < this.atoms.length; i++) {
@@ -118,7 +123,7 @@ Molecule.prototype.calcUnitVect = function(atom1, atom2) {
 Molecule.prototype.calcExtCoords = function (dT) {
     var a = this.V.calcF(this.r.mag())/this.reducedM() + Math.pow(this.omega,2)*this.r.mag();
     this.v = a*dT;
-    this.r = this.r.add(this.v * dT);
+    this.r = this.r.add(this.r.unit().multiply(this.v * dT));
 };
 
 /**
@@ -157,7 +162,7 @@ Molecule.prototype.calcRotCoords = function(dt) {
  *
  */
 Molecule.prototype.calcRotKE = function() {
-    this.E_r = this.Lsq / (2 * this.I);                                 // Using L^2 = 2 * I * KE_rot
+    this.E_r = Math.pow(this.L,2) / (2 * this.I);                                 // Using L^2 = 2 * I * KE_rot
     return this.E_r
 };
 
@@ -166,7 +171,7 @@ Molecule.prototype.calcRotKE = function() {
  * @returns {number} I
  */
 Molecule.prototype.calcMoI = function() {
-    return this.reducedMass() * Math.pow(this.r,2);                                                       // Return Moment of Inertia (scalar).
+    return this.reducedM() * Math.pow(this.r.mag(),2);                                                       // Return Moment of Inertia (scalar).
 };
 
 /**
@@ -200,3 +205,4 @@ Molecule.prototype.calcCOM = function() {
     this.COM = total_mx.multiply(1 / total_m);                          // Updating instance COM coords.
     return this.COM;                                                    // Return Vector coordinates of COM.
 };
+

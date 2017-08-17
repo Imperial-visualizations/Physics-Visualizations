@@ -19,7 +19,7 @@ Vector = function(items) {
 Vector.prototype.toString = function () {
     var string = "[";
     for(var i = 0;i < this.length;i++){
-        string += this.items[0].toString();
+        string += this.items[i].toString();
         if(i < this.length - 1) string += ",";
     }
 
@@ -145,8 +145,7 @@ Vector.prototype.mag = function normal() {
 
 Vector.prototype.unit = function unit() {
     var magnitude = this.mag();
-    var vector = this.multiply(1/magnitude);
-    return vector;
+    return this.multiply(1 / magnitude);
 };
 
 Vector.prototype.power = function power(number) {
@@ -244,7 +243,6 @@ Vector.prototype.multiply = function multiply(other) {
             result.push(this.items[i] * other);
         }
     }
-
     // Scalar multiplication of a matrix
     else if (this.items.constructor === Array && this.items[0].constructor === Array && isNumber(other)) {
         for (var j = 0; j < this.items.length; j++) {
