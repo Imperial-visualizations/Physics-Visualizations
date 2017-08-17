@@ -14,7 +14,6 @@ test.py
 # Ignore All
 .ipynb_checkpoints/
 .DS_STORE
-.ipynb
 
 # EM
 JSON_data/
