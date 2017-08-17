@@ -2,7 +2,8 @@
 var width = 800;
 var height = 480;
 
-var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS,"phaser",{preload: preload,create: create,update: update});
+var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS,
+    "phaser",{preload: preload,create: create,update: update});
 
 var a1,a2,mol1,potential;
 var zoom  = 10;
@@ -28,9 +29,9 @@ function create(){
 
 
     potential = new LJ(2, 0.4);
-    a1 = new Atom([0, 0], 2, 1,WHITE);
-    a2 = new Atom([3, 4], 1, 1,WHITE);
-    mol1 = new Molecule(a1,a2,potential, 10, 1);
+    a1 = new Atom([0, 0], 2, 1, WHITE);
+    a2 = new Atom([3, 4], 1, 1, WHITE);
+    mol1 = new Molecule(a1, a2, potential, 100, 0);
 
     console.log(" I is " + mol1.I);
 }
@@ -48,7 +49,8 @@ function addAtom(atom) {
     atomG.beginFill(atom.color,1);
     atomG.drawCircle(0,0,atom.radius*zoom);
 
-    var sprite = phaserInstance.add.sprite(atom.pos.items[0]*zoom + phaserInstance.world.centerX,atom.pos.items[1]*zoom + phaserInstance.world.centerY,atomG.generateTexture());
+    var sprite = phaserInstance.add.sprite(atom.pos.items[0]*zoom + phaserInstance.world.centerX,atom.pos.items[1]*zoom
+        + phaserInstance.world.centerY,atomG.generateTexture());
     sprite.anchor.set(0.5,0.5);
     atomG.destroy();
     return sprite;

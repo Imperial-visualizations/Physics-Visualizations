@@ -9,20 +9,14 @@
     <link rel = "icon" href = "images/favicon.ico" type="image/x-icon">
 
     <style type="text/css">
-        #canvasWrapper{
+        #phaser{
             width: 100%;
             margin: 0 auto;
         }
         input[type=range] {
         }
 
-        .titleRotKE {
-            padding-left: 8px;
-            font-weight:400;
-            border-left: 8px solid #E9003A;
-        }
-
-        .titleVibKE {
+        .titleKE {
             padding-left: 8px;
             font-weight:400;
             border-left: 8px solid #02893B;
@@ -39,6 +33,7 @@
             font-weight:200;
             border-left: 4px solid #9F004E;
         }
+
     </style>
 
     <script>
@@ -60,65 +55,94 @@
     <script src="./scripts/molecule.js"></script>
 </head>
 
+<script src = "scripts/diatomic.js"></script>
+<script src="scripts/graphics.js"></script>
+
 <body>
 
+<!--Phaser animation and KE plots & input sliders-->
 <div class="container">
-    <div class="row">
-        <div class="eight columns">
-            <div id="canvasWrapper"></div>
-            <script src="./scripts/graphics.js"></script>
+    <div class="row" style="margin-bottom: 12px;">
+        <div class="twelve columns">
+            <div class="eight columns">
+                <div id="phaser"></div>
+            </div>
 
+            <div class="four columns">
+                <h4 class="titleKE">Kinetic Energies</h4>
+
+                <label class="sliderTitle">Vibrational:
+                    <span id="vibKEDisplay" data-unit="eV">0 eV</span>
+                </label>
+                <label class="slider">
+                    <input id="Slider" class="inputs" title="Vib KE" type="range" value="0" min="0" max="10.0" step="0.1"/>
+                    <span class="sliderMin">0.0</span><span class="sliderMax">10.0</span>
+                </label>
+
+                <button class="vibE" id="showhide" onclick="showhide(this);">Hide</button>
+                <div class="vibE" id="expand">
+                    Graph 2
+                </div>
+
+                <label class="sliderTitle">Rotational:
+                    <span id="rotKEDisplay" data-unit="eV">0 eV</span>
+                </label>
+                <label class="slider">
+                    <input id="Slider" class="inputs" title="Rot KE" type="range" value=0" min="0" max="10.0" step="0.1"/>
+                    <span class="sliderMin">0.0</span><span class="sliderMax">10.0</span>
+                </label>
+
+                <button class="rotE" id="showhide" onclick="showhide(this);">Hide</button>
+                <div class="rotE" id="expand">
+                    Graph 3
+                </div>
+                <br>
+                <button class="potE" id="showhide" onclick="showhide(this);">Hide</button>
+                <div class="potE" id="expand">
+                    Graph 4
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Lennard-Jones potential Plotly graph -->
+    <div class="row">
+        <div class="twelve columns">
             <button class="LJ" id="showhide" onclick="showhide(this);">Hide</button>
-            <div class = "LJ" id="expand">
+            <div class = "LJ" id="expand" style="width: 50%; height: 50%">
                 LJ Graph
+                <br>
+            </div>
+            <br>
+        </div>
+    </div>
+
+    <!-- Atom A LJ params -->
+    <div class="row">
+        <h4 class="titleAtomA">Atom A</h4>
+        <div class="twelve columns">
+            <div class="six columns">
+                &sigma;    <input class="inputs" type="number" title="sigma" value="3">
+            </div>
+
+            <div class="six columns">
+                &epsilon;  <input class="inputs" type="number" title="epsilon" value="-2">
+                <br>
             </div>
         </div>
+    </div>
 
-        <div class="four columns">
-
-            <h4 class="titleVibKE">Vibrational KE</h4>
-            <button class="vibE" id="showhide" onclick="showhide(this);">Hide</button>
-            <div class="vibE" id="expand">
-                Graph 2
+    <!-- Atom B LJ params -->
+    <div class="row">
+        <h4 class="titleAtomB">Atom B</h4>
+        <div class="twelve columns">
+            <div class="six columns">
+                <span>&sigma; = </span>    <input class="inputs" type="number" title="sigma" value="3">
             </div>
-            <input id="Slider" class="inputs" title="Vib KE" type="range" value="0" min="0" max="10.0" step="0.1">
-            <br>
 
-            <h4 class="titleRotKE">Rotational KE</h4>
-            <button class="rotE" id="showhide" onclick="showhide(this);">Hide</button>
-            <div class="rotE" id="expand">
-                Graph 3
-            </div>
-            <input id="Slider" class="inputs" title="Rot KE" type="range" value=0" min="0" max="10.0" step="0.1">
-            <br>
-
-            <button class="potE" id="showhide" onclick="showhide(this);">Hide</button>
-            <div class="potE" id="expand">
-                Graph 4
-            </div>
-            <br>
-
-            <div class="row">
-                <h5 class="titleAtomA">Atom A</h5>
-                <div class="eight    columns">
-                    &sigma;    <input class="inputs" type="number" title="sigma" value="3">
-                </div>
-
-                <div class="seven columns">
-                    &epsilon;  <input class="inputs" type="number" title="epsilon" value="-2">
-                    <br>
-                </div>
-
-                <br><br><br>
-
-                <h5 class="titleAtomB">Atom B</h5>
-                <div class="seven columns">
-                    <h6>&sigma;</h6>    <input class="inputs" type="number" title="sigma" value="3">
-                </div>
-
-                <div class="seven columns">
-                    <h6>&epsilon;</h6>  <input class="inputs" type="number" title="epsilon" value="-2">
-                </div>
+            <div class="six columns">
+                <span>&epsilon; = </span>  <input class="inputs" type="number" title="epsilon" value="-2">
             </div>
         </div>
     </div>

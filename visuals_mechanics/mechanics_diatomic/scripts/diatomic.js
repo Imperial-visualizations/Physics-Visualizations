@@ -58,8 +58,10 @@ Molecule = function(a1,a2, potential, keVib_0,keRot_0) {
         var val = this.V.getR_0();
 
         for(var i =0; i < 10; i++){
-            val -= (this.reducedM()*Math.pow(this.omega,2)*Math.pow(val,14) - 12*this.V.e*Math.pow(this.V.getR_0()*val,6)- 12*this.V.e*Math.pow(this.V.getR_0(),12))/
-                    (14*this.reducedM()*Math.pow(this.omega,2)*Math.pow(val,13)-72*this.V.e*Math.pow(val,5) * Math.pow(this.V.getR_0(),6));
+            val -= (this.reducedM()*Math.pow(this.omega,2)*Math.pow(val,14)
+                - 12*this.V.e*Math.pow(this.V.getR_0()*val,6)- 12*this.V.e*Math.pow(this.V.getR_0(),12))/
+                    (14*this.reducedM()*Math.pow(this.omega,2)*Math.pow(val,13)-72*this.V.e*Math.pow(val,5) *
+                        Math.pow(this.V.getR_0(),6));
         }
         return val;
     };
@@ -77,7 +79,7 @@ Molecule = function(a1,a2, potential, keVib_0,keRot_0) {
     this.omega = this.omega_0();
     this.L = this.I * this.omega;
 
-    this.r = new Vector([0,1]).multiply(this.init_r_0());;
+    this.r = new Vector([0,1]).multiply(this.init_r_0());
     this.v = Math.sqrt(2* keVib_0 / this.reducedM());
 
     a1.pos = this.r.multiply(a1.mass/this.tot_m());
