@@ -6,7 +6,7 @@ var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS,"phaser",{preloa
 
 var a1,a2,mol1,potential;
 var zoom  = 10;
-var BLACK = 0xffffff;
+var WHITE = 0xffffff;
 
 
 /**
@@ -23,16 +23,15 @@ function preload(){
  * in the simulation as well as for creating sprites. phaserInstance has fully loaded at this point so all phaser features can be used.
  */
 function create(){
-    phaserInstance.renderer.renderSession.roundedPixels = true;
-    Phaser.Canvas.setImageRenderingCrisp(phaserInstance.canvas);
+    //phaserInstance.renderer.renderSession.roundedPixels = true;
+    //Phaser.Canvas.setImageRenderingCrisp(phaserInstance.canvas);
 
 
-    potential = new LJ(2, 4);
-    a1 = new Atom([0, 0], 2, 1, potential, BLACK);
-    a2 = new Atom([3, 4], 1, 1, potential, BLACK);
-    mol1 = new Molecule([a1, a2], 2, 2);
+    potential = new LJ(2, 0.4);
+    a1 = new Atom([0, 0], 2, 1,WHITE);
+    a2 = new Atom([3, 4], 1, 1,WHITE);
+    mol1 = new Molecule(a1,a2,potential, 10, 1);
 
-    console.log(" COM is " + mol1.COM.items);
     console.log(" I is " + mol1.I);
 }
 
@@ -47,7 +46,8 @@ function addAtom(atom) {
     }
     var atomG = phaserInstance.add.graphics(0,0);
     atomG.beginFill(atom.color,1);
-    atomG.drawCircle(0,0,atom.r*zoom);
+    atomG.drawCircle(0,0,atom.radius*zoom);
+
     var sprite = phaserInstance.add.sprite(atom.pos.items[0]*zoom + phaserInstance.world.centerX,atom.pos.items[1]*zoom + phaserInstance.world.centerY,atomG.generateTexture());
     sprite.anchor.set(0.5,0.5);
     atomG.destroy();
@@ -58,7 +58,7 @@ function addAtom(atom) {
  *
  */
 function update(){
-    mol1.update(phaserInstance.time.elapsed/1000);//requests molecule update, sends deltaTime to mol1.
+    mol1.update(1/10);//requests molecule update, sends deltaTime to mol1.
     a1.sprite.x = a1.pos.items[0]*zoom + phaserInstance.world.centerX;
     a1.sprite.y = a1.pos.items[1]*zoom + phaserInstance.world.centerY;
     a2.sprite.x = a2.pos.items[0]*zoom + phaserInstance.world.centerX;

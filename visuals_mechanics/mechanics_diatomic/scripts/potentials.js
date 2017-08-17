@@ -48,7 +48,7 @@ LJ.prototype.calcF = function(r) {
 };
 
 LJ.prototype.getR_0 = function(){
-    return Math.pow(2,-1/6) * this.s;
+    return Math.pow(2,1/6) * this.s;
 };
 
 
