@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Dielectric Boundary - Imperial Visualisations</title>
+
+  <!-- <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1"> -->
+  <link rel="stylesheet" href="debug-style.css">
+  <link rel="stylesheet" href="toggle-style.css">
+  <link rel="stylesheet" href="loading-spinner.css">
+
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="dielectric-boundary.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Dielectric boundary</h1>
+
+    <div id="spinner-wrapper">
+        <span class="spinner-span">Loading</span>
+        <div>
+            <div class="spinner-mask"></div>
+            <div id="spinner-bar"></div>
+            <div class="spinner-mask"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="six columns">
+            <div id="graph"></div>
+        </div>
+
+        <div class="six columns">
+            <div id="graph2"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="interface">
+            <div class="two columns">
+                <div id="polarisation-switch" class="switch">
+                    <label class="sliderTitle">Polarisation:</label>
+                    <input type="radio" id="s-polarisation" value="s-polarisation" name="polarisation-switch" checked="checked">
+                    <label for="s-polarisation" class="radio-label">s</label>
+                    <input type="radio" id="p-polarisation" value="p-polarisation" name="polarisation-switch">
+                    <label for="p-polarisation" class="radio-label">p</label>
+                </div>
+            </div>
+
+            <div class="ten columns">
+                <div id="angle-slider">
+                    <label for="angle" class="sliderTitle">Angle of incidence:</label>
+                    <input type="range" id="angle" name="angle" min="0" max="90" value="45">
+                    <span class="sliderMin">0&deg;</span><span class="sliderMax">90&deg;</span>
+                </div>
+
+                <div id="refractive-index-slider">
+                    <label for="refractive-index" class="sliderTitle">Refractive index:</label>
+                    <input type="range" id="refractive-index" name="refractive-index" min="0.5" max="2" step="0.02" value="1.5">
+                    <span class="sliderMin">0.5</span><span class="sliderMax">2</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
