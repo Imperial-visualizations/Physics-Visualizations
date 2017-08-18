@@ -30,13 +30,14 @@ Atom = function(pos, radius, mass, color) {
 /**
  * Class to make molecule out of atoms, with a spring constant that defines strength of bonds, and instantiated with
  * rotational and vibrational E.
- * @param atoms: Array containing all atoms in molecules.
+ * @param a1: Atom 1.
+ * @param a2: Atom 2.
  * @param potential: Potential describing bond between atoms.
- * @param vibrational_E: Vibrational kinetic energy.
- * @param rotational_E: Rotational kinetic energy.
+ * @param keVib_0: Vibrational kinetic energy at t=0.
+ * @param keRot_0: Rotational kinetic energy at t=0.
  * @constructor
  */
-Molecule = function(a1,a2, potential, keVib_0,keRot_0) {
+Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
 
     // Checking objects of class Atom passed in in the list.
     if (a1.constructor !== Atom || a2.constructor !== Atom){
@@ -46,49 +47,44 @@ Molecule = function(a1,a2, potential, keVib_0,keRot_0) {
     this.V = potential;
 
     // Finding total mass of the system.
-    this.tot_m = function () {
-        return a1.mass + a2.mass;
-    };
+    this.tot_m = a1.mass + a2.mass;
+
     // Finding system's reduced mass.
-    this.reducedM = function () {
-        return a1.mass*a2.mass /(a1.mass+a2.mass);
-    };
+    this.reducedM = a1.mass * a2.mass / (this.tot_m);
 
     this.init_r_0 = function () {
         var val = this.V.getR_0();
 
-        for(var i =0; i < 10; i++){
-            val -= (this.reducedM()*Math.pow(this.omega,2)*Math.pow(val,14)
-                - 12*this.V.e*Math.pow(this.V.getR_0()*val,6)- 12*this.V.e*Math.pow(this.V.getR_0(),12))/
-                    (14*this.reducedM()*Math.pow(this.omega,2)*Math.pow(val,13)-72*this.V.e*Math.pow(val,5) *
-                        Math.pow(this.V.getR_0(),6));
+        for (var i =0; i < 10; i++) {
+            val -= (this.reducedM * Math.pow(this.omega, 2) * Math.pow(val, 14)
+                - 12 * this.V.e * Math.pow(this.V.getR_0() * val, 6) - 12 * this.V.e * Math.pow(this.V.getR_0(), 12))/
+                    (14 * this.reducedM * Math.pow(this.omega,2) * Math.pow(val,13)-72 * this.V.e * Math.pow(val, 5) *
+                        Math.pow(this.V.getR_0(), 6));
         }
         return val;
     };
 
-    /**
-     * @return {number}
-     */
-    this.I_0 = function () {
-        return this.reducedM() * Math.pow(this.V.getR_0(),2);
-    };
-    this.omega_0 = function () {
-        return Math.sqrt( 2*keRot_0/this.I);
-    };
-    this.I = this.I_0();
-    this.omega = this.omega_0();
+    // Calculate initial Moment of Inertia.
+    this.I = this.reducedM * Math.pow(this.V.getR_0(),2);
+
+    // Calculate initial angular velocity.
+    this.omega = Math.sqrt(2 * keRot_0 / this.I);
+
+    // Calculate angular momentum (conserved).
     this.L = this.I * this.omega;
 
+    // Initial radius, due to centrifugal distortion
     this.r = new Vector([0,1]).multiply(this.init_r_0());
-    this.v = Math.sqrt(2* keVib_0 / this.reducedM());
 
-    a1.pos = this.r.multiply(a1.mass/this.tot_m());
-    a2.pos = this.r.multiply(-a2.mass/this.tot_m());
+    // Initial linear velocity of molecule.
+    this.v = Math.sqrt(2 * keVib_0 / this.reducedM);
 
+    // Finding coordinates of atoms in CoM frame.
+    a1.pos = this.r.multiply(a1.mass / this.tot_m);
+    a2.pos = this.r.multiply(-a2.mass / this.tot_m);
 
-    console.log(this.r.toString());
     // // Magnitude of linear speed for each Atom object.
-    // this.p_i = Math.sqrt((this.E_v * 2 * this.tot_m()) / (Math.pow(this.atoms.length, 2)));
+    // this.p_i = Math.sqrt((this.E_v * 2 * this.tot_m) / (Math.pow(this.atoms.length, 2)));
     // for (var i = 0; i < this.atoms.length; i++) {
     //     this.atoms[i].v = this.p_i / this.atoms[i].m;                   // Setting each atom's speed.
     // }
@@ -123,8 +119,8 @@ Molecule.prototype.calcUnitVect = function(atom1, atom2) {
  * @param dT: Time elapsed since previous timestep.
  */
 Molecule.prototype.calcExtCoords = function (dT) {
-    var a = this.V.calcF(this.r.mag())/this.reducedM() + Math.pow(this.omega,2)*this.r.mag();
-    this.v = a*dT;
+    var a = this.V.calcF(this.r.mag())/this.reducedM + Math.pow(this.omega, 2) * this.r.mag();
+    this.v = a * dT;
     this.r = this.r.add(this.r.unit().multiply(this.v * dT));
 };
 
@@ -133,12 +129,18 @@ Molecule.prototype.calcExtCoords = function (dT) {
  * @returns {Number} System PE.
  */
 Molecule.prototype.update = function(deltaTime){
+
+    // Recalculate MoI and angular velocity.
     this.I = this.calcMoI();
     this.omega = this.calcAngVel();
+
+    // Rotate and vibrate.
     this.calcRotCoords(deltaTime);
     this.calcExtCoords(deltaTime);
-    a1.pos = this.r.multiply(a1.mass/this.tot_m());
-    a2.pos = this.r.multiply(-a2.mass/this.tot_m());
+
+    // Update atom coordinates in CoM frame.
+    a1.pos = this.r.multiply(a1.mass / this.tot_m);
+    a2.pos = this.r.multiply(-a2.mass / this.tot_m);
 };
 
 
@@ -173,7 +175,7 @@ Molecule.prototype.calcRotKE = function() {
  * @returns {number} I
  */
 Molecule.prototype.calcMoI = function() {
-    return this.reducedM() * Math.pow(this.r.mag(),2);                                                       // Return Moment of Inertia (scalar).
+    return this.reducedM * Math.pow(this.r.mag(),2);                                                       // Return Moment of Inertia (scalar).
 };
 
 /**
