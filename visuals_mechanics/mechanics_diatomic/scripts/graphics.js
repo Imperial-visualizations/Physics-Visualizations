@@ -1,6 +1,7 @@
-
 var width = 800;
 var height = 480;
+width = $("#phaser").width() * window.devicePixelRatio;
+height = $("#phaser").width() * window.devicePixelRatio;
 
 var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS,
     "phaser",{preload: preload,create: create,update: update});
@@ -26,6 +27,13 @@ function preload(){
 function create(){
     //phaserInstance.renderer.renderSession.roundedPixels = true;
     //Phaser.Canvas.setImageRenderingCrisp(phaserInstance.canvas);
+
+    phaserInstance.canvasWidth = $("#phaser").width() * window.devicePixelRatio;
+    phaserInstance.canvasHeight = $("#phaser").width() * window.devicePixelRatio;
+    phaserInstance.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+    phaserInstance.scale.setUserScale(1 / window.devicePixelRatio, 1 / window.devicePixelRatio);
+    phaserInstance.renderer.renderSession.roundPixels = true;
+    Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
 
 
     potential = new LJ(2, 10,2,10);

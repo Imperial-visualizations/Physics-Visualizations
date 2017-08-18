@@ -1,18 +1,10 @@
-<!doctype html>
+<!doctype html> 
 <head>
     <title>Diatomic Molecule Vibration and Rotation</title>
-    <script src = "https://github.com/photonstorm/phaser-ce/releases/download/v2.8.3/phaser.min.js"></script>
-    <script src = "./scripts/vecops.js"></script>
-    <script src = "./scripts/potentials.js"></script>
-    <script src=https://code.jquery.com/jquery-latest.min.js></script>
     <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
     <link rel = "icon" href = "images/favicon.ico" type="image/x-icon">
 
     <style type="text/css">
-        #phaser{
-            width: 100%;
-            margin: 0 auto;
-        }
         input[type=range] {
         }
 
@@ -35,37 +27,14 @@
         }
 
     </style>
-
-    <script>
-    /**
-    * Expands div with same class as button, and has id="expand"
-    * @param btn: button that was clicked.
-    */
-    function showhide(btn) {
-        var btn_class = $(btn).attr('class');               // Class of button.
-        var expandable = '.' + btn_class + '#expand';       // Finding div by class (same as button) and id.
-        $(expandable).slideToggle("fast");                  // Making contents transition in (wipe down).
-
-        // Toggle show/hide text on button.
-        if (btn.innerText === 'Hide') btn.innerText = 'Show';
-        else btn.innerText = 'Hide';
-    }
-    </script>
-
-    <script src="./scripts/molecule.js"></script>
 </head>
-
-<script src = "scripts/diatomic.js"></script>
-<script src="scripts/graphics.js"></script>
-
 <body>
 
 <!--Phaser animation and KE plots & input sliders-->
 <div class="container">
     <div class="row" style="margin-bottom: 12px;">
         <div class="twelve columns">
-            <div class="eight columns">
-                <div id="phaser"></div>
+            <div id="phaser" class="eight columns">
             </div>
 
             <div class="four columns">
@@ -79,8 +48,8 @@
                     <span class="sliderMin">0.0</span><span class="sliderMax">10.0</span>
                 </label>
 
-                <button class="vibE" id="showhide" onclick="showhide(this);">Hide</button>
-                <div class="vibE" id="expand">
+                <button for="#vibE" class="showHideButton">Hide</button>
+                <div id="vibE" class="expand">
                     Graph 2
                 </div>
 
@@ -92,13 +61,13 @@
                     <span class="sliderMin">0.0</span><span class="sliderMax">10.0</span>
                 </label>
 
-                <button class="rotE" id="showhide" onclick="showhide(this);">Hide</button>
-                <div class="rotE" id="expand">
+                <button for="#rotE" class="showHideButton">Hide</button>
+                <div id="rotE" class="expand">
                     Graph 3
                 </div>
                 <br>
-                <button class="potE" id="showhide" onclick="showhide(this);">Hide</button>
-                <div class="potE" id="expand">
+                <button for="#potE" class="showHideButton">Hide</button>
+                <div id="potE" class="expand">
                     Graph 4
                 </div>
             </div>
@@ -109,8 +78,8 @@
     <!-- Lennard-Jones potential Plotly graph -->
     <div class="row">
         <div class="twelve columns">
-            <button class="LJ" id="showhide" onclick="showhide(this);">Hide</button>
-            <div class = "LJ" id="expand" style="width: 50%; height: 50%">
+            <button for="#LJ" class="showHideButton">Hide</button>
+            <div id="LJ" class="expand" style="width: 50%; height: 50%">
                 LJ Graph
                 <br>
             </div>
@@ -148,4 +117,23 @@
     </div>
 </div>
 
+
+
+    <script src=https://code.jquery.com/jquery-latest.min.js></script>
+    <script src = "https://github.com/photonstorm/phaser-ce/releases/download/v2.8.3/phaser.min.js"></script>
+    <script src = "./scripts/vecops.js"></script>
+    <script src = "./scripts/potentials.js"></script>
+    <script src = "./scripts/diatomic.js"></script>
+    <script src="./scripts/graphics.js"></script>
+    <script src="./scripts/molecule.js"></script>
+    <script>
+    /**
+    * 
+    */
+    $(".showHideButton").on("click",function(){
+        text = ($(this).text() == "Hide") ? "Show" : "Hide";
+        $(this).text(text);
+        $($(this).attr("for")).slideToggle("fast");
+    });
+    </script>
 </body>
