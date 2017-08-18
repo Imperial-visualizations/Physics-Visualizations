@@ -22,7 +22,7 @@ function plotInit(coor) {
 
     if (coor === 1) {
         if (coorType !== 1) {
-            console.log(currentPoint);
+            //console.log(currentPoint);
             $("#xController").val(currentPoint[0]);
             $("#xControllerDisplay").text(currentPoint[0]);
             $("#yController").val(currentPoint[1]);
@@ -37,13 +37,15 @@ function plotInit(coor) {
         coorType = 1;
     } else if (coor === 2){
         if (coorType !== 2) {
-            console.log(currentPoint);
+            //console.log(currentPoint);
             initialRho = Math.sqrt(currentPoint[0]*currentPoint[0] + currentPoint[1]*currentPoint[1]);
             initialPhi = ((Math.atan2(currentPoint[1], currentPoint[0]) + 2*Math.PI) % (2*Math.PI))/Math.PI;
+            initialRho = Math.round(initialRho*10)/10;
+            initialPhi = Math.round(initialPhi*8)/8;
             $("#rhoController").val(initialRho);
             $("#rhoControllerDisplay").text(initialRho);
             $("#phiController").val(initialPhi);
-            $("#phiControllerDisplayA1").text(initialPhi + $("#phiControllerDisplayA1").attr("data-unit"));
+            $("#phiControllerDisplayA1").text("(" + initialPhi*8 + "/8)" + $("#phiControllerDisplayA1").attr("data-unit"));
             $("#phiControllerDisplayA2").text(initialPhi*180 + $("#phiControllerDisplayA2").attr("data-unit"));
             $("#z1Controller").val(currentPoint[2]);
             $("#z1ControllerDisplay").text(currentPoint[2]);
@@ -56,17 +58,20 @@ function plotInit(coor) {
         coorType = 2;
     } else if (coor === 3){
         if (coorType !== 3) {
-            console.log(currentPoint);
+            //console.log(currentPoint);
             initialR = Math.sqrt(currentPoint[0]*currentPoint[0] + currentPoint[1]*currentPoint[1] + currentPoint[2]*currentPoint[2]);
             initialTheta = Math.atan2(Math.sqrt(currentPoint[0]*currentPoint[0] + currentPoint[1]*currentPoint[1]), currentPoint[2])/Math.PI;
             initialPhi = ((Math.atan2(currentPoint[1], currentPoint[0]) + 2*Math.PI) % (2*Math.PI))/Math.PI;
+            initialR = Math.round(initialR*10)/10;
+            initialTheta = Math.round(initialTheta*8)/8;
+            initialPhi = Math.round(initialPhi*8)/8;
             $("#rController").val(initialR);
             $("#rControllerDisplay").text(initialR);
             $("#thetaController").val(initialTheta);
-            $("#thetaControllerDisplayA1").text(initialTheta + $("#thetaControllerDisplayA1").attr("data-unit"));
+            $("#thetaControllerDisplayA1").text("(" + initialTheta*8 + "/8)" + $("#thetaControllerDisplayA1").attr("data-unit"));
             $("#thetaControllerDisplayA2").text(initialTheta*180 + $("#thetaControllerDisplayA2").attr("data-unit"));
             $("#phi1Controller").val(initialPhi);
-            $("#phi1ControllerDisplayA1").text(initialPhi + $("#phi1ControllerDisplayA1").attr("data-unit"));
+            $("#phi1ControllerDisplayA1").text("(" + initialPhi*8 + "/8)" + $("#phi1ControllerDisplayA1").attr("data-unit"));
             $("#phi1ControllerDisplayA2").text(initialPhi*180 + $("#phi1ControllerDisplayA2").attr("data-unit"));
         }
         var r = parseFloat(document.getElementById('rController').value);
@@ -79,8 +84,10 @@ function plotInit(coor) {
 }
 //Plot for basis for corresponding coordinate systems:
 function plotCartesian(x, y, z) {
+    cuboid = new Cuboid(x, y, z);
     Plotly.newPlot('graph',
         [
+            cuboid.gObject("rgb(0,62,116"),
             new Line([[x, y, z], [x + 1, y, z]]).gObject("rgb(255,0,0)"),
             new Line([[x, y, z], [x, y + 1, z]]).gObject("rgb(0,255,0)"),
             new Line([[x, y, z], [x, y, z + 1]]).gObject("rgb(0,0,255)")
@@ -93,6 +100,15 @@ function plotCylinder(rho, phi, z) {
     cylinder = new Cylinder(rho, z);
     var x = rho*Math.cos(phi);
     var y = rho*Math.sin(phi);
+
+    var meshSize = phi/Math.PI*24;
+    var t = numeric.linspace(0, phi, meshSize);
+    var xTrace = [], yTrace = [], zTrace = [];
+    for(var i = 0; i < meshSize; ++i) {
+        xTrace[i] = rho*Math.cos(t[i]);
+        yTrace[i] = rho*Math.sin(t[i]);
+        zTrace[i] = z;
+    }
     Plotly.newPlot('graph',
         [
             cylinder.gObjectCurve("rgb(0,62,116)", "rgb(255,255,255)"),
@@ -100,7 +116,15 @@ function plotCylinder(rho, phi, z) {
             cylinder.gObjectBottom("rgb(0,62,116)"),
             new Line([[x, y, z], [x + Math.cos(phi), y + Math.sin(phi), z]]).gObject("rgb(255,0,0)"),
             new Line([[x, y, z], [x - Math.sin(phi), y + Math.cos(phi), z]]).gObject("rgb(0,255,0)"),
-            new Line([[x, y, z], [x, y, z + 1]]).gObject("rgb(0,0,255)")
+            new Line([[x, y, z], [x, y, z + 1]]).gObject("rgb(0,0,255)"),
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xTrace,
+                y: yTrace,
+                z: zTrace,
+                line: {color: "rgb(0,0,0)", width: 2}
+            }
         ],
         layout
     )
@@ -111,12 +135,46 @@ function plotSphere(r, theta, phi) {
     var x = r*Math.cos(phi)*Math.sin(theta);
     var y = r*Math.sin(phi)*Math.sin(theta);
     var z = r*Math.cos(theta);
+
+    var meshSize = phi/Math.PI*24;
+    var t = numeric.linspace(0, phi, meshSize);
+    var xTrace = [], yTrace = [], zTrace = [];
+    for(var i = 0; i < meshSize; ++i) {
+        xTrace[i] = r*Math.cos(t[i])*Math.sin(theta);
+        yTrace[i] = r*Math.sin(t[i])*Math.sin(theta);
+        zTrace[i] = z;
+    }
+
+    var meshSize1 = theta/Math.PI*24;
+    var t1 = numeric.linspace(0, theta, meshSize1);
+    var xTrace1 = [], yTrace1 = [], zTrace1 = [];
+    for(var i = 0; i < meshSize1; ++i) {
+        xTrace1[i] = r*Math.cos(phi)*Math.sin(t1[i]);
+        yTrace1[i] = r*Math.sin(phi)*Math.sin(t1[i]);
+        zTrace1[i] = r*Math.cos(t1[i]);
+    }
     Plotly.newPlot('graph',
         [
             sphere.gObject("rgb(0,62,116)", "rgb(255,255,255)"),
-            new Line([[x, y, z], [x + Math.cos(phi)*Math.sin(theta), y + Math.sin(phi)*Math.sin(theta), z + Math.cos(theta)]]).gObject("rgb(255,0,0)"),
+            new Line([[x, y, z], [x + Math.cos(phi)*Math.sin(theta), y + Math.sin(phi)*Math.sin(theta), z + Math.cos(theta)]]).gObject("rgb(0,0,255)"),
             new Line([[x, y, z], [x - Math.sin(phi), y + Math.cos(phi), z]]).gObject("rgb(0,255,0)"),
-            new Line([[x, y, z], [x + Math.cos(phi)*Math.cos(theta), y + Math.sin(phi)*Math.cos(theta), z - Math.sin(theta)]]).gObject("rgb(0,0,255)")
+            new Line([[x, y, z], [x + Math.cos(phi)*Math.cos(theta), y + Math.sin(phi)*Math.cos(theta), z - Math.sin(theta)]]).gObject("rgb(255,0,0)"),
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xTrace,
+                y: yTrace,
+                z: zTrace,
+                line: {color: "rgb(0,0,0)", width: 2}
+            },
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xTrace1,
+                y: yTrace1,
+                z: zTrace1,
+                line: {color: "rgb(0,0,0)", width: 2}
+            }
         ],
         layout
     )
