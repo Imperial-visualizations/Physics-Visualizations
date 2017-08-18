@@ -4,7 +4,7 @@ var nb_waves = parseInt($("#fourier_terms").val());
 var terms = [];
 
 // x and t coordinates
-var n = 400;
+var n = 10000;
 var y = [];
 var x = numeric.linspace(0, 20, n);
 var t = 0.0;
@@ -98,7 +98,7 @@ var layout =
     };
 
 // Plot graph with interactivity
-Plotly.newPlot('graph', [wave], layout);
+Plotly.plot('graph', [wave], layout);
 
 //--------------------------------------------ANIMATION--------------------------------------------
 

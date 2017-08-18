@@ -11,7 +11,7 @@ var omega_nondisp = [];
 var omega_disp = [];
 
 // x and t coordinates
-var n = 801;
+var n = 1001;
 var y_i = [], y_d = [];
 var x = numeric.linspace(0, 100, n);
 var t = 0.0;

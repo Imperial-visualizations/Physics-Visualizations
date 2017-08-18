@@ -44,7 +44,7 @@
 
                     <div class="tab-pane active" id="dispersive">
 
-                        <!--<h1>Slider - Number of Waves</h1>-->
+                        <!--Slider - Number of Waves-->
                         <label class="sliderTitle">Number of sine waves:
                             <span id="waves_display"> 2 </span>
                         </label>
@@ -53,7 +53,7 @@
                             <span class="sliderMin">1</span><span class="sliderMax">100</span>
                         </label>
 
-                        <!--<h1>Slider - Phase Velocity</h1>-->
+                        <!--Slider - Phase Velocity-->
                         <label class="sliderTitle">Phase Velocity (non-dispersive):
                             <span id="phaseVelocityDisplay" data-unit="m/s"> 1 m/s</span>
                         </label>
@@ -88,14 +88,11 @@
                         <!--Checkbox-->
                         <input type="checkbox">
 
-                        <!--Plotting scripts-->
-                        <script src="tabs/dispersive.js"></script>
-
                     </div>
 
                     <div class="tab-pane" id="fourier">
 
-                        <!--<h1>Fourier terms</h1>-->
+                        <!--Fourier terms-->
                         <label class="sliderTitle">Number of fourier terms:<span id="fourier_sin"> 1 </span></label>
                         <label class="slider">
                             <input id="fourier_terms" class="inputs" type="range" value="1" min="1" max="100" step="1"/>
@@ -106,15 +103,16 @@
                         <input id="fourier_run_button" type="button" value="play" onclick="onStart()" style="width:200px"/>
                         <input id="fourier_reset_button" type="button" value="reset" onclick="onReset()" style="width:200px"/>
 
-                        <!--Plotting scripts-->
-                        <!--<script src="tabs/fourier.js"></script>-->
-
                     </div>
 
                 </div>
             </div>
         </div>
     </div>
+
+    <!--Plotting scripts-->
+    <script src="tabs/dispersive.js"></script>
+    <!--<script src="tabs/fourier.js"></script>-->
 
 </body>
 </html>
