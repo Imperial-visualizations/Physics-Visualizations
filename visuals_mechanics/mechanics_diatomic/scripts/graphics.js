@@ -6,7 +6,7 @@ var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS,
     "phaser",{preload: preload,create: create,update: update});
 
 var a1,a2,mol1,potential;
-var zoom  = 10;
+var zoom  = 15;
 var WHITE = 0xffffff;
 
 
@@ -28,10 +28,10 @@ function create(){
     //Phaser.Canvas.setImageRenderingCrisp(phaserInstance.canvas);
 
 
-    potential = new LJ(2, 0.4);
-    a1 = new Atom([0, 0], 2, 1, WHITE);
-    a2 = new Atom([3, 4], 1, 1, WHITE);
-    mol1 = new Molecule(a1, a2, potential, 100, 0);
+    potential = new LJ(2, 10,2,10);
+    a1 = new Atom([0, 0], 1, 1,WHITE);
+    a2 = new Atom([3, 4], 1, 1,WHITE);
+    mol1 = new Molecule(a1,a2,potential,7,4);
 
     console.log(" I is " + mol1.I);
 }
@@ -60,7 +60,7 @@ function addAtom(atom) {
  *
  */
 function update(){
-    mol1.update(1/10);//requests molecule update, sends deltaTime to mol1.
+    mol1.update(1/60);//requests molecule update, sends deltaTime to mol1.
     a1.sprite.x = a1.pos.items[0]*zoom + phaserInstance.world.centerX;
     a1.sprite.y = a1.pos.items[1]*zoom + phaserInstance.world.centerY;
     a2.sprite.x = a2.pos.items[0]*zoom + phaserInstance.world.centerX;

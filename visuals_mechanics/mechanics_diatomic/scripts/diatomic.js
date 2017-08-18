@@ -46,6 +46,9 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
 
     this.V = potential;
 
+    if(keVib_0 + keRot_0 + potential.calcV(this.V.getR_0())> 0){
+        console.log("escaping");
+    }
     // Finding total mass of the system.
     this.tot_m = a1.mass + a2.mass;
 
@@ -54,13 +57,14 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
 
     this.init_r_0 = function () {
         var val = this.V.getR_0();
-
+        console.log(val);
         for (var i =0; i < 10; i++) {
             val -= (this.reducedM * Math.pow(this.omega, 2) * Math.pow(val, 14)
-                - 12 * this.V.e * Math.pow(this.V.getR_0() * val, 6) - 12 * this.V.e * Math.pow(this.V.getR_0(), 12))/
-                    (14 * this.reducedM * Math.pow(this.omega,2) * Math.pow(val,13)-72 * this.V.e * Math.pow(val, 5) *
+                    - 12 * this.V.e * Math.pow(this.V.getR_0() * val, 6) + 12 * this.V.e * Math.pow(this.V.getR_0(), 12))/
+                    (14 * this.reducedM * Math.pow(this.omega,2) * Math.pow(val,13)- 72 * this.V.e * Math.pow(val, 5) *
                         Math.pow(this.V.getR_0(), 6));
         }
+        console.log(val);
         return val;
     };
 
@@ -74,11 +78,11 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
     this.L = this.I * this.omega;
 
     // Initial radius, due to centrifugal distortion
-    this.r = new Vector([0,1]).multiply(this.init_r_0());
-
+    this.r = new Vector([1,0]).multiply(this.init_r_0());
+    console.log(this.r.mag());
     // Initial linear velocity of molecule.
-    this.v = Math.sqrt(2 * keVib_0 / this.reducedM);
-
+    this.v = -Math.sqrt(2 * keVib_0 / this.reducedM);
+    console.log("v0" + this.v.toString());
     // Finding coordinates of atoms in CoM frame.
     a1.pos = this.r.multiply(a1.mass / this.tot_m);
     a2.pos = this.r.multiply(-a2.mass / this.tot_m);
@@ -120,7 +124,7 @@ Molecule.prototype.calcUnitVect = function(atom1, atom2) {
  */
 Molecule.prototype.calcExtCoords = function (dT) {
     var a = this.V.calcF(this.r.mag())/this.reducedM + Math.pow(this.omega, 2) * this.r.mag();
-    this.v = a * dT;
+    this.v += a * dT;
     this.r = this.r.add(this.r.unit().multiply(this.v * dT));
 };
 
