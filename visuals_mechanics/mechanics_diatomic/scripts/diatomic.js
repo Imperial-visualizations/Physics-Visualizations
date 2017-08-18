@@ -46,7 +46,7 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
     this.V = potential;                                         // Potential used as a bond between atoms.
 
     if(keVib_0 + keRot_0 + potential.calcV(this.V.getR_0())> 0){
-        console.log("escaping");
+        console.error("escaping");
     }
 
     this.tot_m = a1.mass + a2.mass;                             // Finding total mass of the system.
@@ -54,14 +54,12 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
 
     this.init_r_0 = function () {
         var val = this.V.getR_0();
-        console.log(val);
         for (var i =0; i < 10; i++) {
             val -= (this.reducedM * Math.pow(this.omega, 2) * Math.pow(val, 14)
                     - 12 * this.V.e * Math.pow(this.V.getR_0() * val, 6) + 12 * this.V.e * Math.pow(this.V.getR_0(), 12))/
                     (14 * this.reducedM * Math.pow(this.omega,2) * Math.pow(val,13)- 72 * this.V.e * Math.pow(val, 5) *
                         Math.pow(this.V.getR_0(), 6));
         }
-        console.log(val);
         return val;
     };
 

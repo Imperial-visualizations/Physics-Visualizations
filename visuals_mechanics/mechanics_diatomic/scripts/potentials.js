@@ -54,42 +54,25 @@ LJ.prototype.getR_0 = function(){
     return Math.pow(2, 1/6) * this.s;
 };
 
+LJ.prototype.plot = function() {
+    var x = [];                                                 // Array to store r values.
+    var y = [];                                                 // Array to store LJ potential at corresponding r.
+    var ppu = 10;                                               // Points per unit of separation distance.
 
+    // Layout of plot.
+    var layout = {title: "LJ Potential",
+        xaxis: {title: "r / Angstroms", range: [0.5 * this.s, 3 * this.s]},
+        yaxis: {title: "Potential / eV", range: [1.1 * this.e, -2 * this.e]},
+        line: {color: "blue"}};
 
-/**
- * Harmonic potential class.
- * @param equilibrium: Equilibrium distance of pair of atoms.
- * @param force_constant: Hooke's Law, spring/force constant.
- * @constructor
- */
-Parabolic = function (equilibrium, force_constant) {
-
-    // Sanity check.
-    if (!isNumber(equilibrium) || !isNumber(force_constant)) {
-        console.error("Error! Equilibrium and k values invalid!");
+    // Generating plot data.
+    for (var i = layout.xaxis.range[0] + 1/ppu; i < Math.ceil(layout.xaxis.range[1]) * ppu; i++) {
+        var separation = i / ppu;
+        x.push(separation);
+        y.push(this.calcV(separation));
     }
 
-    if (equilibrium < 0 || force_constant < 0) {
-        console.error("Error! Equilibrium and/or force constant values negative (unphysical)!");
-        equilibrium = -equilibrium;
-        force_constant = -force_constant;
-    }
-
-    // Harmonic potential parameters intialisation.
-    this.eqR = equilibrium;
-    this.k = force_constant;
-};
-
-/**
- * Calculate harmonic potential.
- * @param r: Distance from harmonic potential centre.
- * @returns {number}
- */
-Parabolic.prototype.calcV = function (r) {
-    var parabola = Math.pow(r - this.eqR, 2);                   // Shape of harmonic potential
-    return this.k * parabola;                                   // Calculating harmonic potential at distance r.
-};
-
-Parabolic.prototype.calcF = function(r) {
-    return -1 * this.k * r;
+    // Creating plot-able object.
+    var scatter_LJ = {y: y, x: x, mode: "lines+markers", type: "scatter", name: "LJ Pot"};
+    Plotly.newPlot("LJ_scatter", {data: [scatter_LJ], traces: [0], layout: layout});
 };

@@ -27,6 +27,8 @@
         }
 
     </style>
+    <script src=https://cdn.plot.ly/plotly-latest.min.js></script>
+    <script src = "./scripts/potentials.js"></script>
 </head>
 <body>
 
@@ -76,14 +78,17 @@
     </div>
 
     <!-- Lennard-Jones potential Plotly graph -->
-    <div class="row">
+    <div class="row" style="margin-bottom: 10px">
         <div class="twelve columns">
-            <button for="#LJ" class="showHideButton">Hide</button>
-            <div id="LJ" class="expand" style="width: 50%; height: 50%">
-                LJ Graph
-                <br>
+            <a for="#LJ_scatter" class="showHideButton">Hide</a>
+            <div class="expand">
+                <div id="LJ_scatter" style="width:75%; height: 480px">
+                    <script>
+                        var p = new LJ(2, 10);
+                        p.plot();
+                    </script>
+                </div>
             </div>
-            <br>
         </div>
     </div>
 
@@ -116,24 +121,22 @@
         </div>
     </div>
 </div>
+</body>
 
+<script src=https://code.jquery.com/jquery-latest.min.js></script>
+<script src = "https://github.com/photonstorm/phaser-ce/releases/download/v2.8.3/phaser.min.js"></script>
+<script src = "./scripts/vecops.js"></script>
+<script src = "./scripts/diatomic.js"></script>
+<script src="./scripts/graphics.js"></script>
+<script src="./scripts/molecule.js"></script>
 
-
-    <script src=https://code.jquery.com/jquery-latest.min.js></script>
-    <script src = "https://github.com/photonstorm/phaser-ce/releases/download/v2.8.3/phaser.min.js"></script>
-    <script src = "./scripts/vecops.js"></script>
-    <script src = "./scripts/potentials.js"></script>
-    <script src = "./scripts/diatomic.js"></script>
-    <script src="./scripts/graphics.js"></script>
-    <script src="./scripts/molecule.js"></script>
-    <script>
+<script>
     /**
-    * 
-    */
+     *
+     */
     $(".showHideButton").on("click",function(){
-        text = ($(this).text() == "Hide") ? "Show" : "Hide";
+        var text = ($(this).text() === "Hide") ? "Show" : "Hide";
         $(this).text(text);
         $($(this).attr("for")).slideToggle("fast");
     });
-    </script>
-</body>
+</script>

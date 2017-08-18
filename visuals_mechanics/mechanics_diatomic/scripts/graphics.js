@@ -36,12 +36,10 @@ function create(){
     Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
 
 
-    potential = new LJ(2, 10,2,10);
-    a1 = new Atom([0, 0], 1, 1,WHITE);
-    a2 = new Atom([3, 4], 1, 1,WHITE);
-    mol1 = new Molecule(a1,a2,potential,7,4);
-
-    console.log(" I is " + mol1.I);
+    potential = new LJ(2, -10, 2, -10);
+    a1 = new Atom([0, 0], 1, 1, WHITE);
+    a2 = new Atom([3, 4], 1, 1, WHITE);
+    mol1 = new Molecule(a1, a2, potential, 2, 5);
 }
 
 /**

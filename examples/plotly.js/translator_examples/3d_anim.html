@@ -14,7 +14,6 @@ var x0 = [[-3.1415926535897931, -3.0133643820146996, -2.885136110439606, -2.7569
 var scatter3d0 = {y: y0[0], mode: "markers", z: z0[0], x: x0[0], marker: {size: 4}, line: {color: "blue"}, type: "scatter3d", name: "spiral"};
 var layout = {title: "3D Animated Sine/Cos Wave Example", xaxis: {title: "x", range: [-3.141592653589793, 3.141592653589793], titlefont: {size: 18}}, z: {axis: {title: "z"}}, yaxis: {title: "y", range: [-1, 1]}, zaxis: {range: [-1, 1]}};
 
-; 
 function plot() {
 	Plotly.newPlot("scatter", {data: [scatter3d0], traces: [0], layout: layout}); 
 	 } 
