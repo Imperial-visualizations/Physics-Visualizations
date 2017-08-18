@@ -16,25 +16,25 @@ The Imperial-Visualizations project is a team project in which collaboration and
 
 Slack is a cloud-based set of team collaboration tools and services including messaging channels, apps, and direct messaging. This ensures that everyone can contact each other and is the backbone for working remotely. It also has desktop and mobile apps.
 
-1. Create a Slack account https://slack.com/ 
+1. Create a Slack account https://slack.com/.
 
-2. Slack admins (@c.clewley, @jamie, and @akashb95) can add people via the https://imperialvisualize.slack.com/admin/invites page. Or more easily by going to the Imperial-Visualizations slack, going to the Imperial-Visualizations drop-down menu, clicking *Invite people* and creating an invite link to be shared to all new project members.
+2. Slack admins (@c.clewley, @jamie, and @akashb95) can add members via the https://imperialvisualize.slack.com/admin/invites page. An easier way to add multiple members is to go to the Imperial-Visualizations drop-down menu on the Imperial-Visualizations Slack, clicking *Invite people*, and creating an invite link to be shared to all new project members.
 
-3. Once you have joined the slack you will see a list of channels. The most important channels to join are *#general* (announcements and general discussion) and *#standup* (more on standup reports later). The *#code-help* and *#random* channels should be self explanatory. It is recommended to mute the *#trello* (linked to the core team's research trello for 2017) and *#github* (linked to the GitHub repo) channels as these can become quite spammy. We currently have the *#electromagnetism*, *#maths*, and *#mechanics* visualization channels but if one for your development stream doesn't yet exist feel free to make your own.
+3. Once you have joined Slack you will see a list of channels. The most important channels to join are *#general* (announcements and general discussion) and *#standup* (more on standup reports later). The *#code-help* and *#random* channels should be self explanatory. It is recommended to mute the *#trello* (linked to the core team's research trello for 2017) and *#github* (linked to the GitHub repo) channels as these can become quite spammy. We currently have the *#electromagnetism*, *#maths*, and *#mechanics* visualization channels but if one for your development stream doesn't yet exist feel free to make your own.
 
-4. Standup reports are currently managed by @anthony_li where the *Standuply* app will ask each team member questions every working day on what they have done, obstacles encountered, and what they plan to do the next day. This is based upon agile software development principles (specifically Scrum) but removes the issues of standup meetings which can get sidetracked or delayed. Ansers are compiled from replies to the app and posted on the *#standuply* channel where everyone can see what everyone else has been up to and see if any similar obstacles (which arise often in a project such as this) are encountered or have been overcome.
+4. Standup reports (currently managed by @c.clewley) are where the *Standuply* app asks each team member questions every working day on what they have done, obstacles encountered, and what they plan to do the next day. This is based upon agile software development principles (specifically Scrum) and removes the issues of standup meetings which can often get sidetracked or delayed. Answers are compiled from replies to the app and posted on the *#standuply* channel where everyone can see what everyone else has been up to, and see if any similar obstacles (which arise often in a project such as this) have been encountered and/or overcome.
 
 ### Trello
 
 Trello essentially a todo list that organises projects into various boards. This is powerful for project development and can be used to easily plan what is being done, what is going to be done, who is working on what, and what features need to be worked on. It also has a mobile app.
 
-1. Create a Trello account https://trello.com/
+1. Create a Trello account https://trello.com/.
 
-2. Trello admins (@c.clewley, @jamie, @akashb95, @cyd_cowley, and @anthony_li) can add people via the https://trello.com/impvis/members page. 
+2. Trello admins (@c.clewley, @jamie, @akashb95, @cyd_cowley, and @anthony_li) can add members via the https://trello.com/impvis/members page. 
 
 3. Once you have joined the team you will see various project boards. Current boards are *Core Team* (no longer in use as set-up process is completed), *E&M group*, *Math group*, *Mechanics and V\&W*. If a board for your development stream doesn't yet exist feel free to make your own.
 
-4. When you create a Trello account it will automatically create a welcome board for you. It is recommended to take the 5 minutes to work through the examples on this board to rapidly learn what Trello can offer.
+4. When you create a Trello account it will automatically create a welcome board for you. It is recommended to take the 5 minutes to work through the examples on this board to learn what Trello can offer.
 
 
 ## Coding Apps
@@ -59,7 +59,7 @@ Jupyter Notebooks are a platform for separating code into segments and can be us
 
 ### PEP8 and IDEs (Integrated Development Environments)
 
-In order to make sure that people can understand what our code is doing (particularly for future work) we need to follow PEP8 for any Python code, particularly comments and documentation. The style guide is available at https://www.python.org/dev/peps/pep-0008/ and it is vital to read the section on *Comments*. If you want to improve your coding style reading the section on *Code layout* (and in fact the whole guide if you have time) would be beneficial.
+In order to make sure that everyone can understand what our code is doing (particularly for future work) we need to follow PEP8 for any Python code, particularly comments and documentation. The style guide is available at https://www.python.org/dev/peps/pep-0008/ and it is vital to read the section on *Comments*. If you want to improve your coding style reading the section on *Code layout* (and in fact the whole guide if you have time) would be beneficial.
 
 1. IDEs make it easier to understand what your code is doing by highlighting functions. Some even check if your code is following PEP8 and checks your code for errors as you type. I recommend PyCharm for coding in Python https://www.jetbrains.com/pycharm/download/ and the professional version can be downloaded for free by using a student email address. If you plan to use PyCharm you can change the project interpreter and appearance theme by going to *File -> Settings*. I recommend using the Darcula theme for coding where possible as it puts far less strain on the eyes, particularly after extended periods of time or late at night.
 
@@ -80,7 +80,7 @@ All coding collaboration is done via GitHub. See the [git tutorial](https://anth
 
 The final aim of the project is to create standalone interactive web apps for learning which can be simply accessed via a web link. These are built using HTML, CSS, and Javascript. For deeper learning accompanying Jupyter Notebooks containing carefully selected segments of Python code with well-explained Physics and explanations should also be created. These are built using Jupyter Notebooks (.ipynb files) and will either be available to download or accessible via a JupyterHub.
 
-1. Since the Jupyter Notebook should be easier to code (coding interactivity isn't required since students will be changing code, variables, equations.etc themselves) it makes sense to first create a proof of concept for the visualization in Python. We also found that many people are more comfortable working with classes, objects.etc in Python. The key here is to make sure the concept is well-explained in the visualization.
+1. Since the Jupyter Notebook should be easier to code (coding interactivity isn't required since students will be changing code, variables, equations.etc themselves) it makes sense to first create a proof of concept for the visualization in Python. We also found that many members are more comfortable working with classes, objects.etc in Python. The key here is to make sure the concept is well-explained in the visualization.
 
 2. At this point consider whether the visualizations will be computationally intensive or not. If it's intensive you will need to first export the plotting data to a json data file to eliminate the delay due to long computation times. Generate this using Python to reduce the workload when creating a Jupyter Notebook (the physics enabling the data output is sufficient here). If it's not intensive it is possible continuously update the data in Javascript and have the user update it themselves in a completely separate Jupyter Notebook. This also removes any loading times.
 
@@ -102,4 +102,4 @@ The best way to start coding a visualization is probably to first plan out how y
 
 _________________________________________________________________________________________________
 
-Thanks for reading this far! Please direct any further questions, suggestions, or corrections to Caroline Clewley (@c.clewley), or (the people involved in the set-up process) Akash Bhattacharya (@akashb95), Jamie Coombes (@jamie), Cyd Cowley (@cyd_cowley), and Anthony Li (@anthony_li) on the Imperial-Visualizations Slack.
+Thanks for reading this far! Please direct any further questions, suggestions, or corrections to Caroline Clewley (@c.clewley), or (the members involved in the set-up process) Akash Bhattacharya (@akashb95), Jamie Coombes (@jamie), Cyd Cowley (@cyd_cowley), and Anthony Li (@anthony_li) on the Imperial-Visualizations Slack.
