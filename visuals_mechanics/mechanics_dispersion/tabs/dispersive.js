@@ -1,3 +1,5 @@
+//--------------------------------------------VARIABLES--------------------------------------------
+
 // Defining variables (need to update later anyway so importing from e.g. json is meaningless)
 // Wave characteristics:
 var nb_waves = parseInt($("#slider_waves").val());
@@ -10,8 +12,8 @@ var omega_disp = [];
 
 // x and t coordinates
 var n = 801;
-var y_i = [], y_r = [], y_t = [];
-var x = numeric.linspace(-50, 50, n);
+var y_i = [], y_d = [];
+var x = numeric.linspace(0, 100, n);
 var t = 0.0;
 var dt = 0.02;
 var is_paused = true;
@@ -104,8 +106,8 @@ $('#slider_waves').on('input', function () {
     if (is_paused === true) {
         Plotly.relayout('graph', {
             "yaxis.range": [-y_range, y_range],
-        }
-        )
+            "yaxis2.range": [-y_range, y_range],
+        })
     }
 });
 
@@ -127,10 +129,10 @@ function initial_data(){
     }
     else {
         if ($('#function').val().includes('^')) {
-                for (var i = 0; i < nb_waves; i++) {
+                for (var j = 0; j < nb_waves; j++) {
                     if ($('#function').val().includes('k')) {
-                        funct = funct.replace(/k/g, k_array[i]);
-                        omega_disp[i] = calculator.parse(funct);
+                        funct = funct.replace(/k/g, k_array[j]);
+                        omega_disp[j] = calculator.parse(funct);
                     }
                 }
             }
@@ -141,22 +143,20 @@ function initial_data(){
                 }
             }
     }
-    for (var i_ = 0; i_ <= n; i_++) {
-        if (x[i_] < 0) {
-            y_i[i_] = 0;
-            y_r[i_] = 0;
-            for (var j = 0; j < nb_waves; j++) {
-                y_i[i_] += Math.sin(k_array[j] * x[i_] - omega_nondisp[j] * t);
-                y_r[i_] += Math.sin(k_array[j] * x[i_] - omega_nondisp[j] * t);
+    for (var i = 0; i < n; i++) {
+        y_i[i] = 0;
+        y_d[i] = 0;
+            for (var j_ = 0; j_ < nb_waves; j_++) {
+                y_i[i] += Math.sin(k_array[j_] * x[i] - omega_nondisp[j_] * t);
+                y_d[i] += Math.sin(k_array[j_] * x[i] - omega_disp[j_] * t);
             }
-        }
-        else if (x[i_] >= 0){
-            y_t[i_] = 0;
-            for (var l = 0; l < nb_waves; l++) {
-                y_t[i_] += Math.sin(k_array[l] * x[i_] - omega_disp[l] * t);
-            }
-        }
     }
+}
+
+function onStart() {
+    is_paused = !is_paused;
+    document.getElementById('run_button').value = (is_paused) ? "Play" : "Pause";
+    requestAnimationFrame(update);
 }
 
 function onReset() {
@@ -165,7 +165,7 @@ function onReset() {
     initial_data();
 
     Plotly.animate('graph',
-            {data: [{y: y_i}, {y: y_r}, {y: y_t}]},
+            {data: [{y: y_i}, {y: y_d}]},
             {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
     );
     document.getElementById('run_button').value = (is_paused) ? "Play" : "Pause";
@@ -189,45 +189,23 @@ initial_data();
 var incident = {
     x: x,
     y: y_i,
-    name: "incident",
-    line: {width: 2, color: '#960078', simplify: false}
-};
-
-var reflected = {
-    x: x,
-    y: y_r,
-    name: "reflected",
+    name: "non-dispersive",
     line: {width: 2, color: '#E40043', simplify: false}
 };
 
-var transmitted = {
+var dispersive = {
     x: x,
-    y: y_t,
+    y: y_d,
     xaxis: 'x2',
     yaxis: 'y2',
-    name: "transmitted",
+    name: "dispersive",
     line: {width: 2, color: '#00ACD7', simplify: false}
 };
 
-var boundary = {
-    x: [0, 0],
-    y: [-105, 105],  // more efficient than updating it when axis change
-    mode: "lines",
-    name: "boundary",
-    line: {width: 3, color: 'black', simplify: false}
-};
-
-var xline = {
-    x: [-15, 15],
-    y: [0, 0],
-    mode: "lines",
-    showlegend: false,
-    line: {width: 2, color: '#003E74', simplify: false}
-};
 var layout =
-    {
+        {
         autosize: false,
-        width: 700,
+        width: 600,
         height: 400,
         margin: {
             l: 60,
@@ -238,7 +216,7 @@ var layout =
         },
         //plot_bgcolor: '#EBEEEE',
         xaxis: {
-            range: [-50, 0],
+            range: [0, 100],
         },
         yaxis: {
             autorange: false,
@@ -246,7 +224,7 @@ var layout =
             domain: [0.6, 1],
         },
         xaxis2: {
-            range: [0, 50],
+            range: [0, 100],
             anchor: 'y2',
         },
         yaxis2: {
@@ -269,7 +247,7 @@ var layout =
     };
 
 // Plot graph with interactivity
-Plotly.plot('graph', [incident, reflected, transmitted, boundary, xline], layout);
+Plotly.plot('graph', [incident, dispersive], layout);
 
 //--------------------------------------------ANIMATION--------------------------------------------
 
@@ -281,20 +259,12 @@ function compute() {
     // need to find a way to define time limit
     if (t < t_start + 50) {
         for (var i = 0; i < n; i++) {
-            if (x[i] < 0) {
-                y_i[i] = 0;
-                y_r[i] = 0;
+            y_i[i] = 0;
+            y_d[i] = 0;
                 for (var j = 0; j < nb_waves; j++) {
                     y_i[i] += Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
-                    y_r[i] += Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
+                    y_d[i] += Math.sin(k_array[j] * x[i] - omega_disp[j] * t);
                 }
-            }
-            else if (x[i] >= 0) {
-                y_t[i] = 0;
-                for (var j_ = 0; j_ < nb_waves; j_++) {
-                    y_t[i] += Math.sin(k_array[j_] * x[i] - omega_disp[j_] * t);
-                }
-            }
         }
     }
 }
@@ -307,7 +277,7 @@ function update() {
         compute();
 
         Plotly.animate('graph',
-                {data: [{y: y_i}, {y: y_r}, {y: y_t}]},
+                {data: [{y: y_i}, {y: y_d}]},
                 {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
                 // vastly speeds up animation but won't update any non-animated properties
         );
@@ -315,18 +285,10 @@ function update() {
     }
 }
 
-function onStart() {
-    is_paused = !is_paused;
-    document.getElementById('run_button').value = (is_paused) ? "Play" : "Pause";
-    requestAnimationFrame(update);
-}
-
-// ToDo: tooltips for input boxes
-// ToDo: Change Initial Wave
-// ToDo: Python?
-// ToDo: Numeric (Clean Up)
-// ToDo: Speed Up
-// ToDo: Wave at Interface (if possible) -> (v1, v2, endpoint and moving window, border height change with plot)
+// ToDo: Tooltips for input boxes
+// ToDo: Change initial wave (and/or cos, exp options)
+// ToDo: Numeric (Clean Up/Speed-up)
+// ToDo: Wave at interface (if possible) -> (v1, v2, endpoint and moving window, border height change with plot)
 // Maybe at beginning: need to specify v (ratio of w and k) and how w (/k cause they are
 // proportional) changes with the added sine wave
 
