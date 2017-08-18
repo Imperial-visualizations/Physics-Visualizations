@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>Pulse Animation</title>
+    <title>Dispersive Wave</title>
     <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
     <link rel="icon" href="./images/favicon.ico" type="image/x-icon">
     <style>
@@ -99,49 +99,7 @@
     var omega_input = false;
     var funct;
 
-    var layout =
-        {
-            autosize: false,
-            width: 700,
-            height: 400,
-            margin: {
-                l: 60,
-                r: 35,
-                b: 50,
-                t: 40,
-                pad: 4
-            },
-            //plot_bgcolor: '#EBEEEE',
-            xaxis: {
-                range: [-50, 0],
-            },
-            yaxis: {
-                autorange: false,
-                range: [-4, 4],
-                domain: [0.6, 1],
-            },
-            xaxis2: {
-                range: [0, 50],
-                anchor: 'y2',
-            },
-            yaxis2: {
-                autorange: false,
-                range: [-4, 4],
-                domain: [0, 0.4],
-            },
-            legend: {
-                orientation: 'h',
-                x: -0.05,
-                y: 1.2,
-                fontsize: 25
-            },
-            font: {
-                family: 'Lato',
-                size: 16,
-                color: '#003E74',
-                weight: 900
-            }
-        };
+    //--------------------------------------------INTERACTS--------------------------------------------
 
     // k0
     $("#k0_input").on('keyup',function () {
@@ -217,7 +175,6 @@
 
     })
 
-
     // Slider waves
     $('#slider_waves').on('input', function () {
         nb_waves = parseFloat($("#slider_waves").val());
@@ -238,6 +195,8 @@
         $("#phaseVelocityDisplay").text(" " + v + " m/s");
         onReset();
     });
+
+    //--------------------------------------------FUNCTIONS--------------------------------------------
 
     function initial_data(){
         k_array = numeric.linspace(k0, kend, nb_waves);
@@ -280,15 +239,6 @@
         }
     }
 
-    function update_y_range() {
-        if (nb_waves < 4) {
-            y_range = 4
-        }
-        else {
-            y_range = (nb_waves - (nb_waves % 5)) + 5
-        }
-    }
-
     function onReset() {
         is_paused = true;
         t = 0;
@@ -300,6 +250,17 @@
         );
         document.getElementById('run_button').value = (is_paused) ? "Play" : "Pause";
     }
+
+    function update_y_range() {
+        if (nb_waves < 4) {
+            y_range = 4
+        }
+        else {
+            y_range = (nb_waves - (nb_waves % 5)) + 5
+        }
+    }
+
+    //--------------------------------------------PLOTTING--------------------------------------------
 
     // Data
     initial_data();
@@ -343,10 +304,54 @@
         showlegend: false,
         line: {width: 2, color: '#003E74', simplify: false}
     };
-
+    var layout =
+        {
+            autosize: false,
+            width: 700,
+            height: 400,
+            margin: {
+                l: 60,
+                r: 35,
+                b: 50,
+                t: 40,
+                pad: 4
+            },
+            //plot_bgcolor: '#EBEEEE',
+            xaxis: {
+                range: [-50, 0],
+            },
+            yaxis: {
+                autorange: false,
+                range: [-4, 4],
+                domain: [0.6, 1],
+            },
+            xaxis2: {
+                range: [0, 50],
+                anchor: 'y2',
+            },
+            yaxis2: {
+                autorange: false,
+                range: [-4, 4],
+                domain: [0, 0.4],
+            },
+            legend: {
+                orientation: 'h',
+                x: -0.05,
+                y: 1.2,
+                fontsize: 25
+            },
+            font: {
+                family: 'Lato',
+                size: 16,
+                color: '#003E74',
+                weight: 900
+            }
+        };
 
     // Plot graph with interactivity
     Plotly.plot('graph', [incident, reflected, transmitted, boundary, xline], layout);
+
+    //--------------------------------------------ANIMATION--------------------------------------------
 
     // Data update function for animation
     var t_start = t;
