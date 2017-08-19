@@ -57,13 +57,13 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
         for (var i =0; i < 10; i++) {
             val -= (this.reducedM * Math.pow(this.omega, 2) * Math.pow(val, 14)
                     - 12 * this.V.e * Math.pow(this.V.getR_0() * val, 6) + 12 * this.V.e * Math.pow(this.V.getR_0(), 12))/
-                    (14 * this.reducedM * Math.pow(this.omega,2) * Math.pow(val,13)- 72 * this.V.e * Math.pow(val, 5) *
+                    (14 * this.reducedM * Math.pow(this.omega, 2) * Math.pow(val,13)- 72 * this.V.e * Math.pow(val, 5) *
                         Math.pow(this.V.getR_0(), 6));
         }
         return val;
     };
 
-    this.I = this.reducedM * Math.pow(this.V.getR_0(),2);       // Calculate initial Moment of Inertia.
+    this.I = this.reducedM * Math.pow(this.V.getR_0(), 2);      // Calculate initial Moment of Inertia.
     this.omega = Math.sqrt(2 * keRot_0 / this.I);               // Calculate initial angular velocity.
     this.L = this.I * this.omega;                               // Calculate angular momentum (conserved).
     this.r = new Vector([1, 0]).multiply(this.init_r_0());      // Initial radius, due to centrifugal distortion
@@ -92,6 +92,15 @@ Molecule.prototype.update = function(deltaTime){
     // Update atom coordinates in CoM frame.
     a1.pos = this.r.multiply(a1.mass / this.tot_m);
     a2.pos = this.r.multiply(-a2.mass / this.tot_m);
+};
+
+Molecule.prototype.updateVibKE = function (vibKE) {
+    this.v = -Math.sqrt(2 * vibKE / this.reducedM);
+};
+
+Molecule.prototype.updateRotKE = function (rotKE) {
+    this.omega = Math.sqrt(2 * rotKE / this.I);
+    this.L = this.I * this.omega;
 };
 
 /**
@@ -128,8 +137,3 @@ Molecule.prototype.calcMoI = function() {
 Molecule.prototype.calcAngVel = function () {
     return this.L / this.I;
 };
-
-/**
- * Calculates Centre of Mass coordinates.
- * @returns {Vector} Centre of Mass
- */

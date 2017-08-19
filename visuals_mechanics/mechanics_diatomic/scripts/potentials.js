@@ -21,16 +21,28 @@ LJ = function (sigma, epsilon, sigma2, epsilon2) {
     if (!isNumber(sigma) || !isNumber(epsilon)) {
         console.error("Error! Sigma and Epsilon values invalid!");
     }
-    // LJ parameters initialisation.
-    this.s = sigma;
-    this.e = epsilon;
+    // LJ parameters initialisation for Atom 1.
+    this.s1 = sigma;
+    this.e1 = epsilon;
 
     // Heterogeneous diatomic molecule.
     if (isNumber(sigma2) && isNumber(epsilon2)){
-        // LJ combined parameter calculation.
-        this.s = (this.s + sigma2)/2;
-        this.e = Math.sqrt(this.e * epsilon2)
+        // LJ parameters for Atom 2.
+        this.s2 = sigma2;
+        this.e2 = epsilon2;
     }
+
+    else {
+        this.s2 = this.s1;
+        this.e2 = this.e1;
+    }
+
+    this.setParams(this.s1, this.e1, this.s2, this.e2);
+};
+
+LJ.prototype.setParams = function(s1, e1, s2, e2) {
+    this.s = (s1 + s2 / 2);
+    this.e = Math.sqrt(e1 * e2);
 };
 
 /**
@@ -57,22 +69,23 @@ LJ.prototype.getR_0 = function(){
 LJ.prototype.plot = function() {
     var x = [];                                                 // Array to store r values.
     var y = [];                                                 // Array to store LJ potential at corresponding r.
-    var ppu = 10;                                               // Points per unit of separation distance.
+    var ppu = 1000;                                             // Points per unit of separation distance.
 
     // Layout of plot.
     var layout = {title: "LJ Potential",
         xaxis: {title: "r / Angstroms", range: [0.5 * this.s, 3 * this.s]},
-        yaxis: {title: "Potential / eV", range: [1.1 * this.e, -2 * this.e]},
-        line: {color: "blue"}};
+        yaxis: {title: "Potential / eV", range: [1.1 * this.e, -2 * this.e]}};
 
     // Generating plot data.
     for (var i = layout.xaxis.range[0] + 1/ppu; i < Math.ceil(layout.xaxis.range[1]) * ppu; i++) {
         var separation = i / ppu;
         x.push(separation);
-        y.push(this.calcV(separation));
+        y.push(-1 * this.calcV(separation));
     }
 
     // Creating plot-able object.
-    var scatter_LJ = {y: y, x: x, mode: "lines+markers", type: "scatter", name: "LJ Pot"};
-    Plotly.newPlot("LJ_scatter", {data: [scatter_LJ], traces: [0], layout: layout});
+    var scatter = {y: y, x: x, mode: "markers+lines", type: "scatter", name: "LJ Pot",
+        line: {color: "blue", width: 2}, marker: {size: 1}};
+    Plotly.newPlot("LJ_scatter", {data: [scatter], traces: [0], layout: layout});
+
 };

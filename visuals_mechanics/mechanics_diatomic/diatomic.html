@@ -29,6 +29,9 @@
     </style>
     <script src=https://cdn.plot.ly/plotly-latest.min.js></script>
     <script src = "./scripts/potentials.js"></script>
+    <script src = "./scripts/vecops.js"></script>
+    <script src = "./scripts/diatomic.js"></script>
+    <script src="./scripts/molecule.js"></script>
 </head>
 <body>
 
@@ -42,34 +45,40 @@
             <div class="four columns">
                 <h4 class="titleKE">Kinetic Energies</h4>
 
+                <!-- Vib KE slider -->
                 <label class="sliderTitle">Vibrational:
-                    <span id="vibKEDisplay" data-unit="eV">0 eV</span>
+                    <span id="vibKEDisplay" data-unit="eV">2 eV</span>
                 </label>
                 <label class="slider">
-                    <input id="Slider" class="inputs" title="Vib KE" type="range" value="0" min="0" max="10.0" step="0.1"/>
+                    <input id="vibKE" class="inputs" title="Vib KE" type="range" value="0" min="0" max="10.0" step="0.1"/>
                     <span class="sliderMin">0.0</span><span class="sliderMax">10.0</span>
                 </label>
 
-                <button for="#vibE" class="showHideButton">Hide</button>
-                <div id="vibE" class="expand">
+                <!-- Vib KE Graph Plotly -->
+                <em><a for="#vibE" class="showHideButton">Hide </a></em> <a>KE<sub>vib</sub></a>
+                <div id="vibE" class="expand" style="padding-bottom: 10px">
                     Graph 2
                 </div>
 
+                <!-- Rot KE slider -->
                 <label class="sliderTitle">Rotational:
-                    <span id="rotKEDisplay" data-unit="eV">0 eV</span>
+                    <span id="rotKEDisplay" data-unit="eV">5 eV</span>
                 </label>
                 <label class="slider">
-                    <input id="Slider" class="inputs" title="Rot KE" type="range" value=0" min="0" max="10.0" step="0.1"/>
+                    <input id="rotKE" class="inputs" title="Rot KE" type="range" value=0" min="0" max="10.0" step="0.1"/>
                     <span class="sliderMin">0.0</span><span class="sliderMax">10.0</span>
                 </label>
 
-                <button for="#rotE" class="showHideButton">Hide</button>
-                <div id="rotE" class="expand">
+                <!-- Rot KE Graph Plotly -->
+                <em><a for="#graphRotE" class="showHideButton">Hide </a></em> <a>KE<sub>rot</sub></a>
+                <div id="graphRotE" class="expand" style="padding-bottom: 10px">
                     Graph 3
                 </div>
                 <br>
-                <button for="#potE" class="showHideButton">Hide</button>
-                <div id="potE" class="expand">
+
+                <!-- PE Graph Plotly -->
+                <em><a for="#graphPotE" class="showHideButton">Hide </a></em> <a>PE</a>
+                <div id="graphPotE" class="expand" style="padding-bottom: 10px">
                     Graph 4
                 </div>
             </div>
@@ -80,7 +89,7 @@
     <!-- Lennard-Jones potential Plotly graph -->
     <div class="row" style="margin-bottom: 10px">
         <div class="twelve columns">
-            <a for="#LJ_scatter" class="showHideButton">Hide</a>
+            <em><a for="#LJ_scatter" class="showHideButton">Hide </a></em> <a>LJ potential</a>
             <div class="expand">
                 <div id="LJ_scatter" style="width:75%; height: 480px">
                     <script>
@@ -97,11 +106,11 @@
         <h4 class="titleAtomA">Atom A</h4>
         <div class="twelve columns">
             <div class="six columns">
-                &sigma;    <input class="inputs" type="number" title="sigma" value="3">
+                <span>&sigma; = </span>    <input class="inputs" type="number" title="sigmaA" min="0" value="2"/>
             </div>
 
             <div class="six columns">
-                &epsilon;  <input class="inputs" type="number" title="epsilon" value="-2">
+                <span>&epsilon; = </span>    <input class="inputs" type="number" title="epsilonA" min="0" value="10"/>
                 <br>
             </div>
         </div>
@@ -112,11 +121,11 @@
         <h4 class="titleAtomB">Atom B</h4>
         <div class="twelve columns">
             <div class="six columns">
-                <span>&sigma; = </span>    <input class="inputs" type="number" title="sigma" value="3">
+                <span>&sigma; = </span>    <input class="inputs" type="number" title="sigmaB" value="2"/>
             </div>
 
             <div class="six columns">
-                <span>&epsilon; = </span>  <input class="inputs" type="number" title="epsilon" value="-2">
+                <span>&epsilon; = </span>  <input class="inputs" type="number" title="epsilonB" value="10"/>
             </div>
         </div>
     </div>
@@ -125,11 +134,7 @@
 
 <script src=https://code.jquery.com/jquery-latest.min.js></script>
 <script src = "https://github.com/photonstorm/phaser-ce/releases/download/v2.8.3/phaser.min.js"></script>
-<script src = "./scripts/vecops.js"></script>
-<script src = "./scripts/diatomic.js"></script>
 <script src="./scripts/graphics.js"></script>
-<script src="./scripts/molecule.js"></script>
-
 <script>
     /**
      *
@@ -139,4 +144,68 @@
         $(this).text(text);
         $($(this).attr("for")).slideToggle("fast");
     });
+
+    $(window).on("load", function(){
+        $('#LJ_scatter').fadeIn(100);
+        $('#phaser').fadeIn(500);
+    } );
+</script>
+
+<script>
+    $("select[title='sigmaA']").on("change keyup", function() {
+        potential.s1 = $(this).val;
+    });
+    $("select[title='sigmaB']").on("change keyup", function() {
+        potential.s2 = $(this).val;
+    });
+    $("select[title='epsilonA']").on("change keyup", function() {
+        potential.e1 = $(this).val;
+    });
+    $("select[title='epsilonB']").on("change keyup", function() {
+        potential.e2 = $(this).val;
+    });
+</script>
+
+<script>
+    $(".inputs").each(function () {
+    // To update the displayed value in HTML
+    $(this).on('input', updateLabels);
+    });
+
+    function updateLabels() {
+    $(".inputs").each(function () {
+        // To update the displayed value in HTML
+        var display_id = "#" + $(this).attr("id") + "Display";
+        $(display_id).text($(this).val() + $(display_id).attr("data-unit"));
+    });
+
+    mol1.updateVibKE(parseFloat($("#vibKE")));
+    mol1.updateRotKE(parseFloat($("#rotKE")));
+//    if (!isRunning) {
+//        ball1.Lab.mass = parseFloat($("#ball1LabMass").val());
+//        ball2.Lab.mass = parseFloat($("#ball2LabMass").val());
+//        ball1.Lab.v.x = parseFloat($("#ball1LabVelocityX").val());
+//
+//        ball1.CoM.v = vCal(ball1.Lab.v, '-', getCoMV());
+//        ball2.CoM.v = vCal(ball2.Lab.v, '-', getCoMV());
+//
+//
+//
+//        updateRadius(ball1);
+//        updateRadius(ball2);
+//
+//        updateScatterAngle();
+//
+//        centreOfMass1.x = getCoMR().x;
+//        centreOfMass1.y = getCoMR().y;
+//
+//        ball1.CoM.spriteInstance.x = canvasWidth - 100 - getCoMR().x;
+//        ball1.CoM.spriteInstance.y += canvasHeight / 6 - getCoMR().y;
+//        ball2.CoM.spriteInstance.x = canvasWidth + 100 - getCoMR().x;
+//        ball2.CoM.spriteInstance.y += canvasHeight / 6 - getCoMR().y;
+//
+//
+//        recalculateVector();
+//    }
+}
 </script>
