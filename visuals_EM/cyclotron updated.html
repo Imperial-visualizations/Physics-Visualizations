@@ -6,7 +6,11 @@
 <link rel=stylesheet href=https://manglekuo.com/i-v/styles.css?v=2>
 </head>
 <body>
-<div style="width:50%; height:80%" id="particle"></div>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> 
+    
 <script>
 
 var ourRequest = new XMLHttpRequest();
@@ -14,7 +18,20 @@ ourRequest.open('GET','https://rawgit.com/Blaze23/imperialvisualize/master/cyclo
  
 var xy = {
 	x0: 0,
-	y0: 0
+	y0: 0,
+    data: []
+}
+
+var vars = {
+    B: 4,
+    E: 40,
+    M: 3
+}
+
+var slides = {
+    intface: $("#interface"),
+    BInput: $("input#E"),
+    EInput: $("input#B")
 }
 
 var is_paused = true;
@@ -66,6 +83,9 @@ function onReset() {
 	} 
 } 
 
+    
+
+
 
 
 
@@ -77,11 +97,16 @@ ourRequest.onload=function(){
 
 
 	//all the plotly stuff here or whatever you wanna do with the data 
+    
+    xy.data = data[0]['B_' + String(vars.B)][0]['E_' + String(vars.E)][0]['Mass' + String(vars.M)];
+    
+    
+    console.log(vars.B.type);
 
-	xy.x0 = data[0]['B_6'][0]['E_40'][0]['Mass2'][0];
-	xy.y0 = data[0]['B_6'][0]['E_40'][0]['Mass2'][1];
+    xy.x0 = xy.data[0];
+    xy.y0 = xy.data[1];
+    
 
-	console.log(xy.x0);
 
 
 //	var scatter0 = {x: xy.x0, y: xy.y0, mode: "lines", type: "scatter", line: {width: 1, color: "blue"}, name: "sine"};
@@ -94,24 +119,90 @@ ourRequest.onload=function(){
 
 	plot(scatter0, layout);
 	requestAnimationFrame(update);
+    
+    $('#B').on('input', function(){
+        vars.B = $(this).val();
+        xy.data = data[0]['B_' + String(vars.B)][0]['E_' + String(vars.E)][0]['Mass' + String(vars.M)];
+        xy.x0 = xy.data[0];
+        xy.y0 = xy.data[1];
+        
+        var scatter0 = {name: "Particle", y: xy.y0, mode: "lines", type: "scatter", x: xy.x0, line: {width: 2, color: "blue"}};
+        
+        Plotly.restyle(plot, scatter0)
+    });
+                      
+    $('#E').on('input', function(){
+        vars.E = $(this).val();
+        xy.data = data[0]['B_' + String(vars.B)][0]['E_' + String(vars.E)][0]['Mass' + String(vars.M)];
+        xy.x0 = xy.data[0];
+        xy.y0 = xy.data[1];
+        
+        var scatter0 = {name: "Particle", y: xy.y0, mode: "lines", type: "scatter", x: xy.x0, line: {width: 2, color: "blue"}};
+        
+        Plotly.restyle(plot, scatter0)
 
+	});
+    
+    $('#M').on('input', function(){
+        vars.M = $(this).val();
+        xy.data = data[0]['B_' + String(vars.B)][0]['E_' + String(vars.E)][0]['Mass' + String(vars.M)];
+        xy.x0 = xy.data[0];
+        xy.y0 = xy.data[1];
+        
+        var scatter0 = {name: "Particle", y: xy.y0, mode: "lines", type: "scatter", x: xy.x0, line: {width: 2, color: "blue"}};
+        
+        Plotly.restyle(plot, scatter0)
 
-	};
+	});
 
+    
+}
+                                            
+                                        
 ourRequest.send();
+    
 
-console.log(xy.x0);
-
-
-
-
+    
 
 
 
 </script>
-<div id="scatter_btn"></div>
-<input id="run" onclick="onToggleRun()" value="Play" type="button">
-<input id="reset" onclick="onReset()" value="Reset" type="button">
+    
+<div class="container">
+    <h1>Cyclotron</h1>
+
+    <div style="width:50%; height:80%" id="particle"></div>
+    <div class="row">
+        <div id="interface">
+
+            <div class="ten columns">
+                <div id="B-slider">
+                    <label for="B" class="sliderTitle">B field strength:</label>
+                    <input type="range" id="B" name="B" min="0" max="10" step = "2" value="4">
+                    <span class="sliderMin">0</span><span class="sliderMax">10</span>
+                </div>
+
+                <div id="E-slider">
+                    <label for="E" class="sliderTitle">E field strength:</label>
+                    <input type="range" id="E" name="E" min="0" max="50" step="10" value="40">
+                    <span class="sliderMin">0</span><span class="sliderMax">50</span>
+                </div>
+                
+                <div id="M-slider">
+                    <label for="M" class="sliderTitle">Mass of particle:</label>
+                    <input type="range" id="M" name="M" min="1" max="5" step="1" value="3">
+                    <span class="sliderMin">1</span><span class="sliderMax">5</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="scatter_btn"></div>
+    <input id="run" onclick="onToggleRun()" value="Play" type="button">
+    <input id="reset" onclick="onReset()" value="Reset" type="button">
+</div>
+    
+
 
 </body>
 </html>
