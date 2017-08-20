@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Green's Theorem</title>
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
+     <link rel="stylesheet" href="skeleton-tabs.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script src="__utils__.js"></script>
+    <script src="green.js"></script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <script src="skeleton-tabs.js"></script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="six columns">
+            <h1>Green's Theorem</h1>
+        </div>
+    </div>
+
+        <div class="row">
+            <div class="twelve columns">
+                <ul class="tab-nav">
+                      <li><a class="button active" href="#circulation">Circulation</a></li>
+                      <li><a class="button" href="#curl">Curl</a></li>
+                      <li><a class="button" href="#overall">Overall</a></li>
+                </ul>
+
+                <div class="tab-content">
+
+                    <div class="tab-pane active" id="circulation">
+                        <div class="six columns">
+                            <h2>Circulation Integrals</h2>
+                            <div id='circulation_graph' style="width:450px; height:450px;"></div>
+                        </div>
+                        <div class="six columns">
+                            <div id="circ_para">
+                            <p>Consider a unit square, \(D\), surrounded by a closed loop \(C\).
+                                The circulation \((\Gamma)\) of a vector field is defined as the line integral of the
+                                vector field \((\vec{A})\) around a closed loop C. In 2D, we let \(\vec{A}=(L,\,M)\) then:
+                                $$
+                                \Gamma = \oint_C \vec{A} \cdot \, d\vec{r} = \oint_C L\,dx+M\,dy
+                                $$
+                                This is a measure of how much the vector
+                                field is "spinning" overall. Remember the right hand rule!
+                                </p>
+                            </div>
+                            <input type="button" value="Animate!" onclick="circulationPlot()">
+                            <input type="button"value="Toggle Text" onclick="toggleText()">
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="curl">
+                        <div class="six columns">
+                            <h2>Curl</h2>
+                            <div id='curl_graph' style="width:450px; height:450px;"></div>
+                        </div>
+                        <div class="six columns">
+                            <div id="curl_para">
+                                <p>Recall the definition of a curl of a vector field \(\vec{A}\) is:
+                                $$ \text{curl}\,\vec{A} = \nabla \times \vec{A} $$
+                                We can think of the curl as a measure of "spinning per unit area". If we only consider
+                                vector fields in 2D (i.e. \(\vec{A} = (L,M,0) \)) we can "add up" all of these little rotating regions
+                                by integrating the curl flux through our surface (in this case the \(x-y\) plane) like:
+                                $$ \iint_D \text{curl}\,\vec{A} \cdot \vec{n} \, dS = \iint_D \Big( \frac{\partial M}{\partial x}
+                                -\frac{\partial L}{\partial y} \Big) \, dxdy
+                                $$
+                                <b>N.B.</b> The curl of a 2D vector field has only one component in the \(\mathbf{\hat{k}}\)
+                                    -direction. Try calculating it yourself!</p>
+                            </div>
+                            <input type="button" value="Toggle Text" onclick="toggleText()">
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="overall">
+                        <div class="six columns">
+                            <h2>Overall</h2>
+                            <div id="overall_graph" style="width:450px; height:450px;"></div>
+                        </div>
+
+                        <div class="six columns">
+                            <div id="overall_para">
+                                <p>Now we make the link between these 2 integrals. Consider breaking down our region \(D\) into an
+                                \(n\times n\) grid (strictly we would need to take \(n\to\infty\) but this would be impossible to see).
+                                    Now we have tiny rotating regions of our curl. However, if we look <b>inside</b> our grid, every arrow
+                                    has a corresponding opposite arrow. These arrows, coloured green, "cancel" out and the only ones left
+                                    are the ones coloured magenta. Increase n using the slider and you will see this is always the case.
+                                </p>
+                                <p>Finally, we notice that after all the green arrows "cancel", the magenta arrows make up the line integral we saw earlier.
+                                    This is the link between the circulation integral and curl flux integral which gives us Green's Theorem:
+                                    $$ \oint_C L\,dx+M\,dy = \iint \frac{\partial M}{\partial x}-\frac{\partial L}{\partial y}\,dx\,dy$$
+
+
+                                </p>
+                            </div>
+
+                        <label>
+                            <input id="getN" type ="range" value="2" min ="2" max="8" step ="1" onchange="overallReplot()"/>
+                            <span class="sliderMin">2</span><span class="sliderMax">8</span>
+                        </label>
+                        <input type="button" value="Toggle Text" onclick="toggleText()">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

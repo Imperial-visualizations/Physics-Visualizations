@@ -1,3 +1,5 @@
+Author: Ryo Kurashina (rk2014@ic.ac.uk) 19/08/2017
+Arrow Object based upon Ronnie Dutta's Python design.
 # Quick Starter Guide: __utils__.js including the new Arrow object and Quiver function
 
 1. Copy the [__utils__.js](./__utils__.js) file in your working directory and include it as a script in your head section (avoid using function names which are listed below).
