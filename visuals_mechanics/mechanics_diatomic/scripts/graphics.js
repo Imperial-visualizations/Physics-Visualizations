@@ -69,9 +69,9 @@ function create(){
 
     phaserInstance.stage.backgroundColor = 0xEBEEEE;
 
-    potential = new LJ(2, -10, 2, -10);
-    a1 = new Atom(1, 1,CHERRY);
-    a2 = new Atom(1, 1,CHERRY);
+    potential = new LJ(2, 10, 2, 10);
+    a1 = new Atom(1, 1, CHERRY);
+    a2 = new Atom(1, 1, CHERRY);
 
 
     updateLabels();
@@ -115,13 +115,18 @@ function plotVibKE() {
     Plotly.newPlot("graphVibE", {data: [{x: arrTime, y: arrVibKE}], traces: [0]},
         {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
 }
+
+var r = [];                                                 // Array to store r values.
+var v = [];                                                 // Array to store LJ potential at corresponding r.
+var ppu = 90;                                               // Points per unit of separation distance.
+
 plotRotKE();
 plotPE();
 plotVibKE();
 
 function reset(){
 
-    mol1 = new Molecule(a1,a2,potential,initKVib,initKRot);
+    mol1 = new Molecule(a1, a2, potential, initKVib, initKRot);
 
     a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
     a1.sprite.y = a1.getPos().items[1] * zoom + phaserInstance.world.centerY;
@@ -132,6 +137,7 @@ function reset(){
     arrTime = [];
     plotRotKE();
     plotPE();
+    plotVibKE();
 }
 
 /**
@@ -168,13 +174,13 @@ function update(){
         else t = dT;
         arrTime.push(t);
 
+        Plotly.restyle("graphVibE", {data: [{x: arrTime, y: arrVibKE}], traces: [0]},
+            {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
+
         Plotly.restyle("graphRotE", {data: [{x: arrTime, y: arrRotKE}], traces: [0]},
             {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
 
         Plotly.restyle("graphPotE", {data: [{x: arrTime, y: arrPE}], traces: [0]},
-            {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
-
-        Plotly.restyle("graphVibE", {data: [{x: arrTime, y: arrVibKE}], traces: [0]},
             {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
     }
 }
@@ -183,8 +189,8 @@ function drawLine(atom){
     //  lineG.moveTo(atom.pos[0].items[0]*zoom + phaserInstance.world.centerX,
     //                atom.pos[0].items[1]*zoom + phaserInstance.world.centerY);
     lineG.lineStyle(2,IMPERIAL_BLUE,0);
-    for(var i = 0; i < atom.pos.length;i+= 5){
-        if(i > 0) lineG.lineStyle(2,IMPERIAL_BLUE,1);
+    for(var i = 0; i < atom.pos.length; i+= 5){
+        if(i > 0) lineG.lineStyle(2, IMPERIAL_BLUE, 1);
         lineG.lineTo(atom.pos[i].items[0]*zoom + phaserInstance.world.centerX,
                     atom.pos[i].items[1]*zoom + phaserInstance.world.centerY);
     }

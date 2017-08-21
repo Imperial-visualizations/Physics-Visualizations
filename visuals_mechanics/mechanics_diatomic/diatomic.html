@@ -151,16 +151,16 @@
 </script>
 
 <script>
-    $("select[title='sigmaA']").on("change keyup", function() {
+    $("select[title='sigmaA']").on("input", function() {
         potential.s1 = $(this).val;
     });
-    $("select[title='sigmaB']").on("change keyup", function() {
+    $("select[title='sigmaB']").on("input", function() {
         potential.s2 = $(this).val;
     });
-    $("select[title='epsilonA']").on("change keyup", function() {
+    $("select[title='epsilonA']").on("input", function() {
         potential.e1 = $(this).val;
     });
-    $("select[title='epsilonB']").on("change keyup", function() {
+    $("select[title='epsilonB']").on("input", function() {
         potential.e2 = $(this).val;
     });
 </script>

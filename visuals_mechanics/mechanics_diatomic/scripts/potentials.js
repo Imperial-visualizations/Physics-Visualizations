@@ -80,7 +80,7 @@ LJ.prototype.plot = function() {
     for (var i = layout.xaxis.range[0] + 1/ppu; i < Math.ceil(layout.xaxis.range[1]) * ppu; i++) {
         var separation = i / ppu;
         x.push(separation);
-        y.push(-1 * this.calcV(separation));
+        y.push(this.calcV(separation));
     }
 
     // Creating plot-able object.
