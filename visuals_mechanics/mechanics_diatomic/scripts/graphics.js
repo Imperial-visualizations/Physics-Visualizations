@@ -70,8 +70,8 @@ function create(){
     phaserInstance.stage.backgroundColor = 0xEBEEEE;
 
     potential = new LJ(2, -10, 2, -10);
-    a1 = new Atom([0, 0], 1, 1,CHERRY);
-    a2 = new Atom([3, 4], 1, 1,CHERRY);
+    a1 = new Atom(1, 1,CHERRY);
+    a2 = new Atom(1, 1,CHERRY);
 
 
     updateLabels();
@@ -90,8 +90,7 @@ function addAtom(atom) {
     atomG.beginFill(atom.color,1);
     atomG.drawCircle(0,0,atom.radius*zoom);
 
-    var sprite = phaserInstance.add.sprite(atom.pos.items[0]*zoom + phaserInstance.world.centerX,atom.pos.items[1]*zoom
-        + phaserInstance.world.centerY,atomG.generateTexture());
+    var sprite = phaserInstance.add.sprite(0,0,atomG.generateTexture());
     sprite.anchor.set(0.5,0.5);
     atomG.destroy();
     return sprite;
@@ -124,10 +123,11 @@ function reset(){
 
     mol1 = new Molecule(a1,a2,potential,initKVib,initKRot);
 
-    a1.sprite.x = a1.pos.items[0] * zoom + phaserInstance.world.centerX;
-    a1.sprite.y = a1.pos.items[1] * zoom + phaserInstance.world.centerY;
-    a2.sprite.x = a2.pos.items[0] * zoom + phaserInstance.world.centerX;
-    a2.sprite.y = a2.pos.items[1] * zoom + phaserInstance.world.centerY;
+    a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
+    a1.sprite.y = a1.getPos().items[1] * zoom + phaserInstance.world.centerY;
+    a2.sprite.x = a2.getPos().items[0] * zoom + phaserInstance.world.centerX;
+    a2.sprite.y = a2.getPos().items[1] * zoom + phaserInstance.world.centerY;
+
     arrRotKE = [];
     arrTime = [];
     plotRotKE();
@@ -140,12 +140,15 @@ function reset(){
  */
 function update(){
     if(running) {
-        var dT = 1 / 60;
+        dT = 1/60;
         mol1.update(dT);//requests molecule update, sends deltaTime to mol1.
-        a1.sprite.x = a1.pos.items[0] * zoom + phaserInstance.world.centerX;
-        a1.sprite.y = a1.pos.items[1] * zoom + phaserInstance.world.centerY;
-        a2.sprite.x = a2.pos.items[0] * zoom + phaserInstance.world.centerX;
-        a2.sprite.y = a2.pos.items[1] * zoom + phaserInstance.world.centerY;
+        a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
+        a1.sprite.y = a1.getPos().items[1] * zoom + phaserInstance.world.centerY;
+        a2.sprite.x = a2.getPos().items[0] * zoom + phaserInstance.world.centerX;
+        a2.sprite.y = a2.getPos().items[1] * zoom + phaserInstance.world.centerY;
+        drawLine(a1);
+        drawLine(a2);
+
 
         // Calculate Rotational KE and update array.
         var rotKE = 0.5 * mol1.I * Math.pow(mol1.omega, 2);
@@ -174,6 +177,21 @@ function update(){
         Plotly.restyle("graphVibE", {data: [{x: arrTime, y: arrVibKE}], traces: [0]},
             {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
     }
+}
+function drawLine(atom){
+    var lineG = phaserInstance.add.graphics(0,0);
+    //  lineG.moveTo(atom.pos[0].items[0]*zoom + phaserInstance.world.centerX,
+    //                atom.pos[0].items[1]*zoom + phaserInstance.world.centerY);
+    lineG.lineStyle(2,IMPERIAL_BLUE,0);
+    for(var i = 0; i < atom.pos.length;i+= 5){
+        if(i > 0) lineG.lineStyle(2,IMPERIAL_BLUE,1);
+        lineG.lineTo(atom.pos[i].items[0]*zoom + phaserInstance.world.centerX,
+                    atom.pos[i].items[1]*zoom + phaserInstance.world.centerY);
+    }
+    if(typeof atom.lineSprite !== 'undefined') atom.lineSprite.destroy();
+    atom.lineSprite = phaserInstance.add.sprite(0,0,lineG.generateTexture());
+    lineG.destroy();
+
 }
 
 

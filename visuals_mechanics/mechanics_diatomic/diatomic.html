@@ -164,23 +164,6 @@
         potential.e2 = $(this).val;
     });
 </script>
-
-<script>
-    $(".inputs").each(function () {
-        // To update the displayed value in HTML
-        $(this).on('input', updateLabels);
-    });
-
-    function updateLabels() {
-        $(".inputs").each(function () {
-            // To update the displayed value in HTML
-            var display_id = "#" + $(this).attr("id") + "Display";
-            $(display_id).text($(this).val() + $(display_id).attr("data-unit"));
-        });
-
-        mol1.updateVibKE(parseFloat($("#vibKE")));
-        mol1.updateRotKE(parseFloat($("#rotKE")));
-    }
 </body>
-</html>;
+</html>
 

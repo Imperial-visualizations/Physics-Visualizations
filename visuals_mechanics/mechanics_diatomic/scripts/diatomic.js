@@ -7,9 +7,9 @@
  * @param color: Color of atom for phaser code.(cosmetic only)
  * @constructor: Atom
  */
-Atom = function(pos, radius, mass, color) {
+Atom = function(radius, mass, color) {
     // Making position and force vectors.
-    this.pos = new Vector(pos);                 // Atom position Vector.
+    this.pos = [];                 // Atom position Vector.
 
     // Checking for unphysical parameters.
     if (radius <= 0 || mass <= 0) {
@@ -19,11 +19,21 @@ Atom = function(pos, radius, mass, color) {
         radius = -radius;
         mass = -mass;
     }
-
+    this.lineSprite;
     this.color = color;
     this.radius = radius;                            // Atom radius.
     this.mass = mass;                              // Atom mass.
     this.sprite = addAtom(this);
+};
+Atom.prototype.getPos = function(){
+    if(this.pos.length === 0 ) return;
+    return this.pos[this.pos.length - 1];
+};
+Atom.prototype.setPos = function(newPos){
+    if(this.pos.length > 450) {
+        this.pos.shift();
+    }
+        this.pos.push(newPos);
 };
 
 /**
@@ -37,7 +47,8 @@ Atom = function(pos, radius, mass, color) {
  * @constructor
  */
 Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
-
+    a1.pos = [];
+    a2.pos = [];
     // Checking objects of class Atom passed in in the list.
     if (a1.constructor !== Atom || a2.constructor !== Atom){
         console.error("Can't run simulation without two valid atom objects");
@@ -72,8 +83,8 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
     this.TME = keVib_0 + keRot_0 + this.V.calcV(this.r.mag());      // Total Mechanical Energy of system - constant.
 
     // Finding coordinates of atoms in CoM frame.
-    a1.pos = this.r.multiply(a1.mass / this.tot_m);
-    a2.pos = this.r.multiply(-a2.mass / this.tot_m);
+    a1.setPos(this.r.multiply(a1.mass / this.tot_m));
+    a2.setPos(this.r.multiply(-a2.mass / this.tot_m));
 };
 
 /** ================================================= Class Methods ==================================================*/
@@ -92,8 +103,8 @@ Molecule.prototype.update = function(deltaTime){
     this.calcExtCoords(deltaTime);
 
     // Update atom coordinates in CoM frame.
-    a1.pos = this.r.multiply(a1.mass / this.tot_m);
-    a2.pos = this.r.multiply(-a2.mass / this.tot_m);
+    a1.setPos(this.r.multiply(a1.mass / this.tot_m));
+    a2.setPos(this.r.multiply(-a2.mass / this.tot_m));
 };
 
 Molecule.prototype.updateVibKE = function (vibKE) {
