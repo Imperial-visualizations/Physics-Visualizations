@@ -17,7 +17,6 @@ var scatter0 = {mode: "lines", line: {color: "blue", width: 1}, x: x0[0], type: 
 var scatter1 = {x: x1[0], line: {color: "red", width: 2}, name: "cosine", y: y1[0], mode: "lines"};
 var layout = {yaxis: {range: [-1, 1], title: "y"}, xaxis: {range: [-3.141592653589793, 3.141592653589793], title: "x"}, title: "Animated Sine Wave Example"};
 
-; 
 function plot() {
 	Plotly.newPlot("scatter", {data: [scatter0, scatter1], traces: [0, 1], layout: layout}); 
 	 } 

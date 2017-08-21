@@ -63,18 +63,23 @@
                     <span class="sliderMin">0.0</span><span class="sliderMax">10.0</span>
                 </label>
 
+                <!-- Vib KE Graph Plotly -->
+                <em><a for="#graphVibE" class="showHideButton">Hide </a></em> <a>KE<sub>vib</sub></a>
+                <div id="graphVibE" class="expand" style="height: 350px; width: 300px; padding-bottom: 10px;">
+                </div>
+
                 <!-- Rot KE Graph Plotly -->
                 <em><a for="#graphRotE" class="showHideButton">Hide </a></em> <a>KE<sub>rot</sub></a>
-                <div id="graphRotE" class="expand" style="padding-bottom: 10px">
-                    Graph 3
+                <div id="graphRotE" class="expand" style="height: 350px; width: 300px; padding-bottom: 10px;">
                 </div>
                 <br>
 
                 <!-- PE Graph Plotly -->
                 <em><a for="#graphPotE" class="showHideButton">Hide </a></em> <a>PE</a>
-                <div id="graphPotE" class="expand" style="padding-bottom: 10px">
-                    Graph 4
+                <div id="graphPotE" class="expand" style="height: 350px; width: 300px; padding-bottom: 10px;">
                 </div>
+
+                <br>
                 <button id="playPauseButton">Play</button>
             </div>
 
@@ -105,7 +110,7 @@
             </div>
 
             <div class="six columns">
-                <span>&epsilon; = </span>    <input class="inputs" type="number" title="epsilonA" min="0" value="10"/>
+                <span>&epsilon; = </span>    <input class="inputs" type="number" title="epsilonA" min="0" value="5"/>
                 <br>
             </div>
         </div>
@@ -176,7 +181,6 @@
         mol1.updateVibKE(parseFloat($("#vibKE")));
         mol1.updateRotKE(parseFloat($("#rotKE")));
     }
-</script>
 </body>
-</html>
+</html>;
 

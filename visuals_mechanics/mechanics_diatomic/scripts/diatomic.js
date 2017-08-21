@@ -69,6 +69,8 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
     this.r = new Vector([1, 0]).multiply(this.init_r_0());      // Initial radius, due to centrifugal distortion
     this.v = -Math.sqrt(2 * keVib_0 / this.reducedM);           // Initial linear velocity of molecule.
 
+    this.TME = keVib_0 + keRot_0 + this.V.calcV(this.r.mag());      // Total Mechanical Energy of system - constant.
+
     // Finding coordinates of atoms in CoM frame.
     a1.pos = this.r.multiply(a1.mass / this.tot_m);
     a2.pos = this.r.multiply(-a2.mass / this.tot_m);

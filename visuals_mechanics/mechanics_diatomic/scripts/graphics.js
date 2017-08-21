@@ -82,20 +82,77 @@ function addAtom(atom) {
     atomG.destroy();
     return sprite;
 }
+
+var arrRotKE = [];
+var arrTime = [];
+var arrPE = [];
+var arrVibKE = [];
+
+function plotRotKE() {
+    Plotly.newPlot("graphRotE", {data: [{x: arrTime, y: arrRotKE}], traces: [0]},
+        {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
+}
+
+function plotPE() {
+    Plotly.newPlot("graphPotE", {data: [{x: arrTime, y: arrPE}], traces: [0]},
+        {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
+}
+
+function plotVibKE() {
+    Plotly.newPlot("graphVibE", {data: [{x: arrTime, y: arrVibKE}], traces: [0]},
+        {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
+}
+plotRotKE();
+plotPE();
+plotVibKE();
+
+function reset(){
+    mol1 = new Molecule(a1,a2,potential,2,5);
+    arrRotKE = [];
+    arrTime = [];
+    plotRotKE();
+    plotPE();
+}
+
 /**
  * This function is called once per frame.
  *
  */
-function reset(){
-    mol1 = new Molecule(a1,a2,potential,2,5);
-}
 function update(){
     if(running) {
-        mol1.update(1 / 60);//requests molecule update, sends deltaTime to mol1.
+        var dT = 1 / 60;
+        mol1.update(dT);//requests molecule update, sends deltaTime to mol1.
         a1.sprite.x = a1.pos.items[0] * zoom + phaserInstance.world.centerX;
         a1.sprite.y = a1.pos.items[1] * zoom + phaserInstance.world.centerY;
         a2.sprite.x = a2.pos.items[0] * zoom + phaserInstance.world.centerX;
         a2.sprite.y = a2.pos.items[1] * zoom + phaserInstance.world.centerY;
+
+        // Calculate Rotational KE and update array.
+        var rotKE = 0.5 * mol1.I * Math.pow(mol1.omega, 2);
+        arrRotKE.push(rotKE);
+
+        // Calculate PE and update array.
+        var PE = mol1.V.calcV(mol1.r.mag());
+        arrPE.push(PE);
+
+        // Calculate Vibrational KE and update array.
+        var vibKE = mol1.TME - rotKE - PE;
+        arrVibKE.push(vibKE);
+
+        // Update time array.
+        var t;
+        if (arrTime.length > 0) t = arrTime[arrTime.length - 1] + dT;
+        else t = dT;
+        arrTime.push(t);
+
+        Plotly.restyle("graphRotE", {data: [{x: arrTime, y: arrRotKE}], traces: [0]},
+            {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
+
+        Plotly.restyle("graphPotE", {data: [{x: arrTime, y: arrPE}], traces: [0]},
+            {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
+
+        Plotly.restyle("graphVibE", {data: [{x: arrTime, y: arrVibKE}], traces: [0]},
+            {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
     }
 }
 

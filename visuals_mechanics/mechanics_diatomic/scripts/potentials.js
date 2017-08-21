@@ -69,7 +69,7 @@ LJ.prototype.getR_0 = function(){
 LJ.prototype.plot = function() {
     var x = [];                                                 // Array to store r values.
     var y = [];                                                 // Array to store LJ potential at corresponding r.
-    var ppu = 1000;                                             // Points per unit of separation distance.
+    var ppu = 100;                                              // Points per unit of separation distance.
 
     // Layout of plot.
     var layout = {title: "LJ Potential",
@@ -85,7 +85,7 @@ LJ.prototype.plot = function() {
 
     // Creating plot-able object.
     var scatter = {y: y, x: x, mode: "markers+lines", type: "scatter", name: "LJ Pot",
-        line: {color: "blue", width: 2}, marker: {size: 1}};
+        line: {color: "blue", width: 2}, marker: {size: 5}};
     Plotly.newPlot("LJ_scatter", {data: [scatter], traces: [0], layout: layout});
 
 };
