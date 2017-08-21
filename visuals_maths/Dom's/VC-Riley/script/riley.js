@@ -1,0 +1,419 @@
+//Global Initial Parameters:
+var initialPoint = [3., 1., 3.];
+var layout = {
+    width: 450, "height": 500,
+    margin: {l:0, r:0, t:0, b:0},
+    hovermode: "closest",
+    showlegend: false,
+    scene: {
+        camera: {
+            up: {x: 0, y: 0, z: 1},
+            eye: {x: 1, y: -0.1, z: 0.6},
+            center: {x: 0, y: 0, z: -0.2}
+        },
+        xaxis: {range: [-6, 6], zeroline: true, nticks: 10},
+        yaxis: {range: [-6, 6], zeroline: true, scaleratio: 1},
+        zaxis: {range: [-6, 6], zeroline: true, scaleratio: 1}
+    }
+}
+var coorType = 0; //(2 = Cylindrical, 3 = Spherical)
+var currentPoint = initialPoint;
+
+//Plots
+function plotVolumeElement(coor) {
+    var initialRho = 0, initialphi = 0, initialR = 0, initialTheta = 0;
+
+    if (coor === 2){
+        if (coorType !== 2) {
+            //console.log(currentPoint);
+            initialRho = Math.sqrt(currentPoint[0]*currentPoint[0] + currentPoint[1]*currentPoint[1]);
+            initialPhi = ((Math.atan2(currentPoint[1], currentPoint[0]) + 2*Math.PI) % (2*Math.PI))/Math.PI;
+            initialRho = Math.round(initialRho*10)/10;
+            initialPhi = Math.round(initialPhi*8)/8;
+            $("#rhoController").val(initialRho);
+            $("#rhoControllerDisplay").text(initialRho);
+            $("#phiController").val(initialPhi);
+            $("#phiControllerDisplayA1").text("(" + initialPhi*8 + "/8)" + $("#phiControllerDisplayA1").attr("data-unit"));
+            $("#phiControllerDisplayA2").text(initialPhi*180 + $("#phiControllerDisplayA2").attr("data-unit"));
+            $("#z1Controller").val(currentPoint[2]);
+            $("#z1ControllerDisplay").text(currentPoint[2]);
+        }
+        var rho = parseFloat(document.getElementById('rhoController').value);
+        var phi = parseFloat(document.getElementById('phiController').value)*Math.PI;
+        var z = parseFloat(document.getElementById('z1Controller').value);
+
+        plotCylinderElement(rho, phi, z);
+        coorType = 2;
+    } else if (coor === 3){
+        if (coorType !== 3) {
+            //console.log(currentPoint);
+            initialR = Math.sqrt(currentPoint[0]*currentPoint[0] + currentPoint[1]*currentPoint[1] + currentPoint[2]*currentPoint[2]);
+            initialTheta = Math.atan2(Math.sqrt(currentPoint[0]*currentPoint[0] + currentPoint[1]*currentPoint[1]), currentPoint[2])/Math.PI;
+            initialPhi = ((Math.atan2(currentPoint[1], currentPoint[0]) + 2*Math.PI) % (2*Math.PI))/Math.PI;
+            initialR = Math.round(initialR*10)/10;
+            initialTheta = Math.round(initialTheta*8)/8;
+            initialPhi = Math.round(initialPhi*8)/8;
+            $("#rController").val(initialR);
+            $("#rControllerDisplay").text(initialR);
+            $("#thetaController").val(initialTheta);
+            $("#thetaControllerDisplayA1").text("(" + initialTheta*8 + "/8)" + $("#thetaControllerDisplayA1").attr("data-unit"));
+            $("#thetaControllerDisplayA2").text(initialTheta*180 + $("#thetaControllerDisplayA2").attr("data-unit"));
+            $("#phi1Controller").val(initialPhi);
+            $("#phi1ControllerDisplayA1").text("(" + initialPhi*8 + "/8)" + $("#phi1ControllerDisplayA1").attr("data-unit"));
+            $("#phi1ControllerDisplayA2").text(initialPhi*180 + $("#phi1ControllerDisplayA2").attr("data-unit"));
+        }
+        var r = parseFloat(document.getElementById('rController').value);
+        var theta = parseFloat(document.getElementById('thetaController').value)*Math.PI;
+        var phi = parseFloat(document.getElementById('phi1Controller').value)*Math.PI;
+
+        plotSphereElement(r, theta, phi);
+        coorType = 3;
+    }
+}
+//Plot for basis for corresponding coordinate systems:
+function plotCylinderElement(rho, phi, z) {
+    var x0 = rho*Math.cos(phi);
+    var y0 = rho*Math.sin(phi);
+    var z0 = z;
+
+    var newPhi = phi + Math.PI/16;
+
+    var x1 = rho*Math.cos(newPhi);
+    var y1 = rho*Math.sin(newPhi);
+    var z1 = z + 0.8
+
+    var meshSize0 = Math.round(phi/Math.PI*24);
+
+    var intermediatePhi0 = numeric.linspace(0, phi, meshSize0);
+    var xPhi0 = [], yPhi0 = [];
+    for(var i = 0; i < meshSize0; ++i) {
+        xPhi0[i] = 0.3*rho*Math.cos(intermediatePhi0[i]);
+        yPhi0[i] = 0.3*rho*Math.sin(intermediatePhi0[i]);
+    }
+    var zPhi0 = numeric.rep([meshSize0], 0);
+
+    var meshSize1 = 9;
+
+    var intermediatePhi1 = numeric.linspace(phi, newPhi, meshSize1);
+    var xPhi1 = [], yPhi1 = [], zPhi1 = numeric.rep([meshSize1], 0);
+    var xPhi2 = [], yPhi2 = [], zPhi2 = numeric.rep([meshSize1], z0);
+    var xPhi3 = [], yPhi3 = [];
+    for(var i = 0; i < meshSize1; ++i) {
+        xPhi1[i] = 0.5*rho*Math.cos(intermediatePhi1[i]);
+        yPhi1[i] = 0.5*rho*Math.sin(intermediatePhi1[i]);
+        xPhi2[i] = rho*Math.cos(intermediatePhi1[i]);
+        yPhi2[i] = rho*Math.sin(intermediatePhi1[i]);
+        xPhi3[i] = (rho + 0.8)*Math.cos(intermediatePhi1[i]);
+        yPhi3[i] = (rho + 0.8)*Math.sin(intermediatePhi1[i]);
+    }
+
+    var xTrace = xPhi2.concat(xPhi3.reverse());
+    xTrace.push(xPhi2[0]);
+    var yTrace = yPhi2.concat(yPhi3.reverse());
+    yTrace.push(yPhi2[0]);
+
+    var intermediateZ = numeric.linspace(z0, z1, 2*meshSize1 + 1);
+
+    var zTrace = [], xTrace1 = [], yTrace1 = [];
+
+    for (var i = 0, n = intermediateZ.length; i < n; ++i) {
+        xTrace1.push(xTrace);
+        yTrace1.push(yTrace);
+        zTrace.push(numeric.rep([2*meshSize1 + 1], intermediateZ[i]));
+    }
+
+    Plotly.newPlot('graph',
+        [
+            new Line([[x0, y0, z0], [x0 + 0.8*Math.cos(phi), y0 + 0.8*Math.sin(phi), z0]]).gObject("rgb(255,0,0)"),
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xPhi2,
+                y: yPhi2,
+                z: zPhi2,
+                line: {color: "rgb(0,255,0)", width: 7, dash: "solid"}
+            },
+            new Line([[x0, y0, z0], [x0, y0, z1]]).gObject("rgb(0,0,255)"),
+            new Line([[0, 0, 0], [5, 0, 0]]).gObject("rgb(0,0,0)"),
+            new Line([[0, 0, 0], [0, 5, 0]]).gObject("rgb(0,0,0)"),
+            new Line([[0, 0, 0], [0, 0, 5]]).gObject("rgb(0,0,0)"),
+            new Line([[0, 0, 0], [x0, y0, 0]]).gObject("rgb(0,0,0)", 2),
+            new Line([[0, 0, 0], [x1, y1, 0]]).gObject("rgb(0,0,0)", 2),
+            new Line([[x0, y0, 0], [x0, y0, z]]).gObject("rgb(0,0,0)", 2, "longdash"),
+            new Line([[x1, y1, 0], [x1, y1, z]]).gObject("rgb(0,0,0)", 2, "longdash"),
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xPhi0,
+                y: yPhi0,
+                z: zPhi0,
+                line: {color: "rgb(0,0,0)", width: 2}
+            },
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xPhi1,
+                y: yPhi1,
+                z: zPhi1,
+                line: {color: "rgb(0,0,0)", width: 2}
+            },
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xPhi2,
+                y: yPhi2,
+                z: zPhi1,
+                line: {color: "rgb(0,0,0)", width: 2}
+            },
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xTrace,
+                y: yTrace,
+                z: zTrace[0],
+                line: {color: "rgb(0,62,116)", width: 2},
+                surfaceaxis: 2,
+                opacity: 0.5
+            },
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xTrace,
+                y: yTrace,
+                z: zTrace[zTrace.length - 1],
+                line: {color: "rgb(0,62,116)", width: 2},
+                surfaceaxis: 2,
+                opacity: 0.3
+            },
+            {
+                type: "surface",
+                x: xTrace1,
+                y: yTrace1,
+                z: zTrace,
+                showscale: false,
+                opacity: 0.7,
+                colorscale: [[0.0, "rgb(0,62,116)"], [1.0, "rgb(255,255,255)"]]
+            }
+        ],
+        layout
+    )
+    currentPoint = [Math.round(x0*10)/10, Math.round(y0*10)/10, Math.round(z0*10)/10];
+}
+function plotSphereElement(r, theta, phi) {
+    var x0 = r*Math.cos(phi)*Math.sin(theta);
+    var y0 = r*Math.sin(phi)*Math.sin(theta);
+    var z0 = r*Math.cos(theta);
+
+    var newPhi = phi + Math.PI/16;
+    var newTheta = theta + 3*Math.PI/64;
+
+    var x1 = r*Math.cos(newPhi)*Math.sin(theta);
+    var y1 = r*Math.sin(newPhi)*Math.sin(theta);
+    var z1 = r*Math.cos(theta);
+
+    var x2 = r*Math.cos(phi)*Math.sin(newTheta);
+    var y2 = r*Math.sin(phi)*Math.sin(newTheta);
+    var z2 = r*Math.cos(newTheta)
+
+    var meshSize0 = Math.round(phi/Math.PI*24);
+
+    var intermediatePhi0 = numeric.linspace(0, phi, meshSize0);
+    var xPhi0 = [], yPhi0 = [];
+    for(var i = 0; i < meshSize0; ++i) {
+        xPhi0[i] = 0.3*r*Math.cos(intermediatePhi0[i])*Math.sin(theta);
+        yPhi0[i] = 0.3*r*Math.sin(intermediatePhi0[i])*Math.sin(theta);
+    }
+    var zPhi0 = numeric.rep([meshSize0], 0);
+
+    var meshSize1 = 9;
+
+    var intermediatePhi1 = numeric.linspace(phi, newPhi, meshSize1);
+    var xPhi1 = [], yPhi1 = [], zPhi1 = numeric.rep([meshSize1], 0);
+    var xPhi2 = [], yPhi2 = [], zPhi2 = numeric.rep([meshSize1], z0);
+    var xPhi3 = [], yPhi3 = [];
+    for(var i = 0; i < meshSize1; ++i) {
+        xPhi1[i] = 0.5*r*Math.cos(intermediatePhi1[i])*Math.sin(theta);
+        yPhi1[i] = 0.5*r*Math.sin(intermediatePhi1[i])*Math.sin(theta);
+        xPhi2[i] = r*Math.cos(intermediatePhi1[i])*Math.sin(theta);
+        yPhi2[i] = r*Math.sin(intermediatePhi1[i])*Math.sin(theta);
+        xPhi3[i] = (r + 0.8)*Math.cos(intermediatePhi1[i])*Math.sin(theta);
+        yPhi3[i] = (r + 0.8)*Math.sin(intermediatePhi1[i])*Math.sin(theta);
+    }
+
+    var meshSize2 = Math.round(theta/Math.PI*24);
+    var intermediateTheta0 = numeric.linspace(0, theta, meshSize2);
+    var xTheta0 = [], yTheta0 = [], zTheta0 = [];
+    for(var i = 0; i < meshSize2; ++i) {
+        xTheta0[i] = 0.3*r*Math.cos(phi)*Math.sin(intermediateTheta0[i]);
+        yTheta0[i] = 0.3*r*Math.sin(phi)*Math.sin(intermediateTheta0[i]);
+        zTheta0[i] = 0.3*r*Math.cos(intermediateTheta0[i]);
+    }
+
+    var meshSize3 = 9;
+
+    var intermediateTheta1 = numeric.linspace(theta, newTheta, meshSize3);
+    var xTheta1 = [], yTheta1 = [], zTheta1 = [];
+    var xTheta2 = [], yTheta2 = [], zTheta2 = [];
+    var xTheta3 = [], yTheta3 = [], zTheta3 = [];
+    var xTheta4 = [], yTheta4 = [];
+    var xTheta5 = [], yTheta5 = [];
+    for(var i = 0; i < meshSize1; ++i) {
+        xTheta1[i] = 0.5*r*Math.cos(phi)*Math.sin(intermediateTheta1[i]);
+        yTheta1[i] = 0.5*r*Math.sin(phi)*Math.sin(intermediateTheta1[i]);
+        zTheta1[i] = 0.5*r*Math.cos(intermediateTheta1[i]);
+        xTheta2[i] = r*Math.cos(phi)*Math.sin(intermediateTheta1[i]);
+        yTheta2[i] = r*Math.sin(phi)*Math.sin(intermediateTheta1[i]);
+        zTheta2[i] = r*Math.cos(intermediateTheta1[i]);
+        xTheta3[i] = (r + 0.8)*Math.cos(phi)*Math.sin(intermediateTheta1[i]);
+        yTheta3[i] = (r + 0.8)*Math.sin(phi)*Math.sin(intermediateTheta1[i]);
+        zTheta3[i] = (r + 0.8)*Math.cos(intermediateTheta1[i]);
+        xTheta4[i] = r*Math.cos(newPhi)*Math.sin(intermediateTheta1[i]);
+        yTheta4[i] = r*Math.sin(newPhi)*Math.sin(intermediateTheta1[i]);
+        xTheta5[i] = (r + 0.8)*Math.cos(newPhi)*Math.sin(intermediateTheta1[i]);
+        yTheta5[i] = (r + 0.8)*Math.sin(newPhi)*Math.sin(intermediateTheta1[i]);
+    }
+
+    Plotly.newPlot('graph',
+        [
+            new Line([[x0, y0, z0], [x0 + 0.8*Math.cos(phi)*Math.sin(theta), y0 + 0.8*Math.sin(phi)*Math.sin(theta), z0 + 0.8*Math.cos(theta)]]).gObject("rgb(0,0,255)"),
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xPhi2,
+                y: yPhi2,
+                z: zPhi2,
+                line: {color: "rgb(0,255,0)", width: 7}
+            },
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xTheta2,
+                y: yTheta2,
+                z: zTheta2,
+                line: {color: "rgb(255,0,0)", width: 7}
+            },
+            new Line([[0, 0, 0], [5, 0, 0]]).gObject("rgb(0,0,0)"),
+            new Line([[0, 0, 0], [0, 5, 0]]).gObject("rgb(0,0,0)"),
+            new Line([[0, 0, 0], [0, 0, 5]]).gObject("rgb(0,0,0)"),
+            new Line([[0, 0, 0], [x0, y0, 0]]).gObject("rgb(0,0,0)", 2),
+            new Line([[0, 0, 0], [x0, y0, z0]]).gObject("rgb(0,0,0)", 2),
+            new Line([[0, 0, 0], [x2, y2, z2]]).gObject("rgb(0,0,0)", 2),
+            new Line([[0, 0, 0], [x1, y1, 0]]).gObject("rgb(0,0,0)", 2),
+            new Line([[x0, y0, 0], [x0, y0, z0]]).gObject("rgb(0,0,0)", 2, "longdash"),
+            new Line([[x1, y1, 0], [x1, y1, z0]]).gObject("rgb(0,0,0)", 2, "longdash"),
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xPhi0,
+                y: yPhi0,
+                z: zPhi0,
+                line: {color: "rgb(0,0,0)", width: 2}
+            },
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xPhi1,
+                y: yPhi1,
+                z: zPhi1,
+                line: {color: "rgb(0,0,0)", width: 2}
+            },
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xPhi2,
+                y: yPhi2,
+                z: zPhi1,
+                line: {color: "rgb(0,0,0)", width: 2}
+            },
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xTheta0,
+                y: yTheta0,
+                z: zTheta0,
+                line: {color: "rgb(0,0,0)", width: 2}
+            },
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xTheta1,
+                y: yTheta1,
+                z: zTheta1,
+                line: {color: "rgb(0,0,0)", width: 2}
+            },
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xTheta2,
+                y: yTheta2,
+                z: zTheta2,
+                line: {color: "rgb(0,0,0)", width: 2}
+            },
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xTheta3,
+                y: yTheta3,
+                z: zTheta3,
+                line: {color: "rgb(0,0,0)", width: 2}
+            },
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xTheta4,
+                y: yTheta4,
+                z: zTheta2,
+                line: {color: "rgb(0,0,0)", width: 2}
+            },
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xTheta5,
+                y: yTheta5,
+                z: zTheta3,
+                line: {color: "rgb(0,0,0)", width: 2}
+            }
+        ],
+        layout
+    )
+    currentPoint = [Math.round(x0*10)/10, Math.round(y0*10)/10, Math.round(z0*10)/10];
+}
+
+function main() {
+    $("input[type=range]").each(function () {
+        var displayEl;
+        $(this).on('input', function(){
+            $("#"+$(this).attr("id") + "Display").text( $(this).val() + $("#"+$(this).attr("id") + "Display").attr("data-unit") );
+            $("#"+$(this).attr("id") + "DisplayA2").text( parseFloat($(this).val())*180 + $("#" + $(this).attr("id") + "DisplayA2").attr("data-unit") );
+            if (parseFloat($(this).val())*8 % 8 === 0.0) {
+                displayEl = $(this).val() + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit");
+            } else if (parseFloat($(this).val())*8 % 4 === 0.0) {
+                displayEl = "(" + $(this).val()*2 + "/2)" + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit");
+            } else if (parseFloat($(this).val())*8 % 2 === 0.0) {
+                displayEl = "(" + $(this).val()*4 + "/4)" + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit");
+            } else {
+                displayEl = "(" + $(this).val()*8 + "/8)" + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit");
+            }
+            $("#"+$(this).attr("id") + "DisplayA1").text( displayEl );
+            plotVolumeElement(coorType);
+        });
+    });
+
+    $(function() {
+        $('ul.tab-nav li a.button').click(function() {
+            var href = $(this).attr('href');
+            $('li a.active.button', $(this).parent().parent()).removeClass('active');
+            $(this).addClass('active');
+            $('.tab-pane.active', $(href).parent()).removeClass('active');
+            $(href).addClass('active');
+            if(href === "#cylin"){
+                plotVolumeElement(2);
+            } else if(href === "#spher"){
+                plotVolumeElement(3);
+            }
+            return false;
+        });
+    });
+    plotVolumeElement(3);
+}
+$(document).ready(main);

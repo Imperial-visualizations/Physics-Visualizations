@@ -1,20 +1,19 @@
 //Global Initial Parameters:
-var initialPoint = [2., 2., 2.];
-var radius = 2*Math.sqrt(3);
+var initialPoint = [1., 1., 1.];
 var layout = {
-  "width": 450, "height": 500,
-  "margin": {l:0, r:0, t:0, b:0},
-  "hovermode": "closest",
-  "showlegend": false,
-  "scene": {
-    camera: createView(initialPoint),
-    xaxis: {range: [-6, 6]},
-    yaxis: {range: [-6, 6]},
-    zaxis: {range: [-6, 6]}
-  }
+    width: 450, height: 500,
+    margin: {l:0, r:0, t:0, b:0},
+    hovermode: "closest",
+    showlegend: false,
+    scene: {
+        camera: createView([1,1,1]),
+        xaxis: {range: [-6, 6]},
+        yaxis: {range: [-6, 6]},
+        zaxis: {range: [-6, 6]}
+    }
 }
-var coorType = 0; //(1 = Cartesian, 2 = Cylindrical, 3 = Spherical
-var currentPoint = [1, 1, 1];
+var coorType = 0; //(1 = Cartesian, 2 = Cylindrical, 3 = Spherical)
+var currentPoint = initialPoint;
 
 //Plots
 function plotInit(coor) {
@@ -101,7 +100,7 @@ function plotCylinder(rho, phi, z) {
     var x = rho*Math.cos(phi);
     var y = rho*Math.sin(phi);
 
-    var meshSize = phi/Math.PI*24;
+    var meshSize = Math.round(phi/Math.PI*24);
     var t = numeric.linspace(0, phi, meshSize);
     var xTrace = [], yTrace = [], zTrace = [];
     for(var i = 0; i < meshSize; ++i) {
@@ -136,7 +135,7 @@ function plotSphere(r, theta, phi) {
     var y = r*Math.sin(phi)*Math.sin(theta);
     var z = r*Math.cos(theta);
 
-    var meshSize = phi/Math.PI*24;
+    var meshSize = Math.round(phi/Math.PI*24);
     var t = numeric.linspace(0, phi, meshSize);
     var xTrace = [], yTrace = [], zTrace = [];
     for(var i = 0; i < meshSize; ++i) {
@@ -145,7 +144,7 @@ function plotSphere(r, theta, phi) {
         zTrace[i] = z;
     }
 
-    var meshSize1 = theta/Math.PI*24;
+    var meshSize1 = Math.round(theta/Math.PI*24);
     var t1 = numeric.linspace(0, theta, meshSize1);
     var xTrace1 = [], yTrace1 = [], zTrace1 = [];
     for(var i = 0; i < meshSize1; ++i) {
@@ -179,67 +178,6 @@ function plotSphere(r, theta, phi) {
         layout
     )
     currentPoint = [Math.round(x*10)/10, Math.round(y*10)/10, Math.round(z*10)/10];
-}
-//Plot for planes:
-function plotPlane(plane) {
-    var data = [];
-    if (plane === 1) {
-        data.push({
-            x: [0, 0],
-            y: [-10, 10],
-            z: [[-10, 10],
-                [-10, 10]],
-            colorscale: "Blues",
-            showscale: false,
-            type: "surface"
-        });
-    } else if (plane === 2) {
-        data.push({
-            x: [-10, 10],
-            y: [0, 0],
-            z: [[-10, -10],
-                [10, 10]],
-            colorscale: "Blues",
-            showscale: false,
-            type: "surface"
-        });
-    } else if (plane === 3) {
-        data.push({
-            x: [-10, 10],
-            y: [-10, 10],
-            z: [[0, 0],
-                [0, 0]],
-            colorscale: "Blues",
-            showscale: false,
-            type: "surface"
-        });
-    }
-    Plotly.plot('graph', data);
-}
-//Layout
-function createView(point) {
-  var norm = Math.sqrt(point[0]*point[0] + (5*point[1])*(5*point[1]) + point[2]*point[2]);
-  var a = 0.5 + point[0]/norm, b = 1 +  5*point[1]/norm, c = 0.5 + point[2]/norm;
-  var camera = {
-    up: {x: 0, y: 0, z: 1},
-    eye: {x: -a, y: -b, z: c + 0.5},
-    center: {x: 0, y: 0, z: -0.2}
-  }
-  return camera
-}
-
-//Slider Value and Matrix grid Value
-function makeTableHTML(myArray) {
-    var result = "<table><tbody>";
-    for(var i=0; i<myArray.length; i++) {
-        result += "<tr>";
-        for(var j=0; j<myArray[i].length; j++){
-            result += "<td>"+myArray[i][j]+"</td>";
-        }
-        result += "</tr>";
-    }
-    result += "</tbody></table>";
-    return result;
 }
 
 function main() {

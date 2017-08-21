@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>VC: Coordinate Systems</title>
+    <title>VC: Volume elements</title>
     <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -16,7 +16,7 @@
         <div class="row">
         <!-- Graph -->
         <div class="six columns">
-            <h1>Coordinate Systems:</h1>
+            <h1>Volume element:</h1>
             <div id='graph' style="width:450px; height:450px;"></div>
         </div>
 
@@ -24,38 +24,11 @@
         <div class="six columns">
             <!--Main Options-->
             <ul class="tab-nav">
-                <li><a class="button active" href="#carte">Cartesian</a></li>
                 <li><a class="button" href="#cylin">Cylindrical</a></li>
-                <li><a class="button" href="#spher">Spherical</a></li>
+                <li><a class="button active" href="#spher">Spherical</a></li>
             </ul>
 
             <div class="tab-content">
-                <div class="tab-pane active" id="carte">
-                    <h5 style="border-left: solid 5px rgb(255,0,0); padding-left: 8px;">x-coordinate:</h5>
-                    <label class="sliderTitle">x:&nbsp;
-                        <span id="xControllerDisplay" data-unit="">1</span>
-                    </label>
-                    <label class="slider">
-                        <input id="xController" class="inputs" type="range" value="1" min="-3" max="3" step="0.2"/>
-                        <span class="sliderMin">-3</span><span class="sliderMax">3</span>
-                    </label>
-                    <h5 style="border-left: solid 5px rgb(0,255,0); padding-left: 8px;">y-coordinate:</h5>
-                    <label class="sliderTitle">y:&nbsp;
-                        <span id="yControllerDisplay" data-unit="">1</span>
-                    </label>
-                    <label class="slider">
-                        <input id="yController" class="inputs" type="range" value="1" min="-3" max="3" step="0.2"/>
-                        <span class="sliderMin">-3</span><span class="sliderMax">3</span>
-                    </label>
-                    <h5 style="border-left: solid 5px rgb(0,0,255); padding-left: 8px;">z-coordinate:</h5>
-                    <label class="sliderTitle">z:&nbsp;
-                        <span id="zControllerDisplay" data-unit="">1</span>
-                    </label>
-                    <label class="slider">
-                        <input id="zController" class="inputs" type="range" value="1" min="-3" max="3" step="0.2"/>
-                        <span class="sliderMin">-3</span><span class="sliderMax">3</span>
-                    </label>
-                </div>
                 <div class="tab-pane" id="cylin">
                     <h5 style="border-left: solid 5px rgb(255,0,0); padding-left: 8px;">ρ-coordinate(index):</h5>
                     <label class="sliderTitle">ρ:&nbsp;
@@ -79,11 +52,11 @@
                         <span id="z1ControllerDisplay" data-unit="">1</span>
                     </label>
                     <label class="slider">
-                        <input id="z1Controller" class="inputs" type="range" value="1" min="-3" max="3" step="0.2"/>
-                        <span class="sliderMin">-3</span><span class="sliderMax">3</span>
+                        <input id="z1Controller" class="inputs" type="range" value="1" min="0" max="4" step="0.2"/>
+                        <span class="sliderMin">0</span><span class="sliderMax">4</span>
                     </label>
                 </div>
-                <div class="tab-pane" id="spher">
+                <div class="tab-pane active" id="spher">
                     <h5 style="border-left: solid 5px rgb(0,0,255); padding-left: 8px;">r-coordinate(thumb):</h5>
                     <label class="sliderTitle">r:&nbsp;
                         <span id="rControllerDisplay" data-unit="">0</span>
@@ -115,8 +88,8 @@
         </div>
     </div>
     </div>
-<script src=script/basis.js></script>
-<script src=../util/objects.js></script>
+    <script src=../Util/objects.js></script>
+    <script src=script/riley.js></script>
 </body>
 
 </html>
