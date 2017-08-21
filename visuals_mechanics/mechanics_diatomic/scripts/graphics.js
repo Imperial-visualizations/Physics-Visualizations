@@ -8,6 +8,7 @@ var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS,
 
 var a1,a2,mol1,potential;
 var zoom  = 45;
+var initKVib,initKRot;
 var WHITE = 0xffffff;
 const GREEN = 0x66A40A;
 const IMPERIAL_BLUE = 0x003E74;
@@ -22,6 +23,12 @@ function preload(){
 
 }
 
+$('.inputs').each(function(){
+
+    $(this).on('input',updateLabels);
+});
+
+
 $('#playPauseButton').on('click',function(){
     if(running){
         running = false;
@@ -29,10 +36,20 @@ $('#playPauseButton').on('click',function(){
         reset();
     }else{
         running = true;
-        $('#playPausebutton').text("Stop");
+        $('#playPauseButton').text("Stop");
     }
 });
 
+function updateLabels(){
+    $('.inputs').each(function(){
+        var display_id = "#" + $(this).attr("id") + "Display";
+        $(display_id).text($(this).val() + $(display_id).attr("data-unit"));
+
+    });
+    initKVib = parseFloat($('#vibKE').val());
+    initKRot = parseFloat($('#rotKE').val());
+    reset();
+}
 
 
 /**
@@ -55,12 +72,9 @@ function create(){
     potential = new LJ(2, -10, 2, -10);
     a1 = new Atom([0, 0], 1, 1,CHERRY);
     a2 = new Atom([3, 4], 1, 1,CHERRY);
-    mol1 = new Molecule(a1, a2, potential, 2, 5);
 
-    a1.sprite.x = a1.pos.items[0] * zoom + phaserInstance.world.centerX;
-    a1.sprite.y = a1.pos.items[1] * zoom + phaserInstance.world.centerY;
-    a2.sprite.x = a2.pos.items[0] * zoom + phaserInstance.world.centerX;
-    a2.sprite.y = a2.pos.items[1] * zoom + phaserInstance.world.centerY;
+
+    updateLabels();
 }
 
 /**
@@ -107,7 +121,13 @@ plotPE();
 plotVibKE();
 
 function reset(){
-    mol1 = new Molecule(a1,a2,potential,2,5);
+
+    mol1 = new Molecule(a1,a2,potential,initKVib,initKRot);
+
+    a1.sprite.x = a1.pos.items[0] * zoom + phaserInstance.world.centerX;
+    a1.sprite.y = a1.pos.items[1] * zoom + phaserInstance.world.centerY;
+    a2.sprite.x = a2.pos.items[0] * zoom + phaserInstance.world.centerX;
+    a2.sprite.y = a2.pos.items[1] * zoom + phaserInstance.world.centerY;
     arrRotKE = [];
     arrTime = [];
     plotRotKE();
