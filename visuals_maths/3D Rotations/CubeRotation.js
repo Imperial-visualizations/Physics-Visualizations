@@ -215,7 +215,7 @@ function graphThat(xx, yy, zz,){
         colorscale: [
           [0, 'rgb(255,255,255)'],
           [0.5, 'rgb(0,133,202)'],
-          [1, 'rgbrgb(0,62,116)']
+          [1, 'rgb(0,62,116)']
         ],
         showscale: false
         }]
@@ -329,7 +329,7 @@ function Scale(){
     axisSelector = document.getElementById("ScaleSelect").value
     scaleSelector = document.getElementById("ScaleSlider").value
 
-    if (axisSelector ==="ScaleXaxis") ){
+    if (axisSelector ==="ScaleXaxis") {
         alert("Sorry, don't scale too much this program isn't perfect")
         return;
     }

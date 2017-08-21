@@ -1,6 +1,6 @@
 <!doctype html>
 <head>
-    <title>3D Transformations</title>
+    <title>Triple Integration</title>
     <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
     <!-- <link rel="stylesheet" href="skeleton-tabs.css"> -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -9,6 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
     <script src=tripleintegration.js></script>
     <script src="skeleton-tabs.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">  
 </head>
 <body>
@@ -18,8 +19,24 @@
     <h1>Triple Integration</h1>
     <div id='graph' style="width:450px; height:450px;"></div>
     <script src=tripleintegration.js></script>  
+    </div>
+<div class = "six columns">
+
+
+
+
+
+
+<br><br>
+    The mass of the tetrahedron is given by:
+       $$M = \iiint_V \rho(x,y,z) \,dx\,dy\,dz
+            = \int_{x= 0}^{a} \int_{y = 0}^{b(1-\frac{x}{a})} \int_{z=0}^{c(1-\frac{x}{a} - \frac{y}{b})} \rho(x,y,z) \,dz\,dy \,dx $$
+
+    
     
 </div>
+    
+
 </div>
     </div>
 <body>
