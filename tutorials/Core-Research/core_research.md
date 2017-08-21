@@ -1,6 +1,6 @@
 # Core Research (2017)
 
-*This is a quick write-up of the initial process and research for setting up the Imperial-Visualizations project.*
+*This is a quick write-up of the initial process and research for setting up the Imperial-Visualizations project. Initial discussion can be found on the #general channel on the Imperial-Visualizations Slack, and the #standup channel can be used to check work done since the visualization focused subteams joined. The #trello and #github channels summarise the main history of the process, which can be seen in more detail on the Core Team board (see archived items for boards and cards) on the Imperial-Visualizations Trello and on the Imperial-Visualizations GitHub repository (see commit history).*
 
 A guide to getting started with the project and various other tutorials are available [here](https://anthonyli358.github.io/Imperial-Visualizations/tutorials "tutorials").
 
@@ -117,11 +117,11 @@ The main focus this week was creating a standardised dashboard layout (report vs
     
 2. The solution to this is to use a client-side programming language Javascript to code the standalone visualizations. Here Javascript is ideal as it is used in standalone web pages and can be formatted using HTML and CSS. Vitally, in addition to Python plotly is also supported for other languages including Javascript, ensuring that plots created in Python and Javascript maintain a consistent style. Plotly.js offers additional interactions over plotly.py mouse interacts and is used over D3 due to limited Javascript experience and more importantly - time. D3 is more powerful and offers superior customization but everything must be built from scratch (it requires ~200 lines to build a scatter plot compared to ~3 for plotly), whereas plotly has built in plotting, interactivity.etc for plotting (exactly what we want). However, an issue with plotly is that it is a little *too* high level, which can actually make some simple customizations quite difficult.
 
-3. Here @akashb95 mentioned it might be useful to create a Python-Javascript transpiler to speed up working in Javascript since the expertise this year was predominantly Python based.
+3. Here it was discussed that it might be useful to create a Python-Javascript transpiler to speed up working in Javascript since the expertise this year was predominantly Python based.
 
 ### Week 4
 
-The main focus this week was for the team to start learning and using Javascript. The team aimed to create a few simple examples in plotly.js for reference and to get the Python-Javascript transpiler underway (@akashb95). 
+The main focus this week was for the team to start learning and using Javascript. The team aimed to create a few simple examples in plotly.js for reference and to get the Python-Javascript transpiler underway. 
 
 1. The EM surface example was converted to Javascript and some simple Javascript examples were also created:
  
@@ -163,7 +163,7 @@ To ensure coding time is spent efficiently and to compromise between loading and
 
    * For computationally intensive visualizations (e.g. 3D EM waves), a json data file should first be output using Python. With the physics written in Python this will make it simple to write up in a Jupyter notebook, and plotly.js will be used to plot this pre-generated data for the interactive web app. This removes the delay due to long computation times.
    * For non-computationally intensive visualizations (e.g. a simple 2D pulse) it is possible continuously update the data in Javascript and have the user update it themselves in a completely separate Jupyter Notebook. This removes any loading times.
-   
+
 _________________________________________________________________________________________________
 
-Thanks for reading this far! Please direct any further questions, suggestions, or corrections to (the people involved in the set-up process) Akash Bhattacharya (@akashb95), Jamie Coombes (@jamie), Cyd Cowley (@cyd_cowley), and Anthony Li (@anthony_li) on the Imperial-Visualizations Slack.
+Thanks for reading this far! Please direct any further questions, suggestions, or corrections to (the members involved in the set-up process) Akash Bhattacharya (@akashb95), Jamie Coombes (@jamie), Cyd Cowley (@cyd_cowley), and Anthony Li (@anthony_li) on the Imperial-Visualizations Slack.
