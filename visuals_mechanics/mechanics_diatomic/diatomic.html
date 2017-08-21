@@ -37,7 +37,9 @@
 
 <!--Phaser animation and KE plots & input sliders-->
 <div class="container">
+      <h1> Diatomic molecule in a Lennard-Jones potential </h1>
     <div class="row" style="margin-bottom: 12px;">
+
         <div class="twelve columns">
             <div id="phaser" class="eight columns">
             </div>
@@ -77,10 +79,8 @@
                 </div>
                 <button id="playPauseButton">Play</button>
             </div>
-
         </div>
     </div>
-
     <!-- Lennard-Jones potential Plotly graph -->
     <div class="row" style="margin-bottom: 10px">
         <div class="twelve columns">
@@ -160,23 +160,6 @@
     });
 </script>
 
-<script>
-    $(".inputs").each(function () {
-        // To update the displayed value in HTML
-        $(this).on('input', updateLabels);
-    });
-
-    function updateLabels() {
-        $(".inputs").each(function () {
-            // To update the displayed value in HTML
-            var display_id = "#" + $(this).attr("id") + "Display";
-            $(display_id).text($(this).val() + $(display_id).attr("data-unit"));
-        });
-
-        mol1.updateVibKE(parseFloat($("#vibKE")));
-        mol1.updateRotKE(parseFloat($("#rotKE")));
-    }
-</script>
 </body>
 </html>
 
