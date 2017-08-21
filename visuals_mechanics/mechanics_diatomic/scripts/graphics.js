@@ -7,10 +7,12 @@ var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS,
     "phaser",{preload: preload,create: create,update: update});
 
 var a1,a2,mol1,potential;
-var zoom  = 15;
+var zoom  = 45;
 var WHITE = 0xffffff;
-
-
+const GREEN = 0x66A40A;
+const IMPERIAL_BLUE = 0x003E74;
+const CHERRY = 0xE40043;
+var running = false;
 /**
  * This function is the first function called when phaser starts and should only be used for initialising textures to be used
  * for sprites. All other code that should be called before the first update call should be placed in create. Not all phaser features have loaded
@@ -19,6 +21,19 @@ var WHITE = 0xffffff;
 function preload(){
 
 }
+
+$('#playPauseButton').on('click',function(){
+    if(running){
+        running = false;
+        $('#playPauseButton').text("Play");
+        reset();
+    }else{
+        running = true;
+        $('#playPausebutton').text("Stop");
+    }
+});
+
+
 
 /**
  * Function called after preload and before the first update call. Should be used for initialising objects and variables that will be used
@@ -35,11 +50,17 @@ function create(){
     phaserInstance.renderer.renderSession.roundPixels = true;
     Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
 
+    phaserInstance.stage.backgroundColor = 0xEBEEEE;
 
-    potential = new LJ(2, 10);
-    a1 = new Atom([0, 0], 1, 1, WHITE);
-    a2 = new Atom([3, 4], 1, 1, WHITE);
+    potential = new LJ(2, -10, 2, -10);
+    a1 = new Atom([0, 0], 1, 1,CHERRY);
+    a2 = new Atom([3, 4], 1, 1,CHERRY);
     mol1 = new Molecule(a1, a2, potential, 2, 5);
+
+    a1.sprite.x = a1.pos.items[0] * zoom + phaserInstance.world.centerX;
+    a1.sprite.y = a1.pos.items[1] * zoom + phaserInstance.world.centerY;
+    a2.sprite.x = a2.pos.items[0] * zoom + phaserInstance.world.centerX;
+    a2.sprite.y = a2.pos.items[1] * zoom + phaserInstance.world.centerY;
 }
 
 /**
@@ -65,12 +86,17 @@ function addAtom(atom) {
  * This function is called once per frame.
  *
  */
+function reset(){
+    mol1 = new Molecule(a1,a2,potential,2,5);
+}
 function update(){
-    mol1.update(1/60);//requests molecule update, sends deltaTime to mol1.
-    a1.sprite.x = a1.pos.items[0]*zoom + phaserInstance.world.centerX;
-    a1.sprite.y = a1.pos.items[1]*zoom + phaserInstance.world.centerY;
-    a2.sprite.x = a2.pos.items[0]*zoom + phaserInstance.world.centerX;
-    a2.sprite.y = a2.pos.items[1]*zoom + phaserInstance.world.centerY;
+    if(running) {
+        mol1.update(1 / 60);//requests molecule update, sends deltaTime to mol1.
+        a1.sprite.x = a1.pos.items[0] * zoom + phaserInstance.world.centerX;
+        a1.sprite.y = a1.pos.items[1] * zoom + phaserInstance.world.centerY;
+        a2.sprite.x = a2.pos.items[0] * zoom + phaserInstance.world.centerX;
+        a2.sprite.y = a2.pos.items[1] * zoom + phaserInstance.world.centerY;
+    }
 }
 
 

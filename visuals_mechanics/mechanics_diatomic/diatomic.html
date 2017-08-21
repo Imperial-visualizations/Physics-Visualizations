@@ -1,4 +1,5 @@
-<!doctype html> 
+<!doctype html>
+<html>
 <head>
     <title>Diatomic Molecule Vibration and Rotation</title>
     <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
@@ -31,7 +32,6 @@
     <script src = "./scripts/potentials.js"></script>
     <script src = "./scripts/vecops.js"></script>
     <script src = "./scripts/diatomic.js"></script>
-    <script src="./scripts/molecule.js"></script>
 </head>
 <body>
 
@@ -54,12 +54,6 @@
                     <span class="sliderMin">0.0</span><span class="sliderMax">10.0</span>
                 </label>
 
-                <!-- Vib KE Graph Plotly -->
-                <em><a for="#vibE" class="showHideButton">Hide </a></em> <a>KE<sub>vib</sub></a>
-                <div id="vibE" class="expand" style="padding-bottom: 10px">
-                    Graph 2
-                </div>
-
                 <!-- Rot KE slider -->
                 <label class="sliderTitle">Rotational:
                     <span id="rotKEDisplay" data-unit="eV">5 eV</span>
@@ -81,6 +75,7 @@
                 <div id="graphPotE" class="expand" style="padding-bottom: 10px">
                     Graph 4
                 </div>
+                <button id="playPauseButton">Play</button>
             </div>
 
         </div>
@@ -130,11 +125,10 @@
         </div>
     </div>
 </div>
-</body>
-
 <script src=https://code.jquery.com/jquery-latest.min.js></script>
 <script src = "https://github.com/photonstorm/phaser-ce/releases/download/v2.8.3/phaser.min.js"></script>
 <script src="./scripts/graphics.js"></script>
+
 <script>
     /**
      *
@@ -168,44 +162,21 @@
 
 <script>
     $(".inputs").each(function () {
-    // To update the displayed value in HTML
-    $(this).on('input', updateLabels);
+        // To update the displayed value in HTML
+        $(this).on('input', updateLabels);
     });
 
     function updateLabels() {
-    $(".inputs").each(function () {
-        // To update the displayed value in HTML
-        var display_id = "#" + $(this).attr("id") + "Display";
-        $(display_id).text($(this).val() + $(display_id).attr("data-unit"));
-    });
+        $(".inputs").each(function () {
+            // To update the displayed value in HTML
+            var display_id = "#" + $(this).attr("id") + "Display";
+            $(display_id).text($(this).val() + $(display_id).attr("data-unit"));
+        });
 
-    mol1.updateVibKE(parseFloat($("#vibKE")));
-    mol1.updateRotKE(parseFloat($("#rotKE")));
-//    if (!isRunning) {
-//        ball1.Lab.mass = parseFloat($("#ball1LabMass").val());
-//        ball2.Lab.mass = parseFloat($("#ball2LabMass").val());
-//        ball1.Lab.v.x = parseFloat($("#ball1LabVelocityX").val());
-//
-//        ball1.CoM.v = vCal(ball1.Lab.v, '-', getCoMV());
-//        ball2.CoM.v = vCal(ball2.Lab.v, '-', getCoMV());
-//
-//
-//
-//        updateRadius(ball1);
-//        updateRadius(ball2);
-//
-//        updateScatterAngle();
-//
-//        centreOfMass1.x = getCoMR().x;
-//        centreOfMass1.y = getCoMR().y;
-//
-//        ball1.CoM.spriteInstance.x = canvasWidth - 100 - getCoMR().x;
-//        ball1.CoM.spriteInstance.y += canvasHeight / 6 - getCoMR().y;
-//        ball2.CoM.spriteInstance.x = canvasWidth + 100 - getCoMR().x;
-//        ball2.CoM.spriteInstance.y += canvasHeight / 6 - getCoMR().y;
-//
-//
-//        recalculateVector();
-//    }
-}
+        mol1.updateVibKE(parseFloat($("#vibKE")));
+        mol1.updateRotKE(parseFloat($("#rotKE")));
+    }
 </script>
+</body>
+</html>
+
