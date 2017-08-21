@@ -22,7 +22,7 @@ window.onload = function() {
         var coord = pixelIndexToCoord(pixel),
             x = coord[0],
             y = coord[1];
-        return 127.5*Math.sin(Math.cos(degToRad(angle)) * 8*pi*(x - phase)/graphDim + Math.sin(degToRad(angle)) * 8*pi*(y - phase)/graphDim) + 127.5;
+        return 127.5*Math.sin(Math.cos(degToRad(angle)) * 8*pi*(x - Math.cos(degToRad(angle))*phase)/graphDim + Math.sin(degToRad(angle)) * 8*pi*(y - Math.sin(degToRad(angle))*phase)/graphDim) + 127.5;
     }
 
 
