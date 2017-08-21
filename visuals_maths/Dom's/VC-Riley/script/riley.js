@@ -8,7 +8,7 @@ var layout = {
     scene: {
         camera: {
             up: {x: 0, y: 0, z: 1},
-            eye: {x: 1, y: -0.1, z: 0.6},
+            eye: {x: 1, y: -0.1, z: 0.8},
             center: {x: 0, y: 0, z: -0.2}
         },
         xaxis: {range: [-6, 6], zeroline: true, nticks: 10},
@@ -18,6 +18,25 @@ var layout = {
 }
 var coorType = 0; //(2 = Cylindrical, 3 = Spherical)
 var currentPoint = initialPoint;
+
+//Add more curvature definition:
+function curveMore(arraySize) {
+    var hello = [], hello2;
+    if (arraySize%2 === 0) {
+        for (var i = 0, n = Math.round(arraySize/2); i < n; ++i) {
+            hello.push(1 + (i/n/100));
+        }
+        hello2 = hello.slice();
+    } else {
+        for (var i = 0, n = Math.round(arraySize/2) - 1; i < n; ++i) {
+            hello.push(1+ (i/n/100));
+        }
+        hello2 = hello.slice();
+        hello.push(1.008);
+    }
+
+    return hello.concat(hello2.reverse());
+}
 
 //Plots
 function plotVolumeElement(coor) {
@@ -93,6 +112,7 @@ function plotCylinderElement(rho, phi, z) {
     var zPhi0 = numeric.rep([meshSize0], 0);
 
     var meshSize1 = 9;
+    var curved = curveMore(meshSize1);
 
     var intermediatePhi1 = numeric.linspace(phi, newPhi, meshSize1);
     var xPhi1 = [], yPhi1 = [], zPhi1 = numeric.rep([meshSize1], 0);
@@ -101,10 +121,10 @@ function plotCylinderElement(rho, phi, z) {
     for(var i = 0; i < meshSize1; ++i) {
         xPhi1[i] = 0.5*rho*Math.cos(intermediatePhi1[i]);
         yPhi1[i] = 0.5*rho*Math.sin(intermediatePhi1[i]);
-        xPhi2[i] = rho*Math.cos(intermediatePhi1[i]);
-        yPhi2[i] = rho*Math.sin(intermediatePhi1[i]);
-        xPhi3[i] = (rho + 0.8)*Math.cos(intermediatePhi1[i]);
-        yPhi3[i] = (rho + 0.8)*Math.sin(intermediatePhi1[i]);
+        xPhi2[i] = curved[i]*rho*Math.cos(intermediatePhi1[i]);
+        yPhi2[i] = curved[i]*rho*Math.sin(intermediatePhi1[i]);
+        xPhi3[i] = curved[i]*(rho + 0.8)*Math.cos(intermediatePhi1[i]);
+        yPhi3[i] = curved[i]*(rho + 0.8)*Math.sin(intermediatePhi1[i]);
     }
 
     var xTrace = xPhi2.concat(xPhi3.reverse());
@@ -122,6 +142,24 @@ function plotCylinderElement(rho, phi, z) {
         zTrace.push(numeric.rep([2*meshSize1 + 1], intermediateZ[i]));
     }
 
+    var phiText = [];
+    for (var i = 0; i < meshSize0; ++i) {
+        phiText.push("");
+    }
+    phiText[Math.round(meshSize0/2)] = "φ";
+
+    var dphiText = [];
+    for (var i = 0; i < meshSize1; ++i) {
+        dphiText.push("");
+    }
+    dphiText[Math.round(meshSize1/2)] = "dφ";
+
+    var pdphiText = [];
+    for (var i = 0; i < meshSize1; ++i) {
+        pdphiText.push("");
+    }
+    pdphiText[Math.round(meshSize1/2)] = "p dφ";
+
     Plotly.newPlot('graph',
         [
             new Line([[x0, y0, z0], [x0 + 0.8*Math.cos(phi), y0 + 0.8*Math.sin(phi), z0]]).gObject("rgb(255,0,0)"),
@@ -137,33 +175,48 @@ function plotCylinderElement(rho, phi, z) {
             new Line([[0, 0, 0], [5, 0, 0]]).gObject("rgb(0,0,0)"),
             new Line([[0, 0, 0], [0, 5, 0]]).gObject("rgb(0,0,0)"),
             new Line([[0, 0, 0], [0, 0, 5]]).gObject("rgb(0,0,0)"),
-            new Line([[0, 0, 0], [x0, y0, 0]]).gObject("rgb(0,0,0)", 2),
+            {
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [0, 3*x0/5, x0],
+                y: [0, 3*y0/5, y0],
+                z: [0, 0, 0],
+                line: {color: "rgb(0,0,0)", width: 2},
+                text: ["", "ρ", ""],
+                textposition: "bottom"
+            },
             new Line([[0, 0, 0], [x1, y1, 0]]).gObject("rgb(0,0,0)", 2),
             new Line([[x0, y0, 0], [x0, y0, z]]).gObject("rgb(0,0,0)", 2, "longdash"),
             new Line([[x1, y1, 0], [x1, y1, z]]).gObject("rgb(0,0,0)", 2, "longdash"),
             {
                 type: "scatter3d",
-                mode: "lines",
+                mode: "lines+text",
                 x: xPhi0,
                 y: yPhi0,
                 z: zPhi0,
-                line: {color: "rgb(0,0,0)", width: 2}
+                line: {color: "rgb(0,0,0)", width: 2},
+                text: phiText,
+                textposition: "bottom"
             },
             {
                 type: "scatter3d",
-                mode: "lines",
+                mode: "lines+text",
                 x: xPhi1,
                 y: yPhi1,
                 z: zPhi1,
-                line: {color: "rgb(0,0,0)", width: 2}
+                line: {color: "rgb(0,0,0)", width: 2},
+                text: dphiText,
+                textposition: "top"
             },
             {
                 type: "scatter3d",
-                mode: "lines",
+                mode: "lines+text",
                 x: xPhi2,
                 y: yPhi2,
                 z: zPhi1,
-                line: {color: "rgb(0,0,0)", width: 2}
+                line: {color: "rgb(0,0,0)", width: 2},
+                text: pdphiText,
+                textposition: "bottom"
             },
             {
                 type: "scatter3d",
@@ -226,18 +279,16 @@ function plotSphereElement(r, theta, phi) {
     var zPhi0 = numeric.rep([meshSize0], 0);
 
     var meshSize1 = 9;
+    var curved = curveMore(meshSize1);
 
     var intermediatePhi1 = numeric.linspace(phi, newPhi, meshSize1);
     var xPhi1 = [], yPhi1 = [], zPhi1 = numeric.rep([meshSize1], 0);
     var xPhi2 = [], yPhi2 = [], zPhi2 = numeric.rep([meshSize1], z0);
-    var xPhi3 = [], yPhi3 = [];
     for(var i = 0; i < meshSize1; ++i) {
         xPhi1[i] = 0.5*r*Math.cos(intermediatePhi1[i])*Math.sin(theta);
         yPhi1[i] = 0.5*r*Math.sin(intermediatePhi1[i])*Math.sin(theta);
-        xPhi2[i] = r*Math.cos(intermediatePhi1[i])*Math.sin(theta);
-        yPhi2[i] = r*Math.sin(intermediatePhi1[i])*Math.sin(theta);
-        xPhi3[i] = (r + 0.8)*Math.cos(intermediatePhi1[i])*Math.sin(theta);
-        yPhi3[i] = (r + 0.8)*Math.sin(intermediatePhi1[i])*Math.sin(theta);
+        xPhi2[i] = curved[i]*r*Math.cos(intermediatePhi1[i])*Math.sin(theta);
+        yPhi2[i] = curved[i]*r*Math.sin(intermediatePhi1[i])*Math.sin(theta);
     }
 
     var meshSize2 = Math.round(theta/Math.PI*24);
@@ -249,28 +300,39 @@ function plotSphereElement(r, theta, phi) {
         zTheta0[i] = 0.3*r*Math.cos(intermediateTheta0[i]);
     }
 
-    var meshSize3 = 9;
-
-    var intermediateTheta1 = numeric.linspace(theta, newTheta, meshSize3);
+    var intermediateTheta1 = numeric.linspace(theta, newTheta, meshSize1);
     var xTheta1 = [], yTheta1 = [], zTheta1 = [];
-    var xTheta2 = [], yTheta2 = [], zTheta2 = [];
-    var xTheta3 = [], yTheta3 = [], zTheta3 = [];
-    var xTheta4 = [], yTheta4 = [];
-    var xTheta5 = [], yTheta5 = [];
+    var xTheta2 = [], yTheta2 = [];
+    var zTemp1 = [], zTemp2 = [];
     for(var i = 0; i < meshSize1; ++i) {
         xTheta1[i] = 0.5*r*Math.cos(phi)*Math.sin(intermediateTheta1[i]);
         yTheta1[i] = 0.5*r*Math.sin(phi)*Math.sin(intermediateTheta1[i]);
         zTheta1[i] = 0.5*r*Math.cos(intermediateTheta1[i]);
-        xTheta2[i] = r*Math.cos(phi)*Math.sin(intermediateTheta1[i]);
-        yTheta2[i] = r*Math.sin(phi)*Math.sin(intermediateTheta1[i]);
-        zTheta2[i] = r*Math.cos(intermediateTheta1[i]);
-        xTheta3[i] = (r + 0.8)*Math.cos(phi)*Math.sin(intermediateTheta1[i]);
-        yTheta3[i] = (r + 0.8)*Math.sin(phi)*Math.sin(intermediateTheta1[i]);
-        zTheta3[i] = (r + 0.8)*Math.cos(intermediateTheta1[i]);
-        xTheta4[i] = r*Math.cos(newPhi)*Math.sin(intermediateTheta1[i]);
-        yTheta4[i] = r*Math.sin(newPhi)*Math.sin(intermediateTheta1[i]);
-        xTheta5[i] = (r + 0.8)*Math.cos(newPhi)*Math.sin(intermediateTheta1[i]);
-        yTheta5[i] = (r + 0.8)*Math.sin(newPhi)*Math.sin(intermediateTheta1[i]);
+        xTheta2[i] = curved[i]*r*Math.cos(phi)*Math.sin(intermediateTheta1[i]);
+        yTheta2[i] = curved[i]*r*Math.sin(phi)*Math.sin(intermediateTheta1[i]);
+        zTemp1[i] = curved[i]*r*Math.cos(intermediateTheta1[i]);
+        zTemp2[i] = curved[i]*(r + 0.8)*Math.cos(intermediateTheta1[i]);
+    }
+
+    var xTrace = [], yTrace = [], zTrace = [];
+
+    var xTemp1, yTemp1, xTemp2, yTemp2;
+    zTemp2.reverse();
+
+    for (var i = 0; i < meshSize1; ++i) {
+        xTemp1 = [], xTemp2 = [], yTemp1 = [], yTemp2 = [];
+        for (var j = 0; j < meshSize1; ++j) {
+            xTemp1[j] = curved[j]*r*Math.cos(intermediatePhi1[i])*Math.sin(intermediateTheta1[j]);
+            yTemp1[j] = curved[j]*r*Math.sin(intermediatePhi1[i])*Math.sin(intermediateTheta1[j]);
+            xTemp2[j] = curved[j]*(r + 0.8)*Math.cos(intermediatePhi1[i])*Math.sin(intermediateTheta1[j]);
+            yTemp2[j] = curved[j]*(r + 0.8)*Math.sin(intermediatePhi1[i])*Math.sin(intermediateTheta1[j]);
+        }
+        xTrace[i] = xTemp1.concat(xTemp2.reverse());
+        xTrace[i].push(xTemp1[0]);
+        yTrace[i] = yTemp1.concat(yTemp2.reverse());
+        yTrace[i].push(yTemp1[0]);
+        zTrace[i] = zTemp1.concat(zTemp2);
+        zTrace[i].push(zTemp1[0]);
     }
 
     Plotly.newPlot('graph',
@@ -289,7 +351,7 @@ function plotSphereElement(r, theta, phi) {
                 mode: "lines",
                 x: xTheta2,
                 y: yTheta2,
-                z: zTheta2,
+                z: zTemp1,
                 line: {color: "rgb(255,0,0)", width: 7}
             },
             new Line([[0, 0, 0], [5, 0, 0]]).gObject("rgb(0,0,0)"),
@@ -298,6 +360,8 @@ function plotSphereElement(r, theta, phi) {
             new Line([[0, 0, 0], [x0, y0, 0]]).gObject("rgb(0,0,0)", 2),
             new Line([[0, 0, 0], [x0, y0, z0]]).gObject("rgb(0,0,0)", 2),
             new Line([[0, 0, 0], [x2, y2, z2]]).gObject("rgb(0,0,0)", 2),
+            new Line([[0, 0, z0], [x0, y0, z0]]).gObject("rgb(0,0,0)", 2),
+            new Line([[0, 0, z0], [x1, y1, z0]]).gObject("rgb(0,0,0)", 2),
             new Line([[0, 0, 0], [x1, y1, 0]]).gObject("rgb(0,0,0)", 2),
             new Line([[x0, y0, 0], [x0, y0, z0]]).gObject("rgb(0,0,0)", 2, "longdash"),
             new Line([[x1, y1, 0], [x1, y1, z0]]).gObject("rgb(0,0,0)", 2, "longdash"),
@@ -307,6 +371,14 @@ function plotSphereElement(r, theta, phi) {
                 x: xPhi0,
                 y: yPhi0,
                 z: zPhi0,
+                line: {color: "rgb(0,0,0)", width: 2}
+            },
+            {
+                type: "scatter3d",
+                mode: "lines",
+                x: xPhi1,
+                y: yPhi1,
+                z: zPhi2,
                 line: {color: "rgb(0,0,0)", width: 2}
             },
             {
@@ -344,34 +416,31 @@ function plotSphereElement(r, theta, phi) {
             {
                 type: "scatter3d",
                 mode: "lines",
-                x: xTheta2,
-                y: yTheta2,
-                z: zTheta2,
-                line: {color: "rgb(0,0,0)", width: 2}
+                x: xTrace[0],
+                y: yTrace[0],
+                z: zTrace[0],
+                line: {color: "rgb(0,62,116)", width: 2},
+                surfaceaxis: 0,
+                opacity: 0.3
             },
             {
                 type: "scatter3d",
                 mode: "lines",
-                x: xTheta3,
-                y: yTheta3,
-                z: zTheta3,
-                line: {color: "rgb(0,0,0)", width: 2}
+                x: xTrace[xTrace.length - 1],
+                y: yTrace[yTrace.length - 1],
+                z: zTrace[zTrace.length - 1],
+                line: {color: "rgb(0,62,116)", width: 2},
+                surfaceaxis: 0,
+                opacity: 0.3
             },
             {
-                type: "scatter3d",
-                mode: "lines",
-                x: xTheta4,
-                y: yTheta4,
-                z: zTheta2,
-                line: {color: "rgb(0,0,0)", width: 2}
-            },
-            {
-                type: "scatter3d",
-                mode: "lines",
-                x: xTheta5,
-                y: yTheta5,
-                z: zTheta3,
-                line: {color: "rgb(0,0,0)", width: 2}
+                type: "surface",
+                x: xTrace,
+                y: yTrace,
+                z: zTrace,
+                showscale: false,
+                opacity: 0.7,
+                colorscale: [[0.0, "rgb(0,62,116)"], [1.0, "rgb(255,255,255)"]]
             }
         ],
         layout
@@ -414,6 +483,6 @@ function main() {
             return false;
         });
     });
-    plotVolumeElement(3);
+    plotVolumeElement(2);
 }
 $(document).ready(main);
