@@ -3,36 +3,64 @@ window.onload = function() {
     var canvas = document.getElementById("graph"),
 
         graphDim = canvas.height,
-        pixSize = 5,
-        pi = Math.PI;
+        // pixSize = 5,
+        pi = Math.PI,
+        phase = 0;
 
     if (canvas.getContext) {
-        var ctx = canvas.getContext('2d');
+        var ctx = canvas.getContext('2d'),
+            imageData = ctx.getImageData(0, 0, graphDim, graphDim),
+            sinData = createSinData();
 
-        // updateGraph(ctx, 150);
-        for (phase = 0; phase < 150; phase += 2) {
-            timeoutUpdateGraph(ctx, phase);
-        }
-    }
+        // updateGraph(ctx, imageData, 150);
+        // for (phase = 0; phase < 150; phase += 2) {
+        //     timeoutUpdateGraph(ctx, imageData, phase);
+        // }
 
-    function timeoutUpdateGraph(ctx, phase) {
+        var animIntervalID = window.setInterval(updateGraph, 50);
         setTimeout(function() {
-            updateGraph(ctx, phase);
-        }, 10);
+            clearInterval(animIntervalID);
+        }, 15000);
     }
 
-    function returnSinRGB(x, phase) {
-        return 'rgb(' + (127.5*Math.sin(8*pi*(x - phase)/graphDim) + 127.5) + ', 0, 0)';
+    // function timeoutUpdateGraph(ctx, imageData, phase) {
+    //     setTimeout(function() {
+    //         updateGraph(ctx, imageData, phase);
+    //     }, 10000);
+    // }
+
+    function returnSinR(x, phase) {
+        return 127.5*Math.sin(8*pi*(x - phase)/graphDim) + 127.5;
     }
 
-    function updateGraph(ctx, phase) {
-        for (var x = 0; x < graphDim; x += pixSize) {
-            for (var y = 0; y < graphDim; y += pixSize) {
-                // ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = returnSinRGB(x, phase);
-                ctx.fillRect(x, y, pixSize, pixSize);
+    function createSinData() {
+        var imageDataR = [],
+            imageDataLength = imageData.data.length;
+
+        for (var phase = 0; phase < 126; phase += 2) {
+            imageDataR[phase] = [];
+            for (var pixel = 0; pixel < imageDataLength/4; pixel++) {
+                imageDataR[phase][pixel] = returnSinR(pixel, phase);
             }
-            console.log(x, y, returnSinRGB(x, phase));
+        }
+        return imageDataR;
+    }
+
+    function updateGraph() {
+        var imageDataLength = imageData.data.length;
+        console.log(phase);
+        for (var pixel = 0; pixel < imageDataLength/4; pixel++) {
+            imageData.data[4*pixel] = sinData[phase][pixel];
+            imageData.data[4*pixel + 1] = 0;
+            imageData.data[4*pixel + 2] = 0;
+            imageData.data[4*pixel + 3] = 255;
+            // console.log(x, y, returnSinRGB(x, phase));
+        }
+        ctx.putImageData(imageData, 0, 0);
+        if (phase === 124) {
+            phase = 0;
+        } else {
+            phase += 2;
         }
     }
 
