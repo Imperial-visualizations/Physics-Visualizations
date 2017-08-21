@@ -120,7 +120,7 @@ ourRequest.onload=function(){
 	plot(scatter0, layout);
 	requestAnimationFrame(update);
     
-    $('#B').on('input', function(){
+    $('#B').on('change', function(){
         vars.B = $(this).val();
         xy.data = data[0]['B_' + String(vars.B)][0]['E_' + String(vars.E)][0]['Mass' + String(vars.M)];
         xy.x0 = xy.data[0];
@@ -131,7 +131,7 @@ ourRequest.onload=function(){
         Plotly.restyle(plot, scatter0)
     });
                       
-    $('#E').on('input', function(){
+    $('#E').on('change', function(){
         vars.E = $(this).val();
         xy.data = data[0]['B_' + String(vars.B)][0]['E_' + String(vars.E)][0]['Mass' + String(vars.M)];
         xy.x0 = xy.data[0];
@@ -143,7 +143,7 @@ ourRequest.onload=function(){
 
 	});
     
-    $('#M').on('input', function(){
+    $('#M').on('change', function(){
         vars.M = $(this).val();
         xy.data = data[0]['B_' + String(vars.B)][0]['E_' + String(vars.E)][0]['Mass' + String(vars.M)];
         xy.x0 = xy.data[0];
