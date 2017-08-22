@@ -40,6 +40,8 @@ $('#canvas').ready(function() {
   Plotly.newPlot('canvas',data,layout);
   var plotDiv = document.getElementById('canvas');
   console.log("data in plotDiv: ", plotDiv.data);
+  console.log("lookup: ", createAlgObjToUidLookup('canvas'));
+  console.log("findIdxByAlgObjId: ", findIdxByAlgObjId('canvas',line2.goify().algObjId));
 
   function createAlgObjToUidLookup(plotDiv) {
     // Construct a dictionary {algObjId: uid}
@@ -49,11 +51,12 @@ $('#canvas').ready(function() {
       lookup[plotData[idx].algObjId] = plotData[idx].uid;
     }
     console.log("lookup dictionary: ",lookup);
+    return lookup;
   }
 
   function findIdxByUid(plotDiv,uid) {
     /* Find trace position in plotDiv.data using uid;
-    returns appropriate index if found of -1 if not found */
+    returns appropriate index if found or -1 if not found */
     var plotData = document.getElementById(plotDiv).data;
     for (var idx=0; plotData.length;idx++) {
       if(plotData[idx].uid == uid) {
@@ -62,11 +65,14 @@ $('#canvas').ready(function() {
     }
     return -1;
   }
+
   function findIdxByAlgObjId(plotDiv,algObjId) {
     /* Find trace position in plotDiv.data using algObjId
-    returns appropriate index if found of -1 if not found */
+    returns appropriate index if found or -1 if not found */
     var lookup = createAlgObjToUidLookup(plotDiv);
     return findIdxByUid(plotDiv, lookup[algObjId]);
+  }
+
 });
 </script>
 <div id="canvas"></div>
