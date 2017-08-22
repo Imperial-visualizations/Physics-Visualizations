@@ -1,11 +1,12 @@
 "use strict";
 var objcounter = 0;
 function Vector(x,y,z) {
+	/*Cartesian coordinates vector, defining basic vector operations (dot product, cross product etc.)*/
 	this.x = x;
 	this.y = y;
 	this.z = z;
-	console.log("New Alg Object: ", this)
 	this.allclose = function(other){
+		/*Use this to compare two vectors if they are equal. */
 		if(!(other instanceof Vector)) {
 			throw new Error("Argument error: Cannot compare Vector to no-vector.");
 		}
@@ -19,6 +20,7 @@ function Vector(x,y,z) {
 		}
 	}
 	this.add = function(other) {
+		/*Add *this* Vector to *other* Vector.*/
 		if(!(other instanceof Vector)) {
 			throw new Error("Argument error: Cannot add vector to non-vector.");
 		}
@@ -27,6 +29,7 @@ function Vector(x,y,z) {
 		}
 	}
 	this.mul = function(num) {
+		/* Multiply a vector by a constant. Also, negate the vector by *this.mul(-1)*.*/
 		return new Vector(num*this.x,num*this.y,num*this.z);
 	}
 	this.norm = function() {
@@ -34,7 +37,7 @@ function Vector(x,y,z) {
 		return Math.sqrt(this.x*this.x+this.y*this.y+this.z*this.z);
 	}
 	this.normalize = function() {
-		/* Normalize this vector, i.e. change its length to one preserving direction. */
+		/* Normalize this vector, i.e. change its length to one, preserving direction. */
 		var norm = this.norm()
 		if(norm == 0) {
 			throw new Error("Inputted vector is zero vector; cannot normalize");
@@ -44,54 +47,50 @@ function Vector(x,y,z) {
 		}
 	}
 	this.dot = function(other) {
-		/* Dot product this . other */
+		/* Dot product *this* . *other* */
 		if(!(other instanceof Vector)) {
-			throw new Error("Argument error: Cannot take dot product.")
+			throw new Error("Argument error: Cannot take dot product with non-Vector.")
 		}
 		return this.x*other.x + this.y*other.y + this.z*other.z;
 	}
 	this.cross = function(other) {
-		/* Cross product this x other */
+		/* Cross product *this* x *other* */
 		if(!(other instanceof Vector)) {
-			throw new Error("Argument error: Cannot take cross product.")
+			throw new Error("Argument error: Cannot take cross product with non-Vector.")
 		}
 		return new Vector(this.y*other.z-this.z*other.y, this.z*other.x-this.x*other.z, this.x*other.y-this.y*other.x);
 	}
 	this.toString = function() {
-		if(this.hasOwnProperty('name')) {
-			return this.name;
-		}
-		else {
-			return "Vector("+this.x.toFixed(3)+","+this.y.toFixed(3)+","+this.z.toFixed(3)+")";
-		}
+		return "Vector("+this.x.toFixed(3)+","+this.y.toFixed(3)+","+this.z.toFixed(3)+")";
 	}
 }
-const ZERO_VECTOR = new Vector(0.0,0.0,0.0);
+const ZERO_VECTOR = new Vector(0.0,0.0,0.0); //Zero vector for later usew
 
 function Point(pos) {
-	//pos must be type Vector
+	/* Points are defined by their position *pos* in 3d. */
 	if(!(pos instanceof Vector)) {
-		throw new Error("Argument error: Point(...) 'pos' argument should be Vector.")
+		throw new Error("Argument error: Point(...) 'pos' argument should be Vector.");
 	}
 	else {
-		this.pos = pos
+		this.pos = pos;
 	}
-	this.goify = function(layout){
-		if(pos.x < layout.scene.xaxis.range[0] || pos.x > layout.scene.xaxis.range[1] ||
-			pos.y < layout.scene.yaxis.range[0] || pos.y > layout.scene.yaxis.range[1] ||
-			pos.z < layout.scene.zaxis.range[0] || pos.z > layout.scene.zaxis.range[1]) {
-				//throw new Error("trying to display Point out of canvas");
-				//TODO maybe some dynamic alignment of layout in that case?
-			}
+	this.goify = function(layout) {
+		/* Cast this Point object to Plotly graphic object. */
+		if(pos.x < layout.scene.xaxis.range[0] || pos.x > layout.scene.xaxis.range[1] || pos.y < layout.scene.yaxis.range[0] || pos.y > layout.scene.yaxis.range[1] || pos.z < layout.scene.zaxis.range[0] || pos.z > layout.scene.zaxis.range[1]) {
+			// trying to display Point out of canvas
+			// TODO maybe some dynamic alignment of layout in that case?
+			// for now: do nothing
+		}
 		return {
 			name:this.toString(),
 			mode:"markers",
 			type:"scatter3d",
 			x:[this.pos.x],
 			y:[this.pos.y],
-			z:[this.pos.z]
+			z:[this.pos.z],
+			algObjId: this.id //for internal use, to keep track of what is what
 		}
-	};
+	}
 	this.toString = function() {
 		if(this.hasOwnProperty('name')) {
 			return this.name;
@@ -101,30 +100,37 @@ function Point(pos) {
 		}
 	}
 	this.describe = function() {
-		var ans = this.toString() + " is a Point.\n"
-			+ "Its position vector is: " + this.pos.toString() + "\n";
+		//obsolete, but will be kept here
+		var ans = this.toString() + " is a Point.\n" + "Its position vector is: " + this.pos.toString() + "\n";
 		return ans;
 	}
-	this.id = (objcounter++) + "point";
-	console.log("New Alg Object: ", this)
+	this.id = (objcounter++) + "point"; //assign id
+	console.log("New Alg Object: ", this); //notify when created
 }
-
 function Line(dir,off) {
-	// type checks
+	/* Lines are defined by direction vector and offset vector. */
+	// keep track of original user input
+	this.usrDir=dir;
+	this.usrOff=off;
 	if(!(dir instanceof Vector)) {
 		throw new Error("Argument error: Line(...) 'dir' argument should be Vector.");
 	}
 	else {
+		// normalize direction vector
 		this.dir = dir.normalize();
 	}
 	if(!(off instanceof Vector)) {
 		throw new Error("Argument error: Line(...) 'off' argument should be Vector.");
 	}
 	else {
+		// offset is changed to such that is the closest to origin
 		this.off = off.add((this.dir.mul(off.dot(this.dir))).mul(-1));
 	}
 	this.goify = function(layout){
 		var xyz = {x: [], y: [], z: []};
+		// dynamically generate data depending on layout
+		var param_top; //parameters from which to which data will be generated
+		var param_bot;
 		if(this.dir.x == 0) {
 			//check that the line goes in x dir
 			xyz.x = [this.off.x, this.off.x];
@@ -136,18 +142,18 @@ function Line(dir,off) {
 					xyz.z = [this.off.z, this.off.z];
 				}
 				else {
-					var param_top = (layout.scene.zaxis.range[1] - this.off.z)/this.dir.z
-					var param_bot = (layout.scene.zaxis.range[0] - this.off.z)/this.dir.z
+					param_top = (layout.scene.zaxis.range[1] - this.off.z)/this.dir.z
+					param_bot = (layout.scene.zaxis.range[0] - this.off.z)/this.dir.z
 				}
 			}
 			else {
-				var param_top = (layout.scene.yaxis.range[1] - this.off.y)/this.dir.y
-				var param_bot = (layout.scene.yaxis.range[0] - this.off.y)/this.dir.y
+				param_top = (layout.scene.yaxis.range[1] - this.off.y)/this.dir.y
+				param_bot = (layout.scene.yaxis.range[0] - this.off.y)/this.dir.y
 			}
 		}
 		else {
-			var param_top = (layout.scene.xaxis.range[1] - this.off.x)/this.dir.x
-			var param_bot = (layout.scene.xaxis.range[0] - this.off.x)/this.dir.x
+			param_top = (layout.scene.xaxis.range[1] - this.off.x)/this.dir.x
+			param_bot = (layout.scene.xaxis.range[0] - this.off.x)/this.dir.x
 		}
 		xyz.x = [this.off.x + this.dir.x*param_bot, this.off.x + this.dir.x*param_top];
 		xyz.y = [this.off.y + this.dir.y*param_bot, this.off.y + this.dir.y*param_top];
@@ -161,7 +167,8 @@ function Line(dir,off) {
 			},
 			x:xyz.x,
 			y:xyz.y,
-			z:xyz.z
+			z:xyz.z,
+			algObjId: this.id
 		}
 	}
 	this.toString = function() {
@@ -169,34 +176,41 @@ function Line(dir,off) {
 			return this.name;
 		}
 		else {
-			return "Line(dir="+this.dir+",off="+this.off+")";
+			//use usrDir and usrOff
+			return "Line(dir="+this.usrDir+",off="+this.usrOff+")";
 		}
 	}
 	this.describe = function() {
 		var ans = this.toString() + " is a Line.\n"
-			+ "Its direction vector is: " + this.dir.toString() + ".\n"
-			+ "Its offset vector is: " + this.off.toString() + ".\n";
-			return ans;
+		+ "Its direction vector is: " + this.usrDir.toString() + ".\n"
+		+ "Its offset vector is: " + this.usrOff.toString() + ".\n";
+		return ans;
 	}
 	this.id = (objcounter++) + "line";
-	console.log("New Alg Object: ", this)
+	console.log("New Alg Object: ", this); //notify of new object creation
 }
 
 function Plane(normal,off) {
+	/* Planes are defined by a normal and any point lying on it. */
+	// keep track of user input
+	this.usrNormal = normal;
+	this.usrOff = off;
 	if(!(normal instanceof Vector)) {
 		throw new Error("Argument error: Plane(...) 'normal' argument should be Vector.");
 	}
 	else {
+		// normalize the normal vector
 		this.normal = normal.normalize();
 	}
 	if(!(off instanceof Vector)) {
 		throw new Error("Argument error: Plane(...) 'off' argument should be Vector.");
 	}
 	else {
-		this.off = off;
+		// select the closest one to the origin
+		this.off = this.normal.mul(off.dot(this.normal));
 	}
-
 	this.XYZ = function(layout) {
+		// a couple utils functions
 		function mesh2d(xlim, ylim) {
 			var xx = [[xlim[0],xlim[1]],[xlim[0],xlim[1]]];
 			var yy = [[ylim[0],ylim[0]],[ylim[1],ylim[1]]];
@@ -206,7 +220,7 @@ function Plane(normal,off) {
 			var ans = normal.dot(offset) - normal.x*x - normal.y*y - normal.z*z;
 			return ans
 		}
-		if(layout!=null) {
+		if(layout!=undefined) {
 			var xlim = layout.scene.xaxis.range;
 			var ylim = layout.scene.yaxis.range;
 			var zlim = layout.scene.zaxis.range;
@@ -216,13 +230,16 @@ function Plane(normal,off) {
 			var ylim = [-1,1];
 			var zlim = [-1,1];
 		}
+		//rename things for convenience
 		var n = this.normal;
 		var off = this.off;
 		if(n.z == 0) {
 			if(n.y == 0) {
 				if(n.x == 0) {
+					// this won't happen as normal vector must be normalized (so non-zero)
+					// but throw an error anyway
 					throw new Error("Normal vector is zero vector.")
-					}
+				}
 				else {
 					console.log("plane goify: no z or y direction in normal vector")
 					//cannot generate z or y but can x, try generating x for yz mesh
@@ -272,7 +289,8 @@ function Plane(normal,off) {
 			showscale:false,
 			x:xyz.x,
 			y:xyz.y,
-			z:xyz.z
+			z:xyz.z,
+			algObjId: this.id
 		}
 	}
 	this.toString = function() {
@@ -280,26 +298,27 @@ function Plane(normal,off) {
 			return this.name;
 		}
 		else {
-			return "Plane(normal="+this.normal+",off="+this.off+")";
+			return "Plane(normal="+this.usrNormal+",off="+this.usrOff+")";
 		}
 	}
 	this.describe = function() {
+		//obbsolete, but will be kept here
 		var ans = this.toString() + " is a Plane.\n"
-			+ "Its normal vector is: " + this.normal.toString() + ".\n"
-			+ "Its offset vector is: " + this.off.toString() + ".\n";
-			return ans;
+		+ "Its normal vector is: " + this.usrNormal.toString() + ".\n"
+		+ "Its offset vector is: " + this.usrOff.toString() + ".\n";
+		return ans;
 	}
 	this.id = (objcounter++)+"plane";
-	console.log("New Alg Object: ", this)
+	console.log("New Alg Object: ", this);
 }
 
 function NoIntersectionError(message){
-    this.message = message;
+	this.message = message;
 }
 NoIntersectionError.prototype = new Error();
 
 function NotImplementedError(message){
-    this.message = message;
+	this.message = message;
 }
 NotImplementedError.prototype = new Error();
 
@@ -341,31 +360,106 @@ function intersect(obj1, obj2) {
 	else {
 		throw new TypeError("Argument error: intersect can only take Point, Line and Plane arguments.")
 	}
-	ans.name = "intersection of "+obj1.toString()+" and "+obj2.toString();
+	ans.name = obj1.toString()+" & "+obj2.toString();
 	return ans;
 }
 
-function intersectList(objlist) {
-	console.log("intersectList called")
-	var ans =[];
-	for(var idx = 0; idx<objlist.length;idx++) {
-		for(var other = idx; other<objlist.length;other++) {
-			if(idx != other) {
-				console.log("intersecting: "+objlist[idx]+" and "+objlist[other])
-				//for every intersection pair
-				//intersect and catch exceptions if arise
+function intersectList(array) {
+	// Intersect many elements together.
+	console.log("new version intersectList called")
+	var isec;
+	var gen_1, gen_2, gen_3; //three generations of intersections
+	isec = getGen(array);
+	gen_1 = reduceAlgObjArray(isec.points.concat(isec.lines.concat(isec.planes)))
+	console.log("gen_1", gen_1);
+	isec = getGen(gen_1);
+	gen_2 = reduceAlgObjArray(isec.points.concat(isec.lines));
+	console.log("gen_2", gen_2);
+	isec = getGen(gen_2);
+	gen_3 = reduceAlgObjArray(isec.points);
+	console.log("gen_3", gen_3);
+	return reduceAlgObjArray(array.concat(gen_1.concat(gen_2.concat(gen_3))));
+	function getGen(a) {
+		var points = [];
+		var lines = [];
+		var planes = [];
+		for (var idx=0; idx<a.length; idx++) {
+			for (var other=idx+1; other<a.length; other++) {
 				try {
-					var toPush = intersect(objlist[idx],objlist[other]);
-					ans.push(toPush);
+					var toPush = intersect(a[idx],a[other]);
+					if(toPush instanceof Point) {
+						points.push(toPush);
+					}
+					if(toPush instanceof Line) {
+						lines.push(toPush);
+					}
+					if(toPush instanceof Plane) {
+						planes.push(toPush);
+					}
 				}
 				catch(err) {
-					//just skip the errors
-					//throw err;
+					console.log(err)
+					//do nothing
 				}
 			}
 		}
+		var ans = {'points': points, 'lines': lines, 'planes': planes};
+		return ans;
 	}
-	return ans;
+
+	function reduceAlgObjArray(array) {
+		//remove copies from array of algObjs
+		function whereInArray(algObj,array) {
+			for(var idx=0;idx<array.length;idx++) {
+				var one = algObj;
+				var other = array[idx];
+				if(one instanceof Point && other instanceof Point) {
+					if(one.pos.allclose(other.pos)) {
+						return idx;
+					}
+				}
+				if(one instanceof Line && other instanceof Line) {
+					if( ( one.dir.allclose(other.dir) || one.dir.allclose(other.dir.mul(-1)) ) && one.off.allclose(other.off) ) {
+						return idx;
+					}
+				}
+				if(one instanceof Plane && other instanceof Plane) {
+					if( ( one.normal.allclose(other.normal) || one.normal.allclose(other.normal.mul(-1)) ) && one.off.allclose(other.off) ) {
+						return idx;
+					}
+				}
+			}
+			return -1; //no success in finding
+		}
+		var ans=[]
+		for(var idx=0;idx<array.length;idx++) {
+			var position = whereInArray(array[idx],ans);
+			if(position==-1) {
+				// if the object is not in ans array
+				ans.push(array[idx])
+			}
+		}
+		return ans;
+		/*
+		function whereInArrayTest() {
+		// whereInArray unit test
+		var line1 = new Line(new Vector(1,1,0), new Vector(-1,0,0));
+		var line2 = new Line(new Vector(1,0,1), new Vector(0,0,1));
+		var line3 = new Line(new Vector(1,0,0), new Vector(-3,0,1));
+		var plane1 = new Plane(new Vector(1,0,1), new Vector(0,0,1));
+		var arr = [line1,line2,plane1,line2];
+		var test1=(whereInArray(line1,arr)==0);
+		console.log("where in array 1. ",test1);
+		var test2=(whereInArray(line2,arr)==1);
+		console.log("where in array 2. ",test2);
+		var test3=(whereInArray(plane1,arr)==2);
+		console.log("where in array 3. ",test3);
+		test4=(whereInArray(line3,arr)==-1);
+		console.log("where in array 4. ",test4)
+		return [test1,test2,test3,test4]
+	}
+	*/
+}
 }
 
 function _point_point_intersect(obj1, obj2) {
@@ -399,10 +493,10 @@ function _line_point_intersect(obj1, obj2) {
 		/*
 		Idea:
 		\begin{itemize}
-				\item line: $\vec{r}_{l} = \vec{d}_{l} + \vec{v}_{l} t_{l}, t_{l} \in R$
-				\item point: $\vec{r}_{p} = \vec{d}_{p}$
-				\item intersection condition: $\vec{v}_{l} \times (\vec{d}_{p}-\vec{d}_{l}) = 0$
-				\item intersection point: $\vec{r}_{i} = ...$, any point on the line, eg. $\vec{r}_{i} = \vec{d}_{l}$
+		\item line: $\vec{r}_{l} = \vec{d}_{l} + \vec{v}_{l} t_{l}, t_{l} \in R$
+		\item point: $\vec{r}_{p} = \vec{d}_{p}$
+		\item intersection condition: $\vec{v}_{l} \times (\vec{d}_{p}-\vec{d}_{l}) = 0$
+		\item intersection point: $\vec{r}_{i} = ...$, any point on the line, eg. $\vec{r}_{i} = \vec{d}_{l}$
 		\end{itemize}
 		*/
 		var off_diff = point.pos.add( line.off.mul(-1) );
@@ -424,10 +518,10 @@ function _line_line_intersect(obj1, obj2) {
 		/*
 		Idea:
 		\begin{itemize}
-				\item line 1: $\vec{r}_{1} = \vec{d}_{1} + \vec{v}_{1} t_{1}, t_{1} \in R$
-				\item line 2: $\vec{r}_{2} = \vec{d}_{2} + \vec{v}_{2} t_{2}, t_{2} \in R$
-				\item intersection condition: distance between lines is zero
-				\item intersection point: found by vector algebra
+		\item line 1: $\vec{r}_{1} = \vec{d}_{1} + \vec{v}_{1} t_{1}, t_{1} \in R$
+		\item line 2: $\vec{r}_{2} = \vec{d}_{2} + \vec{v}_{2} t_{2}, t_{2} \in R$
+		\item intersection condition: distance between lines is zero
+		\item intersection point: found by vector algebra
 		\end{itemize}
 		*/
 		var line1 = obj1;
@@ -473,8 +567,8 @@ function _line_line_intersect(obj1, obj2) {
 			else {
 				throw new NoIntersectionError("Line "+line1.toString()+" and Line "+ toString() + " are skew.")
 			}
-			}
 		}
+	}
 }
 
 function _plane_point_intersect(obj1, obj2) {
@@ -566,46 +660,46 @@ function _plane_plane_intersect(obj1,obj2) {
 			}
 			//we will solve by cramer's rule
 			var coeffMatrix_nox = [[p1.normal.y,p1.normal.z],
-														 [p2.normal.y,p2.normal.z]]
+			[p2.normal.y,p2.normal.z]]
 			var coeffMatrix_noy = [[p1.normal.x,p1.normal.z],
-														 [p2.normal.x,p2.normal.z]]
+			[p2.normal.x,p2.normal.z]]
 			var coeffMatrix_noz = [[p1.normal.x,p1.normal.y],
-														 [p2.normal.x,p2.normal.y]]
+			[p2.normal.x,p2.normal.y]]
 			var rhs = [p1.normal.dot(p1.off),
-								 p2.normal.dot(p2.off)];
-			//try no x
-			var determinant = det(coeffMatrix_nox);
-			if(determinant != 0 ) {
-				//console.log("case no-x")
-				var y = det([[rhs[0],p1.normal.z],
-										 [rhs[1],p2.normal.z]])/determinant;
-				var z = det([[p1.normal.y,rhs[0]],
-										 [p2.normal.y,rhs[1]]])/determinant;
-				return new Line(cross, new Vector(0,y,z)); //return answer straight away
-			}
-			else {
-				//no x failed; try no y
-				var determinant = det(coeffMatrix_noy);
+				p2.normal.dot(p2.off)];
+				//try no x
+				var determinant = det(coeffMatrix_nox);
 				if(determinant != 0 ) {
-					//console.log("case no-y")
-					var x = det([[rhs[0],p1.normal.z],
-											 [rhs[1],p2.normal.z]])/determinant;
-					var z = det([[p1.normal.x,rhs[0]],
-											 [p2.normal.x,rhs[1]]])/determinant;
-					return new Line(cross, new Vector(x,0,z)); //return answer
-				}
-				else {
-					//x and y failed; z must work
-					var determinant = det(coeffMatrix_noz);
-					if(determinant != 0 ) {
-						//console.log("case no-z")
-						var x = det([[rhs[0],p1.normal.y],
-												 [rhs[1],p2.normal.y]])/determinant;
-						var y = det([[p1.normal.x,rhs[0]],[p2.normal.x,rhs[1]]])/determinant;
-						return new Line(cross, new Vector(x,y,0)); //return answer
-					}
-				}
-			}
-		}
-	}
-}
+					//console.log("case no-x")
+					var y = det([[rhs[0],p1.normal.z],
+						[rhs[1],p2.normal.z]])/determinant;
+						var z = det([[p1.normal.y,rhs[0]],
+							[p2.normal.y,rhs[1]]])/determinant;
+							return new Line(cross, new Vector(0,y,z)); //return answer straight away
+						}
+						else {
+							//no x failed; try no y
+							var determinant = det(coeffMatrix_noy);
+							if(determinant != 0 ) {
+								//console.log("case no-y")
+								var x = det([[rhs[0],p1.normal.z],
+									[rhs[1],p2.normal.z]])/determinant;
+									var z = det([[p1.normal.x,rhs[0]],
+										[p2.normal.x,rhs[1]]])/determinant;
+										return new Line(cross, new Vector(x,0,z)); //return answer
+									}
+									else {
+										//x and y failed; z must work
+										var determinant = det(coeffMatrix_noz);
+										if(determinant != 0 ) {
+											//console.log("case no-z")
+											var x = det([[rhs[0],p1.normal.y],
+												[rhs[1],p2.normal.y]])/determinant;
+												var y = det([[p1.normal.x,rhs[0]],[p2.normal.x,rhs[1]]])/determinant;
+												return new Line(cross, new Vector(x,y,0)); //return answer
+											}
+										}
+									}
+								}
+							}
+						}
