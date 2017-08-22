@@ -1,7 +1,6 @@
 window.onload = function() {
 
     var canvas = document.getElementById("graph"),
-
         graphDim = canvas.height,
         pi = Math.PI,
         phase = 0;
@@ -18,29 +17,31 @@ window.onload = function() {
     }
 
 
-    function returnSinR(pixel, angle, phase) {
+    function returnSin255(pixel, angle, phase) {
         var coord = pixelIndexToCoord(pixel),
             x = coord[0],
-            y = coord[1];
-        return 127.5*Math.sin(Math.cos(degToRad(angle)) * 8*pi*(x - Math.cos(degToRad(angle))*phase)/graphDim + Math.sin(degToRad(angle)) * 8*pi*(y - Math.sin(degToRad(angle))*phase)/graphDim) + 127.5;
+            y = coord[1],
+            k_x = Math.cos(degToRad(angle)),
+            k_y = Math.sin(degToRad(angle));
+        return 127.5*Math.sin((8*pi/graphDim) * (k_x*x + k_y*y - phase)) + 127.5;
     }
 
 
     function createSinData(angle) {
-        var imageDataR = [],
+        var imageDataArray = [],
             imageDataLength = imageData.data.length;
 
         for (var phase = 0; phase < 126; phase += 2) {
-            imageDataR[phase] = [];
+            imageDataArray[phase] = [];
             for (var pixel = 0; pixel < imageDataLength/4; pixel++) {
                 // RGBA:
-                imageDataR[phase][4*pixel] = returnSinR(pixel, angle, phase);
-                imageDataR[phase][4*pixel + 1] = 0;
-                imageDataR[phase][4*pixel + 2] = 0;
-                imageDataR[phase][4*pixel + 3] = 255;
+                imageDataArray[phase][4*pixel] = returnSin255(pixel, angle, phase);
+                imageDataArray[phase][4*pixel + 1] = 0;
+                imageDataArray[phase][4*pixel + 2] = 0;
+                imageDataArray[phase][4*pixel + 3] = 255;
             }
         }
-        return imageDataR;
+        return imageDataArray;
     }
 
 
