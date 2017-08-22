@@ -65,3 +65,13 @@ LJ.prototype.calcF = function(r) {
 LJ.prototype.getR_0 = function(){
     return Math.pow(2, 1/6) * this.s;
 };
+
+LJ.prototype.plotPoints = function(ppu) {
+    var r = [];
+    var v = [];
+    for (var i = 1; i < Math.ceil(this.s * 3 * ppu); i++) {
+        r.push(i / ppu);
+        v.push(this.calcV(i / ppu));
+    }
+    return {x: r, y: v, name: "LJ potential", mode: "lines", marker: {size: 2, opacity: 0.5}, line: {width: 1}}
+};
