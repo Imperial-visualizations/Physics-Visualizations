@@ -67,13 +67,16 @@ function Vector(x,y,z) {
 const ZERO_VECTOR = new Vector(0.0,0.0,0.0); //Zero vector for later usew
 
 function Point(pos) {
-	/* Points are defined by their position *pos* in 3d. */
-	if(!(pos instanceof Vector)) {
-		throw new Error("Argument error: Point(...) 'pos' argument should be Vector.");
+	this.assignPos = function(pos) {
+		/* Points are defined by their position *pos* in 3d. */
+		if(!(pos instanceof Vector)) {
+			throw new Error("Argument error: Point(...) 'pos' argument should be Vector.");
+		}
+		else {
+			this.pos = pos;
+		}
 	}
-	else {
-		this.pos = pos;
-	}
+	this.assignPos(pos);
 	this.goify = function(layout) {
 		if(layout!=undefined) {
 			/* Cast this Point object to Plotly graphic object. */
@@ -113,22 +116,28 @@ function Point(pos) {
 function Line(dir,off) {
 	/* Lines are defined by direction vector and offset vector. */
 	// keep track of original user input
-	this.usrDir=dir;
-	this.usrOff=off;
-	if(!(dir instanceof Vector)) {
-		throw new Error("Argument error: Line(...) 'dir' argument should be Vector.");
+	this.assignDir = function(dir) {
+		this.usrDir=dir;
+		if(!(dir instanceof Vector)) {
+			throw new Error("Argument error: Line(...) 'dir' argument should be Vector.");
+		}
+		else {
+			// normalize direction vector
+			this.dir = dir.normalize();
+		}
 	}
-	else {
-		// normalize direction vector
-		this.dir = dir.normalize();
+	this.assignOff = function(off){
+		this.usrOff=off;
+		if(!(off instanceof Vector)) {
+			throw new Error("Argument error: Line(...) 'off' argument should be Vector.");
+		}
+		else {
+			// offset is changed to such that is the closest to origin
+			this.off = off.add((this.dir.mul(off.dot(this.dir))).mul(-1));
+		}
 	}
-	if(!(off instanceof Vector)) {
-		throw new Error("Argument error: Line(...) 'off' argument should be Vector.");
-	}
-	else {
-		// offset is changed to such that is the closest to origin
-		this.off = off.add((this.dir.mul(off.dot(this.dir))).mul(-1));
-	}
+	this.assignDir(dir);
+	this.assignOff(off);
 	this.goify = function(layout){
 		var xyz = {x: [], y: [], z: []};
 		// dynamically generate data depending on layout
@@ -205,22 +214,28 @@ function Line(dir,off) {
 function Plane(normal,off) {
 	/* Planes are defined by a normal and any point lying on it. */
 	// keep track of user input
-	this.usrNormal = normal;
-	this.usrOff = off;
-	if(!(normal instanceof Vector)) {
-		throw new Error("Argument error: Plane(...) 'normal' argument should be Vector.");
+	this.assignNormal = function(normal) {
+		this.usrNormal = normal;
+		if(!(normal instanceof Vector)) {
+			throw new Error("Argument error: Plane(...) 'normal' argument should be Vector.");
+		}
+		else {
+			// normalize the normal vector
+			this.normal = normal.normalize();
+		}
 	}
-	else {
-		// normalize the normal vector
-		this.normal = normal.normalize();
+	this.assignOff = function(off) {
+		this.usrOff = off;
+		if(!(off instanceof Vector)) {
+			throw new Error("Argument error: Plane(...) 'off' argument should be Vector.");
+		}
+		else {
+			// select the closest one to the origin
+			this.off = this.normal.mul(off.dot(this.normal));
+		}
 	}
-	if(!(off instanceof Vector)) {
-		throw new Error("Argument error: Plane(...) 'off' argument should be Vector.");
-	}
-	else {
-		// select the closest one to the origin
-		this.off = this.normal.mul(off.dot(this.normal));
-	}
+	this.assignNormal(normal);
+	this.assignOff(off);
 	this.XYZ = function(layout) {
 		// a couple utils functions
 		function mesh2d(xlim, ylim) {
