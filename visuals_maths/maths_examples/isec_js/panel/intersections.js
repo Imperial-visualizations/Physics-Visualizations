@@ -108,6 +108,7 @@ function Point(pos) {
 	}
 	this.id = (objcounter++) + "point"; //assign id
 	console.log("New Alg Object: ", this); //notify when created
+	this.type = "point";
 }
 function Line(dir,off) {
 	/* Lines are defined by direction vector and offset vector. */
@@ -198,6 +199,7 @@ function Line(dir,off) {
 	}
 	this.id = (objcounter++) + "line";
 	console.log("New Alg Object: ", this); //notify of new object creation
+	this.type = "line";
 }
 
 function Plane(normal,off) {
@@ -321,6 +323,7 @@ function Plane(normal,off) {
 	}
 	this.id = (objcounter++)+"plane";
 	console.log("New Alg Object: ", this);
+	this.type = "plane";
 }
 
 function NoIntersectionError(message){
