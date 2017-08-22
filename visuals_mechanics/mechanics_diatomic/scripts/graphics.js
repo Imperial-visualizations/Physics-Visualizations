@@ -28,13 +28,16 @@ $('.inputs').each(function(){
     $(this).on('input',updateLabels);
 });
 
-
+/**
+ * Play/stop button code.
+ */
 $('#playPauseButton').on('click',function(){
-    if(running){
+    if(running) {
         running = false;
         $('#playPauseButton').text("Play");
         reset();
-    }else{
+    }
+    else {
         running = true;
         $('#playPauseButton').text("Stop");
     }
@@ -50,7 +53,6 @@ function updateLabels(){
     initKRot = parseFloat($('#rotKE').val());
     reset();
 }
-
 
 /**
  * Function called after preload and before the first update call. Should be used for initialising objects and variables that will be used
@@ -72,7 +74,6 @@ function create(){
     potential = new LJ(2, 10, 2, 10);
     a1 = new Atom(1, 1, CHERRY);
     a2 = new Atom(1, 1, CHERRY);
-
 
     updateLabels();
 }
@@ -125,7 +126,6 @@ plotPE();
 plotVibKE();
 
 function reset(){
-
     mol1 = new Molecule(a1, a2, potential, initKVib, initKRot);
 
     a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
