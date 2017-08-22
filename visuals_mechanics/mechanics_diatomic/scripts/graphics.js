@@ -15,6 +15,8 @@ const GREEN = 0x66A40A;
 const IMPERIAL_BLUE = 0x003E74;
 const CHERRY = 0xE40043;
 var running = false;
+
+var mainLayer,traceLayer;
 /**
  * This function is the first function called when phaser starts and should only be used for initialising textures to be used
  * for sprites. All other code that should be called before the first update call should be placed in create. Not all phaser features have loaded
@@ -33,33 +35,6 @@ $('.inputs').each(function(){
  * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
  * off the input field.
  */
-$('body').on('click', '[data-change]', function() {
-
-    // Storing current element and its attributes.
-    var $element = $(this);
-    var $title = $(this).attr("title");
-    var $el_id = $(this).attr("id");
-
-    // Creating input form.
-    var $input = $('<input/>').val($element.text());
-    $input.attr("id", $el_id);                                  // Setting ID attribute (same as text).
-    $input.attr("title", $title);                               // Setting title attribute (same as text).
-    $element.replaceWith($input);                               // Replacing text with input form.
-
-    var save = function save() {
-        var $a = $('<a data-change />').text($input.val());
-
-        // Restoring text with same attributes as original.
-        $a.attr("title", $title);
-        $a.attr("id", $el_id);
-        $input.replaceWith($a);
-    };
-
-    // When clicking away from element (blurring), revert from input form to text.
-    $input.one('blur', save).focus();
-    updateLJparams();
-    reset();
-});
 
 /**
  * Play/stop button code.
@@ -88,10 +63,10 @@ function updateLabels(){
 }
 
 function updateLJparams() {
-    inits1 = parseFloat($('#s1').val());
-    inits2 = parseFloat($('#s2').val());
-    inite1 = parseFloat($('#e1').val());
-    inite2 = parseFloat($('#e2').val());
+    inits1 = parseFloat($('#s1').text());
+    inits2 = parseFloat($('#s2').text());
+    inite1 = parseFloat($('#e1').text());
+    inite2 = parseFloat($('#e2').text());
 }
 
 
@@ -102,6 +77,9 @@ function updateLJparams() {
 function create(){
     //phaserInstance.renderer.renderSession.roundedPixels = true;
     //Phaser.Canvas.setImageRenderingCrisp(phaserInstance.canvas);
+    traceLayer = phaserInstance.add.group();
+    mainLayer = phaserInstance.add.group();
+
 
     phaserInstance.canvasWidth = $("#phaser").width() * window.devicePixelRatio;
     phaserInstance.canvasHeight = $("#phaser").width() * window.devicePixelRatio;
@@ -132,7 +110,7 @@ function addAtom(atom) {
     atomG.beginFill(atom.color,1);
     atomG.drawCircle(0,0,atom.radius*zoom);
 
-    var sprite = phaserInstance.add.sprite(0,0,atomG.generateTexture());
+    var sprite = mainLayer.create(0,0,atomG.generateTexture());
     sprite.anchor.set(0.5,0.5);
     atomG.destroy();
     return sprite;
@@ -238,7 +216,7 @@ function drawLine(atom){
                     atom.pos[i].items[1]*zoom + phaserInstance.world.centerY);
     }
     if(typeof atom.lineSprite !== 'undefined') atom.lineSprite.destroy();
-    atom.lineSprite = phaserInstance.add.sprite(0,0,lineG.generateTexture());
+    atom.lineSprite = traceLayer.create(0,0,lineG.generateTexture());
     lineG.destroy();
 
 }

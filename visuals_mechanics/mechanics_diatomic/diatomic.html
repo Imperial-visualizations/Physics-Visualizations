@@ -147,6 +147,39 @@
         $('#LJ_scatter').fadeIn(100);
         $('#phaser').fadeIn(500);
     } );
+
+    /**
+ * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
+ * off the input field.
+ */
+$('body').on('click', '[data-change]', function() {
+
+    // Storing current element and its attributes.
+    var $element = $(this);
+    var $title = $(this).attr("title");
+    var $el_id = $(this).attr("id");
+
+    // Creating input form.
+    var $input = $('<input/>').val($element.text());
+    $input.attr("id", $el_id);                                  // Setting ID attribute (same as text).
+    $input.attr("title", $title);                               // Setting title attribute (same as text).
+    $element.replaceWith($input);                               // Replacing text with input form.
+
+    var save = function save() {
+        var $a = $('<a data-change />').text($input.val());
+
+        // Restoring text with same attributes as original.
+        $a.attr("title", $title);
+        $a.attr("id", $el_id);
+        $input.replaceWith($a);
+    };
+
+    // When clicking away from element (blurring), revert from input form to text.
+    $input.one('blur', save).focus();
+    updateLJparams();
+    reset();
+});
+
 </script>
 </body>
 </html>
