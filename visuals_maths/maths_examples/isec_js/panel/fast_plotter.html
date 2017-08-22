@@ -76,13 +76,18 @@ $('#canvas').ready(function() {
     showlegend: false,
     margin: {l:0,r:0,b:0,t:0}
   };
-  var line1 = new Line(new Vector(1,-1,1), new Vector(0,2,-1));
-  var line2 = new Line(new Vector(3,1,-4), new Vector(-1,-2,-1));
-  var plane1 = new Plane(new Vector(0,2,-1),new Vector(1,-1,1));
+  var line1;
+  var line2;
+  var plane1;
   var plot = new fastPlotHandler('canvas');
   plot.init();
   plot.setLayout(layout);
-  $('#add').click(function() {
+  $('#redraw').click(function() {
+    plot.purge();
+    line1 = new Line(new Vector(1,-1,1), new Vector(0,2,-1));
+    line2 = new Line(new Vector(3,1,-4), new Vector(-1,-2,-1));
+    plane1 = new Plane(new Vector(0,2,-1),new Vector(1,-1,1));
+    plot.init();
     plot.addAlgObj(line1);
     plot.addAlgObj(line2);
     plot.addAlgObj(plane1);
@@ -96,10 +101,18 @@ $('#canvas').ready(function() {
   $('#unhighlight').click(function() {
     plot.unHighlight();
   })
+  $('#hide').click(function() {
+    plot.hideTraces([line2.id]);
+  })
+  $('#unhide').click(function() {
+    plot.showTraces([line2.id]);
+  })
 });
 </script>
 <div id="canvas"></div>
-<a id="add">add line</a>
-<a id="highlight">highlight line</a>
-<a id="unhighlight">unhighlight</a>
-<a id="delete">delete plane</a>
+<a id="redraw">redraw graph</a><br>
+<a id="highlight">highlight line</a><br>
+<a id="unhighlight">unhighlight</a><br>
+<a id="hide">hide</a><br>
+<a id="unhide">unhide</a><br>
+<a id="delete">delete plane</a><br>
