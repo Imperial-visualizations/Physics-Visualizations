@@ -65,27 +65,3 @@ LJ.prototype.calcF = function(r) {
 LJ.prototype.getR_0 = function(){
     return Math.pow(2, 1/6) * this.s;
 };
-
-LJ.prototype.plot = function() {
-    var x = [];                                                 // Array to store r values.
-    var y = [];                                                 // Array to store LJ potential at corresponding r.
-    var ppu = 100;                                              // Points per unit of separation distance.
-
-    // Layout of plot.
-    var layout = {title: "LJ Potential",
-        xaxis: {title: "r / Angstroms", range: [0.5 * this.s, 3 * this.s]},
-        yaxis: {title: "Potential / eV", range: [1.1 * this.e, -2 * this.e]}};
-
-    // Generating plot data.
-    for (var i = layout.xaxis.range[0] + 1/ppu; i < Math.ceil(layout.xaxis.range[1]) * ppu; i++) {
-        var separation = i / ppu;
-        x.push(separation);
-        y.push(this.calcV(separation));
-    }
-
-    // Creating plot-able object.
-    var scatter = {y: y, x: x, mode: "markers+lines", type: "scatter", name: "LJ Pot",
-        line: {color: "blue", width: 2}, marker: {size: 5}};
-    Plotly.newPlot("LJ_scatter", {data: [scatter], traces: [0], layout: layout});
-
-};

@@ -9,11 +9,12 @@ var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS,
 var a1,a2,mol1,potential;
 var zoom  = 45;
 var initKVib,initKRot;
-var inits1, inits2, inite1, inite2;
+var init_s1 = 2, init_s2 = 2, init_e1 = 10, init_e2 = 10;
 var WHITE = 0xffffff;
 const GREEN = 0x66A40A;
 const IMPERIAL_BLUE = 0x003E74;
 const CHERRY = 0xE40043;
+const GRAPH_TIME = 5;
 var running = false;
 
 var mainLayer,traceLayer;
@@ -31,10 +32,13 @@ $('.inputs').each(function(){
     $(this).on('input',updateLabels);
 });
 
-/**
- * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
- * off the input field.
- */
+$('#submitLJ').on('click', function() {
+    init_s1 = parseFloat($('#s1').text());
+    init_e1 = parseFloat($('#e1').text());
+    init_s2 = parseFloat($('#s2').text());
+    init_e2 = parseFloat($('#e2').text());
+    reset();
+});
 
 /**
  * Play/stop button code.
@@ -62,21 +66,12 @@ function updateLabels(){
     reset();
 }
 
-function updateLJparams() {
-    inits1 = parseFloat($('#s1').text());
-    inits2 = parseFloat($('#s2').text());
-    inite1 = parseFloat($('#e1').text());
-    inite2 = parseFloat($('#e2').text());
-}
-
-
 /**
- * Function called after preload and before the first update call. Should be used for initialising objects and variables that will be used
- * in the simulation as well as for creating sprites. phaserInstance has fully loaded at this point so all phaser features can be used.
+ * Function called after preload and before the first update call. Should be used for initialising objects and variables
+ * that will be used in the simulation as well as for creating sprites. phaserInstance has fully loaded at this point
+ * so all phaser features can be used.
  */
 function create(){
-    //phaserInstance.renderer.renderSession.roundedPixels = true;
-    //Phaser.Canvas.setImageRenderingCrisp(phaserInstance.canvas);
     traceLayer = phaserInstance.add.group();
     mainLayer = phaserInstance.add.group();
 
@@ -92,8 +87,6 @@ function create(){
 
     a1 = new Atom(1, 1, CHERRY);
     a2 = new Atom(1, 1, CHERRY);
-
-    updateLJparams();
     updateLabels();
 }
 
@@ -120,6 +113,7 @@ var arrRotKE = [];
 var arrTime = [];
 var arrPE = [];
 var arrVibKE = [];
+var arrSeparation = [];
 
 function plotRotKE() {
     Plotly.newPlot("graphRotE", {data: [{x: arrTime, y: arrRotKE}], traces: [0]},
@@ -136,9 +130,13 @@ function plotVibKE() {
         {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
 }
 
-var r = [];                                                 // Array to store r values.
-var v = [];                                                 // Array to store LJ potential at corresponding r.
-var ppu = 90;                                               // Points per unit of separation distance.
+// function plotLJ() {
+//     var ppu = 10;
+//     for (var i = 1 / ppu; i < Math.max(init_s1, init_s2) * 3 * ppu; i++) {
+//         arrSeparation.push()
+//     }
+//     Plotly.newPlot("LJ_scatter", {data: [{x: }]})
+// }
 
 plotRotKE();
 plotPE();
@@ -146,7 +144,7 @@ plotVibKE();
 
 function reset(){
 
-    potential = new LJ(inits1, inite1, inits2, inite2);
+    potential = new LJ(init_s1, init_e1, init_s2, init_e2);
     mol1 = new Molecule(a1, a2, potential, initKVib, initKRot);
 
     a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
@@ -156,6 +154,8 @@ function reset(){
 
     arrRotKE = [];
     arrTime = [];
+    arrPE = [];
+    arrVibKE = [];
     plotRotKE();
     plotPE();
     plotVibKE();
@@ -167,7 +167,7 @@ function reset(){
  */
 function update(){
     if(running) {
-        dT = 1/60;
+        var dT = 1/60;
         mol1.update(dT);//requests molecule update, sends deltaTime to mol1.
         a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
         a1.sprite.y = a1.getPos().items[1] * zoom + phaserInstance.world.centerY;
@@ -194,6 +194,14 @@ function update(){
         if (arrTime.length > 0) t = arrTime[arrTime.length - 1] + dT;
         else t = dT;
         arrTime.push(t);
+
+        // Delete older data to keep graphs neater and to limit memory usage.
+        if (arrRotKE.length > Math.ceil(GRAPH_TIME / dT)) {
+            arrRotKE.shift();
+            arrTime.shift();
+            arrVibKE.shift();
+            arrPE.shift();
+        }
 
         Plotly.restyle("graphVibE", {data: [{x: arrTime, y: arrVibKE}], traces: [0]},
             {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
