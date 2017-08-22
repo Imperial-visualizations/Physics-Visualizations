@@ -9,6 +9,7 @@ var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS,
 var a1,a2,mol1,potential;
 var zoom  = 45;
 var initKVib,initKRot;
+var inits1, inits2, inite1, inite2;
 var WHITE = 0xffffff;
 const GREEN = 0x66A40A;
 const IMPERIAL_BLUE = 0x003E74;
@@ -28,13 +29,48 @@ $('.inputs').each(function(){
     $(this).on('input',updateLabels);
 });
 
+/**
+ * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
+ * off the input field.
+ */
+$('body').on('click', '[data-change]', function() {
 
+    // Storing current element and its attributes.
+    var $element = $(this);
+    var $title = $(this).attr("title");
+    var $el_id = $(this).attr("id");
+
+    // Creating input form.
+    var $input = $('<input/>').val($element.text());
+    $input.attr("id", $el_id);                                  // Setting ID attribute (same as text).
+    $input.attr("title", $title);                               // Setting title attribute (same as text).
+    $element.replaceWith($input);                               // Replacing text with input form.
+
+    var save = function save() {
+        var $a = $('<a data-change />').text($input.val());
+
+        // Restoring text with same attributes as original.
+        $a.attr("title", $title);
+        $a.attr("id", $el_id);
+        $input.replaceWith($a);
+    };
+
+    // When clicking away from element (blurring), revert from input form to text.
+    $input.one('blur', save).focus();
+    updateLJparams();
+    reset();
+});
+
+/**
+ * Play/stop button code.
+ */
 $('#playPauseButton').on('click',function(){
-    if(running){
+    if(running) {
         running = false;
         $('#playPauseButton').text("Play");
         reset();
-    }else{
+    }
+    else {
         running = true;
         $('#playPauseButton').text("Stop");
     }
@@ -49,6 +85,13 @@ function updateLabels(){
     initKVib = parseFloat($('#vibKE').val());
     initKRot = parseFloat($('#rotKE').val());
     reset();
+}
+
+function updateLJparams() {
+    inits1 = parseFloat($('#s1').val());
+    inits2 = parseFloat($('#s2').val());
+    inite1 = parseFloat($('#e1').val());
+    inite2 = parseFloat($('#e2').val());
 }
 
 
@@ -69,11 +112,10 @@ function create(){
 
     phaserInstance.stage.backgroundColor = 0xEBEEEE;
 
-    potential = new LJ(2, 10, 2, 10);
     a1 = new Atom(1, 1, CHERRY);
     a2 = new Atom(1, 1, CHERRY);
 
-
+    updateLJparams();
     updateLabels();
 }
 
@@ -126,6 +168,7 @@ plotVibKE();
 
 function reset(){
 
+    potential = new LJ(inits1, inite1, inits2, inite2);
     mol1 = new Molecule(a1, a2, potential, initKVib, initKRot);
 
     a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;

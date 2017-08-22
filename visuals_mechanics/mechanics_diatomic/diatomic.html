@@ -67,6 +67,7 @@
                 <em><a for="#graphVibE" class="showHideButton">Hide </a></em> <a>KE<sub>vib</sub></a>
                 <div id="graphVibE" class="expand" style="height: 350px; width: 300px; padding-bottom: 10px;">
                 </div>
+                <br>
 
                 <!-- Rot KE Graph Plotly -->
                 <em><a for="#graphRotE" class="showHideButton">Hide </a></em> <a>KE<sub>rot</sub></a>
@@ -93,8 +94,6 @@
             <div class="expand">
                 <div id="LJ_scatter" style="width:75%; height: 480px">
                     <script>
-                        var p = new LJ(2, 10);
-                        p.plot();
                     </script>
                 </div>
             </div>
@@ -106,11 +105,11 @@
         <h4 class="titleAtomA">Atom A</h4>
         <div class="twelve columns">
             <div class="six columns">
-                <span>&sigma; = </span>    <input class="inputs" type="number" title="sigmaA" min="0" value="2"/>
+                <span>&sigma; = </span>      <a id="s1" data-change title="&sigma;">2</a> <span><em>nm</em></span>
             </div>
 
             <div class="six columns">
-                <span>&epsilon; = </span>    <input class="inputs" type="number" title="epsilonA" min="0" value="5"/>
+                <span>&epsilon; = </span>    <a id="e1" data-change title="&epsilon;">10</a> <span><em>eV</em></span>
                 <br>
             </div>
         </div>
@@ -121,11 +120,11 @@
         <h4 class="titleAtomB">Atom B</h4>
         <div class="twelve columns">
             <div class="six columns">
-                <span>&sigma; = </span>    <input class="inputs" type="number" title="sigmaB" value="2"/>
+                <span>&sigma; = </span>    <a id="s2" data-change title="&sigma;">2</a> <span><em>nm</em></span>
             </div>
 
             <div class="six columns">
-                <span>&epsilon; = </span>  <input class="inputs" type="number" title="epsilonB" value="10"/>
+                <span>&epsilon; = </span>  <a id="e2" data-change title="&epsilon;">10</a> <span><em>eV</em></span>
             </div>
         </div>
     </div>
@@ -148,21 +147,6 @@
         $('#LJ_scatter').fadeIn(100);
         $('#phaser').fadeIn(500);
     } );
-</script>
-
-<script>
-    $("select[title='sigmaA']").on("input", function() {
-        potential.s1 = $(this).val;
-    });
-    $("select[title='sigmaB']").on("input", function() {
-        potential.s2 = $(this).val;
-    });
-    $("select[title='epsilonA']").on("input", function() {
-        potential.e1 = $(this).val;
-    });
-    $("select[title='epsilonB']").on("input", function() {
-        potential.e2 = $(this).val;
-    });
 </script>
 </body>
 </html>
