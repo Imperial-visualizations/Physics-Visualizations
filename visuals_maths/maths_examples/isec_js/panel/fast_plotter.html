@@ -41,12 +41,32 @@ $('#canvas').ready(function() {
   var plotDiv = document.getElementById('canvas');
   console.log("data in plotDiv: ", plotDiv.data);
 
-  //construct a dictionary {algObjId: uid}
-  var lookup = {};
-  for(var idx=0; idx<plotDiv.data.length; idx++) {
-    lookup[plotDiv.data[idx].algObjId] = plotDiv.data[idx].uid;
+  function createAlgObjToUidLookup(plotDiv) {
+    // Construct a dictionary {algObjId: uid}
+    var plotData = document.getElementById(plotDiv).data;
+    var lookup = {};
+    for(var idx=0; idx<plotData.length; idx++) {
+      lookup[plotData[idx].algObjId] = plotData[idx].uid;
+    }
+    console.log("lookup dictionary: ",lookup);
   }
-  console.log("lookup dictionary: ",lookup);
+
+  function findIdxByUid(plotDiv,uid) {
+    /* Find trace position in plotDiv.data using uid;
+    returns appropriate index if found of -1 if not found */
+    var plotData = document.getElementById(plotDiv).data;
+    for (var idx=0; plotData.length;idx++) {
+      if(plotData[idx].uid == uid) {
+        return idx;
+      }
+    }
+    return -1;
+  }
+  function findIdxByAlgObjId(plotDiv,algObjId) {
+    /* Find trace position in plotDiv.data using algObjId
+    returns appropriate index if found of -1 if not found */
+    var lookup = createAlgObjToUidLookup(plotDiv);
+    return findIdxByUid(plotDiv, lookup[algObjId]);
 });
 </script>
 <div id="canvas"></div>
