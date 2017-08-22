@@ -1,7 +1,8 @@
 var width = 800;
 var height = 480;
-width = $("#phaser").width() * window.devicePixelRatio;
-height = $("#phaser").width() * window.devicePixelRatio;
+var phaser_id = "#phaser";
+width = $(phaser_id).width() * window.devicePixelRatio;
+height = $(phaser_id).width() * window.devicePixelRatio;
 
 var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS,
     "phaser",{preload: preload,create: create,update: update});
@@ -76,8 +77,8 @@ function create(){
     mainLayer = phaserInstance.add.group();
 
 
-    phaserInstance.canvasWidth = $("#phaser").width() * window.devicePixelRatio;
-    phaserInstance.canvasHeight = $("#phaser").width() * window.devicePixelRatio;
+    phaserInstance.canvasWidth = $(phaser_id).width() * window.devicePixelRatio;
+    phaserInstance.canvasHeight = $(phaser_id).width() * window.devicePixelRatio;
     phaserInstance.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
     phaserInstance.scale.setUserScale(1 / window.devicePixelRatio, 1 / window.devicePixelRatio);
     phaserInstance.renderer.renderSession.roundPixels = true;
@@ -113,7 +114,9 @@ var arrRotKE = [];
 var arrTime = [];
 var arrPE = [];
 var arrVibKE = [];
-var arrSeparation = [];
+var LJ_scatter;
+var curr_LJ;
+var LJ_layout;
 
 function plotRotKE() {
     Plotly.newPlot("graphRotE", {data: [{x: arrTime, y: arrRotKE}], traces: [0]},
@@ -130,13 +133,24 @@ function plotVibKE() {
         {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
 }
 
-// function plotLJ() {
-//     var ppu = 10;
-//     for (var i = 1 / ppu; i < Math.max(init_s1, init_s2) * 3 * ppu; i++) {
-//         arrSeparation.push()
-//     }
-//     Plotly.newPlot("LJ_scatter", {data: [{x: }]})
-// }
+function plotLJ() {
+    LJ_layout = {title: "Lennard-Jones Potential",
+                yaxis: {range: [-1.1 * potential.e, potential.e], title: "V(r) / eV"},
+                xaxis: {range: [0, 3 * potential.s], title: "r / nm"}};
+
+    // Remove all points outside visible range on graph.
+    while (LJ_scatter.y[0] > LJ_layout.yaxis.range[1]) {
+        LJ_scatter.x.shift();
+        LJ_scatter.y.shift();
+    }
+    LJ_layout.yaxis.range[1] = LJ_scatter.y[0];     // Re-optimising y-axis scaling.
+
+    var curr_sep = mol1.r.mag(); var curr_V = potential.calcV(curr_sep);
+    curr_LJ = {x: [curr_sep], y: [curr_V], name: "Current LJ", mode: "markers", marker: {size: 10, color: "red"}};
+
+    Plotly.newPlot("LJ_scatter", {data: [LJ_scatter, curr_LJ], traces: [0, 1], layout: LJ_layout},
+        {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
+}
 
 plotRotKE();
 plotPE();
@@ -144,7 +158,13 @@ plotVibKE();
 
 function reset(){
 
+    // Creating new LJ potential
     potential = new LJ(init_s1, init_e1, init_s2, init_e2);
+
+    // Creating x and y coordinates to plot.
+    LJ_scatter  = potential.plotPoints(100);
+
+    // Creating new molecule with atoms and instantiated potential. KEs entered by users using sliders.
     mol1 = new Molecule(a1, a2, potential, initKVib, initKRot);
 
     a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
@@ -156,6 +176,7 @@ function reset(){
     arrTime = [];
     arrPE = [];
     arrVibKE = [];
+    plotLJ();
     plotRotKE();
     plotPE();
     plotVibKE();
@@ -182,12 +203,16 @@ function update(){
         arrRotKE.push(rotKE);
 
         // Calculate PE and update array.
-        var PE = mol1.V.calcV(mol1.r.mag());
-        arrPE.push(PE);
+        var curr_sep = mol1.r.mag();                    // Current separation
+        var curr_V = mol1.V.calcV(curr_sep);            // Current potential
+        arrPE.push(curr_V);
 
         // Calculate Vibrational KE and update array.
-        var vibKE = mol1.TME - rotKE - PE;
+        var vibKE = mol1.TME - rotKE - curr_V;
         arrVibKE.push(vibKE);
+
+        // Updating current LJ r and V(r).
+        curr_LJ.x = [curr_sep]; curr_LJ.y = [curr_V];
 
         // Update time array.
         var t;
@@ -210,6 +235,9 @@ function update(){
             {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
 
         Plotly.restyle("graphPotE", {data: [{x: arrTime, y: arrPE}], traces: [0]},
+            {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
+
+        Plotly.restyle("LJ_scatter", {data: [LJ_scatter, curr_LJ], traces: [0, 1], layout: LJ_layout},
             {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
     }
 }

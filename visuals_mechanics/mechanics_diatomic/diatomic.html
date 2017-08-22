@@ -139,7 +139,7 @@
      *
      */
     $(".showHideButton").on("click",function(){
-        var text = ($(this).text() === "Hide") ? "Show" : "Hide";
+        var text = ($(this).text() === "Show") ? "Hide" : "Show";
         $(this).text(text);
         $($(this).attr("for")).slideToggle("fast");
     });
@@ -177,8 +177,6 @@ $('body').on('click', '[data-change]', function() {
 
     // When clicking away from element (blurring), revert from input form to text.
     $input.one('blur', save).focus();
-    updateLJparams();
-    reset();
 });
 
 </script>
