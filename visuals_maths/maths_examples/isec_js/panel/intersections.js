@@ -75,11 +75,13 @@ function Point(pos) {
 		this.pos = pos;
 	}
 	this.goify = function(layout) {
-		/* Cast this Point object to Plotly graphic object. */
-		if(pos.x < layout.scene.xaxis.range[0] || pos.x > layout.scene.xaxis.range[1] || pos.y < layout.scene.yaxis.range[0] || pos.y > layout.scene.yaxis.range[1] || pos.z < layout.scene.zaxis.range[0] || pos.z > layout.scene.zaxis.range[1]) {
-			// trying to display Point out of canvas
-			// TODO maybe some dynamic alignment of layout in that case?
-			// for now: do nothing
+		if(layout!=undefined) {
+			/* Cast this Point object to Plotly graphic object. */
+			if(pos.x < layout.scene.xaxis.range[0] || pos.x > layout.scene.xaxis.range[1] || pos.y < layout.scene.yaxis.range[0] || pos.y > layout.scene.yaxis.range[1] || pos.z < layout.scene.zaxis.range[0] || pos.z > layout.scene.zaxis.range[1]) {
+				// trying to display Point out of canvas
+				// TODO maybe some dynamic alignment of layout in that case?
+				// for now: do nothing
+			}
 		}
 		return {
 			name:this.toString(),
@@ -131,33 +133,41 @@ function Line(dir,off) {
 		// dynamically generate data depending on layout
 		var param_top; //parameters from which to which data will be generated
 		var param_bot;
-		if(this.dir.x == 0) {
-			//check that the line goes in x dir
-			xyz.x = [this.off.x, this.off.x];
-			if(this.dir.y == 0) {
-				//check that the line goes in y dir
-				xyz.y = [this.off.y, this.off.y];
-				if(this.dir.z == 0) {
-					//check that the line goes in z dir
-					xyz.z = [this.off.z, this.off.z];
+		if(layout != undefined) {
+			if(this.dir.x == 0) {
+				//check that the line goes in x dir
+				xyz.x = [this.off.x, this.off.x];
+				if(this.dir.y == 0) {
+					//check that the line goes in y dir
+					xyz.y = [this.off.y, this.off.y];
+					if(this.dir.z == 0) {
+						//check that the line goes in z dir
+						xyz.z = [this.off.z, this.off.z];
+					}
+					else {
+						param_top = (layout.scene.zaxis.range[1] - this.off.z)/this.dir.z
+						param_bot = (layout.scene.zaxis.range[0] - this.off.z)/this.dir.z
+					}
 				}
 				else {
-					param_top = (layout.scene.zaxis.range[1] - this.off.z)/this.dir.z
-					param_bot = (layout.scene.zaxis.range[0] - this.off.z)/this.dir.z
+					param_top = (layout.scene.yaxis.range[1] - this.off.y)/this.dir.y
+					param_bot = (layout.scene.yaxis.range[0] - this.off.y)/this.dir.y
 				}
 			}
 			else {
-				param_top = (layout.scene.yaxis.range[1] - this.off.y)/this.dir.y
-				param_bot = (layout.scene.yaxis.range[0] - this.off.y)/this.dir.y
+				param_top = (layout.scene.xaxis.range[1] - this.off.x)/this.dir.x
+				param_bot = (layout.scene.xaxis.range[0] - this.off.x)/this.dir.x
 			}
 		}
 		else {
-			param_top = (layout.scene.xaxis.range[1] - this.off.x)/this.dir.x
-			param_bot = (layout.scene.xaxis.range[0] - this.off.x)/this.dir.x
+			//default to (0,1) as parameters for the line in case layout undefined
+			param_top=1;
+			param_bot=0;
 		}
 		xyz.x = [this.off.x + this.dir.x*param_bot, this.off.x + this.dir.x*param_top];
 		xyz.y = [this.off.y + this.dir.y*param_bot, this.off.y + this.dir.y*param_top];
 		xyz.z = [this.off.z + this.dir.z*param_bot, this.off.z + this.dir.z*param_top];
+
 		return {
 			name: this.toString(),
 			type:"scatter3d",
@@ -226,6 +236,7 @@ function Plane(normal,off) {
 			var zlim = layout.scene.zaxis.range;
 		}
 		else {
+			//default values
 			var xlim = [-1,1];
 			var ylim = [-1,1];
 			var zlim = [-1,1];
