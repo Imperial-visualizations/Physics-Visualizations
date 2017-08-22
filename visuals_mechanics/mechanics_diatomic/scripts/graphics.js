@@ -9,11 +9,14 @@ var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS,
 var a1,a2,mol1,potential;
 var zoom  = 45;
 var initKVib,initKRot;
+var inits1, inits2, inite1, inite2;
 var WHITE = 0xffffff;
 const GREEN = 0x66A40A;
 const IMPERIAL_BLUE = 0x003E74;
 const CHERRY = 0xE40043;
 var running = false;
+
+var mainLayer,traceLayer;
 /**
  * This function is the first function called when phaser starts and should only be used for initialising textures to be used
  * for sprites. All other code that should be called before the first update call should be placed in create. Not all phaser features have loaded
@@ -27,6 +30,11 @@ $('.inputs').each(function(){
 
     $(this).on('input',updateLabels);
 });
+
+/**
+ * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
+ * off the input field.
+ */
 
 /**
  * Play/stop button code.
@@ -54,6 +62,14 @@ function updateLabels(){
     reset();
 }
 
+function updateLJparams() {
+    inits1 = parseFloat($('#s1').text());
+    inits2 = parseFloat($('#s2').text());
+    inite1 = parseFloat($('#e1').text());
+    inite2 = parseFloat($('#e2').text());
+}
+
+
 /**
  * Function called after preload and before the first update call. Should be used for initialising objects and variables that will be used
  * in the simulation as well as for creating sprites. phaserInstance has fully loaded at this point so all phaser features can be used.
@@ -61,6 +77,9 @@ function updateLabels(){
 function create(){
     //phaserInstance.renderer.renderSession.roundedPixels = true;
     //Phaser.Canvas.setImageRenderingCrisp(phaserInstance.canvas);
+    traceLayer = phaserInstance.add.group();
+    mainLayer = phaserInstance.add.group();
+
 
     phaserInstance.canvasWidth = $("#phaser").width() * window.devicePixelRatio;
     phaserInstance.canvasHeight = $("#phaser").width() * window.devicePixelRatio;
@@ -71,10 +90,10 @@ function create(){
 
     phaserInstance.stage.backgroundColor = 0xEBEEEE;
 
-    potential = new LJ(2, 10, 2, 10);
     a1 = new Atom(1, 1, CHERRY);
     a2 = new Atom(1, 1, CHERRY);
 
+    updateLJparams();
     updateLabels();
 }
 
@@ -91,7 +110,7 @@ function addAtom(atom) {
     atomG.beginFill(atom.color,1);
     atomG.drawCircle(0,0,atom.radius*zoom);
 
-    var sprite = phaserInstance.add.sprite(0,0,atomG.generateTexture());
+    var sprite = mainLayer.create(0,0,atomG.generateTexture());
     sprite.anchor.set(0.5,0.5);
     atomG.destroy();
     return sprite;
@@ -126,6 +145,8 @@ plotPE();
 plotVibKE();
 
 function reset(){
+
+    potential = new LJ(inits1, inite1, inits2, inite2);
     mol1 = new Molecule(a1, a2, potential, initKVib, initKRot);
 
     a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
@@ -195,7 +216,7 @@ function drawLine(atom){
                     atom.pos[i].items[1]*zoom + phaserInstance.world.centerY);
     }
     if(typeof atom.lineSprite !== 'undefined') atom.lineSprite.destroy();
-    atom.lineSprite = phaserInstance.add.sprite(0,0,lineG.generateTexture());
+    atom.lineSprite = traceLayer.create(0,0,lineG.generateTexture());
     lineG.destroy();
 
 }
