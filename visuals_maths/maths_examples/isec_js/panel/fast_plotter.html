@@ -1,6 +1,8 @@
 <script src="./intersections.js"></script>
+<script src="./fast_plotter.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<!--
 <script>
 "use strict"
 var layout = {
@@ -40,40 +42,64 @@ $('#canvas').ready(function() {
   Plotly.newPlot('canvas',data,layout);
   var plotDiv = document.getElementById('canvas');
   console.log("data in plotDiv: ", plotDiv.data);
-  console.log("lookup: ", createAlgObjToUidLookup('canvas'));
-  console.log("findIdxByAlgObjId: ", findIdxByAlgObjId('canvas',line2.goify().algObjId));
-
-  function createAlgObjToUidLookup(plotDiv) {
-    // Construct a dictionary {algObjId: uid}
-    var plotData = document.getElementById(plotDiv).data;
-    var lookup = {};
-    for(var idx=0; idx<plotData.length; idx++) {
-      lookup[plotData[idx].algObjId] = plotData[idx].uid;
-    }
-    console.log("lookup dictionary: ",lookup);
-    return lookup;
-  }
-
-  function findIdxByUid(plotDiv,uid) {
-    /* Find trace position in plotDiv.data using uid;
-    returns appropriate index if found or -1 if not found */
-    var plotData = document.getElementById(plotDiv).data;
-    for (var idx=0; plotData.length;idx++) {
-      if(plotData[idx].uid == uid) {
-        return idx;
-      }
-    }
-    return -1;
-  }
-
-  function findIdxByAlgObjId(plotDiv,algObjId) {
-    /* Find trace position in plotDiv.data using algObjId
-    returns appropriate index if found or -1 if not found */
-    var lookup = createAlgObjToUidLookup(plotDiv);
-    return findIdxByUid(plotDiv, lookup[algObjId]);
-  }
-
+  console.log("lookup: ", _createAlgObjId2UidLookup('canvas'));
+  console.log("findIdxByAlgObjId: ", _findIdxByAlgObjId('canvas',line2.id));
+});
+</script>-->
+<script>
+$('#canvas').ready(function() {
+  var layout = {
+    scene: {
+      xaxis: {
+        range: [-10,10]
+      },
+      yaxis: {
+        range: [-10,10]
+      },
+      zaxis: {
+        range: [-10,10]
+      },
+      camera: {
+        up: {
+          x: 0,
+          y: 0,
+          z: 1
+        },
+        eye: {
+          x: -1.7428,
+          y: 1.0707,
+          z: 0.7100
+        }
+      },
+      aspectratio: {x: 1, y: 1, z: 1},
+    },
+    showlegend: false,
+    margin: {l:0,r:0,b:0,t:0}
+  };
+  var line1 = new Line(new Vector(1,-1,1), new Vector(0,2,-1));
+  var line2 = new Line(new Vector(3,1,-4), new Vector(-1,-2,-1));
+  var plane1 = new Plane(new Vector(0,2,-1),new Vector(1,-1,1));
+  var plot = new fastPlotHandler('canvas');
+  plot.init();
+  plot.setLayout(layout);
+  $('#add').click(function() {
+    plot.addAlgObj(line1);
+    plot.addAlgObj(line2);
+    plot.addAlgObj(plane1);
+  })
+  $('#delete').click(function() {
+    plot.deleteTrace(plane1.id);
+  })
+  $('#highlight').click(function() {
+    plot.highlightTraces([line1.id]);
+  })
+  $('#unhighlight').click(function() {
+    plot.unHighlight();
+  })
 });
 </script>
 <div id="canvas"></div>
-<input type="button"
+<a id="add">add line</a>
+<a id="highlight">highlight line</a>
+<a id="unhighlight">unhighlight</a>
+<a id="delete">delete plane</a>
