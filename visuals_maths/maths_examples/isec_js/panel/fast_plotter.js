@@ -1,8 +1,9 @@
 /*
 This script enables quick plotting of algObjs from intersections module.
-It works as long as the objects plotted provide 'id' field within their
+It works as long as the objects plotted provide 'algObjId' field within their
 'graphical object' (Plotly go) versions.
 */
+//dependencies: [Plotly, intersections.js]
 function fastPlotHandler(divHandle) {
   /* Fast plotter makes plotting easy! Keeps track internally of which trace is which object.*/
   this.handle = divHandle;
