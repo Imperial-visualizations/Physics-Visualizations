@@ -1,11 +1,14 @@
 "use strict";
+// Tells the browser to enter String Mode. read more on https://johnresig.com/blog/ecmascript-5-strict-mode-json-and-more/
 var objcounter = 0;
+
+// Defining Vector class.
 function Vector(x,y,z) {
 	/*Cartesian coordinates vector, defining basic vector operations (dot product, cross product etc.)*/
 	this.x = x;
 	this.y = y;
 	this.z = z;
-	this.allclose = function(other){
+	this.isEqualTo = function(other){
 		/*Use this to compare two vectors if they are equal. */
 		if(!(other instanceof Vector)) {
 			throw new Error("Argument error: Cannot compare Vector to no-vector.");
@@ -66,6 +69,8 @@ function Vector(x,y,z) {
 }
 const ZERO_VECTOR = new Vector(0.0,0.0,0.0); //Zero vector for later usew
 
+
+// Defining classes for point, line, and plane.
 function Point(pos) {
 	this.assignPos = function(pos) {
 		/* Points are defined by their position *pos* in 3d. */
@@ -98,7 +103,7 @@ function Point(pos) {
 	}
 	this.toString = function() {
 		if(this.hasOwnProperty('name')) {
-			return this.name;
+			return this.type.charAt(0).toUpperCase() + this.type.slice(1) + " "+this.name;
 		}
 		else {
 			return "Point(pos="+this.pos+")";
@@ -113,6 +118,7 @@ function Point(pos) {
 	console.log("New Alg Object: ", this); //notify when created
 	this.type = "point";
 }
+
 function Line(dir,off) {
 	/* Lines are defined by direction vector and offset vector. */
 	// keep track of original user input
@@ -193,7 +199,7 @@ function Line(dir,off) {
 	}
 	this.toString = function() {
 		if(this.hasOwnProperty('name')) {
-			return this.name;
+			return this.type.charAt(0).toUpperCase() + this.type.slice(1) + " "+this.name;
 		}
 		else {
 			//use usrDir and usrOff
@@ -323,7 +329,7 @@ function Plane(normal,off) {
 	}
 	this.toString = function() {
 		if(this.hasOwnProperty('name')) {
-			return this.name;
+			return this.type.charAt(0).toUpperCase() + this.type.slice(1) + " "+this.name;
 		}
 		else {
 			return "Plane(normal="+this.usrNormal+",off="+this.usrOff+")";
@@ -341,6 +347,8 @@ function Plane(normal,off) {
 	this.type = "plane";
 }
 
+
+// Defining Customized Error Types
 function NoIntersectionError(message){
 	this.message = message;
 }
@@ -351,6 +359,7 @@ function NotImplementedError(message){
 }
 NotImplementedError.prototype = new Error();
 
+// Calculate intersections between 2 objects.
 function intersect(obj1, obj2) {
 	var ans;
 	//plane-plane
@@ -389,17 +398,99 @@ function intersect(obj1, obj2) {
 	else {
 		throw new TypeError("Argument error: intersect can only take Point, Line and Plane arguments.")
 	}
-	ans.name = obj1.toString()+" & "+obj2.toString();
+	ans.name = "("+obj1.name+" intersects "+obj2.name+")";
 	return ans;
+}
+
+// Calculate intersections between multiple objects.
+function getGen(a) {
+	var points = [];
+	var lines = [];
+	var planes = [];
+	for (var idx=0; idx<a.length; idx++) {
+		for (var other=idx+1; other<a.length; other++) {
+			try {
+				var toPush = intersect(a[idx],a[other]);
+				if(toPush instanceof Point) {
+					points.push(toPush);
+				}
+				if(toPush instanceof Line) {
+					lines.push(toPush);
+				}
+				if(toPush instanceof Plane) {
+					planes.push(toPush);
+				}
+			}
+			catch(err) {
+				console.log(err);
+				log(err.message);
+			}
+		}
+	}
+	var ans = {'points': points, 'lines': lines, 'planes': planes};
+	return ans;
+}
+function whereInArray(algObj,array) {
+	for(var idx=0;idx<array.length;idx++) {
+		var one = algObj;
+		var other = array[idx];
+		if(one instanceof Point && other instanceof Point) {
+			if(one.pos.isEqualTo(other.pos)) {
+				return idx;
+			}
+		}
+		if(one instanceof Line && other instanceof Line) {
+			if( ( one.dir.isEqualTo(other.dir) || one.dir.isEqualTo(other.dir.mul(-1)) ) && one.off.isEqualTo(other.off) ) {
+				return idx;
+			}
+		}
+		if(one instanceof Plane && other instanceof Plane) {
+			if( ( one.normal.isEqualTo(other.normal) || one.normal.isEqualTo(other.normal.mul(-1)) ) && one.off.isEqualTo(other.off) ) {
+				return idx;
+			}
+		}
+	}
+	return -1; //no success in finding
+}
+function reduceAlgObjArray(array) {
+	//remove copies from array of algObjs
+	var ans=[]
+	for(var idx=0;idx<array.length;idx++) {
+		var position = whereInArray(array[idx],ans);
+		if(position==-1) {
+			// if the object is not in ans array
+			ans.push(array[idx])
+		}
+	}
+	return ans;
+	/*
+	function whereInArrayTest() {
+	// whereInArray unit test
+	var line1 = new Line(new Vector(1,1,0), new Vector(-1,0,0));
+	var line2 = new Line(new Vector(1,0,1), new Vector(0,0,1));
+	var line3 = new Line(new Vector(1,0,0), new Vector(-3,0,1));
+	var plane1 = new Plane(new Vector(1,0,1), new Vector(0,0,1));
+	var arr = [line1,line2,plane1,line2];
+	var test1=(whereInArray(line1,arr)==0);
+	console.log("where in array 1. ",test1);
+	var test2=(whereInArray(line2,arr)==1);
+	console.log("where in array 2. ",test2);
+	var test3=(whereInArray(plane1,arr)==2);
+	console.log("where in array 3. ",test3);
+	test4=(whereInArray(line3,arr)==-1);
+	console.log("where in array 4. ",test4)
+	return [test1,test2,test3,test4]
+}
+*/
 }
 
 function intersectList(array) {
 	// Intersect many elements together.
-	console.log("new version intersectList called")
+	console.log("new version intersectList called");
 	var isec;
 	var gen_1, gen_2, gen_3; //three generations of intersections
 	isec = getGen(array);
-	gen_1 = reduceAlgObjArray(isec.points.concat(isec.lines.concat(isec.planes)))
+	gen_1 = reduceAlgObjArray(isec.points.concat(isec.lines.concat(isec.planes)));
 	console.log("gen_1", gen_1);
 	isec = getGen(gen_1);
 	gen_2 = reduceAlgObjArray(isec.points.concat(isec.lines));
@@ -408,87 +499,7 @@ function intersectList(array) {
 	gen_3 = reduceAlgObjArray(isec.points);
 	console.log("gen_3", gen_3);
 	return reduceAlgObjArray(array.concat(gen_1.concat(gen_2.concat(gen_3))));
-	function getGen(a) {
-		var points = [];
-		var lines = [];
-		var planes = [];
-		for (var idx=0; idx<a.length; idx++) {
-			for (var other=idx+1; other<a.length; other++) {
-				try {
-					var toPush = intersect(a[idx],a[other]);
-					if(toPush instanceof Point) {
-						points.push(toPush);
-					}
-					if(toPush instanceof Line) {
-						lines.push(toPush);
-					}
-					if(toPush instanceof Plane) {
-						planes.push(toPush);
-					}
-				}
-				catch(err) {
-					console.log(err)
-					//do nothing
-				}
-			}
-		}
-		var ans = {'points': points, 'lines': lines, 'planes': planes};
-		return ans;
-	}
 
-	function reduceAlgObjArray(array) {
-		//remove copies from array of algObjs
-		function whereInArray(algObj,array) {
-			for(var idx=0;idx<array.length;idx++) {
-				var one = algObj;
-				var other = array[idx];
-				if(one instanceof Point && other instanceof Point) {
-					if(one.pos.allclose(other.pos)) {
-						return idx;
-					}
-				}
-				if(one instanceof Line && other instanceof Line) {
-					if( ( one.dir.allclose(other.dir) || one.dir.allclose(other.dir.mul(-1)) ) && one.off.allclose(other.off) ) {
-						return idx;
-					}
-				}
-				if(one instanceof Plane && other instanceof Plane) {
-					if( ( one.normal.allclose(other.normal) || one.normal.allclose(other.normal.mul(-1)) ) && one.off.allclose(other.off) ) {
-						return idx;
-					}
-				}
-			}
-			return -1; //no success in finding
-		}
-		var ans=[]
-		for(var idx=0;idx<array.length;idx++) {
-			var position = whereInArray(array[idx],ans);
-			if(position==-1) {
-				// if the object is not in ans array
-				ans.push(array[idx])
-			}
-		}
-		return ans;
-		/*
-		function whereInArrayTest() {
-		// whereInArray unit test
-		var line1 = new Line(new Vector(1,1,0), new Vector(-1,0,0));
-		var line2 = new Line(new Vector(1,0,1), new Vector(0,0,1));
-		var line3 = new Line(new Vector(1,0,0), new Vector(-3,0,1));
-		var plane1 = new Plane(new Vector(1,0,1), new Vector(0,0,1));
-		var arr = [line1,line2,plane1,line2];
-		var test1=(whereInArray(line1,arr)==0);
-		console.log("where in array 1. ",test1);
-		var test2=(whereInArray(line2,arr)==1);
-		console.log("where in array 2. ",test2);
-		var test3=(whereInArray(plane1,arr)==2);
-		console.log("where in array 3. ",test3);
-		test4=(whereInArray(line3,arr)==-1);
-		console.log("where in array 4. ",test4)
-		return [test1,test2,test3,test4]
-	}
-	*/
-}
 }
 
 function _point_point_intersect(obj1, obj2) {
@@ -499,7 +510,7 @@ function _point_point_intersect(obj1, obj2) {
 		//renaming variables
 		var pos1 = obj1.pos;
 		var pos2 = obj2.pos;
-		if(pos1.allclose(pos2)) {
+		if(pos1.isEqualTo(pos2)) {
 			// Point of intersection found
 			return new Point(new Vector(pos1.x,pos1.y,pos1.z));
 		}
@@ -530,11 +541,11 @@ function _line_point_intersect(obj1, obj2) {
 		*/
 		var off_diff = point.pos.add( line.off.mul(-1) );
 		var cross = line.dir.cross(off_diff);
-		if(cross.allclose(ZERO_VECTOR)) {
+		if(cross.isEqualTo(ZERO_VECTOR)) {
 			return new Point(new Vector(point.pos.x,point.pos.y,point.pos.z));
 		}
 		else {
-			throw new NoIntersectionError("Point "+point.toString()+" does not intersect Line "+line.toString()+".")
+			throw new NoIntersectionError(""+point.toString()+" does not intersect "+line.toString()+".")
 		}
 	}
 }
@@ -556,7 +567,7 @@ function _line_line_intersect(obj1, obj2) {
 		var line1 = obj1;
 		var line2 = obj2;
 		var cross = line1.dir.cross(line2.dir); //perpendicular to both lines
-		if(cross.allclose(ZERO_VECTOR)) {
+		if(cross.isEqualTo(ZERO_VECTOR)) {
 			//lines parallel
 			try {
 				intersect(line2, new Point(line1.off)); //this will throw NoIntersectionError if they are not identical
@@ -564,7 +575,7 @@ function _line_line_intersect(obj1, obj2) {
 			}
 			catch(err) {
 				if(err instanceof NoIntersectionError) {
-					throw new NoIntersectionError("Line "+line1.toString()+" and Line "+ toString() + " are parallel, not identical.")
+					throw new NoIntersectionError(""+line1.toString()+" and "+ toString() + " are parallel, not identical.")
 				}
 				else {
 					throw err;
@@ -582,7 +593,7 @@ function _line_line_intersect(obj1, obj2) {
 			var dist = Math.abs(s.dot(cross)); //distance between lines
 			//console.log("distance between lines: ", dist)
 			if (Math.abs(dist) < 1e-6) {
-				if(s.allclose(ZERO_VECTOR)) {
+				if(s.isEqualTo(ZERO_VECTOR)) {
 					// Sample is zero, so this must be the intersection
 					return new Point(d2);
 				}
@@ -594,7 +605,7 @@ function _line_line_intersect(obj1, obj2) {
 				return new Point(d2.add(v2.mul(param)));
 			}
 			else {
-				throw new NoIntersectionError("Line "+line1.toString()+" and Line "+ toString() + " are skew.")
+				throw new NoIntersectionError(""+line1.toString()+" and "+ line2.toString() + " are skew.")
 			}
 		}
 	}
@@ -612,7 +623,7 @@ function _plane_point_intersect(obj1, obj2) {
 			return new Point(new Vector(point.pos.x,point.pos.y,point.pos.z));
 		}
 		else {
-			throw new NoIntersectionError("Plane " + plane.toString() + " and Point " + point.toString() + " do not intersect.")
+			throw new NoIntersectionError("" + plane.toString() + " and " + point.toString() + " do not intersect.")
 		}
 	}
 }
@@ -636,7 +647,7 @@ function _plane_line_intersect(obj1,obj2) {
 				if(err instanceof NoIntersectionError) {
 					//console.log("plane and line - no overlap, parallel")
 					//do not overlap
-					throw new NoIntersectionError("Plane "+plane.toString()+" and Line " + line.toString() + " are parallel.");
+					throw new NoIntersectionError(""+plane.toString()+" and " + line.toString() + " are parallel.");
 				}
 				else {
 					console.error(err)
@@ -653,17 +664,19 @@ function _plane_line_intersect(obj1,obj2) {
 		}
 	}
 }
-
+function det(mat) {
+	//2x2 matrix determinant
+	return mat[0][0]*mat[1][1] - mat[0][1]*mat[1][0];
+}
 function _plane_plane_intersect(obj1,obj2) {
 	if(!(obj1 instanceof Plane) || !(obj2 instanceof Plane)) {
-		throw new TypeError("Argument error: _plane_plane_intesect can only take arguments of type Plane and Plane.")
-	}
-	else {
+		throw new TypeError("Argument error: _plane_plane_intesect can only take arguments of type Plane and Plane.");
+	} else {
 		//rename
 		var p1 = obj1;
 		var p2 = obj2;
 		var cross = p2.normal.cross(p1.normal);
-		if(cross.allclose(ZERO_VECTOR)) {
+		if(cross.isEqualTo(ZERO_VECTOR)) {
 			//planes are parallel or overlap
 			//if they overlap then the offset of one plane lies on the other
 			try {
@@ -678,57 +691,42 @@ function _plane_plane_intersect(obj1,obj2) {
 					throw err; //generic error; keep as it is
 				}
 			}
-		}
-		else {
+		} else {
 			//console.log("plane-plane intersection case")
 			//ok, so there is an intersection
 			//premise: the line has to intersect at least one of the planes: xy, yz, or xz.
-			function det(mat) {
-				//2x2 matrix determinant
-				return mat[0][0]*mat[1][1] - mat[0][1]*mat[1][0];
-			}
+
 			//we will solve by cramer's rule
-			var coeffMatrix_nox = [[p1.normal.y,p1.normal.z],
-			[p2.normal.y,p2.normal.z]]
-			var coeffMatrix_noy = [[p1.normal.x,p1.normal.z],
-			[p2.normal.x,p2.normal.z]]
-			var coeffMatrix_noz = [[p1.normal.x,p1.normal.y],
-			[p2.normal.x,p2.normal.y]]
-			var rhs = [p1.normal.dot(p1.off),
-				p2.normal.dot(p2.off)];
-				//try no x
-				var determinant = det(coeffMatrix_nox);
+			var coeffMatrix_nox = [[p1.normal.y,p1.normal.z],[p2.normal.y,p2.normal.z]];
+			var coeffMatrix_noy = [[p1.normal.x,p1.normal.z],[p2.normal.x,p2.normal.z]];
+			var coeffMatrix_noz = [[p1.normal.x,p1.normal.y],[p2.normal.x,p2.normal.y]];
+			var rhs = [p1.normal.dot(p1.off),p2.normal.dot(p2.off)];
+			//try no x
+			var determinant = det(coeffMatrix_nox);
+			if(determinant != 0 ) {
+				//console.log("case no-x")
+				var y = det( [[rhs[0],p1.normal.z],[rhs[1],p2.normal.z]] ) / determinant;
+				var z = det( [[p1.normal.y,rhs[0]],[p2.normal.y,rhs[1]]] ) / determinant;
+				return new Line(cross, new Vector(0,y,z)); //return answer straight away
+			} else {
+				//no x failed; try no y
+				var determinant = det(coeffMatrix_noy);
 				if(determinant != 0 ) {
-					//console.log("case no-x")
-					var y = det([[rhs[0],p1.normal.z],
-						[rhs[1],p2.normal.z]])/determinant;
-						var z = det([[p1.normal.y,rhs[0]],
-							[p2.normal.y,rhs[1]]])/determinant;
-							return new Line(cross, new Vector(0,y,z)); //return answer straight away
-						}
-						else {
-							//no x failed; try no y
-							var determinant = det(coeffMatrix_noy);
-							if(determinant != 0 ) {
-								//console.log("case no-y")
-								var x = det([[rhs[0],p1.normal.z],
-									[rhs[1],p2.normal.z]])/determinant;
-									var z = det([[p1.normal.x,rhs[0]],
-										[p2.normal.x,rhs[1]]])/determinant;
-										return new Line(cross, new Vector(x,0,z)); //return answer
-									}
-									else {
-										//x and y failed; z must work
-										var determinant = det(coeffMatrix_noz);
-										if(determinant != 0 ) {
-											//console.log("case no-z")
-											var x = det([[rhs[0],p1.normal.y],
-												[rhs[1],p2.normal.y]])/determinant;
-												var y = det([[p1.normal.x,rhs[0]],[p2.normal.x,rhs[1]]])/determinant;
-												return new Line(cross, new Vector(x,y,0)); //return answer
-											}
-										}
-									}
-								}
-							}
-						}
+					//console.log("case no-y")
+					var x = det( [[rhs[0],p1.normal.z],[rhs[1],p2.normal.z]] ) / determinant;
+					var z = det( [[p1.normal.x,rhs[0]],[p2.normal.x,rhs[1]]] ) / determinant;
+					return new Line(cross, new Vector(x,0,z)); //return answer
+				} else {
+					//x and y failed; z must work
+					var determinant = det(coeffMatrix_noz);
+					if(determinant != 0 ) {
+						//console.log("case no-z")
+						var x = det( [[rhs[0],p1.normal.y],[rhs[1],p2.normal.y]] ) / determinant;
+						var y = det( [[p1.normal.x,rhs[0]],[p2.normal.x,rhs[1]]] ) / determinant;
+						return new Line(cross, new Vector(x,y,0)); //return answer
+					}
+				}
+			}
+		}
+	}
+}
