@@ -39,15 +39,41 @@
 <div class="container">
     <div class="row" style="margin-bottom: 12px;">
         <div class="twelve columns">
-            <div id="phaser" class="eight columns">
+            <div class="seven columns">
+                <div id="phaser" style="padding-bottom: 7px"></div>
+                <em><a for="#LJ_scatter" class="showHideButton">Hide </a></em> <a>LJ potential</a>
+                <div class="expand twelve columns">
+                    <div id="LJ_scatter" style="width:100%; height: 320px"></div>
+                </div>
+
+                <div class="row">
+                    <div class="four columns">
+                        <h5 class="titleAtomA">Atom A</h5>
+                        <span>&sigma; = </span>      <a class="txt" id="s1" data-change title="&sigma;">2</a> <span><em>nm</em></span>
+                        <br>
+                        <span>&epsilon; = </span>    <a class="txt" id="e1" data-change title="&epsilon;">10</a> <span><em>eV</em></span>
+                    </div>
+
+                    <div class="four columns">
+                        <h5 class="titleAtomB">Atom B</h5>
+                        <span>&sigma; = </span>    <a id="s2" class="txt" data-change title="&sigma;">2</a> <span><em>nm</em></span>
+                        <br>
+                        <span>&epsilon; = </span>  <a id="e2" class="txt" data-change title="&epsilon;">10</a> <span><em>eV</em></span>
+                    </div>
+
+                    <div class="four columns">
+                        <br>
+                        <button id="submitLJ" class="inputs">Update LJ</button>
+                    </div>
+                </div>
             </div>
 
-            <div class="four columns">
+            <div class="five columns">
                 <h4 class="titleKE">Kinetic Energies</h4>
 
                 <!-- Vib KE slider -->
                 <label class="sliderTitle">Vibrational:
-                    <span id="vibKEDisplay" data-unit="eV">2 eV</span>
+                    <span id="vibKEDisplay" data-unit="eV">0 eV</span>
                 </label>
                 <label class="slider">
                     <input id="vibKE" class="inputs" title="Vib KE" type="range" value="0" min="0" max="10.0" step="0.1"/>
@@ -65,71 +91,28 @@
 
                 <!-- Vib KE Graph Plotly -->
                 <em><a for="#graphVibE" class="showHideButton">Hide </a></em> <a>KE<sub>vib</sub></a>
-                <div id="graphVibE" class="expand" style="height: 350px; width: 300px; padding-bottom: 10px;">
+                <div id="graphVibE" class="expand" style="height: 300px; width: 470px; padding-bottom: 5px;">
                 </div>
                 <br>
 
                 <!-- Rot KE Graph Plotly -->
                 <em><a for="#graphRotE" class="showHideButton">Hide </a></em> <a>KE<sub>rot</sub></a>
-                <div id="graphRotE" class="expand" style="height: 350px; width: 300px; padding-bottom: 10px;">
+                <div id="graphRotE" class="expand" style="height: 300px; width: 470px; padding-bottom: 5px;">
                 </div>
                 <br>
 
                 <!-- PE Graph Plotly -->
                 <em><a for="#graphPotE" class="showHideButton">Hide </a></em> <a>PE</a>
-                <div id="graphPotE" class="expand" style="height: 350px; width: 300px; padding-bottom: 10px;">
+                <div id="graphPotE" class="expand" style="height: 300px; width: 470px; padding-bottom: 5px;">
                 </div>
 
                 <br>
                 <button id="playPauseButton">Play</button>
             </div>
-
         </div>
-    </div>
-
-    <!-- Lennard-Jones potential Plotly graph -->
-    <div class="row" style="margin-bottom: 10px">
-        <div class="twelve columns">
-            <em><a for="#LJ_scatter" class="showHideButton">Hide </a></em> <a>LJ potential</a>
-            <div class="expand">
-                <div id="LJ_scatter" style="width:75%; height: 480px">
-                    <script>
-                    </script>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Atom A LJ params -->
-    <div class="row">
-        <h4 class="titleAtomA">Atom A</h4>
-        <div class="twelve columns">
-            <div class="six columns">
-                <span>&sigma; = </span>      <a class="txt" id="s1" data-change title="&sigma;">2</a> <span><em>nm</em></span>
-            </div>
-
-            <div class="six columns">
-                <span>&epsilon; = </span>    <a class="txt" id="e1" data-change title="&epsilon;">10</a> <span><em>eV</em></span>
-                <br>
-            </div>
-        </div>
-    </div>
-
-    <!-- Atom B LJ params -->
-    <div class="row">
-        <h4 class="titleAtomB">Atom B</h4>
-        <div class="twelve columns">
-            <div class="six columns">
-                <span>&sigma; = </span>    <a id="s2" class="txt" data-change title="&sigma;">2</a> <span><em>nm</em></span>
-            </div>
-
-            <div class="six columns">
-                <span>&epsilon; = </span>  <a id="e2" class="txt" data-change title="&epsilon;">10</a> <span><em>eV</em></span>
-            </div>
-        </div>
-        <button id="submitLJ" class="inputs">Update LJ</button>
     </div>
 </div>
+
 <script src=https://code.jquery.com/jquery-latest.min.js></script>
 <script src = "https://github.com/photonstorm/phaser-ce/releases/download/v2.8.3/phaser.min.js"></script>
 <script src="./scripts/graphics.js"></script>
@@ -144,11 +127,6 @@
         $($(this).attr("for")).slideToggle("fast");
     });
 
-    $(window).on("load", function(){
-        $('#LJ_scatter').fadeIn(100);
-        $('#phaser').fadeIn(500);
-    } );
-
     /**
  * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
  * off the input field.
@@ -161,7 +139,7 @@ $('body').on('click', '[data-change]', function() {
     var $el_id = $(this).attr("id");
 
     // Creating input form.
-    var $input = $('<input/>').val($element.text());
+    var $input = $('<input style="width: 50%;"/>').val($element.text());
     $input.attr("id", $el_id);                                  // Setting ID attribute (same as text).
     $input.attr("title", $title);                               // Setting title attribute (same as text).
     $element.replaceWith($input);                               // Replacing text with input form.
@@ -179,38 +157,6 @@ $('body').on('click', '[data-change]', function() {
     $input.one('blur', save).focus();
 });
 
-</script>
-
-<script>
-    /**
-     * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
-     * off the input field.
-     */
-    $('body').on('click', '[data-change]', function() {
-
-        // Storing current element and its attributes.
-        var $element = $(this);
-        var $title = $(this).attr("title");
-        var $el_id = $(this).attr("id");
-
-        // Creating input form.
-        var $input = $('<input/>').val($element.text());
-        $input.attr("id", $el_id);                                  // Setting ID attribute (same as text).
-        $input.attr("title", $title);                               // Setting title attribute (same as text).
-        $element.replaceWith($input);                               // Replacing text with input form.
-
-        var save = function save() {
-            var $a = $('<a data-change />').text($input.val());
-
-            // Restoring text with same attributes as original.
-            $a.attr("title", $title);
-            $a.attr("id", $el_id);
-            $input.replaceWith($a);
-        };
-
-        // When clicking away from element (blurring), revert from input form to text.
-        $input.one('blur', save).focus();
-    });
 </script>
 </body>
 </html>

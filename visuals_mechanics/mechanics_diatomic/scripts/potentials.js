@@ -9,7 +9,7 @@ var isNumber = function (n) {
 
 /**
  * Lennard-Jones potential class. If sigma2 and epsilon2 not provided, assuming atom 1 and atom 2 are identical.
- * @param sigma: Radius where potential is 0 for a1-a1 diatom.
+ * @param sigma: Separation where potential is 0 for a1-a1 diatom.
  * @param epsilon: Potential at equilibrium distance for a1-a1 diatom.
  * @param sigma2: LJ param sigma for a2-a2 diatom.
  * @param epsilon2: Lj param epsilon for a2-a2 diatom.
@@ -22,26 +22,25 @@ LJ = function (sigma, epsilon, sigma2, epsilon2) {
         console.error("Error! Sigma and Epsilon values invalid!");
     }
     // LJ parameters initialisation for Atom 1.
-    this.s1 = sigma;
-    this.e1 = epsilon;
+    var s1 = sigma;
+    var e1 = epsilon;
+
+    var s2, e2;
 
     // Heterogeneous diatomic molecule.
     if (isNumber(sigma2) && isNumber(epsilon2)){
         // LJ parameters for Atom 2.
-        this.s2 = sigma2;
-        this.e2 = epsilon2;
+        s2 = sigma2;
+        e2 = epsilon2;
     }
 
     else {
-        this.s2 = this.s1;
-        this.e2 = this.e1;
+        s2 = s1;
+        e2 = e1;
     }
 
-    this.setParams(this.s1, this.e1, this.s2, this.e2);
-};
-
-LJ.prototype.setParams = function(s1, e1, s2, e2) {
-    this.s = (s1 + s2 / 2);
+    // Calculating combined LJ parameters.
+    this.s = (s1 + s2) / 2;
     this.e = Math.sqrt(e1 * e2);
 };
 
@@ -73,5 +72,5 @@ LJ.prototype.plotPoints = function(ppu) {
         r.push(i / ppu);
         v.push(this.calcV(i / ppu));
     }
-    return {x: r, y: v, name: "LJ potential", mode: "lines", marker: {size: 2, opacity: 0.5}, line: {width: 1}}
+    return {x: r, y: v, name: "LJ potential", mode: "lines", line: {width: 1, opacity: 0.8, color: "#003E74"}}
 };

@@ -117,33 +117,37 @@ var arrVibKE = [];
 var LJ_scatter;
 var curr_LJ;
 var LJ_layout;
-var EPlotsLayout = {yaxis: {title: "Energy / eV"}, xaxis: {title: "t / s"}};
+var EPlotsLayout = {yaxis: {title: "Energy / eV"}, xaxis: {title: "t / s"}, autosize: true};
 
 function plotRotKE() {
     var layout = EPlotsLayout;
-    layout.title = "Rotational KE";
-    Plotly.newPlot("graphRotE", {data: [{x: arrTime, y: arrRotKE}], traces: [0], layout: layout},
-        {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
+    layout.title = "KE" + "rot".sub() + " against Time";
+    Plotly.newPlot("graphRotE", {data: [{x: arrTime, y: arrRotKE, mode: "lines", line: {width: 2, color: "#66A40A"}}],
+            traces: [0], layout: layout},
+            {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
 }
 
 function plotPE() {
     var layout = EPlotsLayout;
-    layout.title = "Potential Energy";
-    Plotly.newPlot("graphPotE", {data: [{x: arrTime, y: arrPE}], traces: [0], layout: layout},
-        {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
+    layout.title = "PE against Time";
+
+    Plotly.newPlot("graphPotE", {data: [{x: arrTime, y: arrPE, mode: "lines", line: {width: 2, color: "#003E74"}}],
+            traces: [0], layout: layout},
+            {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
 }
 
 function plotVibKE() {
     var layout = EPlotsLayout;
-    layout.title = "Vibrational KE";
-    Plotly.newPlot("graphVibE", {data: [{x: arrTime, y: arrVibKE}], traces: [0], layout: layout},
-        {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
+    layout.title = "KE" + "vib".sub() + " against Time";
+    Plotly.newPlot("graphVibE", {data: [{x: arrTime, y: arrVibKE, mode: "lines", line: {width: 2, color: "#FFDD00"}}],
+            traces: [0], layout: layout},
+            {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
 }
 
 function plotLJ() {
     LJ_layout = {title: "Lennard-Jones Potential",
                 yaxis: {range: [-1.1 * potential.e, potential.e], title: "LJ Potential / eV"},
-                xaxis: {range: [0, 3 * potential.s], title: "r / nm"}};
+                xaxis: {range: [0, 3 * potential.s], title: "r" + "AB".sub() + " / nm"}};
 
     // Remove all points outside visible range on graph.
     while (LJ_scatter.y[0] > LJ_layout.yaxis.range[1]) {
@@ -153,7 +157,8 @@ function plotLJ() {
     LJ_layout.yaxis.range[1] = LJ_scatter.y[0];     // Re-optimising y-axis scaling.
 
     var curr_sep = mol1.r.mag(); var curr_V = potential.calcV(curr_sep);
-    curr_LJ = {x: [curr_sep], y: [curr_V], name: "Current LJ", mode: "markers", marker: {size: 10, color: "red"}};
+    curr_LJ = {x: [curr_sep], y: [curr_V], name: "Current LJ", mode: "markers",
+        marker: {size: 10, color: CHERRY, symbol: "circle-open"}};
 
     Plotly.newPlot("LJ_scatter", {data: [LJ_scatter, curr_LJ], traces: [0, 1], layout: LJ_layout},
         {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
@@ -235,17 +240,18 @@ function update(){
             arrPE.shift();
         }
 
-        Plotly.restyle("graphVibE", {data: [{x: arrTime, y: arrVibKE}], traces: [0]},
-            {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
+        Plotly.restyle("graphVibE", {data: [{x: arrTime, y: arrVibKE}],
+                traces: [0]},
+                {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
 
         Plotly.restyle("graphRotE", {data: [{x: arrTime, y: arrRotKE}], traces: [0]},
-            {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
+                {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
 
         Plotly.restyle("graphPotE", {data: [{x: arrTime, y: arrPE}], traces: [0]},
-            {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
+                {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
 
-        Plotly.restyle("LJ_scatter", {data: [LJ_scatter, curr_LJ], traces: [0, 1], layout: LJ_layout},
-            {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
+        Plotly.restyle("LJ_scatter", {data: [LJ_scatter, curr_LJ], traces: [0, 1]},
+                {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
     }
 }
 function drawLine(atom){
