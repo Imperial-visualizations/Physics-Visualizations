@@ -1,8 +1,7 @@
 var width = 800;
 var height = 480;
-var phaser_id = "#phaser";
-width = $(phaser_id).width() * window.devicePixelRatio;
-height = $(phaser_id).width() * window.devicePixelRatio;
+width = $("#phaser").width() * window.devicePixelRatio;
+height = $("#phaser").width() * window.devicePixelRatio;
 
 var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS,
     "phaser",{preload: preload,create: create,update: update});
@@ -77,8 +76,8 @@ function create(){
     mainLayer = phaserInstance.add.group();
 
 
-    phaserInstance.canvasWidth = $(phaser_id).width() * window.devicePixelRatio;
-    phaserInstance.canvasHeight = $(phaser_id).width() * window.devicePixelRatio;
+    phaserInstance.canvasWidth = $("#phaser").width() * window.devicePixelRatio;
+    phaserInstance.canvasHeight = $("#phaser").width() * window.devicePixelRatio;
     phaserInstance.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
     phaserInstance.scale.setUserScale(1 / window.devicePixelRatio, 1 / window.devicePixelRatio);
     phaserInstance.renderer.renderSession.roundPixels = true;
@@ -168,6 +167,26 @@ plotRotKE();
 plotPE();
 plotVibKE();
 
+function drawBond(starting,end){
+    var widthOfSpring = end.subtract(starting).mag()*zoom; // The distance between atomes.
+    console.log(widthOfSpring);
+    var heightOfSpring = zoom;
+    var arrowG = phaserInstance.add.graphics(0,0);
+    var wiggles = 3;
+    arrowG.lineStyle(5,IMPERIAL_BLUE,1);
+    arrowG.lineTo(widthOfSpring/(wiggles*4),0);
+    for (var i = 2; i<wiggles*4 -1; i+=2) {
+    arrowG.lineTo(i*widthOfSpring/(wiggles*4), ((i%4)-1)*heightOfSpring/2);
+    }
+    arrowG.lineTo(((wiggles*4)-1)*widthOfSpring/(wiggles*4), 0);
+    arrowG.lineTo((wiggles*4)*widthOfSpring/(wiggles*4), 0);
+    if(typeof mol1.bondSprite !== 'undefined') mol1.bondSprite.destroy();
+    mol1.bondSprite = traceLayer.create(phaserInstance.world.centerX, phaserInstance.world.centerY,arrowG.generateTexture());
+    mol1.bondSprite.anchor.set(0.5,0.5);
+    mol1.bondSprite.angle = Phaser.Math.RAD_TO_DEG * Math.atan2(end.subtract(starting).items[1],end.subtract(starting).items[0]);
+    arrowG.destroy();
+}
+
 function reset(){
 
     // Creating new LJ potential
@@ -175,7 +194,11 @@ function reset(){
 
     // Creating x and y coordinates to plot.
     LJ_scatter  = potential.plotPoints(100);
-
+    if(typeof mol1 !== 'undefined'){
+        if(typeof mol1.bondSprite !== 'undefined'){
+            mol1.bondSprite.destroy();
+        }
+    }
     // Creating new molecule with atoms and instantiated potential. KEs entered by users using sliders.
     mol1 = new Molecule(a1, a2, potential, initKVib, initKRot);
 
@@ -208,8 +231,7 @@ function update(){
         a2.sprite.y = a2.getPos().items[1] * zoom + phaserInstance.world.centerY;
         drawLine(a1);
         drawLine(a2);
-
-
+        drawBond(a1.getPos(),a2.getPos());
         // Calculate Rotational KE and update array.
         var rotKE = 0.5 * mol1.I * Math.pow(mol1.omega, 2);
         arrRotKE.push(rotKE);

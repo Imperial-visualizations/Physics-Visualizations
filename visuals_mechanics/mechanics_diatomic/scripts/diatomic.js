@@ -49,6 +49,8 @@ Atom.prototype.setPos = function(newPos){
 Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
     a1.pos = [];
     a2.pos = [];
+
+    var bondSprite;
     // Checking objects of class Atom passed in in the list.
     if (a1.constructor !== Atom || a2.constructor !== Atom){
         console.error("Can't run simulation without two valid atom objects");
@@ -65,7 +67,7 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
 
     this.init_r_0 = function () {
         var val = this.V.getR_0();
-        for (var i =0; i < 10; i++) {
+        for (var i =0; i < 100; i++) {
             val -= (this.reducedM * Math.pow(this.omega, 2) * Math.pow(val, 14)
                     - 12 * this.V.e * Math.pow(this.V.getR_0() * val, 6) + 12 * this.V.e * Math.pow(this.V.getR_0(), 12))/
                     (14 * this.reducedM * Math.pow(this.omega, 2) * Math.pow(val,13)- 72 * this.V.e * Math.pow(val, 5) *
@@ -74,7 +76,7 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
         return val;
     };
 
-    this.I = this.reducedM * Math.pow(this.V.getR_0(), 2);      // Calculate initial Moment of Inertia.
+    this.I =  Math.pow(this.V.getR_0(), 2)/4 + this.tot_m;      // Calculate initial Moment of Inertia.
     this.omega = Math.sqrt(2 * keRot_0 / this.I);               // Calculate initial angular velocity.
     this.L = this.I * this.omega;                               // Calculate angular momentum (conserved).
     this.r = new Vector([1, 0]).multiply(this.init_r_0());      // Initial radius, due to centrifugal distortion
@@ -102,6 +104,8 @@ Molecule.prototype.update = function(deltaTime){
     this.calcRotCoords(deltaTime);
     this.calcExtCoords(deltaTime);
 
+    console.log("Total E: " + this.getTotalE().toString());
+
     // Update atom coordinates in CoM frame.
     a1.setPos(this.r.multiply(a1.mass / this.tot_m));
     a2.setPos(this.r.multiply(-a2.mass / this.tot_m));
@@ -114,6 +118,10 @@ Molecule.prototype.updateVibKE = function (vibKE) {
 Molecule.prototype.updateRotKE = function (rotKE) {
     this.omega = Math.sqrt(2 * rotKE / this.I);
     this.L = this.I * this.omega;
+};
+
+Molecule.prototype.getTotalE = function(){
+    return 0.5 * this.I*Math.pow(this.omega,2) + 0.5*this.reducedM*Math.pow(this.v,2) + this.V.calcV(this.r.mag());
 };
 
 /**
@@ -140,7 +148,7 @@ Molecule.prototype.calcRotCoords = function(dt) {
  * @returns {number} I
  */
 Molecule.prototype.calcMoI = function() {
-    return this.reducedM * Math.pow(this.r.mag(), 2);                            // Return Moment of Inertia (scalar).
+    return (Math.pow(this.r.mag(), 2)/4) * this.tot_m;                            // Return Moment of Inertia (scalar).
 };
 
 /**
