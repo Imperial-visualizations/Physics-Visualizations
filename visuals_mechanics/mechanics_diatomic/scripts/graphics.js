@@ -15,6 +15,7 @@ var WHITE = 0xffffff;
 const GREEN = 0x66A40A;
 const IMPERIAL_BLUE = 0x003E74;
 const CHERRY = 0xE40043;
+const LEMON_YELLOW = 0xFFDD00;
 const GRAPH_TIME = 5;
 var running = false;
 
@@ -117,30 +118,28 @@ var arrVibKE = [];
 var LJ_scatter;
 var curr_LJ;
 var LJ_layout;
-var EPlotsLayout = {yaxis: {title: "Energy / eV"}, xaxis: {title: "t / s"}, autosize: true};
 
 function plotRotKE() {
-    var layout = EPlotsLayout;
-    layout.title = "KE" + "rot".sub() + " against Time";
+    var layoutRot = {yaxis: {title: "Energy / eV"},
+        xaxis: {title: "t / s"}, title: "KE" + "rot".sub() + " against Time"};
     Plotly.newPlot("graphRotE", {data: [{x: arrTime, y: arrRotKE, mode: "lines", line: {width: 2, color: "#66A40A"}}],
-            traces: [0], layout: layout},
+            traces: [0], layout: layoutRot},
             {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
 }
 
 function plotPE() {
-    var layout = EPlotsLayout;
-    layout.title = "PE against Time";
-
+    var layoutPE = {yaxis: {title: "Energy / eV", range: [-1.1 * potential.e, 0]},
+        xaxis: {title: "t / s"}, title: "PE against Time"};
     Plotly.newPlot("graphPotE", {data: [{x: arrTime, y: arrPE, mode: "lines", line: {width: 2, color: "#003E74"}}],
-            traces: [0], layout: layout},
+            traces: [0], layout: layoutPE},
             {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
 }
 
 function plotVibKE() {
-    var layout = EPlotsLayout;
-    layout.title = "KE" + "vib".sub() + " against Time";
+    var layoutVib = {yaxis: {title: "Energy / eV"},
+        xaxis: {title: "t / s"}, title: "KE" + "vib".sub() + " against Time"};
     Plotly.newPlot("graphVibE", {data: [{x: arrTime, y: arrVibKE, mode: "lines", line: {width: 2, color: "#FFDD00"}}],
-            traces: [0], layout: layout},
+            traces: [0], layout: layoutVib},
             {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
 }
 
@@ -209,7 +208,6 @@ function update(){
         drawLine(a1);
         drawLine(a2);
 
-
         // Calculate Rotational KE and update array.
         var rotKE = 0.5 * mol1.I * Math.pow(mol1.omega, 2);
         arrRotKE.push(rotKE);
@@ -254,21 +252,21 @@ function update(){
                 {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
     }
 }
+
 function drawLine(atom){
-    var lineG = phaserInstance.add.graphics(0,0);
+    var lineG = phaserInstance.add.graphics();
     //  lineG.moveTo(atom.pos[0].items[0]*zoom + phaserInstance.world.centerX,
     //                atom.pos[0].items[1]*zoom + phaserInstance.world.centerY);
-    lineG.lineStyle(2,IMPERIAL_BLUE,0);
-    for(var i = 0; i < atom.pos.length; i+= 5){
-        if(i > 0) lineG.lineStyle(2, IMPERIAL_BLUE, 1);
-        lineG.lineTo(atom.pos[i].items[0]*zoom + phaserInstance.world.centerX,
-                    atom.pos[i].items[1]*zoom + phaserInstance.world.centerY);
+    lineG.lineStyle(4, IMPERIAL_BLUE, 0);
+
+    for (var i = 0; i < atom.pos.length; i+= 5) {
+        if(i > 0) lineG.lineStyle(4, IMPERIAL_BLUE, 0.4);
+
+        lineG.lineTo(atom.pos[i].items[0] * zoom + phaserInstance.world.centerX,
+                    atom.pos[i].items[1] * zoom + phaserInstance.world.centerY);
     }
-    if(typeof atom.lineSprite !== 'undefined') atom.lineSprite.destroy();
-    atom.lineSprite = traceLayer.create(0,0,lineG.generateTexture());
+
+    if (typeof atom.lineSprite !== 'undefined') atom.lineSprite.destroy();
+    atom.lineSprite = traceLayer.create(0, 0, lineG.generateTexture());
     lineG.destroy();
-
 }
-
-
-

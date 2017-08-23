@@ -8,7 +8,6 @@
  * @constructor: Atom
  */
 Atom = function(radius, mass, color) {
-    // Making position and force vectors.
     this.pos = [];                 // Atom position Vector.
 
     // Checking for unphysical parameters.
@@ -25,12 +24,13 @@ Atom = function(radius, mass, color) {
     this.mass = mass;                              // Atom mass.
     this.sprite = addAtom(this);
 };
+
 Atom.prototype.getPos = function(){
     if(this.pos.length === 0 ) return;
     return this.pos[this.pos.length - 1];
 };
 Atom.prototype.setPos = function(newPos){
-    if(this.pos.length > 450) {
+    if(this.pos.length > 250) {
         this.pos.shift();
     }
         this.pos.push(newPos);
