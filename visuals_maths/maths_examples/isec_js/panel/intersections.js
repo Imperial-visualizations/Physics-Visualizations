@@ -67,19 +67,24 @@ function Vector(x,y,z) {
 const ZERO_VECTOR = new Vector(0.0,0.0,0.0); //Zero vector for later usew
 
 function Point(pos) {
-	/* Points are defined by their position *pos* in 3d. */
-	if(!(pos instanceof Vector)) {
-		throw new Error("Argument error: Point(...) 'pos' argument should be Vector.");
+	this.assignPos = function(pos) {
+		/* Points are defined by their position *pos* in 3d. */
+		if(!(pos instanceof Vector)) {
+			throw new Error("Argument error: Point(...) 'pos' argument should be Vector.");
+		}
+		else {
+			this.pos = pos;
+		}
 	}
-	else {
-		this.pos = pos;
-	}
+	this.assignPos(pos);
 	this.goify = function(layout) {
-		/* Cast this Point object to Plotly graphic object. */
-		if(pos.x < layout.scene.xaxis.range[0] || pos.x > layout.scene.xaxis.range[1] || pos.y < layout.scene.yaxis.range[0] || pos.y > layout.scene.yaxis.range[1] || pos.z < layout.scene.zaxis.range[0] || pos.z > layout.scene.zaxis.range[1]) {
-			// trying to display Point out of canvas
-			// TODO maybe some dynamic alignment of layout in that case?
-			// for now: do nothing
+		if(layout!=undefined) {
+			/* Cast this Point object to Plotly graphic object. */
+			if(pos.x < layout.scene.xaxis.range[0] || pos.x > layout.scene.xaxis.range[1] || pos.y < layout.scene.yaxis.range[0] || pos.y > layout.scene.yaxis.range[1] || pos.z < layout.scene.zaxis.range[0] || pos.z > layout.scene.zaxis.range[1]) {
+				// trying to display Point out of canvas
+				// TODO maybe some dynamic alignment of layout in that case?
+				// for now: do nothing
+			}
 		}
 		return {
 			name:this.toString(),
@@ -106,58 +111,73 @@ function Point(pos) {
 	}
 	this.id = (objcounter++) + "point"; //assign id
 	console.log("New Alg Object: ", this); //notify when created
+	this.type = "point";
 }
 function Line(dir,off) {
 	/* Lines are defined by direction vector and offset vector. */
 	// keep track of original user input
-	this.usrDir=dir;
-	this.usrOff=off;
-	if(!(dir instanceof Vector)) {
-		throw new Error("Argument error: Line(...) 'dir' argument should be Vector.");
+	this.assignDir = function(dir) {
+		this.usrDir=dir;
+		if(!(dir instanceof Vector)) {
+			throw new Error("Argument error: Line(...) 'dir' argument should be Vector.");
+		}
+		else {
+			// normalize direction vector
+			this.dir = dir.normalize();
+		}
 	}
-	else {
-		// normalize direction vector
-		this.dir = dir.normalize();
+	this.assignOff = function(off){
+		this.usrOff=off;
+		if(!(off instanceof Vector)) {
+			throw new Error("Argument error: Line(...) 'off' argument should be Vector.");
+		}
+		else {
+			// offset is changed to such that is the closest to origin
+			this.off = off.add((this.dir.mul(off.dot(this.dir))).mul(-1));
+		}
 	}
-	if(!(off instanceof Vector)) {
-		throw new Error("Argument error: Line(...) 'off' argument should be Vector.");
-	}
-	else {
-		// offset is changed to such that is the closest to origin
-		this.off = off.add((this.dir.mul(off.dot(this.dir))).mul(-1));
-	}
+	this.assignDir(dir);
+	this.assignOff(off);
 	this.goify = function(layout){
 		var xyz = {x: [], y: [], z: []};
 		// dynamically generate data depending on layout
 		var param_top; //parameters from which to which data will be generated
 		var param_bot;
-		if(this.dir.x == 0) {
-			//check that the line goes in x dir
-			xyz.x = [this.off.x, this.off.x];
-			if(this.dir.y == 0) {
-				//check that the line goes in y dir
-				xyz.y = [this.off.y, this.off.y];
-				if(this.dir.z == 0) {
-					//check that the line goes in z dir
-					xyz.z = [this.off.z, this.off.z];
+		if(layout != undefined) {
+			if(this.dir.x == 0) {
+				//check that the line goes in x dir
+				xyz.x = [this.off.x, this.off.x];
+				if(this.dir.y == 0) {
+					//check that the line goes in y dir
+					xyz.y = [this.off.y, this.off.y];
+					if(this.dir.z == 0) {
+						//check that the line goes in z dir
+						xyz.z = [this.off.z, this.off.z];
+					}
+					else {
+						param_top = (layout.scene.zaxis.range[1] - this.off.z)/this.dir.z
+						param_bot = (layout.scene.zaxis.range[0] - this.off.z)/this.dir.z
+					}
 				}
 				else {
-					param_top = (layout.scene.zaxis.range[1] - this.off.z)/this.dir.z
-					param_bot = (layout.scene.zaxis.range[0] - this.off.z)/this.dir.z
+					param_top = (layout.scene.yaxis.range[1] - this.off.y)/this.dir.y
+					param_bot = (layout.scene.yaxis.range[0] - this.off.y)/this.dir.y
 				}
 			}
 			else {
-				param_top = (layout.scene.yaxis.range[1] - this.off.y)/this.dir.y
-				param_bot = (layout.scene.yaxis.range[0] - this.off.y)/this.dir.y
+				param_top = (layout.scene.xaxis.range[1] - this.off.x)/this.dir.x
+				param_bot = (layout.scene.xaxis.range[0] - this.off.x)/this.dir.x
 			}
 		}
 		else {
-			param_top = (layout.scene.xaxis.range[1] - this.off.x)/this.dir.x
-			param_bot = (layout.scene.xaxis.range[0] - this.off.x)/this.dir.x
+			//default to (0,1) as parameters for the line in case layout undefined
+			param_top=1;
+			param_bot=0;
 		}
 		xyz.x = [this.off.x + this.dir.x*param_bot, this.off.x + this.dir.x*param_top];
 		xyz.y = [this.off.y + this.dir.y*param_bot, this.off.y + this.dir.y*param_top];
 		xyz.z = [this.off.z + this.dir.z*param_bot, this.off.z + this.dir.z*param_top];
+
 		return {
 			name: this.toString(),
 			type:"scatter3d",
@@ -188,27 +208,34 @@ function Line(dir,off) {
 	}
 	this.id = (objcounter++) + "line";
 	console.log("New Alg Object: ", this); //notify of new object creation
+	this.type = "line";
 }
 
 function Plane(normal,off) {
 	/* Planes are defined by a normal and any point lying on it. */
 	// keep track of user input
-	this.usrNormal = normal;
-	this.usrOff = off;
-	if(!(normal instanceof Vector)) {
-		throw new Error("Argument error: Plane(...) 'normal' argument should be Vector.");
+	this.assignNormal = function(normal) {
+		this.usrNormal = normal;
+		if(!(normal instanceof Vector)) {
+			throw new Error("Argument error: Plane(...) 'normal' argument should be Vector.");
+		}
+		else {
+			// normalize the normal vector
+			this.normal = normal.normalize();
+		}
 	}
-	else {
-		// normalize the normal vector
-		this.normal = normal.normalize();
+	this.assignOff = function(off) {
+		this.usrOff = off;
+		if(!(off instanceof Vector)) {
+			throw new Error("Argument error: Plane(...) 'off' argument should be Vector.");
+		}
+		else {
+			// select the closest one to the origin
+			this.off = this.normal.mul(off.dot(this.normal));
+		}
 	}
-	if(!(off instanceof Vector)) {
-		throw new Error("Argument error: Plane(...) 'off' argument should be Vector.");
-	}
-	else {
-		// select the closest one to the origin
-		this.off = this.normal.mul(off.dot(this.normal));
-	}
+	this.assignNormal(normal);
+	this.assignOff(off);
 	this.XYZ = function(layout) {
 		// a couple utils functions
 		function mesh2d(xlim, ylim) {
@@ -226,6 +253,7 @@ function Plane(normal,off) {
 			var zlim = layout.scene.zaxis.range;
 		}
 		else {
+			//default values
 			var xlim = [-1,1];
 			var ylim = [-1,1];
 			var zlim = [-1,1];
@@ -310,6 +338,7 @@ function Plane(normal,off) {
 	}
 	this.id = (objcounter++)+"plane";
 	console.log("New Alg Object: ", this);
+	this.type = "plane";
 }
 
 function NoIntersectionError(message){
