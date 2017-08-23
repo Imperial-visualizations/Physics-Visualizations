@@ -66,6 +66,7 @@ function Cylinder(radius, height){
     this.radius = radius;
     this.height = height;
     var meshSize = radius * 10;
+    if (meshSize === 0) {meshSize = 2;}
     var phi = numeric.linspace(0, 2*Math.PI, meshSize);
     this.x = [], this.y = [], this.z = [];
     var hValue = numeric.linspace(-height, height, meshSize);
@@ -140,30 +141,4 @@ function Cuboid(x, y, z){
         }
         return cuboid
     }
-}
-
-//Layout
-function createView(point) {
-  var norm = Math.sqrt(point[0]*point[0] + (5*point[1])*(5*point[1]) + point[2]*point[2]);
-  var a = 0.5 + point[0]/norm, b = 1 +  5*point[1]/norm, c = 0.5 + point[2]/norm;
-  var camera = {
-    up: {x: 0, y: 0, z: 1},
-    eye: {x: -a, y: -b, z: c + 0.5},
-    center: {x: 0, y: 0, z: -0.2}
-  }
-  return camera
-}
-
-//Slider Value and Matrix grid Value
-function makeTableHTML(myArray) {
-    var result = "<table class='matrix'><tbody>";
-    for(var i=0; i<myArray.length; i++) {
-        result += "<tr>";
-        for(var j=0; j<myArray[i].length; j++){
-            result += "<td>"+myArray[i][j]+"</td>";
-        }
-        result += "</tr>";
-    }
-    result += "</tbody></table>";
-    return result;
 }

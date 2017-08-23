@@ -7,18 +7,17 @@ var layout = {
     showlegend: false,
     scene: {
         camera: createView([1,1,1]),
-        xaxis: {range: [-6, 6]},
-        yaxis: {range: [-6, 6]},
-        zaxis: {range: [-6, 6]}
+        xaxis: {range: [-6, 6], zeroline: true, scaleratio: 1},
+        yaxis: {range: [-6, 6], zeroline: true, scaleratio: 1},
+        zaxis: {range: [-6, 6], zeroline: true, scaleratio: 1}
     }
 }
 var coorType = 0; //(1 = Cartesian, 2 = Cylindrical, 3 = Spherical)
 var currentPoint = initialPoint;
+var initialRho = 0, initialPhi = 0, initialR = 0, initialTheta = 0;
 
 //Plots
 function plotInit(coor) {
-    var initialRho = 0, initialphi = 0, initialR = 0, initialTheta = 0;
-
     if (coor === 1) {
         if (coorType !== 1) {
             //console.log(currentPoint);
@@ -101,6 +100,9 @@ function plotCylinder(rho, phi, z) {
     var y = rho*Math.sin(phi);
 
     var meshSize = Math.round(phi/Math.PI*24);
+    if (meshSize === 0) {
+        meshSize = 2;
+    }
     var t = numeric.linspace(0, phi, meshSize);
     var xTrace = [], yTrace = [], zTrace = [];
     for(var i = 0; i < meshSize; ++i) {

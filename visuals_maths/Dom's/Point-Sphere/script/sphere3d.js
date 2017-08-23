@@ -1,29 +1,22 @@
-//Rotation Matrices (axis of rotation along x/y/z-axix):
-function rotationX(angle) {
-    var matrix = [[1, 0, 0], [0, Math.cos(angle), -Math.sin(angle)], [0, Math.sin(angle), Math.cos(angle)]];
-    return matrix;
-}
-function rotationY(angle) {
-    var matrix = [[Math.cos(angle), 0, Math.sin(angle)], [0, 1, 0], [-Math.sin(angle), 0, Math.cos(angle)]];
-    return matrix;
-}
-function rotationZ(angle) {
-    var matrix = [[Math.cos(angle), -Math.sin(angle), 0], [Math.sin(angle), Math.cos(angle), 0], [0, 0 ,1]];
-    return matrix;
-}
-
-//Scaling Matrices
-function scaleX(factor) {
-    var matrix = [[factor, 0, 0], [0, 1, 0], [0, 0, 1]];
-    return matrix;
-}
-function scaleY(factor) {
-    var matrix = [[1, 0, 0], [0, factor, 0], [0, 0, 1]];
-    return matrix;
-}
-function scaleZ(factor) {
-    var matrix = [[1, 0, 0], [0, 1, 0], [0, 0 ,factor]];
-    return matrix;
+//Global Initial Parameters:
+var initialPoint = [-2., -2., 2.];
+var historyPoint = [initialPoint];
+var historyIndex = 0;
+var historyCount = 0;
+var historyLimit = 15;
+var radius = 2*Math.sqrt(3);
+var animatePause = false;
+var layout = {
+    width: 450, height: 500,
+    margin: {l:0, r:0, t:0, b:0},
+    hovermode: "closest",
+    showlegend: false,
+    scene: {
+        camera: createView([1, 1, 1]),
+        xaxis: {range: [-4, 4], zeroline: true, scaleratio: 1},
+        yaxis: {range: [-4, 4], zeroline: true, scaleratio: 1},
+        zaxis: {range: [-4, 4], zeroline: true, scaleratio: 1}
+    }
 }
 
 //Transformation algorithms
@@ -195,34 +188,13 @@ function computeCommute(rotation1, rotation2, theta1, theta2, frameSize) {
         showlegend: false,
         sliders: sliders,
         scene: {
-            camera: createView(initialPoint),
+            camera: createView([1,1,1]),
             xaxis: {range: [-4, 4]},
             yaxis: {range: [-4, 4]},
             zaxis: {range: [-4, 4]}
         }
     }
     return [frames, layout];
-}
-
-//Global Initial Parameters:
-var initialPoint = [-2., -2., 2.];
-var historyPoint = [initialPoint];
-var historyIndex = 0;
-var historyCount = 0;
-var historyLimit = 15;
-var radius = 2*Math.sqrt(3);
-var animatePause = false;
-var layout = {
-    width: 450, height: 500,
-    margin: {l:0, r:0, t:0, b:0},
-    hovermode: "closest",
-    showlegend: false,
-    scene: {
-        camera: createView([1, 1, 1]),
-        xaxis: {range: [-4, 4]},
-        yaxis: {range: [-4, 4]},
-        zaxis: {range: [-4, 4]}
-    }
 }
 
 //Hide/Show Option (Rotation) - for better interface
@@ -332,8 +304,8 @@ function startAnimation (frames) {
         + ")";
 }
 function stopAnimation () {
-    Plotly.animate('graph',[], {mode: 'next'});
-
+    //Plotly.animate('graph',[], {mode: 'next'});
+    requestAnimationFrame();
 }
 
 //Plots
@@ -546,98 +518,6 @@ function undo(){
         + String(Math.round(historyPoint[historyIndex][1]*100)/100) + ", "
         + String(Math.round(historyPoint[historyIndex][2]*100)/100)
         + ")";
-}
-
-//Slider Value and Matrix grid Value
-function displayRotationMatrix() {
-    var angle = document.getElementById("rotator").value;
-    var cosAngle = "cos("+String(Math.abs(angle))+"π"+")";
-    var sinAngle1 = "sin(0)", sinAngle2 = "-sin(0)";
-    if (angle > 0) {
-        sinAngle1 = "sin(" + String(angle)+"π)"; sinAngle2 = "-sin(" + String(angle)+"π)";
-    } else if (angle < 0) {
-        sinAngle1 = "-sin(" + String(-angle)+"π)"; sinAngle2 = "sin(" + String(-angle)+"π)";
-    }
-    if (rotationType === 1) {
-        document.getElementById("rotateMatrix").innerHTML=makeTableHTML(
-            [
-                ["1", "0", "0"],
-                ["0", cosAngle, sinAngle2],
-                ["0", sinAngle1, cosAngle]
-            ]
-        )
-    } else if (rotationType === 2) {
-        document.getElementById("rotateMatrix").innerHTML=makeTableHTML(
-            [
-                [cosAngle, "0", sinAngle1],
-                ["0", "1", "0"],
-                [sinAngle2, "0", cosAngle]
-            ]
-        )
-    } else if (rotationType === 3) {
-        document.getElementById("rotateMatrix").innerHTML=makeTableHTML(
-            [
-                [cosAngle, sinAngle2, "0"],
-                [sinAngle1, cosAngle, "0"],
-                ["0", "0", "1"]
-            ]
-        )
-    }
-}
-function displayReflectionMatrix() {
-    if (reflectionType === 1) {
-        document.getElementById("reflectMatrix").innerHTML=makeTableHTML(
-            [
-                ["-1", "0", "0"],
-                ["0", "1", "0"],
-                ["0", "0", "1"]
-            ]
-        )
-    } else if (reflectionType === 2) {
-        document.getElementById("reflectMatrix").innerHTML=makeTableHTML(
-            [
-                ["1", "0", "0"],
-                ["0", "-1", "0"],
-                ["0", "0", "1"]
-            ]
-        )
-    } else if (reflectionType === 3) {
-        document.getElementById("reflectMatrix").innerHTML=makeTableHTML(
-            [
-                ["1", "0", "0"],
-                ["0", "1", "0"],
-                ["0", "0", "-1"]
-            ]
-        )
-    }
-}
-function displayScaleMatrix() {
-    var factor = document.getElementById("scaler").value;
-    if (scaleType === 1) {
-        document.getElementById("scaleMatrix").innerHTML=makeTableHTML(
-            [
-                [String(factor), "0", "0"],
-                ["0", "1", "0"],
-                ["0", "0", "1"]
-            ]
-        )
-    } else if (scaleType === 2) {
-        document.getElementById("scaleMatrix").innerHTML=makeTableHTML(
-            [
-                ["1", "0", "0"],
-                ["0", String(factor), "0"],
-                ["0", "0", "1"]
-            ]
-        )
-    } else if (scaleType === 3) {
-        document.getElementById("scaleMatrix").innerHTML=makeTableHTML(
-            [
-                ["1", "0", "0"],
-                ["0", "1", "0"],
-                ["0", "0", String(factor)]
-            ]
-        )
-    }
 }
 
 function main() {

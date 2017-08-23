@@ -1,5 +1,5 @@
 //Global Initial Parameters:
-var initialPoint = [3., 1., 3.];
+var initialPoint = [3.4, 1.4, 3.7];
 var layout = {
     width: 450, "height": 500,
     margin: {l:0, r:0, t:0, b:0},
@@ -8,16 +8,19 @@ var layout = {
     scene: {
         camera: {
             up: {x: 0, y: 0, z: 1},
-            eye: {x: 1, y: -0.1, z: 0.8},
-            center: {x: 0, y: 0, z: -0.2}
+            eye: {x: 1.2, y: -0.3, z: 0.5},
+            center: {x: 0, y: 0, z: 0}
         },
-        xaxis: {range: [-6, 6], zeroline: true, nticks: 10},
+        xaxis: {range: [-6, 6], zeroline: true, scaleratio: 1},
         yaxis: {range: [-6, 6], zeroline: true, scaleratio: 1},
         zaxis: {range: [-6, 6], zeroline: true, scaleratio: 1}
     }
 }
 var coorType = 0; //(2 = Cylindrical, 3 = Spherical)
 var currentPoint = initialPoint;
+var initialRho = 0, initialPhi = 0, initialR = 0, initialTheta = 0;
+var axes = createAxes(5);
+var rho, phi, z, r, theta;
 
 //Add more curvature definition:
 function curveMore(arraySize) {
@@ -40,11 +43,8 @@ function curveMore(arraySize) {
 
 //Plots
 function plotVolumeElement(coor) {
-    var initialRho = 0, initialphi = 0, initialR = 0, initialTheta = 0;
-
     if (coor === 2){
         if (coorType !== 2) {
-            //console.log(currentPoint);
             initialRho = Math.sqrt(currentPoint[0]*currentPoint[0] + currentPoint[1]*currentPoint[1]);
             initialPhi = ((Math.atan2(currentPoint[1], currentPoint[0]) + 2*Math.PI) % (2*Math.PI))/Math.PI;
             initialRho = Math.round(initialRho*10)/10;
@@ -57,15 +57,14 @@ function plotVolumeElement(coor) {
             $("#z1Controller").val(currentPoint[2]);
             $("#z1ControllerDisplay").text(currentPoint[2]);
         }
-        var rho = parseFloat(document.getElementById('rhoController').value);
-        var phi = parseFloat(document.getElementById('phiController').value)*Math.PI;
-        var z = parseFloat(document.getElementById('z1Controller').value);
+        rho = parseFloat(document.getElementById('rhoController').value);
+        phi = parseFloat(document.getElementById('phiController').value)*Math.PI;
+        z = parseFloat(document.getElementById('z1Controller').value);
 
         plotCylinderElement(rho, phi, z);
         coorType = 2;
     } else if (coor === 3){
         if (coorType !== 3) {
-            //console.log(currentPoint);
             initialR = Math.sqrt(currentPoint[0]*currentPoint[0] + currentPoint[1]*currentPoint[1] + currentPoint[2]*currentPoint[2]);
             initialTheta = Math.atan2(Math.sqrt(currentPoint[0]*currentPoint[0] + currentPoint[1]*currentPoint[1]), currentPoint[2])/Math.PI;
             initialPhi = ((Math.atan2(currentPoint[1], currentPoint[0]) + 2*Math.PI) % (2*Math.PI))/Math.PI;
@@ -81,9 +80,9 @@ function plotVolumeElement(coor) {
             $("#phi1ControllerDisplayA1").text("(" + initialPhi*8 + "/8)" + $("#phi1ControllerDisplayA1").attr("data-unit"));
             $("#phi1ControllerDisplayA2").text(initialPhi*180 + $("#phi1ControllerDisplayA2").attr("data-unit"));
         }
-        var r = parseFloat(document.getElementById('rController').value);
-        var theta = parseFloat(document.getElementById('thetaController').value)*Math.PI;
-        var phi = parseFloat(document.getElementById('phi1Controller').value)*Math.PI;
+        r = parseFloat(document.getElementById('rController').value);
+        theta = parseFloat(document.getElementById('thetaController').value)*Math.PI;
+        phi = parseFloat(document.getElementById('phi1Controller').value)*Math.PI;
 
         plotSphereElement(r, theta, phi);
         coorType = 3;
@@ -148,33 +147,55 @@ function plotCylinderElement(rho, phi, z) {
     }
     phiText[Math.round(meshSize0/2)] = "φ";
 
-    var dphiText = [];
+    var emptyText = [];
     for (var i = 0; i < meshSize1; ++i) {
-        dphiText.push("");
+        emptyText.push("");
     }
+
+    var dphiText = emptyText.slice();
     dphiText[Math.round(meshSize1/2)] = "dφ";
 
-    var pdphiText = [];
-    for (var i = 0; i < meshSize1; ++i) {
-        pdphiText.push("");
-    }
-    pdphiText[Math.round(meshSize1/2)] = "p dφ";
+    var rhodphiText = emptyText.slice();
+    rhodphiText[Math.round(meshSize1/2)] = "ρ dφ";
 
     Plotly.newPlot('graph',
         [
-            new Line([[x0, y0, z0], [x0 + 0.8*Math.cos(phi), y0 + 0.8*Math.sin(phi), z0]]).gObject("rgb(255,0,0)"),
+            axes[0],
+            axes[1],
+            axes[2],
             {
                 type: "scatter3d",
-                mode: "lines",
+                mode: "lines+text",
+                x: [x0, x0+0.5*Math.cos(phi), x0+0.8*Math.cos(phi)],
+                y: [y0, y0+0.5*Math.sin(phi), y0+0.8*Math.sin(phi)],
+                z: [z0, z0, z0],
+                line: {color: "rgb(255,0,0)", width: 7, dash: "solid"},
+                text: ["", "dρ", ""],
+                textposition: "top left",
+                textfont: {color:"rgb(255,0,0)"}
+            },
+            {
+                type: "scatter3d",
+                mode: "lines+text",
                 x: xPhi2,
                 y: yPhi2,
                 z: zPhi2,
-                line: {color: "rgb(0,255,0)", width: 7, dash: "solid"}
+                line: {color: "rgb(0,255,0)", width: 7, dash: "solid"},
+                text: rhodphiText,
+                textposition: "bottom",
+                textfont: {color:"rgb(0,255,0)"}
             },
-            new Line([[x0, y0, z0], [x0, y0, z1]]).gObject("rgb(0,0,255)"),
-            new Line([[0, 0, 0], [5, 0, 0]]).gObject("rgb(0,0,0)"),
-            new Line([[0, 0, 0], [0, 5, 0]]).gObject("rgb(0,0,0)"),
-            new Line([[0, 0, 0], [0, 0, 5]]).gObject("rgb(0,0,0)"),
+            {
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [x0, x0, x0],
+                y: [y0, y0, y0],
+                z: [z0, z0+0.4, z1],
+                line: {color: "rgb(0,0,255)", width: 7, dash: "solid"},
+                text: ["", "dz", ""],
+                textposition: "left",
+                textfont: {color:"rgb(0,0,255)"}
+            },
             {
                 type: "scatter3d",
                 mode: "lines+text",
@@ -215,7 +236,7 @@ function plotCylinderElement(rho, phi, z) {
                 y: yPhi2,
                 z: zPhi1,
                 line: {color: "rgb(0,0,0)", width: 2},
-                text: pdphiText,
+                text: rhodphiText,
                 textposition: "bottom"
             },
             {
@@ -335,83 +356,167 @@ function plotSphereElement(r, theta, phi) {
         zTrace[i].push(zTemp1[0]);
     }
 
+    var phiText = [];
+    for (var i = 0; i < meshSize0; ++i) {
+        phiText.push("");
+    }
+    phiText[Math.round(meshSize0/2)] = "φ";
+
+    var thetaText = [];
+    for (var i = 0; i < meshSize2; ++i) {
+        thetaText.push("");
+    }
+    thetaText[Math.round(meshSize2/2)] = "θ";
+
+    var emptyText = [];
+    for (var i = 0; i < meshSize1; ++i) {
+        emptyText.push("");
+    }
+
+    var dphiText = emptyText.slice();
+    dphiText[Math.round(meshSize1/2)] = "dφ";
+
+    var dthetaText = emptyText.slice();
+    dthetaText[Math.round(meshSize1/2)] = "dθ";
+
+    var rdthetaText = emptyText.slice();
+    rdthetaText[Math.round(meshSize1/2)] = "r dθ";
+
+    var rsinthetadphiText = emptyText.slice();
+    rsinthetadphiText[Math.round(meshSize1/2)] = "r sin(θ) dφ";
+
     Plotly.newPlot('graph',
         [
-            new Line([[x0, y0, z0], [x0 + 0.8*Math.cos(phi)*Math.sin(theta), y0 + 0.8*Math.sin(phi)*Math.sin(theta), z0 + 0.8*Math.cos(theta)]]).gObject("rgb(0,0,255)"),
+            axes[0],
+            axes[1],
+            axes[2],
             {
                 type: "scatter3d",
-                mode: "lines",
+                mode: "lines+text",
+                x: [x0, x0+0.6*Math.cos(phi)*Math.sin(theta), x0+0.8*Math.cos(phi)*Math.sin(theta)],
+                y: [y0, y0+0.6*Math.sin(phi)*Math.sin(theta), y0+0.8*Math.sin(phi)*Math.sin(theta)],
+                z: [z0, z0+0.6*Math.cos(theta), z0+0.8*Math.cos(theta)],
+                line: {color: "rgb(0,0,255)", width: 7},
+                text: ["", "dr", ""],
+                textfont: {color: "rgb(0,0,255)"},
+                textposition: "top center"
+            },
+            {
+                type: "scatter3d",
+                mode: "lines+text",
                 x: xPhi2,
                 y: yPhi2,
                 z: zPhi2,
-                line: {color: "rgb(0,255,0)", width: 7}
+                line: {color: "rgb(0,255,0)", width: 7},
+                text: rsinthetadphiText,
+                textfont: {color: "rgb(0,255,0)"},
+                textposition: "bottom"
             },
             {
                 type: "scatter3d",
-                mode: "lines",
+                mode: "lines+text",
                 x: xTheta2,
                 y: yTheta2,
                 z: zTemp1,
-                line: {color: "rgb(255,0,0)", width: 7}
+                line: {color: "rgb(255,0,0)", width: 7},
+                text: rdthetaText,
+                textfont: {color: "rgb(255,0,0)"},
+                textposition: "left"
             },
-            new Line([[0, 0, 0], [5, 0, 0]]).gObject("rgb(0,0,0)"),
-            new Line([[0, 0, 0], [0, 5, 0]]).gObject("rgb(0,0,0)"),
-            new Line([[0, 0, 0], [0, 0, 5]]).gObject("rgb(0,0,0)"),
-            new Line([[0, 0, 0], [x0, y0, 0]]).gObject("rgb(0,0,0)", 2),
-            new Line([[0, 0, 0], [x0, y0, z0]]).gObject("rgb(0,0,0)", 2),
+            {
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [0, 3*x0/5, x0],
+                y: [0, 3*y0/5, y0],
+                z: [0, 0, 0],
+                line: {color: "rgb(0,0,0)", width: 2},
+                text: ["", "r sin(θ)", ""],
+                textposition: "bottom"
+            },
+            {
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [0, 3*x0/5, x0],
+                y: [0, 3*y0/5, y0],
+                z: [z0, z0, z0],
+                line: {color: "rgb(0,0,0)", width: 2},
+                text: ["(0, 0, r cos(θ))", "r sin(θ)", ""],
+                textposition: "bottom"
+            },
+            {
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [0, 0.65*x0, x0],
+                y: [0, 0.65*y0, y0],
+                z: [0, 0.65*z0, z0],
+                line: {color: "rgb(0,0,0)", width: 2},
+                text: ["", "r", ""],
+                textposition: "top"
+            },
             new Line([[0, 0, 0], [x2, y2, z2]]).gObject("rgb(0,0,0)", 2),
-            new Line([[0, 0, z0], [x0, y0, z0]]).gObject("rgb(0,0,0)", 2),
             new Line([[0, 0, z0], [x1, y1, z0]]).gObject("rgb(0,0,0)", 2),
             new Line([[0, 0, 0], [x1, y1, 0]]).gObject("rgb(0,0,0)", 2),
             new Line([[x0, y0, 0], [x0, y0, z0]]).gObject("rgb(0,0,0)", 2, "longdash"),
             new Line([[x1, y1, 0], [x1, y1, z0]]).gObject("rgb(0,0,0)", 2, "longdash"),
             {
                 type: "scatter3d",
-                mode: "lines",
+                mode: "lines+text",
                 x: xPhi0,
                 y: yPhi0,
                 z: zPhi0,
-                line: {color: "rgb(0,0,0)", width: 2}
+                line: {color: "rgb(0,0,0)", width: 2},
+                text: phiText,
+                textposition: "bottom"
             },
             {
                 type: "scatter3d",
-                mode: "lines",
+                mode: "lines+text",
                 x: xPhi1,
                 y: yPhi1,
                 z: zPhi2,
-                line: {color: "rgb(0,0,0)", width: 2}
+                line: {color: "rgb(0,0,0)", width: 2},
+                text: dphiText,
+                textposition: "top"
             },
             {
                 type: "scatter3d",
-                mode: "lines",
+                mode: "lines+text",
                 x: xPhi1,
                 y: yPhi1,
                 z: zPhi1,
-                line: {color: "rgb(0,0,0)", width: 2}
+                line: {color: "rgb(0,0,0)", width: 2},
+                text: dphiText,
+                textposition: "top"
             },
             {
                 type: "scatter3d",
-                mode: "lines",
+                mode: "lines+text",
                 x: xPhi2,
                 y: yPhi2,
                 z: zPhi1,
-                line: {color: "rgb(0,0,0)", width: 2}
+                line: {color: "rgb(0,0,0)", width: 2},
+                text: rsinthetadphiText,
+                textposition: "bottom"
             },
             {
                 type: "scatter3d",
-                mode: "lines",
+                mode: "lines+text",
                 x: xTheta0,
                 y: yTheta0,
                 z: zTheta0,
-                line: {color: "rgb(0,0,0)", width: 2}
+                line: {color: "rgb(0,0,0)", width: 2},
+                text: thetaText,
+                textpostion: "top"
             },
             {
                 type: "scatter3d",
-                mode: "lines",
+                mode: "lines+text",
                 x: xTheta1,
                 y: yTheta1,
                 z: zTheta1,
-                line: {color: "rgb(0,0,0)", width: 2}
+                line: {color: "rgb(0,0,0)", width: 2},
+                text: dthetaText,
+                textpostion: "bottom"
             },
             {
                 type: "scatter3d",
