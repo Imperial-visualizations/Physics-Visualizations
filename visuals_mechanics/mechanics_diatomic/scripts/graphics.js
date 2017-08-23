@@ -1,13 +1,13 @@
 var width = 800;
 var height = 480;
 width = $("#phaser").width() * window.devicePixelRatio;
-height = $("#phaser").width() * window.devicePixelRatio;
+height = $("#phaser").width() * 0.7 * window.devicePixelRatio;
 
 var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS,
     "phaser",{preload: preload,create: create,update: update});
 
 var a1,a2,mol1,potential;
-var zoom  = 45;
+var zoom  = 30;
 var initKVib,initKRot;
 var init_s1 = 2, init_s2 = 2, init_e1 = 10, init_e2 = 10;
 var WHITE = 0xffffff;
@@ -119,33 +119,33 @@ var curr_LJ;
 var LJ_layout;
 
 function plotRotKE() {
-    var layoutRot = {yaxis: {title: "Energy / eV"},
-        xaxis: {title: "t / s"}, title: "KE" + "rot".sub() + " against Time"};
+    var layoutRot = {yaxis: {title: "Energy / eV", titlefont: {size: 8}}, titlefont: {size: 10},
+        xaxis: {title: "t / s", titlefont: {size: 8}}, title: "KE" + "rot".sub() + " against Time"};
     Plotly.newPlot("graphRotE", {data: [{x: arrTime, y: arrRotKE, mode: "lines", line: {width: 2, color: "#66A40A"}}],
             traces: [0], layout: layoutRot},
             {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
 }
 
 function plotPE() {
-    var layoutPE = {yaxis: {title: "Energy / eV", range: [-1.1 * potential.e, 0]},
-        xaxis: {title: "t / s"}, title: "PE against Time"};
+    var layoutPE = {yaxis: {title: "Energy / eV", range: [-1.1 * potential.e, 0], titlefont: 8}, titlefont: {size: 10},
+        xaxis: {title: "t / s", titlefont: {size: 8}}, title: "PE against Time"};
     Plotly.newPlot("graphPotE", {data: [{x: arrTime, y: arrPE, mode: "lines", line: {width: 2, color: "#003E74"}}],
             traces: [0], layout: layoutPE},
             {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
 }
 
 function plotVibKE() {
-    var layoutVib = {yaxis: {title: "Energy / eV"},
-        xaxis: {title: "t / s"}, title: "KE" + "vib".sub() + " against Time"};
+    var layoutVib = {yaxis: {title: "Energy / eV", titlefont: {size: 8}}, titlefont: {size: 10},
+        xaxis: {title: "t / s", titlefont: {size: 8}}, title: "KE" + "vib".sub() + " against Time"};
     Plotly.newPlot("graphVibE", {data: [{x: arrTime, y: arrVibKE, mode: "lines", line: {width: 2, color: "#FFDD00"}}],
             traces: [0], layout: layoutVib},
             {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
 }
 
 function plotLJ() {
-    LJ_layout = {title: "Lennard-Jones Potential",
-                yaxis: {range: [-1.1 * potential.e, potential.e], title: "LJ Potential / eV"},
-                xaxis: {range: [0, 3 * potential.s], title: "r" + "AB".sub() + " / nm"}};
+    LJ_layout = {title: "Lennard-Jones Potential", titlefont: {size: 10},
+                yaxis: {range: [-1.1 * potential.e, potential.e], title: "LJ Potential / eV", titlefont: {size: 8}},
+                xaxis: {range: [0, 3 * potential.s], title: "r" + "AB".sub() + " / nm", titlefont: {size: 8}}};
 
     // Remove all points outside visible range on graph.
     while (LJ_scatter.y[0] > LJ_layout.yaxis.range[1]) {
@@ -167,20 +167,26 @@ plotPE();
 plotVibKE();
 
 function drawBond(starting,end){
-    var widthOfSpring = end.subtract(starting).mag()*zoom; // The distance between atomes.
-    console.log(widthOfSpring);
-    var heightOfSpring = zoom;
-    var arrowG = phaserInstance.add.graphics(0,0);
-    var wiggles = 3;
-    arrowG.lineStyle(5,IMPERIAL_BLUE,1);
-    arrowG.lineTo(widthOfSpring/(wiggles*4),0);
-    for (var i = 2; i<wiggles*4 -1; i+=2) {
-    arrowG.lineTo(i*widthOfSpring/(wiggles*4), ((i%4)-1)*heightOfSpring/2);
+    var widthOfSpring = end.subtract(starting).mag()*zoom;          // The distance between atoms.
+
+    var heightOfSpring = 0.3 * zoom;
+    var arrowG = phaserInstance.add.graphics(0, 0);
+    var wiggles = 7;
+
+    arrowG.lineStyle(3, IMPERIAL_BLUE, 0.5);
+    arrowG.lineTo(widthOfSpring / (wiggles * 4), 0);
+
+    for (var i = 2; i < (wiggles * 4) - 1; i += 2) {
+        arrowG.lineTo(i * widthOfSpring / (wiggles * 4), ((i % 4) - 1) * heightOfSpring / 2);
     }
-    arrowG.lineTo(((wiggles*4)-1)*widthOfSpring/(wiggles*4), 0);
-    arrowG.lineTo((wiggles*4)*widthOfSpring/(wiggles*4), 0);
+    arrowG.lineTo(((wiggles * 4) - 1) * widthOfSpring / (wiggles * 4), 0);
+    arrowG.lineTo((wiggles * 4) * widthOfSpring / (wiggles * 4), 0);
+
     if(typeof mol1.bondSprite !== 'undefined') mol1.bondSprite.destroy();
-    mol1.bondSprite = traceLayer.create(phaserInstance.world.centerX, phaserInstance.world.centerY,arrowG.generateTexture());
+
+    mol1.bondSprite = traceLayer.create(phaserInstance.world.centerX,
+        phaserInstance.world.centerY, arrowG.generateTexture());
+
     mol1.bondSprite.anchor.set(0.5,0.5);
     mol1.bondSprite.angle = Phaser.Math.RAD_TO_DEG * Math.atan2(end.subtract(starting).items[1],end.subtract(starting).items[0]);
     arrowG.destroy();
@@ -191,8 +197,6 @@ function reset(){
     // Creating new LJ potential
     potential = new LJ(init_s1, init_e1, init_s2, init_e2);
 
-    // Creating x and y coordinates to plot.
-    LJ_scatter  = potential.plotPoints(100);
     if(typeof mol1 !== 'undefined'){
         if(typeof mol1.bondSprite !== 'undefined'){
             mol1.bondSprite.destroy();
@@ -200,6 +204,8 @@ function reset(){
     }
     // Creating new molecule with atoms and instantiated potential. KEs entered by users using sliders.
     mol1 = new Molecule(a1, a2, potential, initKVib, initKRot);
+    // Creating x and y coordinates to plot.
+    LJ_scatter  = potential.plotPoints(100);
 
     a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
     a1.sprite.y = a1.getPos().items[1] * zoom + phaserInstance.world.centerY;
