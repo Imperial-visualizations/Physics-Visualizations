@@ -240,6 +240,8 @@
   </style>
 </head>
 <body>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <h1>Linear algebra - Intersections</h1>
   <div class="container">
     <div class="row">
@@ -268,10 +270,45 @@
       </div>
     </div>
   </div>
+  <script src="fast_plotter.js"></script>
+  <script>
+  var layout = {
+    scene: {
+      xaxis: {
+        range: [-10,10]
+      },
+      yaxis: {
+        range: [-10,10]
+      },
+      zaxis: {
+        range: [-10,10]
+      },
+      camera: {
+        up: {
+          x: 0,
+          y: 0,
+          z: 1
+        },
+        eye: {
+          x: -1.7428,
+          y: 1.0707,
+          z: 0.7100
+        }
+      },
+      aspectratio: {x: 1, y: 1, z: 1},
+    },
+    showlegend: false,
+    margin: {l:0,r:0,b:0,t:0}
+  };
+  var plot = null;
+  $('#canvasWrapper').ready(function() {
+    plot = new fastPlotHandler('canvasWrapper');
+    plot.init();
+    plot.setLayout(layout);
+  })
+  </script>
   <br><br><br>
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script src="./intersections.js?v=4"></script>
+  <script src="./intersections.js"></script>
   <script type="text/javascript">
   var algObjs = {};
 
@@ -341,6 +378,7 @@
       var newid = newPoint.id;
       newPoint.name = nextName();
       algObjs[newid] = newPoint;
+      plot.addAlgObj(algObjs[newid])
       log(algObjs[newid].toString()+" added.");
       //we could call addAlgObj(algObjs[newid]) but it's obsolete
       redisplay();
@@ -353,6 +391,7 @@
       newLine.name = nextName();
       var newid = newLine.id;
       algObjs[newid] = newLine;
+      plot.addAlgObj(algObjs[newid])
       //we could call addAlgObj(algObjs[newid]) but it's obsolete
       log(algObjs[newid].toString()+" added.");
       redisplay();
@@ -365,6 +404,7 @@
       newPlane.name = nextName();
       var newid = newPlane.id;
       algObjs[newid] = newPlane;
+      plot.addAlgObj(algObjs[newid])
       //we could call addAlgObj(algObjs[newid]) but it's obsolete
       log(algObjs[newid].toString()+" added.");
       redisplay();
@@ -386,6 +426,7 @@
       for(idx in newobjs) {
         var newid = newobjs[idx].id;
         algObjs[newid] = newobjs[idx];
+        plot.addAlgObj(algObjs[newid])
       }
       redisplay();
       log("Results displayed.");
@@ -394,6 +435,7 @@
       for (i in algObjs) {
         console.log("idx: ", i, ", object: ", algObjs[i].toString());
         $( "#"+i ).parent().remove();
+        plot.deleteAlgObj(algObjs[i]);
         delete algObjs[i];
       }
       redisplay();
@@ -402,6 +444,7 @@
       $("#panelItemsWrapper>item>label.selected").each(
         function() {
           console.log("deleting at id", $(this)[0].id, ", object:", algObjs[$(this)[0].id])
+          plot.deleteAlgObj(algObjs[$(this)[0].id]);
           delete algObjs[$(this)[0].id];
         }
       );
@@ -435,7 +478,7 @@
       if(algObjs[id].name != $("#NameOf"+id).val()){
         changes += 1;
         algObjs[id].name = $("#NameOf"+id).val();
-        $("#"+id).text(algObjs[id].toString()); 
+        $("#"+id).text(algObjs[id].toString());
       }
       logMessage += algObjs[id].toString()+" ";
 
@@ -498,7 +541,7 @@
         }
       }else{
         console.log("ERROR: the object"+id+" can't be accessed.");
-      }       
+      }
       if(dontClose){
         $("#panelItemsWrapper").scrollTop($("#EditorFor"+id).position().top+$("#EditorFor"+id).height());
       }else{
@@ -540,11 +583,11 @@
         event.preventDefault();
       });
       $(this).on('dblclick',function(event) {
-        id = $(this).attr("id"); 
+        id = $(this).attr("id");
         console.log("double click on ",id)
         // var newName = prompt("Enter new name", algObjs[$(this)[0].id].toString())
         // algObjs[$(this)[0].id].name = newName;
-        // redisplay();       
+        // redisplay();
         if($("#EditorFor"+id).hasClass("expanded")){
           //update the object with the value in the input elements
           saveToObject(id);
@@ -647,7 +690,7 @@
 
     }else if(object.type == "plane"){
       $("#panelItemsWrapper").append('<itemEditor id="EditorFor'+object.id+'" style="display: none;"><input class="itemNameInput" id="NameOf'+object.id+'" value="'+object.name+'"><label>Normal</label><span class="inputWrapper">x:<input id="'+object.id+'NX" value="'+object.normal.x+'"></span><span class="inputWrapper">y:<input id="'+object.id+'NY" value="'+object.normal.y+'"></span><span class="inputWrapper">z:<input id="'+object.id+'NZ" value="'+object.normal.z+'"></span><label>Offset</label><span class="inputWrapper">x:<input id="'+object.id+'OX" value="'+object.off.x+'"></span><span class="inputWrapper">y:<input id="'+object.id+'OY" value="'+object.off.y+'"></span><span class="inputWrapper">z:<input id="'+object.id+'OZ" value="'+object.off.z+'"></span></itemEditor>');
-      
+
     }else{
       console.log("Error: Invalid input type for algObjToPanel().");
     }
@@ -666,8 +709,8 @@
         algObjToPanel(algObjs[i]);
       }
     }
-    console.log("redisplaying graph...")
-    redrawPlot();
+    //console.log("redisplaying graph...")
+    //redrawPlot();
   }
   function addAlgObj(object){
     //obsolete!!
@@ -676,60 +719,6 @@
     $("#panelItemsWrapper>p").remove();
     $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
     itemsAddEventListener();
-  }
-  </script>
-
-  <script>
-  var layout = {
-    scene: {
-      xaxis: {
-        range: [-10,10]
-      },
-      yaxis: {
-        range: [-10,10]
-      },
-      zaxis: {
-        range: [-10,10]
-      },
-      camera: {
-        up: {
-          x: 0,
-          y: 0,
-          z: 1
-        },
-        eye: {
-          x: -1.7428,
-          y: 1.0707,
-          z: 0.7100
-        }
-      },
-      aspectratio: {x: 1, y: 1, z: 1},
-    },
-    showlegend: false,
-    margin: {l:0,r:0,b:0,t:0}
-  };
-  function redrawPlot() {
-    goified = []
-    if(algObjs.length == 0) {
-      Plotly.newPlot(
-        'canvasWrapper',
-        [
-          {
-            x: [],
-            y: [],
-            type: 'scatter3d'
-          }
-        ],
-        layout
-      );
-    }
-    else {
-      for(idx in algObjs) {
-        goified.push(algObjs[idx].goify(layout));
-      }
-      console.log("canvasWrapper: redraw. goified: ",goified);
-    }
-    Plotly.newPlot('canvasWrapper', goified, layout);
   }
   </script>
 </body>
