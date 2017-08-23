@@ -388,6 +388,9 @@
         algObjs[newid] = newobjs[idx];
       }
       redisplay();
+      if(newobjs.length == selectedObjs.length){
+        log("<red>No intersections found.</red>");
+      }
       log("Results displayed.");
     });
     $("#clear").on('click',function(){
@@ -425,7 +428,7 @@
     + currentdate.getSeconds();
     sessionStorage.lastSaved = datetime;
 
-    log("Last Saved: "+sessionStorage.lastSaved);
+    log("<blue>Last Saved: "+sessionStorage.lastSaved+"</blue>");
   }
   function saveToObject(id){
       var changes = 0;
@@ -502,12 +505,14 @@
       if(dontClose){
         $("#panelItemsWrapper").scrollTop($("#EditorFor"+id).position().top+$("#EditorFor"+id).height());
       }else{
-        $("#EditorFor"+id).slideUp(200);
-        $("#EditorFor"+id).removeClass("expanded");
         if(changes > 0){
+          $("#EditorFor"+id).slideUp(200);
           redrawPlot();
           log(logMessage);
+        }else{
+          $("#EditorFor"+id).slideUp(1000);
         }
+        $("#EditorFor"+id).removeClass("expanded");
       }
   }
   function itemsAddEventListener(){
