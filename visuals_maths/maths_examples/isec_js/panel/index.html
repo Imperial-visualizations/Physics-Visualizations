@@ -228,6 +228,15 @@
     color: #006EAF;
     text-shadow: 0px 0px 2px #bccfda;
   }
+
+  red{
+    font-weight: 600;
+    color: #DD2501;
+  }
+  blue{
+    font-weight: 600;
+    color: #006EAF;
+  }
   </style>
 </head>
 <body>
@@ -275,14 +284,13 @@
   }
   function log(txt){
     $("#panelHeadWrapper").html($("#panelHeadWrapper").html()+txt+"<br>");
-    var objDiv = document.getElementById("panelHeadWrapper");
-    objDiv.scrollTop = objDiv.scrollHeight;
+    $("#panelHeadWrapper").animate({ scrollTop: $('#panelHeadWrapper').prop("scrollHeight")}, 200);
   }
   $(document).ready(function(){
     console.log("Document ready!")
-    log("<b>Click to select.</b>");
-    log("<b>Click again to deselect.</b>");
-    log("<b>Double click to edit.</b>");
+    log("<blue>Click to select.</blue>");
+    log("<blue>Click again to deselect.</blue>");
+    log("<blue>Double click to edit.</blue>");
     if(sessionStorage.lastSaved != undefined){
       console.log("there is a saved state... retrieving,",sessionStorage);
       var retrieveAlgObjs = JSON.parse(sessionStorage.getItem("algObjsSaved"));
@@ -336,7 +344,7 @@
       log(algObjs[newid].toString()+" added.");
       //we could call addAlgObj(algObjs[newid]) but it's obsolete
       redisplay();
-      $("#EditorFor"+newPoint.id).slideDown("fast");
+      $("#EditorFor"+newPoint.id).slideDown(200);
       $("#EditorFor"+newPoint.id).addClass("expanded");
       $("#NameOf"+newPoint.id).focus();
     });
@@ -348,7 +356,7 @@
       //we could call addAlgObj(algObjs[newid]) but it's obsolete
       log(algObjs[newid].toString()+" added.");
       redisplay();
-      $("#EditorFor"+newLine.id).slideDown("fast");
+      $("#EditorFor"+newLine.id).slideDown(200);
       $("#EditorFor"+newLine.id).addClass("expanded");
       $("#NameOf"+newLine.id).focus();
     });
@@ -360,7 +368,7 @@
       //we could call addAlgObj(algObjs[newid]) but it's obsolete
       log(algObjs[newid].toString()+" added.");
       redisplay();
-      $("#EditorFor"+newPlane.id).slideDown("fast");
+      $("#EditorFor"+newPlane.id).slideDown(200);
       $("#EditorFor"+newPlane.id).addClass("expanded");
       $("#NameOf"+newPlane.id).focus();
     });
@@ -420,42 +428,87 @@
     log("Last Saved: "+sessionStorage.lastSaved);
   }
   function saveToObject(id){
-      thisObject = $("#"+id);
-      algObjs[id].name = $("#NameOf"+thisObject.attr("id")).val();
-      $("#"+thisObject.attr("id")).text(algObjs[id].toString());
+      var changes = 0;
+      var dontClose = false;
+      var logMessage = "Updated: ";
+      var thisObject = $("#"+id);
+      if(algObjs[id].name != $("#NameOf"+id).val()){
+        changes += 1;
+        algObjs[id].name = $("#NameOf"+id).val();
+        $("#"+id).text(algObjs[id].toString()); 
+      }
+      logMessage += algObjs[id].toString()+" ";
+
       if(algObjs[id].type == "point"){
-        x = parseFloat($("#"+thisObject.attr("id")+"PX").val());
-        y = parseFloat($("#"+thisObject.attr("id")+"PY").val());
-        z = parseFloat($("#"+thisObject.attr("id")+"PZ").val());
-        algObjs[id].assignPos(new Vector(x,y,z));
-        log(algObjs[id].toString()+" updated:<br>P("+x+","+y+","+z+")");
+        x = parseFloat($("#"+id+"PX").val());
+        y = parseFloat($("#"+id+"PY").val());
+        z = parseFloat($("#"+id+"PZ").val());
+        newPos = new Vector(x,y,z);
+        if(newPos.isEqualTo(algObjs[id].pos)){
+        }else{
+          changes += 1;
+          algObjs[id].assignPos(newPos);
+          logMessage += ("<br><b>r</b>=("+x+","+y+","+z+")");
+        }
       }else if(algObjs[id].type == "line"){
-        dirx = parseFloat($("#"+thisObject.attr("id")+"DX").val());
-        diry = parseFloat($("#"+thisObject.attr("id")+"DY").val());
-        dirz = parseFloat($("#"+thisObject.attr("id")+"DZ").val());
-        offx = parseFloat($("#"+thisObject.attr("id")+"OX").val());
-        offy = parseFloat($("#"+thisObject.attr("id")+"OY").val());
-        offz = parseFloat($("#"+thisObject.attr("id")+"OZ").val());
-        algObjs[id].assignDir(new Vector(dirx,diry,dirz));
-        algObjs[id].assignOff(new Vector(offx,offy,offz));
-        log(algObjs[id].toString()+" updated:<br>D("+dirx+","+diry+","+dirz+")<br>O("+offx+","+offy+","+offz+")");
+        if( parseFloat($("#"+id+"DX").val())==0 && parseFloat($("#"+id+"DY").val())==0 && parseFloat($("#"+id+"DZ").val())==0 ){
+          alert("Direction can't be (0,0,0)!");
+          log("<red>Direction can't be (0,0,0)!</red>");
+          var dontClose = true;
+        }else{
+          dirx = parseFloat($("#"+id+"DX").val());
+          diry = parseFloat($("#"+id+"DY").val());
+          dirz = parseFloat($("#"+id+"DZ").val());
+          offx = parseFloat($("#"+id+"OX").val());
+          offy = parseFloat($("#"+id+"OY").val());
+          offz = parseFloat($("#"+id+"OZ").val());
+          newDir = new Vector(dirx,diry,dirz);
+          newOff = new Vector(offx,offy,offz);
+          if(newDir.isEqualTo(algObjs[id].dir) && newOff.isEqualTo(algObjs[id].off)){
+
+          }else{
+            changes += 1;
+            algObjs[id].assignDir(newDir);
+            algObjs[id].assignOff(newOff);
+            logMessage += ("<br><b>r</b>=("+offx+","+offy+","+offz+")+µ("+dirx+","+diry+","+dirz+")");
+          }
+        }
 
       }else if(algObjs[id].type == "plane"){
-        normalx = parseFloat($("#"+thisObject.attr("id")+"NX").val());
-        normaly = parseFloat($("#"+thisObject.attr("id")+"NY").val());
-        normalz = parseFloat($("#"+thisObject.attr("id")+"NZ").val());
-        offx = parseFloat($("#"+thisObject.attr("id")+"OX").val());
-        offy = parseFloat($("#"+thisObject.attr("id")+"OY").val());
-        offz = parseFloat($("#"+thisObject.attr("id")+"OZ").val());
-        algObjs[id].assignNormal(new Vector(normalx,normaly,normalz));
-        algObjs[id].assignOff(new Vector(offx,offy,offz));
-        log(algObjs[id].toString()+" updated:<br>N("+normalx+","+normaly+","+normalz+")<br>O("+offx+","+offy+","+offz+")");
+        if( parseFloat($("#"+id+"NX").val())==0 && parseFloat($("#"+id+"NY").val())==0 && parseFloat($("#"+id+"NZ").val())==0 ){
+          alert("Normal can't be (0,0,0)!");
+          log("<red>Normal can't be (0,0,0)!</red>");
+          var dontClose = true;
+        }else{
+          normalx = parseFloat($("#"+id+"NX").val());
+          normaly = parseFloat($("#"+id+"NY").val());
+          normalz = parseFloat($("#"+id+"NZ").val());
+          offx = parseFloat($("#"+id+"OX").val());
+          offy = parseFloat($("#"+id+"OY").val());
+          offz = parseFloat($("#"+id+"OZ").val());
+          newNormal = new Vector(normalx,normaly,normalz);
+          newOff = new Vector(offx,offy,offz);
+          if(newNormal.isEqualTo(algObjs[id].normal) && newOff.isEqualTo(algObjs[id].off)){
+          }else{
+            changes += 1;
+            algObjs[id].assignNormal(newNormal);
+            algObjs[id].assignOff(newOff);
+            logMessage += ("<br>("+normalx+","+normaly+","+normalz+")•(<b>r</b>-("+offx+","+offy+","+offz+"))=0");
+          }
+        }
       }else{
         console.log("ERROR: the object"+id+" can't be accessed.");
       }       
-      $("#EditorFor"+id).slideUp(600);
-      $("#EditorFor"+id).removeClass("expanded");
-      redrawPlot();
+      if(dontClose){
+        $("#panelItemsWrapper").scrollTop($("#EditorFor"+id).position().top+$("#EditorFor"+id).height());
+      }else{
+        $("#EditorFor"+id).slideUp(200);
+        $("#EditorFor"+id).removeClass("expanded");
+        if(changes > 0){
+          redrawPlot();
+          log(logMessage);
+        }
+      }
   }
   function itemsAddEventListener(){
     $("#panelItemsWrapper>item>span").each(function(index){
@@ -498,35 +551,35 @@
         }else{
           $("#panelItemsWrapper>item>label").each(function(index){
             $(this).removeClass("selected");
-            if($("#EditorFor"+$(this).attr("id")).hasClass("expanded")){
-              saveToObject($(this).attr("id"));
+            if($("#EditorFor"+id).hasClass("expanded")){
+              saveToObject(id);
             }
           });
           //update the value in the input elements with object
-           $("#NameOf"+$(this).attr("id")).val(algObjs[id].name);
+           $("#NameOf"+id).val(algObjs[id].name);
           if(algObjs[id].type == "point"){
-            $("#"+$(this).attr("id")+"PX").val(algObjs[id].pos.x);
-            $("#"+$(this).attr("id")+"PY").val(algObjs[id].pos.y);
-            $("#"+$(this).attr("id")+"PZ").val(algObjs[id].pos.z);
+            $("#"+id+"PX").val(algObjs[id].pos.x);
+            $("#"+id+"PY").val(algObjs[id].pos.y);
+            $("#"+id+"PZ").val(algObjs[id].pos.z);
           }else if(algObjs[id].type == "line"){
-            $("#"+$(this).attr("id")+"DX").val(algObjs[id].dir.x);
-            $("#"+$(this).attr("id")+"DY").val(algObjs[id].dir.y);
-            $("#"+$(this).attr("id")+"DZ").val(algObjs[id].dir.z);
-            $("#"+$(this).attr("id")+"OX").val(algObjs[id].off.x);
-            $("#"+$(this).attr("id")+"OY").val(algObjs[id].off.y);
-            $("#"+$(this).attr("id")+"OZ").val(algObjs[id].off.z);
+            $("#"+id+"DX").val(algObjs[id].dir.x);
+            $("#"+id+"DY").val(algObjs[id].dir.y);
+            $("#"+id+"DZ").val(algObjs[id].dir.z);
+            $("#"+id+"OX").val(algObjs[id].off.x);
+            $("#"+id+"OY").val(algObjs[id].off.y);
+            $("#"+id+"OZ").val(algObjs[id].off.z);
 
           }else if(algObjs[id].type == "plane"){
-            $("#"+$(this).attr("id")+"NX").val(algObjs[id].normal.x);
-            $("#"+$(this).attr("id")+"NY").val(algObjs[id].normal.y);
-            $("#"+$(this).attr("id")+"NZ").val(algObjs[id].normal.z);
-            $("#"+$(this).attr("id")+"OX").val(algObjs[id].off.x);
-            $("#"+$(this).attr("id")+"OY").val(algObjs[id].off.y);
-            $("#"+$(this).attr("id")+"OZ").val(algObjs[id].off.z);
+            $("#"+id+"NX").val(algObjs[id].normal.x);
+            $("#"+id+"NY").val(algObjs[id].normal.y);
+            $("#"+id+"NZ").val(algObjs[id].normal.z);
+            $("#"+id+"OX").val(algObjs[id].off.x);
+            $("#"+id+"OY").val(algObjs[id].off.y);
+            $("#"+id+"OZ").val(algObjs[id].off.z);
           }else{
             console.log("ERROR: the object"+id+" can't be accessed.");
           }
-          $("#EditorFor"+id).slideToggle("fast");
+          $("#EditorFor"+id).slideToggle(200);
           $("#EditorFor"+id).toggleClass("expanded");
         }
         event.stopPropagation();

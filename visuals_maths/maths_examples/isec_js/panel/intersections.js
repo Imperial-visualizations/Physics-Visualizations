@@ -396,7 +396,7 @@ function intersect(obj1, obj2) {
 		ans = _point_point_intersect(obj1,obj2);
 	}
 	else {
-		throw new TypeError("Argument error: intersect can only take Point, Line and Plane arguments.")
+		throw new TypeError("Argument error: intersect can only take Point, Line and Plane arguments.");
 	}
 	ans.name = "("+obj1.name+" intersects "+obj2.name+")";
 	return ans;
