@@ -66,7 +66,7 @@ function fastPlotHandler(divHandle) {
     /* Decreases opacity of evering except from objects whose ids are in idArray */
     toHighlight=[];
     var decreaseOpacity = {
-    opacity: 0.4
+    opacity: 0.2
     };
     var increaseOpacity = {
     opacity: 1.0
