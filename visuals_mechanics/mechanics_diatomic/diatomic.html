@@ -8,7 +8,9 @@
     <style type="text/css">
         input[type=range] {
         }
-
+        #phaser{
+            margin-bottom: 8px;
+        }
         .titleKE {
             padding-left: 8px;
             font-weight:400;
@@ -27,6 +29,25 @@
             border-left: 4px solid #9F004E;
         }
 
+        .graphs{
+            height: 200px;
+            border: 1px solid #EBEEEE;
+            box-sizing: border-box;
+            box-shadow: 1px 1px 0px 2px #EBEEEE;
+        }
+        .showHideButton{
+            display: block;
+            color: #000;
+            text-decoration: underline;
+            margin-top: 0;
+            text-align: right;
+            width: 100%;
+            border-top: 2px solid #EBEEEE;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.8em;
+        }
+
     </style>
     <script src=https://cdn.plot.ly/plotly-latest.min.js></script>
     <script src = "./scripts/potentials.js"></script>
@@ -35,95 +56,72 @@
 </head>
 <body>
 
-<h1>Diatomic Molecule: Vibration and Rotation</h1>
 
 <div class="container">
-    <div class="twelve columns">
-        <!--Phaser animation and KE plots & input sliders-->
+    <h1>Diatomic Molecule: Vibration and Rotation</h1>
+    <!--Phaser animation and KE plots & input sliders-->
+    <div class="row">
         <div class="seven columns">
-            <div class="row">
-                <div id="phaser" style="padding-bottom: 7px"></div>
-            </div>
+            <div id="phaser"><span id="lodaingMessage">Loading Canvas....</span></div>
+            <button id="playPauseButton">Start</button>
+            <button id="resetButton">Reset</button>
 
-            <div class="row" style="padding-bottom: 13px">
-                <div class="three columns">
-                    <button id="playPauseButton">Start</button>
-                </div>
+            <h4 class="titleKE">Kinetic Energies</h4>
 
-                <div class="three columns">
-                    <button id="resetButton">Reset</button>
-                </div>
-            </div>
+            <!-- Vib KE slider -->
+            <label class="sliderTitle">Vibrational:
+                <span id="vibKEDisplay" data-unit="eV">0 eV</span>
+            </label>
+            <label class="slider">
+                <input id="vibKE" class="inputs" title="Vib KE" type="range" value="0" min="0" max="10.0" step="0.05"/>
+                <span class="sliderMin">0.00</span><span class="sliderMax">10.00</span>
+            </label>
 
-            <div class="row">
-                <h4 class="titleKE">Kinetic Energies</h4>
-                <!-- Vib KE slider -->
-                <label class="sliderTitle">Vibrational:
-                    <span id="vibKEDisplay" data-unit="eV">0 eV</span>
-                </label>
-                <label class="slider">
-                    <input id="vibKE" class="inputs" title="Vib KE" type="range" value="0" min="0" max="10.0" step="0.05"/>
-                    <span class="sliderMin">0.00</span><span class="sliderMax">10.00</span>
-                </label>
-
-                <br>
-                <!-- Rot KE slider -->
-                <label class="sliderTitle">Rotational:
-                    <span id="rotKEDisplay" data-unit="eV">5 eV</span>
-                </label>
-                <label class="slider">
-                    <input id="rotKE" class="inputs" title="Rot KE" type="range" value=0" min="0" max="10.0" step="0.05"/>
-                    <span class="sliderMin">0.00</span><span class="sliderMax">10.00</span>
-                </label>
-            </div>
+            <!-- Rot KE slider -->
+            <label class="sliderTitle">Rotational:
+                <span id="rotKEDisplay" data-unit="eV">5 eV</span>
+            </label>
+            <label class="slider">
+                <input id="rotKE" class="inputs" title="Rot KE" type="range" value=0" min="0" max="10.0" step="0.05"/>
+                <span class="sliderMin">0.00</span><span class="sliderMax">10.00</span>
+            </label>
 
             <!-- Atom A and Atom B LJ Parameter input fields -->
             <div class="row">
-                <div class="four columns">
+                <div class="one-half column">
                     <h5 class="titleAtomA">Atom A</h5>
-                    <span>&sigma; = </span>      <a class="txt" id="s1" data-change title="&sigma;">2</a> <span><em>nm</em></span>
+                    <span>&sigma; = </span><a class="txt" id="s1" data-change title="&sigma;">2</a> <span><em>nm</em></span>
                     <br>
-                    <span>&epsilon; = </span>    <a class="txt" id="e1" data-change title="&epsilon;">10</a> <span><em>eV</em></span>
+                    <span>&epsilon; = </span><a class="txt" id="e1" data-change title="&epsilon;">10</a> <span><em>eV</em></span>
                 </div>
-
-                <div class="four columns">
+                <div class="one-half column">
                     <h5 class="titleAtomB">Atom B</h5>
-                    <span>&sigma; = </span>    <a id="s2" class="txt" data-change title="&sigma;">2</a> <span><em>nm</em></span>
+                    <span>&sigma; = </span><a id="s2" class="txt" data-change title="&sigma;">2</a> <span><em>nm</em></span>
                     <br>
-                    <span>&epsilon; = </span>  <a id="e2" class="txt" data-change title="&epsilon;">10</a> <span><em>eV</em></span>
-                </div>
-
-                <div class="four columns">
-                    <br><br>
-                    <button id="submitLJ" class="inputs">Update LJ</button>
+                    <span>&epsilon; = </span><a id="e2" class="txt" data-change title="&epsilon;">10</a> <span><em>eV</em></span>
                 </div>
             </div>
+
+            <br><br>
+            <button id="submitLJ" class="inputs">Update LJ</button>
+
         </div>
 
         <div class="five columns">
-            <em><a for="#LJ_scatter" class="showHideButton">Hide </a></em> <a>LJ potential</a>
-            <div class="expand twelve columns">
-                <div id="LJ_scatter" style="width:100%; height: 200px"></div>
-            </div>
-            <br>
+            <div id="LJ_scatter" class="twelve columns graphs expanded"></div>
+            <em><a for="#LJ_scatter" class="showHideButton" data-garph-name=" LJ potential">Hide LJ potential</a></em>
 
             <!-- PE Graph Plotly -->
-            <em><a for="#graphPotE" class="showHideButton">Hide </a></em> <a>PE</a>
-            <div id="graphPotE" class="expand twelve columns" style="height: 220px; padding-bottom: 5px;">
-            </div>
-            <br>
+            <div id="graphPotE" class="twelve columns graphs expanded"></div>
+            <em><a for="#graphPotE" class="showHideButton" data-garph-name=" PE">Hide PE</a></em>
 
             <!-- Vib KE Graph Plotly -->
-            <em><a for="#graphVibE" class="showHideButton">Hide </a></em> <a>KE<sub>vib</sub></a>
-            <div id="graphVibE" class="expand twelve columns" style="height: 220px; padding-bottom: 5px;">
-            </div>
-            <br>
+            <div id="graphVibE" class="twelve columns graphs expanded"></div>
+            <em><a for="#graphVibE" class="showHideButton" data-garph-name=" KE<sub>vib</sub>">Hide KE<sub>vib</sub></a></em>
 
             <!-- Rot KE Graph Plotly -->
-            <em><a for="#graphRotE" class="showHideButton">Hide </a></em> <a>KE<sub>rot</sub></a>
-            <div id="graphRotE" class="expand twelve columns" style="height: 220px; padding-bottom: 5px;">
-            </div>
-            <br>
+            <div id="graphRotE" class="twelve columns graphs expanded"></div>
+            <em><a for="#graphRotE" class="showHideButton" data-garph-name=" KE<sub>rot</sub>">Hide KE<sub>rot</sub></a></em>
         </div>
     </div>
 </div>

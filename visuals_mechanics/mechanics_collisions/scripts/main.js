@@ -151,6 +151,9 @@ UI handling
 ++++++++++++++++++++++++++++++++++++
 */
 
+$(document).ready(function(){
+    $("#lodaingMessage").remove();
+});
 function updateScatterAngle() {
     initAngle = -degToRad(parseFloat($("#ballCollisionAngle").val()));
 
@@ -254,14 +257,10 @@ function resetSimulation() {
     ball2.CoM.spriteInstance.x = ball2.CoM.initr.x;
     ball2.CoM.spriteInstance.y = ball2.CoM.initr.y;
 
-    document.getElementById('ball1LabVelocityX').disabled = false;
-    $("#ball1LabVelocityX").removeClass("disabled");
-    document.getElementById('ball1LabMass').disabled = false;
-    $("#ball1LabMass").removeClass("disabled");
-    document.getElementById('ball2LabMass').disabled = false;
-    $("#ball2LabMass").removeClass("disabled");
-    document.getElementById('ballCollisionAngle').disabled = false;
-    $("#ballCollisionAngle").removeClass("disabled");
+    $('#ball1LabVelocityX').prop("disabled", false);
+    $('#ball1LabMass').prop("disabled", false);
+    $('#ball2LabMass').prop("disabled", false);
+    $('#ballCollisionAngle').prop("disabled", false);
 
     $("#ball1LabVelocityXDisplay").text($("#ball1LabVelocityX").val() + $("#ball1LabVelocityXDisplay").attr("data-unit"));
     $("#ball1LabVelocityYDisplay").text("0m/s");
@@ -511,15 +510,10 @@ function update() {
         ball1.CoM.spriteInstance.x += ball1.CoM.v.x;
         ball1.CoM.spriteInstance.y -= ball1.CoM.v.y;
 
-        document.getElementById('ball1LabVelocityX').disabled = true;
-        $("#ball1LabVelocityX").addClass("disabled");
-        document.getElementById('ball1LabMass').disabled = true;
-        $("#ball1LabMass").addClass("disabled");
-        document.getElementById('ball2LabMass').disabled = true;
-        $("#ball2LabMass").addClass("disabled");
-        document.getElementById('ballCollisionAngle').disabled = true;
-        $("#ballCollisionAngle").addClass("disabled");
-
+        $('#ball1LabVelocityX').prop("disabled", true);
+        $('#ball1LabMass').prop("disabled", true);
+        $('#ball2LabMass').prop("disabled", true);
+        $('#ballCollisionAngle').prop("disabled", true);
 
         let velocityDisplay = [ball1.Lab.v.x.toFixed(2), ball1.Lab.v.y.toFixed(2), ball2.Lab.v.x.toFixed(2), ball2.Lab.v.y.toFixed(2)];
 
@@ -653,7 +647,7 @@ function recalculateVector() {
         let colPoint = 100 - ball2.radius;
 
         drawArrow(vCal(new Vector(colPoint/scalefactor + 5, 1.5 - (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor ),'-',ball1.Lab.v), ball1.Lab.v, 1, 0xE40043);
-        drawArrow(new Vector(colPoint/scalefactor + 5, 1.5 - (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor ), ball1.Lab.postv, 1, 0xE40043);
+        drawArrow(new Vector(colPoint/scalefactor + 5, 1.5 - (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor ), ball1.Lab.postv, 1, 0xD24000);
         drawArrow(new Vector((ball2.Lab.spriteInstance.x-canvasWidth*0.5)/scalefactor + 5, 1.5 + (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor),ball2.Lab.postv, 1, 0x00ACD7);
         //CoM frame
         drawArrow(new Vector(5-pStar.x ,1.5),pStar,2,0x960078,'pstar');

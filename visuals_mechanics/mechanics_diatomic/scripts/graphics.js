@@ -31,10 +31,11 @@ function preload() {}
  * On slider change, runs functions to update labels of sliders.
  */
 $('.inputs').each(function() {
-
     $(this).on('input',updateLabels);
 });
-
+$(document).ready(function(){
+    $("#lodaingMessage").remove();
+});
 /**
  * When button pressed, LJ parameters updated and animation reset.
  */
@@ -50,9 +51,10 @@ $('#submitLJ').on('click', function() {
  * Hides divs to make parts of the page invisible. "Spoiler".
  */
 $(".showHideButton").on("click",function(){
-    var text = ($(this).text() === "Show") ? "Hide" : "Show";
-    $(this).text(text);
+    var text = ($($(this).attr("for")).hasClass("expanded")) ? "Show" : "Hide";
+    $(this).html(text+$(this).attr("data-garph-name"));
     $($(this).attr("for")).slideToggle("fast");
+    $($(this).attr("for")).toggleClass("expanded");
 });
 
 /**
@@ -110,7 +112,6 @@ function updateLabels() {
     $('.inputs').each(function(){
         var display_id = "#" + $(this).attr("id") + "Display";
         $(display_id).text($(this).val() + $(display_id).attr("data-unit"));
-
     });
 
     // Updating KE values and resetting.
@@ -171,8 +172,15 @@ var LJ_scatter;
 var curr_LJ;
 var LJ_layout;
 var titleFontsize = 12, labelFontsize = 10;                     // Text sizes.
-var marT = 30, marB = 23, marR = 5, marL = 23;                  // Margins.
-
+var marT = 30, marB = 23, marR = 5, marL = 35;                  // Margins.
+var options = {
+    scrollZoom: false, // lets us scroll to zoom in and out - works
+    showLink: false, // removes the link to edit on plotly - works
+    modeBarButtonsToRemove: ['sendDataToCloud','zoom2d','pan2d','select2d','lasso2d','zoomIn2d','zoomOut2d','autoScale2d','resetScale2d','hoverClosestCartesian','hoverCompareCartesian'],
+    //modeBarButtonsToAdd: ['lasso2d'],
+    displayLogo: false, // this one also seems to not work
+    displayModeBar: false //this one does work
+};
 /** ========================== Functions to draw static plots for Energy against time ============================== **/
 /**
  * Plots Rotational KE against Time
@@ -181,10 +189,8 @@ function plotRotKE() {
     var layoutRot = {yaxis: {title: "Energy / eV", titlefont: {size: labelFontsize}},
         titlefont: {size: titleFontsize}, margin: {l: marL, r: marR, b: marB, t: marT},
         xaxis: {title: "t / s", titlefont: {size: 10}}, title: "KE" + "rot".sub() + " against Time"};
-
-    Plotly.newPlot("graphRotE", {data: [{x: arrTime, y: arrRotKE, mode: "lines", line: {width: 2, color: "#66A40A"}}],
-            traces: [0, 1], layout: layoutRot},
-            {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
+    data = [{x: arrTime, y: arrRotKE, mode: "lines", line: {width: 2, color: "#66A40A"}}];
+    Plotly.newPlot("graphRotE", data , layoutRot , options);
 }
 
 /**
@@ -195,23 +201,22 @@ function plotPE() {
         titlefont: {size: titleFontsize}, margin: {l: marL, r: marR, b: marB, t: marT},
         xaxis: {title: "t / s", titlefont: {size: 10}}, title: "PE against Time"};
 
-    Plotly.newPlot("graphPotE", {data: [{x: arrTime, y: arrPE, mode: "lines",
-            line: {width: 2, color: "#003E74"}}],
-            traces: [0], layout: layoutPE},
-            {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
+    data = [{x: arrTime, y: arrPE, mode: "lines",line: {width: 2, color: "#003E74"}}];
+    Plotly.newPlot("graphPotE", data, layoutPE, options);
 }
 
 /**
  * Plots Vibrational KE against time.
  */
 function plotVibKE() {
-    var layoutVib = {yaxis: {title: "Energy / eV", titlefont: {size: labelFontsize}},
+    var layoutVib = {
+        yaxis: {title: "Energy / eV", titlefont: {size: labelFontsize}},
         titlefont: {size: titleFontsize}, margin: {l: marL, r: marR, b: marB, t: marT},
-        xaxis: {title: "t / s", titlefont: {size: 10}}, title: "KE" + "vib".sub() + " against Time"};
-
-    Plotly.newPlot("graphVibE", {data: [{x: arrTime, y: arrVibKE, mode: "lines", line: {width: 2, color: "#FFDD00"}}],
-            traces: [0], layout: layoutVib},
-            {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
+        xaxis: {title: "t / s", titlefont: {size: 10}}, 
+        title: "KE" + "vib".sub() + " against Time"
+    };
+    data = [{x: arrTime, y: arrVibKE, mode: "lines", line: {width: 2, color: "#FFDD00"}}];
+    Plotly.newPlot("graphVibE", data, layoutVib, options);
 }
 
 /**
@@ -234,9 +239,8 @@ function plotLJ() {
     var curr_sep = mol1.r.mag(); var curr_V = potential.calcV(curr_sep);
     curr_LJ = {x: [curr_sep], y: [curr_V], name: "Current LJ", mode: "markers",
         marker: {size: 10, color: CHERRY, symbol: "circle-open"}};
-
-    Plotly.newPlot("LJ_scatter", {data: [LJ_scatter, curr_LJ], traces: [0, 1], layout: LJ_layout},
-        {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
+    data = [LJ_scatter, curr_LJ];
+    Plotly.newPlot("LJ_scatter", data, LJ_layout, options);
 }
 
 /**
@@ -373,9 +377,15 @@ function update(){
         }
 
         // Animating all graphs.
-        Plotly.restyle("graphVibE", {data: [{x: arrTime, y: arrVibKE}],
-                traces: [0]},
-                {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
+        Plotly.restyle("graphVibE", 
+                {
+                    data: [{x: arrTime, y: arrVibKE}],
+                    traces: [0]
+                },
+                {
+                    frame: {redraw: false, duration: 0}, 
+                    transition: {duration: 0}
+                });
 
         Plotly.restyle("graphRotE", {data: [{x: arrTime, y: arrRotKE}],
                 traces: [0]},
