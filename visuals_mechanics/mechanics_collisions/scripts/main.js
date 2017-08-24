@@ -95,7 +95,7 @@ let arrowSprites = [];
 let traces = [];
 let toolTips = {};
 
-let angleSprite,dynamicSF;
+let angleSprite,dynamicSF,startingX,startingY;
 
 let d = new Date();
 
@@ -172,7 +172,7 @@ $(".inputs").each(function () {
 
 });
 
-$('#vector_draw_enable').on('click', updateLabels);
+$('#vectorDrawEnable').on('click', updateLabels);
 
 function updateLabels() {
     $(".inputs").each(function () {
@@ -261,6 +261,7 @@ function resetSimulation() {
     $('#ball1LabMass').prop("disabled", false);
     $('#ball2LabMass').prop("disabled", false);
     $('#ballCollisionAngle').prop("disabled", false);
+    $('#vectorDrawEnable').prop("disabled", false);
 
     $("#ball1LabVelocityXDisplay").text($("#ball1LabVelocityX").val() + $("#ball1LabVelocityXDisplay").attr("data-unit"));
     $("#ball1LabVelocityYDisplay").text("0m/s");
@@ -514,6 +515,7 @@ function update() {
         $('#ball1LabMass').prop("disabled", true);
         $('#ball2LabMass').prop("disabled", true);
         $('#ballCollisionAngle').prop("disabled", true);
+        $('#vectorDrawEnable').prop("disabled", true);
 
         let velocityDisplay = [ball1.Lab.v.x.toFixed(2), ball1.Lab.v.y.toFixed(2), ball2.Lab.v.x.toFixed(2), ball2.Lab.v.y.toFixed(2)];
 
@@ -538,27 +540,31 @@ function update() {
 }
 
 function drawArrow(originV, vectorV, rectIndex, color = 0x006EAF, latexID = "") {
-    let origin,vector;
+    // let origin,vector;
+    let scaleFactor;
+    let disStarting = 1;
+    if(rectIndex == 3) {
+        // vector = new Vector(vectorV.x * 7 /dynamicSF,-1*vectorV.y*7/dynamicSF);
+        // if(latexID === 'p1'){
+        //     origin = new Vector(originV.x,-1*originV.y);
+        // }
+        // else{
+        //      origin = new Vector(originV.x * 7/dynamicSF,-1*originV.y * 7 /dynamicSF);
+        // }
+        // // Flip directions for canvas y-axis
 
-    if(rectIndex === 3) {
-        vector = new Vector(vectorV.x * 7 /dynamicSF,-1*vectorV.y*7/dynamicSF);
-        if(latexID === 'p1'){
-            origin = new Vector(originV.x,-1*originV.y);
-        }
-        else{
-             origin = new Vector(originV.x * 7/dynamicSF,-1*originV.y * 7 /dynamicSF);
-        }
-        // Flip directions for canvas y-axis
+        scaleFactor = dynamicSF;
     }else{
-        vector = new Vector(vectorV.x,-1*vectorV.y);
-        origin = new Vector(originV.x, -1 * originV.y);
+        // vector = new Vector(vectorV.x,-1*vectorV.y);
+        // origin = new Vector(originV.x, -1 * originV.y);
+
+        scaleFactor = canvasWidth / 16;
+        disStarting = 0;
     }
 
-    let arrowG = game.add.graphics((canvasWidth / 2 - 500 + origin.x), (canvasHeight * 5 / 6 + 100 + origin.y));
+    let arrowG = game.add.graphics(0,0);
 
-    let scaleFactor = canvasWidth / 16;
-
-    let mag = vector.getMag() * scaleFactor;
+    let mag = vectorV.getMag() * scaleFactor;
 
     arrowG.lineStyle(2, color, 1);
     arrowG.moveTo(0, 0);
@@ -567,7 +573,7 @@ function drawArrow(originV, vectorV, rectIndex, color = 0x006EAF, latexID = "") 
     arrowG.lineTo(0, 0);
     arrowG.lineTo(mag, 0);
 
-    for (var i = 1; i <= Math.floor(vector.getMag()); i++) {
+    for (var i = 1; i <= Math.floor(vectorV.getMag()); i++) {
         arrowG.lineTo(i*scaleFactor, 0);
         arrowG.lineTo(i*scaleFactor, 4);
         arrowG.lineTo(i*scaleFactor, -4);
@@ -591,12 +597,13 @@ function drawArrow(originV, vectorV, rectIndex, color = 0x006EAF, latexID = "") 
     arrowG.endFill();
 
 
-    arrowSprites.push(markerGroup.create((canvasWidth / 2 - 5 * scaleFactor + origin.x * scaleFactor), (canvasHeight * (rectIndex * 2 - 1) / 6 + scaleFactor*1.5 + origin.y * scaleFactor), arrowG.generateTexture()));
+    arrowSprites.push(markerGroup.create((canvasWidth / 2 + startingX*disStarting + originV.x * scaleFactor), (canvasHeight * (rectIndex * 2 - 1) / 6 + startingY*disStarting - originV.y * scaleFactor), arrowG.generateTexture()));
     arrowSprites[arrowSprites.length - 1].anchor.set(0, 0.5);
-    arrowSprites[arrowSprites.length - 1].rotation = vector.getArg();
+    arrowSprites[arrowSprites.length - 1].rotation = -1*vectorV.getArg();
+    console.log(-1*vectorV.getArg());
 
     if (latexID !== "") {
-        arrowSprites.push(markerGroup.create((canvasWidth / 2 - 5 * scaleFactor + origin.x * scaleFactor + vector.x * scaleFactor / 2), (canvasHeight * (rectIndex * 2 - 1) / 6 + scaleFactor*1.5 + origin.y * scaleFactor + vector.y * scaleFactor / 2), latexID));
+        arrowSprites.push(markerGroup.create((canvasWidth / 2 + startingX*disStarting + originV.x * scaleFactor + vectorV.x * scaleFactor / 2), (canvasHeight * (rectIndex * 2 - 1) / 6 + startingY*disStarting - originV.y * scaleFactor - vectorV.y * scaleFactor / 2), latexID));
         arrowSprites[arrowSprites.length - 1].anchor.set(0.5, 0);
     }
 
@@ -639,24 +646,19 @@ function recalculateVector() {
     let q2Star = vCal(vCal(ball2.Lab.postv,'-',ball1.Lab.postv),'*',getReducedMass());
     let q1Star = vCal(q2Star,'*',-1);
 
-    dynamicSF = Math.max(p1.getMag(),
-                        q2.getMag(),
-                        q1.getMag(),
-                        vCal(vCal(pStar,'*',-1), "*", (ball1.Lab.mass / ball2.Lab.mass)).getMag(),
-                        pStar.getMag(),
-                        q1Star.getMag()) + 0.5;
+    dynamicSF = 1;
 
-    // if( ( p1.getMag()/Math.abs(q1.y)) <= ( (canvasWidth*0.8) / (canvasHeight/3*0.8) ) ){
-    //     // fit to Math.abs(q1.y)
-    //     dynamicSF = (canvasHeight/3*0.8)/Math.abs(q1.y);
-    // }else if( ( p1.getMag()/q1.y) > ( (canvasWidth*0.8) / (canvasHeight/3*0.8) ) ){
-    //     // fit to p1.getMag()
-    //     dynamicSF = (canvasWidth*0.8)/p1.getMag();
-    // }else{}
+    if( ( p1.getMag()/Math.abs(q1.y)) <= ( (canvasWidth*0.6) / (canvasHeight/3*0.6) ) ){
+        // fit to Math.abs(q1.y)
+        dynamicSF = (canvasHeight/3*0.6)/(Math.abs(q1.y)+0.4);
+    }else if( ( p1.getMag()/Math.abs(q1.y)) > ( (canvasWidth*0.6) / (canvasHeight/3*0.6) ) ){
+        // fit to p1.getMag()
+        dynamicSF = (canvasWidth*0.6)/p1.getMag();
+    }else{}
 
-    // startingX = -1*(dynamicSF*p1.getMag()/2);
-    // startingY = (dynamicSF*Math.abs(q1.y)/2);
-    
+    startingX = -1*(dynamicSF*p1.getMag()/2);
+    startingY = (dynamicSF*(q1.y-0.4)/2);
+
     if('comLab' in toolTips){
         toolTips['comLab'].updatePosition(getCoMR());
     }else {
@@ -664,20 +666,20 @@ function recalculateVector() {
     }
 
     clearVectors();
-    if ($('#vector_draw_enable').is(':checked')) {
+    if ($('#vectorDrawEnable').is(':checked')) {
         console.log("Checked");
 
         let scalefactor = canvasWidth / 16;
-        let colPoint = 100 - ball2.radius;
+        let colPoint = 100-ball2.radius;
 
-        drawArrow(vCal(new Vector(colPoint/scalefactor + 5, 1.5 - (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor ),'-',ball1.Lab.v), ball1.Lab.v, 1, 0xE40043);
-        drawArrow(new Vector(colPoint/scalefactor + 5, 1.5 - (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor ), ball1.Lab.postv, 1, 0xD24000);
-        drawArrow(new Vector((ball2.Lab.spriteInstance.x-canvasWidth*0.5)/scalefactor + 5, 1.5 + (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor),ball2.Lab.postv, 1, 0x00ACD7);
+        drawArrow(vCal(new Vector(colPoint/scalefactor, 0 - (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor ),'-',ball1.Lab.v), ball1.Lab.v, 1, 0xE40043);
+        drawArrow(new Vector(colPoint/scalefactor, 0 - (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor ), ball1.Lab.postv, 1, 0xD24000);
+        drawArrow(new Vector((ball2.Lab.spriteInstance.x-canvasWidth*0.5)/scalefactor, (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor),ball2.Lab.postv, 1, 0x00ACD7);
         //CoM frame
-        drawArrow(new Vector(5-pStar.x ,1.5),pStar,2,0x960078,'pstar');
-        drawArrow(new Vector(5+pStar.x,1.5),vCal(pStar,'*',-1),2,0x960078,'pstar');
-        drawArrow(new Vector(5,1.5),q1Star,2,0x960078,'qstar');
-        drawArrow(new Vector(5,1.5),q2Star,2,0x960078,'qstar');
+        drawArrow(new Vector(0-pStar.x ,0),pStar,2,0x960078,'pstar');
+        drawArrow(new Vector(pStar.x,0),vCal(pStar,'*',-1),2,0x960078,'pstar');
+        drawArrow(new Vector(0,0),q1Star,2,0x960078,'qstar');
+        drawArrow(new Vector(0,0),q2Star,2,0x960078,'qstar');
     }
     drawArrow(zeroV(), q1, 3, 0xDD2501, "q1");
     drawArrow(q1, q2, 3, 0x0091D4, 'q2');
