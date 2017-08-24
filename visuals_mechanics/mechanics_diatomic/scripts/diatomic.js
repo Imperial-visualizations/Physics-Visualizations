@@ -29,10 +29,8 @@ Atom.prototype.getPos = function(){
     return this.pos[this.pos.length - 1];
 };
 Atom.prototype.setPos = function(newPos){
-    if(this.pos.length > 250) {
-        this.pos.shift();
-    }
-        this.pos.push(newPos);
+    if(this.pos.length > 100) this.pos.shift();     // Storing last 100 positions, deleting older ones
+    this.pos.push(newPos);      // Pushing new position.
 };
 
 /**
@@ -104,7 +102,7 @@ Molecule.prototype.update = function(deltaTime){
     this.calcRotCoords(deltaTime);
     this.calcExtCoords(deltaTime);
 
-    console.log("Total E: " + this.getTotalE().toString());
+    // console.log("Total E: " + this.getTotalE().toString());
 
     // Update atom coordinates in CoM frame.
     a1.setPos(this.r.multiply(a1.mass / this.tot_m));

@@ -1,38 +1,43 @@
-var width = 800;
-var height = 480;
-width = $("#phaser").width() * window.devicePixelRatio;
-height = $("#phaser").width() * 0.7 * window.devicePixelRatio;
+var divPhaser = "#phaser";
+var width = $(divPhaser).width() * window.devicePixelRatio;
+var height = $(divPhaser).width() * 0.7 * window.devicePixelRatio;
 
 var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS,
     "phaser",{preload: preload,create: create,update: update});
 
-var a1,a2,mol1,potential;
+var a1,a2,mol1,potential;                                           // Atoms, molecules and potential to be instantiated
 var zoom  = 30;
-var initKVib,initKRot;
-var init_s1 = 2, init_s2 = 2, init_e1 = 10, init_e2 = 10;
-var WHITE = 0xffffff;
-const GREEN = 0x66A40A;
+var initKVib, initKRot;                                             // Initial KEs.
+var init_s1 = 2, init_s2 = 2, init_e1 = 10, init_e2 = 10;           // Initial LJ parameters.
+
+// Colours
 const IMPERIAL_BLUE = 0x003E74;
 const CHERRY = 0xE40043;
-const LEMON_YELLOW = 0xFFDD00;
-const GRAPH_TIME = 5;
-var running = false;
+
+const GRAPH_TIME = 5;                                               // x-axis range for Energy against Time plots.
+
+var running = false;                                                // Animation status.
 
 var mainLayer,traceLayer;
+
 /**
- * This function is the first function called when phaser starts and should only be used for initialising textures to be used
- * for sprites. All other code that should be called before the first update call should be placed in create. Not all phaser features have loaded
- * at this point so should not be used for any phaser code other than loading textures.
+ * This function is the first function called when phaser starts and should only be used for initialising textures to be
+ * used or sprites. All other code that should be called before the first update call should be placed in create. Not
+ * all phaser features have loaded at this point so should not be used for any phaser code other than loading textures.
  */
-function preload(){
+function preload() {}
 
-}
-
-$('.inputs').each(function(){
+/**
+ * On slider change, runs functions to update labels of sliders.
+ */
+$('.inputs').each(function() {
 
     $(this).on('input',updateLabels);
 });
 
+/**
+ * When button pressed, LJ parameters updated and animation reset.
+ */
 $('#submitLJ').on('click', function() {
     init_s1 = parseFloat($('#s1').text());
     init_e1 = parseFloat($('#e1').text());
@@ -42,26 +47,73 @@ $('#submitLJ').on('click', function() {
 });
 
 /**
+ * Hides divs to make parts of the page invisible. "Spoiler".
+ */
+$(".showHideButton").on("click",function(){
+    var text = ($(this).text() === "Show") ? "Hide" : "Show";
+    $(this).text(text);
+    $($(this).attr("for")).slideToggle("fast");
+});
+
+/**
+ * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
+ * off the input field.
+ */
+$('body').on('click', '[data-change]', function() {
+
+    // Storing current element and its attributes.
+    var $element = $(this);
+    var $title = $(this).attr("title");
+    var $el_id = $(this).attr("id");
+
+    // Creating input form.
+    var $input = $('<input style="width: 50%;"/>').val($element.text());
+    $input.attr("id", $el_id);                                  // Setting ID attribute (same as text).
+    $input.attr("title", $title);                               // Setting title attribute (same as text).
+    $element.replaceWith($input);                               // Replacing text with input form.
+
+    var save = function save() {
+        var $a = $('<a data-change />').text($input.val());
+
+        // Restoring text with same attributes as original.
+        $a.attr("title", $title);
+        $a.attr("id", $el_id);
+        $input.replaceWith($a);
+    };
+
+    // When clicking away from element (blurring), revert from input form to text.
+    $input.one('blur', save).focus();
+});
+
+/**
  * Play/stop button code.
  */
-$('#playPauseButton').on('click',function(){
+$('#playPauseButton').on('click',function() {
     if(running) {
         running = false;
-        $('#playPauseButton').text("Play");
+        $('#playPauseButton').text("Start");
         reset();
     }
+
     else {
         running = true;
         $('#playPauseButton').text("Stop");
     }
 });
 
-function updateLabels(){
+/**
+ * Changes writing on label to reflect value of slider.
+ */
+function updateLabels() {
+
+    // Updating labels.
     $('.inputs').each(function(){
         var display_id = "#" + $(this).attr("id") + "Display";
         $(display_id).text($(this).val() + $(display_id).attr("data-unit"));
 
     });
+
+    // Updating KE values and resetting.
     initKVib = parseFloat($('#vibKE').val());
     initKRot = parseFloat($('#rotKE').val());
     reset();
@@ -72,13 +124,13 @@ function updateLabels(){
  * that will be used in the simulation as well as for creating sprites. phaserInstance has fully loaded at this point
  * so all phaser features can be used.
  */
-function create(){
+function create() {
     traceLayer = phaserInstance.add.group();
     mainLayer = phaserInstance.add.group();
 
 
-    phaserInstance.canvasWidth = $("#phaser").width() * window.devicePixelRatio;
-    phaserInstance.canvasHeight = $("#phaser").width() * window.devicePixelRatio;
+    phaserInstance.canvasWidth = $(divPhaser).width() * window.devicePixelRatio;
+    phaserInstance.canvasHeight = $(divPhaser).width() * window.devicePixelRatio;
     phaserInstance.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
     phaserInstance.scale.setUserScale(1 / window.devicePixelRatio, 1 / window.devicePixelRatio);
     phaserInstance.renderer.renderSession.roundPixels = true;
@@ -100,16 +152,17 @@ function addAtom(atom) {
         console.error("phaser Instance has not been created yet");
         return -1;
     }
-    var atomG = phaserInstance.add.graphics(0,0);
-    atomG.beginFill(atom.color,1);
-    atomG.drawCircle(0,0,atom.radius*zoom);
+    var atomG = phaserInstance.add.graphics(0, 0);
+    atomG.beginFill(atom.color, 1);
+    atomG.drawCircle(0, 0, atom.radius * zoom);
 
     var sprite = mainLayer.create(0,0,atomG.generateTexture());
-    sprite.anchor.set(0.5,0.5);
+    sprite.anchor.set(0.5, 0.5);
     atomG.destroy();
     return sprite;
 }
 
+// Global Variables to store data for graph-drawing.
 var arrRotKE = [];
 var arrTime = [];
 var arrPE = [];
@@ -118,30 +171,46 @@ var LJ_scatter;
 var curr_LJ;
 var LJ_layout;
 
+/** ========================== Functions to draw static plots for Energy against time ============================== **/
+/**
+ * Plots Rotational KE against Time
+ */
 function plotRotKE() {
     var layoutRot = {yaxis: {title: "Energy / eV", titlefont: {size: 8}}, titlefont: {size: 10},
         xaxis: {title: "t / s", titlefont: {size: 8}}, title: "KE" + "rot".sub() + " against Time"};
+
     Plotly.newPlot("graphRotE", {data: [{x: arrTime, y: arrRotKE, mode: "lines", line: {width: 2, color: "#66A40A"}}],
-            traces: [0], layout: layoutRot},
+            traces: [0, 1], layout: layoutRot},
             {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
 }
 
+/**
+ * Plots Potential Energy against Time.
+ */
 function plotPE() {
     var layoutPE = {yaxis: {title: "Energy / eV", range: [-1.1 * potential.e, 0], titlefont: 8}, titlefont: {size: 10},
         xaxis: {title: "t / s", titlefont: {size: 8}}, title: "PE against Time"};
+
     Plotly.newPlot("graphPotE", {data: [{x: arrTime, y: arrPE, mode: "lines", line: {width: 2, color: "#003E74"}}],
             traces: [0], layout: layoutPE},
             {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
 }
 
+/**
+ * Plots Vibrational KE against time.
+ */
 function plotVibKE() {
     var layoutVib = {yaxis: {title: "Energy / eV", titlefont: {size: 8}}, titlefont: {size: 10},
         xaxis: {title: "t / s", titlefont: {size: 8}}, title: "KE" + "vib".sub() + " against Time"};
+
     Plotly.newPlot("graphVibE", {data: [{x: arrTime, y: arrVibKE, mode: "lines", line: {width: 2, color: "#FFDD00"}}],
             traces: [0], layout: layoutVib},
             {frame: {redraw: false, duration: 0}, transition: {duration: 0}})
 }
 
+/**
+ * Plots Lennard-Jones function and a marker to show current V against current separation using Plotly.
+ */
 function plotLJ() {
     LJ_layout = {title: "Lennard-Jones Potential", titlefont: {size: 10},
                 yaxis: {range: [-1.1 * potential.e, potential.e], title: "LJ Potential / eV", titlefont: {size: 8}},
@@ -154,6 +223,7 @@ function plotLJ() {
     }
     LJ_layout.yaxis.range[1] = LJ_scatter.y[0];     // Re-optimising y-axis scaling.
 
+    // Drawing red marker that shows current LJ potential against current separation.
     var curr_sep = mol1.r.mag(); var curr_V = potential.calcV(curr_sep);
     curr_LJ = {x: [curr_sep], y: [curr_V], name: "Current LJ", mode: "markers",
         marker: {size: 10, color: CHERRY, symbol: "circle-open"}};
@@ -162,18 +232,19 @@ function plotLJ() {
         {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
 }
 
-plotRotKE();
-plotPE();
-plotVibKE();
-
+/**
+ * Function to draw a 'spring' between two Atom instances to signify a bond.
+ * @param starting {Vector}: Position where spring starts.
+ * @param end {Vector}: Position where spring ends.
+ */
 function drawBond(starting,end){
     var widthOfSpring = end.subtract(starting).mag()*zoom;          // The distance between atoms.
 
     var heightOfSpring = 0.3 * zoom;
     var arrowG = phaserInstance.add.graphics(0, 0);
-    var wiggles = 7;
+    var wiggles = Math.ceil(potential.s * 3);
 
-    arrowG.lineStyle(3, IMPERIAL_BLUE, 0.5);
+    arrowG.lineStyle(2, IMPERIAL_BLUE, -arrPE[arrPE.length - 1] / potential.e);
     arrowG.lineTo(widthOfSpring / (wiggles * 4), 0);
 
     for (var i = 2; i < (wiggles * 4) - 1; i += 2) {
@@ -187,11 +258,36 @@ function drawBond(starting,end){
     mol1.bondSprite = traceLayer.create(phaserInstance.world.centerX,
         phaserInstance.world.centerY, arrowG.generateTexture());
 
-    mol1.bondSprite.anchor.set(0.5,0.5);
-    mol1.bondSprite.angle = Phaser.Math.RAD_TO_DEG * Math.atan2(end.subtract(starting).items[1],end.subtract(starting).items[0]);
+    mol1.bondSprite.anchor.set(0.5, 0.5);
+    mol1.bondSprite.angle = Phaser.Math.RAD_TO_DEG * Math.atan2(end.subtract(starting).items[1],
+        end.subtract(starting).items[0]);
     arrowG.destroy();
 }
 
+/**
+ * Function to draw trails behind Atom instances to show past positions.
+ * @param atom: Instance of Atom to draw trail behind.
+ */
+function drawLine(atom){
+    var lineG = phaserInstance.add.graphics();
+    lineG.lineStyle(4, IMPERIAL_BLUE, 0);
+
+    for (var i = 0; i < atom.pos.length; i+= 5) {
+        if(i > 0) lineG.lineStyle(4, IMPERIAL_BLUE, i / atom.pos.length);
+
+        lineG.lineTo(atom.pos[i].items[0] * zoom + phaserInstance.world.centerX,
+            atom.pos[i].items[1] * zoom + phaserInstance.world.centerY);
+    }
+
+    if (typeof atom.lineSprite !== 'undefined') atom.lineSprite.destroy();
+    atom.lineSprite = traceLayer.create(0, 0, lineG.generateTexture());
+    lineG.destroy();
+}
+
+/** ================================================ Time to Run =================================================== **/
+/**
+ * Re-instantiates all LJ and Molecule parameters, and wipes the graphs clean.
+ */
 function reset(){
 
     // Creating new LJ potential
@@ -224,7 +320,6 @@ function reset(){
 
 /**
  * This function is called once per frame.
- *
  */
 function update(){
     if(running) {
@@ -267,35 +362,21 @@ function update(){
             arrPE.shift();
         }
 
+        // Animating all graphs.
         Plotly.restyle("graphVibE", {data: [{x: arrTime, y: arrVibKE}],
                 traces: [0]},
                 {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
 
-        Plotly.restyle("graphRotE", {data: [{x: arrTime, y: arrRotKE}], traces: [0]},
+        Plotly.restyle("graphRotE", {data: [{x: arrTime, y: arrRotKE}],
+                traces: [0]},
                 {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
 
-        Plotly.restyle("graphPotE", {data: [{x: arrTime, y: arrPE}], traces: [0]},
+        Plotly.restyle("graphPotE", {data: [{x: arrTime, y: arrPE}],
+                traces: [0]},
                 {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
 
-        Plotly.restyle("LJ_scatter", {data: [LJ_scatter, curr_LJ], traces: [0, 1]},
+        Plotly.restyle("LJ_scatter", {data: [LJ_scatter, curr_LJ],
+                traces: [0, 1]},
                 {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
     }
-}
-
-function drawLine(atom){
-    var lineG = phaserInstance.add.graphics();
-    //  lineG.moveTo(atom.pos[0].items[0]*zoom + phaserInstance.world.centerX,
-    //                atom.pos[0].items[1]*zoom + phaserInstance.world.centerY);
-    lineG.lineStyle(4, IMPERIAL_BLUE, 0);
-
-    for (var i = 0; i < atom.pos.length; i+= 5) {
-        if(i > 0) lineG.lineStyle(4, IMPERIAL_BLUE, 0.4);
-
-        lineG.lineTo(atom.pos[i].items[0] * zoom + phaserInstance.world.centerX,
-                    atom.pos[i].items[1] * zoom + phaserInstance.world.centerY);
-    }
-
-    if (typeof atom.lineSprite !== 'undefined') atom.lineSprite.destroy();
-    atom.lineSprite = traceLayer.create(0, 0, lineG.generateTexture());
-    lineG.destroy();
 }

@@ -64,7 +64,6 @@ Vector.prototype.add = function add(other) {
             result.push(this.items[j].add(other.items[j]).items)                        // Adding arrays recursively.
         }
     }
-    ;
     return new Vector(result);                                                    // Returning the resultant array
 };
 
@@ -110,7 +109,7 @@ Vector.prototype.subtract = function(other) {
 
 /** ************************************************* Sum function ************************************************* **|
  * Adds all elements of vector together. Also can add the all the rows of the matrices.
- * @returns {*} Summed array.
+ * @returns {Number} Summed array.
 |** **************************************************************************************************************** **/
 Vector.prototype.sum = function sum() {
     var sum = 0;

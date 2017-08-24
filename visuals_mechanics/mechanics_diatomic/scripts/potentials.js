@@ -25,8 +25,8 @@ LJ = function (sigma, epsilon, sigma2, epsilon2) {
     var s1 = sigma;
     var e1 = epsilon;
 
+    // LJ parameters initialisation for Atom 2.
     var s2, e2;
-
     // Heterogeneous diatomic molecule.
     if (isNumber(sigma2) && isNumber(epsilon2)){
         // LJ parameters for Atom 2.
@@ -47,27 +47,45 @@ LJ = function (sigma, epsilon, sigma2, epsilon2) {
 /**
  * Calculate LJ potential.
  * @param r: Distance from LJ centre.
- * @returns {number|*}
+ * @returns {number} Net potential due to potential
  */
 LJ.prototype.calcV = function(r) {
     var repulsive = Math.pow(this.s / r, 12);                   // Repulsive factors.
     var attractive = -1 * Math.pow(this.s / r, 6);              // Attractive factors.
-    return 4 * this.e * (repulsive + attractive);     // Calculating LJ potential at distance r.
+    return 4 * this.e * (repulsive + attractive);
 };
 
+/**
+ * Calculates force on each atom in molecule due to LJ potential.
+ * @param r: Separation
+ * @returns {number} Net force due to potential
+ */
 LJ.prototype.calcF = function(r) {
-    var repulsive = 12 * Math.pow(this.s / r, 12);
-    var attractive = -6 * Math.pow(this.s / r, 6);
+    var repulsive = 12 * Math.pow(this.s / r, 12);              // Repulsive force.
+    var attractive = -6 * Math.pow(this.s / r, 6);              // Attractive force.
     return 4 * this.e * ((repulsive + attractive) / r);
 };
 
+/**
+ *
+ * @returns {number} Separation at which potential is 0.
+ */
 LJ.prototype.getR_0 = function(){
     return Math.pow(2, 1/6) * this.s;
 };
 
+/**
+ * Generates two arrays of points that can be used to plot the potential against separation to visualise the form of the
+ * instance of LJ potential.
+ * @param ppu: Points per unit of separation.
+ * @returns {{x: Array, y: Array, name: string, mode: string, line: {width: number, opacity: number, color: string}}}
+ * JS object that can be plotted by Plotly.
+ */
 LJ.prototype.plotPoints = function(ppu) {
-    var r = [];
-    var v = [];
+    var r = [];                                                         // Array to store separation in.
+    var v = [];                                                         // Array to store corresponding potential in.
+
+    // Taking points upto 3 * sigma.
     for (var i = 1; i < Math.ceil(this.s * 3 * ppu); i++) {
         r.push(i / ppu);
         v.push(this.calcV(i / ppu));
