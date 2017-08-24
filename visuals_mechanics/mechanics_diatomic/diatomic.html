@@ -45,8 +45,14 @@
                 <div id="phaser" style="padding-bottom: 7px"></div>
             </div>
 
-            <div class="row" style="padding-bottom: 10px">
-                <button id="playPauseButton">Start</button>
+            <div class="row" style="padding-bottom: 13px">
+                <div class="three columns">
+                    <button id="playPauseButton">Start</button>
+                </div>
+
+                <div class="three columns">
+                    <button id="resetButton">Reset</button>
+                </div>
             </div>
 
             <div class="row">
@@ -56,8 +62,8 @@
                     <span id="vibKEDisplay" data-unit="eV">0 eV</span>
                 </label>
                 <label class="slider">
-                    <input id="vibKE" class="inputs" title="Vib KE" type="range" value="0" min="0" max="10.0" step="0.1"/>
-                    <span class="sliderMin">0.0</span><span class="sliderMax">10.0</span>
+                    <input id="vibKE" class="inputs" title="Vib KE" type="range" value="0" min="0" max="10.0" step="0.05"/>
+                    <span class="sliderMin">0.00</span><span class="sliderMax">10.00</span>
                 </label>
 
                 <br>
@@ -66,31 +72,32 @@
                     <span id="rotKEDisplay" data-unit="eV">5 eV</span>
                 </label>
                 <label class="slider">
-                    <input id="rotKE" class="inputs" title="Rot KE" type="range" value=0" min="0" max="10.0" step="0.1"/>
-                    <span class="sliderMin">0.0</span><span class="sliderMax">10.0</span>
+                    <input id="rotKE" class="inputs" title="Rot KE" type="range" value=0" min="0" max="10.0" step="0.05"/>
+                    <span class="sliderMin">0.00</span><span class="sliderMax">10.00</span>
                 </label>
             </div>
 
             <!-- Atom A and Atom B LJ Parameter input fields -->
             <div class="row">
-                <div class="six columns">
+                <div class="four columns">
                     <h5 class="titleAtomA">Atom A</h5>
                     <span>&sigma; = </span>      <a class="txt" id="s1" data-change title="&sigma;">2</a> <span><em>nm</em></span>
                     <br>
                     <span>&epsilon; = </span>    <a class="txt" id="e1" data-change title="&epsilon;">10</a> <span><em>eV</em></span>
                 </div>
 
-                <div class="six columns">
+                <div class="four columns">
                     <h5 class="titleAtomB">Atom B</h5>
                     <span>&sigma; = </span>    <a id="s2" class="txt" data-change title="&sigma;">2</a> <span><em>nm</em></span>
                     <br>
                     <span>&epsilon; = </span>  <a id="e2" class="txt" data-change title="&epsilon;">10</a> <span><em>eV</em></span>
                 </div>
-            </div>
-            <div class="row" style="margin-top: 10px">
-                <button id="submitLJ" class="inputs">Update LJ</button>
-            </div>
 
+                <div class="four columns">
+                    <br><br>
+                    <button id="submitLJ" class="inputs">Update LJ</button>
+                </div>
+            </div>
         </div>
 
         <div class="five columns">

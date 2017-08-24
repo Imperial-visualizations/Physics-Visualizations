@@ -2,8 +2,8 @@ var divPhaser = "#phaser";
 var width = $(divPhaser).width() * window.devicePixelRatio;
 var height = $(divPhaser).width() * 0.7 * window.devicePixelRatio;
 
-var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS,
-    "phaser",{preload: preload,create: create,update: update});
+var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS, "phaser",
+    {preload: preload,create: create,update: update});
 
 var a1,a2,mol1,potential;                                           // Atoms, molecules and potential to be instantiated
 var zoom  = 30;
@@ -86,19 +86,19 @@ $('body').on('click', '[data-change]', function() {
 });
 
 /**
- * Play/stop button code.
+ * Start/Pause button code.
  */
 $('#playPauseButton').on('click',function() {
-    if(running) {
-        running = false;
-        $('#playPauseButton').text("Start");
-        reset();
-    }
+    var text = running ? "Start" : "Pause";
+    $("#playPauseButton").text(text);
+    running = !running;
+});
 
-    else {
-        running = true;
-        $('#playPauseButton').text("Stop");
-    }
+/**
+ * Runs reset function when reset button pressed.
+ */
+$('#resetButton').on('click', function() {
+    reset();
 });
 
 /**
