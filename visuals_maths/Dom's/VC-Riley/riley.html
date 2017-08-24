@@ -30,13 +30,13 @@
 
             <div class="tab-content">
                 <div class="tab-pane active" id="cylin">
-                    <h5 style="border-left: solid 5px rgb(255,0,0); padding-left: 8px;">ρ-coordinate(index):</h5>
+                    <h5 style="border-left: solid 5px rgb(255,0,0); padding-left: 8px;">ρ-coordinate(index)</h5>
                     <label class="sliderTitle">ρ:&nbsp;
                         <span id="rhoControllerDisplay" data-unit="">0</span>
                     </label>
                     <label class="slider">
-                        <input id="rhoController" class="inputs" type="range" value="0" min="0" max="4.4" step="0.2"/>
-                        <span class="sliderMin">0</span><span class="sliderMax">4.4</span>
+                        <input id="rhoController" class="inputs" type="range" value="3" min="3" max="4.4" step="0.2"/>
+                        <span class="sliderMin">3</span><span class="sliderMax">4.4</span>
                     </label>
                     <h5 style="border-left: solid 5px rgb(0,255,0); padding-left: 8px;">φ-coordinate(middle):</h5>
                     <label class="sliderTitle">φ:&nbsp;
@@ -57,13 +57,13 @@
                     </label>
                 </div>
                 <div class="tab-pane" id="spher">
-                    <h5 style="border-left: solid 5px rgb(0,0,255); padding-left: 8px;">r-coordinate(thumb):</h5>
+                    <h5 style="border-left: solid 5px rgb(0,0,255); padding-left: 8px;">r-coordinate(thumb)</h5>
                     <label class="sliderTitle">r:&nbsp;
                         <span id="rControllerDisplay" data-unit="">0</span>
                     </label>
                     <label class="slider">
-                        <input id="rController" class="inputs" type="range" value="0" min="0" max="5.2" step="0.2"/>
-                        <span class="sliderMin">0</span><span class="sliderMax">5.2</span>
+                        <input id="rController" class="inputs" type="range" value="3.8" min="3.8" max="5.2" step="0.2"/>
+                        <span class="sliderMin">3.8</span><span class="sliderMax">5.2</span>
                     </label>
                     <h5 style="border-left: solid 5px rgb(255,0,0); padding-left: 8px;">θ-coordinate(index):</h5>
                     <label class="sliderTitle">θ:&nbsp;
@@ -88,6 +88,8 @@
         </div>
     </div>
     </div>
+    <script src=../Util/htmlUtil.js></script>
+    <script src=../Util/plotUtil.js></script>
     <script src=../Util/objects.js></script>
     <script src=script/riley.js></script>
 </body>
