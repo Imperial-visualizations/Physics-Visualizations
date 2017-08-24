@@ -380,7 +380,7 @@ var initialData = [];
 }
 
 function curlPlot(n) {
-    var data = arrowBox(n,'rgb(0,0,0)','rgb(0,0,0)');
+    var data = arrowBox(n,'rgb(0,62,116)','rgb(0,62,116)');
     var layout = {
         title: 'Plot of D split up into rotating regions',
         xaxis: {label: 'x', range: [-0.5,1.5]},
@@ -390,6 +390,37 @@ function curlPlot(n) {
     Plotly.newPlot('curl_graph',data,layout)
 }
 
+function zoom() {
+    Plotly.animate('curl_graph',{layout: {
+        title: 'Plot of D split up into rotating regions',
+        xaxis: {label: 'x', range: [0.3,0.4]},
+        yaxis: {label: 'y', range: [0.3,0.4]},
+        showlegend: false
+        }
+    }, {
+        transition: {
+            duration: 1000,
+            easing: 'linear'
+        }
+    })
+}
+
+function unzoom() {
+    Plotly.animate('curl_graph',{layout: {
+        title: 'Plot of D split up into rotating regions',
+        xaxis: {label: 'x', range: [-0.5,1.5]},
+        yaxis: {label: 'y', range: [-0.5,1.5]},
+        showlegend: false
+        }
+    }, {
+        transition: {
+            duration: 1000,
+            easing: 'linear'
+        }
+    })
+}
+
+
 //function curlReplot() {
 //    var N = document.getElementById('curlBox').value;
 ////    var N = Number($("#curlBox").value)
@@ -398,9 +429,9 @@ function curlPlot(n) {
 //}
 
 function overallPlot(n) {
-    var data = arrowBox(n,'rgb(255,0,255)','rgb(0,255,0)');
+    var data = arrowBox(n,'rgb(255,0,255)','rgb(34,139,34)');
     var layout = {
-        title: 'Plot of D with colour coded arrows'
+        title: 'Plot of D with colour coded arrows',
         xaxis: {label: 'x', range: [-0.5,1.5]},
         yaxis: {lavel: 'y', range: [-0.5,1.5]},
         showlegend: false
