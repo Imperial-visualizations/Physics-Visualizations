@@ -38,11 +38,12 @@
         .showHideButton{
             display: block;
             color: #000;
+            background: #EBEEEE;
             text-decoration: underline;
             margin-top: 0;
             text-align: right;
             width: 100%;
-            border-top: 2px solid #EBEEEE;
+            border-top: 2px solid #e1e4e4;
             margin-bottom: 8px;
             font-weight: 500;
             font-size: 0.8em;
@@ -62,7 +63,7 @@
     <!--Phaser animation and KE plots & input sliders-->
     <div class="row">
         <div class="seven columns">
-            <div id="phaser"><span id="lodaingMessage">Loading Canvas....</span></div>
+            <div id="phaser"><span id="loadingMessage"></span></div>
             <button id="playPauseButton">Start</button>
             <button id="resetButton">Reset</button>
 
@@ -109,19 +110,19 @@
 
         <div class="five columns">
             <div id="LJ_scatter" class="twelve columns graphs expanded"></div>
-            <em><a for="#LJ_scatter" class="showHideButton" data-garph-name=" LJ potential">Hide LJ potential</a></em>
+            <em><a for="#LJ_scatter" class="showHideButton" data-graph-name=" LJ potential">Hide LJ potential</a></em>
 
             <!-- PE Graph Plotly -->
             <div id="graphPotE" class="twelve columns graphs expanded"></div>
-            <em><a for="#graphPotE" class="showHideButton" data-garph-name=" PE">Hide PE</a></em>
+            <em><a for="#graphPotE" class="showHideButton" data-graph-name=" PE">Hide PE</a></em>
 
             <!-- Vib KE Graph Plotly -->
             <div id="graphVibE" class="twelve columns graphs expanded"></div>
-            <em><a for="#graphVibE" class="showHideButton" data-garph-name=" KE<sub>vib</sub>">Hide KE<sub>vib</sub></a></em>
+            <em><a for="#graphVibE" class="showHideButton" data-graph-name=" KE<sub>vib</sub>">Hide KE<sub>vib</sub></a></em>
 
             <!-- Rot KE Graph Plotly -->
             <div id="graphRotE" class="twelve columns graphs expanded"></div>
-            <em><a for="#graphRotE" class="showHideButton" data-garph-name=" KE<sub>rot</sub>">Hide KE<sub>rot</sub></a></em>
+            <em><a for="#graphRotE" class="showHideButton" data-graph-name=" KE<sub>rot</sub>">Hide KE<sub>rot</sub></a></em>
         </div>
     </div>
 </div>

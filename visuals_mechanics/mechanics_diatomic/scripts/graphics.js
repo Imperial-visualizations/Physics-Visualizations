@@ -36,6 +36,7 @@ $('.inputs').each(function() {
 $(document).ready(function(){
     $("#lodaingMessage").remove();
 });
+
 /**
  * When button pressed, LJ parameters updated and animation reset.
  */
@@ -52,7 +53,7 @@ $('#submitLJ').on('click', function() {
  */
 $(".showHideButton").on("click",function(){
     var text = ($($(this).attr("for")).hasClass("expanded")) ? "Show" : "Hide";
-    $(this).html(text+$(this).attr("data-garph-name"));
+    $(this).html(text+$(this).attr("data-graph-name"));
     $($(this).attr("for")).slideToggle("fast");
     $($(this).attr("for")).toggleClass("expanded");
 });
@@ -176,7 +177,8 @@ var marT = 30, marB = 23, marR = 5, marL = 35;                  // Margins.
 var options = {
     scrollZoom: false, // lets us scroll to zoom in and out - works
     showLink: false, // removes the link to edit on plotly - works
-    modeBarButtonsToRemove: ['sendDataToCloud','zoom2d','pan2d','select2d','lasso2d','zoomIn2d','zoomOut2d','autoScale2d','resetScale2d','hoverClosestCartesian','hoverCompareCartesian'],
+    modeBarButtonsToRemove: ['sendDataToCloud','zoom2d','pan2d','select2d','lasso2d','zoomIn2d','zoomOut2d',
+        'autoScale2d','resetScale2d','hoverClosestCartesian','hoverCompareCartesian'],
     //modeBarButtonsToAdd: ['lasso2d'],
     displayLogo: false, // this one also seems to not work
     displayModeBar: false //this one does work
@@ -251,7 +253,7 @@ function plotLJ() {
 function drawBond(starting,end){
     var widthOfSpring = end.subtract(starting).mag()*zoom;          // The distance between atoms.
 
-    var heightOfSpring = 0.3 * zoom;
+    var heightOfSpring = 0.35 * zoom;
     var arrowG = phaserInstance.add.graphics(0, 0);
     var wiggles = Math.ceil(potential.s * 3);
 
@@ -283,7 +285,7 @@ function drawTrail(atom){
     var lineG = phaserInstance.add.graphics();
     lineG.lineStyle(4, IMPERIAL_BLUE, 0);
 
-    for (var i = 0; i < atom.pos.length; i+= 5) {
+    for (var i = 0; i < atom.pos.length; i+= 6) {
 
         // Trail gets thinner and more transparent for older positions.
         if(i > 0) lineG.lineStyle(4 * i / atom.pos.length, IMPERIAL_BLUE, i / atom.pos.length);
@@ -377,26 +379,35 @@ function update(){
         }
 
         // Animating all graphs.
-        Plotly.restyle("graphVibE", 
-                {
+        if ($("#graphVibE").hasClass("expanded")) {
+            Plotly.restyle("graphVibE", {
                     data: [{x: arrTime, y: arrVibKE}],
+                    traces: [0]},
+                {frame: {redraw: false, duration: 0},
+                    transition: {duration: 0}});
+        }
+
+        if ($("#graphRotE").hasClass("expanded")) {
+            Plotly.restyle("graphRotE", {
+                    data: [{x: arrTime, y: arrRotKE}],
+                    traces: [0]},
+                {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
+        }
+
+        if ($("#graphPotE").hasClass("expanded")) {
+            Plotly.restyle("graphPotE", {
+                    data: [{x: arrTime, y: arrPE}],
                     traces: [0]
                 },
-                {
-                    frame: {redraw: false, duration: 0}, 
-                    transition: {duration: 0}
-                });
-
-        Plotly.restyle("graphRotE", {data: [{x: arrTime, y: arrRotKE}],
-                traces: [0]},
                 {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
+        }
 
-        Plotly.restyle("graphPotE", {data: [{x: arrTime, y: arrPE}],
-                traces: [0]},
+        if ($('#LJ_scatter').hasClass("expanded")) {
+            Plotly.restyle("LJ_scatter", {
+                    data: [LJ_scatter, curr_LJ],
+                    traces: [0, 1]
+                },
                 {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
-
-        Plotly.restyle("LJ_scatter", {data: [LJ_scatter, curr_LJ],
-                traces: [0, 1]},
-                {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
+        }
     }
 }
