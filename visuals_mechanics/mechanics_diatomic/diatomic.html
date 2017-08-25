@@ -30,7 +30,7 @@
         }
 
         .graphs{
-            height: 200px;
+            height: 300px;
             border: 1px solid #EBEEEE;
             box-sizing: border-box;
             box-shadow: 1px 1px 0px 2px #EBEEEE;
@@ -70,7 +70,7 @@
             <h4 class="titleKE">Kinetic Energies</h4>
 
             <!-- Vib KE slider -->
-            <label class="sliderTitle">Vibrational:
+            <label class="sliderTitle" style="padding-bottom: 10px">Vibrational:
                 <span id="vibKEDisplay" data-unit="eV">0 eV</span>
             </label>
             <label class="slider">
@@ -79,7 +79,7 @@
             </label>
 
             <!-- Rot KE slider -->
-            <label class="sliderTitle">Rotational:
+            <label class="sliderTitle" style="margin-bottom: 0">Rotational:
                 <span id="rotKEDisplay" data-unit="eV">5 eV</span>
             </label>
             <label class="slider">
@@ -112,17 +112,8 @@
             <div id="LJ_scatter" class="twelve columns graphs expanded"></div>
             <em><a for="#LJ_scatter" class="showHideButton" data-graph-name=" LJ potential">Hide LJ potential</a></em>
 
-            <!-- PE Graph Plotly -->
-            <div id="graphPotE" class="twelve columns graphs expanded"></div>
-            <em><a for="#graphPotE" class="showHideButton" data-graph-name=" PE">Hide PE</a></em>
-
-            <!-- Vib KE Graph Plotly -->
-            <div id="graphVibE" class="twelve columns graphs expanded"></div>
-            <em><a for="#graphVibE" class="showHideButton" data-graph-name=" KE<sub>vib</sub>">Hide KE<sub>vib</sub></a></em>
-
-            <!-- Rot KE Graph Plotly -->
-            <div id="graphRotE" class="twelve columns graphs expanded"></div>
-            <em><a for="#graphRotE" class="showHideButton" data-graph-name=" KE<sub>rot</sub>">Hide KE<sub>rot</sub></a></em>
+            <div id="graphE" class="twelve columns graphs expanded" style="height: 325px;"></div>
+            <em><a for="#graphE" class="showHideButton" data-graph-name=" Energy vs Time">Hide Energy vs Time</sub></a></em>
         </div>
     </div>
 </div>

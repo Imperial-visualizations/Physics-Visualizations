@@ -101,9 +101,6 @@ Molecule.prototype.update = function(deltaTime){
     // Rotate and vibrate.
     this.calcRotCoords(deltaTime);
     this.calcExtCoords(deltaTime);
-    console.log(this.getTotalE().toString());
-
-    // console.log("Total E: " + this.getTotalE().toString());
 
     // Update atom coordinates in CoM frame.
     a1.setPos(this.r.multiply(a1.mass / this.tot_m));

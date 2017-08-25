@@ -137,8 +137,8 @@ function create() {
     mainLayer = phaserInstance.add.group();
 
 
-    phaserInstance.canvasWidth = $("#phaser").width() * window.devicePixelRatio;
-    phaserInstance.canvasHeight = $("#phaser").width() * window.devicePixelRatio;
+    phaserInstance.canvasWidth = $(divPhaser).width() * window.devicePixelRatio;
+    phaserInstance.canvasHeight = $(divPhaser).width() * window.devicePixelRatio;
     phaserInstance.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
     phaserInstance.scale.setUserScale(1 / window.devicePixelRatio, 1 / window.devicePixelRatio);
     phaserInstance.renderer.renderSession.roundPixels = true;
@@ -182,6 +182,7 @@ var curr_LJ;
 var LJ_layout;
 var titleFontsize = 12, labelFontsize = 10;                     // Text sizes.
 var marT = 30, marB = 23, marR = 5, marL = 35;                  // Margins.
+var layoutE;
 var options = {
     scrollZoom: false, // lets us scroll to zoom in and out - works
     showLink: false, // removes the link to edit on plotly - works
@@ -191,42 +192,25 @@ var options = {
     displayLogo: false, // this one also seems to not work
     displayModeBar: false //this one does work
 };
+
 /** ========================== Functions to draw static plots for Energy against time ============================== **/
-/**
- * Plots Rotational KE against Time
- */
-function plotRotKE() {
-    var layoutRot = {yaxis: {title: "Energy / eV", titlefont: {size: labelFontsize}},
-        titlefont: {size: titleFontsize}, margin: {l: marL, r: marR, b: marB, t: marT},
-        xaxis: {title: "t / s", titlefont: {size: 10}}, title: "KE" + "rot".sub() + " against Time"};
-    data = [{x: arrTime, y: arrRotKE, mode: "lines", line: {width: 2, color: "#66A40A"}}];
-    Plotly.newPlot("graphRotE", data , layoutRot , options);
-}
-
-/**
- * Plots Potential Energy against Time.
- */
-function plotPE() {
-    var layoutPE = {yaxis: {title: "Energy / eV", titlefont: {size: labelFontsize}},
-        titlefont: {size: titleFontsize}, margin: {l: marL, r: marR, b: marB, t: marT},
-        xaxis: {title: "t / s", titlefont: {size: 10}}, title: "PE against Time"};
-
-    data = [{x: arrTime, y: arrPE, mode: "lines",line: {width: 2, color: "#003E74"}}];
-    Plotly.newPlot("graphPotE", data, layoutPE, options);
-}
-
 /**
  * Plots Vibrational KE against time.
  */
-function plotVibKE() {
-    var layoutVib = {
-        yaxis: {title: "Energy / eV", titlefont: {size: labelFontsize}},
+function plotE() {
+    layoutE = {
+        yaxis: {title: "Energy / eV", titlefont: {size: labelFontsize},
+            range: [-1.1 * mol1.V.e, 1.7 * Math.max(initKVib, initKRot)], dtick: 2},
         titlefont: {size: titleFontsize}, margin: {l: marL, r: marR, b: marB, t: marT},
-        xaxis: {title: "t / s", titlefont: {size: 10}},
-        title: "KE" + "vib".sub() + " against Time"
+        xaxis: {title: "t / s", titlefont: {size: 10}, range: [0, GRAPH_TIME], dtick: 0.5},
+        title: "KE and PE against Time",
+        legend: {x: 0.67, y: 1, orientation: "h"}
     };
-    data = [{x: arrTime, y: arrVibKE, mode: "lines", line: {width: 2, color: "#FFDD00"}}];
-    Plotly.newPlot("graphVibE", data, layoutVib, options);
+    var data = [{x: arrTime, y: arrVibKE, mode: "lines", line: {width: 2, color: "#FFDD00"}, name: "KE" + "vib".sub()},
+            {x: arrTime, y: arrRotKE, mode: "lines", line: {width: 2, color: "#66A40A"}, name: "KE" + "rot".sub()},
+            {x: arrTime, y: arrPE, mode: "lines", line: {width: 2, color: "#003E74"}, name: "PE"}];
+
+    Plotly.newPlot("graphE", data, layoutE, options);
 }
 
 /**
@@ -235,8 +219,8 @@ function plotVibKE() {
 function plotLJ() {
     LJ_layout = {title: "Lennard-Jones Potential", titlefont: {size: 12}, margin: {l: marL + 5, r: marR, b: marB, t: marT},
                 legend: {x: 0.67, y: 1, "orientation": "v"},
-                yaxis: {range: [-1.1 * potential.e, 0.7 * potential.e], title: "LJ Potential / eV", titlefont: {size: 10}},
-                xaxis: {range: [0, 3 * potential.s], title: "r" + "AB".sub() + " / nm", titlefont: {size: 10}}};
+                yaxis: {range: [-1.1 * potential.e, 0.7 * potential.e], dtick: 2, title: "LJ Potential / eV", titlefont: {size: 10}},
+                xaxis: {range: [0, 3 * potential.s], dtick: 0.5, title: "r" + "AB".sub() + " / nm", titlefont: {size: 10}}};
 
     // Remove all points outside visible range on graph.
     while (LJ_scatter.y[0] > LJ_layout.yaxis.range[1]) {
@@ -249,7 +233,7 @@ function plotLJ() {
     var curr_sep = mol1.r.mag(); var curr_V = potential.calcV(curr_sep);
     curr_LJ = {x: [curr_sep], y: [curr_V], name: "Current LJ", mode: "markers",
         marker: {size: 10, color: CHERRY, symbol: "circle-open"}};
-    data = [LJ_scatter, curr_LJ];
+    var data = [LJ_scatter, curr_LJ];
     Plotly.newPlot("LJ_scatter", data, LJ_layout, options);
 }
 
@@ -259,13 +243,15 @@ function plotLJ() {
  * @param end {Vector}: Position where spring ends.
  */
 function drawBond(starting,end){
-    var widthOfSpring = end.subtract(starting).mag()*zoom; // The distance between atomes.
-    var heightOfSpring = zoom;
+    var widthOfSpring = end.subtract(starting).mag() * zoom;        // The distance between atoms.
+    var heightOfSpring = 0.33 * zoom;
     var arrowG = phaserInstance.add.graphics(0,0);
-    if(initKVib + initKRot - mol1.V.e < 0){
 
-        var wiggles = 1 + Math.round(initKVib) / 2;
-        arrowG.lineStyle(5, IMPERIAL_BLUE, 1);
+    var curr_pot = mol1.V.calcV(mol1.r.mag());
+
+    if (-curr_pot / mol1.V.e > 0.01) {
+        var wiggles = 2 * Math.ceil(mol1.V.s);
+        arrowG.lineStyle(4, IMPERIAL_BLUE, (-curr_pot / mol1.V.e));
         arrowG.lineTo(widthOfSpring / (wiggles * 4), 0);
         for (var i = 2; i < wiggles * 4 - 1; i += 2) {
             arrowG.lineTo(i * widthOfSpring / (wiggles * 4), ((i % 4) - 1) * heightOfSpring / 2);
@@ -344,9 +330,7 @@ function reset(){
     arrPE = [];
     arrVibKE = [];
     plotLJ();
-    plotRotKE();
-    plotPE();
-    plotVibKE();
+    plotE();
 }
 
 /**
@@ -354,7 +338,7 @@ function reset(){
  */
 function update(){
     if(running) {
-        var dT = 1/3600;
+        var dT = 1/80;
         mol1.update(dT);//requests molecule update, sends deltaTime to mol1.
         a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
         a1.sprite.y = a1.getPos().items[1] * zoom + phaserInstance.world.centerY;
@@ -363,6 +347,7 @@ function update(){
         drawLine(a1);
         drawLine(a2);
         drawBond(a1.getPos(),a2.getPos());
+
         // Calculate Rotational KE and update array.
         var rotKE = 0.5 * mol1.I * Math.pow(mol1.omega, 2);
         arrRotKE.push(rotKE);
@@ -393,28 +378,15 @@ function update(){
             arrPE.shift();
         }
 
+        layoutE.xaxis.range[0] = arrTime[0];
+        layoutE.xaxis.range[1] = Math.max(arrTime[arrTime.length - 1] + 0.5, GRAPH_TIME);
+
         // Animating all graphs.
-        if ($("#graphVibE").hasClass("expanded")) {
-            Plotly.restyle("graphVibE", {
-                    data: [{x: arrTime, y: arrVibKE}],
-                    traces: [0]},
-                {frame: {redraw: false, duration: 0},
-                    transition: {duration: 0}});
-        }
-
-        if ($("#graphRotE").hasClass("expanded")) {
-            Plotly.restyle("graphRotE", {
-                    data: [{x: arrTime, y: arrRotKE}],
-                    traces: [0]},
-                {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
-        }
-
-        if ($("#graphPotE").hasClass("expanded")) {
-            Plotly.restyle("graphPotE", {
-                    data: [{x: arrTime, y: arrPE}],
-                    traces: [0]
-                },
-                {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
+        if ($("#graphE").hasClass("expanded")) {
+            Plotly.restyle("graphE", {data: [{x: arrTime, y: arrVibKE},
+                        {x: arrTime, y: arrRotKE}, {x: arrTime, y: arrPE}],
+                        traces: [0, 1, 2]},
+                        {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
         }
 
         if ($('#LJ_scatter').hasClass("expanded")) {
