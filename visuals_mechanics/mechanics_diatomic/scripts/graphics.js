@@ -13,7 +13,6 @@ var init_s1 = 2, init_s2 = 2, init_e1 = 10, init_e2 = 10;           // Initial L
 // Colours
 const IMPERIAL_BLUE = 0x003E74;
 const CHERRY = 0xE40043;
-
 const GRAPH_TIME = 5;                                               // x-axis range for Energy against Time plots.
 
 var running = false;                                                // Animation status.
@@ -33,8 +32,9 @@ function preload() {}
 $('.inputs').each(function() {
     $(this).on('input',updateLabels);
 });
+
 $(document).ready(function(){
-    $("#lodaingMessage").remove();
+    $("#loadingMessage").remove();
 });
 
 /**
@@ -63,29 +63,30 @@ $(".showHideButton").on("click",function(){
  * off the input field.
  */
 $('body').on('click', '[data-change]', function() {
+    if(!running){
+        // Storing current element and its attributes.
+        var $element = $(this);
+        var $title = $(this).attr("title");
+        var $el_id = $(this).attr("id");
 
-    // Storing current element and its attributes.
-    var $element = $(this);
-    var $title = $(this).attr("title");
-    var $el_id = $(this).attr("id");
+        // Creating input form.
+        var $input = $('<input style="width: 50%;"/>').val($element.text());
+        $input.attr("id", $el_id);                                  // Setting ID attribute (same as text).
+        $input.attr("title", $title);                               // Setting title attribute (same as text).
+        $element.replaceWith($input);                               // Replacing text with input form.
 
-    // Creating input form.
-    var $input = $('<input style="width: 50%;"/>').val($element.text());
-    $input.attr("id", $el_id);                                  // Setting ID attribute (same as text).
-    $input.attr("title", $title);                               // Setting title attribute (same as text).
-    $element.replaceWith($input);                               // Replacing text with input form.
+        var save = function save() {
+            var $a = $('<a data-change />').text($input.val());
 
-    var save = function save() {
-        var $a = $('<a data-change />').text($input.val());
+            // Restoring text with same attributes as original.
+            $a.attr("title", $title);
+            $a.attr("id", $el_id);
+            $input.replaceWith($a);
+        };
 
-        // Restoring text with same attributes as original.
-        $a.attr("title", $title);
-        $a.attr("id", $el_id);
-        $input.replaceWith($a);
-    };
-
-    // When clicking away from element (blurring), revert from input form to text.
-    $input.one('blur', save).focus();
+        // When clicking away from element (blurring), revert from input form to text.
+        $input.one('blur', save).focus();
+    }
 });
 
 /**
@@ -95,12 +96,17 @@ $('#playPauseButton').on('click',function() {
     var text = running ? "Start" : "Pause";
     $("#playPauseButton").text(text);
     running = !running;
+    $("#vibKE").prop('disabled',running);
+    $("#rotKE").prop('disabled',running);
 });
 
 /**
  * Runs reset function when reset button pressed.
  */
 $('#resetButton').on('click', function() {
+    running = false;
+    $("#vibKE").prop('disabled',false);
+    $("#rotKE").prop('disabled',false);
     reset();
 });
 
@@ -109,7 +115,7 @@ $('#resetButton').on('click', function() {
  */
 function updateLabels() {
 
-    // Updating labels.
+
     $('.inputs').each(function(){
         var display_id = "#" + $(this).attr("id") + "Display";
         $(display_id).text($(this).val() + $(display_id).attr("data-unit"));
@@ -131,8 +137,8 @@ function create() {
     mainLayer = phaserInstance.add.group();
 
 
-    phaserInstance.canvasWidth = $(divPhaser).width() * window.devicePixelRatio;
-    phaserInstance.canvasHeight = $(divPhaser).width() * window.devicePixelRatio;
+    phaserInstance.canvasWidth = $("#phaser").width() * window.devicePixelRatio;
+    phaserInstance.canvasHeight = $("#phaser").width() * window.devicePixelRatio;
     phaserInstance.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
     phaserInstance.scale.setUserScale(1 / window.devicePixelRatio, 1 / window.devicePixelRatio);
     phaserInstance.renderer.renderSession.roundPixels = true;
@@ -214,7 +220,7 @@ function plotVibKE() {
     var layoutVib = {
         yaxis: {title: "Energy / eV", titlefont: {size: labelFontsize}},
         titlefont: {size: titleFontsize}, margin: {l: marL, r: marR, b: marB, t: marT},
-        xaxis: {title: "t / s", titlefont: {size: 10}}, 
+        xaxis: {title: "t / s", titlefont: {size: 10}},
         title: "KE" + "vib".sub() + " against Time"
     };
     data = [{x: arrTime, y: arrVibKE, mode: "lines", line: {width: 2, color: "#FFDD00"}}];
@@ -251,21 +257,20 @@ function plotLJ() {
  * @param end {Vector}: Position where spring ends.
  */
 function drawBond(starting,end){
-    var widthOfSpring = end.subtract(starting).mag()*zoom;          // The distance between atoms.
+    var widthOfSpring = end.subtract(starting).mag()*zoom; // The distance between atomes.
+    var heightOfSpring = zoom;
+    var arrowG = phaserInstance.add.graphics(0,0);
+    if(initKVib + initKRot - mol1.V.e < 0){
 
-    var heightOfSpring = 0.35 * zoom;
-    var arrowG = phaserInstance.add.graphics(0, 0);
-    var wiggles = Math.ceil(potential.s * 3);
-
-    arrowG.lineStyle(2, IMPERIAL_BLUE, -arrPE[arrPE.length - 1] / potential.e);
-    arrowG.lineTo(widthOfSpring / (wiggles * 4), 0);
-
-    for (var i = 2; i < (wiggles * 4) - 1; i += 2) {
-        arrowG.lineTo(i * widthOfSpring / (wiggles * 4), ((i % 4) - 1) * heightOfSpring / 2);
+        var wiggles = 1 + Math.round(initKVib) / 2;
+        arrowG.lineStyle(5, IMPERIAL_BLUE, 1);
+        arrowG.lineTo(widthOfSpring / (wiggles * 4), 0);
+        for (var i = 2; i < wiggles * 4 - 1; i += 2) {
+            arrowG.lineTo(i * widthOfSpring / (wiggles * 4), ((i % 4) - 1) * heightOfSpring / 2);
+        }
+        arrowG.lineTo(((wiggles * 4) - 1) * widthOfSpring / (wiggles * 4), 0);
+        arrowG.lineTo(widthOfSpring, 0);
     }
-    arrowG.lineTo(((wiggles * 4) - 1) * widthOfSpring / (wiggles * 4), 0);
-    arrowG.lineTo((wiggles * 4) * widthOfSpring / (wiggles * 4), 0);
-
     if(typeof mol1.bondSprite !== 'undefined') mol1.bondSprite.destroy();
 
     mol1.bondSprite = traceLayer.create(phaserInstance.world.centerX,
@@ -281,7 +286,7 @@ function drawBond(starting,end){
  * Function to draw trails behind Atom instances to show past positions.
  * @param atom: Instance of Atom to draw trail behind.
  */
-function drawTrail(atom){
+function drawLine(atom){
     var lineG = phaserInstance.add.graphics();
     lineG.lineStyle(4, IMPERIAL_BLUE, 0);
 
@@ -311,6 +316,13 @@ function reset(){
     if(typeof mol1 !== 'undefined'){
         if(typeof mol1.bondSprite !== 'undefined'){
             mol1.bondSprite.destroy();
+
+        }
+    }
+    if(typeof a1 !== 'undefined'){
+        if(typeof  a1.lineSprite !== 'undefined'){
+            a1.lineSprite.destroy();
+            a2.lineSprite.destroy();
         }
     }
     // Creating new molecule with atoms and instantiated potential. KEs entered by users using sliders.
@@ -322,6 +334,8 @@ function reset(){
     a1.sprite.y = a1.getPos().items[1] * zoom + phaserInstance.world.centerY;
     a2.sprite.x = a2.getPos().items[0] * zoom + phaserInstance.world.centerX;
     a2.sprite.y = a2.getPos().items[1] * zoom + phaserInstance.world.centerY;
+
+    drawBond(a1.getPos(),a2.getPos());
 
     arrRotKE = [];
     arrTime = [];
@@ -344,10 +358,9 @@ function update(){
         a1.sprite.y = a1.getPos().items[1] * zoom + phaserInstance.world.centerY;
         a2.sprite.x = a2.getPos().items[0] * zoom + phaserInstance.world.centerX;
         a2.sprite.y = a2.getPos().items[1] * zoom + phaserInstance.world.centerY;
-        drawTrail(a1);
-        drawTrail(a2);
-        drawBond(a1.getPos(), a2.getPos());
-
+        drawLine(a1);
+        drawLine(a2);
+        drawBond(a1.getPos(),a2.getPos());
         // Calculate Rotational KE and update array.
         var rotKE = 0.5 * mol1.I * Math.pow(mol1.omega, 2);
         arrRotKE.push(rotKE);
@@ -358,7 +371,7 @@ function update(){
         arrPE.push(curr_V);
 
         // Calculate Vibrational KE and update array.
-        var vibKE = mol1.TME - rotKE - curr_V;
+        var vibKE = 0.5 * mol1.reducedM * Math.pow(mol1.v,2);
         arrVibKE.push(vibKE);
 
         // Updating current LJ r and V(r).
