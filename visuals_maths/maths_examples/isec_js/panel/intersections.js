@@ -423,7 +423,6 @@ function getGen(a) {
 			}
 			catch(err) {
 				console.log(err);
-				log(err.message);
 			}
 		}
 	}
