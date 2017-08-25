@@ -1,7 +1,5 @@
-var a = 1, b = 1, c = 1;
-//var zinteglimit = (10*c) -1
-//var yinteglimit = (10* b) - 1
-//var xinteglimit = (10* a)
+//Global Variable
+var a = 1, b= 1, c= 1;
 var xxinit = [0.3, 0.3, 0.4, 0.4, 0.3, 0.3, 0.4, 0.4];
 var yyinit = [0.2, 0.3, 0.3, 0.2, 0.2, 0.3, 0.3, 0.2];
 var zzinit = [0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5];
@@ -12,7 +10,7 @@ var xxinit3 = [0.3, 0.3, 0.3, 0.4, 0.4, 0.4];
 var yyinit3 = [0.0, 0.0, 0.7, 0.0, 0.0, 0.6];
 var zzinit3 =  [0.0, 0.6, 0.0, 0.0, 0.7, 0.0];
 var zz, yy;
-var frames = [];
+var frames = [], data;
 
 function ZintegratorZYXelementup(xinit, yinit,zinit,number){
     zz = []
@@ -121,7 +119,7 @@ function YintegratorZYXelementdown(xinit, yinit, zinit, number){
             if (zinit[j] != 0) {
                 zlim = c*(0.7 - (ylim/b))
             } else {
-                zlim = 0 
+                zlim = 0
             }
             yy.push(ylim)
             zz.push(zlim)
@@ -151,7 +149,7 @@ function YintegratorZYXelementup(xinit, yinit, zinit, number){
             if (zinit[j] != 0) {
                 zlim = c*(0.7 - (ylim/b))
             } else {
-                zlim = 0 
+                zlim = 0
             }
             yy.push(ylim)
             zz.push(zlim)
@@ -180,12 +178,12 @@ function YintegratorZYXtotaldown(xinit, yinit, zinit, number){
             if (yinit[j] != 0.3) {
             ylim = yinit[j] - (0.1*number)
             } else {
-                ylim = 0.2 
+                ylim = 0.2
             }
             if (zinit[j] != 0) {
                 zlim = c*(0.7 - (ylim/b))
             } else {
-                zlim = 0 
+                zlim = 0
             }
             yy.push(ylim)
             zz.push(zlim)
@@ -216,12 +214,12 @@ function YintegratorZYXtotalup(xinit, yinit, zinit, number){
             if (yinit[j] != 0.3) {
             ylim = yinit[j] + (0.1*number)
             } else {
-                ylim = 0.0 
+                ylim = 0.0
             }
             if (zinit[j] != 0) {
                 zlim = c*(0.7 - (ylim/b))
             } else {
-                zlim = 0 
+                zlim = 0
             }
             yy.push(ylim)
             zz.push(zlim)
@@ -255,12 +253,12 @@ function XintegratorZYXelementdown(xinit, yinit, zinit, number){
         if (yinit[j] != 0) {
                 ylim = b*(1 - (xlim/a))
             } else {
-                ylim = 0 
+                ylim = 0
             }
         if (zinit[j] != 0) {
                 zlim = 1 - c*((ylim/b)+(xlim/a))
             } else {
-                zlim = 0 
+                zlim = 0
             }
             xx.push(xlim)
             yy.push(ylim)
@@ -280,7 +278,7 @@ function XintegratorZYXelementdown(xinit, yinit, zinit, number){
                 [1, 'rgb(0,0,0)']
             ],
         opacity: 1.0,
-        showscale: false            
+        showscale: false
                 }
     return newcube
 
@@ -294,12 +292,12 @@ function XintegratorZYXelementup(xinit, yinit, zinit, number){
         if (yinit[j] != 0) {
                 ylim = b*(1 - (xlim/a))
             } else {
-                ylim = 0 
+                ylim = 0
             }
         if (zinit[j] != 0) {
                 zlim = 1 - c*((ylim/b)+(xlim/a))
             } else {
-                zlim = 0 
+                zlim = 0
             }
             xx.push(xlim)
             yy.push(ylim)
@@ -319,7 +317,7 @@ function XintegratorZYXelementup(xinit, yinit, zinit, number){
                 [1, 'rgb(0,0,0)']
             ],
         opacity: 1.0,
-        showscale: false            
+        showscale: false
                 }
     return newcube
 
@@ -331,15 +329,15 @@ function XintegratorZYXtotaldown(xinit, yinit, zinit, number){
     for (var j = 0; j <6 ; j++){
         if (xinit[j] != 0.3){
             xlim = xinit[j] - (0.1*number)
-            
+
         } else {
             xlim = 0.3
         }
-        
+
         if (yinit[j] != 0) {
                 ylim = b*(1 - (xlim/a))
             } else {
-                ylim = 0 
+                ylim = 0
             }
         if (zinit[j] != 0) {
                 zlim = 1 - c*((ylim/b)+(xlim/a))
@@ -461,106 +459,6 @@ function ZYXintegrator() {
     return frames
 }
 
-function XintegratorXYZelementup(xinit, yinit,zinit,number){
-    xx = []
-    for (var j = 0 ; j < 8 ; j++) {  //This is to loop through 8 points of the cube
-            xx.push(xinit[j] +(0.1*number))     
-        }
-        newcube = {
-        type: "mesh3d",
-        x: xx ,
-        y: yinit,
-        z: zinit,
-        i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
-        j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
-        k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
-        opacity: 1.0,
-        colorscale: [
-          [0, 'rgb(0,0,0)'],
-          [1, 'rgb(0,0,0)'] ],
-        intensity: [0, 0.1, 0.2, 0.3, 0.5, 0.6, 0.8, 1],
-
-        showscale: false}
-    return newcube
-}
-function XintegratorXYZelementdown(xinit, yinit,zinit,number){
-    xx = []
-    for (var j = 0 ; j < 8 ; j++) {  //This is to loop through 8 points of the cube
-            xx.push(xinit[j] - (0.1*number))     
-        }
-        newcube = {
-        type: "mesh3d",
-        x: xx ,
-        y: yinit,
-        z: zinit,
-        i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
-        j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
-        k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
-        opacity: 1.0,
-        colorscale: [
-          [0, 'rgb(0,0,0)'],
-          [1, 'rgb(0,0,0)'] ],
-        intensity: [0, 0.1, 0.2, 0.3, 0.5, 0.6, 0.8, 1],
-
-        showscale: false}
-    return newcube
-}
-function XintegratorXYZtotalup(xinit, yinit,zinit,number){
-    xx = []
-    for (var j = 0 ; j < 8 ; j++) {  //This is to loop through 8 points of the cube
-            if (xinit[j] != 0.3){
-                xx.push(xinit[j] +(0.1*number))        
-            } else 
-            {
-                xx.push(0.0)
-            }
-        }
-        newcube = {
-        type: "mesh3d",
-        x: xx ,
-        y: yinit,
-        z: zinit,
-        i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
-        j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
-        k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
-        opacity: 0.8,
-        colorscale: [
-          [0, 'rgb(0,62,116)'],
-          [1, 'rgb(0,62,116)']
-        ],
-
-        showscale: false, }
-    return newcube
-}
-function XintegratorXYZtotaldown(xinit, yinit,zinit,number){
-    xx = []
-    for (var j = 0 ; j < 8 ; j++) {  //This is to loop through 8 points of the cube
-            if (xinit[j] != 0.4){
-                xx.push(xinit[j] - (0.1*number))        
-            } else 
-            {
-                xx.push(0.4)
-            }
-        }
-        newcube = {
-        type: "mesh3d",
-        x: xx ,
-        y: yinit,
-        z: zinit,
-        i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
-        j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
-        k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
-        opacity: 0.8,
-        colorscale: [
-          [0, 'rgb(0,62,116)'],
-          [1, 'rgb(0,62,116)']
-        ],
-
-        showscale: false, }
-    return newcube
-}
-
-
 var tetrahedron = {
     type: "mesh3d",
     x: [0, 0, 0, 1],
@@ -576,7 +474,7 @@ var tetrahedron = {
     ],
     opacity: 0.5,
     showscale : false
-  }
+  };
 var volumeElement = {
     type: "mesh3d",
     x: [0.0, 0.0, 0.1, 0.1, 0.0, 0.0, 0.1, 0.1] ,
@@ -594,67 +492,23 @@ var volumeElement = {
         ],
 
     showscale: false
+};
+
+function main() {
+
+    $("input[type=range]").each(function () {
+        var displayEl;
+        $(this).on('input', function(){
+            $("#"+$(this).attr("id") + "Display").text( $(this).val() + $("#"+$(this).attr("id") + "Display").attr("data-unit") );
+            historyPlot(parseInt($(this).val()));
+        });
+    });
+
+    frames = [{data:[
+        {x:[0,0], y:[0,0], z:[0,0], type:"mesh3d", showscale: false},
+        {x:[0,0], y:[0,0], z:[0,0], type:"mesh3d", showscale: false}
+    ]}]; //defined some dummy!!! must be the same type as the frames!!!
+    frames = frames.concat(ZYXintegrator());
+    init("#frame", frames, [tetrahedron], [8, 14]);
 }
-var data = [];
-
-frames = ZYXintegrator()
-data.push(frames[0].data[0]);
-data.push(frames[0].data[1]);
-data.push(tetrahedron);
-
-var steps=[]
-
-for (var i = 0; i < (24); ++i) {
-    steps.push({
-        "method": "animate",
-        "args": [
-                    [i],
-                    {
-                        "mode": "immediate",
-                        "transition": {"duration": 300,},
-                        "frame": {"duration": 300, "redraw": false}
-                    }
-                ]
-    })
-}
-  var sliders= [{
-    "active": 0,
-    "pad": {"t":10},
-    "steps": steps
-  }];
-  var layout = {
-    "width": 700, "height": 600,
-    "margin": {l:0, r:0, t:0, b:0},
-    "hovermode": "closest",
-    "updatemenus": [
-      {
-        "x": 0.0, "y": 1,
-        "xanchor": "left", "yanchor": "top",
-        "showactive": false,
-        "type": "buttons",
-        "pad": {"t": 87, "r": 10},
-        "buttons": [
-          {
-            "method": "animate",
-            "args": [null, {"fromcurrent": true, "transition": {"duration": 200, "easing": "quadratic-in-out"}, "frame": {"duration": 200, "redraw":false}}],
-            "label": "Play"
-          },
-          {
-            "method": "animate",
-            "args":[[null], {"mode": "immediate", "transition": {"duration": 0}, "frame": {"duration": 0, "redraw": false}}],
-            "label": "Pause"
-          }
-        ]
-      }
-    ],
-    "showlegend": false,
-    "sliders": sliders,
-      scene: {
-    xaxis: {range: [-1, 1]},
-    yaxis: {range: [-1, 1]},
-    zaxis: {range: [-1, 1]}
-    }
-
-  }
-
-Plotly.newPlot('graph', {data:data, frames: frames, layout: layout});
+$(document).ready(main);

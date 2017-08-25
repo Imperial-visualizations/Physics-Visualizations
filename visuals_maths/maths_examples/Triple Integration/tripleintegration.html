@@ -1,42 +1,43 @@
 <!doctype html>
+<html>
 <head>
     <title>Triple Integration</title>
     <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
-    <!-- <link rel="stylesheet" href="skeleton-tabs.css"> -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
-    <script src=tripleintegration.js></script>
-    <script src="skeleton-tabs.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">  
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
 <body>
-<div class="container">
-<div class="row">
-<div class="six columns">
-    <h1>Triple Integration</h1>
-    <div id='graph' style="width:450px; height:450px;"></div>
-    <script src=tripleintegration.js></script>  
+    <div class="container">
+        <div class="row">
+            <div class="six columns">
+                <h1>Triple Integration</h1>
+                <div id='graph' style="width:450px; height:450px;"></div>
+                <label class="sliderTitle">Frame #:
+                    <span id="frameDisplay" data-unit="">1</span>
+                </label>
+                <label class="slider">
+                    <input id="frame" class="inputs" type="range" value="1" min="1" max="24" step="1"/>
+                    <span class="sliderMin">1</span><span class="sliderMax">24</span>
+                </label>
+            </div>
+
+            <div class="six columns">
+                <br><br>
+                The mass of the tetrahedron is given by:
+                $$
+                    M   = \iiint_V \rho(x,y,z) \,dx\,dy\,dz
+                        = \int_{x= 0}^{a} \int_{y = 0}^{b(1-\frac{x}{a})} \int_{z=0}^{c(1-\frac{x}{a} - \frac{y}{b})} \rho(x,y,z) \,dz\,dy \,dx
+                $$
+                <input id="playPause" type="button" value="Play", onclick="startAnimation()">
+                <input type="button" value="Reset", onclick="reset()">
+            </div>
+        </div>
     </div>
-<div class = "six columns">
-
-
-
-
-
-
-<br><br>
-    The mass of the tetrahedron is given by:
-       $$M = \iiint_V \rho(x,y,z) \,dx\,dy\,dz
-            = \int_{x= 0}^{a} \int_{y = 0}^{b(1-\frac{x}{a})} \int_{z=0}^{c(1-\frac{x}{a} - \frac{y}{b})} \rho(x,y,z) \,dz\,dy \,dx $$
-
-    
-    
-</div>
-    
-
-</div>
-    </div>
-<body>
+<script src=animateUtil.js></script>
+<script src=tripleintegration.js></script>
+</body>
+</html>
