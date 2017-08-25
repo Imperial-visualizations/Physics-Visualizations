@@ -21,8 +21,10 @@ function integratorZYXelement(xinit, yinit,zinit,number, direction, element){
     if (element === 2) {
        for (var j = 0 ; j < 8 ; j++) {  //This is to loop through 8 points of the cube
             ylim = yinit[j] + direction*(0.1*number)
-            if (zinit[j] != 0) {
+            if (zinit[j] != 0 && xinit[j] === 0.3) {
                 zlim = c*(0.7 - (ylim/b))
+            } else if (zinit[j] != 0 && xinit[j] === 0.4){
+                zlim = c*(0.6 - (ylim/b))
             } else {
                 zlim = 0
             }
@@ -116,8 +118,10 @@ function integratorZYXtotal(xinit, yinit,zinit,number,direction, element){
             } else {
                 ylim = 0.0
             }
-            if (zinit[j] != 0) {
+            if (zinit[j] != 0 && xinit[j] === 0.3) {
                 zlim = c*(0.7 - (ylim/b))
+            } else if (zinit[j] != 0 && xinit[j] === 0.4){
+                zlim = c*(0.6 - (ylim/b))
             } else {
                 zlim = 0
             }
@@ -259,18 +263,20 @@ function integratorXYZelement(xinit, yinit,zinit,number, direction, element){ //
     yy = yinit
     zz = zinit   
     }
-    if (element ===2) {
-         for (var j = 0 ; j < 8 ; j++) {  //This is to loop through 8 points of the cube
+    if (element === 2) {
+       for (var j = 0 ; j < 8 ; j++) {  //This is to loop through 8 points of the cube
             ylim = yinit[j] + direction*(0.1*number)
-            if (xinit[j] != 0) {
+            if (xinit[j] != 0 && zinit[j]===0.4) {
                 xlim = a*(0.6 - (ylim/b))
+            } else if (xinit[j] != 0 && zinit[j]===0.5) {
+                xlim = a*(0.5 - (ylim/b))
             } else {
-                xlim = 0 
+                xlim = 0
             }
             yy.push(ylim)
             xx.push(xlim)
-        }
-    zz = zinit
+        } 
+    zz= zinit
     }
     
     if (element === 3) {
@@ -311,8 +317,8 @@ function integratorXYZelement(xinit, yinit,zinit,number, direction, element){ //
     newcube = {
         type: "mesh3d",
         x: xx ,
-        y: yinit,
-        z: zinit,
+        y: yy,
+        z: zz,
         i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
         j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
         k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
@@ -355,8 +361,10 @@ function integratorXYZtotal(xinit, yinit,zinit,number,direction, element){
             } else {
                 ylim = 0.0
             }
-            if (xinit[j] != 0) {
+            if (xinit[j] != 0 && zinit[j]===0.4) {
                 xlim = c*(0.6 - (ylim/b))
+            } else if (xinit[j] != 0 && zinit[j]===0.5){
+                xlim = c*(0.5 - (ylim/b))
             } else {
                 xlim = 0 
             }
@@ -427,95 +435,6 @@ function integratorXYZtotal(xinit, yinit,zinit,number,direction, element){
         showscale: false, }
     return newcube
 }
-function YintegratorXYZtotal(xinit, yinit, zinit, number, direction = 1){
-    yy = []
-    xx = []
-    for (var j = 0 ; j < 8 ; j++) {  //This is to loop through 8 points of the cube
-            if (yinit[j] != 0.3 && direction === -1) {
-                ylim = yinit[j] - (0.1*number)
-            } else if (yinit[j] === 0.3 && direction === -1){
-                ylim = 0.2 
-            } else if (yinit[j] != 0.2 && direction ===1) {
-                ylim = yinit[j] + (0.1*number)
-            } else {
-                ylim = 0.0
-            }
-            if (xinit[j] != 0) {
-                xlim = c*(0.6 - (ylim/b))
-            } else {
-                xlim = 0 
-            }
-            yy.push(ylim)
-            xx.push(xlim)
-        }
-    newcube = {
-        type: "mesh3d",
-        x: xx,
-        y: yy,
-        z: zinit,
-        i: [0, 3, 0, 4, 4, 7, 3, 7, 1, 5, 4, 4],
-        j: [3, 2, 1, 1, 5, 5, 7, 6, 2, 2, 3, 7],
-        k: [1, 1, 4, 5, 7, 6, 2, 2, 5, 6, 0, 3],
-        intensity: [0, 0.14285714285714285, 0.2857142857142857, 0.42857142857142855, 0.5714285714285714, 0.7142857142857143, 0.8571428571428571, 1],
-        opacity: 0.8,
-        colorscale: [
-          [0, 'rgb(0,62,116)'],
-          [1, 'rgb(0,62,116)']
-        ],
-
-        opacity: 1.0,
-        showscale: false,}
-    return newcube
-}
-function ZintegratorXYZtotal(xinit, yinit, zinit, number, direction = 1){
-    xx = []
-    yy = []
-    zz = []
-    for (var j = 0; j <6 ; j++){
-        if (zinit[j] != 0.5 && direction === -1){
-            zlim = zinit[j] - (0.1*number)
-            
-        } else if (zinit[j] === 0.5 && direction === -1) {
-            zlim = 0.5
-        } else if (zinit[j] != 0.4 && direction === 1) {
-            zlim = zinit[j] + (0.1*number)
-        } else {
-            zlim = 0.0
-        }
-        
-        if (yinit[j] != 0) {
-                ylim = b*(1 - (zlim/c))
-            } else {
-                ylim = 0 
-            }
-        if (xinit[j] != 0) {
-                xlim = 1 - a*((ylim/b)+(zlim/c))
-            } else {
-                xlim = 0 
-            }
-            xx.push(xlim)
-            yy.push(ylim)
-            zz.push(zlim)
-    }
-            newcube = {
-                type: "mesh3d",
-                x: xx,
-                y: yy,
-                z: zz,
-                i: [3,0,0,1,3,3],
-                j: [5,1,3,3,0,2],
-                k: [4,2,1,4,2,5],
-                opacity: 1.0,
-            colorscale: [
-            [0, 'rgb(0,62,116)'],
-            [1, 'rgb(0,62,116)']
-            ],
-                showscale: false            
-                }
-    return newcube
-
-}
-
 function XYZintegrator(){
     var xxinit = [0.3, 0.3, 0.4, 0.4, 0.3, 0.3, 0.4, 0.4];
     var yyinit = [0.2, 0.3, 0.3, 0.2, 0.2, 0.3, 0.3, 0.2];
@@ -535,14 +454,14 @@ function XYZintegrator(){
       }
     for (var i = 0; i < 2; ++i) {
           frames.push({
-            "data": [YintegratorXYZtotal(xxinit2,yyinit2,zzinit2,i, -1),
+            "data": [integratorXYZtotal(xxinit2,yyinit2,zzinit2,i, -1,2 ),
                      integratorXYZelement(xxinit2,yyinit2,zzinit2,i, -1,2)],
             "name": i + 4
         })
       }
     for (var i = 0; i < 4; ++i) {
           frames.push({
-            "data": [YintegratorXYZtotal(xxinit2,yyinit2,zzinit2,i,1),
+            "data": [integratorXYZtotal(xxinit2,yyinit2,zzinit2,i,1,2),
                     integratorXYZelement(xxinit2,yyinit2,zzinit2,i,1,2)],
             "name": i + 6
         })
@@ -666,7 +585,10 @@ var volumeElement = {
 
     showscale: false
 };
+runFunctionRun(XYZintegrator)
 
+
+/*
 function main() {
     $("input[type=range]").each(function () {
         var displayEl;
@@ -684,3 +606,4 @@ function main() {
     init("#frame", frames, [tetrahedron], [8, 14]);
 }
 $(document).ready(main);
+*/
