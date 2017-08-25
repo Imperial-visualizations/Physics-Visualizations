@@ -246,6 +246,7 @@ function circulationPlot() {
         text: ['D'],
         type: 'scatter',
         showlegend: false,
+        font: {size: 20}
 
     }
     initialData.push(myLabel)
@@ -427,7 +428,7 @@ function initialPlot() {
         text: ['D'],
         type: 'scatter',
         showlegend: false,
-        font: {size:30}
+        font: {size:12}
 
     }
     initialData.push(myLabel)

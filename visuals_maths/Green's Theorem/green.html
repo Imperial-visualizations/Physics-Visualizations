@@ -20,7 +20,7 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="six columns">
+        <div class="five columns">
             <h1>Green's Theorem</h1>
         </div>
     </div>
@@ -36,19 +36,19 @@
                 <div class="tab-content">
 
                     <div class="tab-pane active" id="circulation">
-                        <div class="six columns">
+                        <div class="five columns">
                             <h2>Circulation Integrals</h2>
-                            <div id='circulation_graph' style="width:450px; height:450px;"></div>
+                            <div id='circulation_graph' style="width:400px; height:400px;"></div>
                         </div>
-                        <div class="six columns">
+                        <div class="seven columns">
                             <div id="circ_para">
-                            <p>Consider a unit square, \(D\), surrounded by a closed loop \(C\).
+                            <p>Consider a unit square surface, \(D\), surrounded by a closed loop \(C\).
                                 The circulation \((\Gamma)\) of a vector field is defined as the line integral of the
                                 vector field \((\vec{A})\) around a closed loop C, orientated here anti-clockwise.
                                 In 2D, we let \(\vec{A}=(P,\,Q,\,0) =P(x,\,y)\mathbf{\hat{i}}+Q(x,\,y)\mathbf{\hat{j}}\)  then:
                                 $$
                                 \Gamma = \oint_C \vec{A} \cdot \, d\vec{r} = \oint_C P(x,\,y(x))\,dx+Q(x(y),\,y)\,dy
-                                $$
+                                $$ where \(d\vec{r}=dx\mathbf{\hat{i}} + dy\mathbf{\hat{j}}\). <br><br>
                                 <b>N.B.</b> When integrating \(P\) and \(Q\), remember to convert \(P\) as a function of \(x\) <b>only</b>
                                 and \(Q\) as a function of \(y\) <b>only</b>. <br><br>
                                 Circulation is a measure of how much the vector
@@ -62,13 +62,13 @@
                     </div>
 
                     <div class="tab-pane" id="curl">
-                        <div class="six columns">
+                        <div class="five columns">
                             <h2>Curl</h2>
-                            <div id='curl_graph' style="width:450px; height:450px;"></div>
+                            <div id='curl_graph' style="width:400px; height:400px;"></div>
                             <input type="button" value="Zoom In" onclick="zoom()">
                             <input type="button" value="Zoom out" onclick="unzoom()">
                         </div>
-                        <div class="six columns">
+                        <div class="seven columns">
                             <div id="curl_para">
                                 <p>Recall the definition of the curl of a vector field \(\vec{A}\) is:
                                 $$ \text{curl}\,\vec{A} = \nabla \times \vec{A} $$
@@ -87,12 +87,12 @@
                     </div>
 
                     <div class="tab-pane" id="overall">
-                        <div class="six columns">
+                        <div class="five columns">
                             <h2>Overall</h2>
-                            <div id="overall_graph" style="width:450px; height:450px;"></div>
+                            <div id="overall_graph" style="width:400px; height:400px;"></div>
                         </div>
 
-                        <div class="six columns">
+                        <div class="seven columns">
                             <div id="overall_para">
                                 <p>Now, we make the link between these 2 integrals. Consider breaking down our region
                                     \(D\) into an \(n\times n\) grid. <br><br>
@@ -106,27 +106,30 @@
                                 <p>We notice that after all the green arrows "cancel", the magenta arrows make
                                     up the same contour as in the line integral we saw earlier.
                                     This is the link between macroscopic and microscopic circulation
-                                    which gives us <b>Green's Theorem</b>:
-                                    $$ \oint_C P(x,y(x))\,dx+Q(x,x(y))\,dy = \iint_D \Big(\frac{\partial Q}{\partial x}(x,\,y)-
-                                    \frac{\partial P}{\partial y}(x,\,y)\Big)\,dx\,dy$$
+                                    which gives us <b>Green's Theorem</b>:<br><br>
+                                    <span style="font-size: 20pt">∳</span>\(\!_C\)\(\,P(x,y(x))\,dx+Q(x,x(y))\,dy = \iint_D \frac{\partial Q}{\partial x}(x,\,y)-
+                                    \frac{\partial P}{\partial y}(x,\,y)\,dx\,dy\)
                                 </p>
                                 <p id="extra">
-                                    (insert symbol here) means that both sides of Green's Theorem have to be orientated in
+                                    <span style="font-size:18pt">↺</span> &nbsp on the integral means that both sides of
+                                    Green's Theorem have to be orientated in
                                     a self-consistent manner following the <b>right-hand rule</b>. The orientation of
-                                    \   (C\) needs to be consistent with the orientation of \(d\vec{S}\). For the 2D case
+                                    \(C\) needs to be consistent with the orientation of \(d\vec{S}\,\!\). For the 2D case
                                     (Green's Theorem):
                                     <ul>
-                                        <li>\(C\) orientated clockwise   \(\,\Longleftrightarrow\,\)   \(d\vec{S}\) pointed in
+                                        <li>\(C\) orientated clockwise   \(\,\Longleftrightarrow\,\)   \(d\vec{S}\!\,\) pointed in
                                         \(-\mathbf{\hat{k}}\) direction.</li>
-                                    <li>\(C\) orientated anti-clockwise   \(\,\Longleftrightarrow\,\)   \(d\vec{S}\) pointed in
+                                        <li>\(C\) orientated anti-clockwise   \(\,\Longleftrightarrow\,\)   \(d\vec{S}\!\,\) pointed in
                                             \(+\mathbf{\hat{k}}\) direction.</li>
+                                    </ul>
                                     A quick trick to remember this is with the right-hand rule. Start by putting your
-                                right hand in the centre of the loop \(C\):
+                                    right hand in the centre of the loop \(C\):<br><br>
                                     <ul>
-                                        <li>Index \(\longrightarrow\) </li>
+                                        <li>Index Finger &nbsp;\(\longrightarrow\) &nbsp;Provides the orientation of \(C\)</li>
+                                        <li> Thumb &nbsp; \(\longrightarrow\) &nbsp;Provides the direction of \(d\vec{S}\) </li>
                                     </ul>
 
-                                    </ul>
+
                                 </p>
                             </div>
 
