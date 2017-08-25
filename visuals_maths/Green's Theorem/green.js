@@ -221,19 +221,20 @@ function circulationPlot() {
     };
 
     var initialData = [];
-    var arrow0 = new Arrow2D(1,0,[0,0],2,'rgb(0,0,0)',false,0.5);
+    var ratio = 1.2;
+    var arrow0 = new Arrow2D(1,0,[0,0],2,'rgb(0,0,0)',false,ratio);
     var wings0 = arrow0.data.wings;
-    var arrow1 = new Arrow2D(0,1,[1,0],2,'rgb(0,0,0)',false,0.5);
+    var arrow1 = new Arrow2D(0,1,[1,0],2,'rgb(0,0,0)',false,ratio);
     var wings1 = arrow1.data.wings;
-    var arrow2 = new Arrow2D(-1,0,[1,1],2,'rgb(0,0,0)',false,0.5);
+    var arrow2 = new Arrow2D(-1,0,[1,1],2,'rgb(0,0,0)',false,ratio);
     var wings2 = arrow2.data.wings;
-    var arrow3 = new Arrow2D(0,-1,[0,1],2,'rgb(0,0,0)',false,0.5);
+    var arrow3 = new Arrow2D(0,-1,[0,1],2,'rgb(0,0,0)',false,ratio);
     var wings3 = arrow3.data.wings;
 
-    wings0.x = math.add(wings0.x,[-0.5,-0.5,-0.5])
-    wings1.y = math.add(wings1.y,[-0.5,-0.5,-0.5])
-    wings2.x = math.add(wings2.x,[0.5,0.5,0.5])
-    wings3.y = math.add(wings3.y,[0.5,0.5,0.5])
+    wings0.x = math.add(wings0.x,[-ratio+0.5,-ratio+0.5,-ratio+0.5])
+    wings1.y = math.add(wings1.y,[-ratio+0.5,-ratio+0.5,-ratio+0.5])
+    wings2.x = math.add(wings2.x,[ratio-0.5,ratio-0.5,ratio-0.5])
+    wings3.y = math.add(wings3.y,[ratio-0.5,ratio-0.5,ratio-0.5])
 
     initialData = [wings0,wings1,wings2,wings3]
 
@@ -248,21 +249,93 @@ function circulationPlot() {
 
     }
     initialData.push(myLabel)
-    var fill_area = {
+      var fill_area = {
         x: [0, 1, 1, 0, 0],
         y: [0, 0, 1, 1, 0],
         line: {simplify: false, color: 'rgb(0,62,116)'},
         fill: 'tozeroy',
+        showlegend: false,
         mode: 'lines',
-        name: 'C'
     }
     initialData.push(fill_area)
-    N = 100
+
+    var outline_area = {
+        x: [0, 1, 1, 0, 0],
+        y: [0, 0, 1, 1, 0],
+        line: {simplify: false, color: 'rgb(0,62,116)'},
+        name: 'C',
+        type: 'scatter',
+        mode: 'lines'
+    }
+    initialData.push(outline_area)
+
+    N = 50
     var frames = [];
     var t = 0;
 
     for (var i=0; i<N; i++) {
-        t = i/(N-1)
+        t = 0.5*i/(N-1)
+        newData = {
+            data: [{
+                  x: math.add(wings0.x,[t,t,t]),
+                  y: wings0.y,
+                  name: 'frame'+parseInt(i)
+
+            },
+            {
+                x: wings1.x,
+                y: math.add(wings1.y,[t,t,t]),
+                name: 'frame'+parseInt(i)
+            },
+            {
+                x: math.add(wings2.x,[-t,-t,-t]),
+                y: wings2.y,
+                name: 'frame'+parseInt(i)
+            },
+            {
+                x: wings3.x,
+                y: math.add(wings3.y,[-t,-t,-t]),
+                name: 'frame'+parseInt(i)
+
+            },
+            {
+                x: [0.5],
+                y: [0.5],
+                mode: 'text',
+                name: 'D',
+                text: ['D'],
+                type: 'scatter',
+                showlegend: false,
+                font: {
+                    size: 30
+                }
+            },
+            {
+                x: [0, 1, 1, 0, 0],
+                y: [0, 0, 1, 1, 0],
+                name: 'frame'+parseInt(i)
+            }
+
+            ]
+        }
+        frames.push(newData)
+    }
+    var arrow0 = new Arrow2D(1,0,[0,0],2,'rgb(0,0,0)',false,ratio);
+    var wings0 = arrow0.data.wings;
+    var arrow1 = new Arrow2D(0,1,[1,0],2,'rgb(0,0,0)',false,ratio);
+    var wings1 = arrow1.data.wings;
+    var arrow2 = new Arrow2D(-1,0,[1,1],2,'rgb(0,0,0)',false,ratio);
+    var wings2 = arrow2.data.wings;
+    var arrow3 = new Arrow2D(0,-1,[0,1],2,'rgb(0,0,0)',false,ratio);
+    var wings3 = arrow3.data.wings;
+
+    wings0.x = math.add(wings0.x,[-ratio,-ratio,-ratio])
+    wings1.y = math.add(wings1.y,[-ratio,-ratio,-ratio])
+    wings2.x = math.add(wings2.x,[ratio,ratio,ratio])
+    wings3.y = math.add(wings3.y,[ratio,ratio,ratio])
+
+    for (var i=0; i<N; i++) {
+        t = 0.5*i/(N-1)
         newData = {
             data: [{
                   x: math.add(wings0.x,[t,t,t]),
@@ -328,20 +401,21 @@ function circulationPlot() {
 }
 
 function initialPlot() {
-var initialData = [];
-    var arrow0 = new Arrow2D(1,0,[0,0],2,'rgb(0,0,0)',false,0.5);
+    var initialData = [];
+    var ratio = 1.2;
+    var arrow0 = new Arrow2D(1,0,[0,0],2,'rgb(0,0,0)',false,ratio);
     var wings0 = arrow0.data.wings;
-    var arrow1 = new Arrow2D(0,1,[1,0],2,'rgb(0,0,0)',false,0.5);
+    var arrow1 = new Arrow2D(0,1,[1,0],2,'rgb(0,0,0)',false,ratio);
     var wings1 = arrow1.data.wings;
-    var arrow2 = new Arrow2D(-1,0,[1,1],2,'rgb(0,0,0)',false,0.5);
+    var arrow2 = new Arrow2D(-1,0,[1,1],2,'rgb(0,0,0)',false,ratio);
     var wings2 = arrow2.data.wings;
-    var arrow3 = new Arrow2D(0,-1,[0,1],2,'rgb(0,0,0)',false,0.5);
+    var arrow3 = new Arrow2D(0,-1,[0,1],2,'rgb(0,0,0)',false,ratio);
     var wings3 = arrow3.data.wings;
 
-    wings0.x = math.add(wings0.x,[-0.5,-0.5,-0.5])
-    wings1.y = math.add(wings1.y,[-0.5,-0.5,-0.5])
-    wings2.x = math.add(wings2.x,[0.5,0.5,0.5])
-    wings3.y = math.add(wings3.y,[0.5,0.5,0.5])
+    wings0.x = math.add(wings0.x,[-ratio+0.5,-ratio+0.5,-ratio+0.5])
+    wings1.y = math.add(wings1.y,[-ratio+0.5,-ratio+0.5,-ratio+0.5])
+    wings2.x = math.add(wings2.x,[ratio-0.5,ratio-0.5,ratio-0.5])
+    wings3.y = math.add(wings3.y,[ratio-0.5,ratio-0.5,ratio-0.5])
 
     initialData = [wings0,wings1,wings2,wings3]
 
@@ -362,10 +436,20 @@ var initialData = [];
         y: [0, 0, 1, 1, 0],
         line: {simplify: false, color: 'rgb(0,62,116)'},
         fill: 'tozeroy',
+        showlegend: false,
         mode: 'lines',
-        name: 'C'
     }
     initialData.push(fill_area)
+
+    var outline_area = {
+        x: [0, 1, 1, 0, 0],
+        y: [0, 0, 1, 1, 0],
+        line: {simplify: false, color: 'rgb(0,62,116)'},
+        name: 'C',
+        type: 'scatter',
+        mode: 'lines'
+    }
+    initialData.push(outline_area)
 
     var layout = {
         xaxis: {label: 'x', range: [-0.5,1.5]},
@@ -382,7 +466,7 @@ var initialData = [];
 function curlPlot(n) {
     var data = arrowBox(n,'rgb(0,62,116)','rgb(0,62,116)');
     var layout = {
-        title: 'Plot of D split up into rotating regions',
+        title: 'Plot of region D split up into rotating regions',
         xaxis: {label: 'x', range: [-0.5,1.5]},
         yaxis: {lavel: 'y', range: [-0.5,1.5]},
         showlegend: false
@@ -431,7 +515,7 @@ function unzoom() {
 function overallPlot(n) {
     var data = arrowBox(n,'rgb(255,0,255)','rgb(34,139,34)');
     var layout = {
-        title: 'Plot of D with colour coded arrows',
+        title: 'Plot of region D with colour coded arrows',
         xaxis: {label: 'x', range: [-0.5,1.5]},
         yaxis: {lavel: 'y', range: [-0.5,1.5]},
         showlegend: false

@@ -44,16 +44,16 @@
                             <div id="circ_para">
                             <p>Consider a unit square, \(D\), surrounded by a closed loop \(C\).
                                 The circulation \((\Gamma)\) of a vector field is defined as the line integral of the
-                                vector field \((\vec{A})\) around a closed loop C. In 2D, we let \(\vec{A}=(P,\,Q,\,0)\) then:
+                                vector field \((\vec{A})\) around a closed loop C, orientated here anti-clockwise.
+                                In 2D, we let \(\vec{A}=(P,\,Q,\,0) =P(x,\,y)\mathbf{\hat{i}}+Q(x,\,y)\mathbf{\hat{j}}\)  then:
                                 $$
-                                \Gamma = \oint_C \vec{A} \cdot \, d\vec{r} = \oint_C P(x,\,y(x))\,dx+Q(y,\,x(y))\,dy
+                                \Gamma = \oint_C \vec{A} \cdot \, d\vec{r} = \oint_C P(x,\,y(x))\,dx+Q(x(y),\,y)\,dy
                                 $$
                                 <b>N.B.</b> When integrating \(P\) and \(Q\), remember to convert \(P\) as a function of \(x\) <b>only</b>
                                 and \(Q\) as a function of \(y\) <b>only</b>. <br><br>
                                 Circulation is a measure of how much the vector
-                                field is "spinning" overall or it is sometimes called the <b>macroscopic circulation</b>
-                                . Remember by convention we go around line integrals <b>anti-clockwise</b>,
-                                use the right hand rule to remember this!
+                                field is "spinning" overall, it is sometimes called the <b>macroscopic circulation</b>
+                                .
                                 </p>
                             </div>
                             <input type="button" value="Animate!" onclick="circulationPlot()">
@@ -74,12 +74,12 @@
                                 $$ \text{curl}\,\vec{A} = \nabla \times \vec{A} $$
                                 We can think of the curl as a measure of "spinning per unit area". If we only consider
                                 vector fields in 2D (i.e. \(\vec{A} = (P,Q,0) \)) and we "add up" all of these little rotating regions
-                                by integrating the curl flux through our surface (in this case the \(x-y\) plane) like:
+                                by integrating the curl flux through our surface (here in the \(x-y\) plane) like:
                                 $$ \iint_D (\nabla \times \vec{A}) \cdot \mathbf{\hat{k}} \, dS = \iint_D \Big( \frac{\partial Q}{\partial x}
-                                -\frac{\partial P}{\partial y} \Big) \, dxdy
+                                (x,\,y)-\frac{\partial P}{\partial y}(x,\,y) \Big) \, dxdy
                                 $$ We can think of the curl flux integral as being all the infinitesimally small regions of rotations "added up".
                                     This is sometimes called <b>microscopic circulation</b>.<br><br>
-                                <b>N.B.</b> The curl of a 2D vector field has only one component in the \(\mathbf{\hat{k}}\)
+                                <b>N.B.</b> The curl of a 2D vector field \(\vec{A}=(P,Q,0)\) has only one component in the \(\pm\mathbf{\hat{k}}\)
                                     -direction. Try calculating it yourself.</p>
                             </div>
                             <!--<input type="button" value="Toggle Text" onclick="toggleText()">-->
@@ -103,12 +103,30 @@
                                     <span style="color:#FF00FF"><b>magenta</b></span>. Increase \(n\) using the slider
                                     and you will see this is always the case.
                                 </p>
-                                <p>Finally, we notice that after all the green arrows "cancel", the magenta arrows make
+                                <p>We notice that after all the green arrows "cancel", the magenta arrows make
                                     up the same contour as in the line integral we saw earlier.
                                     This is the link between macroscopic and microscopic circulation
                                     which gives us <b>Green's Theorem</b>:
-                                    $$ \oint_C P(x,y(x))\,dx+Q(x,x(y))\,dy = \iint_D \Big(\frac{\partial Q}{\partial x}-
-                                    \frac{\partial P}{\partial y}\Big)\,dx\,dy$$
+                                    $$ \oint_C P(x,y(x))\,dx+Q(x,x(y))\,dy = \iint_D \Big(\frac{\partial Q}{\partial x}(x,\,y)-
+                                    \frac{\partial P}{\partial y}(x,\,y)\Big)\,dx\,dy$$
+                                </p>
+                                <p id="extra">
+                                    (insert symbol here) means that both sides of Green's Theorem have to be orientated in
+                                    a self-consistent manner following the <b>right-hand rule</b>. The orientation of
+                                    \   (C\) needs to be consistent with the orientation of \(d\vec{S}\). For the 2D case
+                                    (Green's Theorem):
+                                    <ul>
+                                        <li>\(C\) orientated clockwise   \(\,\Longleftrightarrow\,\)   \(d\vec{S}\) pointed in
+                                        \(-\mathbf{\hat{k}}\) direction.</li>
+                                    <li>\(C\) orientated anti-clockwise   \(\,\Longleftrightarrow\,\)   \(d\vec{S}\) pointed in
+                                            \(+\mathbf{\hat{k}}\) direction.</li>
+                                    A quick trick to remember this is with the right-hand rule. Start by putting your
+                                right hand in the centre of the loop \(C\):
+                                    <ul>
+                                        <li>Index \(\longrightarrow\) </li>
+                                    </ul>
+
+                                    </ul>
                                 </p>
                             </div>
 
