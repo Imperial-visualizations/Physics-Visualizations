@@ -200,12 +200,13 @@ var options = {
 function plotE() {
     layoutE = {
         yaxis: {title: "Energy / eV", titlefont: {size: labelFontsize},
-            range: [-1.1 * mol1.V.e, 1.7 * Math.max(initKVib, initKRot)], dtick: 2},
+            range: [-1.1 * mol1.V.e, 1.7 * Math.max(initKVib, initKRot)], nticks: 20},
         titlefont: {size: titleFontsize}, margin: {l: marL, r: marR, b: marB, t: marT},
-        xaxis: {title: "t / s", titlefont: {size: 10}, range: [0, GRAPH_TIME], dtick: 0.5},
+        xaxis: {title: "t / s", titlefont: {size: 10}, range: [0, GRAPH_TIME], nticks: 20},
         title: "KE and PE against Time",
         legend: {x: 0.67, y: 1, orientation: "h"}
     };
+
     var data = [{x: arrTime, y: arrVibKE, mode: "lines", line: {width: 2, color: "#FFDD00"}, name: "KE" + "vib".sub()},
             {x: arrTime, y: arrRotKE, mode: "lines", line: {width: 2, color: "#66A40A"}, name: "KE" + "rot".sub()},
             {x: arrTime, y: arrPE, mode: "lines", line: {width: 2, color: "#003E74"}, name: "PE"}];
@@ -217,10 +218,10 @@ function plotE() {
  * Plots Lennard-Jones function and a marker to show current V against current separation using Plotly.
  */
 function plotLJ() {
-    LJ_layout = {title: "Lennard-Jones Potential", titlefont: {size: 12}, margin: {l: marL + 5, r: marR, b: marB, t: marT},
+    LJ_layout = {title: "Lennard-Jones Potential", titlefont: {size: 12}, margin: {l: marL, r: marR, b: marB + 10, t: marT},
                 legend: {x: 0.67, y: 1, "orientation": "v"},
-                yaxis: {range: [-1.1 * potential.e, 0.7 * potential.e], dtick: 2, title: "LJ Potential / eV", titlefont: {size: 10}},
-                xaxis: {range: [0, 3 * potential.s], dtick: 0.5, title: "r" + "AB".sub() + " / nm", titlefont: {size: 10}}};
+                yaxis: {range: [-1.1 * potential.e, 0.7 * potential.e], nticks: 20, title: "LJ Potential / eV", titlefont: {size: 10}},
+                xaxis: {range: [0, 3 * potential.s], nticks: 20, title: "r" + "AB".sub() + " / nm", titlefont: {size: 10}}};
 
     // Remove all points outside visible range on graph.
     while (LJ_scatter.y[0] > LJ_layout.yaxis.range[1]) {
