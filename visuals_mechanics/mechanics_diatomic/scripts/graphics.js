@@ -6,7 +6,7 @@ var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS, "phaser",
     {preload: preload,create: create,update: update});
 
 var a1,a2,mol1,potential;                                           // Atoms, molecules and potential to be instantiated
-var zoom  = 30;
+var zoom  = 35;
 var initKVib, initKRot;                                             // Initial KEs.
 var init_s1 = 2, init_s2 = 2, init_e1 = 10, init_e2 = 10;           // Initial LJ parameters.
 
@@ -145,6 +145,8 @@ function create() {
     Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
 
     phaserInstance.stage.backgroundColor = 0xEBEEEE;
+
+    zoom = zoom * window.devicePixelRatio;
 
     a1 = new Atom(1, 1, CHERRY);
     a2 = new Atom(1, 1, CHERRY);
@@ -352,7 +354,7 @@ function reset(){
  */
 function update(){
     if(running) {
-        var dT = 1/60;
+        var dT = 1/3600;
         mol1.update(dT);//requests molecule update, sends deltaTime to mol1.
         a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
         a1.sprite.y = a1.getPos().items[1] * zoom + phaserInstance.world.centerY;
