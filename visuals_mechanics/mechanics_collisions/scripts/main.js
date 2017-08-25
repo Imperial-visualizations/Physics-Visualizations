@@ -205,6 +205,11 @@ function updateLabels() {
 
         recalculateVector();
     }
+    
+    ball1.Lab.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
+    ball1.CoM.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
+    ball2.Lab.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
+    ball2.CoM.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
 }
 
 function updateRadius(ball) {
@@ -342,6 +347,8 @@ let game = new Phaser.Game(canvasWidth, canvasHeight, Phaser.CANVAS, 'canvasWrap
     create: create,
     update: update
 });
+
+
 function preload() {
     game.stage.backgroundColor = "#EBEEEE";
     if (window.devicePixelRatio >= 1.5) {
@@ -352,6 +359,9 @@ function preload() {
         game.load.image('qstar', 'images/qstarlatex@2x.png');
         game.load.image('q1', 'images/q1latex@2x.png');
         game.load.image('q2', 'images/q2latex@2x.png');
+        game.load.image('u1', 'images/u1latex@2x.png');
+        game.load.image('v1', 'images/v1latex@2x.png');
+        game.load.image('v2', 'images/v2latex@2x.png');
     } else {
         game.load.image('cofmPNG', 'images/cofm.png');
         game.load.image('p1m1m2', 'images/p1m1m2latex.png');
@@ -360,6 +370,9 @@ function preload() {
         game.load.image('qstar', 'images/qstarlatex.png');
         game.load.image('q1', 'images/q1latex.png');
         game.load.image('q2', 'images/q2latex.png');
+        game.load.image('u1', 'images/u1latex.png');
+        game.load.image('v1', 'images/v1latex.png');
+        game.load.image('v2', 'images/v2latex.png');
     }
     textScaleDown = window.devicePixelRatio;
 
@@ -375,6 +388,7 @@ function clearVectors() {
 
 
 function create() {
+
     markerGroup = game.add.group();
     mainGroup = game.add.group();
     uiGroup = game.add.group();
@@ -401,6 +415,8 @@ function create() {
     ball1.CoM.spriteInstance = mainGroup.create(ball1.CoM.initr.x, ball1.CoM.initr.y, ball1G.generateTexture());
     ball1.Lab.spriteInstance.anchor.set(0.5, 0.5);
     ball1.CoM.spriteInstance.anchor.set(0.5, 0.5);
+    ball1.Lab.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
+    ball1.CoM.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
     ball1G.destroy();
 
 
@@ -414,6 +430,8 @@ function create() {
     ball2.Lab.spriteInstance = mainGroup.create(ball2.Lab.initr.x, ball2.Lab.initr.y, ball2G.generateTexture());
     ball2.Lab.spriteInstance.anchor.set(0.5, 0.5);
     ball2.CoM.spriteInstance.anchor.set(0.5, 0.5);
+    ball2.Lab.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
+    ball2.CoM.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
     ball2G.destroy();
 
 
@@ -470,6 +488,11 @@ function create() {
 
     mainGroup.sort();
     updateLabels();
+
+    ball1.Lab.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
+    ball1.CoM.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
+    ball2.Lab.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
+    ball2.CoM.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
 
 }
 
@@ -535,6 +558,11 @@ function update() {
         if (Phaser.Rectangle.intersects(ball1.Lab.spriteInstance.getBounds(), ball2.Lab.spriteInstance.getBounds()) && !isColliding) {
             onCollision();
         }
+
+        ball1.Lab.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
+        ball1.CoM.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
+        ball2.Lab.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
+        ball2.CoM.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
     }
     t += 1;
 }
@@ -672,9 +700,9 @@ function recalculateVector() {
         let scalefactor = canvasWidth / 16;
         let colPoint = 100-ball2.radius;
 
-        drawArrow(vCal(new Vector(colPoint/scalefactor, 0 - (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor ),'-',ball1.Lab.v), ball1.Lab.v, 1, 0xE40043);
-        drawArrow(new Vector(colPoint/scalefactor, 0 - (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor ), ball1.Lab.postv, 1, 0xD24000);
-        drawArrow(new Vector((ball2.Lab.spriteInstance.x-canvasWidth*0.5)/scalefactor, (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor),ball2.Lab.postv, 1, 0x00ACD7);
+        drawArrow(vCal(new Vector(colPoint/scalefactor, 0 - (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor ),'-',ball1.Lab.v), ball1.Lab.v, 1, 0xE40043, "u1");
+        drawArrow(new Vector(colPoint/scalefactor, 0 - (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor ), ball1.Lab.postv, 1, 0xD24000, "v1");
+        drawArrow(new Vector((ball2.Lab.spriteInstance.x-canvasWidth*0.5)/scalefactor, (Math.sin(initAngle)*(ball1.radius + ball2.radius)*0.25)/scalefactor),ball2.Lab.postv, 1, 0x00ACD7, "v2");
         //CoM frame
         drawArrow(new Vector(0-pStar.x ,0),pStar,2,0x960078,'pstar');
         drawArrow(new Vector(pStar.x,0),vCal(pStar,'*',-1),2,0x960078,'pstar');
