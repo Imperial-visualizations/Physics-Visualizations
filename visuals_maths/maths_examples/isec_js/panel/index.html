@@ -442,75 +442,88 @@
       }
       logMessage += algObjs[id].toString()+" ";
 
-      if(algObjs[id].type == "point"){
+      if(algObjs[id] instanceof Point){
+
         x = parseFloat($("#"+id+"PX").val());
         y = parseFloat($("#"+id+"PY").val());
         z = parseFloat($("#"+id+"PZ").val());
         newPos = new Vector(x,y,z);
         if(newPos.isEqualTo(algObjs[id].pos)){
+            // If no change is made do nothing
+            // to save CPU time 
         }else{
           changes += 1;
           algObjs[id].assignPos(newPos);
           logMessage += ("<br><b>r</b>=("+x+","+y+","+z+")");
         }
-      }else if(algObjs[id].type == "line"){
-        if( parseFloat($("#"+id+"DX").val())==0 && parseFloat($("#"+id+"DY").val())==0 && parseFloat($("#"+id+"DZ").val())==0 ){
-          alert("Direction can't be (0,0,0)!");
-          log("<red>Direction can't be (0,0,0)!</red>");
-          var dontClose = true;
-        }else{
-          dirx = parseFloat($("#"+id+"DX").val());
-          diry = parseFloat($("#"+id+"DY").val());
-          dirz = parseFloat($("#"+id+"DZ").val());
-          offx = parseFloat($("#"+id+"OX").val());
-          offy = parseFloat($("#"+id+"OY").val());
-          offz = parseFloat($("#"+id+"OZ").val());
+
+      }else if(algObjs[id] instanceof Line){
+
+        dirx = parseFloat($("#"+id+"DX").val());
+        diry = parseFloat($("#"+id+"DY").val());
+        dirz = parseFloat($("#"+id+"DZ").val());
+        offx = parseFloat($("#"+id+"OX").val());
+        offy = parseFloat($("#"+id+"OY").val());
+        offz = parseFloat($("#"+id+"OZ").val());
+
+        try {
           newDir = new Vector(dirx,diry,dirz);
           newOff = new Vector(offx,offy,offz);
           if(newDir.isEqualTo(algObjs[id].dir) && newOff.isEqualTo(algObjs[id].off)){
-
+            // If no change is made do nothing
+            // to save CPU time 
           }else{
             changes += 1;
             algObjs[id].assignDir(newDir);
             algObjs[id].assignOff(newOff);
             logMessage += ("<br><b>r</b>=("+offx+","+offy+","+offz+")+µ("+dirx+","+diry+","+dirz+")");
           }
+        } catch(err) {
+          console.log(err);
+          log("<red>ERROR: "+err.message+"<br>The Direction of "+algObjs[id].toString+" can't be (0,0,0)!</red>");
+          var dontClose = true;
         }
 
-      }else if(algObjs[id].type == "plane"){
-        if( parseFloat($("#"+id+"NX").val())==0 && parseFloat($("#"+id+"NY").val())==0 && parseFloat($("#"+id+"NZ").val())==0 ){
-          alert("Normal can't be (0,0,0)!");
-          log("<red>Normal can't be (0,0,0)!</red>");
-          var dontClose = true;
-        }else{
-          normalx = parseFloat($("#"+id+"NX").val());
-          normaly = parseFloat($("#"+id+"NY").val());
-          normalz = parseFloat($("#"+id+"NZ").val());
-          offx = parseFloat($("#"+id+"OX").val());
-          offy = parseFloat($("#"+id+"OY").val());
-          offz = parseFloat($("#"+id+"OZ").val());
+      }else if(algObjs[id] instanceof Plane){
+
+        normalx = parseFloat($("#"+id+"NX").val());
+        normaly = parseFloat($("#"+id+"NY").val());
+        normalz = parseFloat($("#"+id+"NZ").val());
+        offx = parseFloat($("#"+id+"OX").val());
+        offy = parseFloat($("#"+id+"OY").val());
+        offz = parseFloat($("#"+id+"OZ").val());
+
+        try {
           newNormal = new Vector(normalx,normaly,normalz);
           newOff = new Vector(offx,offy,offz);
           if(newNormal.isEqualTo(algObjs[id].normal) && newOff.isEqualTo(algObjs[id].off)){
+            // If no change is made do nothing
+            // to save CPU time 
           }else{
             changes += 1;
             algObjs[id].assignNormal(newNormal);
             algObjs[id].assignOff(newOff);
             logMessage += ("<br>("+normalx+","+normaly+","+normalz+")•(<b>r</b>-("+offx+","+offy+","+offz+"))=0");
           }
+        } catch(err) {
+          console.log(err);
+          log("<red>ERROR: "+err.message+"<br>The Normal of "+algObjs[id].toString+" can't be (0,0,0)!</red>");
+          var dontClose = true;
         }
+
       }else{
         console.log("ERROR: the object"+id+" can't be accessed.");
-      }       
+      }    
+
       if(dontClose){
-        $("#panelItemsWrapper").scrollTop($("#EditorFor"+id).position().top+$("#EditorFor"+id).height());
+        $("#panelItemsWrapper").scrollTop($("#EditorFor"+id).position().top-80);
       }else{
         if(changes > 0){
-          $("#EditorFor"+id).slideUp(200);
+          $("#EditorFor"+id).slideUp(100);
           redrawPlot();
           log(logMessage);
         }else{
-          $("#EditorFor"+id).slideUp(1000);
+          $("#EditorFor"+id).slideUp(600);
         }
         $("#EditorFor"+id).removeClass("expanded");
       }
@@ -547,26 +560,17 @@
       $(this).on('dblclick',function(event) {
         id = $(this).attr("id"); 
         console.log("double click on ",id)
-        // var newName = prompt("Enter new name", algObjs[$(this)[0].id].toString())
-        // algObjs[$(this)[0].id].name = newName;
-        // redisplay();       
         if($("#EditorFor"+id).hasClass("expanded")){
           //update the object with the value in the input elements
           saveToObject(id);
         }else{
-          $("#panelItemsWrapper>item>label").each(function(index){
-            $(this).removeClass("selected");
-            if($("#EditorFor"+id).hasClass("expanded")){
-              saveToObject(id);
-            }
-          });
           //update the value in the input elements with object
            $("#NameOf"+id).val(algObjs[id].name);
-          if(algObjs[id].type == "point"){
+          if(algObjs[id] instanceof Point){
             $("#"+id+"PX").val(algObjs[id].pos.x);
             $("#"+id+"PY").val(algObjs[id].pos.y);
             $("#"+id+"PZ").val(algObjs[id].pos.z);
-          }else if(algObjs[id].type == "line"){
+          }else if(algObjs[id] instanceof Line){
             $("#"+id+"DX").val(algObjs[id].dir.x);
             $("#"+id+"DY").val(algObjs[id].dir.y);
             $("#"+id+"DZ").val(algObjs[id].dir.z);
@@ -574,7 +578,7 @@
             $("#"+id+"OY").val(algObjs[id].off.y);
             $("#"+id+"OZ").val(algObjs[id].off.z);
 
-          }else if(algObjs[id].type == "plane"){
+          }else if(algObjs[id] instanceof Plane){
             $("#"+id+"NX").val(algObjs[id].normal.x);
             $("#"+id+"NY").val(algObjs[id].normal.y);
             $("#"+id+"NZ").val(algObjs[id].normal.z);
@@ -582,9 +586,17 @@
             $("#"+id+"OY").val(algObjs[id].off.y);
             $("#"+id+"OZ").val(algObjs[id].off.z);
           }else{
-            console.log("ERROR: the object"+id+" can't be accessed.");
+            console.log("ERROR: the object "+id+" can't be accessed.");
           }
           $("#EditorFor"+id).slideToggle(200);
+          $("#panelItemsWrapper>item>label").each(function(){
+            // "this" in here is not the same as the "this" outside,
+            // so can't use "id" but have to use $(this).attr("id")
+            $(this).removeClass("selected");
+            if($("#EditorFor"+$(this).attr("id")).hasClass("expanded")){
+              saveToObject($(this).attr("id"));
+            }
+          });
           $("#EditorFor"+id).toggleClass("expanded");
         }
         event.stopPropagation();
@@ -645,12 +657,12 @@
     //console.log("AlgObj with id "+object.id+", ", object.toString());
     $("#panelItemsWrapper>p").remove();
     $("#panelItemsWrapper").append("<item class='"+object.type+"'><span class='active'><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
-    if(object.type == "point"){
+    if(object instanceof Point){
       $("#panelItemsWrapper").append('<itemEditor id="EditorFor'+object.id+'" style="display: none;"><input class="itemNameInput" id="NameOf'+object.id+'" value="'+object.name+'"><label>Position</label><span class="inputWrapper">x:<input id="'+object.id+'PX" value="'+object.pos.x+'"></span><span class="inputWrapper">y:<input id="'+object.id+'PY" value="'+object.pos.y+'"></span><span class="inputWrapper">z:<input id="'+object.id+'PZ" value="'+object.pos.z+'"></span></itemEditor>');
-    }else if(object.type == "line"){
+    }else if(object instanceof Line){
       $("#panelItemsWrapper").append('<itemEditor id="EditorFor'+object.id+'" style="display: none;"><input class="itemNameInput" id="NameOf'+object.id+'" value="'+object.name+'"><label>Direction</label><span class="inputWrapper">x:<input id="'+object.id+'DX" value="'+object.dir.x+'"></span><span class="inputWrapper">y:<input id="'+object.id+'DY" value="'+object.dir.y+'"></span><span class="inputWrapper">z:<input id="'+object.id+'DZ" value="'+object.dir.z+'"></span><label>Offset</label><span class="inputWrapper">x:<input id="'+object.id+'OX" value="'+object.off.x+'"></span><span class="inputWrapper">y:<input id="'+object.id+'OY" value="'+object.off.y+'"></span><span class="inputWrapper">z:<input id="'+object.id+'OZ" value="'+object.off.z+'"></span></itemEditor>');
 
-    }else if(object.type == "plane"){
+    }else if(object instanceof Plane){
       $("#panelItemsWrapper").append('<itemEditor id="EditorFor'+object.id+'" style="display: none;"><input class="itemNameInput" id="NameOf'+object.id+'" value="'+object.name+'"><label>Normal</label><span class="inputWrapper">x:<input id="'+object.id+'NX" value="'+object.normal.x+'"></span><span class="inputWrapper">y:<input id="'+object.id+'NY" value="'+object.normal.y+'"></span><span class="inputWrapper">z:<input id="'+object.id+'NZ" value="'+object.normal.z+'"></span><label>Offset</label><span class="inputWrapper">x:<input id="'+object.id+'OX" value="'+object.off.x+'"></span><span class="inputWrapper">y:<input id="'+object.id+'OY" value="'+object.off.y+'"></span><span class="inputWrapper">z:<input id="'+object.id+'OZ" value="'+object.off.z+'"></span></itemEditor>');
       
     }else{
