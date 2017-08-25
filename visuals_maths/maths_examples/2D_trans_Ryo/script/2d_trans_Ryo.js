@@ -332,7 +332,7 @@ function main() {
 
 // Function which takes array as input and returns a table
 function makeTableHTML(myArray) {
-    var result = "<table><tbody>";
+    var result = "<table class='matrix'><tbody>";
     for(var i=0; i<myArray.length; i++) {
         result += "<tr>";
         for(var j=0; j<myArray[i].length; j++){

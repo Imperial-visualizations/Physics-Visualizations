@@ -20,13 +20,16 @@
     border-radius: 4px;
     box-sizing: border-box;
     width: 100%;
-    height: 528px;
+    height: 568px;
   }
   #panelHeadWrapper{
-    height: 40px;
+    height: 80px;
     box-sizing: border-box;
-    border-bottom: 4px solid #fff;
+    border: 1px solid #000;
     padding: 4px;
+    font-family: "Consolas","Courier New","Lucida Console","Lucida Sans Typewriter","Monaco","Andale Mono";
+    font-size: 0.8em;
+    overflow: scroll;
   }
   #panelHeadWrapper>label{
     font-size: 26px;
@@ -45,10 +48,41 @@
     height: 30px;
     border: 1px solid #000;
     display: block;
+    position: relative;
   }
   #panelItemsWrapper>item:nth-last-child(2){
     box-sizing: border-box;
     border-bottom: 2px solid #000;
+  }
+  #panelItemsWrapper>item.point:after{
+    content: "•";
+    position: absolute;
+    display: block;
+    width: 10%;
+    height: 100%;
+    top: 0;
+    left: 90%;
+    text-align: center;
+  }
+  #panelItemsWrapper>item.line:after{
+    content: "∖";
+    position: absolute;
+    display: block;
+    width: 10%;
+    height: 100%;
+    top: 0;
+    left: 90%;
+    text-align: center;
+  }
+  #panelItemsWrapper>item.plane:after{
+    content: "◼︎";
+    position: absolute;
+    display: block;
+    width: 10%;
+    height: 100%;
+    top: 0;
+    left: 90%;
+    text-align: center;
   }
   #panelItemsWrapper>item>span{
     height: 28px;
@@ -72,6 +106,7 @@
     display: block;
     height: 28px;
     padding-left: 4px;
+    margin:0;
     overflow: hidden;
     transition: all 100ms;
   }
@@ -193,9 +228,20 @@
     color: #006EAF;
     text-shadow: 0px 0px 2px #bccfda;
   }
+
+  red{
+    font-weight: 600;
+    color: #DD2501;
+  }
+  blue{
+    font-weight: 600;
+    color: #006EAF;
+  }
   </style>
 </head>
 <body>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <h1>Linear algebra - Intersections</h1>
   <div class="container">
     <div class="row">
@@ -206,34 +252,65 @@
       <div class="four columns">
         <panel>
           <div id="panelHeadWrapper">
-            <!--<label>Control Panel</label>-->
+            Loading Saved Data....<br>
           </div>
           <div id="panelItemsWrapper">
-
           </div>
           <div id="panelActionsWrapper">
             <a class="active" title="Add Dot" id="addPoint"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>Point</a>
             <a class="active" title="Add Line" id="addLine"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>Line</a>
             <a class="active" title="Add Plane" id="addPlane"><i class="fa fa-plus fa-fw" aria-hidden="true"></i>Plane</a><br>
-            <a class="active" title="Clear" id="clear"><i class="fa fa-repeat  fa-fw" aria-hidden="true"></i>Clear</a>
+            <a class="" title="Delete" id="delete"><i class="fa fa-trash fa-fw" aria-hidden="true"></i>Delete</a>
             <a class="" title="Intersect" id="intersect"><i class="fa fa-compress fa-fw" aria-hidden="true"></i>Intersect</a>
-            <a class="" title="Delete" id="delete"><i class="fa fa-trash fa-fw" aria-hidden="true"></i>Delete</a><br>
+            <a class="active" title="Clear" id="clear"><i class="fa fa-repeat  fa-fw" aria-hidden="true"></i>Clear</a><br>
             <a class="active" title="Save" id="save"><i class="fa fa-floppy-o fa-fw" aria-hidden="true"></i>Save</a>
           </div>
         </panel>
-        <h6 id="info"></h6>
-        <h6>Hold CTRL to select multiple. </h6>
 
       </div>
     </div>
   </div>
+  <script src="fast_plotter.js"></script>
+  <script>
+  var layout = {
+    scene: {
+      xaxis: {
+        range: [-10,10]
+      },
+      yaxis: {
+        range: [-10,10]
+      },
+      zaxis: {
+        range: [-10,10]
+      },
+      camera: {
+        up: {
+          x: 0,
+          y: 0,
+          z: 1
+        },
+        eye: {
+          x: -1.7428,
+          y: 1.0707,
+          z: 0.7100
+        }
+      },
+      aspectratio: {x: 1, y: 1, z: 1},
+    },
+    showlegend: false,
+    margin: {l:0,r:0,b:0,t:0}
+  };
+  var plot = null;
+  $('#canvasWrapper').ready(function() {
+    plot = new fastPlotHandler('canvasWrapper');
+    plot.init();
+    plot.setLayout(layout);
+  })
+  </script>
   <br><br><br>
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="./intersections.js"></script>
   <script type="text/javascript">
   var algObjs = {};
-  var ctrlPressed = false;
 
   var nameCount = 0;
   function nextName() {
@@ -242,11 +319,17 @@
     nameCount++;
     return name;
   }
-
+  function log(txt){
+    $("#panelHeadWrapper").html($("#panelHeadWrapper").html()+txt+"<br>");
+    $("#panelHeadWrapper").animate({ scrollTop: $('#panelHeadWrapper').prop("scrollHeight")}, 200);
+  }
   $(document).ready(function(){
     console.log("Document ready!")
+    log("<blue>Click to select.</blue>");
+    log("<blue>Click again to deselect.</blue>");
+    log("<blue>Double click to edit.</blue>");
     if(sessionStorage.lastSaved != undefined){
-      console.log("there is a saved state... retrieving,",sessionStorage)
+      console.log("there is a saved state... retrieving,",sessionStorage);
       var retrieveAlgObjs = JSON.parse(sessionStorage.getItem("algObjsSaved"));
       objcounter = 0//JSON.parse(sessionStorage.getItem("algObjsCounterSaved"));
       function rebuildAlgObj(obj) {
@@ -282,77 +365,81 @@
       rebuild = {}
       for(idx in retrieveAlgObjs) {
         //rebuild everything
-        var newobj = rebuildAlgObj(retrieveAlgObjs[idx])
+        var newobj = rebuildAlgObj(retrieveAlgObjs[idx]);
         rebuild[newobj.id] = newobj;
+        plot.addAlgObj(rebuild[newobj.id]); //add this object to the plot
       }
       algObjs = rebuild;
       redisplay();
     } else{
-      console.log("no saved state... defaulting")
+      console.log("no saved state... defaulting");
     }
-    $(document).on('keydown',function(event) {
-      if ( (event.which == 91 || event.which == 17) || (event.ctrlKey||event.metaKey) ) {
-        ctrlPressed = true;
-      }
-    });
-    $(document).on('keyup',function(event) {
-      if ( (event.which == 91 || event.which == 17) || (event.ctrlKey||event.metaKey) ) {
-        ctrlPressed = false;
-      }
-    });
     $("#addPoint").on('click',function(){
       var newPoint = new Point(new Vector(Math.random(),Math.random(),Math.random()));
       var newid = newPoint.id;
-      newPoint.name = "Point "+nextName();
+      newPoint.name = nextName();
       algObjs[newid] = newPoint;
+      plot.addAlgObj(algObjs[newid])
+      log(algObjs[newid].toString()+" added.");
       //we could call addAlgObj(algObjs[newid]) but it's obsolete
       redisplay();
-      $("#EditorFor"+newPoint.id).slideDown("fast");
+      $("#EditorFor"+newPoint.id).slideDown(200);
       $("#EditorFor"+newPoint.id).addClass("expanded");
       $("#NameOf"+newPoint.id).focus();
     });
     $("#addLine").on('click',function(){
       var newLine = new Line(new Vector(Math.random(),Math.random(),Math.random()), new Vector(Math.random(),Math.random(),Math.random()));
-      newLine.name = "Line "+nextName();
+      newLine.name = nextName();
       var newid = newLine.id;
       algObjs[newid] = newLine;
+      plot.addAlgObj(algObjs[newid])
       //we could call addAlgObj(algObjs[newid]) but it's obsolete
+      log(algObjs[newid].toString()+" added.");
       redisplay();
-      $("#EditorFor"+newLine.id).slideDown("fast");
+      $("#EditorFor"+newLine.id).slideDown(200);
       $("#EditorFor"+newLine.id).addClass("expanded");
       $("#NameOf"+newLine.id).focus();
     });
     $("#addPlane").on('click',function(){
       var newPlane = new Plane(new Vector(Math.random(),Math.random(),Math.random()), new Vector(Math.random(),Math.random(),Math.random()));
-      newPlane.name = "Plane "+nextName();
+      newPlane.name = nextName();
       var newid = newPlane.id;
       algObjs[newid] = newPlane;
+      plot.addAlgObj(algObjs[newid])
       //we could call addAlgObj(algObjs[newid]) but it's obsolete
+      log(algObjs[newid].toString()+" added.");
       redisplay();
-      $("#EditorFor"+newPlane.id).slideDown("fast");
+      $("#EditorFor"+newPlane.id).slideDown(200);
       $("#EditorFor"+newPlane.id).addClass("expanded");
       $("#NameOf"+newPlane.id).focus();
     });
     $("#intersect").on('click',function(){
+      log("Finding possible intersections....");
       var selectedObjs = []
       $("#panelItemsWrapper>item>label.selected").each(
         function() {
           selectedObjs.push(algObjs[$(this)[0].id]);
         }
       );
-      console.log("interect selected objs: ",selectedObjs)
+      console.log("interect selected objs: ",selectedObjs);
       var newobjs = intersectList(selectedObjs);
-      console.log("intersect result: ",newobjs)
+      console.log("intersect result: ",newobjs);
       for(idx in newobjs) {
         var newid = newobjs[idx].id;
         algObjs[newid] = newobjs[idx];
+        plot.addAlgObj(algObjs[newid])
       }
       redisplay();
+      if(newobjs.length == selectedObjs.length){
+        log("<red>No intersections found.</red>");
+      }
+      log("Results displayed.");
     });
     $("#clear").on('click',function(){
       for (i in algObjs) {
         console.log("idx: ", i, ", object: ", algObjs[i].toString());
         $( "#"+i ).parent().remove();
+        plot.deleteAlgObj(algObjs[i]);
         delete algObjs[i];
       }
       redisplay();
@@ -361,6 +448,7 @@
       $("#panelItemsWrapper>item>label.selected").each(
         function() {
           console.log("deleting at id", $(this)[0].id, ", object:", algObjs[$(this)[0].id])
+          plot.deleteAlgObj(algObjs[$(this)[0].id]);
           delete algObjs[$(this)[0].id];
         }
       );
@@ -384,69 +472,145 @@
     + currentdate.getSeconds();
     sessionStorage.lastSaved = datetime;
 
-    $("#info").text("Last Saved: "+sessionStorage.lastSaved);
+    log("<blue>Last Saved: "+sessionStorage.lastSaved+"</blue>");
   }
   function saveToObject(id){
-      thisObject = $("#"+id);
-      algObjs[id].name = $("#NameOf"+thisObject.attr("id")).val();
-      $("#"+thisObject.attr("id")).text(algObjs[id].name);
-      if(algObjs[id].type == "point"){
-        x = parseFloat($("#"+thisObject.attr("id")+"PX").val());
-        y = parseFloat($("#"+thisObject.attr("id")+"PY").val());
-        z = parseFloat($("#"+thisObject.attr("id")+"PZ").val());
-        algObjs[id].assignPos(new Vector(x,y,z));
-      }else if(algObjs[id].type == "line"){
-        dirx = parseFloat($("#"+thisObject.attr("id")+"DX").val());
-        diry = parseFloat($("#"+thisObject.attr("id")+"DY").val());
-        dirz = parseFloat($("#"+thisObject.attr("id")+"DZ").val());
-        offx = parseFloat($("#"+thisObject.attr("id")+"OX").val());
-        offy = parseFloat($("#"+thisObject.attr("id")+"OY").val());
-        offz = parseFloat($("#"+thisObject.attr("id")+"OZ").val());
-        algObjs[id].assignDir(new Vector(dirx,diry,dirz));
-        algObjs[id].assignOff(new Vector(offx,offy,offz));
+      var changes = 0;
+      var dontClose = false;
+      var logMessage = "Updated: ";
+      var thisObject = $("#"+id);
+      if(algObjs[id].name != $("#NameOf"+id).val()){
+        changes += 1;
+        algObjs[id].name = $("#NameOf"+id).val();
+        $("#"+id).text(algObjs[id].toString());
+      }
+      logMessage += algObjs[id].toString()+" ";
 
-      }else if(algObjs[id].type == "plane"){
-        normalx = parseFloat($("#"+thisObject.attr("id")+"NX").val());
-        normaly = parseFloat($("#"+thisObject.attr("id")+"NY").val());
-        normalz = parseFloat($("#"+thisObject.attr("id")+"NZ").val());
-        offx = parseFloat($("#"+thisObject.attr("id")+"OX").val());
-        offy = parseFloat($("#"+thisObject.attr("id")+"OY").val());
-        offz = parseFloat($("#"+thisObject.attr("id")+"OZ").val());
-        algObjs[id].assignNormal(new Vector(normalx,normaly,normalz));
-        algObjs[id].assignOff(new Vector(offx,offy,offz));
+      if(algObjs[id] instanceof Point){
+
+        x = parseFloat($("#"+id+"PX").val());
+        y = parseFloat($("#"+id+"PY").val());
+        z = parseFloat($("#"+id+"PZ").val());
+        newPos = new Vector(x,y,z);
+        if(newPos.isEqualTo(algObjs[id].pos)){
+            // If no change is made do nothing
+            // to save CPU time 
+        }else{
+          changes += 1;
+          algObjs[id].assignPos(newPos);
+          logMessage += ("<br><b>r</b>=("+x+","+y+","+z+")");
+        }
+
+      }else if(algObjs[id] instanceof Line){
+
+        dirx = parseFloat($("#"+id+"DX").val());
+        diry = parseFloat($("#"+id+"DY").val());
+        dirz = parseFloat($("#"+id+"DZ").val());
+        offx = parseFloat($("#"+id+"OX").val());
+        offy = parseFloat($("#"+id+"OY").val());
+        offz = parseFloat($("#"+id+"OZ").val());
+
+        try {
+          newDir = new Vector(dirx,diry,dirz);
+          newOff = new Vector(offx,offy,offz);
+          if(newDir.isEqualTo(algObjs[id].dir) && newOff.isEqualTo(algObjs[id].off)){
+            // If no change is made do nothing
+            // to save CPU time 
+          }else{
+            changes += 1;
+            algObjs[id].assignDir(newDir);
+            algObjs[id].assignOff(newOff);
+            logMessage += ("<br><b>r</b>=("+offx+","+offy+","+offz+")+µ("+dirx+","+diry+","+dirz+")");
+          }
+        } catch(err) {
+          console.log(err);
+          log("<red>ERROR: "+err.message+"<br>The Direction of "+algObjs[id].toString+" can't be (0,0,0)!</red>");
+          var dontClose = true;
+        }
+
+      }else if(algObjs[id] instanceof Plane){
+
+        normalx = parseFloat($("#"+id+"NX").val());
+        normaly = parseFloat($("#"+id+"NY").val());
+        normalz = parseFloat($("#"+id+"NZ").val());
+        offx = parseFloat($("#"+id+"OX").val());
+        offy = parseFloat($("#"+id+"OY").val());
+        offz = parseFloat($("#"+id+"OZ").val());
+
+        try {
+          newNormal = new Vector(normalx,normaly,normalz);
+          newOff = new Vector(offx,offy,offz);
+          if(newNormal.isEqualTo(algObjs[id].normal) && newOff.isEqualTo(algObjs[id].off)){
+            // If no change is made do nothing
+            // to save CPU time 
+          }else{
+            changes += 1;
+            algObjs[id].assignNormal(newNormal);
+            algObjs[id].assignOff(newOff);
+            logMessage += ("<br>("+normalx+","+normaly+","+normalz+")•(<b>r</b>-("+offx+","+offy+","+offz+"))=0");
+          }
+        } catch(err) {
+          console.log(err);
+          log("<red>ERROR: "+err.message+"<br>The Normal of "+algObjs[id].toString+" can't be (0,0,0)!</red>");
+          var dontClose = true;
+        }
+
       }else{
         console.log("ERROR: the object"+id+" can't be accessed.");
-      }       
-      $("#EditorFor"+id).slideUp("fast");
-      $("#EditorFor"+id).removeClass("expanded");
-      redrawPlot();
+<<<<<<< HEAD
+      }
+=======
+      }    
+
+>>>>>>> 1a1abaad9db9d82c54f7085a231482d5011fa9dc
+      if(dontClose){
+        $("#panelItemsWrapper").scrollTop($("#EditorFor"+id).position().top-80);
+      }else{
+        if(changes > 0){
+          $("#EditorFor"+id).slideUp(100);
+          redrawPlot();
+          log(logMessage);
+        }else{
+          $("#EditorFor"+id).slideUp(600);
+        }
+        $("#EditorFor"+id).removeClass("expanded");
+      }
   }
   function itemsAddEventListener(){
     $("#panelItemsWrapper>item>span").each(function(index){
       $(this).off();
       $(this).on('click',function(event){
         $(this).toggleClass("active");
+        if($(this).hasClass("active")){
+          var activeId = $(this)[0].firstChild.id.replace('Eye','');
+          plot.showTraces([activeId]); //show what was clicked to be shown
+        }
+        else {
+          var deactiveId = $(this)[0].firstChild.id.replace('Eye','');
+          plot.hideTraces([deactiveId]); //hide what was clicked to be hidden
+        }
         event.preventDefault();
       });
     });
     $("#panelItemsWrapper>item>label").each(function(index){
       $(this).off();
       $(this).on('click',function(event){
-        if(ctrlPressed == false){
-          $("#panelItemsWrapper>item>label").each(function(index){
-            $(this).removeClass("selected");
-          });
-          $(this).addClass("selected");
-        } else{
-          $(this).toggleClass("selected");
-        }
+        $(this).toggleClass("selected");
         var counts = 0;
+        var toHighlight = [];
         $("#panelItemsWrapper>item>label").each(function(index){
-          if($(this).hasClass("selected")){counts += 1;}
+          if($(this).hasClass("selected")){
+            toHighlight.push($(this)[0].id);
+            console.log(toHighlight);
+            counts += 1;
+          }
         });
         if(counts != 0){
+          plot.unHighlight();
+          plot.highlightTraces(toHighlight);
           $("#delete").addClass("active");
         }else{
+          plot.unHighlight();
           $("#delete").removeClass("active");
         }
         if(counts>1) {
@@ -457,43 +621,61 @@
         event.stopPropagation();
         event.preventDefault();
       });
-      $(this).on('dblclick',function() {
-        id = $(this).attr("id"); 
+      $(this).on('dblclick',function(event) {
+        id = $(this).attr("id");
         console.log("double click on ",id)
+<<<<<<< HEAD
         // var newName = prompt("Enter new name", algObjs[$(this)[0].id].toString())
         // algObjs[$(this)[0].id].name = newName;
-        // redisplay();       
+        // redisplay();
+=======
+>>>>>>> 1a1abaad9db9d82c54f7085a231482d5011fa9dc
         if($("#EditorFor"+id).hasClass("expanded")){
           //update the object with the value in the input elements
           saveToObject(id);
         }else{
           //update the value in the input elements with object
-           $("#NameOf"+$(this).attr("id")).val(algObjs[id].name);
-          if(algObjs[id].type == "point"){
-            $("#"+$(this).attr("id")+"PX").val(algObjs[id].pos.x);
-            $("#"+$(this).attr("id")+"PY").val(algObjs[id].pos.y);
-            $("#"+$(this).attr("id")+"PZ").val(algObjs[id].pos.z);
-          }else if(algObjs[id].type == "line"){
-            $("#"+$(this).attr("id")+"DX").val(algObjs[id].dir.x);
-            $("#"+$(this).attr("id")+"DY").val(algObjs[id].dir.y);
-            $("#"+$(this).attr("id")+"DZ").val(algObjs[id].dir.z);
-            $("#"+$(this).attr("id")+"OX").val(algObjs[id].off.x);
-            $("#"+$(this).attr("id")+"OY").val(algObjs[id].off.y);
-            $("#"+$(this).attr("id")+"OZ").val(algObjs[id].off.z);
+           $("#NameOf"+id).val(algObjs[id].name);
+          if(algObjs[id] instanceof Point){
+            $("#"+id+"PX").val(algObjs[id].pos.x);
+            $("#"+id+"PY").val(algObjs[id].pos.y);
+            $("#"+id+"PZ").val(algObjs[id].pos.z);
+          }else if(algObjs[id] instanceof Line){
+            $("#"+id+"DX").val(algObjs[id].dir.x);
+            $("#"+id+"DY").val(algObjs[id].dir.y);
+            $("#"+id+"DZ").val(algObjs[id].dir.z);
+            $("#"+id+"OX").val(algObjs[id].off.x);
+            $("#"+id+"OY").val(algObjs[id].off.y);
+            $("#"+id+"OZ").val(algObjs[id].off.z);
 
-          }else if(algObjs[id].type == "plane"){
-            $("#"+$(this).attr("id")+"NX").val(algObjs[id].normal.x);
-            $("#"+$(this).attr("id")+"NY").val(algObjs[id].normal.y);
-            $("#"+$(this).attr("id")+"NZ").val(algObjs[id].normal.z);
-            $("#"+$(this).attr("id")+"OX").val(algObjs[id].off.x);
-            $("#"+$(this).attr("id")+"OY").val(algObjs[id].off.y);
-            $("#"+$(this).attr("id")+"OZ").val(algObjs[id].off.z);
+          }else if(algObjs[id] instanceof Plane){
+            $("#"+id+"NX").val(algObjs[id].normal.x);
+            $("#"+id+"NY").val(algObjs[id].normal.y);
+            $("#"+id+"NZ").val(algObjs[id].normal.z);
+            $("#"+id+"OX").val(algObjs[id].off.x);
+            $("#"+id+"OY").val(algObjs[id].off.y);
+            $("#"+id+"OZ").val(algObjs[id].off.z);
           }else{
-            console.log("ERROR: the object"+id+" can't be accessed.");
+            console.log("ERROR: the object "+id+" can't be accessed.");
           }
-          $("#EditorFor"+id).slideToggle("fast");
+          $("#EditorFor"+id).slideToggle(200);
+          $("#panelItemsWrapper>item>label").each(function(){
+            // "this" in here is not the same as the "this" outside,
+            // so can't use "id" but have to use $(this).attr("id")
+            $(this).removeClass("selected");
+            if($("#EditorFor"+$(this).attr("id")).hasClass("expanded")){
+              saveToObject($(this).attr("id"));
+            }
+          });
           $("#EditorFor"+id).toggleClass("expanded");
         }
+        event.stopPropagation();
+        event.preventDefault();
+      });
+    });
+    $("#panelItemsWrapper>itemEditor").each(function(index){
+      $(this).off();
+      $(this).on('click',function(event){
         event.stopPropagation();
         event.preventDefault();
       });
@@ -503,19 +685,31 @@
       $(this).on('click',function(event){
         $("#panelItemsWrapper>item>label").each(function(index){
           $(this).removeClass("selected");
+          if($("#EditorFor"+$(this).attr("id")).hasClass("expanded")){
+            saveToObject($(this).attr("id"));
+          }
+          plot.unHighlight();
         });
         $("#intersect").removeClass("active");
         $("#delete").removeClass("active");
+        event.stopPropagation();
+        event.preventDefault();
       });
     });
-    $(".inputWrapper input").each(function(){
+    $("itemeditor input").each(function(){
       $(this).off();
       $(this).on('keypress',function(e){
         if(e.which == 13 || e.originalEvent.keyCode == 13){
           id = $(this).attr("id");
-          id = id.slice(0, -2);
+          if($(this).hasClass("itemNameInput")){
+            id = id.slice(6, id.length);
+          }else{
+            id = id.slice(0, -2);
+          }
           console.log(id);
           saveToObject(id);
+          e.stopPropagation();
+          e.preventDefault();
         }
       });
     });
@@ -533,15 +727,15 @@
   function algObjToPanel(object){
     //console.log("AlgObj with id "+object.id+", ", object.toString());
     $("#panelItemsWrapper>p").remove();
-    $("#panelItemsWrapper").append("<item class=''><span class='active'><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
-    if(object.type == "point"){
+    $("#panelItemsWrapper").append("<item class='"+object.type+"'><span class='active'><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
+    if(object instanceof Point){
       $("#panelItemsWrapper").append('<itemEditor id="EditorFor'+object.id+'" style="display: none;"><input class="itemNameInput" id="NameOf'+object.id+'" value="'+object.name+'"><label>Position</label><span class="inputWrapper">x:<input id="'+object.id+'PX" value="'+object.pos.x+'"></span><span class="inputWrapper">y:<input id="'+object.id+'PY" value="'+object.pos.y+'"></span><span class="inputWrapper">z:<input id="'+object.id+'PZ" value="'+object.pos.z+'"></span></itemEditor>');
-    }else if(object.type == "line"){
+    }else if(object instanceof Line){
       $("#panelItemsWrapper").append('<itemEditor id="EditorFor'+object.id+'" style="display: none;"><input class="itemNameInput" id="NameOf'+object.id+'" value="'+object.name+'"><label>Direction</label><span class="inputWrapper">x:<input id="'+object.id+'DX" value="'+object.dir.x+'"></span><span class="inputWrapper">y:<input id="'+object.id+'DY" value="'+object.dir.y+'"></span><span class="inputWrapper">z:<input id="'+object.id+'DZ" value="'+object.dir.z+'"></span><label>Offset</label><span class="inputWrapper">x:<input id="'+object.id+'OX" value="'+object.off.x+'"></span><span class="inputWrapper">y:<input id="'+object.id+'OY" value="'+object.off.y+'"></span><span class="inputWrapper">z:<input id="'+object.id+'OZ" value="'+object.off.z+'"></span></itemEditor>');
 
-    }else if(object.type == "plane"){
+    }else if(object instanceof Plane){
       $("#panelItemsWrapper").append('<itemEditor id="EditorFor'+object.id+'" style="display: none;"><input class="itemNameInput" id="NameOf'+object.id+'" value="'+object.name+'"><label>Normal</label><span class="inputWrapper">x:<input id="'+object.id+'NX" value="'+object.normal.x+'"></span><span class="inputWrapper">y:<input id="'+object.id+'NY" value="'+object.normal.y+'"></span><span class="inputWrapper">z:<input id="'+object.id+'NZ" value="'+object.normal.z+'"></span><label>Offset</label><span class="inputWrapper">x:<input id="'+object.id+'OX" value="'+object.off.x+'"></span><span class="inputWrapper">y:<input id="'+object.id+'OY" value="'+object.off.y+'"></span><span class="inputWrapper">z:<input id="'+object.id+'OZ" value="'+object.off.z+'"></span></itemEditor>');
-      
+
     }else{
       console.log("Error: Invalid input type for algObjToPanel().");
     }
@@ -560,8 +754,8 @@
         algObjToPanel(algObjs[i]);
       }
     }
-    console.log("redisplaying graph...")
-    redrawPlot();
+    //console.log("redisplaying graph...")
+    //redrawPlot();
   }
   function addAlgObj(object){
     //obsolete!!
@@ -570,60 +764,6 @@
     $("#panelItemsWrapper>p").remove();
     $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
     itemsAddEventListener();
-  }
-  </script>
-
-  <script>
-  var layout = {
-    scene: {
-      xaxis: {
-        range: [-10,10]
-      },
-      yaxis: {
-        range: [-10,10]
-      },
-      zaxis: {
-        range: [-10,10]
-      },
-      camera: {
-        up: {
-          x: 0,
-          y: 0,
-          z: 1
-        },
-        eye: {
-          x: -1.7428,
-          y: 1.0707,
-          z: 0.7100
-        }
-      },
-      aspectratio: {x: 1, y: 1, z: 1},
-    },
-    showlegend: false,
-    margin: {l:0,r:0,b:0,t:0}
-  };
-  function redrawPlot() {
-    goified = []
-    if(algObjs.length == 0) {
-      Plotly.newPlot(
-        'canvasWrapper',
-        [
-          {
-            x: [],
-            y: [],
-            type: 'scatter3d'
-          }
-        ],
-        layout
-      );
-    }
-    else {
-      for(idx in algObjs) {
-        goified.push(algObjs[idx].goify(layout));
-      }
-      console.log("canvasWrapper: redraw. goified: ",goified);
-    }
-    Plotly.newPlot('canvasWrapper', goified, layout);
   }
   </script>
 </body>
