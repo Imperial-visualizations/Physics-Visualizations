@@ -25,6 +25,18 @@ function fastPlotHandler(divHandle) {
     //use this to remove algObjs from graph
     this.deleteTrace(algObj.id);
   }
+  this.showAlgObj = function(algObj) {
+    this.showTraces([algObj.id]);
+  }
+  this.hideAlgObj = function(algObj) {
+    this.hideTraces([algObj.id]);
+  }
+  this.highlightAlgObj = function(algObj) {
+    this.highlightTraces(algObj.id);
+  }
+  this.unhighlightAlgObj = function(algObj) {
+    this.unHighlight(algObj.id);
+  }
 
   //Manipulating traces instead of algObjs
   this.addTrace = function(data) {

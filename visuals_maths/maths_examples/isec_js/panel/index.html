@@ -367,6 +367,7 @@
         //rebuild everything
         var newobj = rebuildAlgObj(retrieveAlgObjs[idx]);
         rebuild[newobj.id] = newobj;
+        plot.addAlgObj(rebuild[newobj.id]); //add this object to the plot
       }
       algObjs = rebuild;
       redisplay();
@@ -558,6 +559,14 @@
       $(this).off();
       $(this).on('click',function(event){
         $(this).toggleClass("active");
+        if($(this).hasClass("active")){
+          var activeId = $(this)[0].firstChild.id.replace('Eye','');
+          plot.showTraces([activeId]); //show what was clicked to be shown
+        }
+        else {
+          var deactiveId = $(this)[0].firstChild.id.replace('Eye','');
+          plot.hideTraces([deactiveId]); //hide what was clicked to be hidden
+        }
         event.preventDefault();
       });
     });
@@ -566,12 +575,20 @@
       $(this).on('click',function(event){
         $(this).toggleClass("selected");
         var counts = 0;
+        var toHighlight = [];
         $("#panelItemsWrapper>item>label").each(function(index){
-          if($(this).hasClass("selected")){counts += 1;}
+          if($(this).hasClass("selected")){
+            toHighlight.push($(this)[0].id);
+            console.log(toHighlight);
+            counts += 1;
+          }
         });
         if(counts != 0){
+          plot.unHighlight();
+          plot.highlightTraces(toHighlight);
           $("#delete").addClass("active");
         }else{
+          plot.unHighlight();
           $("#delete").removeClass("active");
         }
         if(counts>1) {
@@ -644,6 +661,7 @@
           if($("#EditorFor"+$(this).attr("id")).hasClass("expanded")){
             saveToObject($(this).attr("id"));
           }
+          plot.unHighlight();
         });
         $("#intersect").removeClass("active");
         $("#delete").removeClass("active");
