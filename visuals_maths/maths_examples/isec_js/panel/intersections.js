@@ -98,7 +98,7 @@ function Point(pos) {
 			x:[this.pos.x],
 			y:[this.pos.y],
 			z:[this.pos.z],
-			algObjId: this.id //for internal use, to keep track of what is what
+			plotId: this.id //for internal use, to keep track of what is what
 		}
 	}
 	this.toString = function() {
@@ -194,7 +194,7 @@ function Line(dir,off) {
 			x:xyz.x,
 			y:xyz.y,
 			z:xyz.z,
-			algObjId: this.id
+			plotId: this.id
 		}
 	}
 	this.toString = function() {
@@ -324,7 +324,7 @@ function Plane(normal,off) {
 			x:xyz.x,
 			y:xyz.y,
 			z:xyz.z,
-			algObjId: this.id
+			plotId: this.id
 		}
 	}
 	this.toString = function() {
@@ -431,7 +431,7 @@ function getGen(a) {
 }
 function whereInArray(algObj,array) {
 	for(var idx=0;idx<array.length;idx++) {
-		var one = algObj;
+		var one = algObj;	
 		var other = array[idx];
 		if(one instanceof Point && other instanceof Point) {
 			if(one.pos.isEqualTo(other.pos)) {

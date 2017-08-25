@@ -1,9 +1,9 @@
 /*
-This script enables quick plotting of algObjs from intersections module.
-It works as long as the objects plotted provide 'algObjId' field within their
-'graphical object' (Plotly go) versions.
+This script enables quick plotting of objs from intersections module.
+It works as long as the objects plotted provide 'plotId' field within their
+'graphical object' (Plotly go) versions, and also provide goify(layout) method.
 */
-//dependencies: [Plotly, intersections.js]
+//dependencies: [Plotly]
 function fastPlotHandler(divHandle) {
   /* Fast plotter makes plotting easy! Keeps track internally of which trace is which object.*/
   this.handle = divHandle;
@@ -18,52 +18,60 @@ function fastPlotHandler(divHandle) {
     Plotly.relayout(this.handle, this._layout);
   };
 
-  //Manipulating algObjs
-  this.addAlgObj = function(algObj) {
-    console.log("fast-plotter : addAlgObj", algObj)
-    //use this to add algObjs to graph
-    this.addTrace(algObj.goify(this._layout));
+  //Manipulating plotObjs
+  this.addPlotObj = function(plotObj) {
+    console.log("fast-plotter : addPlotObj", plotObj)
+    //use this to add plotObjs to graph
+    this.addTrace(plotObj.goify(this._layout));
   }
-  this.deleteAlgObj = function(algObj) {
-    console.log("fast-plotter : deleteAlgObj", algObj)
-    //use this to remove algObjs from graph
-    this.deleteTrace(algObj.id);
+  this.deletePlotObj = function(plotObj) {
+    console.log("fast-plotter : deletePlotObj", plotObj)
+    //use this to remove plotObjs from graph
+    this.deleteTrace(plotObj.plotId);
   }
-  this.refreshAlgObj = function(algObj) {
-    console.log("fast-plotter : refreshAlgObj :",algObj)
-    this.deleteAlgObj(algObj);
-    this.addAlgObj(algObj);
+  this.refreshPlotObj = function(plotObj) {
+    console.log("fast-plotter : refreshPlotObj :",plotObj)
+    this.deletePlotObj(plotObj);
+    this.addPlotObj(plotObj);
   }
-  this.replaceAlgObj = function(newObj,oldObj) {
-    console.log("fast-plotter : replaceAlgObj : replacing ", newObj, " with ", oldObj)
-    this.deleteAlgObj(oldObj);
-    this.addAlgObj(newObj);
+  this.replacePlotObj = function(newObj,oldObj) {
+    console.log("fast-plotter : replacePlotObj : replacing ", newObj, " with ", oldObj)
+    this.deletePlotObj(oldObj);
+    this.addPlotObj(newObj);
   }
-  this.showAlgObj = function(algObj) {
-    console.log("fast-plotter : showAlgObj : ",algObj)
-    this.showTraces([algObj.id]);
+  this.showPlotObj = function(plotObj) {
+    console.log("fast-plotter : showPlotObj : ",plotObj)
+    this.showTraces([plotObj.plotId]);
   }
-  this.hideAlgObj = function(algObj) {
-    console.log("fast-plotter : hideAlgObj : ",algObj)
-    this.hideTraces([algObj.id]);
+  this.hidePlotObj = function(plotObj) {
+    console.log("fast-plotter : hidePlotObj : ",plotObj)
+    this.hideTraces([plotObj.plotId]);
   }
-  this.highlightAlgObj = function(algObj) {
-    console.log("fast-plotter : highlightAlgObj : ",algObj)
-    this.highlightTraces(algObj.id);
+  this.highlightPlotObjs = function(plotObjArray) {
+    console.log("fast-plotter : highlightPlotObjs : ",plotObjArray)
+    var toHighlight = [];
+    for(var idx=0;idx<plotObjArray.length;idx++) {
+      toHighlight.push(plotObjArray[idx]);
+    }
+    this.highlightTraces(toHighlight);
   }
-  this.unhighlightAlgObj = function(algObj) {
-    console.log("fast-plotter : unAlgObj : ",algObj)
-    this.unHighlightTraces(algObj.id);
+  this.highlightPlotObj = function(plotObj) {
+    console.log("fast-plotter : highlightPlotObj : ",plotObj)
+    this.highlightTraces([plotObj.plotId]);
+  }
+  this.unhighlightPlotObj = function(plotObj) {
+    console.log("fast-plotter : unPlotObj : ",plotObj)
+    this.unHighlightTraces();
   }
 
-  //Manipulating traces instead of algObjs
+  //Manipulating traces instead of plotObjs
   this.addTrace = function(data) {
-    //instead of operating on algObjs, we can operate on addTrace & deleteTrace
+    //instead of operating on plotObjs, we can operate on addTrace & deleteTrace
     Plotly.addTraces(this.handle, data);
   };
-  this.deleteTrace = function(id) {
-    //instead of operating on algObjs, we can operate on addTrace & deleteTrace
-    var idx = _getIdxByAlgObjId(this.handle,id);
+  this.deleteTrace = function(plotId) {
+    //instead of operating on plotObjs, we can operate on addTrace & deleteTrace
+    var idx = _getIdxByPlotId(this.handle,plotId);
     if(idx!=-1) {
       Plotly.deleteTraces(this.handle,idx);
     }
@@ -71,14 +79,14 @@ function fastPlotHandler(divHandle) {
       console.warn("fast-plotter : deleteTrace : Trace not plotted");
     }
   };
-  this.showTraces = function(idArray) {
+  this.showTraces = function(plotIdArray) {
     //show traces; if traces were already shown, then does nothing
     var toShow = [];
     var hide = {
       visible: true
     };
-    for(var idx=0; idx<idArray.length; idx++) {
-      toShow.push(_getIdxByAlgObjId(this.handle,idArray[idx])); //see which ones are supposed to be highlighed
+    for(var idx=0; idx<plotIdArray.length; idx++) {
+      toShow.push(_getIdxByPlotId(this.handle,plotIdArray[idx])); //see which ones are supposed to be highlighed
     }
     Plotly.restyle(this.handle, hide, toShow); //decrease opacity of everthing
   };
@@ -89,7 +97,7 @@ function fastPlotHandler(divHandle) {
       visible: false
     };
     for(var idx=0; idx<idArray.length; idx++) {
-      toHide.push(_getIdxByAlgObjId(this.handle,idArray[idx])); //see which ones are supposed to be highlighed
+      toHide.push(_getIdxByPlotObjId(this.handle,idArray[idx])); //see which ones are supposed to be highlighed
     }
     Plotly.restyle(this.handle, hide, toHide); //decrease opacity of everthing
   };
@@ -102,8 +110,14 @@ function fastPlotHandler(divHandle) {
     var increaseOpacity = {
     opacity: 1.0
     };
-    for(var idx=0; idx<idArray.length; idx++) {
-      toHighlight.push(_getIdxByAlgObjId(this.handle,idArray[idx])); //see which ones are supposed to be highlighed
+    for(var idx=0; idx < idArray.length; idx++) {
+      var index = _getIdxByPlotId(this.handle,idArray[idx]);
+      if(index == -1) {
+        throw new Error("not in the plot")
+      }
+      else {
+        toHighlight.push(_getIdxByPlotId(this.handle, idArray[idx])); //see which ones are supposed to be highlighed
+      }
     }
     Plotly.restyle(this.handle, decreaseOpacity); //decrease opacity of everthing
     Plotly.restyle(this.handle, increaseOpacity, toHighlight); //increase opacity of the ones highlighted
@@ -122,22 +136,23 @@ function fastPlotHandler(divHandle) {
   }
 }
 
-function _getIdxByAlgObjId(plotDiv,algObjId) {
+function _getIdxByPlotId(plotDiv,plotId) {
   /* Find trace position in plotDiv.data using algObjId
   returns appropriate index if found or -1 if not found */
-  var lookup = _createAlgObjId2UidLookup(plotDiv);
-  //we convert algoObjId to plotly uid and return the appropriate index
-  return _findIdxByUid(plotDiv, lookup[algObjId]);
+  var lookup = _createPlotId2UidLookup(plotDiv);
+  //we convert plotId to plotly uid and return the appropriate index
+  return _findIdxByUid(plotDiv, lookup[plotId]);
 }
 
-function _createAlgObjId2UidLookup(plotDiv) {
-  // Construct a dictionary {algObjId: uid}
+function _createPlotId2UidLookup(plotDiv) {
+  // Construct a dictionary {plotId: uid}
   var plotData = document.getElementById(plotDiv).data; //retrieve data
   var lookup = {};
   for(var idx=0; idx<plotData.length; idx++) {
     //fill in the lookup dict
-    lookup[plotData[idx].algObjId] = plotData[idx].uid;
+    lookup[plotData[idx].plotId] = plotData[idx].uid;
   }
+  console.log(lookup)
   return lookup;
 }
 
@@ -145,8 +160,11 @@ function _findIdxByUid(plotDiv,uid) {
   /* Find trace position in plotDiv.data using uid;
   returns appropriate index if found or -1 if not found */
   var plotData = document.getElementById(plotDiv).data;
-  for (var idx=0; plotData.length;idx++) {
+  for (var idx=0; idx<plotData.length; idx++) {
+    console.log("not ", idx, plotData[idx].uid, uid)
+
     if(plotData[idx].uid == uid) {
+      console.log("found at ",idx)
       return idx; //found;return index needed
     }
   }

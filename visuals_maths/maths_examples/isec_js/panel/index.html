@@ -367,7 +367,7 @@
         //rebuild everything
         var newobj = rebuildAlgObj(retrieveAlgObjs[idx]);
         rebuild[newobj.id] = newobj; //add this object to the new algObj dictionary
-        plot.addAlgObj(rebuild[newobj.id]); //add this object to the plot
+        plot.addPlotObj(rebuild[newobj.id]); //add this object to the plot
       }
       algObjs = rebuild;
       redisplay();
@@ -378,7 +378,7 @@
       var newPoint = new Point(new Vector(Math.random(),Math.random(),Math.random()));
       newPoint.name = nextName(); //generate name
       algObjs[newPoint.id] = newPoint; //ad to the dict
-      plot.addAlgObj(algObjs[newPoint.id]); //add to plot
+      plot.addPlotObj(algObjs[newPoint.id]); //add to plot
       log(algObjs[newPoint.id].toString()+" added.");
       redisplay();
       //expand the toolbox
@@ -402,7 +402,7 @@
       var newPlane = new Plane(new Vector(Math.random(),Math.random(),Math.random()), new Vector(Math.random(),Math.random(),Math.random()));
       newPlane.name = nextName(); //get name
       algObjs[newPlane.id] = newPlane; //add to dict
-      plot.addAlgObj(algObjs[newPlane.id]); //plot
+      plot.addPlotObj(algObjs[newPlane.id]); //plot
       //we could call addAlgObj(algObjs[newid]) but it's obsolete
       log(algObjs[newPlane.id].toString()+" added.");
       redisplay(); //redisplay panel
@@ -410,18 +410,6 @@
       $("#EditorFor"+newPlane.id).addClass("expanded");
       $("#NameOf"+newPlane.id).focus();
     });
-    function getSelectedAlgObjs() {
-      /* Retrieve a list of selected items in the panel.
-      It compares the ids of selected labels with entries of
-      'dictionary'. */
-      var selectedObjs = [];
-      $("#panelItemsWrapper>item>label.selected").each(
-        function() {
-          selectedObjs.push(algObjs[$(this)[0].id]);
-        }
-      )
-      return selectedObjs;
-    }
     $("#intersect").on('click',function(){
       log("Finding possible intersections....");
       var selectedObjs = getSelectedAlgObjs();
@@ -432,7 +420,7 @@
       for(idx in newobjs) {
         var newid = newobjs[idx].id;
         algObjs[newid] = newobjs[idx];
-        plot.addAlgObj(algObjs[newid]); //add to plot too
+        plot.addPlotObj(algObjs[newid]); //add to plot too
       }
       redisplay(); //redisplay panel
       if(newobjs.length == selectedObjs.length){
@@ -447,7 +435,7 @@
       console.log("purging algObj:",algObj);
       $( "#"+i ).parent().remove(); //from panel
       delete algObjs[algObj.id]; //from dictionary
-      plot.deleteAlgObj(algObj); //from plot
+      plot.deletePlotObj(algObj); //from plot
     }
     $("#clear").on('click',function() {
       for (i in algObjs) {
@@ -467,7 +455,18 @@
     });
     $("#save").on('click',save());
   });
-
+  function getSelectedAlgObjs() {
+    /* Retrieve a list of selected items in the panel.
+    It compares the ids of selected labels with entries of
+    'dictionary'. */
+    var selectedObjs = [];
+    $("#panelItemsWrapper>item>label.selected").each(
+      function() {
+        selectedObjs.push(algObjs[$(this)[0].id]);
+      }
+    )
+    return selectedObjs;
+  }
   function save(){
     console.log("save: current state", sessionStorage)
     sessionStorage.setItem("algObjsSaved", JSON.stringify(algObjs));
@@ -508,7 +507,7 @@
       } else {
         changes += 1;
         algObjs[id].assignPos(newPos);
-        plot.refreshAlgObj(algObjs[id]); //this re-adds the object to the plot
+        plot.refreshPlotObj(algObjs[id]); //this re-adds the object to the plot
         //necessary because plot does not keep reference to original objects;
         //after changed the object has to call .goify(..) again and pass
         //to fastPlotHandler
@@ -534,7 +533,8 @@
           changes += 1;
           algObjs[id].assignDir(newDir);
           algObjs[id].assignOff(newOff);
-          plot.refreshAlgObj(algObjs[id]); //refresh the Line on the plot
+          plot.refreshPlotObj(algObjs[id]); //refresh the Line on the plot
+          //see note for addPoint
           logMessage += ("<br><b>r</b>=("+offx+","+offy+","+offz+")+µ("+dirx+","+diry+","+dirz+")");
         }
       } catch(err) {
@@ -562,7 +562,8 @@
           changes += 1;
           algObjs[id].assignNormal(newNormal);
           algObjs[id].assignOff(newOff);
-          plot.refreshAlgObj(algObjs[id]); //refresh the Plane on the plot
+          plot.refreshPlotObj(algObjs[id]); //refresh the Plane on the plot
+          //see note for saving to point
           logMessage += ("<br>("+normalx+","+normaly+","+normalz+")•(<b>r</b>-("+offx+","+offy+","+offz+"))=0");
         }
       } catch(err) {
@@ -575,6 +576,7 @@
       console.log("ERROR: the object "+id+" can't be accessed.");
     }
     if(dontClose){
+      //don't close the panel
       $("#panelItemsWrapper").scrollTop($("#EditorFor"+id).position().top-80);
     } else{
       if(changes > 0){
@@ -587,12 +589,14 @@
       $("#EditorFor"+id).removeClass("expanded");
     }
   }
-  function itemsAddEventListener(){
+  function itemsAddEventListener() {
     $("#panelItemsWrapper>item>span").each(function(index){
+      //these are the 'Eyes'
       $(this).off();
       $(this).on('click',function(event){
+        //click on the eye - show/hide algObjs
         $(this).toggleClass("active");
-        if($(this).hasClass("active")){
+        if($(this).hasClass("active")) {
           var activeId = $(this)[0].firstChild.id.replace('Eye','');
           plot.showTraces([activeId]); //show what was clicked to be shown
         }
@@ -603,28 +607,29 @@
         event.preventDefault();
       });
     });
-    $("#panelItemsWrapper>item>label").each(function(index){
+    $("#panelItemsWrapper>item>label").each(function(index) {
+      //the labels, that contain the names of algObjs
       $(this).off();
       $(this).on('click',function(event){
         $(this).toggleClass("selected");
-        var counts = 0;
-        var toHighlight = [];
-        $("#panelItemsWrapper>item>label").each(function(index){
-          if($(this).hasClass("selected")){
-            toHighlight.push($(this)[0].id);
-            console.log(toHighlight);
-            counts += 1;
-          }
-        });
-        if(counts != 0){
+        var selectedObjs = getSelectedAlgObjs();
+        //highlighting
+        if(selectedObjs.length != 0){
+          //unhighlight and highlight again
           plot.unHighlightTraces();
-          plot.highlightTraces(toHighlight);
+          plot.highlightPlotObjs(selectedObjs);
+        } else {
+          //nothing to highlight, so remove highlights
+          plot.unHighlightTraces();
+        }
+        //delete button
+        if(selectedObjs.length != 0){
           $("#delete").addClass("active");
-        }else{
-          plot.unHighlightTraces();
+        } else {
           $("#delete").removeClass("active");
         }
-        if(counts>1) {
+        //intersect button
+        if(selectedObjs.length>1) {
           $("#intersect").addClass("active");
         }else{
           $("#intersect").removeClass("active");
@@ -652,7 +657,6 @@
             $("#"+id+"OX").val(algObjs[id].off.x);
             $("#"+id+"OY").val(algObjs[id].off.y);
             $("#"+id+"OZ").val(algObjs[id].off.z);
-
           }else if(algObjs[id] instanceof Plane){
             $("#"+id+"NX").val(algObjs[id].normal.x);
             $("#"+id+"NY").val(algObjs[id].normal.y);
