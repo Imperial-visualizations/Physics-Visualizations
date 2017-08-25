@@ -9,33 +9,51 @@ function fastPlotHandler(divHandle) {
   this.handle = divHandle;
   this._layout = {};
   this.init = function() {
+    console.log("fast-plotter : init")
     Plotly.newPlot(this.handle, [], this._layout);
   }
   this.setLayout = function(layout) {
+    console.log("fast-plotter : setLayout", layout)
     this._layout = layout;
     Plotly.relayout(this.handle, this._layout);
   };
 
   //Manipulating algObjs
   this.addAlgObj = function(algObj) {
+    console.log("fast-plotter : addAlgObj", algObj)
     //use this to add algObjs to graph
     this.addTrace(algObj.goify(this._layout));
   }
   this.deleteAlgObj = function(algObj) {
+    console.log("fast-plotter : deleteAlgObj", algObj)
     //use this to remove algObjs from graph
     this.deleteTrace(algObj.id);
   }
+  this.refreshAlgObj = function(algObj) {
+    console.log("fast-plotter : refreshAlgObj :",algObj)
+    this.deleteAlgObj(algObj);
+    this.addAlgObj(algObj);
+  }
+  this.replaceAlgObj = function(newObj,oldObj) {
+    console.log("fast-plotter : replaceAlgObj : replacing ", newObj, " with ", oldObj)
+    this.deleteAlgObj(oldObj);
+    this.addAlgObj(newObj);
+  }
   this.showAlgObj = function(algObj) {
+    console.log("fast-plotter : showAlgObj : ",algObj)
     this.showTraces([algObj.id]);
   }
   this.hideAlgObj = function(algObj) {
+    console.log("fast-plotter : hideAlgObj : ",algObj)
     this.hideTraces([algObj.id]);
   }
   this.highlightAlgObj = function(algObj) {
+    console.log("fast-plotter : highlightAlgObj : ",algObj)
     this.highlightTraces(algObj.id);
   }
   this.unhighlightAlgObj = function(algObj) {
-    this.unHighlight(algObj.id);
+    console.log("fast-plotter : unAlgObj : ",algObj)
+    this.unHighlightTraces(algObj.id);
   }
 
   //Manipulating traces instead of algObjs
@@ -50,7 +68,7 @@ function fastPlotHandler(divHandle) {
       Plotly.deleteTraces(this.handle,idx);
     }
     else {
-      console.log("error, AlgObj not plotted");
+      console.warn("fast-plotter : deleteTrace : Trace not plotted");
     }
   };
   this.showTraces = function(idArray) {
@@ -90,7 +108,7 @@ function fastPlotHandler(divHandle) {
     Plotly.restyle(this.handle, decreaseOpacity); //decrease opacity of everthing
     Plotly.restyle(this.handle, increaseOpacity, toHighlight); //increase opacity of the ones highlighted
   };
-  this.unHighlight = function() {
+  this.unHighlightTraces = function() {
     /* Bring everything to opacity=1 (no highlights at all) */
     var increaseOpacity = {
     opacity: 1.0
