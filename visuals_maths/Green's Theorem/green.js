@@ -1,3 +1,35 @@
+// Rotation matrix
+function rotmat(th) {
+  var rotator = [[Math.cos(th),-Math.sin(th)],[Math.sin(th),Math.cos(th)]];
+  return rotator;
+}
+
+// Rotation function returns arrays x,y for smooth transition
+function rotation(vec,th) {
+  // Parameters
+  var N = 5;
+  var t = numeric.linspace(0,th,N);
+  // Rotation matrix
+  var x = [];
+  var y = [];
+  var myvec = math.matrix(vec);
+  for (var i=0; i<N; i++) {
+    var newvec = math.multiply(rotmat(t[i]),myvec);
+      // Pull out x and y components
+        x.push(newvec._data[0])
+        y.push(newvec._data[1])
+  }
+  return [x,y];
+}
+
+function wingRotation(wings, offset, th) {
+    var rotated = [];
+    var x = [], y = [];
+    for (var i=0; i<5; i++) {
+
+    }
+}
+
 // Creates nxn grid for a unit box
 function box(n) {
     var X = numeric.linspace(0, 1, n+1);
@@ -321,6 +353,9 @@ function circulationPlot() {
         }
         frames.push(newData)
     }
+    // Use shifted arrows and rotate for smoother transition
+
+
     var arrow0 = new Arrow2D(1,0,[0,0],2,'rgb(0,0,0)',false,ratio);
     var wings0 = arrow0.data.wings;
     var arrow1 = new Arrow2D(0,1,[1,0],2,'rgb(0,0,0)',false,ratio);
