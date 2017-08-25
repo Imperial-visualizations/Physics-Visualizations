@@ -366,97 +366,106 @@
       for(idx in retrieveAlgObjs) {
         //rebuild everything
         var newobj = rebuildAlgObj(retrieveAlgObjs[idx]);
-        rebuild[newobj.id] = newobj;
+        rebuild[newobj.id] = newobj; //add this object to the new algObj dictionary
         plot.addAlgObj(rebuild[newobj.id]); //add this object to the plot
       }
       algObjs = rebuild;
       redisplay();
-    } else{
+    } else {
       console.log("no saved state... defaulting");
     }
-    $("#addPoint").on('click',function(){
+    $("#addPoint").on('click',function() {
       var newPoint = new Point(new Vector(Math.random(),Math.random(),Math.random()));
-      var newid = newPoint.id;
-      newPoint.name = nextName();
-      algObjs[newid] = newPoint;
-      plot.addAlgObj(algObjs[newid])
-      log(algObjs[newid].toString()+" added.");
-      //we could call addAlgObj(algObjs[newid]) but it's obsolete
+      newPoint.name = nextName(); //generate name
+      algObjs[newPoint.id] = newPoint; //ad to the dict
+      plot.addAlgObj(algObjs[newPoint.id]); //add to plot
+      log(algObjs[newPoint.id].toString()+" added.");
       redisplay();
+      //expand the toolbox
       $("#EditorFor"+newPoint.id).slideDown(200);
       $("#EditorFor"+newPoint.id).addClass("expanded");
       $("#NameOf"+newPoint.id).focus();
     });
     $("#addLine").on('click',function(){
       var newLine = new Line(new Vector(Math.random(),Math.random(),Math.random()), new Vector(Math.random(),Math.random(),Math.random()));
-      newLine.name = nextName();
-      var newid = newLine.id;
-      algObjs[newid] = newLine;
-      plot.addAlgObj(algObjs[newid])
-      //we could call addAlgObj(algObjs[newid]) but it's obsolete
-      log(algObjs[newid].toString()+" added.");
-      redisplay();
+      newLine.name = nextName(); //generate name for this line
+      algObjs[newLine.id] = newLine; //add to dictionary
+      plot.addAlgObj(algObjs[newLine.id]); //add to plot
+      log(algObjs[newLine.id].toString()+" added.");
+      redisplay(); //redisplay panel
+      //expand toolbopx
       $("#EditorFor"+newLine.id).slideDown(200);
       $("#EditorFor"+newLine.id).addClass("expanded");
       $("#NameOf"+newLine.id).focus();
     });
     $("#addPlane").on('click',function(){
       var newPlane = new Plane(new Vector(Math.random(),Math.random(),Math.random()), new Vector(Math.random(),Math.random(),Math.random()));
-      newPlane.name = nextName();
-      var newid = newPlane.id;
-      algObjs[newid] = newPlane;
-      plot.addAlgObj(algObjs[newid])
+      newPlane.name = nextName(); //get name
+      algObjs[newPlane.id] = newPlane; //add to dict
+      plot.addAlgObj(algObjs[newPlane.id]); //plot
       //we could call addAlgObj(algObjs[newid]) but it's obsolete
-      log(algObjs[newid].toString()+" added.");
-      redisplay();
+      log(algObjs[newPlane.id].toString()+" added.");
+      redisplay(); //redisplay panel
       $("#EditorFor"+newPlane.id).slideDown(200);
       $("#EditorFor"+newPlane.id).addClass("expanded");
       $("#NameOf"+newPlane.id).focus();
     });
-    $("#intersect").on('click',function(){
-      log("Finding possible intersections....");
-      var selectedObjs = []
+    function getSelectedAlgObjs() {
+      /* Retrieve a list of selected items in the panel.
+      It compares the ids of selected labels with entries of
+      'dictionary'. */
+      var selectedObjs = [];
       $("#panelItemsWrapper>item>label.selected").each(
         function() {
           selectedObjs.push(algObjs[$(this)[0].id]);
         }
-      );
+      )
+      return selectedObjs;
+    }
+    $("#intersect").on('click',function(){
+      log("Finding possible intersections....");
+      var selectedObjs = getSelectedAlgObjs();
       console.log("interect selected objs: ",selectedObjs);
       var newobjs = intersectList(selectedObjs);
       console.log("intersect result: ",newobjs);
+      //add all the new objects to the dictionary
       for(idx in newobjs) {
         var newid = newobjs[idx].id;
         algObjs[newid] = newobjs[idx];
-        plot.addAlgObj(algObjs[newid])
+        plot.addAlgObj(algObjs[newid]); //add to plot too
       }
-      redisplay();
+      redisplay(); //redisplay panel
       if(newobjs.length == selectedObjs.length){
+        //rather crude solution but works
         log("<red>No intersections found.</red>");
       }
       log("Results displayed.");
     });
-    $("#clear").on('click',function(){
+    function purgeAlgObj(algObj) {
+      /* Removes an algObj from everywhere: the dictionary, The panel
+      plot etc. */
+      console.log("purging algObj:",algObj);
+      $( "#"+i ).parent().remove(); //from panel
+      delete algObjs[algObj.id]; //from dictionary
+      plot.deleteAlgObj(algObj); //from plot
+    }
+    $("#clear").on('click',function() {
       for (i in algObjs) {
         console.log("idx: ", i, ", object: ", algObjs[i].toString());
-        $( "#"+i ).parent().remove();
-        plot.deleteAlgObj(algObjs[i]);
-        delete algObjs[i];
+        purgeAlgObj(algObjs[i]);
       }
       redisplay();
     });
     $("#delete").on('click',function(){
-      $("#panelItemsWrapper>item>label.selected").each(
-        function() {
-          console.log("deleting at id", $(this)[0].id, ", object:", algObjs[$(this)[0].id])
-          plot.deleteAlgObj(algObjs[$(this)[0].id]);
-          delete algObjs[$(this)[0].id];
-        }
-      );
+      console.log(algObjs);
+      var selectedObjs = getSelectedAlgObjs();
+      console.log("delete clicked, purging algObjs: ", selectedObjs);
+      for(var idx=0;idx<selectedObjs.length;idx++) {
+        purgeAlgObj(selectedObjs[idx]);
+      }
       redisplay();
     });
-    $("#save").on('click',function() {
-      save();
-    });
+    $("#save").on('click',save());
   });
 
   function save(){
@@ -480,18 +489,19 @@
     var logMessage = "Updated: ";
     var thisObject = $("#"+id);
     if(algObjs[id].name != $("#NameOf"+id).val()){
+      //changing name if it is different that it is now
       changes += 1;
-      algObjs[id].name = $("#NameOf"+id).val();
+      algObjs[id].name = String($("#NameOf"+id).val()); //change name
       $("#"+id).text(algObjs[id].toString());
     }
     logMessage += algObjs[id].toString()+" ";
 
     if(algObjs[id] instanceof Point){
-
+      //retrieve user data
       x = parseFloat($("#"+id+"PX").val());
       y = parseFloat($("#"+id+"PY").val());
       z = parseFloat($("#"+id+"PZ").val());
-      newPos = new Vector(x,y,z);
+      newPos = new Vector(x,y,z); //Point.assignPos takes Vector input
       if(newPos.isEqualTo(algObjs[id].pos)){
         // If no change is made do nothing
         // to save CPU time
@@ -524,15 +534,16 @@
           changes += 1;
           algObjs[id].assignDir(newDir);
           algObjs[id].assignOff(newOff);
+          plot.refreshAlgObj(algObjs[id]); //refresh the Line on the plot
           logMessage += ("<br><b>r</b>=("+offx+","+offy+","+offz+")+µ("+dirx+","+diry+","+dirz+")");
         }
       } catch(err) {
-        console.log(err);
-        log("<red>ERROR: "+err.message+"<br>The Direction of "+algObjs[id].toString+" can't be (0,0,0)!</red>");
-        var dontClose = true;
+        console.log(err); //it is only assignDir that can throw, at it is going to be argument error
+        log("<red>ERROR: "+err.message+"<br>The Direction of "+algObjs[id].toString()+" can't be (0,0,0)!</red>");
+        var dontClose = true; //don't close the
       }
 
-    }else if(algObjs[id] instanceof Plane){
+    } else if(algObjs[id] instanceof Plane){
 
       normalx = parseFloat($("#"+id+"NX").val());
       normaly = parseFloat($("#"+id+"NY").val());
@@ -551,20 +562,21 @@
           changes += 1;
           algObjs[id].assignNormal(newNormal);
           algObjs[id].assignOff(newOff);
+          plot.refreshAlgObj(algObjs[id]); //refresh the Plane on the plot
           logMessage += ("<br>("+normalx+","+normaly+","+normalz+")•(<b>r</b>-("+offx+","+offy+","+offz+"))=0");
         }
       } catch(err) {
         console.log(err);
-        log("<red>ERROR: "+err.message+"<br>The Normal of "+algObjs[id].toString+" can't be (0,0,0)!</red>");
+        log("<red>ERROR: "+err.message+"<br>The Normal of "+algObjs[id].toString()+" can't be (0,0,0)!</red>");
         var dontClose = true;
       }
 
     }else{
-      console.log("ERROR: the object"+id+" can't be accessed.");
+      console.log("ERROR: the object "+id+" can't be accessed.");
     }
     if(dontClose){
       $("#panelItemsWrapper").scrollTop($("#EditorFor"+id).position().top-80);
-    }else{
+    } else{
       if(changes > 0){
         $("#EditorFor"+id).slideUp(100);
         //redrawPlot();
