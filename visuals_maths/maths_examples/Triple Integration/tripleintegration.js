@@ -7,7 +7,7 @@ var a = 1, b = 1, c = 1;
 var zz, yy;
 var frames = [], data;
 
-function ZintegratorZYXelementup(xinit, yinit,zinit,number){
+function integratorZYXelement(xinit, yinit,zinit,number, direction, element){
     zz = []
     yy = []
     xx = []
@@ -668,7 +668,6 @@ var volumeElement = {
 };
 
 function main() {
-
     $("input[type=range]").each(function () {
         var displayEl;
         $(this).on('input', function(){
