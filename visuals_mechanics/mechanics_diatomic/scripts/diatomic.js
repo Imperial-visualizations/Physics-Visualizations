@@ -29,8 +29,8 @@ Atom.prototype.getPos = function(){
     return this.pos[this.pos.length - 1];
 };
 Atom.prototype.setPos = function(newPos){
-    if(this.pos.length > 100) this.pos.shift();     // Storing last 100 positions, deleting older ones
-    this.pos.push(newPos);      // Pushing new position.
+    if(this.pos.length > 50) this.pos.shift();     // Storing last 100 positions, deleting older ones
+    this.pos.push(newPos);                          // Pushing new position.
 };
 
 /**
@@ -44,10 +44,7 @@ Atom.prototype.setPos = function(newPos){
  * @constructor
  */
 Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
-    a1.pos = [];
-    a2.pos = [];
 
-    var bondSprite;
     // Checking objects of class Atom passed in in the list.
     if (a1.constructor !== Atom || a2.constructor !== Atom){
         console.error("Can't run simulation without two valid atom objects");
@@ -62,17 +59,6 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
     this.tot_m = a1.mass + a2.mass;                             // Finding total mass of the system.
     this.reducedM = a1.mass * a2.mass / (this.tot_m);           // Finding system's reduced mass.
 
-    this.init_r_0 = function () {
-        var val = this.V.getR_0();
-        for (var i =0; i < 100; i++) {
-            val -= (this.reducedM * Math.pow(this.omega, 2) * Math.pow(val, 14)
-                    - 12 * this.V.e * Math.pow(this.V.getR_0() * val, 6) + 12 * this.V.e * Math.pow(this.V.getR_0(), 12))/
-                    (14 * this.reducedM * Math.pow(this.omega, 2) * Math.pow(val,13)- 72 * this.V.e * Math.pow(val, 5) *
-                        Math.pow(this.V.getR_0(), 6));
-        }
-        return val;
-    };
-
     this.I = this.tot_m *  Math.pow(this.V.getR_0(), 2)/4  ;      // Calculate initial Moment of Inertia.
     this.omega = Math.sqrt(2 * keRot_0 / this.I);               // Calculate initial angular velocity.
     this.L = this.I * this.omega;                               // Calculate angular momentum (conserved).
@@ -86,6 +72,21 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
 };
 
 /** ================================================= Class Methods ==================================================*/
+/**
+ *
+ * @returns {number}
+ */
+Molecule.prototype.init_r_0 = function() {
+    var val = this.V.getR_0();
+    for (var i =0; i < 100; i++) {
+        val -= (this.reducedM * Math.pow(this.omega, 2) * Math.pow(val, 14)
+            - 12 * this.V.e * Math.pow(this.V.getR_0() * val, 6) + 12 * this.V.e * Math.pow(this.V.getR_0(), 12))/
+            (14 * this.reducedM * Math.pow(this.omega, 2) * Math.pow(val,13)- 72 * this.V.e * Math.pow(val, 5) *
+                Math.pow(this.V.getR_0(), 6));
+    }
+    return val;
+};
+
 /**
  * Calculates the potential energy of the system using the potential function instantiated to the molecule.
  * @returns {Number} System PE.
@@ -138,4 +139,8 @@ Molecule.prototype.calcMoI = function() {
  */
 Molecule.prototype.calcAngVel = function () {
     return this.L / this.I;
+};
+
+Molecule.prototype.calcDir = function() {
+    return a2.getPos().subtract(a1.getPos()).unit();
 };

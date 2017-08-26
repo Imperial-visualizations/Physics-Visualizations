@@ -5,7 +5,7 @@ var height = $(divPhaser).width() * 0.7 * window.devicePixelRatio;
 var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS, "phaser",
     {preload: preload,create: create,update: update});
 
-var a1,a2,mol1,potential;                                           // Atoms, molecules and potential to be instantiated
+var a1, a2, mol1, potential;                                        // Atoms, molecules and potential to be instantiated
 var zoom  = 35;
 var initKVib, initKRot;                                             // Initial KEs.
 var init_s1 = 2, init_s2 = 2, init_e1 = 10, init_e2 = 10;           // Initial LJ parameters.
@@ -16,6 +16,29 @@ const CHERRY = 0xE40043;
 const GRAPH_TIME = 5;                                               // x-axis range for Energy against Time plots.
 
 var running = false;                                                // Animation status.
+
+// Global Variables to store data for graph-drawing.
+var arrRotKE = [];
+var arrRotKESlider;
+var arrTime = [];
+var arrPE = [];
+var arrVibKE = [];
+var arrVibKESlider;
+var LJ_scatter;
+var curr_LJ;
+var LJ_layout;
+var titleFontsize = 12, labelFontsize = 10;                     // Text sizes.
+var marT = 30, marB = 23, marR = 5, marL = 35;                  // Margins.
+var layoutE;
+var options = {
+    scrollZoom: false, // lets us scroll to zoom in and out - works
+    showLink: false, // removes the link to edit on plotly - works
+    modeBarButtonsToRemove: ['sendDataToCloud','zoom2d','pan2d','select2d','lasso2d','zoomIn2d','zoomOut2d',
+        'autoScale2d','resetScale2d','hoverClosestCartesian','hoverCompareCartesian'],
+    //modeBarButtonsToAdd: ['lasso2d'],
+    displayLogo: false, // this one also seems to not work
+    displayModeBar: false //this one does work
+};
 
 var mainLayer,traceLayer;
 
@@ -168,28 +191,6 @@ function addAtom(atom) {
     return sprite;
 }
 
-// Global Variables to store data for graph-drawing.
-var arrRotKE = [];
-var arrRotKESlider;
-var arrTime = [];
-var arrPE = [];
-var arrVibKE = [];
-var arrVibKESlider;
-var LJ_scatter;
-var curr_LJ;
-var LJ_layout;
-var titleFontsize = 12, labelFontsize = 10;                     // Text sizes.
-var marT = 30, marB = 23, marR = 5, marL = 35;                  // Margins.
-var layoutE;
-var options = {
-    scrollZoom: false, // lets us scroll to zoom in and out - works
-    showLink: false, // removes the link to edit on plotly - works
-    modeBarButtonsToRemove: ['sendDataToCloud','zoom2d','pan2d','select2d','lasso2d','zoomIn2d','zoomOut2d',
-        'autoScale2d','resetScale2d','hoverClosestCartesian','hoverCompareCartesian'],
-    //modeBarButtonsToAdd: ['lasso2d'],
-    displayLogo: false, // this one also seems to not work
-    displayModeBar: false //this one does work
-};
 
 /** ========================== Functions to draw static plots for Energy against time ============================== **/
 /**
@@ -277,11 +278,11 @@ function drawBond(starting,end){
  * Function to draw trails behind Atom instances to show past positions.
  * @param atom: Instance of Atom to draw trail behind.
  */
-function drawLine(atom){
+function drawTrail(atom){
     var lineG = phaserInstance.add.graphics();
     lineG.lineStyle(4, IMPERIAL_BLUE, 0);
 
-    for (var i = 0; i < atom.pos.length; i+= 6) {
+    for (var i = 0; i < atom.pos.length; i += 2) {
 
         // Trail gets thinner and more transparent for older positions.
         if(i > 0) lineG.lineStyle(4 * i / atom.pos.length, IMPERIAL_BLUE, i / atom.pos.length);
@@ -310,16 +311,30 @@ function reset(){
 
         }
     }
+
     if(typeof a1 !== 'undefined'){
         if(typeof  a1.lineSprite !== 'undefined'){
             a1.lineSprite.destroy();
             a2.lineSprite.destroy();
         }
     }
+
     // Creating new molecule with atoms and instantiated potential. KEs entered by users using sliders.
-    mol1 = new Molecule(a1, a2, potential, initKVib, initKRot);
+    // If not running, reset position too.
+    if (!running) {
+        mol1 = new Molecule(a1, a2, potential, initKVib, initKRot);
+    }
+
+    // If running, maintain previous position.
+    else {
+        var dir = mol1.calcDir();
+        mol1 = new Molecule(a1, a2, potential, initKVib, initKRot);
+        mol1.r = dir.multiply(mol1.init_r_0());
+    }
+
+
     // Creating x and y coordinates to plot.
-    LJ_scatter  = potential.plotPoints(100);
+    LJ_scatter  = potential.plotPoints(35);
 
     a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
     a1.sprite.y = a1.getPos().items[1] * zoom + phaserInstance.world.centerY;
@@ -343,14 +358,14 @@ function reset(){
  */
 function update(){
     if(running) {
-        var dT = 1/80;
+        var dT = 1/40;
         mol1.update(dT);//requests molecule update, sends deltaTime to mol1.
         a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
         a1.sprite.y = a1.getPos().items[1] * zoom + phaserInstance.world.centerY;
         a2.sprite.x = a2.getPos().items[0] * zoom + phaserInstance.world.centerX;
         a2.sprite.y = a2.getPos().items[1] * zoom + phaserInstance.world.centerY;
-        drawLine(a1);
-        drawLine(a2);
+        drawTrail(a1);
+        drawTrail(a2);
         drawBond(a1.getPos(),a2.getPos());
 
         // Calculate Rotational KE and update array.
