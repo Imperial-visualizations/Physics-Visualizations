@@ -7,7 +7,7 @@ function rotmat(th) {
 // Rotation function returns arrays x,y for smooth transition
 function rotation(vec,th) {
   // Parameters
-  var N = 5;
+  var N = 10;
   var t = numeric.linspace(0,th,N);
   // Rotation matrix
   var x = [];
@@ -22,13 +22,33 @@ function rotation(vec,th) {
   return [x,y];
 }
 
+// Takes wings of an arrow and rotates anti-clockwise about head by 90 degrees
 function wingRotation(wings, offset, th) {
     var rotated = [];
-    var x = [], y = [];
-    for (var i=0; i<5; i++) {
-
+    var x = [], y = [], addedXVec = [], addedYVec = [];
+    var shiftedx = math.add(wings.x,[-offset[0],-offset[0],-offset[0]])
+    var shiftedy = math.add(wings.y,[-offset[1],-offset[1],-offset[1]])
+    for (var i=0; i<10; i++) {
+        addedXVec.push(offset[0])
+        addedYVec.push(offset[1])
     }
+    for (var j=0; j<3; j++) {
+        var new_vec = rotation([shiftedx[j],shiftedy[j]],th)
+        x = new_vec[0]
+        y = new_vec[1]
+
+        rotated.push(math.add(x,addedXVec))
+        rotated.push(math.add(y,addedYVec))
+        x = []
+        y = []
+    }
+//        console.log(x)
+
+
+    return rotated
 }
+
+
 
 // Creates nxn grid for a unit box
 function box(n) {
@@ -354,7 +374,66 @@ function circulationPlot() {
         frames.push(newData)
     }
     // Use shifted arrows and rotate for smoother transition
+    var w0 = {x: math.add(wings0.x,[0.5,0.5,0.5]), y: wings0.y}
+    var w1 = {x: wings1.x, y: math.add(wings1.y,[0.5,0.5,0.5])}
+    var w2 = {x: math.add(wings2.x,[-0.5,-0.5,-0.5]), y: wings2.y}
+    var w3 = {x: wings3.x, y: math.add(wings3.y,[-0.5,-0.5,-0.5])}
 
+    shifted0 = wingRotation(w0, [1,0], Math.PI/2)
+    console.log(shifted0)
+    console.log(shifted0[0])
+    console.log(shifted0[0][0])
+    shifted1 = wingRotation(w1, [1,1], Math.PI/2)
+    shifted2 = wingRotation(w2, [0,1], Math.PI/2)
+    shifted3 = wingRotation(w3, [0,0], Math.PI/2)
+
+    for (var i=0; i<5; i++) {
+        newData = {
+            data: [{
+                  x: [shifted0[0][i], shifted0[2][i], shifted0[4][i]],
+                  y: [shifted0[1][i], shifted0[3][i], shifted0[5][i]],
+                  name: 'frame'+parseInt(i)
+
+            },
+            {
+                  x: [shifted1[0][i], shifted1[2][i], shifted1[4][i]],
+                  y: [shifted1[1][i], shifted1[3][i], shifted1[5][i]],
+                  name: 'frame'+parseInt(i)
+            },
+            {
+                  x: [shifted2[0][i], shifted2[2][i], shifted2[4][i]],
+                  y: [shifted2[1][i], shifted2[3][i], shifted2[5][i]],
+                  name: 'frame'+parseInt(i)
+            },
+            {
+                  x: [shifted3[0][i], shifted3[2][i], shifted3[4][i]],
+                  y: [shifted3[1][i], shifted3[3][i], shifted3[5][i]],
+                  name: 'frame'+parseInt(i)
+
+            },
+            {
+                x: [0.5],
+                y: [0.5],
+                mode: 'text',
+                name: 'D',
+                text: ['D'],
+                type: 'scatter',
+                showlegend: false,
+                font: {
+                    size: 30
+                }
+            },
+            {
+                x: [0, 1, 1, 0, 0],
+                y: [0, 0, 1, 1, 0],
+                name: 'frame'+parseInt(i)
+            }
+
+            ]
+        }
+        frames.push(newData)
+
+    }
 
     var arrow0 = new Arrow2D(1,0,[0,0],2,'rgb(0,0,0)',false,ratio);
     var wings0 = arrow0.data.wings;
