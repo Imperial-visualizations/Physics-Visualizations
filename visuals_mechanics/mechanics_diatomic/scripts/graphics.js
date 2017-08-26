@@ -33,10 +33,6 @@ $('.inputs').each(function() {
     $(this).on('input',updateLabels);
 });
 
-$(document).ready(function(){
-    $("#loadingMessage").remove();
-});
-
 /**
  * When button pressed, LJ parameters updated and animation reset.
  */
@@ -51,12 +47,14 @@ $('#submitLJ').on('click', function() {
 /**
  * Hides divs to make parts of the page invisible. "Spoiler".
  */
-$(".showHideButton").on("click",function(){
+$(".showHideButton").on("click", spoiler);
+
+function spoiler() {
     var text = ($($(this).attr("for")).hasClass("expanded")) ? "Show" : "Hide";
     $(this).html(text+$(this).attr("data-graph-name"));
     $($(this).attr("for")).slideToggle("fast");
     $($(this).attr("for")).toggleClass("expanded");
-});
+}
 
 /**
  * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
@@ -68,19 +66,21 @@ $('body').on('click', '[data-change]', function() {
         var $element = $(this);
         var $title = $(this).attr("title");
         var $el_id = $(this).attr("id");
+        var $unit = $(this).attr("data-unit");
 
         // Creating input form.
-        var $input = $('<input style="width: 50%;"/>').val($element.text());
+        var $input = $('<input style="width:50%;"/>').val(parseFloat($element.text()));
         $input.attr("id", $el_id);                                  // Setting ID attribute (same as text).
         $input.attr("title", $title);                               // Setting title attribute (same as text).
         $element.replaceWith($input);                               // Replacing text with input form.
 
         var save = function save() {
-            var $a = $('<a data-change />').text($input.val());
+            var $a = $('<a data-change />').text($input.val() + $unit);
 
             // Restoring text with same attributes as original.
             $a.attr("title", $title);
             $a.attr("id", $el_id);
+            $a.attr("data-unit", $unit);
             $input.replaceWith($a);
         };
 
@@ -96,8 +96,6 @@ $('#playPauseButton').on('click',function() {
     var text = running ? "Start" : "Pause";
     $("#playPauseButton").text(text);
     running = !running;
-    $("#vibKE").prop('disabled',running);
-    $("#rotKE").prop('disabled',running);
 });
 
 /**
@@ -105,8 +103,6 @@ $('#playPauseButton').on('click',function() {
  */
 $('#resetButton').on('click', function() {
     running = false;
-    $("#vibKE").prop('disabled',false);
-    $("#rotKE").prop('disabled',false);
     reset();
 });
 
@@ -174,9 +170,11 @@ function addAtom(atom) {
 
 // Global Variables to store data for graph-drawing.
 var arrRotKE = [];
+var arrRotKESlider;
 var arrTime = [];
 var arrPE = [];
 var arrVibKE = [];
+var arrVibKESlider;
 var LJ_scatter;
 var curr_LJ;
 var LJ_layout;
@@ -195,7 +193,7 @@ var options = {
 
 /** ========================== Functions to draw static plots for Energy against time ============================== **/
 /**
- * Plots Vibrational KE against time.
+ * Plots Energy against time plots.
  */
 function plotE() {
     layoutE = {
@@ -208,7 +206,11 @@ function plotE() {
     };
 
     var data = [{x: arrTime, y: arrVibKE, mode: "lines", line: {width: 2, color: "#FFDD00"}, name: "KE" + "vib".sub()},
+            {x: [- 1, 1000000], y: arrVibKESlider,
+                line: {width: 1, color: "#ac8e00", dash: "dash"}, name: "KE" + "vib, slider".sub(), showlegend: false},
             {x: arrTime, y: arrRotKE, mode: "lines", line: {width: 2, color: "#66A40A"}, name: "KE" + "rot".sub()},
+            {x: [- 1, 1000000], y: arrRotKESlider,
+                line: {width: 1, color: "#49830a", dash: "dash"}, name: "KE" + "rot, slider".sub(), showlegend: false},
             {x: arrTime, y: arrPE, mode: "lines", line: {width: 2, color: "#003E74"}, name: "PE"}];
 
     Plotly.newPlot("graphE", data, layoutE, options);
@@ -221,7 +223,7 @@ function plotLJ() {
     LJ_layout = {title: "Lennard-Jones Potential", titlefont: {size: 12}, margin: {l: marL, r: marR, b: marB + 10, t: marT},
                 legend: {x: 0.67, y: 1, "orientation": "v"},
                 yaxis: {range: [-1.1 * potential.e, 0.7 * potential.e], nticks: 20, title: "LJ Potential / eV", titlefont: {size: 10}},
-                xaxis: {range: [0, 3 * potential.s], nticks: 20, title: "r" + "AB".sub() + " / nm", titlefont: {size: 10}}};
+                xaxis: {range: [0.9 * potential.s, 3 * potential.s], nticks: 20, title: "r" + "AB".sub() + " / nm", titlefont: {size: 10}}};
 
     // Remove all points outside visible range on graph.
     while (LJ_scatter.y[0] > LJ_layout.yaxis.range[1]) {
@@ -330,6 +332,8 @@ function reset(){
     arrTime = [];
     arrPE = [];
     arrVibKE = [];
+    arrVibKESlider = [initKVib, initKVib];
+    arrRotKESlider = [initKRot, initKRot];
     plotLJ();
     plotE();
 }
@@ -382,11 +386,13 @@ function update(){
         layoutE.xaxis.range[0] = arrTime[0];
         layoutE.xaxis.range[1] = Math.max(arrTime[arrTime.length - 1] + 0.5, GRAPH_TIME);
 
-        // Animating all graphs.
+
+        // Animating all graphs if shown.
         if ($("#graphE").hasClass("expanded")) {
             Plotly.restyle("graphE", {data: [{x: arrTime, y: arrVibKE},
-                        {x: arrTime, y: arrRotKE}, {x: arrTime, y: arrPE}],
-                        traces: [0, 1, 2]},
+                        {x: arrTime, y: arrRotKE},
+                        {x: arrTime, y: arrPE}],
+                        traces: [0, 1, 2, 3, 4]},
                         {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
         }
 

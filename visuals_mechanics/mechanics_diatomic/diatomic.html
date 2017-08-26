@@ -71,7 +71,7 @@
 
             <!-- Vib KE slider -->
             <label class="sliderTitle" style="padding-bottom: 10px">Vibrational:
-                <span id="vibKEDisplay" data-unit="eV">0 eV</span>
+                <span class="txtInputs" id="vibKEDisplay" data-change data-unit=" eV">0 eV</span>
             </label>
             <label class="slider">
                 <input id="vibKE" class="inputs" title="Vib KE" type="range" value="0" min="0" max="10.0" step="0.05"/>
@@ -80,26 +80,26 @@
 
             <!-- Rot KE slider -->
             <label class="sliderTitle" style="margin-bottom: 0">Rotational:
-                <span id="rotKEDisplay" data-unit="eV">5 eV</span>
+                <span class="txtInputs" id="rotKEDisplay" data-unit=" eV" data-change>5 eV</span>
             </label>
             <label class="slider">
-                <input id="rotKE" class="inputs" title="Rot KE" type="range" value=0" min="0" max="10.0" step="0.05"/>
-                <span class="sliderMin">0.00</span><span class="sliderMax">10.00</span>
+                <input id="rotKE" class="inputs" title="Rot KE" type="range" value="0" min="0" max="30.0" step="0.05"/>
+                <span class="sliderMin">0.00</span><span class="sliderMax">30.00</span>
             </label>
 
             <!-- Atom A and Atom B LJ Parameter input fields -->
             <div class="row">
                 <div class="one-half column">
                     <h5 class="titleAtomA">Atom A</h5>
-                    <span>&sigma; = </span><a class="txt" id="s1" data-change title="&sigma;">2</a> <span><em>nm</em></span>
+                    <span>&sigma; = </span><a id="s1" data-change title="&sigma;" data-unit=" nm">2 nm</a>
                     <br>
-                    <span>&epsilon; = </span><a class="txt" id="e1" data-change title="&epsilon;">10</a> <span><em>eV</em></span>
+                    <span>&epsilon; = </span><a id="e1" data-change title="&epsilon;" data-unit=" eV">10 eV</a>
                 </div>
                 <div class="one-half column">
                     <h5 class="titleAtomB">Atom B</h5>
-                    <span>&sigma; = </span><a id="s2" class="txt" data-change title="&sigma;">2</a> <span><em>nm</em></span>
+                    <span>&sigma; = </span><a id="s2" data-change data-unit=" nm" title="&sigma;">2 nm</a>
                     <br>
-                    <span>&epsilon; = </span><a id="e2" class="txt" data-change title="&epsilon;">10</a> <span><em>eV</em></span>
+                    <span>&epsilon; = </span><a id="e2" data-change data-unit=" eV" title="&epsilon;">10 eV</a>
                 </div>
             </div>
 
@@ -110,10 +110,10 @@
 
         <div class="five columns">
             <div id="LJ_scatter" class="twelve columns graphs expanded"></div>
-            <em><a for="#LJ_scatter" class="showHideButton" data-graph-name=" LJ potential">Hide LJ potential</a></em>
+            <em><a for="#LJ_scatter" class="showHideButton" data-graph-name=" LJ potential">Show LJ potential</a></em>
 
             <div id="graphE" class="twelve columns graphs expanded" style="height: 325px;"></div>
-            <em><a for="#graphE" class="showHideButton" data-graph-name=" Energy vs Time">Hide Energy vs Time</sub></a></em>
+            <em><a for="#graphE" class="showHideButton" data-graph-name=" Energy vs Time">Show Energy vs Time</sub></a></em>
         </div>
     </div>
 </div>

@@ -77,10 +77,8 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
     this.omega = Math.sqrt(2 * keRot_0 / this.I);               // Calculate initial angular velocity.
     this.L = this.I * this.omega;                               // Calculate angular momentum (conserved).
     this.r = new Vector([1, 0]).multiply(this.init_r_0());      // Initial radius, due to centrifugal distortion
-    ///this.V.s = this.r.mag() / Math.pow(2, 1 / 6);               // Centrifugal distortion changes potential.
+    this.V.s = this.r.mag() / Math.pow(2, 1 / 6);               // Centrifugal distortion changes potential.
     this.v = -Math.sqrt(2 * keVib_0 / this.reducedM);           // Initial linear velocity of molecule.
-
-    this.TME = keVib_0 + keRot_0 + this.V.calcV(this.r.mag());      // Total Mechanical Energy of system - constant.
 
     // Finding coordinates of atoms in CoM frame.
     a1.setPos(this.r.multiply(a1.mass / this.tot_m));
@@ -105,19 +103,6 @@ Molecule.prototype.update = function(deltaTime){
     // Update atom coordinates in CoM frame.
     a1.setPos(this.r.multiply(a1.mass / this.tot_m));
     a2.setPos(this.r.multiply(-a2.mass / this.tot_m));
-};
-
-// Molecule.prototype.updateVibKE = function (vibKE) {
-//     this.v = -Math.sqrt(2 * vibKE / this.reducedM);
-// };
-//
-// Molecule.prototype.updateRotKE = function (rotKE) {
-//     this.omega = Math.sqrt(2 * rotKE / this.I);
-//     this.L = this.I * this.omega;
-// };
-
-Molecule.prototype.getTotalE = function(){
-    return 0.5 * this.I*Math.pow(this.omega,2) + 0.5*this.reducedM*Math.pow(this.v,2) + this.V.calcV(this.r.mag());
 };
 
 /**
