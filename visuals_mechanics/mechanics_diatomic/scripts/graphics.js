@@ -80,6 +80,20 @@ function spoiler() {
 }
 
 /**
+ * Hide the graph after the page is loaded, and the element sizes have been allocated according to the css
+ */
+$(document).ready(function(){
+    setTimeout(function() {
+        $(".graphs").each(function(){
+            $(this).slideUp(0);
+            $(this).removeClass("expanded");
+        });
+    }, 100);
+    // Delay 100ms and do the thing inside
+
+});
+
+/**
  * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
  * off the input field.
  */
