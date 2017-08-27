@@ -40,7 +40,15 @@ LJ = function (sigma, epsilon, sigma2, epsilon2) {
     }
 
     // Calculating combined LJ parameters.
-    this.s = (s1 + s2) / 2;
+    this.calcSigma(s1, s2);
+    this.calcEpsilon(e1, e2);
+};
+
+LJ.prototype.calcSigma = function(s1, s2) {
+    this.s = (s1 + s2) / 2
+};
+
+LJ.prototype.calcEpsilon = function(e1, e2) {
     this.e = Math.sqrt(e1 * e2);
 };
 

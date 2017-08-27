@@ -53,7 +53,7 @@ function preload() {}
  * On slider change, runs functions to update labels of sliders.
  */
 $('.inputs').each(function() {
-    $(this).on('input',updateLabels);
+    $(this).on('input', updateLabels);
 });
 
 /**
@@ -84,32 +84,30 @@ function spoiler() {
  * off the input field.
  */
 $('body').on('click', '[data-change]', function() {
-    if(!running){
-        // Storing current element and its attributes.
-        var $element = $(this);
-        var $title = $(this).attr("title");
-        var $el_id = $(this).attr("id");
-        var $unit = $(this).attr("data-unit");
+    // Storing current element and its attributes.
+    var $element = $(this);
+    var $title = $(this).attr("title");
+    var $el_id = $(this).attr("id");
+    var $unit = $(this).attr("data-unit");
 
-        // Creating input form.
-        var $input = $('<input style="width:50%;"/>').val(parseFloat($element.text()));
-        $input.attr("id", $el_id);                                  // Setting ID attribute (same as text).
-        $input.attr("title", $title);                               // Setting title attribute (same as text).
-        $element.replaceWith($input);                               // Replacing text with input form.
+    // Creating input form.
+    var $input = $('<input style="width:50%;"/>').val(parseFloat($element.text()));
+    $input.attr("id", $el_id);                                  // Setting ID attribute (same as text).
+    $input.attr("title", $title);                               // Setting title attribute (same as text).
+    $element.replaceWith($input);                               // Replacing text with input form.
 
-        var save = function save() {
-            var $a = $('<a data-change />').text($input.val() + $unit);
+    var save = function save() {
+        var $a = $('<a data-change />').text($input.val() + $unit);
 
-            // Restoring text with same attributes as original.
-            $a.attr("title", $title);
-            $a.attr("id", $el_id);
-            $a.attr("data-unit", $unit);
-            $input.replaceWith($a);
-        };
+        // Restoring text with same attributes as original.
+        $a.attr("title", $title);
+        $a.attr("id", $el_id);
+        $a.attr("data-unit", $unit);
+        $input.replaceWith($a);
+    };
 
-        // When clicking away from element (blurring), revert from input form to text.
-        $input.one('blur', save).focus();
-    }
+    // When clicking away from element (blurring), revert from input form to text.
+    $input.one('blur', save).focus();
 });
 
 /**
@@ -125,6 +123,7 @@ $('#playPauseButton').on('click',function() {
  * Runs reset function when reset button pressed.
  */
 $('#resetButton').on('click', function() {
+    a1.pos = []; a2.pos = [];
     running = false;
     reset();
 });
@@ -302,8 +301,16 @@ function drawTrail(atom){
  */
 function reset(){
 
-    // Creating new LJ potential
-    potential = new LJ(init_s1, init_e1, init_s2, init_e2);
+    if (typeof mol1 !== 'undefined') {
+        // Updating LJ Params.
+        potential.calcSigma(init_s1, init_s2);
+        potential.calcEpsilon(init_e1, init_e2);
+    }
+
+    else {
+        // Creating new LJ potential
+        potential = new LJ(init_s1, init_e1, init_s2, init_e2);
+    }
 
     if(typeof mol1 !== 'undefined'){
         if(typeof mol1.bondSprite !== 'undefined'){
@@ -328,8 +335,19 @@ function reset(){
     // If running, maintain previous position.
     else {
         var dir = mol1.calcDir();
+        var w = mol1.omega;
+        var I = mol1.I;
+        var L = mol1.L;
+        var v = mol1.v;
+
         mol1 = new Molecule(a1, a2, potential, initKVib, initKRot);
-        mol1.r = dir.multiply(mol1.init_r_0());
+        a1.pos.splice(-1, 1); a2.pos.splice(-1, 1);
+        mol1.r = dir;
+        if (v > 0) {mol1.v = -mol1.v}
+        else {mol1.v = v}
+        mol1.omega = w;
+        mol1.I = I;
+        mol1.L = L;
     }
 
 
@@ -341,12 +359,14 @@ function reset(){
     a2.sprite.x = a2.getPos().items[0] * zoom + phaserInstance.world.centerX;
     a2.sprite.y = a2.getPos().items[1] * zoom + phaserInstance.world.centerY;
 
-    drawBond(a1.getPos(),a2.getPos());
+    drawBond(a1.getPos(), a2.getPos());
 
-    arrRotKE = [];
-    arrTime = [];
-    arrPE = [];
-    arrVibKE = [];
+    if (!running) {
+        arrRotKE = [];
+        arrTime = [];
+        arrPE = [];
+        arrVibKE = [];
+    }
     arrVibKESlider = [initKVib, initKVib];
     arrRotKESlider = [initKRot, initKRot];
     plotLJ();

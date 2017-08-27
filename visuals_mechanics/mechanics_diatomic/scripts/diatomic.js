@@ -142,5 +142,5 @@ Molecule.prototype.calcAngVel = function () {
 };
 
 Molecule.prototype.calcDir = function() {
-    return a2.getPos().subtract(a1.getPos()).unit();
+    return a1.getPos().subtract(a2.getPos());
 };
