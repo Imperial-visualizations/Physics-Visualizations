@@ -75,7 +75,7 @@ $(".showHideButton").on("click", spoiler);
 function spoiler() {
     var text = ($($(this).attr("for")).hasClass("expanded")) ? "Show" : "Hide";
     $(this).html(text+$(this).attr("data-graph-name"));
-    $($(this).attr("for")).slideToggle("fast");
+    $($(this).attr("for")).slideToggle(250);
     $($(this).attr("for")).toggleClass("expanded");
 }
 
@@ -85,10 +85,10 @@ function spoiler() {
 $(document).ready(function(){
     setTimeout(function() {
         $(".graphs").each(function(){
-            $(this).slideUp(0);
+            $(this).slideUp(500);
             $(this).removeClass("expanded");
         });
-    }, 100);
+    }, 900);
     // Delay 100ms and do the thing inside
 
 });
