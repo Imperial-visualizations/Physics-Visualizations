@@ -29,7 +29,7 @@ Atom.prototype.getPos = function(){
     return this.pos[this.pos.length - 1];
 };
 Atom.prototype.setPos = function(newPos){
-    if(this.pos.length > 50) this.pos.shift();     // Storing last 100 positions, deleting older ones
+    if(this.pos.length > 90) this.pos.shift();      // Storing last 90 positions, deleting older ones
     this.pos.push(newPos);                          // Pushing new position.
 };
 

@@ -8,6 +8,7 @@ var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS, "phaser",
 var a1, a2, mol1, potential;                                        // Atoms, molecules and potential to be instantiated
 var zoom  = 35;
 var initKVib, initKRot;                                             // Initial KEs.
+var dInitKVib;
 var init_s1 = 2, init_s2 = 2, init_e1 = 10, init_e2 = 10;           // Initial LJ parameters.
 
 // Colours
@@ -118,6 +119,11 @@ $('body').on('click', '[data-change]', function() {
         $a.attr("id", $el_id);
         $a.attr("data-unit", $unit);
         $input.replaceWith($a);
+
+        if ($a.text().indexOf("Display") === -1) {
+            var $divSlider = $a.attr("id").replace("Display", "");
+            $('#' + $divSlider).attr("value", parseFloat($a.text()));
+        }
     };
 
     // When clicking away from element (blurring), revert from input form to text.
@@ -154,8 +160,10 @@ function updateLabels() {
     });
 
     // Updating KE values and resetting.
-    initKVib = parseFloat($('#vibKE').val());
-    initKRot = parseFloat($('#rotKE').val());
+    var old_KVib = initKVib;
+    initKVib = parseFloat($('#vibKEDisplay').text());
+    initKRot = parseFloat($('#rotKEDisplay').text());
+    dInitKVib = old_KVib - initKVib;
     reset();
 }
 
@@ -180,8 +188,8 @@ function create() {
 
     zoom = zoom * window.devicePixelRatio;
 
-    a1 = new Atom(1, 1, CHERRY);
-    a2 = new Atom(1, 1, CHERRY);
+    a1 = new Atom(2, 1, CHERRY);
+    a2 = new Atom(1, 2, CHERRY);
     updateLabels();
 }
 
@@ -349,19 +357,25 @@ function reset(){
     // If running, maintain previous position.
     else {
         var dir = mol1.calcDir();
-        var w = mol1.omega;
-        var I = mol1.I;
-        var L = mol1.L;
         var v = mol1.v;
+        var w = mol1.omega;
 
         mol1 = new Molecule(a1, a2, potential, initKVib, initKRot);
         a1.pos.splice(-1, 1); a2.pos.splice(-1, 1);
         mol1.r = dir;
-        if (v > 0) {mol1.v = -mol1.v}
-        else {mol1.v = v}
+        if (v > 0) {
+            mol1.v = -mol1.v;
+            if (dInitKVib > 0) {
+                mol1.v = mol1.v -  Math.sqrt((2 * dInitKVib) / mol1.reducedM);
+            }
+        }
+        else {
+            mol1.v = v;
+            if (dInitKVib > 0) {
+                mol1.v = mol1.v + Math.sqrt((2 * dInitKVib) / mol1.reducedM);
+            }
+        }
         mol1.omega = w;
-        mol1.I = I;
-        mol1.L = L;
     }
 
 
@@ -392,7 +406,7 @@ function reset(){
  */
 function update(){
     if(running) {
-        var dT = 1/40;
+        var dT = 1/80;
         mol1.update(dT);//requests molecule update, sends deltaTime to mol1.
         a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
         a1.sprite.y = a1.getPos().items[1] * zoom + phaserInstance.world.centerY;
