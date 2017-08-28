@@ -6,21 +6,20 @@
  * @param color: Color of atom for phaser code.(cosmetic only)
  * @constructor: Atom
  */
-Atom = function(radius, mass, color) {
+Atom = function( mass, color) {
     this.pos = [];                 // Atom position Vector.
 
     // Checking for unphysical parameters.
-    if (radius <= 0 || mass <= 0) {
+    if ( mass <= 0) {
         console.error("Unphysical system detected! Please check radius, mass and charge values.");
 
         // Correcting to physical values.
-        radius = -radius;
         mass = -mass;
     }
-    this.lineSprite;
+    this.lineSprite = null;
     this.color = color;
-    this.radius = radius;                            // Atom radius.
-    this.mass = mass;                              // Atom mass.
+    this.mass = mass;
+    this.radius = Math.sqrt(this.mass);// Atom mass.
     this.sprite = addAtom(this);
 };
 

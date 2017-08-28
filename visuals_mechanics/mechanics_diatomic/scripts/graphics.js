@@ -12,6 +12,8 @@ var dInitKVib;
 var init_s1 = 2, init_s2 = 2, init_e1 = 10, init_e2 = 10;           // Initial LJ parameters.
 
 // Colours
+
+
 const IMPERIAL_BLUE = 0x003E74;
 const CHERRY = 0xE40043;
 const GRAPH_TIME = 5;                                               // x-axis range for Energy against Time plots.
@@ -60,14 +62,6 @@ $('.inputs').each(function() {
 /**
  * When button pressed, LJ parameters updated and animation reset.
  */
-$('#submitLJ').on('click', function() {
-    init_s1 = parseFloat($('#s1').text());
-    init_e1 = parseFloat($('#e1').text());
-    init_s2 = parseFloat($('#s2').text());
-    init_e2 = parseFloat($('#e2').text());
-    reset();
-});
-
 /**
  * Hides divs to make parts of the page invisible. "Spoiler".
  */
@@ -119,7 +113,11 @@ $('body').on('click', '[data-change]', function() {
         $a.attr("id", $el_id);
         $a.attr("data-unit", $unit);
         $input.replaceWith($a);
-
+        init_s1 = parseFloat($('#s1').text());
+        init_e1 = parseFloat($('#e1').text());
+        init_s2 = parseFloat($('#s2').text());
+        init_e2 = parseFloat($('#e2').text());
+        reset();
         if ($a.text().indexOf("Display") === -1) {
             var $divSlider = $a.attr("id").replace("Display", "");
             $('#' + $divSlider).attr("value", parseFloat($a.text()));
@@ -145,6 +143,7 @@ $('#playPauseButton').on('click',function() {
 $('#resetButton').on('click', function() {
     a1.pos = []; a2.pos = [];
     running = false;
+    $('#playPauseButton').text("Start");
     reset();
 });
 
@@ -188,8 +187,8 @@ function create() {
 
     zoom = zoom * window.devicePixelRatio;
 
-    a1 = new Atom(2, 1, CHERRY);
-    a2 = new Atom(1, 2, CHERRY);
+    a1 = new Atom(1, CHERRY);
+    a2 = new Atom(1, CHERRY);
     updateLabels();
 }
 
@@ -312,7 +311,7 @@ function drawTrail(atom){
             atom.pos[i].items[1] * zoom + phaserInstance.world.centerY);
     }
 
-    if (typeof atom.lineSprite !== 'undefined') atom.lineSprite.destroy();
+    if (atom.lineSprite !== null) atom.lineSprite.destroy();
     atom.lineSprite = traceLayer.create(0, 0, lineG.generateTexture());
     lineG.destroy();
 }
@@ -342,7 +341,7 @@ function reset(){
     }
 
     if(typeof a1 !== 'undefined'){
-        if(typeof  a1.lineSprite !== 'undefined'){
+        if(a1.lineSprite !== null){
             a1.lineSprite.destroy();
             a2.lineSprite.destroy();
         }
@@ -406,7 +405,7 @@ function reset(){
  */
 function update(){
     if(running) {
-        var dT = 1/80;
+        var dT = 1/60;
         mol1.update(dT);//requests molecule update, sends deltaTime to mol1.
         a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
         a1.sprite.y = a1.getPos().items[1] * zoom + phaserInstance.world.centerY;

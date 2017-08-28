@@ -79,7 +79,8 @@ LJ.prototype.calcF = function(r) {
  * @returns {number} Separation at which potential is 0.
  */
 LJ.prototype.getR_0 = function(){
-    return Math.pow(2, 1/6) * this.s;
+    var r_0 = Math.pow(2, 1/6) * this.s;
+    return r_0;
 };
 
 /**
