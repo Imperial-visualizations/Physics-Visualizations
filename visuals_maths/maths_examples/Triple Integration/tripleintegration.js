@@ -585,10 +585,7 @@ var volumeElement = {
 
     showscale: false
 };
-runFunctionRun(XYZintegrator)
 
-
-/*
 function main() {
     $("input[type=range]").each(function () {
         var displayEl;
@@ -606,4 +603,3 @@ function main() {
     init("#frame", frames, [tetrahedron], [8, 14]);
 }
 $(document).ready(main);
-*/

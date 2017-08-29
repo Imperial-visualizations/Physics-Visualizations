@@ -121,76 +121,76 @@
 
   }
 
-        #panelItemsWrapper>itemEditor{
-            display: block;
-            box-sizing: border-box;
-            width: 100%;
-            border: 4px solid #fff;
-            border-top: 4px solid #000;
-            background-color: #000;
-            color: #fff;
-            padding: 20px;
-            padding-top: 10px;
-        }
-        .itemNameInput{
-          width: 100%;
-          outline: none;
-          font-weight: 600;
-          padding: 0;
-          margin: 0;
-          margin-bottom: 10px;
-          background: none;
-          border: none;
-          color: #fff;
-          font-size: 1.4em;
-          border-bottom: 2px solid #fff;
-        }
-        .itemNameInput:focus{
-          outline: none;
-          font-style: italic;
-        }
-        .inputWrapper{
-          box-sizing: border-box;
-          height: 24px;
-          width: 100%;
-          margin: 0;
-          padding: 0;
-          padding-left: 30%;
-          display: inline-block;
-        }
-        label+.inputWrapper{
-          box-sizing: border-box;
-          height: 24px;
-          width: 70%;
-          padding-left: 0;
-          display: inline-block;
-        }
-        itemEditor>span+label{
-          margin-top: 10px;
-        }
-        itemEditor>label{
-          margin: 0;
-          padding: 0;
-          display: inline-block;
-          height: 24px;
-          width: 30%;
-          font-size: 14px;
-        }
-        .inputWrapper>input{
-          outline: none;
-          font-weight: 600;
-          padding: 0;
-          margin: 0;
-          background: none;
-          border: none;
-          color: #fff;
-          border-bottom: 1px solid #fff;
-          width: 90%;
-        }
-        .inputWrapper>input:focus{
-          outline: none;
-          font-style: italic;
-        }
+  #panelItemsWrapper>itemEditor{
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    border: 4px solid #fff;
+    border-top: 4px solid #000;
+    background-color: #000;
+    color: #fff;
+    padding: 20px;
+    padding-top: 10px;
+  }
+  .itemNameInput{
+    width: 100%;
+    outline: none;
+    font-weight: 600;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 10px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.4em;
+    border-bottom: 2px solid #fff;
+  }
+  .itemNameInput:focus{
+    outline: none;
+    font-style: italic;
+  }
+  .inputWrapper{
+    box-sizing: border-box;
+    height: 24px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    padding-left: 30%;
+    display: inline-block;
+  }
+  label+.inputWrapper{
+    box-sizing: border-box;
+    height: 24px;
+    width: 70%;
+    padding-left: 0;
+    display: inline-block;
+  }
+  itemEditor>span+label{
+    margin-top: 10px;
+  }
+  itemEditor>label{
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    height: 24px;
+    width: 30%;
+    font-size: 14px;
+  }
+  .inputWrapper>input{
+    outline: none;
+    font-weight: 600;
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: none;
+    color: #fff;
+    border-bottom: 1px solid #fff;
+    width: 90%;
+  }
+  .inputWrapper>input:focus{
+    outline: none;
+    font-style: italic;
+  }
 
   #panelItemsWrapper>p{
     margin: 0 auto;
@@ -366,99 +366,107 @@
       for(idx in retrieveAlgObjs) {
         //rebuild everything
         var newobj = rebuildAlgObj(retrieveAlgObjs[idx]);
-        rebuild[newobj.id] = newobj;
-        plot.addAlgObj(rebuild[newobj.id]); //add this object to the plot
+        rebuild[newobj.id] = newobj; //add this object to the new algObj dictionary
+        plot.addPlotObj(rebuild[newobj.id]); //add this object to the plot
       }
       algObjs = rebuild;
       redisplay();
-    } else{
+    } else {
       console.log("no saved state... defaulting");
     }
-    $("#addPoint").on('click',function(){
+    $("#addPoint").on('click',function() {
       var newPoint = new Point(new Vector(Math.random(),Math.random(),Math.random()));
-      var newid = newPoint.id;
-      newPoint.name = nextName();
-      algObjs[newid] = newPoint;
-      plot.addAlgObj(algObjs[newid])
-      log(algObjs[newid].toString()+" added.");
-      //we could call addAlgObj(algObjs[newid]) but it's obsolete
+      newPoint.name = nextName(); //generate name
+      algObjs[newPoint.id] = newPoint; //ad to the dict
+      plot.addPlotObj(algObjs[newPoint.id]); //add to plot
+      log(algObjs[newPoint.id].toString()+" added.");
       redisplay();
+      //expand the toolbox
       $("#EditorFor"+newPoint.id).slideDown(200);
       $("#EditorFor"+newPoint.id).addClass("expanded");
       $("#NameOf"+newPoint.id).focus();
     });
     $("#addLine").on('click',function(){
       var newLine = new Line(new Vector(Math.random(),Math.random(),Math.random()), new Vector(Math.random(),Math.random(),Math.random()));
-      newLine.name = nextName();
-      var newid = newLine.id;
-      algObjs[newid] = newLine;
-      plot.addAlgObj(algObjs[newid])
-      //we could call addAlgObj(algObjs[newid]) but it's obsolete
-      log(algObjs[newid].toString()+" added.");
-      redisplay();
+      newLine.name = nextName(); //generate name for this line
+      algObjs[newLine.id] = newLine; //add to dictionary
+      plot.addPlotObj(algObjs[newLine.id]); //add to plot
+      log(algObjs[newLine.id].toString()+" added.");
+      //expand toolbopx
       $("#EditorFor"+newLine.id).slideDown(200);
       $("#EditorFor"+newLine.id).addClass("expanded");
       $("#NameOf"+newLine.id).focus();
+      redisplay(); //redisplay panel
     });
     $("#addPlane").on('click',function(){
       var newPlane = new Plane(new Vector(Math.random(),Math.random(),Math.random()), new Vector(Math.random(),Math.random(),Math.random()));
-      newPlane.name = nextName();
-      var newid = newPlane.id;
-      algObjs[newid] = newPlane;
-      plot.addAlgObj(algObjs[newid])
+      newPlane.name = nextName(); //get name
+      algObjs[newPlane.id] = newPlane; //add to dict
+      plot.addPlotObj(algObjs[newPlane.id]); //plot
       //we could call addAlgObj(algObjs[newid]) but it's obsolete
-      log(algObjs[newid].toString()+" added.");
-      redisplay();
+      log(algObjs[newPlane.id].toString()+" added.");
       $("#EditorFor"+newPlane.id).slideDown(200);
       $("#EditorFor"+newPlane.id).addClass("expanded");
       $("#NameOf"+newPlane.id).focus();
+      redisplay(); //redisplay panel
     });
     $("#intersect").on('click',function(){
       log("Finding possible intersections....");
-      var selectedObjs = []
-      $("#panelItemsWrapper>item>label.selected").each(
-        function() {
-          selectedObjs.push(algObjs[$(this)[0].id]);
-        }
-      );
+      var selectedObjs = getSelectedAlgObjs();
       console.log("interect selected objs: ",selectedObjs);
       var newobjs = intersectList(selectedObjs);
       console.log("intersect result: ",newobjs);
+      //add all the new objects to the dictionary
       for(idx in newobjs) {
         var newid = newobjs[idx].id;
         algObjs[newid] = newobjs[idx];
-        plot.addAlgObj(algObjs[newid])
+        plot.addPlotObj(algObjs[newid]); //add to plot too
       }
-      redisplay();
       if(newobjs.length == selectedObjs.length){
+        //rather crude solution but works
         log("<red>No intersections found.</red>");
       }
+      redisplay(); //redisplay panel
       log("Results displayed.");
     });
-    $("#clear").on('click',function(){
+    function purgeAlgObj(algObj) {
+      /* Removes an algObj from everywhere: the dictionary, The panel
+      plot etc. */
+      console.log("purging algObj:",algObj);
+      $( "#"+i ).parent().remove(); //from panel
+      delete algObjs[algObj.id]; //from dictionary
+      plot.deletePlotObj(algObj); //from plot
+    }
+    $("#clear").on('click',function() {
       for (i in algObjs) {
         console.log("idx: ", i, ", object: ", algObjs[i].toString());
-        $( "#"+i ).parent().remove();
-        plot.deleteAlgObj(algObjs[i]);
-        delete algObjs[i];
+        purgeAlgObj(algObjs[i]);
       }
       redisplay();
     });
     $("#delete").on('click',function(){
-      $("#panelItemsWrapper>item>label.selected").each(
-        function() {
-          console.log("deleting at id", $(this)[0].id, ", object:", algObjs[$(this)[0].id])
-          plot.deleteAlgObj(algObjs[$(this)[0].id]);
-          delete algObjs[$(this)[0].id];
-        }
-      );
+      console.log(algObjs);
+      var selectedObjs = getSelectedAlgObjs();
+      console.log("delete clicked, purging algObjs: ", selectedObjs);
+      for(var idx=0;idx<selectedObjs.length;idx++) {
+        purgeAlgObj(selectedObjs[idx]);
+      }
       redisplay();
     });
-    $("#save").on('click',function() {
-      save();
-    });
+    $("#save").on('click',save());
   });
-
+  function getSelectedAlgObjs() {
+    /* Retrieve a list of selected items in the panel.
+    It compares the ids of selected labels with entries of
+    'dictionary'. */
+    var selectedObjs = [];
+    $("#panelItemsWrapper>item>label.selected").each(
+      function() {
+        selectedObjs.push(algObjs[$(this)[0].id]);
+      }
+    )
+    return selectedObjs;
+  }
   function save(){
     console.log("save: current state", sessionStorage)
     sessionStorage.setItem("algObjsSaved", JSON.stringify(algObjs));
@@ -475,113 +483,120 @@
     log("<blue>Last Saved: "+sessionStorage.lastSaved+"</blue>");
   }
   function saveToObject(id){
-      var changes = 0;
-      var dontClose = false;
-      var logMessage = "Updated: ";
-      var thisObject = $("#"+id);
-      if(algObjs[id].name != $("#NameOf"+id).val()){
+    var changes = 0;
+    var dontClose = false;
+    var logMessage = "Updated: ";
+    var thisObject = $("#"+id);
+    if(algObjs[id].name != $("#NameOf"+id).val()){
+      //changing name if it is different that it is now
+      changes += 1;
+      algObjs[id].name = String($("#NameOf"+id).val()); //change name
+      $("#"+id).text(algObjs[id].toString());
+    }
+    logMessage += algObjs[id].toString()+" ";
+
+    if(algObjs[id] instanceof Point){
+      //retrieve user data
+      x = parseFloat($("#"+id+"PX").val());
+      y = parseFloat($("#"+id+"PY").val());
+      z = parseFloat($("#"+id+"PZ").val());
+      newPos = new Vector(x,y,z); //Point.assignPos takes Vector input
+      if(newPos.isEqualTo(algObjs[id].pos)){
+        // If no change is made do nothing
+        // to save CPU time
+      } else {
         changes += 1;
-        algObjs[id].name = $("#NameOf"+id).val();
-        $("#"+id).text(algObjs[id].toString());
+        algObjs[id].assignPos(newPos);
+        plot.refreshPlotObj(algObjs[id]); //this re-adds the object to the plot
+        //necessary because plot does not keep reference to original objects;
+        //after changed the object has to call .goify(..) again and pass
+        //to fastPlotHandler
+        logMessage += ("<br><b>r</b>=("+x+","+y+","+z+")");
       }
-      logMessage += algObjs[id].toString()+" ";
 
-      if(algObjs[id] instanceof Point){
+    } else if(algObjs[id] instanceof Line){
 
-        x = parseFloat($("#"+id+"PX").val());
-        y = parseFloat($("#"+id+"PY").val());
-        z = parseFloat($("#"+id+"PZ").val());
-        newPos = new Vector(x,y,z);
-        if(newPos.isEqualTo(algObjs[id].pos)){
-            // If no change is made do nothing
-            // to save CPU time 
+      dirx = parseFloat($("#"+id+"DX").val());
+      diry = parseFloat($("#"+id+"DY").val());
+      dirz = parseFloat($("#"+id+"DZ").val());
+      offx = parseFloat($("#"+id+"OX").val());
+      offy = parseFloat($("#"+id+"OY").val());
+      offz = parseFloat($("#"+id+"OZ").val());
+
+      try {
+        newDir = new Vector(dirx,diry,dirz);
+        newOff = new Vector(offx,offy,offz);
+        if(newDir.isEqualTo(algObjs[id].dir) && newOff.isEqualTo(algObjs[id].off)){
+          // If no change is made do nothing
+          // to save CPU time
         }else{
           changes += 1;
-          algObjs[id].assignPos(newPos);
-          logMessage += ("<br><b>r</b>=("+x+","+y+","+z+")");
+          algObjs[id].assignDir(newDir);
+          algObjs[id].assignOff(newOff);
+          plot.refreshPlotObj(algObjs[id]); //refresh the Line on the plot
+          //see note for addPoint
+          logMessage += ("<br><b>r</b>=("+offx+","+offy+","+offz+")+µ("+dirx+","+diry+","+dirz+")");
         }
-
-      }else if(algObjs[id] instanceof Line){
-
-        dirx = parseFloat($("#"+id+"DX").val());
-        diry = parseFloat($("#"+id+"DY").val());
-        dirz = parseFloat($("#"+id+"DZ").val());
-        offx = parseFloat($("#"+id+"OX").val());
-        offy = parseFloat($("#"+id+"OY").val());
-        offz = parseFloat($("#"+id+"OZ").val());
-
-        try {
-          newDir = new Vector(dirx,diry,dirz);
-          newOff = new Vector(offx,offy,offz);
-          if(newDir.isEqualTo(algObjs[id].dir) && newOff.isEqualTo(algObjs[id].off)){
-            // If no change is made do nothing
-            // to save CPU time 
-          }else{
-            changes += 1;
-            algObjs[id].assignDir(newDir);
-            algObjs[id].assignOff(newOff);
-            logMessage += ("<br><b>r</b>=("+offx+","+offy+","+offz+")+µ("+dirx+","+diry+","+dirz+")");
-          }
-        } catch(err) {
-          console.log(err);
-          log("<red>ERROR: "+err.message+"<br>The Direction of "+algObjs[id].toString+" can't be (0,0,0)!</red>");
-          var dontClose = true;
-        }
-
-      }else if(algObjs[id] instanceof Plane){
-
-        normalx = parseFloat($("#"+id+"NX").val());
-        normaly = parseFloat($("#"+id+"NY").val());
-        normalz = parseFloat($("#"+id+"NZ").val());
-        offx = parseFloat($("#"+id+"OX").val());
-        offy = parseFloat($("#"+id+"OY").val());
-        offz = parseFloat($("#"+id+"OZ").val());
-
-        try {
-          newNormal = new Vector(normalx,normaly,normalz);
-          newOff = new Vector(offx,offy,offz);
-          if(newNormal.isEqualTo(algObjs[id].normal) && newOff.isEqualTo(algObjs[id].off)){
-            // If no change is made do nothing
-            // to save CPU time 
-          }else{
-            changes += 1;
-            algObjs[id].assignNormal(newNormal);
-            algObjs[id].assignOff(newOff);
-            logMessage += ("<br>("+normalx+","+normaly+","+normalz+")•(<b>r</b>-("+offx+","+offy+","+offz+"))=0");
-          }
-        } catch(err) {
-          console.log(err);
-          log("<red>ERROR: "+err.message+"<br>The Normal of "+algObjs[id].toString+" can't be (0,0,0)!</red>");
-          var dontClose = true;
-        }
-
-      }else{
-        console.log("ERROR: the object"+id+" can't be accessed.");
-<<<<<<< HEAD
+      } catch(err) {
+        console.log(err); //it is only assignDir that can throw, at it is going to be argument error
+        log("<red>ERROR: "+err.message+"<br>The Direction of "+algObjs[id].toString()+" can't be (0,0,0)!</red>");
+        var dontClose = true; //don't close the
       }
-=======
-      }    
 
->>>>>>> 1a1abaad9db9d82c54f7085a231482d5011fa9dc
-      if(dontClose){
-        $("#panelItemsWrapper").scrollTop($("#EditorFor"+id).position().top-80);
-      }else{
-        if(changes > 0){
-          $("#EditorFor"+id).slideUp(100);
-          redrawPlot();
-          log(logMessage);
+    } else if(algObjs[id] instanceof Plane){
+
+      normalx = parseFloat($("#"+id+"NX").val());
+      normaly = parseFloat($("#"+id+"NY").val());
+      normalz = parseFloat($("#"+id+"NZ").val());
+      offx = parseFloat($("#"+id+"OX").val());
+      offy = parseFloat($("#"+id+"OY").val());
+      offz = parseFloat($("#"+id+"OZ").val());
+
+      try {
+        newNormal = new Vector(normalx,normaly,normalz);
+        newOff = new Vector(offx,offy,offz);
+        if(newNormal.isEqualTo(algObjs[id].normal) && newOff.isEqualTo(algObjs[id].off)){
+          // If no change is made do nothing
+          // to save CPU time
         }else{
-          $("#EditorFor"+id).slideUp(600);
+          changes += 1;
+          algObjs[id].assignNormal(newNormal);
+          algObjs[id].assignOff(newOff);
+          plot.refreshPlotObj(algObjs[id]); //refresh the Plane on the plot
+          //see note for saving to point
+          logMessage += ("<br>("+normalx+","+normaly+","+normalz+")•(<b>r</b>-("+offx+","+offy+","+offz+"))=0");
         }
-        $("#EditorFor"+id).removeClass("expanded");
+      } catch(err) {
+        console.log(err);
+        log("<red>ERROR: "+err.message+"<br>The Normal of "+algObjs[id].toString()+" can't be (0,0,0)!</red>");
+        var dontClose = true;
       }
+
+    }else{
+      console.log("ERROR: the object "+id+" can't be accessed.");
+    }
+    if(dontClose){
+      //don't close the panel
+      $("#panelItemsWrapper").scrollTop($("#EditorFor"+id).position().top-80);
+    } else{
+      if(changes > 0){
+        $("#EditorFor"+id).slideUp(100);
+        //redrawPlot();
+        log(logMessage);
+      }else{
+        $("#EditorFor"+id).slideUp(600);
+      }
+      $("#EditorFor"+id).removeClass("expanded");
+    }
   }
-  function itemsAddEventListener(){
+  function itemsAddEventListener() {
     $("#panelItemsWrapper>item>span").each(function(index){
+      //these are the 'Eyes'
       $(this).off();
       $(this).on('click',function(event){
+        //click on the eye - show/hide algObjs
         $(this).toggleClass("active");
-        if($(this).hasClass("active")){
+        if($(this).hasClass("active")) {
           var activeId = $(this)[0].firstChild.id.replace('Eye','');
           plot.showTraces([activeId]); //show what was clicked to be shown
         }
@@ -592,28 +607,32 @@
         event.preventDefault();
       });
     });
-    $("#panelItemsWrapper>item>label").each(function(index){
+    $("#panelItemsWrapper>item>label").each(function(index) {
+      //the labels, that contain the names of algObjs
       $(this).off();
       $(this).on('click',function(event){
         $(this).toggleClass("selected");
-        var counts = 0;
-        var toHighlight = [];
-        $("#panelItemsWrapper>item>label").each(function(index){
-          if($(this).hasClass("selected")){
-            toHighlight.push($(this)[0].id);
-            console.log(toHighlight);
-            counts += 1;
-          }
-        });
-        if(counts != 0){
-          plot.unHighlight();
-          plot.highlightTraces(toHighlight);
+        var selectedObjs = getSelectedAlgObjs();
+        //highlighting
+        //commented out for the presentation
+        /*
+        if(selectedObjs.length != 0){
+          //unhighlight and highlight again
+          plot.unHighlightTraces();
+          plot.highlightPlotObjs(selectedObjs);
+        } else {
+          //nothing to highlight, so remove highlights
+          plot.unHighlightTraces();
+        }
+        */
+        //delete button
+        if(selectedObjs.length != 0){
           $("#delete").addClass("active");
-        }else{
-          plot.unHighlight();
+        } else {
           $("#delete").removeClass("active");
         }
-        if(counts>1) {
+        //intersect button
+        if(selectedObjs.length>1) {
           $("#intersect").addClass("active");
         }else{
           $("#intersect").removeClass("active");
@@ -624,18 +643,12 @@
       $(this).on('dblclick',function(event) {
         id = $(this).attr("id");
         console.log("double click on ",id)
-<<<<<<< HEAD
-        // var newName = prompt("Enter new name", algObjs[$(this)[0].id].toString())
-        // algObjs[$(this)[0].id].name = newName;
-        // redisplay();
-=======
->>>>>>> 1a1abaad9db9d82c54f7085a231482d5011fa9dc
         if($("#EditorFor"+id).hasClass("expanded")){
           //update the object with the value in the input elements
           saveToObject(id);
         }else{
           //update the value in the input elements with object
-           $("#NameOf"+id).val(algObjs[id].name);
+          $("#NameOf"+id).val(algObjs[id].name);
           if(algObjs[id] instanceof Point){
             $("#"+id+"PX").val(algObjs[id].pos.x);
             $("#"+id+"PY").val(algObjs[id].pos.y);
@@ -647,7 +660,6 @@
             $("#"+id+"OX").val(algObjs[id].off.x);
             $("#"+id+"OY").val(algObjs[id].off.y);
             $("#"+id+"OZ").val(algObjs[id].off.z);
-
           }else if(algObjs[id] instanceof Plane){
             $("#"+id+"NX").val(algObjs[id].normal.x);
             $("#"+id+"NY").val(algObjs[id].normal.y);
@@ -688,7 +700,7 @@
           if($("#EditorFor"+$(this).attr("id")).hasClass("expanded")){
             saveToObject($(this).attr("id"));
           }
-          plot.unHighlight();
+          plot.unHighlightTraces();
         });
         $("#intersect").removeClass("active");
         $("#delete").removeClass("active");
@@ -706,7 +718,7 @@
           }else{
             id = id.slice(0, -2);
           }
-          console.log(id);
+          console.log("intemeditor input", id);
           saveToObject(id);
           e.stopPropagation();
           e.preventDefault();
@@ -750,20 +762,12 @@
     else {
       $("#panelItemsWrapper").html("");
       for (i in algObjs) {
-        console.log("redisplay: ", algObjs[i]);
+        //console.log("redisplay: ", algObjs[i]);
         algObjToPanel(algObjs[i]);
       }
     }
     //console.log("redisplaying graph...")
     //redrawPlot();
-  }
-  function addAlgObj(object){
-    //obsolete!!
-    throw new Error("addAlgObj is obsolete, use redisplay() instead;")
-    console.log("addAlgObj with id "+object.id+", ", object.toString());
-    $("#panelItemsWrapper>p").remove();
-    $("#panelItemsWrapper").append("<item class=''><span class=''><i id='"+object.id+"Eye' class='fa fa-eye' aria-hidden='true'></i></span><label id='"+object.id+"'>"+object.toString()+"</label></item>");
-    itemsAddEventListener();
   }
   </script>
 </body>
