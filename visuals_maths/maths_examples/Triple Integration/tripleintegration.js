@@ -733,9 +733,6 @@ runFunctionRun(YXZintegrator)
 
 
 
-    showscale: false
-};
-
 function main() {
     $("input[type=range]").each(function () {
         var displayEl;
