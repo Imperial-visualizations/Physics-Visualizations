@@ -1,26 +1,27 @@
 var frames, addOn;
 var animateIndex = 0, animateLimit = 0;
-var duration = 150;
+var duration = 50;
 var isPaused = false;
 var stops;
 var idName;
 
-function init(sliderName, allFrames, extra=[], stopValues=[0, 0]) {
+function initAnimation(sliderName, allFrames, extra=[], layout={}, setDuration = 50, stopValues=[0, 0]) {
     idName = sliderName;
+    duration = setDuration;
     frames = allFrames;
     animateLimit = frames.length;
     addOn = extra;
     stops = stopValues;
-    console.log(stops);
     isPaused = true;
     animateIndex = 0;
     var data = [];
-    data.push(frames[animateIndex].data[0]);
-    data.push(frames[animateIndex].data[1]);
+    for (var i = 0, n = frames[1].data.length; i < n; ++i) {
+        data.push(frames[animateIndex].data[i]);
+    }
     for (var i = 0, n = addOn.length; i < n; ++i){
         data.push(addOn[i]);
     }
-    Plotly.newPlot('graph', data = data);
+    Plotly.newPlot('graph', data = data, layout = layout);
     reset();
 }
 
@@ -36,8 +37,9 @@ function reset() {
 function historyPlot(index) {
     animateIndex = index;
     var data = [];
-    data.push(frames[index].data[0]);
-    data.push(frames[index].data[1]);
+    for (var i = 0, n = frames[index].data.length; i < n; ++i) {
+        data.push(frames[index].data[i]);
+    }
     Plotly.animate(
         'graph',
         {data: data},
@@ -61,8 +63,9 @@ function update() {
     }
     if (!isPaused) {
         data = [];
-        data.push(frames[animateIndex].data[0]);
-        data.push(frames[animateIndex].data[1]);
+        for (var i = 0, n = frames[1].data.length; i < n; ++i) {
+            data.push(frames[animateIndex].data[i]);
+        }
         Plotly.animate(
             'graph',
             {data: data},
@@ -72,7 +75,7 @@ function update() {
                 frame: {duration: duration, redraw: false,},
             }
         );
-        pauseComp(duration + 5);
+        pauseComp(duration + 1);
         requestAnimationFrame(update);
         resetSlider();
         //Add stopping functionality here!!!
