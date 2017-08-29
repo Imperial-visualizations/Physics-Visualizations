@@ -29,15 +29,13 @@ window.onload = function() {
     var canvas = document.getElementById("graph"),
         graph = {
             ctx: canvas.getContext('2d'),
-            dim: canvas.height,
-            get imageData() {
-                return this.ctx.getImageData(0, 0, this.dim, this.dim);
-            }
-        },
+            dim: canvas.height
+        };
+        graph.imageData = graph.ctx.getImageData(0, 0, graph.dim, graph.dim);
+        graph.numPixels = graph.dim * graph.dim;
 
-        cmath = math,
+    var cmath = math,
         pi = Math.PI;
-
         // phase = 0;
 
     // if (canvas.getContext) {
@@ -97,9 +95,9 @@ window.onload = function() {
             this.frame = 0;
             this.numFrames = 50; //126
 
-            this.imgData = new Array(this.numFrames);
+            this.data = new Array(this.numFrames);
                 for (var i = 0; i < this.numFrames; i++) {
-                    this.imgData[i] = new Uint8Array(graph.dim * graph.dim);
+                    this.data[i] = new Float32Array(4*graph.numPixels);
                 }
 
             var incident = this.createWave(this.theta, amplitude=1, material=1);
@@ -113,9 +111,8 @@ window.onload = function() {
 
         transmit: function() {
             var cosThetaI = Math.cos(this.theta),
-                cosThetaT = cosSnell(this.n1, this.n2, cosThetaI),
-                plotThetaT = math.acos(cosThetaT);
-
+                cosThetaT = cosSnell(this.n1, this.n2, this.theta),
+                plotThetaT = cmath.acos(cosThetaT);
             if (isComplex(cosThetaT)) {
                 console.log("Total internal reflection");
                 cosThetaT = 0;
@@ -138,7 +135,7 @@ window.onload = function() {
             }
             var cosThetaI = Math.cos(this.theta),
                 thetaR = this.theta,
-                cosThetaT = cosSnell(this.n1, this.n2, cosThetaI),
+                cosThetaT = cosSnell(this.n1, this.n2, this.theta),
                 plotThetaR = -thetaR;
 
             if (isComplex(cosThetaT)) {
@@ -160,6 +157,7 @@ window.onload = function() {
 
             var xMin, xMax, n;
             if (material === 1) {
+                // TODO convert x, y values to actual physical values (not pixels)
                 xMin = 0;
                 xMax = graph.dim / 2;
                 n = this.n1;
@@ -177,16 +175,22 @@ window.onload = function() {
                 // yRange = np.range(0, graph.dim),
 
             /** Return intensity value between 0-255 for a given pixel */
-            function clampedWaveFunc(x, y, phase) {
+            function waveFunc(x, y, phase) {
                 // x = 2*x/graph.dim - 1;
                 // y = -2*y/graph.dim - 1;
-                var k_x = n * Math.cos(theta),
+                var k_x, k_y;
+                if (isComplex(theta)) {
+                    k_x = cmath.multiply(n, cmath.cos(theta));
+                    k_y = cmath.multiply(n, cmath.sin(theta));
+                } else {
+                    k_x = n * Math.cos(theta);
                     k_y = n * Math.sin(theta);
+                }
+
                 if (reversePhase === false) {
-                    // TODO: Sort out this expression:
-                    return 127.5 * amplitude * Math.exp( (8*pi/graph.dim) * (k_x*x + k_y*y - phase) ) + 127.5;
+                    return amplitude * Math.cos( (8*pi/graph.dim) * (k_x*x + k_y*y - phase) );
                 } else if (reversePhase === true) {
-                    return 127.5 * amplitude * Math.sin( (8*pi/graph.dim) * (k_x*x + k_y*y + phase) ) + 127.5;
+                    return amplitude * Math.cos( (8*pi/graph.dim) * (k_x*x + k_y*y + phase) );
                 } else {
                     throw new TypeError("`createWave()` arg `reversePhase` must be of type `bool`");
                 }
@@ -197,30 +201,49 @@ window.onload = function() {
                 for (var x = xMin; x < xMax; x++) {
                     for (var y = yMin; y < yMax; y++) {
                         var pixel = coordToPixelIndex(x, y);
-                        this.imgData[frame][4*pixel] += clampedWaveFunc(x, y, frame);
-                        // this.imgData[frame][4*pixel + 1] = 0;
-                        // this.imgData[frame][4*pixel + 2] = 0;
-                        this.imgData[frame][4*pixel + 3] = 255;
+                        this.data[frame][4*pixel] += waveFunc(x, y, 0);//frame/graph.dim);
+                        // if (frame === 0 && pixel < 1010 && pixel > 990) {
+                        //     console.log(pixel, clampedWaveFunc(x, y, 0));
+                        //     console.log(this.data[frame][4*pixel]);
+                        // }
+                        // this.data[frame][4*pixel + 1] += waveVal;
+                        // this.data[frame][4*pixel + 2] += waveVal;
+                        this.data[frame][4*pixel + 3] = 255;
                     }
                 }
+                // for (var pixel = 0; pixel < numPixels; pixel++) {
+                //     var coord = pixelIndexToCoord(pixel),
+                //         x = coord[0],
+                //         y = coord[1];
+                //     // if (frame === 0 && pixel < 1010 && pixel > 990) console.log(pixel, x, y);
+                //     this.data[frame][4*pixel] += clampedWaveFunc(x, y, 0);//frame/graph.dim);
+                //     // this.data[frame][4*pixel + 1] = 0;
+                //     // this.data[frame][4*pixel + 2] = 0;
+                //     this.data[frame][4*pixel + 3] = 255;
+                // }
             }
             return;
         },
 
 
         updatePlot: function() {
-            graph.imageData.data.set(this.imgData[this.frame]);
+            for (var i = 0; i < graph.numPixels; i++) {
+                this.data[this.frame][4*i] = this.data[this.frame][4*i]*127.5 + 127.5;
+            }
+            graph.imageData.data.set(this.data[this.frame]);
+            // console.log(this.data[this.frame][4000], graph.imageData.data[this.frame][4000]);
             graph.ctx.putImageData(graph.imageData, 0, 0);
             this.frame++;
             if (this.frame === this.numFrames) {
                 this.frame = 0;
             }
             console.log("Updated plot;");
+            console.log(graph.imageData);
         }
 
     };
 
-    Boundary.init(angle=30, n1=1, n2=1.5, polarisation="s", interference=true);
+    Boundary.init(angle=70, n1=1, n2=1.5, polarisation="s", interference=false);
     Boundary.updatePlot();
 
     // console.log(np.range(-2, 15));
