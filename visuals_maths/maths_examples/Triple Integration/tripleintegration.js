@@ -754,3 +754,4 @@ function runfunctionrunnew(func,a, b){
 
 
 $(document).ready(main);
+runfunctionrunnew(XYZintegrator,4,10)
