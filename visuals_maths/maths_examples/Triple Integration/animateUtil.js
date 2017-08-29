@@ -4,6 +4,7 @@ var duration = 150;
 var isPaused = false;
 var stops;
 var idName;
+var counter = 1
 
 function init(sliderName, allFrames, extra=[], stopValues=[0, 0]) {
     idName = sliderName;
@@ -30,6 +31,10 @@ function reset() {
     historyPlot(animateIndex);
     document.getElementById('playPause').value = (isPaused) ? "Play":"Pause";
     resetSlider();
+    counter = 1
+    document.getElementById('innerXYZ').style.display = "block"
+    document.getElementById('middleXYZ').style.display = "none"
+    document.getElementById('outerXYZ').style.display = "none"
     return;
 }
 
@@ -96,11 +101,53 @@ function resetSlider() {
     return;
 }
 
-function startAnimation () {
-    if (animateIndex < animateLimit){
+function startAnimation (type) {
+    if (type === 1){
+        if (animateIndex < animateLimit){
         isPaused = !isPaused;
         document.getElementById('playPause').value = (isPaused) ? "Play":"Pause";
         requestAnimationFrame(update);
+    }
+    if (counter === 1){
+        document.getElementById('innerXYZ').style.display = "block"
+        document.getElementById('middleXYZ').style.display = "none"
+        document.getElementById('outerXYZ').style.display = "none"
+        counter = counter + 1 
+    } else if (counter === 2){
+        document.getElementById('innerXYZ').style.display = "none"
+        document.getElementById('middleXYZ').style.display = "block"
+        document.getElementById('outerXYZ').style.display = "none"
+
+        counter = counter + 1     
+    } else if (counter === 3){
+        document.getElementById('innerXYZ').style.display = "none"
+        document.getElementById('middleXYZ').style.display = "none"
+        document.getElementById('outerXYZ').style.display = "block"
+        counter = counter + 1  
+    }
+    }else if (type ===2) {
+        if (animateIndex < animateLimit){
+        isPaused = !isPaused;
+        document.getElementById('playPause').value = (isPaused) ? "Play":"Pause";
+        requestAnimationFrame(update);
+    }
+    if (counter === 1){
+        document.getElementById('innerZYX').style.display = "block"
+        document.getElementById('middleZYX').style.display = "none"
+        document.getElementById('outerZYX').style.display = "none"
+        counter = counter + 1 
+    } else if (counter === 2){
+        document.getElementById('innerZYX').style.display = "none"
+        document.getElementById('middleZYX').style.display = "block"
+        document.getElementById('outerZYX').style.display = "none"
+
+        counter = counter + 1     
+    } else if (counter === 3){
+        document.getElementById('innerZYX').style.display = "none"
+        document.getElementById('middleZYX').style.display = "none"
+        document.getElementById('outerZYX').style.display = "block"
+        counter = counter + 1  
+    }   
     }
     return;
 }
