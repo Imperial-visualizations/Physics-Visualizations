@@ -1,3 +1,14 @@
+//Colour definitions
+var magenta = "#FF00FF",
+    blue = "#0000FF",
+    green = "#008000",
+    impBlue = "#003E74",
+    black = "rgb(0,0,0)",
+    white = "rgb(255,255,255)",
+    cyan = "rgb(0,146,146)", //1
+    lilac = "rgb(182,109,255)", //2
+    orange = "rgb(219,209,0)"; //3
+
 //Layout
 function createView(point) {
   var norm = Math.sqrt(point[0]*point[0] + (5*point[1])*(5*point[1]) + point[2]*point[2]);

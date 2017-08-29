@@ -18,6 +18,15 @@
         <div class="six columns">
             <h1>On a Sphere:</h1>
             <div id='graph' style="width:450px; height:450px;"></div>
+            <div id="frameSlider">
+                <label class="sliderTitle">Frame #:
+                    <span id="frameDisplay" data-unit="">1</span>
+                </label>
+                <label class="slider">
+                    <input id="frame" class="inputs" type="range" value="1" min="1" max="39" step="1"/>
+                    <span class="sliderMin">1</span><span class="sliderMax">39</span>
+                </label>
+            </div>
         </div>
 
         <!--Bottons-->
@@ -27,7 +36,7 @@
                 <li><a class="button" href="#detail">Detail</a></li>
                 <li><a class="button active" href="#rotate">Rotate</a></li>
                 <li><a class="button" href="#reflect">Reflect</a></li>
-                <li><a class="button" href="#scale">Scale</a></li>
+                <!--<li><a class="button" href="#scale">Scale</a></li>-->
             </ul>
 
             <div class="tab-content">
@@ -73,27 +82,24 @@
                             <input class="button-primary" type="submit" value="Rotate (x)", onclick="plotRotate(1)">
                             <!--<input type="button" value="Pause", onclick="stopAnimation()">-->
                             <input type="button" value="Undo", onclick="undo()">
-                            <input type="button" value="Reset", onclick="plotInit()">
                         </div>
                         <div class="rotateCP2">
                             <input class="button-primary" type="submit" value="Rotate (y)", onclick="plotRotate(2)">
                             <input type="button" value="Undo", onclick="undo()">
-                            <input type="button" value="Reset", onclick="plotInit()">
                         </div>
                         <div class="rotateCP3">
                             <input class="button-primary" type="submit" value="Rotate (z)", onclick="plotRotate(3)">
                             <input type="button" value="Undo", onclick="undo()">
-                            <input type="button" value="Reset", onclick="plotInit()">
                         </div>
                         <div>
                             <p id="rotateMatrix"></p>
                         </div>
+                        <input type="button" value="Reset", onclick="plotInit()">
                         <input type="button" value="Commute?", onclick="revealCommute()">
                     </div>
                     <!--Commute?-->
                     <div class="rotateCommute">
-
-                        <h3 style="border-left: solid 5px #E9003A; padding-left: 8px;">Rotation A</h3>
+                        <h3 style="border-left: solid 5px rgb(182,109,255); padding-left: 8px;">Rotation A</h3>
                         <label class="sliderTitle">Rotation about y-axis:&nbsp;
                             <span id="rotator1DisplayA1" data-unit="π rad">(1/2)π rad</span>&nbsp;or&nbsp;
                             <span id="rotator1DisplayA2" data-unit="º">90º</span>
@@ -103,7 +109,7 @@
                             <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
                         </label>
 
-                        <h3 style="border-left: solid 5px #00AEF2; padding-left: 8px;">Rotation B</h3>
+                        <h3 style="border-left: solid 5px rgb(219,209,0); padding-left: 8px;">Rotation B</h3>
                         <label class="sliderTitle">Rotation about z-axis:&nbsp;
                             <span id="rotator2DisplayA1" data-unit="π rad">(1/2)π rad</span>&nbsp;or&nbsp;
                             <span id="rotator2DisplayA2" data-unit="º">90º</span>
@@ -114,8 +120,9 @@
                         </label>
 
                         <input class="button-primary" type="submit" value="Reset Angles", onclick="plotCommute()">
-                        <h3><------</h3>
-                        <p>&#x25CF; = AB & &#x25A0; = BA</p>
+                        <input id="playPause" type="button" value="Play", onclick="startAnimation()">
+                        <h3>&#x25CF;: <font style="color:rgb(182,109,255);">A</font> --> <font style="color:rgb(219,209,0)">B</font></h3>
+                        <h3>&#x25A0;: <font style="color:rgb(219,209,0)">B</font> --> <font style="color:rgb(182,109,255);">A</font></h3>
                         <input type="button" value="Go Back", onclick="unrevealCommute()">
                     </div>
                 </div>
@@ -163,6 +170,7 @@
                         </label>
                     </div>
 
+                    <!--
                     <div class="xScale">
                         <input class="button-primary" type="submit"  value="Scale (x)", onclick="plotScale(1)">
                         <input type="button" value="Undo", onclick="undo()">
@@ -182,11 +190,13 @@
                     <div>
                         <p id="scaleMatrix"></p>
                     </div>
+                    -->
                 </div>
             </div>
         </div>
     </div>
     </div>
+    <script src=../Util/animateUtil.js></script>
     <script src=../Util/matrixDef.js></script>
     <script src=../Util/htmlUtil.js></script>
     <script src=../Util/plotUtil.js></script>
