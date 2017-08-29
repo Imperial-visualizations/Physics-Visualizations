@@ -390,13 +390,13 @@
       var newLine = new Line(new Vector(Math.random(),Math.random(),Math.random()), new Vector(Math.random(),Math.random(),Math.random()));
       newLine.name = nextName(); //generate name for this line
       algObjs[newLine.id] = newLine; //add to dictionary
-      plot.addAlgObj(algObjs[newLine.id]); //add to plot
+      plot.addPlotObj(algObjs[newLine.id]); //add to plot
       log(algObjs[newLine.id].toString()+" added.");
-      redisplay(); //redisplay panel
       //expand toolbopx
       $("#EditorFor"+newLine.id).slideDown(200);
       $("#EditorFor"+newLine.id).addClass("expanded");
       $("#NameOf"+newLine.id).focus();
+      redisplay(); //redisplay panel
     });
     $("#addPlane").on('click',function(){
       var newPlane = new Plane(new Vector(Math.random(),Math.random(),Math.random()), new Vector(Math.random(),Math.random(),Math.random()));
@@ -405,10 +405,10 @@
       plot.addPlotObj(algObjs[newPlane.id]); //plot
       //we could call addAlgObj(algObjs[newid]) but it's obsolete
       log(algObjs[newPlane.id].toString()+" added.");
-      redisplay(); //redisplay panel
       $("#EditorFor"+newPlane.id).slideDown(200);
       $("#EditorFor"+newPlane.id).addClass("expanded");
       $("#NameOf"+newPlane.id).focus();
+      redisplay(); //redisplay panel
     });
     $("#intersect").on('click',function(){
       log("Finding possible intersections....");
@@ -422,11 +422,11 @@
         algObjs[newid] = newobjs[idx];
         plot.addPlotObj(algObjs[newid]); //add to plot too
       }
-      redisplay(); //redisplay panel
       if(newobjs.length == selectedObjs.length){
         //rather crude solution but works
         log("<red>No intersections found.</red>");
       }
+      redisplay(); //redisplay panel
       log("Results displayed.");
     });
     function purgeAlgObj(algObj) {
@@ -614,6 +614,8 @@
         $(this).toggleClass("selected");
         var selectedObjs = getSelectedAlgObjs();
         //highlighting
+        //commented out for the presentation
+        /*
         if(selectedObjs.length != 0){
           //unhighlight and highlight again
           plot.unHighlightTraces();
@@ -622,6 +624,7 @@
           //nothing to highlight, so remove highlights
           plot.unHighlightTraces();
         }
+        */
         //delete button
         if(selectedObjs.length != 0){
           $("#delete").addClass("active");

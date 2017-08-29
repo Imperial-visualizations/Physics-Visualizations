@@ -152,7 +152,6 @@ function _createPlotId2UidLookup(plotDiv) {
     //fill in the lookup dict
     lookup[plotData[idx].plotId] = plotData[idx].uid;
   }
-  console.log(lookup)
   return lookup;
 }
 
@@ -161,10 +160,7 @@ function _findIdxByUid(plotDiv,uid) {
   returns appropriate index if found or -1 if not found */
   var plotData = document.getElementById(plotDiv).data;
   for (var idx=0; idx<plotData.length; idx++) {
-    console.log("not ", idx, plotData[idx].uid, uid)
-
     if(plotData[idx].uid == uid) {
-      console.log("found at ",idx)
       return idx; //found;return index needed
     }
   }
