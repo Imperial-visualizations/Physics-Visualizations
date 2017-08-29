@@ -27,7 +27,7 @@
                 <li><a class="button" href="#detail">Detail</a></li>
                 <li><a class="button active" href="#rotate">Rotate</a></li>
                 <li><a class="button" href="#reflect">Reflect</a></li>
-                <li><a class="button" href="#scale">Scale</a></li>
+                <!--<li><a class="button" href="#scale">Scale</a></li>-->
             </ul>
 
             <div class="tab-content">
@@ -73,21 +73,19 @@
                             <input class="button-primary" type="submit" value="Rotate (x)", onclick="plotRotate(1)">
                             <!--<input type="button" value="Pause", onclick="stopAnimation()">-->
                             <input type="button" value="Undo", onclick="undo()">
-                            <input type="button" value="Reset", onclick="plotInit()">
                         </div>
                         <div class="rotateCP2">
                             <input class="button-primary" type="submit" value="Rotate (y)", onclick="plotRotate(2)">
                             <input type="button" value="Undo", onclick="undo()">
-                            <input type="button" value="Reset", onclick="plotInit()">
                         </div>
                         <div class="rotateCP3">
                             <input class="button-primary" type="submit" value="Rotate (z)", onclick="plotRotate(3)">
                             <input type="button" value="Undo", onclick="undo()">
-                            <input type="button" value="Reset", onclick="plotInit()">
                         </div>
                         <div>
                             <p id="rotateMatrix"></p>
                         </div>
+                        <input type="button" value="Reset", onclick="plotInit()"><br>
                         <input type="button" value="Commute?", onclick="revealCommute()">
                     </div>
                     <!--Commute?-->
@@ -163,6 +161,7 @@
                         </label>
                     </div>
 
+                    <!--
                     <div class="xScale">
                         <input class="button-primary" type="submit"  value="Scale (x)", onclick="plotScale(1)">
                         <input type="button" value="Undo", onclick="undo()">
@@ -182,11 +181,13 @@
                     <div>
                         <p id="scaleMatrix"></p>
                     </div>
+                    -->
                 </div>
             </div>
         </div>
     </div>
     </div>
+    <script src=../Util/animateUtil.js></script>
     <script src=../Util/matrixDef.js></script>
     <script src=../Util/htmlUtil.js></script>
     <script src=../Util/plotUtil.js></script>

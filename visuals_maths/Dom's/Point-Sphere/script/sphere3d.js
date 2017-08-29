@@ -5,6 +5,8 @@ var historyIndex = 0;
 var historyCount = 0;
 var historyLimit = 15;
 var radius = 2*Math.sqrt(3);
+var sphere = new Sphere(radius).gObject(cyan, white);
+var axes = createAxes(4);
 var animatePause = false;
 var layout = {
     width: 450, height: 500,
@@ -20,26 +22,23 @@ var layout = {
 }
 
 //Transformation algorithms
-function computeFrames(transformation, start, end, initialPoint, frameSize) {
+function computeFrames(transformation, start, end, startPoint, frameSize) {
     var intermediate = numeric.linspace(start, end, frameSize);
-    var traceLine = [initialPoint];
+    var traceLine = [startPoint];
     var frames =[];
-    var name;
     var newPoint;
 
     for (var i = 0, n = intermediate.length; i < n; ++i) {
-        newPoint = math.multiply(transformation(intermediate[i]), initialPoint);
+        newPoint = math.multiply(transformation(intermediate[i]), startPoint);
         traceLine.push(newPoint);
-        name = 'frame' + i;
         frames.push({
-            name: name,
             data: [
                     {
                         x: [newPoint[0]],
                         y: [newPoint[1]],
                         z: [newPoint[2]]
                     },
-                    new Line(traceLine).gObject("rgb(255,0,0)")
+                    new Line(traceLine).gObject(orange)
             ]
         })
     }
@@ -282,20 +281,19 @@ function showScale(dir) {
 }
 
 
-//Animation Options
-function startAnimation (frames) {
-    Plotly.animate('graph', frames,{
-        fromcurrent: true,
-        transition: {duration: 55, easing: "quadratic-in-out"},
-        frame: {duration: 55, redraw: false,},
-        mode: "immediate"
-    });
-    document.getElementById("previousPosition").innerHTML=
-        "("
-        + String(Math.round(historyPoint[historyIndex-1][0]*100)/100) + ", "
-        + String(Math.round(historyPoint[historyIndex-1][1]*100)/100) + ", "
-        + String(Math.round(historyPoint[historyIndex-1][2]*100)/100)
-        + ")";
+//Update Positions
+function updatePositionDisplay() {
+    var previousPos;
+    if (historyIndex === 0) {
+        previousPos = "N/A";
+    } else {
+        previousPos = "("
+            + String(Math.round(historyPoint[historyIndex-1][0]*100)/100) + ", "
+            + String(Math.round(historyPoint[historyIndex-1][1]*100)/100) + ", "
+            + String(Math.round(historyPoint[historyIndex-1][2]*100)/100)
+            + ")";
+    }
+    document.getElementById("previousPosition").innerHTML= previousPos;
     document.getElementById("currentPosition").innerHTML=
         "("
         + String(Math.round(historyPoint[historyIndex][0]*100)/100) + ", "
@@ -303,9 +301,16 @@ function startAnimation (frames) {
         + String(Math.round(historyPoint[historyIndex][2]*100)/100)
         + ")";
 }
-function stopAnimation () {
-    //Plotly.animate('graph',[], {mode: 'next'});
-    requestAnimationFrame();
+
+function animateTransformation (frames) {
+    Plotly.animate('graph', frames,{
+        fromcurrent: true,
+        transition: {duration: 55, easing: "quadratic-in-out"},
+        frame: {duration: 55, redraw: false,},
+        mode: "immediate"
+    });
+
+    updatePositionDisplay();
 }
 
 //Plots
@@ -315,66 +320,28 @@ function plotInit() {
     historyPoint = [initialPoint];
 
     plotHistory(0);
-    document.getElementById("previousPosition").innerHTML="N/A"
-    document.getElementById("currentPosition").innerHTML=
-        "("
-        + String(Math.round(historyPoint[historyIndex][0]*100)/100) + ", "
-        + String(Math.round(historyPoint[historyIndex][1]*100)/100) + ", "
-        + String(Math.round(historyPoint[historyIndex][2]*100)/100)
-        + ")";
+    updatePositionDisplay();
 }
 function plotHistory(version) {
     var data = [];
-    for (var i = 0; i < 8; ++i) {
-        data.push(new Line([[0.,0.,0.], [0.,0.,0.]]).gObject("rgb(0,0,0)"));
-    }
-    data.push(new Point(historyPoint[version]).gObject("rgb(0,0,0)"));
+    data.push(new Point(historyPoint[version]).gObject(lilac));
+    data = data.concat(axes);
+    data.push(sphere);
 
-    for (var i = 0; i < 3; ++i) {
-        uvec = [0., 0., 0.];
-        uvec[i] = 1;
-        data.push(new Line([[0.,0.,0], uvec]).gObject("rgb(0,0,0)"));
-    }
-
-    sphere = new Sphere(radius);
-    data.push(sphere.gObject("rgb(0,62,116)", "rgb(255,255,255)"));
     var figure = {data: data, layout: layout}
     Plotly.newPlot('graph', figure,);
 }
-function plotInitialSphere(frames) {
-    sphere = new Sphere(radius);
+function plotPreviousCurrent(position) {
+    var initialPosition = new Point(position);
+    var data = []
+    data.push(initialPosition.gObject(lilac));
+    data.push(new Line([[0,0,0], [0,0,0]]).gObject());
+    data.push(initialPosition.gObject(lilac.slice(0,-1) + ",0.5)"));
+    data = data.concat(axes);
+    data.push(sphere);
 
-    Plotly.newPlot('graph', [
-        {
-            x: frames[0].data[0].x,
-            y: frames[0].data[0].y,
-            z: frames[0].data[0].z,
-            marker: {size:7, color:"rgb(0,0,0)"},
-            type: "scatter3d",
-            mode: "markers"
-        },
-        {
-            x: frames[0].data[1].x,
-            y: frames[0].data[1].y,
-            z: frames[0].data[1].z,
-            marker: {width:7, color:"rgb(255,0,0)"},
-            type: "scatter3d",
-            mode: "lines"
-        },
-        {
-            x: frames[0].data[0].x,
-            y: frames[0].data[0].y,
-            z: frames[0].data[0].z,
-            marker: {size:7, color:"rgb(0,0,0,0.5)"},
-            type: "scatter3d",
-            mode: "markers"
-        },
-        sphere.gObject("rgb(0,62,116)", "rgb(255,255,255)"),
-        new Line([[0.,0.,0], [1,0,0]]).gObject("rgb(0,0,0)"),
-        new Line([[0.,0.,0], [0,1,0]]).gObject("rgb(0,0,0)"),
-        new Line([[0.,0.,0], [0,0,1]]).gObject("rgb(0,0,0)")],
-        layout
-    )
+    var figure = {data: data, layout: layout}
+    Plotly.newPlot('graph', figure,);
 }
 function plotRotate(axis) {
     var slider = document.getElementById('rotator').value;
@@ -392,25 +359,26 @@ function plotRotate(axis) {
     } else if (axis === 3) {
         frames = computeFrames(rotationZ, 0, angle, historyPoint[index], frameSize);
     }
-    plotInitialSphere(frames);
-    startAnimation(frames);
+    plotPreviousCurrent(historyPoint[index]);
+    animateTransformation(frames);
     displayRotationMatrix();
 }
 function plotReflect(plane) {
     var frames;
     var frameSize = 15;
+    var index = historyIndex % historyLimit;
     if (plane === 1) {
-        frames = computeFrames(scaleX, 1, -1, historyPoint[historyIndex], frameSize);
+        frames = computeFrames(scaleX, 1, -1, historyPoint[index], frameSize);
     } else if (plane === 2) {
-        frames = computeFrames(scaleY, 1, -1, historyPoint[historyIndex], frameSize);
+        frames = computeFrames(scaleY, 1, -1, historyPoint[index], frameSize);
     } else if (plane === 3) {
-        frames = computeFrames(scaleZ, 1, -1, historyPoint[historyIndex], frameSize);
+        frames = computeFrames(scaleZ, 1, -1, historyPoint[index], frameSize);
     }
 
     reflectionType = plane;
 
-    plotInitialSphere(frames);
-    startAnimation(frames);
+    plotPreviousCurrent(historyPoint[index]);
+    animateTransformation(frames);
     plotPlane(plane);
     displayReflectionMatrix();
 }
@@ -419,18 +387,55 @@ function plotScale(direction) {
     var frames;
     var frameSize = 10;
     var scaling = [1, 1, 1];
+    var index = historyIndex % historyLimit;
     if (direction === 1) {
-        frames = computeFrames(scaleX, 1, factor, historyPoint[historyIndex], frameSize);
+        frames = computeFrames(scaleX, 1, factor, historyPoint[index], frameSize);
     } else if (direction === 2) {
-        frames = computeFrames(scaleY, 1, factor, historyPoint[historyIndex], frameSize);
+        frames = computeFrames(scaleY, 1, factor, historyPoint[index], frameSize);
     } else if (direction === 3) {
-        frames = computeFrames(scaleZ, 1, factor, historyPoint[historyIndex], frameSize);
+        frames = computeFrames(scaleZ, 1, factor, historyPoint[index], frameSize);
     }
 
     scaleType = direction;
-    plotInitialSphere(frames);
-    startAnimation(frames);
+    plotPreviousCurrent(historyPoint[index]);
+    animateTransformation(frames);
     displayScaleMatrix();
+}
+//Plot for planes:
+function plotPlane(plane) {
+    var data = [];
+    if (plane === 1) {
+        data.push({
+            x: [0, 0],
+            y: [-4, 4],
+            z: [[-4, 4],
+                [-4, 4]],
+            colorscale: [[0.0, lilac.slice(0,-1) + ",0.5)"], [1.0, white]],
+            showscale: false,
+            type: "surface"
+        });
+    } else if (plane === 2) {
+        data.push({
+            x: [-4, 4],
+            y: [0, 0],
+            z: [[-4, -4],
+                [4, 4]],
+            colorscale: [[0.0, lilac.slice(0,-1) + ",0.5)"], [1.0, white]],
+            showscale: false,
+            type: "surface"
+        });
+    } else if (plane === 3) {
+        data.push({
+            x: [-4, 4],
+            y: [-4, 4],
+            z: [[0, 0],
+                [0, 0]],
+            colorscale: [[0.0, lilac.slice(0,-1) + ",0.5)"], [1.0, white]],
+            showscale: false,
+            type: "surface"
+        });
+    }
+    Plotly.plot('graph', data);
 }
 //Plot for commute
 function plotCommute() {
@@ -442,7 +447,7 @@ function plotCommute() {
   for (var i = 0; i < 8; ++i) {
     data1.push(new Line([[0.,0.,0.], [0.,0.,0.]]).gObject("rgb(0,0,0)"));
   }
-  data1.push(new Point(initialPoint).gObject("rgb(0,0,0)", "diamond"));
+  data1.push(new Point(initialPoint).gObject(lilac, "diamond"));
 
   for (var i = 0; i < 3; ++i) {
     uvec = [0., 0., 0.];
@@ -450,8 +455,7 @@ function plotCommute() {
     data1.push(new Line([[0.,0.,0], uvec]).gObject("rgb(0,0,0)"));
   }
 
-  sphere = new Sphere(radius);
-  data1.push(sphere.gObject("rgb(0,62,116)", "rgb(255,255,255)"));
+  data1.push(sphere);
   var data2 = computeCommute(rotationY, rotationZ, theta1, theta2, frameSize);
   var figure = {
     "data": data1,
@@ -459,42 +463,6 @@ function plotCommute() {
     "layout": data2[1]
   }
   Plotly.newPlot('graph', figure);
-}
-//Plot for planes:
-function plotPlane(plane) {
-    var data = [];
-    if (plane === 1) {
-        data.push({
-            x: [0, 0],
-            y: [-4, 4],
-            z: [[-4, 4],
-                [-4, 4]],
-            colorscale: "Blues",
-            showscale: false,
-            type: "surface"
-        });
-    } else if (plane === 2) {
-        data.push({
-            x: [-4, 4],
-            y: [0, 0],
-            z: [[-4, -4],
-                [4, 4]],
-            colorscale: "Blues",
-            showscale: false,
-            type: "surface"
-        });
-    } else if (plane === 3) {
-        data.push({
-            x: [-4, 4],
-            y: [-4, 4],
-            z: [[0, 0],
-                [0, 0]],
-            colorscale: "Blues",
-            showscale: false,
-            type: "surface"
-        });
-    }
-    Plotly.plot('graph', data);
 }
 
 //Memento
