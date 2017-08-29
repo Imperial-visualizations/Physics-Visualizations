@@ -79,6 +79,7 @@ function Point(pos) {
 		}
 		else {
 			this.pos = pos;
+			this.usrPos = pos;
 		}
 	}
 	this.assignPos(pos);
@@ -431,7 +432,7 @@ function getGen(a) {
 }
 function whereInArray(algObj,array) {
 	for(var idx=0;idx<array.length;idx++) {
-		var one = algObj;	
+		var one = algObj;
 		var other = array[idx];
 		if(one instanceof Point && other instanceof Point) {
 			if(one.pos.isEqualTo(other.pos)) {

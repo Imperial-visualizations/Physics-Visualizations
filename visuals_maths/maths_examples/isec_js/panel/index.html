@@ -247,6 +247,7 @@
     <div class="row">
       <div class="eight columns">
         <div id="canvasWrapper">
+          <!-- this is where the plot goes -->
         </div>
       </div>
       <div class="four columns">
@@ -266,10 +267,10 @@
             <a class="active" title="Save" id="save"><i class="fa fa-floppy-o fa-fw" aria-hidden="true"></i>Save</a>
           </div>
         </panel>
-
       </div>
     </div>
   </div>
+  <!-- scripts -->
   <script src="fast_plotter.js"></script>
   <script>
   var layout = {
@@ -305,75 +306,71 @@
     plot = new fastPlotHandler('canvasWrapper');
     plot.init();
     plot.setLayout(layout);
-  })
+  });
   </script>
-  <br><br><br>
   <script src="./intersections.js"></script>
   <script type="text/javascript">
   var algObjs = {};
 
   var nameCount = 0;
   function nextName() {
+    //generate name for the algObj being created
     names = ['Albert','Beatriz','Connor','Diana','Elvis','Fiona','Gondor','Helga','Igor','Joanna','Kamath','Lucille','Łukasz','Mortimer','Norma','Oromis','Patricia','WhatisanameforQ?','Rose','Sandor','Tarya','Urgal','Valor','Wendy','Xavier','Yeti','Zoltan']
     var name = names[(nameCount % names.length)];
     nameCount++;
     return name;
   }
-  function log(txt){
+  function log(txt) {
     $("#panelHeadWrapper").html($("#panelHeadWrapper").html()+txt+"<br>");
     $("#panelHeadWrapper").animate({ scrollTop: $('#panelHeadWrapper').prop("scrollHeight")}, 200);
   }
-  $(document).ready(function(){
+  $(document).ready(function() {
     console.log("Document ready!")
     log("<blue>Click to select.</blue>");
     log("<blue>Click again to deselect.</blue>");
     log("<blue>Double click to edit.</blue>");
-    if(sessionStorage.lastSaved != undefined){
+    if(sessionStorage.lastSaved != undefined) {
       console.log("there is a saved state... retrieving,",sessionStorage);
       var retrieveAlgObjs = JSON.parse(sessionStorage.getItem("algObjsSaved"));
       objcounter = 0//JSON.parse(sessionStorage.getItem("algObjsCounterSaved"));
       function rebuildAlgObj(obj) {
+        // rebuild algObj from its saved, stringified state
+        var rebuild = undefined;
         if(obj.hasOwnProperty('pos')) {
           //it's a point
-          var rebuild = new Point(new Vector(obj.pos.x,obj.pos.y,obj.pos.z));
-          if(obj.hasOwnProperty('name')) {
-            rebuild.name = obj.name;
-          }
-          return rebuild;
+          rebuild = new Point(new Vector(obj.usrPos.x,obj.usrPos.y,obj.usrPos.z));
         }
         if(obj.hasOwnProperty('dir')) {
           //it's a line
-          var rebuild = new Line(new Vector(obj.dir.x,obj.dir.y,obj.dir.z), new Vector(obj.off.x,obj.off.y,obj.off.z));
-          if(obj.hasOwnProperty('name')) {
-            rebuild.name = obj.name;
-          }
-          return rebuild;
+          rebuild = new Line(new Vector(obj.usrDir.x,obj.usrDir.y,obj.usrDir.z), new Vector(obj.usrOff.x,obj.usrOff.y,obj.usrOff.z));
         }
         if(obj.hasOwnProperty('normal')) {
-          //it's a line
-          var rebuild = new Plane(new Vector(obj.normal.x,obj.normal.y,obj.normal.z), new Vector(obj.off.x,obj.off.y,obj.off.z));
-          if(obj.hasOwnProperty('name')) {
-            rebuild.name = obj.name;
-          }
-          return rebuild;
+          //it's a Plane
+          rebuild = new Plane(new Vector(obj.usrNormal.x,obj.usrNormal.y,obj.usrNormal.z), new Vector(obj.usrOff.x,obj.usrOff.y,obj.usrOff.z));
         }
         else {
           //we don't know what it is
-          return obj;
+          rebuild = obj;
         }
+        if(obj.hasOwnProperty('name')) {
+          rebuild.name = obj.name;
+        }
+        return rebuild;
       }
-      rebuild = {}
+      rebuildDict = {};
       for(idx in retrieveAlgObjs) {
         //rebuild everything
         var newobj = rebuildAlgObj(retrieveAlgObjs[idx]);
-        rebuild[newobj.id] = newobj; //add this object to the new algObj dictionary
+        rebuildDict[newobj.id] = newobj; //add this object to the new algObj dictionary
         plot.addPlotObj(rebuild[newobj.id]); //add this object to the plot
       }
-      algObjs = rebuild;
+      algObjs = rebuildDict;
       redisplay();
     } else {
+      log("No saved state found.")
       console.log("no saved state... defaulting");
     }
+  });
     $("#addPoint").on('click',function() {
       var newPoint = new Point(new Vector(Math.random(),Math.random(),Math.random()));
       newPoint.name = nextName(); //generate name
@@ -454,7 +451,6 @@
       redisplay();
     });
     $("#save").on('click',save());
-  });
   function getSelectedAlgObjs() {
     /* Retrieve a list of selected items in the panel.
     It compares the ids of selected labels with entries of
