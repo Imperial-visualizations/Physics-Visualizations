@@ -6,13 +6,12 @@ var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS, "phaser",
     {preload: preload,create: create,update: update});
 
 var a1, a2, mol1, potential;                                        // Atoms, molecules and potential to be instantiated
-var zoom  = 35;
+var zoom  = 45;
 var initKVib, initKRot;                                             // Initial KEs.
 var dInitKVib;
 var init_s1 = 2, init_s2 = 2, init_e1 = 10, init_e2 = 10;           // Initial LJ parameters.
 
 // Colours
-
 
 const IMPERIAL_BLUE = 0x003E74;
 const CHERRY = 0xE40043;
@@ -39,8 +38,8 @@ var options = {
     modeBarButtonsToRemove: ['sendDataToCloud','zoom2d','pan2d','select2d','lasso2d','zoomIn2d','zoomOut2d',
         'autoScale2d','resetScale2d','hoverClosestCartesian','hoverCompareCartesian'],
     //modeBarButtonsToAdd: ['lasso2d'],
-    displayLogo: false, // this one also seems to not work
-    displayModeBar: false //this one does work
+    displayLogo: true, // this one also seems to not work
+    displayModeBar: true //this one does work
 };
 
 var mainLayer,traceLayer;
@@ -267,6 +266,7 @@ function plotLJ() {
  * @param end {Vector}: Position where spring ends.
  */
 function drawBond(starting,end){
+    if(mol1.getKE_V() + mol1.getKE_R() + mol1.V.calcV(mol1.r.mag()) > 0 ) return;
     var widthOfSpring = end.subtract(starting).mag() * zoom;        // The distance between atoms.
     var heightOfSpring = 0.33 * zoom;
     var arrowG = phaserInstance.add.graphics(0,0);

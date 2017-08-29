@@ -51,9 +51,6 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
 
     this.V = potential;                                         // Potential used as a bond between atoms.
 
-    if(keVib_0 + keRot_0 + potential.calcV(this.V.getR_0())> 0){
-        console.error("escaping");
-    }
 
     this.tot_m = a1.mass + a2.mass;                             // Finding total mass of the system.
     this.reducedM = a1.mass * a2.mass / (this.tot_m);           // Finding system's reduced mass.
@@ -61,8 +58,8 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
     this.I = this.tot_m *  Math.pow(this.V.getR_0(), 2)/4  ;      // Calculate initial Moment of Inertia.
     this.omega = Math.sqrt(2 * keRot_0 / this.I);               // Calculate initial angular velocity.
     this.L = this.I * this.omega;                               // Calculate angular momentum (conserved).
-    this.r = new Vector([1, 0]).multiply(this.init_r_0());      // Initial radius, due to centrifugal distortion
-    this.V.s = this.r.mag() / Math.pow(2, 1 / 6);               // Centrifugal distortion changes potential.
+    this.r = new Vector([1, 0]).multiply(this.init_r_0(keVib_0,keRot_0));      // Initial radius, due to centrifugal distortion
+    //this.V.s = this.r.mag() / Math.pow(2, 1 / 6);               // Centrifugal distortion changes potential.
     this.v = -Math.sqrt(2 * keVib_0 / this.reducedM);           // Initial linear velocity of molecule.
 
     // Finding coordinates of atoms in CoM frame.
@@ -72,18 +69,19 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
 
 /** ================================================= Class Methods ==================================================*/
 /**
- *
- * @returns {number}
+ *  Calculates the centrifugally corrected value of r at the time t = 0 seconds.
+ * @returns {number} Corrected value of r_0
  */
-Molecule.prototype.init_r_0 = function() {
-    var val = this.V.getR_0();
-    for (var i =0; i < 100; i++) {
-        val -= (this.reducedM * Math.pow(this.omega, 2) * Math.pow(val, 14)
-            - 12 * this.V.e * Math.pow(this.V.getR_0() * val, 6) + 12 * this.V.e * Math.pow(this.V.getR_0(), 12))/
-            (14 * this.reducedM * Math.pow(this.omega, 2) * Math.pow(val,13)- 72 * this.V.e * Math.pow(val, 5) *
-                Math.pow(this.V.getR_0(), 6));
-    }
-    return val;
+Molecule.prototype.init_r_0 = function(initVib,initRot) {
+        var val = this.V.getR_0();
+        if(initVib + initRot + - this.V.e > 0) return val * Math.pow(13/7,1/6);
+        for (var i =0; i < 100; i++) {
+                val -= (this.reducedM * Math.pow(this.omega, 2) * Math.pow(val, 14)
+                - 12 * this.V.e * Math.pow(this.V.getR_0() * val, 6) + 12 * this.V.e * Math.pow(this.V.getR_0(), 12)) /
+                (14 * this.reducedM * Math.pow(this.omega, 2) * Math.pow(val, 13) - 72 * this.V.e * Math.pow(val, 5) *
+                    Math.pow(this.V.getR_0(), 6));
+        }
+        return val;
 };
 
 /**
@@ -110,7 +108,7 @@ Molecule.prototype.update = function(deltaTime){
  * @param dT: Time elapsed since previous timestep.
  */
 Molecule.prototype.calcExtCoords = function (dT) {
-    var a = this.V.calcF(this.r.mag())/this.reducedM + Math.pow(this.omega, 2) * this.r.mag();
+    var a = (this.V.calcF(this.r.mag())/this.reducedM) + Math.pow(this.omega,2)*this.r.mag();
     this.v += a * dT;
     this.r = this.r.add(this.r.unit().multiply(this.v * dT));
 };
@@ -143,3 +141,12 @@ Molecule.prototype.calcAngVel = function () {
 Molecule.prototype.calcDir = function() {
     return a1.getPos().subtract(a2.getPos());
 };
+
+Molecule.prototype.getKE_R = function () {
+    return 0.5 * this.I * Math.pow(this.omega,2);
+};
+
+Molecule.prototype.getKE_V = function () {
+    return 0.5 * this.reducedM * Math.pow(this.v,2);
+};
+
