@@ -74,10 +74,13 @@ window.onload = function() {
         transmit: function() {
             var cosThetaI = Math.cos(this.theta),
                 cosThetaT = cosSnell(this.n1, this.n2, this.theta),
-                plotThetaT = cmath.acos(cosThetaT);
+                plotThetaT;
             if (isComplex(cosThetaT)) {
                 console.log("Total internal reflection");
+                plotThetaT = cmath.acos(cosThetaT);
                 cosThetaT = 0;
+            } else {
+                plotThetaT = Math.acos(cosThetaT);
             }
 
             var t;
@@ -138,19 +141,26 @@ window.onload = function() {
             function waveFunc(x, y, phase) {
                 x = 2*x/graph.dim - 1;
                 y = -2*y/graph.dim - 1;
-                var k_x, k_y;
-                if (isComplex(theta)) {
-                    k_x = cmath.multiply(n, cmath.cos(theta));
-                    k_y = cmath.multiply(-n, cmath.sin(theta));
 
-                    var a = k_x.re,
-                        b = k_x.im,
-                        c = k_y.re,
-                        d = k_y.im;
-                    return amplitude * Math.cos( 8*pi * (a*x + c*y - phase) ) * Math.exp( -8*pi * (b*x + d*y) );
+                if (isComplex(theta)) {
+                    // Fast complex sin & cos:
+                    var p = theta.re,
+                        q = theta.im,
+
+                        cosP = Math.cos(p),
+                        sinP = Math.sin(p),
+                        coshQ = Math.cosh(q),
+                        sinhQ = Math.sinh(q),
+
+                        a = cosP * coshQ,
+                        b = -sinP * sinhQ,
+                        c = -sinP * coshQ,
+                        d = -cosP * sinhQ,
+                        g = 8*pi*n;
+                    return amplitude * Math.cos( g * (a*x + c*y - phase) ) * Math.exp( -g * (b*x + d*y) );
                 } else {
-                    k_x = n * Math.cos(theta);
-                    k_y = -n * Math.sin(theta);
+                    var k_x = n * Math.cos(theta),
+                        k_y = -n * Math.sin(theta);
 
                     if (reversePhase === false) {
                         return amplitude * Math.cos( 8*pi * (k_x*x + k_y*y - phase) );
@@ -164,10 +174,11 @@ window.onload = function() {
 
             // xy =
             for (var frame = 0; frame < this.numFrames; frame++) {
+                var phase =  2*frame/graph.dim;
                 for (var x = xMin; x < xMax; x++) {
                     for (var y = yMin; y < yMax; y++) {
                         var pixel = coordToPixelIndex(x, y);
-                        this.data[frame][4*pixel] += waveFunc(x, y, 2*frame/graph.dim);
+                        this.data[frame][4*pixel] += waveFunc(x, y, phase);
                         // this.data[frame][4*pixel + 1] += waveVal;
                         // this.data[frame][4*pixel + 2] += waveVal;
                         this.data[frame][4*pixel + 3] = 255;
