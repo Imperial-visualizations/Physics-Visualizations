@@ -52,17 +52,15 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
     this.V = potential;                                         // Potential used as a bond between atoms.
 
 
-    this.tot_m = a1.mass + a2.mass;                             // Finding total mass of the system.
-    this.reducedM = a1.mass * a2.mass / (this.tot_m);           // Finding system's reduced mass.
+    this.tot_m =(a1.mass + a2.mass);                             // Finding total mass of the system.
+    this.reducedM =  (a1.mass * a2.mass) / (this.tot_m);           // Finding system's reduced mass.
 
-    this.I = this.tot_m *  Math.pow(this.V.getR_0(), 2)/4  ;      // Calculate initial Moment of Inertia.
+    this.I =  this.reducedM * Math.pow(this.V.getR_0(),2);        // Calculate initial Moment of Inertia.
     this.omega = Math.sqrt(2 * keRot_0 / this.I);               // Calculate initial angular velocity.
     this.L = this.I * this.omega;                               // Calculate angular momentum (conserved).
     this.r = new Vector([1, 0]).multiply(this.init_r_0(keVib_0,keRot_0));      // Initial radius, due to centrifugal distortion
     //this.V.s = this.r.mag() / Math.pow(2, 1 / 6);               // Centrifugal distortion changes potential.
-    this.v = -Math.sqrt(2 * keVib_0 / this.reducedM);           // Initial linear velocity of molecule.
-
-    // Finding coordinates of atoms in CoM frame.
+    this.v = Math.sqrt(2 * keVib_0 / this.reducedM);           // Initial linear velocity of molecule.
     a1.setPos(this.r.multiply(a1.mass / this.tot_m));
     a2.setPos(this.r.multiply(-a2.mass / this.tot_m));
 };
@@ -108,7 +106,8 @@ Molecule.prototype.update = function(deltaTime){
  * @param dT: Time elapsed since previous timestep.
  */
 Molecule.prototype.calcExtCoords = function (dT) {
-    var a = (this.V.calcF(this.r.mag())/this.reducedM) + Math.pow(this.omega,2)*this.r.mag();
+    var a = (this.V.calcF(this.r.mag())/this.reducedM) +  Math.pow(this.omega,2)*this.r.mag();
+    console.log(a);
     this.v += a * dT;
     this.r = this.r.add(this.r.unit().multiply(this.v * dT));
 };
@@ -127,7 +126,7 @@ Molecule.prototype.calcRotCoords = function(dt) {
  * @returns {number} I
  */
 Molecule.prototype.calcMoI = function() {
-    return (Math.pow(this.r.mag(), 2)/4) * this.tot_m;                            // Return Moment of Inertia (scalar).
+    return this.reducedM * Math.pow(this.r.mag(),2);                            // Return Moment of Inertia (scalar).
 };
 
 /**

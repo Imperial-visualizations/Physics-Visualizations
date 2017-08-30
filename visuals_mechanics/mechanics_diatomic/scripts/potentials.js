@@ -99,5 +99,15 @@ LJ.prototype.plotPoints = function(ppu) {
         r.push(i / ppu);
         v.push(this.calcV(i / ppu));
     }
-    return {x: r, y: v, name: "LJ potential", mode: "lines", line: {width: this.e / 10, opacity: 0.8, color: "#003E74"}}
+    return {x: r, y: v, name: "LJ potential", mode: "lines", line: {width: this.e / 10, opacity: 0.8, color: "#003E74"}};
+};
+LJ.prototype.plotLJCentrifugal = function (ppu,L,mu) {
+    var r = [];
+    var v = [];
+
+    for (var i = 1; i < Math.ceil(this.s * 3 * ppu);i++){
+        r.push(i/ppu);
+        v.push(this.calcV(i/ppu) + Math.pow(L*ppu/i,2) / (2*mu));
+    }
+    return {x:r, y:v, name:"Corrected LJ potential",mode:"lines",line:{width:this.e / 10,opacity:0.8,color:'#FF0000'}};
 };

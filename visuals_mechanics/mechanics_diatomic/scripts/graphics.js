@@ -6,7 +6,7 @@ var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS, "phaser",
     {preload: preload,create: create,update: update});
 
 var a1, a2, mol1, potential;                                        // Atoms, molecules and potential to be instantiated
-var zoom  = 45;
+var zoom  = 10;
 var initKVib, initKRot;                                             // Initial KEs.
 var dInitKVib;
 var init_s1 = 2, init_s2 = 2, init_e1 = 10, init_e2 = 10;           // Initial LJ parameters.
@@ -26,7 +26,7 @@ var arrTime = [];
 var arrPE = [];
 var arrVibKE = [];
 var arrVibKESlider;
-var LJ_scatter;
+var LJ_scatter,LJCentrifgual_scatter;
 var curr_LJ;
 var LJ_layout;
 var titleFontsize = 12, labelFontsize = 10;                     // Text sizes.
@@ -91,41 +91,41 @@ $(document).ready(function(){
  * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
  * off the input field.
  */
-$('body').on('click', '[data-change]', function() {
-    // Storing current element and its attributes.
-    var $element = $(this);
-    var $title = $(this).attr("title");
-    var $el_id = $(this).attr("id");
-    var $unit = $(this).attr("data-unit");
-
-    // Creating input form.
-    var $input = $('<input style="width:50%;"/>').val(parseFloat($element.text()));
-    $input.attr("id", $el_id);                                  // Setting ID attribute (same as text).
-    $input.attr("title", $title);                               // Setting title attribute (same as text).
-    $element.replaceWith($input);                               // Replacing text with input form.
-
-    var save = function save() {
-        var $a = $('<a data-change />').text($input.val() + $unit);
-
-        // Restoring text with same attributes as original.
-        $a.attr("title", $title);
-        $a.attr("id", $el_id);
-        $a.attr("data-unit", $unit);
-        $input.replaceWith($a);
-        init_s1 = parseFloat($('#s1').text());
-        init_e1 = parseFloat($('#e1').text());
-        init_s2 = parseFloat($('#s2').text());
-        init_e2 = parseFloat($('#e2').text());
-        reset();
-        if ($a.text().indexOf("Display") === -1) {
-            var $divSlider = $a.attr("id").replace("Display", "");
-            $('#' + $divSlider).attr("value", parseFloat($a.text()));
-        }
-    };
-
-    // When clicking away from element (blurring), revert from input form to text.
-    $input.one('blur', save).focus();
-});
+// $('body').on('click', '[data-change]', function() {
+//     // Storing current element and its attributes.
+//     var $element = $(this);
+//     var $title = $(this).attr("title");
+//     var $el_id = $(this).attr("id");
+//     var $unit = $(this).attr("data-unit");
+//
+//     // Creating input form.
+//     var $input = $('<input style="width:50%;"/>').val(parseFloat($element.text()));
+//     $input.attr("id", $el_id);                                  // Setting ID attribute (same as text).
+//     $input.attr("title", $title);                               // Setting title attribute (same as text).
+//     $element.replaceWith($input);                               // Replacing text with input form.
+//
+//     var save = function save() {
+//         var $a = $('<a data-change />').text($input.val() + $unit);
+//
+//         // Restoring text with same attributes as original.
+//         $a.attr("title", $title);
+//         $a.attr("id", $el_id);
+//         $a.attr("data-unit", $unit);
+//         $input.replaceWith($a);
+//         init_s1 = parseFloat($('#s1').text());
+//         init_e1 = parseFloat($('#e1').text());
+//         init_s2 = parseFloat($('#s2').text());
+//         init_e2 = parseFloat($('#e2').text());
+//         reset();
+//         if ($a.text().indexOf("Display") === -1) {
+//             var $divSlider = $a.attr("id").replace("Display", "");
+//             $('#' + $divSlider).attr("value", parseFloat($a.text()));
+//         }
+//     };
+//
+//     // When clicking away from element (blurring), revert from input form to text.
+//     $input.one('blur', save).focus();
+// });
 
 /**
  * Start/Pause button code.
@@ -150,7 +150,6 @@ $('#resetButton').on('click', function() {
  * Changes writing on label to reflect value of slider.
  */
 function updateLabels() {
-
 
     $('.inputs').each(function(){
         var display_id = "#" + $(this).attr("id") + "Display";
@@ -250,13 +249,19 @@ function plotLJ() {
         LJ_scatter.x.shift();
         LJ_scatter.y.shift();
     }
+    while(LJCentrifgual_scatter.y[0] > LJ_layout.yaxis.range[1]){
+        LJCentrifgual_scatter.x.shift();
+        LJCentrifgual_scatter.y.shift();
+    }
+
     LJ_layout.yaxis.range[1] = LJ_scatter.y[0];     // Re-optimising y-axis scaling.
 
     // Drawing red marker that shows current LJ potential against current separation.
-    var curr_sep = mol1.r.mag(); var curr_V = potential.calcV(curr_sep);
+    var curr_sep = mol1.r.mag();
+    var curr_V = potential.calcV(curr_sep);
     curr_LJ = {x: [curr_sep], y: [curr_V], name: "Current LJ", mode: "markers",
         marker: {size: 10, color: CHERRY, symbol: "circle-open"}};
-    var data = [LJ_scatter, curr_LJ];
+    var data = [LJ_scatter,LJCentrifgual_scatter, curr_LJ];
     Plotly.newPlot("LJ_scatter", data, LJ_layout, options);
 }
 
@@ -380,6 +385,7 @@ function reset(){
 
     // Creating x and y coordinates to plot.
     LJ_scatter  = potential.plotPoints(35);
+    LJCentrifgual_scatter = potential.plotLJCentrifugal(35,mol1.L,mol1.reducedM);
 
     a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
     a1.sprite.y = a1.getPos().items[1] * zoom + phaserInstance.world.centerY;
