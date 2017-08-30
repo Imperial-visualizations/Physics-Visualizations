@@ -55,11 +55,11 @@ window.onload = function() {
             this.polarisation = polarisation;
 
             this.frame = 0;
-            this.numFrames = 50; //126
+            this.numFrames = 63; //126
 
             this.data = new Array(this.numFrames);
-                for (var i = 0; i < this.numFrames; i++) {
-                    this.data[i] = new Float32Array(4*graph.numPixels);
+                for (var frame = 0; frame < this.numFrames; frame++) {
+                    this.data[frame] = new Float32Array(4*graph.numPixels);
                 }
 
             var incident = this.createWave(this.theta, amplitude=1, material=1);
@@ -67,7 +67,7 @@ window.onload = function() {
             if (interference === true && this.n1 !== this.n2) {
                 this.reflect();
             }
-
+            this.convertToColorVals();
         },
 
 
@@ -135,7 +135,6 @@ window.onload = function() {
                 // xRange = np.range(xMin, xMax),
                 // yRange = np.range(0, graph.dim),
 
-            /** Return intensity value between 0-255 for a given pixel */
             function waveFunc(x, y, phase) {
                 x = 2*x/graph.dim - 1;
                 y = -2*y/graph.dim - 1;
@@ -162,36 +161,55 @@ window.onload = function() {
                 for (var x = xMin; x < xMax; x++) {
                     for (var y = yMin; y < yMax; y++) {
                         var pixel = coordToPixelIndex(x, y);
-                        this.data[frame][4*pixel] += waveFunc(x, y, frame/graph.dim);
+                        this.data[frame][4*pixel] += waveFunc(x, y, 2*frame/graph.dim);
                         // this.data[frame][4*pixel + 1] += waveVal;
                         // this.data[frame][4*pixel + 2] += waveVal;
                         this.data[frame][4*pixel + 3] = 255;
                     }
                 }
+                console.log("Calculated frame data");
             }
+            console.log("Created wave");
             return;
         },
 
 
-        updatePlot: function() {
-            for (var i = 0; i < graph.numPixels; i++) {
-                this.data[this.frame][4*i] = this.data[this.frame][4*i]*127.5 + 127.5;
+        /** Return intensity value between 0-255 for a given pixel */
+        convertToColorVals: function() {
+            for (var frame = 0; frame < this.numFrames; frame++) {
+                for (var pixel = 0; pixel < graph.numPixels; pixel++) {
+                    this.data[frame][4*pixel] = this.data[frame][4*pixel]*127.5 + 127.5;
+                }
             }
+            console.log("Converted colour values");
+        },
+
+
+        updatePlot: function() {
             graph.imageData.data.set(this.data[this.frame]);
             // console.log(this.data[this.frame][4000], graph.imageData.data[this.frame][4000]);
             graph.ctx.putImageData(graph.imageData, 0, 0);
             this.frame++;
             if (this.frame === this.numFrames) {
+                console.log("Reached end of frames");
                 this.frame = 0;
             }
-            console.log("Updated plot;");
-            console.log(graph.imageData);
+            // console.log("Updated plot;");
+            // console.log(graph.imageData);
+            // console.log(this.data);
         }
 
     };
 
-    Boundary.init(angle=30, n1=1, n2=1.5, polarisation="s", interference=true);
+    Boundary.init(angle=53.6, n1=1, n2=1.5, polarisation="s", interference=true);
     Boundary.updatePlot();
+
+    var animIntervalID = window.setInterval(function() {
+        Boundary.updatePlot();
+    }, 50);
+    setTimeout(function() {
+        clearInterval(animIntervalID);
+    }, 30000);
 
     // console.log(np.range(-2, 15));
 
