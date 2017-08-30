@@ -141,18 +141,24 @@ window.onload = function() {
                 var k_x, k_y;
                 if (isComplex(theta)) {
                     k_x = cmath.multiply(n, cmath.cos(theta));
-                    k_y = cmath.multiply(n, cmath.sin(theta));
+                    k_y = cmath.multiply(-n, cmath.sin(theta));
+
+                    var a = k_x.re,
+                        b = k_x.im,
+                        c = k_y.re,
+                        d = k_y.im;
+                    return amplitude * Math.cos( 8*pi * (a*x + c*y - phase) ) * Math.exp( -8*pi * (b*x + d*y) );
                 } else {
                     k_x = n * Math.cos(theta);
                     k_y = -n * Math.sin(theta);
-                }
 
-                if (reversePhase === false) {
-                    return amplitude * Math.cos( 8*pi * (k_x*x + k_y*y - phase) );
-                } else if (reversePhase === true) {
-                    return amplitude * Math.cos( 8*pi * (k_x*x + k_y*y + phase) );
-                } else {
-                    throw new TypeError("`createWave()` arg `reversePhase` must be of type `bool`");
+                    if (reversePhase === false) {
+                        return amplitude * Math.cos( 8*pi * (k_x*x + k_y*y - phase) );
+                    } else if (reversePhase === true) {
+                        return amplitude * Math.cos( 8*pi * (k_x*x + k_y*y + phase) );
+                    } else {
+                        throw new TypeError("`createWave()` arg `reversePhase` must be of type `bool`");
+                    }
                 }
             }
 
