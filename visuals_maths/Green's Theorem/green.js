@@ -22,10 +22,12 @@ function rotation(vec,th) {
   return [x,y];
 }
 
-// Takes wings of an arrow and rotates anti-clockwise about head by 90 degrees
+// Takes wings of an arrow and rotates anti-clockwise about head by 90 degrees, this is used for the
+// circulation integral diagram
 function wingRotation(wings, offset, th) {
     var rotated = [];
     var x = [], y = [], addedXVec = [], addedYVec = [];
+    // Shift along the offset to rotate around origin
     var shiftedx = math.add(wings.x,[-offset[0],-offset[0],-offset[0]])
     var shiftedy = math.add(wings.y,[-offset[1],-offset[1],-offset[1]])
     for (var i=0; i<10; i++) {
@@ -36,18 +38,13 @@ function wingRotation(wings, offset, th) {
         var new_vec = rotation([shiftedx[j],shiftedy[j]],th)
         x = new_vec[0]
         y = new_vec[1]
-
         rotated.push(math.add(x,addedXVec))
         rotated.push(math.add(y,addedYVec))
         x = []
         y = []
     }
-//        console.log(x)
-
-
     return rotated
 }
-
 
 
 // Creates nxn grid for a unit box
@@ -56,6 +53,7 @@ function box(n) {
     var Y = numeric.linspace(0, 1, n+1);
     return {'X': X, 'Y':Y}
 }
+
 
 // Creates circulating arrows inside the nxn grid
 function arrowBox(n,color1,color2) {
@@ -256,6 +254,7 @@ function arrowBox(n,color1,color2) {
     return data
 }
 
+// Function which runs the animation for the circulation integral
 function circulationPlot() {
     // Vector field with the help of getQuiver
     var X = numeric.linspace(0,1,2);
@@ -515,6 +514,7 @@ function circulationPlot() {
 
 }
 
+// Initial plot of circulation integral diagram which is plotted upon loading
 function initialPlot() {
     var initialData = [];
     var ratio = 1.2;
@@ -578,6 +578,7 @@ function initialPlot() {
     Plotly.newPlot('circulation_graph',initialData,layout)
 }
 
+// Plot for diagram visualising curl
 function curlPlot(n) {
     var data = arrowBox(n,'rgb(0,62,116)','rgb(0,62,116)');
     var layout = {
@@ -589,6 +590,7 @@ function curlPlot(n) {
     Plotly.newPlot('curl_graph',data,layout)
 }
 
+// Function which zooms into curl diagram plot to show single rotating region
 function zoom() {
     Plotly.animate('curl_graph',{layout: {
         title: 'Plot of D split up into rotating regions',
@@ -604,6 +606,7 @@ function zoom() {
     })
 }
 
+// Unzoom function which reverses the zoom
 function unzoom() {
     Plotly.animate('curl_graph',{layout: {
         title: 'Plot of D split up into rotating regions',
@@ -619,14 +622,8 @@ function unzoom() {
     })
 }
 
-
-//function curlReplot() {
-//    var N = document.getElementById('curlBox').value;
-////    var N = Number($("#curlBox").value)
-//    curlPlot(Number(N))
-//    console.log(N)
-//}
-
+// Plots the same graph as in the "curl tab" but with colour coded arrows to indicate
+// "cancelled arrows"
 function overallPlot(n) {
     var data = arrowBox(n,'rgb(255,0,255)','rgb(34,139,34)');
     var layout = {
@@ -638,11 +635,15 @@ function overallPlot(n) {
     Plotly.newPlot('overall_graph',data,layout)
 }
 
+
+// Replots the graph above for different values of n
 function overallReplot() {
     var N = document.getElementById('getN').value;
     overallPlot(Number(N))
 }
 
+
+// Was used before to be able to toggle text
 function toggleText() {
     $("#circ_para").slideToggle(600)
     $("#curl_para").slideToggle(600)
