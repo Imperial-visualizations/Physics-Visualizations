@@ -119,7 +119,6 @@ window.onload = function() {
 
             var xMin, xMax, n;
             if (material === 1) {
-                // TODO convert x, y values to actual physical values (not pixels)
                 xMin = 0;
                 xMax = graph.dim / 2;
                 n = this.n1;
@@ -138,21 +137,21 @@ window.onload = function() {
 
             /** Return intensity value between 0-255 for a given pixel */
             function waveFunc(x, y, phase) {
-                // x = 2*x/graph.dim - 1;
-                // y = -2*y/graph.dim - 1;
+                x = 2*x/graph.dim - 1;
+                y = -2*y/graph.dim - 1;
                 var k_x, k_y;
                 if (isComplex(theta)) {
                     k_x = cmath.multiply(n, cmath.cos(theta));
                     k_y = cmath.multiply(n, cmath.sin(theta));
                 } else {
                     k_x = n * Math.cos(theta);
-                    k_y = n * Math.sin(theta);
+                    k_y = -n * Math.sin(theta);
                 }
 
                 if (reversePhase === false) {
-                    return amplitude * Math.cos( (8*pi/graph.dim) * (k_x*x + k_y*y - phase) );
+                    return amplitude * Math.cos( 8*pi * (k_x*x + k_y*y - phase) );
                 } else if (reversePhase === true) {
-                    return amplitude * Math.cos( (8*pi/graph.dim) * (k_x*x + k_y*y + phase) );
+                    return amplitude * Math.cos( 8*pi * (k_x*x + k_y*y + phase) );
                 } else {
                     throw new TypeError("`createWave()` arg `reversePhase` must be of type `bool`");
                 }
