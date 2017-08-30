@@ -1,29 +1,3 @@
-var np = {
-    linspace: function(start, stop, num) {
-        if (typeof num === "undefined") num = 50;
-        if (start > stop) {
-            throw new RangeError("Start value must be lower than stop value");
-        }
-        var arr = [],
-            stepSize = (stop - start) / (num - 1);
-
-    },
-
-    range: function(start, stop) {
-        /* Only works for step size 1 */
-        if (start > stop) {
-            throw new RangeError("Start value must be lower than stop value");
-        }
-        var arr = [],
-            i = stop - start;
-        while (i--) {
-            arr[i] = --stop;
-        }
-        return arr;
-    }
-};
-
-
 window.onload = function() {
 
     var canvas = document.getElementById("graph"),
@@ -37,18 +11,6 @@ window.onload = function() {
     var cmath = math,
         pi = Math.PI;
         // phase = 0;
-
-    // if (canvas.getContext) {
-    //     var ctx = canvas.getContext('2d'),
-    //         imageData = ctx.getImageData(0, 0, graphDim, graphDim),
-    //         sinData = createSinData(70);
-    //
-    //     // var animIntervalID = window.setInterval(updateGraph, 50);
-    //     // setTimeout(function() {
-    //     //     clearInterval(animIntervalID);
-    //     // }, 15000);
-    // }
-
 
 
     function pixelIndexToCoord(pixel) {
@@ -201,26 +163,12 @@ window.onload = function() {
                 for (var x = xMin; x < xMax; x++) {
                     for (var y = yMin; y < yMax; y++) {
                         var pixel = coordToPixelIndex(x, y);
-                        this.data[frame][4*pixel] += waveFunc(x, y, 0);//frame/graph.dim);
-                        // if (frame === 0 && pixel < 1010 && pixel > 990) {
-                        //     console.log(pixel, clampedWaveFunc(x, y, 0));
-                        //     console.log(this.data[frame][4*pixel]);
-                        // }
+                        this.data[frame][4*pixel] += waveFunc(x, y, frame/graph.dim);
                         // this.data[frame][4*pixel + 1] += waveVal;
                         // this.data[frame][4*pixel + 2] += waveVal;
                         this.data[frame][4*pixel + 3] = 255;
                     }
                 }
-                // for (var pixel = 0; pixel < numPixels; pixel++) {
-                //     var coord = pixelIndexToCoord(pixel),
-                //         x = coord[0],
-                //         y = coord[1];
-                //     // if (frame === 0 && pixel < 1010 && pixel > 990) console.log(pixel, x, y);
-                //     this.data[frame][4*pixel] += clampedWaveFunc(x, y, 0);//frame/graph.dim);
-                //     // this.data[frame][4*pixel + 1] = 0;
-                //     // this.data[frame][4*pixel + 2] = 0;
-                //     this.data[frame][4*pixel + 3] = 255;
-                // }
             }
             return;
         },
@@ -243,7 +191,7 @@ window.onload = function() {
 
     };
 
-    Boundary.init(angle=70, n1=1, n2=1.5, polarisation="s", interference=false);
+    Boundary.init(angle=30, n1=1, n2=1.5, polarisation="s", interference=true);
     Boundary.updatePlot();
 
     // console.log(np.range(-2, 15));
