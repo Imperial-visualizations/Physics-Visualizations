@@ -362,7 +362,6 @@ function Skew(){
     axisSelector = document.getElementById("SkewSelect").value
     angleSelector = document.getElementById("SkewSlider").value
     angle = angleSelector*Math.PI
-    totalScaleX = total
     if (axisSelector ==="SkewXaxis") {
         framesnew = master(skewXaxis,0,angle,xrot1,yrot1,zrot1)
         Plotly.animate('graph', framesnew, {transition: {
