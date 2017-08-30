@@ -23,6 +23,7 @@ var layout = {
         
         var data = JSON.parse(ourRequest.responseText);
         firstframe = data.Frames[0]
+        console.log(data.Frames.length)
         plot_data = [firstframe[0],firstframe[1],firstframe[2],firstframe[3],firstframe[4], firstframe[5]]      
         Plotly.plot(div='graph', plot_data, layout);
 

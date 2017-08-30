@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Biot Savart Law</title>
+    <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
     <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
     <style type="text/css">
         /* css here */
@@ -19,17 +20,29 @@
             </div>
            </div>
            <div class ="row">
-            <div class="four columns">
-                <input id="position" type ="range" value="0" min ="1" max="5" step ="1"/>
+            <div class="six columns">
+            <label class="sliderTitle">Point Position:
+            </label>
+            <label class="slider">
+                <input id="position" class="inputs" type="range" value="1" min="1" max="6" step="1"/>
+                <span class="sliderMin">1</span><span class="sliderMax">6</span>
+            </label>
             </div>
+               <div class ="six columns">
+            <input id="run_button" type="button" value="play" onclick="startAnimation()" style="width:200px"/>
+            <input id="reset_button" type="button" value="reset" onclick="initialPlot()" style="width:200px"/>
+               </div>
+                    
         </div>
     </div>
     <br><br><br>
     <br><br><br>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> 
-    <script src="thisisnew.js"></script>
+    <script src="fromexample.js"></script>
     
 
 </body>
 </html>
+
+<input id=“playPause” type=“button” value=“Play”, onclick=“startAnimation()“>
