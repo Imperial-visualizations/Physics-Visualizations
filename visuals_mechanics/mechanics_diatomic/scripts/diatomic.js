@@ -51,7 +51,6 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
 
     this.V = potential;                                         // Potential used as a bond between atoms.
 
-
     this.tot_m =(a1.mass + a2.mass);                             // Finding total mass of the system.
     this.reducedM =  (a1.mass * a2.mass) / (this.tot_m);           // Finding system's reduced mass.
 
@@ -61,8 +60,14 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
     this.r = new Vector([1, 0]).multiply(this.init_r_0(keVib_0,keRot_0));      // Initial radius, due to centrifugal distortion
     //this.V.s = this.r.mag() / Math.pow(2, 1 / 6);               // Centrifugal distortion changes potential.
     this.v = Math.sqrt(2 * keVib_0 / this.reducedM);           // Initial linear velocity of molecule.
+
     a1.setPos(this.r.multiply(a1.mass / this.tot_m));
     a2.setPos(this.r.multiply(-a2.mass / this.tot_m));
+
+    // System's vibrational & rotational KEs, and total energy.
+    this.KE_V = this.getKE_V();
+    this.KE_R = this.getKE_R();
+    this.tot_E = keVib_0 + keRot_0 + this.V.calcCorrV(this.init_r_0(initKVib, initKRot), this.L, this.reducedM);
 };
 
 /** ================================================= Class Methods ==================================================*/
@@ -96,6 +101,9 @@ Molecule.prototype.update = function(deltaTime){
     this.calcRotCoords(deltaTime);
     this.calcExtCoords(deltaTime);
 
+    this.KE_V = this.getKE_V();
+    this.KE_R = this.getKE_R();
+
     // Update atom coordinates in CoM frame.
     a1.setPos(this.r.multiply(a1.mass / this.tot_m));
     a2.setPos(this.r.multiply(-a2.mass / this.tot_m));
@@ -107,7 +115,6 @@ Molecule.prototype.update = function(deltaTime){
  */
 Molecule.prototype.calcExtCoords = function (dT) {
     var a = (this.V.calcF(this.r.mag())/this.reducedM) +  Math.pow(this.omega,2)*this.r.mag();
-    console.log(a);
     this.v += a * dT;
     this.r = this.r.add(this.r.unit().multiply(this.v * dT));
 };
@@ -149,3 +156,6 @@ Molecule.prototype.getKE_V = function () {
     return 0.5 * this.reducedM * Math.pow(this.v,2);
 };
 
+Molecule.prototype.getTot_E = function () {
+    return this.KE_R + this.KE_V + this.V.calcV(this.r)
+};

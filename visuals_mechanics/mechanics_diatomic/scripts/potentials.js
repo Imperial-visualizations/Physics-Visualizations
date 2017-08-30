@@ -64,6 +64,17 @@ LJ.prototype.calcV = function(r) {
 };
 
 /**
+ * Calculates LJ potential corrected for centrifugal force effects.
+ * @param r: separation of atoms
+ * @param L: Angular momentum
+ * @param mu: Reduced mass of diatomic molecule.
+ * @returns {number} Corrected potential
+ */
+LJ.prototype.calcCorrV = function(r, L, mu) {
+    return (this.calcV(r) + Math.pow(L / r, 2) / (2 * mu));
+};
+
+/**
  * Calculates force on each atom in molecule due to LJ potential.
  * @param r: Separation
  * @returns {number} Net force due to potential
@@ -79,8 +90,7 @@ LJ.prototype.calcF = function(r) {
  * @returns {number} Separation at which potential is 0.
  */
 LJ.prototype.getR_0 = function(){
-    var r_0 = Math.pow(2, 1/6) * this.s;
-    return r_0;
+    return Math.pow(2, 1/6) * this.s;
 };
 
 /**
@@ -99,15 +109,25 @@ LJ.prototype.plotPoints = function(ppu) {
         r.push(i / ppu);
         v.push(this.calcV(i / ppu));
     }
-    return {x: r, y: v, name: "LJ potential", mode: "lines", line: {width: this.e / 10, opacity: 0.8, color: "#003E74"}};
+    return {x: r, y: v, name: "V" + "LJ".sub() + "(r)", mode: "lines", line: {width: this.e / 10, opacity: 0.8, color: "#003E74"}};
 };
-LJ.prototype.plotLJCentrifugal = function (ppu,L,mu) {
+
+/**
+ * Generates two arrays of points that can be used to plot the corrected potential against separation to visualise the
+ * form of the instance of LJ potential due to centrifugal effects.
+ * @param ppu: Points per unit of separation
+ * @param L: Angular momentum of molecule.
+ * @param mu: Reduced mass of molecule.
+ * @returns {{x: Array, y: Array, name: string, mode: string, line: {width: number, opacity: number, color: string}}}
+ * JS object that can be plotted by Plotly.
+ */
+LJ.prototype.plotLJCentrifugal = function (ppu, L, mu) {
     var r = [];
     var v = [];
 
-    for (var i = 1; i < Math.ceil(this.s * 3 * ppu);i++){
-        r.push(i/ppu);
-        v.push(this.calcV(i/ppu) + Math.pow(L*ppu/i,2) / (2*mu));
+    for (var i = 1; i < Math.ceil(this.s * 3 * ppu); i++){
+        r.push(i / ppu);
+        v.push(this.calcCorrV(i / ppu, L, mu));
     }
-    return {x:r, y:v, name:"Corrected LJ potential",mode:"lines",line:{width:this.e / 10,opacity:0.8,color:'#FF0000'}};
+    return {x:r, y:v, name:"LJ" + "corr".sub(), mode:"lines", line: {width: this.e / 10, opacity:0.8, color:'#FF0000'}};
 };
