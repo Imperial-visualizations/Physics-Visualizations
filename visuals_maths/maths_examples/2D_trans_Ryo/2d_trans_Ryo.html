@@ -39,15 +39,20 @@
             <div class="tab-content">
               <div class="tab-pane active" id="skew">
                 <div class="sliderSkew">
-                    <label class="sliderTitle">Axis:</label>
-                    <label>
-                        <input id="skewID" class="inputs" type ="range" value="0" min ="0" max="1" step ="1" onchange="skewMatrix()"/>
-                        <span class="sliderMin">x</span><span class="sliderMax">y</span>
-                     </label>
+                    <form>
+                        Axis: <br>
+                      <input type="radio" name="axis" id="x"> x<br>
+                      <input type="radio" name="axis" id="y"> y<br>
+                    </form>
+                    <!--<label class="sliderTitle">Axis:</label>-->
+                    <!--<label>-->
+                        <!--<input id="skewID" class="inputs" type ="range" value="0" min ="0" max="1" step ="1" onchange="skewMatrix()"/>-->
+                        <!--<span class="sliderMin">x</span><span class="sliderMax">y</span>-->
+                     <!--</label>-->
                 </div>
                 <div class="sliderSkew">
-                    <input class="button-primary" type="submit" value="Start", onclick="plotSkew()">
-                    <input type="button" value="Reset", onclick="resetStuff()">
+                    <input class="button-primary" type="submit" value="Start" onclick="plotSkew()">
+                    <input type="button" value="Reset" onclick="resetStuff()">
                 </div>
                   <h4>Skew Matrix:</h4>
                   <p id="skewmatrix"></p>
