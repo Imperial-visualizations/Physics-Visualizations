@@ -110,7 +110,7 @@ window.onload = function() {
             } else {
                 r = (this.n1 * cosThetaT - this.n2 * cosThetaI) / (this.n1 * cosThetaT + this.n2 * cosThetaI);
             }
-            return this.createWave(theta=plotThetaR, amplitude=r, material=1);
+            return this.createWave(theta=plotThetaR, amplitude=r, material=1, reversePhase=true);
         },
 
 
