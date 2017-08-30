@@ -78,11 +78,11 @@ function main() {
 
     // Give arrows names as well for legends
     var arrow1 = new Arrow3D(u[0],u[1],u[2],[0,0,0], 5,'rgb(0,62,116)',true);
-    arrow1.shaft['name'] = 'u⃗'
+    arrow1.shaft['name'] = 'u'
     var arrow2 = new Arrow3D(v[0],v[1],v[2],[0,0,0], 5,'rgb(2,137,59)',true);
-    arrow2.shaft['name'] = 'v⃗'
+    arrow2.shaft['name'] = 'v'
     var arrow3 = new Arrow3D(w[0],w[1],w[2],[0,0,0], 5,'rgb(221,37,1)',true);
-    arrow3.shaft['name'] = 'w⃗'
+    arrow3.shaft['name'] = 'w'
 
     var data = [my_pped.gopped(),arrow1.data.shaft,arrow1.data.wings,arrow2.data.shaft,arrow2.data.wings
         ,arrow3.data.shaft,arrow3.data.wings];
@@ -121,11 +121,11 @@ function ppedplotter() {
     var vol = my_pped.volume();
 
     var arrow1 = new Arrow3D(u[0],u[1],u[2],[0,0,0], 5,'rgb(0,62,116)',true);
-    arrow1.shaft['name'] = 'u⃗'
+    arrow1.shaft['name'] = 'u'
     var arrow2 = new Arrow3D(v[0],v[1],v[2],[0,0,0], 5,'rgb(2,137,59)',true);
-    arrow2.shaft['name'] = 'v⃗'
+    arrow2.shaft['name'] = 'v'
     var arrow3 = new Arrow3D(w[0],w[1],w[2],[0,0,0], 5,'rgb(221,37,1)',true);
-    arrow3.shaft['name'] = 'w⃗'
+    arrow3.shaft['name'] = 'w'
 
     // Arrow data and PPed data
     var data = [my_pped.gopped(),arrow1.data.shaft,arrow1.data.wings,arrow2.data.shaft,arrow2.data.wings
