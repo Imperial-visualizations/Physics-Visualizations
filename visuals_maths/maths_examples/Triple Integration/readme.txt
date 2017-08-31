@@ -1,0 +1,2 @@
+Hey, I won't be able to submit any code tomorrow because I'm moving house. Whilst this isn't fully finished (I need to work on the slider range(it's always 24) and how that changes the text to the right of the graph, right now it only toggles the frames.) However, I think the general concept and idea is ready and would really like some feedback on making it better. I will finish off the slider bits and add any changes you recommend over the weekend. 
+Thanks. 

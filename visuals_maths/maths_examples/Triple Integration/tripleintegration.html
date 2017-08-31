@@ -28,11 +28,12 @@
             </div>
 
             <div class = "six columns">
-                <div>
+            <div>
                 <br><br><br>
             <ul class="tab-nav">
-                      <li><a class="button active" href="#XYZ">XYZ</a></li>
-                      <li><a class="button" href="#ZYX">ZYX</a></li>
+                    <li><a class="button active" href="#XYZ">XYZ</a></li>
+                    <li><a class="button" href="#ZYX">ZYX</a></li>
+                    <li><a class="button" href="#YZX">YZX</a></li>
                     </ul>
             <div class="tab-content">
             <div class="tab-pane active" id="XYZ">
@@ -84,9 +85,7 @@
                 <br> <br>
                 <input id="playPause" type="button" value="Play", onclick="startAnimation(1)">
                 <input type="button" value="Reset", onclick="reset()">
-            </div>
-            
-                
+            </div>   
             <div class="tab-pane" id="ZYX">
                 <br><br>
 
@@ -138,8 +137,59 @@
                 
                 
             </div>
-            </div>
+            <div class="tab-pane" id="YZX">
+                <br><br>
+
+            
+                <div  id = "innerYZX" style="display:block">
+                The mass of the tetrahedron is given by:
+                $$
+
+                    M   = \iiint_V \rho(x,y,z) \,dy\,dz\,dx
+                        = \int_{x= 0}^{a} \int_{z = 0}^{c(1-\frac{x}{a})} \color{red}\int_\color{red}{y=0}^\color{red}{b(1-\frac{x}{a} - \frac{z}{c})} \rho(x,y,z) \,\color{red}d\color{red}y\,dz \,dx
+                $$     
+                The inner integral is given by 
+                $$
+                \int_{y=0}^{b(1-\frac{x}{a} - \frac{z}{c})}\rho(x,y,z) \,dy
+                $$
+                and is integrated over constant X and Z.
+                This corresponds to building a tower with the volume elements
                 </div>
+                
+            <div id = "middleYZX" style="display:none">
+                $$
+
+                    M   = \iiint_V \rho(x,y,z) \,dy\,dz\,dx
+                        = \int_{x= 0}^{a} \color{red}\int_\color{red}{z = 0}^\color{red}{c(1-\frac{x}{a})} \int_{y=0}^{b(1-\frac{x}{a} - \frac{z}{c})} \rho(x,y,z) \,dy\,\color{red}d\color{red}z \,dx
+                $$  
+                The middle integral is given by
+                $$
+                \int_{z = 0}^{c(1-\frac{x}{a})}\rho(x,z),dz 
+                $$
+                and is integrated over a constant X.
+                This corresponds to building a slice of cake with the tower elements
+                </div>
+                
+            <div id = "outerYZX" style="display:none">
+                $$
+
+                    M   = \iiint_V \rho(x,y,z) \,dx\,dy\,dz
+                        = \color{red}\int_{x= 0}^\color{red}{a} \int_{z = 0}^{c(1-\frac{x}{a})} \int_{y=0}^{b(1-\frac{x}{a} - \frac{z}{c})} \rho(x,y,z) \,dy\,dz \,\color{red}d\color{red}x
+                $$    
+                The outer integral is given by 
+                $$
+                \int_{x= 0}^{a}\rho(x)\,dx
+                $$
+                and must be integrated between two constants. 
+                This corresponds to building the tetrahedron with the slices.
+                </div>
+                <input id="playPause" type="button" value="Play", onclick="startAnimation(3)">
+                <input type="button" value="Reset", onclick="reset()">
+                
+                
+            </div>
+            </div>
+            </div>
 
         </div>
         </div>

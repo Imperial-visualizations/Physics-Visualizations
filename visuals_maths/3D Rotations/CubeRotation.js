@@ -120,11 +120,16 @@ function master(transformation, initalparam, finalparam,xinit1,yinit1,zinit1){
             point = [xinit1[j],yinit1[j],zinit1[j]];
             pointOut = transformation(point,t[i]);
             if (math.max(pointOut) > 3){
-                return alert("you've overshot the layout!")
-            }
+                xrot1 = xinit1
+                yrot1 = yinit1
+                zrot1 = zinit1
+                alert("you've overshot the layout!")
+                return;
+            } else {
             xrot1.push(pointOut[0]);
             yrot1.push(pointOut[1]);
             zrot1.push(pointOut[2]);
+            }
         }
 
         cubeRotation = [{  //This generates the cube
@@ -160,7 +165,6 @@ function graphReset(where){
     xrot1 = [-1., -1., 1., 1., -1., -1., 1., 1.];
     yrot1 = [-1., 1., 1., -1., -1., 1., 1., -1.];
     zrot1 = [-1., -1., -1., -1., 1., 1., 1., 1.];
-    scaleSelector = 1
 
     what = [{
         type: "mesh3d",
@@ -311,7 +315,6 @@ function Scale(){
     scaleSelector = document.getElementById("ScaleSlider").value
     
     if (axisSelector ==="ScaleXaxis") {
-        scaleTotalX = scaleTotalX*scaleSelector
         framesnew = master(scaleXaxis,1,scaleSelector,xrot1,yrot1,zrot1)
         Plotly.animate('graph', framesnew, {transition: {
           duration: 100,
