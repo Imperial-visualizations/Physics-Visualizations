@@ -5,11 +5,11 @@
     <title>Waves</title>
 
     <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
-    <link rel="stylesheet" href="scripts/skeleton-tabs.css">
+    <link rel="stylesheet" href="scripts/skeleton-tabs.js">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <style>
         #graph {
-            border: 3px solid #003e74;
+            border: 2px solid #003e74;
         }
     </style>
 
@@ -30,6 +30,10 @@
 
             <div class="eight columns">
                 <div id='graph'></div>  <!-- Plotly chart will be drawn inside this DIV -->
+                <!--Buttons - Play/Pause/Reset-->
+                <br/><input id="run_button" type="button" value="play" onclick="onStart()" style="width:150px"/>
+                <input id="reset_button" type="button" value="reset" onclick="onReset()" style="width:150px"/>
+
             </div>
 
             <div class="four columns">
@@ -37,15 +41,27 @@
                 <!--Main Tab Options-->
                 <ul class="tab-nav">
                   <li><a class="button active" href="#dispersive">Dispersive</a></li>
-                  <li><a class="button" href="#fourier">Fourier</a></li>
+                  <li><a class="button" href="#fourier" >Fourier</a></li>
                 </ul>
 
                 <div class="tab-content">
 
                     <div class="tab-pane active" id="dispersive">
+                        <div id='dispersionRelationGraph'></div>  <!-- Plotly chart will be drawn inside this DIV -->
+                        <!--Checkbox-->
+                        <label class="radioTitle">Type of wave: </label>
+                        <label class="radio">
+                              <input type="radio" name="type" checked value="sine" /><span for="radio"></span>
+                        </label>
+                        <label class="radioLabel">sum of sine waves</label>
+                        <label class="radio">
+                              <input type="radio" name="type" value="fourier" /><span for="radio"></span>
+                        </label>
+                        <label class="radioLabel">fourier</label>
 
                         <!--Slider - Number of Waves-->
-                        <label class="sliderTitle">Number of sine waves:
+                        <label class="sliderTitle">
+                            <br><span id="nb_title">Number of sine waves:</span>
                             <span id="waves_display"> 2 </span>
                         </label>
                         <label class="slider">
@@ -54,7 +70,7 @@
                         </label>
 
                         <!--Slider - Phase Velocity-->
-                        <label class="sliderTitle">Phase Velocity (non-dispersive):
+                        <label class="sliderTitle">Phase Velocity (non-dispersive): v =
                             <span id="phaseVelocityDisplay" data-unit="m/s"> 1 m/s</span>
                         </label>
                         <label class="slider">
@@ -62,48 +78,53 @@
                             <span class="sliderMin">0</span><span class="sliderMax">10</span>
                         </label>
 
-                        <!--Buttons - Play/Pause/Reset-->
-                        <input id="run_button" type="button" value="play" onclick="onStart()" style="width:200px"/>
-                        <input id="reset_button" type="button" value="reset" onclick="onReset()" style="width:200px"/>
 
                         <!--Input - Dispersion Relation-->
                         <label>Define Dispersion Relation: <br />
-                            &omega;(k) = <span id ="dispersionRelation"> </span><br>
+                            &omega;(k) = <span id ="dispersionRelation"> </span>
                             <input id = "function" name="function">
                         </label>
                         <p id= "error_omega" style="color:#ff0000"></p>
 
                         <!--Input - Wavenumber-->
-                        <label>Define wave number: <br />
-                            <!--k0-->
-                            k0 = <span id ="k0"> </span><br>
-                            <input id = "k0_input" ><br>
-                            <!--kend-->
-                            kend = <span id ="kend"> </span><br>
-                            <input id = "kend_input" >
-                        </label>
-                        <p id= "error_k0" style="color:#ff0000"></p>
-                        <p id= "error_kend" style="color:#ff0000"></p>
-
-                        <!--Checkbox-->
-                        <input type="checkbox">
-
-                    </div>
-
-                    <div class="tab-pane" id="fourier">
-
-                        <!--Fourier terms-->
-                        <label class="sliderTitle">Number of fourier terms:<span id="fourier_sin"> 1 </span></label>
-                        <label class="slider">
-                            <input id="fourier_terms" class="inputs" type="range" value="1" min="1" max="100" step="1"/>
-                            <span class="sliderMin">1</span><span class="sliderMax">100</span>
-                        </label>
-
-                        <!--Play/Pause/Reset-->
-                        <input id="fourier_run_button" type="button" value="play" onclick="onStart()" style="width:200px"/>
-                        <input id="fourier_reset_button" type="button" value="reset" onclick="onReset()" style="width:200px"/>
+                        <div id="wave_number">
+                            <label>Define wave number: <br />
+                                <!--k0-->
+                                k0 = <span id ="k0"> </span>
+                                <input id = "k0_input" ><br>
+                                <!--kend-->
+                                kend = <span id ="kend"> </span>
+                                <input id = "kend_input" >
+                            </label>
+                            <p id= "error_k0" style="color:#ff0000"></p>
+                            <p id= "error_kend" style="color:#ff0000"></p>
+                        </div>
 
                     </div>
+
+                    <!--<div class="tab-pane" id="fourier">-->
+
+                        <!--&lt;!&ndash;Fourier terms&ndash;&gt;-->
+                        <!--<label class="sliderTitle">Number of fourier terms:<span id="fourier_sin"> 1 </span></label>-->
+                        <!--<label class="slider">-->
+                            <!--<input id="fourier_terms" class="inputs" type="range" value="1" min="1" max="100" step="1"/>-->
+                            <!--<span class="sliderMin">1</span><span class="sliderMax">100</span>-->
+                        <!--</label>-->
+
+                        <!--&lt;!&ndash;Slider - Phase Velocity&ndash;&gt;-->
+                        <!--<label class="sliderTitle">Phase Velocity (non-dispersive):-->
+                            <!--<span id="phaseVelocityDisplay" data-unit="m/s"> 1 m/s</span>-->
+                        <!--</label>-->
+                        <!--<label class="slider">-->
+                            <!--<input id="velocityPhase" class="inputs" type="range" value="1" min="0.0" max="10" step="0.05"/>-->
+                            <!--<span class="sliderMin">0</span><span class="sliderMax">10</span>-->
+                        <!--</label>-->
+
+                        <!--&lt;!&ndash;Play/Pause/Reset&ndash;&gt;-->
+                        <!--<input id="fourier_run_button" type="button" value="play" onclick="onStart()" style="width:200px"/>-->
+                        <!--<input id="fourier_reset_button" type="button" value="reset" onclick="onReset()" style="width:200px"/>-->
+
+                    <!--</div>-->
 
                 </div>
             </div>
@@ -112,7 +133,7 @@
 
     <!--Plotting scripts-->
     <script src="tabs/dispersive.js"></script>
-    <!--<script src="tabs/fourier.js"></script>-->
+    <!--<script src="tabs/fourier2.js"></script>-->
 
 </body>
 </html>
