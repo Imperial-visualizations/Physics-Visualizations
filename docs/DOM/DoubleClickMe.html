@@ -18,7 +18,7 @@
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
+  <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
   <style type="text/css">
     .example-grid .column, .example-grid .columns {
       background: #EEE;
@@ -174,6 +174,22 @@
     }
   </style>
 
+  <!-- async javascripts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [ ["\[","\]"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: false,
+      }
+  });
+  </script>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
 </head>
 <body>
 
@@ -181,6 +197,17 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
       <h1 class="title">HTML DOM: CSS, Javascript & jQuery</h1>
+        <div class="row">
+          <div class="twelve columns">
+            <ul class="dropdown">
+                <li>
+                    <span id="Menu">List of Contents</span>
+                    <ul id="MenuItemContainer">
+                    </ul>
+                </li>
+            </ul>
+          </div>
+        </div>
           <h2 id="getting-started">Getting Started</h2>
         <div class="row">
           <div class="seven columns">
@@ -252,6 +279,113 @@ Recommonded folder structure for your <em>index.html</em>:
 &lt;/html&gt;
 </code></pre>
           </div>
+        </div>
+        <h2 id="colour">Colour</h2>
+        <div class="row">
+          <div class="six columns">
+        <p>The following colours are colours from the <a href="https://www.imperial.ac.uk/media/imperial-college/staff/brand-and-style-guide/public/Branding-Guidelines-2016.pdf">IMPERIAL COLLEGE LONDON Visual identity guidelines</a>, please read through it before start using these colours. If you&#39;re not confident in choosing colour, please stick with the default colour that plotly has. However, when making customised UI instead of using &#39;red&#39; which usually means #FF0000, please use one of the options from below. </p>
+<p>Most of the time you&#39;ll only need to work with HEX, which you&#39;ll see as #FFFFFF or 0xFFFFFF, rarely you&#39;ll need to work with RGB (rgb(255,255,255)) or RGBa (rgba(255,255,255,1)), the last one being opacity or alpha value, a measure of how not-transparent something is). CMYK stands for cyan, magenta, yellow, and key (black), which is used in printing, and PMS is the Pantone Matching System, which is used for cross-platform colour matching and referencing colour for paint or materials.</p>
+<p>On the right you can see what the the following colour plattes looks like for two type of colour blinded people, please do take them into account when choosing colours for your user interface or graphs. As many as 8 % of men and 0.5 % of women with Northern European ancestry have the common form of red-green color blindness.[^1]</p>
+<p>Avoid using colours that are similar in the colour blinded view in both your UIs and your graphs, as colourblinded people won&#39;t be able to tell them apart.</p>
+<p>[^1]: <a href="https://nei.nih.gov/health/color_blindness/facts_about">&quot;Facts About Color Blindness&quot;</a>. NEI. February 2015. Retrieved 31 Aug 2017</p>
+          </div>
+          <div class="six columns">
+             <ul class="tab-nav">
+                <li>
+                  <a class="button active" href="#normal">Normal</a>
+                </li>
+                <li>
+                  <a class="button" href="#protanopia">Protanopia</a>
+                </li>
+                <li>
+                  <a class="button" href="#deuteranopia">Deuteranopia</a>
+                </li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active" id="normal">
+                  <img src="./assets/ColourPalette.png" title="Normal"/>
+                </div>
+                <div class="tab-pane" id="protanopia">
+                  <img src="./assets/ColourPaletteProtanopia.png" title="Protanopia Colour Blind"/>
+                </div>
+                <div class="tab-pane" id="deuteranopia">
+                  <img src="./assets/ColourPaletteDeuteranopia.png" title="Deuteranopia Colour Blind"/>
+                </div>
+              </div> 
+          </div>
+        </div>
+        <div class="row">
+          <div class="twelve columns">
+            <p>Click the tiles to copy the colour in <select class="" id="colourCopyingOptions">
+                  <option value="color">#FFFFFF</option>
+                  <option value="colorWithoutHashTag">FFFFFF</option>
+                  <option value="rgb">rgb(255,255,255)</option>
+                  <option value="cmyk">cmyk(100,100,100,100)</option>
+                  <option value="pms">Pantone</option>
+                </select> formats.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="six columns colourTiles" data-color="#002147" data-rgb="rgb(0,33,71)" data-cmyk="cmyk(100,55,0,85)" data-pms="539"><span class="tileTitle">Navy</span></div>
+
+          <div class="six columns colourTiles" data-color="#003E74" data-rgb="rgb(0,62,116)" data-cmyk="cmyk(100,61,0,45)" data-pms="541"><span class="tileTitle">Imperial Blue</span></div>
+
+        </div>
+        <div class="row">
+          <div class="two columns colourTiles" data-color="#EBEEEE" data-rgb="rgb(235,238,238)" data-cmyk="cmyk(0,0,0,15)" data-pms="COOL GREY 2"><span class="tileTitle">Light Grey</span></div>
+
+          <div class="two columns colourTiles" data-color="#9D9D9D" data-rgb="rgb(157,157,157)" data-cmyk="cmyk(10,10,10,40)" data-pms="COOL GREY 7"><span class="tileTitle">Cool Grey</span></div>
+
+          <div class="two columns colourTiles" data-color="#D4EFFC" data-rgb="rgb(212,239,252)" data-cmyk="cmyk(15,0,0,0)" data-pms="642"><span class="tileTitle">Light Blue</span></div>
+
+          <div class="two columns colourTiles" data-color="#006EAF" data-rgb="rgb(0,110,175)" data-cmyk="cmyk(100,70,0,0)" data-pms="293"><span class="tileTitle">Blue</span></div>
+
+
+          <div class="two columns colourTiles" data-color="#0091D4" data-rgb="rgb(0,133,202)" data-cmyk="cmyk(100,8,0,5)" data-pms="PROCESS BLUE"><span class="tileTitle">Process Blue</span></div>
+
+          <div class="two columns colourTiles" data-color="#00ACD7" data-rgb="rgb(12,161,205)" data-cmyk="cmyk(75,0,0,0)" data-pms="306"><span class="tileTitle">Pool Blue</span></div>
+        </div>
+        <div class="row">
+          <div class="two columns colourTiles" data-color="#0F8291" data-rgb="rgb(15,130,145)" data-cmyk="cmyk(100,0,25,50)" data-pms="3155"><span class="tileTitle">Dark Teal</span></div>
+
+          <div class="two columns colourTiles" data-color="#009CBC" data-rgb="rgb(0,142,170)" data-cmyk="cmyk(100,0,25,0)" data-pms="3135"><span class="tileTitle">Teal</span></div>
+
+          <div class="two columns colourTiles" data-color="#379F9F" data-rgb="rgb(55,159,159)" data-cmyk="cmyk(75,0,25,0)" data-pms="3115"><span class="tileTitle">Seaglass</span></div>
+
+          <div class="two columns colourTiles" data-color="#02893B" data-rgb="rgb(2,137,59)" data-cmyk="cmyk(100,0,100,15)" data-pms="348"><span class="tileTitle">Dark Green</span></div>
+          
+          <div class="two columns colourTiles" data-color="#66A40A" data-rgb="rgb(102,164,10)" data-cmyk="cmyk(70,0,100,0)" data-pms="368"><span class="tileTitle">Kermit Green</span></div>
+          
+          <div class="two columns colourTiles" data-color="#BBCE00" data-rgb="rgb(196,214,0)" data-cmyk="cmyk(35,0,100,0)" data-pms="382"><span class="tileTitle">Lime</span></div>
+
+        </div>
+        <div class="row">
+          <div class="two columns colourTiles" data-color="#D24000" data-rgb="rgb(210,64,0)" data-cmyk="cmyk(0,76,100,0)" data-pms="166"><span class="tileTitle">Orange</span></div>
+
+          <div class="two columns colourTiles" data-color="#EC7300" data-rgb="rgb(236,115,0)" data-cmyk="cmyk(0,45,100,0)" data-pms="151"><span class="tileTitle">Tangerine</span></div>
+
+          <div class="two columns colourTiles" data-color="#FFDD00" data-rgb="rgb(255,216,1)" data-cmyk="cmyk(0,10,100,0)" data-pms="109"><span class="tileTitle">Lemon Yellow</span></div>
+
+          <div class="two columns colourTiles" data-color="#A51900" data-rgb="rgb(165,25,0)" data-cmyk="cmyk(20,100,100,20)" data-pms="207"><span class="tileTitle">Brick</span></div>
+          
+          <div class="two columns colourTiles" data-color="#DD2501" data-rgb="rgb(221,37,1)" data-cmyk="cmyk(0,100,100,0)" data-pms="WARM RED"><span class="tileTitle">Red</span></div>
+          
+          <div class="two columns colourTiles" data-color="#E40043" data-rgb="rgb(213,0,50)" data-cmyk="cmyk(0,100,62,0)" data-pms="199"><span class="tileTitle">Cherry</span></div>
+
+        </div>
+        <div class="row">
+          <div class="two columns colourTiles" data-color="#9F004E" data-rgb="rgb(145,0,72)" data-cmyk="cmyk(0,100,16,40)" data-pms="221"><span class="tileTitle">Raspberry</span></div>
+
+          <div class="two columns colourTiles" data-color="#C81E78" data-rgb="rgb(200,30,120)" data-cmyk="cmyk(0,100,9,4)" data-pms="RUBINE RED"><span class="tileTitle">Magenta Pink</span></div>
+
+          <div class="two columns colourTiles" data-color="#751E66" data-rgb="rgb(119,37,131)" data-cmyk="cmyk(60,100,20,15)" data-pms="2612"><span class="tileTitle">Iris</span></div>
+
+          <div class="two columns colourTiles" data-color="#960078" data-rgb="rgb(150,0,120)" data-cmyk="cmyk(34,100,0,0)" data-pms="2405"><span class="tileTitle">Violet</span></div>
+          
+          <div class="two columns colourTiles" data-color="#321E6D" data-rgb="rgb(50,30,109)" data-cmyk="cmyk(100,100,0,3)" data-pms="2105"><span class="tileTitle">Plum</span></div>
+          
+          <div class="two columns colourTiles" data-color="#653098" data-rgb="rgb(101,48,152)" data-cmyk="cmyk(88,86,0,0)" data-pms="2098"><span class="tileTitle">Purple</span></div>
+
         </div>
         <div class="row">
           <div class="twelve columns">
@@ -385,7 +519,7 @@ Recommonded folder structure for your <em>index.html</em>:
         <div class="row">
           <div class="twelve columns">
 <p><strong> This section tells you what you <em>need</em> to know when coding with Javascript </strong></p>
-<h5 id="keep-in-mind-">Keep in mind..</h5>
+<h3 id="keep-in-mind-">Keep in mind..</h3>
 <ol>
 <li>Don&#39;t forget to add semi-colon(;) at the end of each statement.</li>
 <li>parseFloat() before summation. (Javascript uses &quot;+&quot; for both string joining and number summation)</li>
@@ -623,124 +757,94 @@ $(&quot;#someSlider&quot;).on(&#39;input&#39;,function(){
 </code></pre>
           </div>
         </div>
-        <h2 id="colour">Colour</h2>
-        <div class="row">
-          <div class="six columns">
-        <p>The following colours are colours from the <a href="https://www.imperial.ac.uk/media/imperial-college/staff/brand-and-style-guide/public/Branding-Guidelines-2016.pdf">IMPERIAL COLLEGE LONDON Visual identity guidelines</a>, please read through it before start using these colours. If you&#39;re not confident in choosing colour, please stick with the default colour that plotly has. However, when making customised UI instead of using &#39;red&#39; which usually means #FF0000, please use one of the options from below. </p>
-<p>Most of the time you&#39;ll only need to work with HEX, which you&#39;ll see as #FFFFFF or 0xFFFFFF, rarely you&#39;ll need to work with RGB (255,255,255)) or RGBa (rgba(255,255,255,1), the last one being opacity or alpha value, a measure of how not-transparent something is). CMYK stands for cyan, magenta, yellow, and key (black), which is used in printing, and PMS is the Pantone Matching System, which is used for cross-platform colour matching and referencing colour for paint or materials.</p>
-<p>On the right you can see what the the following colour platte looks like for two type of colour blinded people, please do take them into account when choosing colours for your user interface or graphs.</p>
-          </div>
-          <div class="six columns">
-             <ul class="tab-nav">
-                <li>
-                  <a class="button active" href="#normal">Normal</a>
-                </li>
-                <li>
-                  <a class="button" href="#protanopia">Protanopia</a>
-                </li>
-                <li>
-                  <a class="button" href="#deuteranopia">Deuteranopia</a>
-                </li>
-              </ul>
-              <div class="tab-content">
-                <div class="tab-pane active" id="normal">
-                  <img src="./assets/ColourPalette.png" title="Normal"/>
-                </div>
-                <div class="tab-pane" id="protanopia">
-                  <img src="./assets/ColourPaletteProtanopia.png" title="Protanopia Colour Blind"/>
-                </div>
-                <div class="tab-pane" id="deuteranopia">
-                  <img src="./assets/ColourPaletteDeuteranopia.png" title="Deuteranopia Colour Blind"/>
-                </div>
-              </div> 
-          </div>
-        </div>
+        <h2 id="useful-libraries">Useful Libraries</h2>
         <div class="row">
           <div class="twelve columns">
-            <p>Click the tiles to copy the colour in <select class="" id="colourCopyingOptions">
-                  <option value="color">#FFFFFF</option>
-                  <option value="rgb">rgb(255,255,255)</option>
-                  <option value="cmyk">cmyk(100,100,100,100)</option>
-                  <option value="pms">Pantone</option>
-                </select> formats.</p>
+          <blockquote>Avoid hosting these libraries youself (on the server), always use the CDN if possible.<em>-Server Manager</em></blockquote>
+<h3 id="python">Python</h3>
+<h4 id="plotly">plotly</h4>
+<p>Library for data virsualisations.
+<a href="https://plot.ly/">https://plot.ly/</a>
+<em>Copyright (c) 2016-2017 Plotly, Inc</em></p>
+<ul>
+<li>Open-Source (MIT License)</li>
+<li><a href="https://github.com/plotly/plotly.py/blob/master/LICENSE.txt">https://github.com/plotly/plotly.py/blob/master/LICENSE.txt</a></li>
+</ul>
+<h3 id="javascript">Javascript</h3>
+<h4 id="jquery">jQuery</h4>
+<p>For easier DOM access.
+<a href="https://jquery.org/">https://jquery.org/</a>
+<em>Copyright 2017 The jQuery Foundation.</em></p>
+<ul>
+<li>Open-Source (MIT License)</li>
+<li><a href="https://jquery.org/license/">License</a></li>
+</ul>
+<h4 id="plotly">plotly</h4>
+<p>Library for data visualisations.
+<a href="https://plot.ly/">https://plot.ly/</a>
+<em>Copyright (c) 2016-2017 Plotly, Inc</em></p>
+<ul>
+<li>Open-Source (MIT License)</li>
+<li><a href="https://github.com/plotly/plotly.py/blob/master/LICENSE.txt">License</a></li>
+<li><a href="https://plot.ly/javascript/open-source-announcement/">https://plot.ly/javascript/open-source-announcement/</a></li>
+<li>Commercial use is fine as long it&#39;s as not hosted on their website <a href="https://plot.ly/terms-of-service/">https://plot.ly/terms-of-service/</a></li>
+</ul>
+<h4 id="phaser-io">phaser.io</h4>
+<p>Library for drawing stuff on Canvas. Use this instead of Plotly when you want full control over your UI.
+<a href="https://phaser.io/">https://phaser.io/</a>
+<em>Copyright (c) 2017 Richard Davey, Photon Storm Ltd.</em></p>
+<ul>
+<li>Open-Source (MIT License)</li>
+<li><a href="https://github.com/photonstorm/phaser-ce/blob/v2.8.4/license.txt">License</a></li>
+</ul>
+<h4 id="mathjax">MathJax</h4>
+<p>For displaying LaTeX on your HTML page.
+<a href="https://www.mathjax.org/">https://www.mathjax.org/</a>
+<em>Copyright (c) 2009-2017 The MathJax Consortium</em></p>
+<ul>
+<li>Open-Source (Apache License, Version 2.0)</li>
+<li><a href="https://github.com/mathjax/MathJax/blob/master/LICENSE">License</a></li>
+</ul>
+<h4 id="marked-js">marked.js</h4>
+<p>For displaying Markdown on your HTML page.
+<a href="https://github.com/chjj/marked">https://github.com/chjj/marked</a>
+<em>Copyright (c) 2011-2014, Christopher Jeffrey (<a href="https://github.com/chjj/">https://github.com/chjj/</a>)</em></p>
+<ul>
+<li>Open-Source (MIT License)</li>
+<li><a href="https://github.com/chjj/marked/blob/master/LICENSE">License</a></li>
+</ul>
+<h4 id="jison">Jison</h4>
+<p>For converting <code>E^sqrt(3*k^2)</code> to <code>Math.pow(Math.E,Math.sqrt(3*Math.pow(k,2)))</code>
+<a href="http://zaa.ch/jison/">http://zaa.ch/jison/</a>
+<em>Copyright (c) 2009-2013 Zachary Carter</em></p>
+<ul>
+<li>Open-Source (MIT License)</li>
+<li><a href="http://zaa.ch/jison/docs/#license">License</a></li>
+</ul>
+<h2 id="css">CSS</h2>
+<h4 id="skeleton">Skeleton</h4>
+<p>What our current CSS is based on. We&#39;ve added a lot to it, but all the margins and paddings are determinant by Skeleton.
+<a href="http://getskeleton.com/">http://getskeleton.com/</a>
+<em>Copyright (c) 2011-2014 Dave Gamache</em></p>
+<ul>
+<li>The MIT License (MIT)</li>
+<li><a href="https://github.com/dhg/Skeleton/blob/master/LICENSE.md">License</a></li>
+</ul>
           </div>
         </div>
-        <div class="row">
-          <div class="six columns colourTiles" data-color="#002147" data-rgb="rgb(0,33,71)" data-cmyk="cmyk(100,55,0,85)" data-pms="539"><span class="tileTitle">Navy</span></div>
-
-          <div class="six columns colourTiles" data-color="#003E74" data-rgb="rgb(0,62,116)" data-cmyk="cmyk(100,61,0,45)" data-pms="541"><span class="tileTitle">Imperial Blue</span></div>
-
-        </div>
-        <div class="row">
-          <div class="two columns colourTiles" data-color="#EBEEEE" data-rgb="rgb(235,238,238)" data-cmyk="cmyk(0,0,0,15)" data-pms="COOL GREY 2"><span class="tileTitle">Light Grey</span></div>
-
-          <div class="two columns colourTiles" data-color="#9D9D9D" data-rgb="rgb(157,157,157)" data-cmyk="cmyk(10,10,10,40)" data-pms="COOL GREY 7"><span class="tileTitle">Cool Grey</span></div>
-
-          <div class="two columns colourTiles" data-color="#D4EFFC" data-rgb="rgb(212,239,252)" data-cmyk="cmyk(15,0,0,0)" data-pms="642"><span class="tileTitle">Light Blue</span></div>
-
-          <div class="two columns colourTiles" data-color="#006EAF" data-rgb="rgb(0,110,175)" data-cmyk="cmyk(100,70,0,0)" data-pms="293"><span class="tileTitle">Blue</span></div>
-
-
-          <div class="two columns colourTiles" data-color="#0091D4" data-rgb="rgb(0,133,202)" data-cmyk="cmyk(100,8,0,5)" data-pms="PROCESS BLUE"><span class="tileTitle">Process Blue</span></div>
-
-          <div class="two columns colourTiles" data-color="#00ACD7" data-rgb="rgb(12,161,205)" data-cmyk="cmyk(75,0,0,0)" data-pms="306"><span class="tileTitle">Pool Blue</span></div>
-        </div>
-        <div class="row">
-          <div class="two columns colourTiles" data-color="#0F8291" data-rgb="rgb(15,130,145)" data-cmyk="cmyk(100,0,25,50)" data-pms="3155"><span class="tileTitle">Dark Teal</span></div>
-
-          <div class="two columns colourTiles" data-color="#009CBC" data-rgb="rgb(0,142,170)" data-cmyk="cmyk(100,0,25,0)" data-pms="3135"><span class="tileTitle">Teal</span></div>
-
-          <div class="two columns colourTiles" data-color="#379F9F" data-rgb="rgb(55,159,159)" data-cmyk="cmyk(75,0,25,0)" data-pms="3115"><span class="tileTitle">Seaglass</span></div>
-
-          <div class="two columns colourTiles" data-color="#02893B" data-rgb="rgb(2,137,59)" data-cmyk="cmyk(100,0,100,15)" data-pms="348"><span class="tileTitle">Dark Green</span></div>
-          
-          <div class="two columns colourTiles" data-color="#66A40A" data-rgb="rgb(102,164,10)" data-cmyk="cmyk(70,0,100,0)" data-pms="368"><span class="tileTitle">Kermit Green</span></div>
-          
-          <div class="two columns colourTiles" data-color="#BBCE00" data-rgb="rgb(196,214,0)" data-cmyk="cmyk(35,0,100,0)" data-pms="382"><span class="tileTitle">Lime</span></div>
-
-        </div>
-        <div class="row">
-          <div class="two columns colourTiles" data-color="#D24000" data-rgb="rgb(210,64,0)" data-cmyk="cmyk(0,76,100,0)" data-pms="166"><span class="tileTitle">Orange</span></div>
-
-          <div class="two columns colourTiles" data-color="#EC7300" data-rgb="rgb(236,115,0)" data-cmyk="cmyk(0,45,100,0)" data-pms="151"><span class="tileTitle">Tangerine</span></div>
-
-          <div class="two columns colourTiles" data-color="#FFDD00" data-rgb="rgb(255,216,1)" data-cmyk="cmyk(0,10,100,0)" data-pms="109"><span class="tileTitle">Lemon Yellow</span></div>
-
-          <div class="two columns colourTiles" data-color="#A51900" data-rgb="rgb(165,25,0)" data-cmyk="cmyk(20,100,100,20)" data-pms="207"><span class="tileTitle">Brick</span></div>
-          
-          <div class="two columns colourTiles" data-color="#DD2501" data-rgb="rgb(221,37,1)" data-cmyk="cmyk(0,100,100,0)" data-pms="WARM RED"><span class="tileTitle">Red</span></div>
-          
-          <div class="two columns colourTiles" data-color="#E40043" data-rgb="rgb(213,0,50)" data-cmyk="cmyk(0,100,62,0)" data-pms="199"><span class="tileTitle">Cherry</span></div>
-
-        </div>
-        <div class="row">
-          <div class="two columns colourTiles" data-color="#9F004E" data-rgb="rgb(145,0,72)" data-cmyk="cmyk(0,100,16,40)" data-pms="221"><span class="tileTitle">Raspberry</span></div>
-
-          <div class="two columns colourTiles" data-color="#C81E78" data-rgb="rgb(200,30,120)" data-cmyk="cmyk(0,100,9,4)" data-pms="RUBINE RED"><span class="tileTitle">Magenta Pink</span></div>
-
-          <div class="two columns colourTiles" data-color="#751E66" data-rgb="rgb(119,37,131)" data-cmyk="cmyk(60,100,20,15)" data-pms="2612"><span class="tileTitle">Iris</span></div>
-
-          <div class="two columns colourTiles" data-color="#960078" data-rgb="rgb(150,0,120)" data-cmyk="cmyk(34,100,0,0)" data-pms="2405"><span class="tileTitle">Violet</span></div>
-          
-          <div class="two columns colourTiles" data-color="#321E6D" data-rgb="rgb(50,30,109)" data-cmyk="cmyk(100,100,0,3)" data-pms="2105"><span class="tileTitle">Plum</span></div>
-          
-          <div class="two columns colourTiles" data-color="#653098" data-rgb="rgb(101,48,152)" data-cmyk="cmyk(88,86,0,0)" data-pms="2098"><span class="tileTitle">Purple</span></div>
-
-        </div>
     </div>
-<div class="copied">copied.</div>
-
+    
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
 
   <script type="text/javascript">    
 
   var paki = document.createElement('audio');
-      paki.setAttribute('src', 'images/paki.mp3');
+      paki.setAttribute('src', 'assets/paki.mp3');
   var paku = document.createElement('audio');
-      paku.setAttribute('src', 'images/paku.mp3');
+      paku.setAttribute('src', 'assets/paku.mp3');
   var climbing = document.createElement('audio');
-      climbing.setAttribute('src', 'images/climbing.mp3');
+      climbing.setAttribute('src', 'assets/climbing.mp3');
       climbing.loop = true;
 
     
@@ -771,6 +875,19 @@ $(&quot;#someSlider&quot;).on(&#39;input&#39;,function(){
       }
     });
 
+    $( ":header" ).each(function(){
+      if($(this).attr("id") != "" && $(this).attr("id") != undefined && $(this).attr("id") != false){
+        level = parseInt(this.nodeName.substring(1));
+        console.log((1500-3*level*100).toFixed(0));
+        prefix = "";
+        for (var i = 2; i < level; i++) {
+          prefix += "&nbsp;&nbsp;";
+        }
+        prefix += "+&nbsp;";
+        $("#MenuItemContainer").append('<li class="popover-item"><a class="popover-link" css="font-size:'+(150-3*level*10).toFixed(2)+'%;font-weight:'+(1500-3*level*100).toFixed(0)+'" href="#'+$(this).attr("id")+'">'+prefix+$(this).html()+'</a></li>');
+      }
+    });
+
 
     $(".colourTiles").each(function(){
       var colour = $(this).attr("data-color"); 
@@ -792,17 +909,29 @@ $(&quot;#someSlider&quot;).on(&#39;input&#39;,function(){
       $(this).append('<span class="tileSubtitle">PMS</span><span class="tileValue">'+$(this).attr("data-pms")+'</span>');
 
       $(this).on('click',function(e){
-        $( ".copied" ).css("left" ,e.pageX );
-        $( ".copied" ).css("top" ,e.pageY );
-        $( ".copied" ).text("\""+$(this).attr("data-"+$("#colourCopyingOptions").val())+"\" copied.");
-        $( ".copied" ).fadeIn( 40, function() {
-          $( ".copied" ).fadeOut( 1000 );
+        var copiedMessage = $("<div class='copied'></div>");
+        $("body").append(copiedMessage);
+        copiedMessage.css("left" ,e.pageX );
+        copiedMessage.css("top" ,e.pageY );
+        if($("#colourCopyingOptions").val() != "colorWithoutHashTag"){
+          copiedMessage.text("\""+$(this).attr("data-"+$("#colourCopyingOptions").val())+"\" copied.");
+        }else{
+          copiedMessage.text("\""+$(this).attr("data-color").substring(1,7)+"\" copied.");
+        }
+        copiedMessage.fadeIn( 40, function() {
+          copiedMessage.fadeOut( 1000 , function(){
+            copiedMessage.remove();
+          } );
         });
       });
 
       new Clipboard(this, {
           text: function(trigger) {
-            var str = trigger.getAttribute("data-"+$("#colourCopyingOptions").val());
+            if($("#colourCopyingOptions").val() != "colorWithoutHashTag"){
+              var str = trigger.getAttribute("data-"+$("#colourCopyingOptions").val());
+            }else{
+              var str = trigger.getAttribute("data-color").substring(1,7);
+            }
             console.log(str);
             return str;
             // return trigger.getAttribute('data-color');
