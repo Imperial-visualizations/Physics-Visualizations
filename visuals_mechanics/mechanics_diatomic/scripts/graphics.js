@@ -6,7 +6,7 @@ var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS, "phaser",
     {preload: preload,create: create,update: update});
 
 var a1, a2, mol1, potential;                                        // Atoms, molecules and potential to be instantiated
-var zoom  = 35;
+var zoom  = 60;
 var initKVib, initKRot;                                             // Initial KEs.
 var init_s1 = 2, init_s2 = 2, init_e1 = 10, init_e2 = 10;           // Initial LJ parameters.
 
@@ -77,21 +77,21 @@ function spoiler() {
 /**
  * Hide the graph after the page is loaded, and the element sizes have been allocated according to the css
  */
-$(document).ready(flashGraphs, 900);
-
-function flashGraphs(){
-    setTimeout(function() {
-        $(".graphs").each(function(){
-            if (!$(this).hasClass("expanded")) {
-                $(this).slideDown(500);
-                $(this).addClass("expanded")
-            }
-
-            $(this).slideUp(500);
-            $(this).removeClass("expanded");
-        });
-    });
-}
+// $(document).ready(flashGraphs, 900);
+//
+// function flashGraphs(){
+//     setTimeout(function() {
+//         $(".graphs").each(function(){
+//             if (!$(this).hasClass("expanded")) {
+//                 $(this).slideDown(500);
+//                 $(this).addClass("expanded")
+//             }
+//
+//             $(this).slideUp(500);
+//             $(this).removeClass("expanded");
+//         });
+//     });
+// }
 /**
  * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
  * off the input field.
@@ -255,7 +255,7 @@ function plotLJ() {
         LJCentr_scatter.y.shift();
     }
 
-    LJ_layout.yaxis.range[1] = LJ_scatter.y[0];     // Re-optimising y-axis scaling.
+    LJ_layout.yaxis.range[1] = LJCentr_scatter.y[0];     // Re-optimising y-axis scaling.
 
     // Drawing red marker that shows current LJ potential against current separation.
     var curr_sep = mol1.r.mag();
@@ -281,7 +281,9 @@ function plotLJ() {
 function drawBond(starting, end) {
     var curr_pot = mol1.V.calcV(mol1.r.mag());
     if (-curr_pot / mol1.V.e < 0.01) {
-        mol1.bondSprite.destroy();
+        if(typeof mol1.bondSprite !== 'undefined') {
+            mol1.bondSprite.destroy();
+        }
         return;
     }
 

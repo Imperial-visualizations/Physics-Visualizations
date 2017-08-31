@@ -48,7 +48,6 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
     if (a1.constructor !== Atom || a2.constructor !== Atom){
         console.error("Can't run simulation without two valid atom objects");
     }
-
     this.a1 = a1;
     this.a2 = a2;
 
@@ -60,7 +59,7 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
     this.I =  this.reducedM * Math.pow(this.V.getR_0(),2);        // Calculate initial Moment of Inertia.
     this.omega = Math.sqrt(2 * keRot_0 / this.I);               // Calculate initial angular velocity.
     this.L = this.I * this.omega;                               // Calculate angular momentum (conserved).
-    this.r = new Vector([1, 0]).multiply(this.init_r_0(keVib_0,keRot_0));      // Initial radius, due to centrifugal distortion
+    this.r = new Vector([1, 0]).multiply(this.init_r_0(0.01,this.L));      // Initial radius, due to centrifugal distortion
     //this.V.s = this.r.mag() / Math.pow(2, 1 / 6);               // Centrifugal distortion changes potential.
     this.v = Math.sqrt(2 * keVib_0 / this.reducedM);           // Initial linear velocity of molecule.
 
@@ -78,16 +77,13 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
  *  Calculates the centrifugally corrected value of r at the time t = 0 seconds.
  * @returns {number} Corrected value of r_0
  */
-Molecule.prototype.init_r_0 = function(initVib,initRot) {
-        var val = this.V.getR_0();
-        if(initVib + initRot + - this.V.e > 0) return val * Math.pow(13/7,1/6);
-        for (var i =0; i < 100; i++) {
-                val -= (this.reducedM * Math.pow(this.omega, 2) * Math.pow(val, 14)
-                - 12 * this.V.e * Math.pow(this.V.getR_0() * val, 6) + 12 * this.V.e * Math.pow(this.V.getR_0(), 12)) /
-                (14 * this.reducedM * Math.pow(this.omega, 2) * Math.pow(val, 13) - 72 * this.V.e * Math.pow(val, 5) *
-                    Math.pow(this.V.getR_0(), 6));
+Molecule.prototype.init_r_0 = function(resolution,L) {
+        var min = [0,Number.MAX_VALUE];
+        for(var i = Math.floor(0.75*this.V.getR_0()/resolution); i < Math.ceil(1.25*this.V.getR_0()/resolution); i++){
+            var potVal = this.V.calcV(i*resolution) +  Math.pow(L/(i*resolution),2)/(2 * this.reducedM);
+            if(min[1] > potVal) min = [i*resolution,potVal];
         }
-        return val;
+        return min[0];
 };
 
 /**
