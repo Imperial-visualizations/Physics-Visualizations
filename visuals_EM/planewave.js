@@ -54,8 +54,17 @@ window.onload = function() {
             this.n2 = n2;
             this.polarisation = polarisation;
 
+            this.numSines = 2 * 4;
+
             this.frame = 0;
-            this.numFrames = 63; //126
+            this.numFrames = Math.round(graph.dim/this.numSines);//63; //126
+
+            var animIntervalID = window.setInterval(function() {
+                this.updatePlot();
+            }.bind(this), 100);
+            setTimeout(function() {
+                clearInterval(animIntervalID);
+            }, 15000);
         },
 
 
@@ -132,7 +141,8 @@ window.onload = function() {
                 throw new RangeError("material must be 1 or 2");
             }
             var yMin = 0,
-                yMax = graph.dim;
+                yMax = graph.dim,
+                numSines = this.numSines;
 
                 // xRange = np.range(xMin, xMax),
                 // yRange = np.range(0, graph.dim),
@@ -140,7 +150,7 @@ window.onload = function() {
             function waveFunc(x, y, phase) {
                 x = 2*x/graph.dim - 1;
                 y = -2*y/graph.dim - 1;
-
+                // console.log(foo);
                 if (isComplex(theta)) {
                     // Fast complex sin & cos:
                     var p = theta.re,
@@ -155,16 +165,16 @@ window.onload = function() {
                         b = -sinP * sinhQ,
                         c = -sinP * coshQ,
                         d = -cosP * sinhQ,
-                        g = 8*pi*n;
+                        g = numSines*pi*n;
                     return amplitude * Math.cos( g * (a*x + c*y - phase) ) * Math.exp( -g * (b*x + d*y) );
                 } else {
                     var k_x = n * Math.cos(theta),
                         k_y = -n * Math.sin(theta);
 
                     if (reversePhase === false) {
-                        return amplitude * Math.cos( 8*pi * (k_x*x + k_y*y - phase) );
+                        return amplitude * Math.cos( numSines*pi * (k_x*x + k_y*y - phase) );
                     } else if (reversePhase === true) {
-                        return amplitude * Math.cos( 8*pi * (k_x*x + k_y*y + phase) );
+                        return amplitude * Math.cos( numSines*pi * (k_x*x + k_y*y + phase) );
                     } else {
                         throw new TypeError("`createWave()` arg `reversePhase` must be of type `bool`");
                     }
@@ -213,15 +223,10 @@ window.onload = function() {
 
     };
 
-    Boundary.init(angle=43, n1=1, n2=1.5, polarisation="s", interference=true);
-    Boundary.updatePlot();
+    Boundary.init(angle=50, n1=1.5, n2=1., polarisation="s", interference=true);
+    // Boundary.updatePlot();
 
-    var animIntervalID = window.setInterval(function() {
-        Boundary.updatePlot();
-    }, 50);
-    setTimeout(function() {
-        clearInterval(animIntervalID);
-    }, 15000);
+
 
     // console.log(np.range(-2, 15));
 
