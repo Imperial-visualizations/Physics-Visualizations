@@ -100,7 +100,7 @@ LJ.prototype.getR_0 = function(){
  * @returns {{x: Array, y: Array, name: string, mode: string, line: {width: number, opacity: number, color: string}}}
  * JS object that can be plotted by Plotly.
  */
-LJ.prototype.plotPoints = function(ppu) {
+LJ.prototype.plotLJ = function(ppu) {
     var r = [];                                                         // Array to store separation in.
     var v = [];                                                         // Array to store corresponding potential in.
 
@@ -121,7 +121,7 @@ LJ.prototype.plotPoints = function(ppu) {
  * @returns {{x: Array, y: Array, name: string, mode: string, line: {width: number, opacity: number, color: string}}}
  * JS object that can be plotted by Plotly.
  */
-LJ.prototype.plotLJCentrifugal = function (ppu, L, mu) {
+LJ.prototype.plotLJCorr = function (ppu, L, mu) {
     var r = [];
     var v = [];
 

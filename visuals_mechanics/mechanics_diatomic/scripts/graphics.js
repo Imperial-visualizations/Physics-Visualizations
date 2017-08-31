@@ -8,7 +8,6 @@ var phaserInstance = new Phaser.Game(width,height,Phaser.CANVAS, "phaser",
 var a1, a2, mol1, potential;                                        // Atoms, molecules and potential to be instantiated
 var zoom  = 35;
 var initKVib, initKRot;                                             // Initial KEs.
-var dInitKVib;
 var init_s1 = 2, init_s2 = 2, init_e1 = 10, init_e2 = 10;           // Initial LJ parameters.
 
 // Colours
@@ -18,6 +17,7 @@ const CHERRY = 0xE40043;
 const GRAPH_TIME = 5;                                               // x-axis range for Energy against Time plots.
 
 var running = false;                                                // Animation status.
+var dT = 1/60;                                                      // Timestep.
 
 // Global Variables to store data for graph-drawing.
 var arrRotKE = [];
@@ -26,7 +26,7 @@ var arrTime = [];
 var arrPE = [];
 var arrVibKE = [];
 var arrVibKESlider;
-var LJ_scatter, LJCentrifgual_scatter;
+var LJ_scatter, LJCentr_scatter;
 var curr_LJ;
 var LJ_layout;
 var curr_corrLJ;
@@ -162,10 +162,8 @@ function updateLabels() {
     });
 
     // Updating KE values and resetting.
-    var old_KVib = initKVib;
     initKVib = parseFloat($('#vibKEDisplay').text());
     initKRot = parseFloat($('#rotKEDisplay').text());
-    dInitKVib = old_KVib - initKVib;
     reset();
 }
 
@@ -253,8 +251,8 @@ function plotLJ() {
     while (LJ_scatter.y[0] > LJ_layout.yaxis.range[1]) {
         LJ_scatter.x.shift();
         LJ_scatter.y.shift();
-        LJCentrifgual_scatter.x.shift();
-        LJCentrifgual_scatter.y.shift();
+        LJCentr_scatter.x.shift();
+        LJCentr_scatter.y.shift();
     }
 
     LJ_layout.yaxis.range[1] = LJ_scatter.y[0];     // Re-optimising y-axis scaling.
@@ -271,7 +269,7 @@ function plotLJ() {
     curr_corrLJ = {x: [curr_sep], y: [curr_cent_V], name: "LJ" + "curr, corr".sub(), mode: "markers",
         marker: {size: 10, color: "#ff9030", symbol: "circle-open"}};
 
-    var data = [LJ_scatter, LJCentrifgual_scatter, curr_LJ, curr_corrLJ, tot_E_plot];
+    var data = [LJ_scatter, LJCentr_scatter, curr_LJ, curr_corrLJ, tot_E_plot];
     Plotly.newPlot("LJ_scatter", data, LJ_layout, options);
 }
 
@@ -366,38 +364,14 @@ function reset(){
 
     // Creating new molecule with atoms and instantiated potential. KEs entered by users using sliders.
     // If not running, reset position too.
-    if (!running) {
-        mol1 = new Molecule(a1, a2, potential, initKVib, initKRot);
-    }
+    if (!running) mol1 = new Molecule(a1, a2, potential, initKVib, initKRot);
 
     // If running, maintain previous position.
-    else {
-        var dir = mol1.calcDir();
-        var v = mol1.v;
-        var w = mol1.omega;
-
-        mol1 = new Molecule(a1, a2, potential, initKVib, initKRot);
-        a1.pos.splice(-1, 1); a2.pos.splice(-1, 1);
-        mol1.r = dir;
-        if (v > 0) {
-            mol1.v = -mol1.v;
-            if (dInitKVib > 0) {
-                mol1.v = mol1.v -  Math.sqrt((2 * dInitKVib) / mol1.reducedM);
-            }
-        }
-        else {
-            mol1.v = v;
-            if (dInitKVib > 0) {
-                mol1.v = mol1.v + Math.sqrt((2 * dInitKVib) / mol1.reducedM);
-            }
-        }
-        mol1.omega = w;
-    }
-
+    else mol1 = mol1.softReset(initKVib, initKRot);
 
     // Creating x and y coordinates to plot.
-    LJ_scatter  = potential.plotPoints(35);
-    LJCentrifgual_scatter = potential.plotLJCentrifugal(35,mol1.L,mol1.reducedM);
+    LJ_scatter  = potential.plotLJ(35);
+    LJCentr_scatter = potential.plotLJCorr(35, mol1.L, mol1.reducedM);
 
     a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
     a1.sprite.y = a1.getPos().items[1] * zoom + phaserInstance.world.centerY;
@@ -423,7 +397,6 @@ function reset(){
  */
 function update(){
     if(running) {
-        var dT = 1/60;
         mol1.update(dT);//requests molecule update, sends deltaTime to mol1.
         a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
         a1.sprite.y = a1.getPos().items[1] * zoom + phaserInstance.world.centerY;

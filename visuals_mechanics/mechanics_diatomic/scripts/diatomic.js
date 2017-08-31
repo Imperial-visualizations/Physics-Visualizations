@@ -49,6 +49,9 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
         console.error("Can't run simulation without two valid atom objects");
     }
 
+    this.a1 = a1;
+    this.a2 = a2;
+
     this.V = potential;                                         // Potential used as a bond between atoms.
 
     this.tot_m =(a1.mass + a2.mass);                             // Finding total mass of the system.
@@ -114,7 +117,7 @@ Molecule.prototype.update = function(deltaTime){
  * @param dT: Time elapsed since previous timestep.
  */
 Molecule.prototype.calcExtCoords = function (dT) {
-    var a = (this.V.calcF(this.r.mag())/this.reducedM) +  Math.pow(this.omega,2)*this.r.mag();
+    var a = (this.V.calcF(this.r.mag()) / this.reducedM) +  Math.pow(this.omega, 2) * this.r.mag();
     this.v += a * dT;
     this.r = this.r.add(this.r.unit().multiply(this.v * dT));
 };
@@ -156,6 +159,22 @@ Molecule.prototype.getKE_V = function () {
     return 0.5 * this.reducedM * Math.pow(this.v,2);
 };
 
-Molecule.prototype.getTot_E = function () {
-    return this.KE_R + this.KE_V + this.V.calcV(this.r)
+/**
+ * Creates new molecule object with no change in direction or separation.
+ * @param ke_vib0: Slider value of KE_vib.
+ * @param ke_rot0: Slider value of KE_rot.
+ * @returns {Molecule} New molecule.
+ */
+Molecule.prototype.softReset = function (ke_vib0, ke_rot0) {
+    var dir = this.calcDir();
+
+    var new_mol = new Molecule(this.a1, this.a2, this.V, ke_vib0, ke_rot0);
+
+    new_mol.a1.pos.splice(-1, 1); new_mol.a2.pos.splice(-1, 1);
+    new_mol.r = dir;
+    new_mol.w = this.w;
+    new_mol.KE_V = new_mol.tot_E - new_mol.KE_R;
+    if (this.v > 0) mol1.v = -mol1.v;
+
+    return new_mol;
 };
