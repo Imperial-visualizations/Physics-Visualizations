@@ -22,7 +22,8 @@
         <div class="six columns">
             <h1>2D Transformations</h1>
             <div id='graph' style="width:450px; height:450px;"></div>  <!-- Plotly chart will be drawn inside this DIV -->
-            <input class="button-primary" type="submit" value="Show Matrix" onclick="showMatrix()">
+            <input class="button-primary" type="submit" value="Show Matrix" onclick="showMatrix()" title="Reveal the
+overall composition of transformations">
             <!--<input type="checkbox",id="myCheck">-->
             <!--<span class="label-body">Show initial plot</span>-->
         </div>
@@ -30,20 +31,24 @@
         <div class="six columns">
 
             <ul class="tab-nav">
-              <li><a class="button active" href="#skew">Skew</a></li>
-              <li><a class="button" href="#scale">Scale</a></li>
-              <li><a class="button" href="#rotate">Rotate</a></li>
-              <li><a class="button" href="#custom">Custom</a></li>
+                <li><a class="button active" href="#skew">Skew</a></li>
+                <li><a class="button" href="#scale">Scale</a></li>
+                <li><a class="button" href="#rotate">Rotate</a></li>
+                <li><a class="button" href="#custom">Custom</a></li>
             </ul>
 
             <div class="tab-content">
-              <div class="tab-pane active" id="skew">
-                <div class="sliderSkew">
-                    <form>
-                        Axis: <br>
-                      <input type="radio" name="axis" value="x" id="x"> x<br>
-                      <input type="radio" name="axis" value="x" id="y"> y<br>
-                    </form>
+                <div class="tab-pane active" id="skew">
+                    <div class="sliderSkew">
+                    <label class="radioTitle">Axis: </label>
+                    <label class="radio">
+                    <input type="radio" name="axis" id="x" checked /><span for="radio"></span>
+                    </label>
+                    <label class="radioLabel">x</label><br>
+                    <label class="radio">
+                    <input type="radio" name="axis" id="y"/><span for="radio"></span>
+                    </label>
+                    <label class="radioLabel">y</label>
                     <!--<label class="sliderTitle">Axis:</label>-->
                     <!--<label>-->
                         <!--<input id="skewID" class="inputs" type ="range" value="0" min ="0" max="1" step ="1" onchange="skewMatrix()"/>-->
@@ -51,11 +56,12 @@
                      <!--</label>-->
                 </div>
                 <div class="sliderSkew">
-                    <input class="button-primary" type="submit" value="Start" onclick="plotSkew()">
-                    <input type="button" value="Reset" onclick="resetStuff()">
-                </div>
-                  <h4>Skew Matrix:</h4>
+                    <h4>Skew Matrix:</h4>
                   <p id="skewmatrix"></p>
+                    <input class="button-primary" type="submit" value="Apply" onclick="plotSkew()">
+                    <input type="button" value="Reset" onclick="resetStuff()" >
+                </div>
+
 
 
               </div>
@@ -64,90 +70,95 @@
                 <div class="sliderRotate">
                     <label class="sliderTitle" >Rotation Angle (θ):</label>
                         <label>
-                           <input id="rotateID" type ="range" value="0" min ="0" max="2" step ="0.05" onchange="rotateMatrix()" data-unit="radians"/>
+                           <input id="rotateID" type ="range" value="0" min ="0" max="2" step ="0.05" oninput="rotateMatrix()" data-unit="radians"/>
                             <span class="sliderMin">0</span><span class="sliderMax">2π rad</span>
                         </label>
                 </div>
                 <div class="sliderRotate">
-                    <!--<input type="button" value="Start", onclick="plotterRotate()">-->
-                    <input class="button-primary" type="submit" value="Start", onclick="plotRotate()">
-                    <input type="button" value="Reset", onclick="resetStuff()">
-                </div>
-                  <p id="showtheta"></p>
+                    <p id="showtheta"></p>
 
                   <h4>Rotation Matrix:</h4>
                   <div class="row">
                       <div class="six columns">
-                  <h5>Trigonometric Form</h5>
+                          <h5>Trigonometric Form</h5>
                           <p id="rotatematrix2"></p>
-                          </div>
+                      </div>
                       <div class="six columns">
-
-                  <h5>Decimal Form</h5>
-                    <p id="rotatematrix"></p>
+                          <h5>Decimal Form</h5>
+                          <p id="rotatematrix"></p><br>
                       </div>
                   </div>
+                    <!--<input type="button" value="Start", onclick="plotterRotate()">-->
+                      <input class="button-primary" type="submit" value="Apply" onclick="plotRotate()">
+                      <input type="button" value="Reset" onclick="resetStuff()">
+                </div>
+
+
 
               </div>
 
               <div class="tab-pane" id="scale">
                 <div class="sliderScale">
-                    <label class="sliderTitle">x-scale:</label>
+                    <label class="sliderTitle">x-scale: <span id="scale1IDDisplay">1</span></label>
                     <label>
-                        <input id="scale1ID" type ="range" value="1" min ="-4" max="4" step ="0.1" onchange="scaleMatrix()"/>
+                        <input id="scale1ID" type ="range" value="1" min ="-4" max="4" step ="0.1" oninput="scaleMatrix()"/>
                         <span class="sliderMin">-4</span><span class="sliderMax">4</span>
                     </label>
                 </div>
                 <div class="sliderScale">
-                    <label class="sliderTitle">y-scale:</label>
+                    <label class="sliderTitle">y-scale: <span id="scale2IDDisplay">1</span></label>
                     <label>
-                        <input id="scale2ID" type ="range" value="1" min ="-4" max="4" step ="0.1" onchange="scaleMatrix()"/>
+                        <input id="scale2ID" type ="range" value="1" min ="-4" max="4" step ="0.1" oninput="scaleMatrix()"/>
                         <span class="sliderMin">-4</span><span class="sliderMax">4</span>
                     </label>
-                </div>
-                <div class="sliderScale">
-                    <input class="button-primary" type="submit" value="Start", onclick="plotScale()">
-                    <input type="button" value="Reset", onclick="resetStuff()">
                 </div>
                   <h4>Scaling Matrix:</h4>
                   <p id="scalematrix"></p>
+                <div class="sliderScale">
+                    <input class="button-primary" type="submit" value="Apply" onclick="plotScale()">
+                    <input type="button" value="Reset" onclick="resetStuff()">
+                </div>
+
               </div>
 
               <div class="tab-pane" id="custom">
-                <div class="sliderCustom">
-                    <label class="sliderTitle">a:</label>
-                     <label>
-                         <input id="aID" type ="range" value="0" min ="-2" max="2" step ="0.1" onchange="customMatrix()"/>
-                         <span class="sliderMin">-2</span><span class="sliderMax">2</span>
-                     </label>
+                  <span><b>Type input:</b></span><br><br>
+                  <p id="tableInput"></p>
+                <!--<div class="sliderCustom">-->
+                    <!--<label class="sliderTitle">a:</label>-->
+                     <!--<label>-->
+                         <!--<input id="aID" type ="range" value="0" min ="-2" max="2" step ="0.1" onchange="customMatrix()"/>-->
+                         <!--<span class="sliderMin">-2</span><span class="sliderMax">2</span>-->
+                     <!--</label>-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="sliderCustom">&ndash;&gt;-->
+                    <!--<label class="sliderTitle">b:</label>-->
+                     <!--<label>-->
+                         <!--<input id="bID" type ="range" value="0" min ="-2" max="2" step ="0.1" onchange="customMatrix()"/>-->
+                         <!--<span class="sliderMin">-2</span><span class="sliderMax">2</span>-->
+                     <!--</label>-->
                 <!--</div>-->
                 <!--<div class="sliderCustom">-->
-                    <label class="sliderTitle">b:</label>
-                     <label>
-                         <input id="bID" type ="range" value="0" min ="-2" max="2" step ="0.1" onchange="customMatrix()"/>
-                         <span class="sliderMin">-2</span><span class="sliderMax">2</span>
-                     </label>
-                </div>
-                <div class="sliderCustom">
-                    <label class="sliderTitle">c:</label>
-                     <label>
-                         <input id="cID" type ="range" value="0" min ="-2" max="2" step ="0.1" onchange="customMatrix()"/>
-                         <span class="sliderMin">-2</span><span class="sliderMax">2</span>
-                     </label>
-                </div>
-                <div class="sliderCustom">
-                    <label class="sliderTitle">d:</label>
-                     <label>
-                         <input id="dID" type ="range" value="0" min ="-2" max="2" step ="0.1" onchange="customMatrix()"/>
-                         <span class="sliderMin">-2</span><span class="sliderMax">2</span>
-                     </label>
-                </div>
-                <div class="sliderCustom">
-                    <input class="button-primary" type="submit" value="Start", onclick="plotCustom()">
-                    <input type="button" value="Reset", onclick="resetStuff()">
-                </div>
+                    <!--<label class="sliderTitle">c:</label>-->
+                     <!--<label>-->
+                         <!--<input id="cID" type ="range" value="0" min ="-2" max="2" step ="0.1" onchange="customMatrix()"/>-->
+                         <!--<span class="sliderMin">-2</span><span class="sliderMax">2</span>-->
+                     <!--</label>-->
+                <!--</div>-->
+                <!--<div class="sliderCustom">-->
+                    <!--<label class="sliderTitle">d:</label>-->
+                     <!--<label>-->
+                         <!--<input id="dID" type ="range" value="0" min ="-2" max="2" step ="0.1" onchange="customMatrix()"/>-->
+                         <!--<span class="sliderMin">-2</span><span class="sliderMax">2</span>-->
+                     <!--</label>-->
+                <!--</div>-->
                   <h4>Custom Matrix:</h4>
                     <p id="custommatrix"></p>
+                <div class="sliderCustom">
+                    <input class="button-primary" type="submit" value="Apply" onclick="plotCustom()">
+                    <input type="button" value="Reset" onclick="resetStuff()">
+                </div>
+
 
               </div>
             </div>
