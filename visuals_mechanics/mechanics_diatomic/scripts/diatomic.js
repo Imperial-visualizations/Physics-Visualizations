@@ -69,7 +69,7 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
     // System's vibrational & rotational KEs, and total energy.
     this.KE_V = this.getKE_V();
     this.KE_R = this.getKE_R();
-    this.tot_E = keVib_0 + keRot_0 + this.V.calcCorrV(this.init_r_0(initKVib, initKRot), this.L, this.reducedM);
+    this.tot_E = keVib_0 + keRot_0 + this.V.calcV(this.r.mag());
 };
 
 /** ================================================= Class Methods ==================================================*/
