@@ -1,5 +1,14 @@
 window.onload = function() {
 
+    var dom = {
+        intface: $("#interface"),
+        loadSpinner: $("#spinner-wrapper"),
+        polarisationSwitchInputs: $("#polarisation-switch input"),
+        refractiveIndexInput: $("input#refractive-index"),
+        angleInput: $("input#angle"),
+        interferenceInput: $("input#interference")
+    };
+
     var canvas = document.getElementById("graph"),
         graph = {
             ctx: canvas.getContext('2d'),
@@ -8,48 +17,47 @@ window.onload = function() {
         graph.imageData = graph.ctx.getImageData(0, 0, graph.dim, graph.dim);
         graph.numPixels = graph.dim * graph.dim;
 
+
+
+    function handlePolarisationSwitch() {
+        Boundary.pauseAnimation();
+        if (this.value === "s-polarisation") {
+            Boundary.polarisation = "s";
+        } else if (this.value === "p-polarisation") {
+            Boundary.polarisation = "p";
+        }
+        Boundary.createWaves();
+        Boundary.playAnimation();
+    }
+
+    function handleRefractiveIndexSlider() {
+        Boundary.pauseAnimation();
+        Boundary.n2 = $(this).val();
+        Boundary.createWaves();
+        Boundary.playAnimation();
+    }
+
+    function handleAngleSlider() {
+        Boundary.pauseAnimation();
+        Boundary.theta = degToRad($(this).val());
+        Boundary.createWaves();
+        Boundary.playAnimation();
+    }
+
+    function handleInterferenceCheckbox() {
+        Boundary.pauseAnimation();
+        if (Boundary.interference) {
+            Boundary.interference = false;
+        } else {
+            Boundary.interference = true;
+        }
+        Boundary.createWaves();
+        Boundary.playAnimation();
+    }
+
+
     var cmath = math,
         pi = Math.PI;
-        // phase = 0;
-
-
-    function pixelIndexToCoord(pixel) {
-        return [pixel % graph.dim, Math.floor(pixel / graph.dim)];
-    }
-    function coordToPixelIndex(x, y) {
-        return y * graph.dim + x;
-    }
-
-    function degToRad(angle) {
-        return (angle / 180) * pi;
-    }
-
-    /** Return intensity value between 0-255 for a given pixel */
-    function convertToColorVal(rawValue) {
-        return rawValue*127.5 + 127.5;
-    }
-
-    function isComplex(number) {
-        if (typeof number === "number") {
-            return false;
-        } else if (typeof number === "object"){
-            return true;
-        } else {
-            throw new TypeError("isComplex() only takes type `number` or `object`");
-        }
-    }
-
-
-    function cosSnell(n1, n2, thetaI) {
-        var cosSquaredThetaT = 1 - Math.pow((n1/n2) * Math.sin(thetaI), 2);
-        if (cosSquaredThetaT < 0) {
-            return cmath.sqrt(cosSquaredThetaT);
-        } else {
-            return Math.sqrt(cosSquaredThetaT);
-        }
-    }
-
-
 
 
     var Boundary = {
@@ -67,12 +75,10 @@ window.onload = function() {
 
             this.createWaves();
 
-            var animIntervalID = window.setInterval(function() {
-                this.updatePlot();
-            }.bind(this), 100);
+            this.playAnimation();
             setTimeout(function() {
-                clearInterval(animIntervalID);
-            }, 15000);
+                this.pauseAnimation();
+            }.bind(this), 15000);
         },
 
 
@@ -91,13 +97,8 @@ window.onload = function() {
         },
 
 
-        updateFrame: function() {
-            this.waveImgData = new Float32Array(4*graph.numPixels);
-            this.setWaveData();
-        },
-
-
         setWaveData: function() {
+            this.waveImgData = new Float32Array(4*graph.numPixels);
             var phase = 2*this.frame/graph.dim;
             for (var x = 0; x < graph.dim; x++) {
                 for (var y = 0; y < graph.dim; y++) {
@@ -123,7 +124,7 @@ window.onload = function() {
 
 
         updatePlot: function() {
-            this.updateFrame();
+            this.setWaveData();
             graph.imageData.data.set(this.waveImgData);
             // console.log(this.waveImgData[4000], graph.imageData.data[4000]);
             graph.ctx.putImageData(graph.imageData, 0, 0);
@@ -135,6 +136,21 @@ window.onload = function() {
             // console.log("Updated plot;");
             // console.log(graph.imageData);
             // console.log(this.waveImgData);
+        },
+
+
+        playAnimation: function() {
+            this.animIntervalID = window.setInterval(function() {
+                this.updatePlot();
+            }.bind(this), 100);
+        },
+        pauseAnimation: function() {
+            clearInterval(this.animIntervalID);
+        },
+
+
+        changeParams: function() {
+
         }
 
     };
@@ -168,6 +184,7 @@ window.onload = function() {
                 this.coeffs.b = -sinP * sinhQ;
                 this.coeffs.c = -sinP * coshQ;
                 this.coeffs.d = -cosP * sinhQ;
+                this.coeffs.g = Boundary.numSines*pi*this.n1;
             } else {
                 this.coeffs.k_x = this.n1 * Math.cos(this.theta);
                 this.coeffs.k_y = -this.n1 * Math.sin(this.theta);
@@ -187,8 +204,7 @@ window.onload = function() {
             // var thisWave = this[waveType];
 
             if (isComplex(this.theta)) {
-                var g = Boundary.numSines*pi*this.n1;
-                return this.amplitude * Math.cos( g * (this.coeffs.a*x + this.coeffs.c*y - phase) ) * Math.exp( -g * (this.coeffs.b*x + this.coeffs.d*y) );
+                return this.amplitude * Math.cos( this.coeffs.g * (this.coeffs.a*x + this.coeffs.c*y - phase/this.n1) ) * Math.exp( -this.coeffs.g * (this.coeffs.b*x + this.coeffs.d*y) );
             } else {
                 if (reversePhase) {
                     return this.amplitude * Math.cos( Boundary.numSines*pi * (this.coeffs.k_x*x + this.coeffs.k_y*y + phase) );
@@ -249,11 +265,48 @@ window.onload = function() {
 
 
 
-    Boundary.init(30, 1, 1.5, "s", true);
-    // Boundary.updatePlot();
+    function pixelIndexToCoord(pixel) {
+        return [pixel % graph.dim, Math.floor(pixel / graph.dim)];
+    }
+    function coordToPixelIndex(x, y) {
+        return y * graph.dim + x;
+    }
+
+    function degToRad(angle) {
+        return (angle / 180) * pi;
+    }
+
+    /** Return intensity value between 0-255 for a given pixel */
+    function convertToColorVal(rawValue) {
+        return rawValue*127.5 + 127.5;
+    }
+
+    function isComplex(number) {
+        if (typeof number === "number") {
+            return false;
+        } else if (typeof number === "object"){
+            return true;
+        } else {
+            throw new TypeError("isComplex() only takes type `number` or `object`");
+        }
+    }
 
 
+    function cosSnell(n1, n2, thetaI) {
+        var cosSquaredThetaT = 1 - Math.pow((n1/n2) * Math.sin(thetaI), 2);
+        if (cosSquaredThetaT < 0) {
+            return cmath.sqrt(cosSquaredThetaT);
+        } else {
+            return Math.sqrt(cosSquaredThetaT);
+        }
+    }
 
-    // console.log(np.range(-2, 15));
+
+    Boundary.init(45, 1, 1.5, "s", true);
+
+    dom.polarisationSwitchInputs.on("change", handlePolarisationSwitch);
+    dom.refractiveIndexInput.on("input", handleRefractiveIndexSlider);
+    dom.angleInput.on("input", handleAngleSlider);
+    dom.interferenceInput.on("change", handleInterferenceCheckbox);
 
 };
