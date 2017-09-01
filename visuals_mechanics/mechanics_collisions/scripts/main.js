@@ -555,7 +555,7 @@ function update() {
         if(ball2.CoM.spriteInstance.y  - ball2.radius/2 < canvasHeight/3) ball2.CoM.spriteInstance.visible = false;
         if(ball2.CoM.spriteInstance.y + ball2.radius/2 > canvasHeight*2/3) ball2.CoM.spriteInstance.visible = false;
 
-        if (Phaser.Rectangle.intersects(ball1.Lab.spriteInstance.getBounds(), ball2.Lab.spriteInstance.getBounds()) && !isColliding) {
+        if (!isColliding && Math.pow(ball1.Lab.spriteInstance.x - ball2.Lab.spriteInstance.x,2) + Math.pow(ball1.Lab.spriteInstance.y - ball2.Lab.spriteInstance.y,2) <= Math.pow(ball1.radius+ball2.radius,2)/4) {
             onCollision();
         }
 
@@ -571,7 +571,7 @@ function drawArrow(originV, vectorV, rectIndex, color = 0x006EAF, latexID = "") 
     // let origin,vector;
     let scaleFactor;
     let disStarting = 1;
-    if(rectIndex == 3) {
+    if(rectIndex === 3) {
         // vector = new Vector(vectorV.x * 7 /dynamicSF,-1*vectorV.y*7/dynamicSF);
         // if(latexID === 'p1'){
         //     origin = new Vector(originV.x,-1*originV.y);

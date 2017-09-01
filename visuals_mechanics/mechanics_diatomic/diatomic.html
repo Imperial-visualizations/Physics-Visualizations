@@ -50,6 +50,12 @@
         }
 
     </style>
+        <script>
+        if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1))
+        {
+            window.location.href = "unsupported.html";
+        }
+    </script>
     </head>
 <body>
 <div class="container">
@@ -77,7 +83,7 @@
                 <span class="txtInputs" id="rotKEDisplay" data-unit=" eV" data-change>5 eV</span>
             </label>
             <label class="slider">
-                <input id="rotKE" class="inputs" title="Rot KE" type="range" value="0" min="0" max="15.0" step="0.05"/>
+                <input id="rotKE" class="inputs" title="Rot KE" type="range" value="0" min="0" max="30.0" step="0.05"/>
                 <span class="sliderMin">0.00</span><span class="sliderMax">15.00</span>
             </label>
 

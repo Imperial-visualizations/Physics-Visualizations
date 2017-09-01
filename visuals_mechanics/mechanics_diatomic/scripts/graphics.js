@@ -27,9 +27,8 @@ var arrPE = [];
 var arrVibKE = [];
 var arrVibKESlider;
 var LJ_scatter, LJCentr_scatter;
-var curr_LJ;
+var curr_LJ,curr_E_connector,curr_corrLJ;
 var LJ_layout;
-var curr_corrLJ;
 var titleFontsize = 12, labelFontsize = 10;                     // Text sizes.
 var marT = 30, marB = 23, marR = 5, marL = 35;                  // Margins.
 var layoutE;
@@ -264,12 +263,14 @@ function plotLJ() {
 
     var tot_E_plot = {x: [LJ_layout.xaxis.range[0] - 1, LJ_layout.xaxis.range[1] + 1], y: [mol1.tot_E, mol1.tot_E],
         name: "E" + "tot".sub(), mode: "lines", line: {dash: "dash", width: 1}};
+    curr_E_connector = {x:[curr_sep,curr_sep],y:[curr_V,curr_cent_V],
+        mode:"lines",line:{dash:"dash",width:1}};
     curr_LJ = {x: [curr_sep], y: [curr_V], name: "LJ" + "curr".sub(), mode: "markers",
         marker: {size: 10, color: CHERRY, symbol: "circle-open"}};
     curr_corrLJ = {x: [curr_sep], y: [curr_cent_V], name: "LJ" + "curr, corr".sub(), mode: "markers",
         marker: {size: 10, color: "#ff9030", symbol: "circle-open"}};
 
-    var data = [LJ_scatter, LJCentr_scatter, curr_LJ, curr_corrLJ, tot_E_plot];
+    var data = [LJ_scatter, LJCentr_scatter, curr_LJ, curr_corrLJ, tot_E_plot,curr_E_connector];
     Plotly.newPlot("LJ_scatter", data, LJ_layout, options);
 }
 
@@ -425,6 +426,8 @@ function update(){
         // Updating current LJ r and V(r) and LJ_corr(r).
         curr_LJ.x = [curr_sep]; curr_LJ.y = [curr_V];
         curr_corrLJ.x = [curr_sep]; curr_corrLJ.y = [curr_cent_V];
+        curr_E_connector.x =[curr_sep,curr_sep]; curr_E_connector.y = [curr_V,curr_cent_V];
+
 
         // Update time array.
         var t;
@@ -456,8 +459,8 @@ function update(){
 
         if ($('#LJ_scatter').hasClass("expanded")) {
             Plotly.restyle("LJ_scatter", {
-                    data: [curr_LJ, curr_corrLJ],
-                    traces: [0, 1]},
+                    data: [curr_LJ, curr_corrLJ,curr_E_connector],
+                    traces: [0, 1, 2]},
                 {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
         }
     }
