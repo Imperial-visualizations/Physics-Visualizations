@@ -40,7 +40,7 @@ $(window).on('load', function() {
         };
 
     $.when(
-        $.getJSON("https://rawgit.com/binaryfunt/Imperial-Visualizations/master/dielectric_boundary_data2.JSON"),
+        $.getJSON("https://rawgit.com/binaryfunt/Imperial-Visualizations/master/dielectric_boundary_data3.JSON"),
         $.getJSON("https://rawgit.com/binaryfunt/Imperial-Visualizations/master/dielectric_boundary_layout.JSON"),
         $.getJSON("https://rawgit.com/EdKeys/Imperial-Visualizations/master/fresnel_data.JSON")
     ).then(function(data, layout, dataFres) { // i.e., function(JSON1, JSON2) {// success}, function() {// error}
@@ -60,16 +60,16 @@ $(window).on('load', function() {
     function init(data, layout, dataFres) {
         phys.data = data;
         phys.dataFres = dataFres;
-        // layout['showlegend']=true;
         layout['width']=600;
-        layout['height']=500;
+        layout['height']=350;
         layout['xaxis'] = {range: [0, 90], title: "Angle"};
         layout['yaxis'] = {range: [-1, 2.1]};
+        layout.margin = {l: 40, r: 10, b: 40, t: 1, pad: 5};
         endLoadingScreen();
 
-        Plotly.plot(div='graph', deepCopy(phys.getPlotData()), layout=layout);
-        Plotly.plot(div='graph2', deepCopy(phys.getCurvePlotData()), layout=layout);
-        // Plotly.plot(div='graph2', deepCopy(phys.getFresPlotData()), layout=layout);
+        Plotly.plot(div='graph', deepCopy(phys.getPlotData()), layout=layout, {displayModeBar: false});
+        Plotly.newPlot(div='graph2', deepCopy(phys.getCurvePlotData()), layout=layout, {displayModeBar: false});
+
     }
 
 
@@ -87,6 +87,7 @@ $(window).on('load', function() {
             input2index($(this), phys.data[phys.polarisation])
         );
         updatePlot();
+        $("#refractiveIndex_display").text($(this).val());
     }
 
     function handleAngleSlider() {
@@ -94,6 +95,7 @@ $(window).on('load', function() {
             input2index($(this), phys.data[phys.polarisation][phys.refractiveIndexIndex])
         );
         updatePlot();
+        $("#angle_display").text($(this).val());
     }
 
 

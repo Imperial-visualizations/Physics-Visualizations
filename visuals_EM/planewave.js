@@ -1,152 +1,216 @@
-$(window).on('load', function() {
+window.onload = function() {
 
-    var dom = {
-            intface: $("#interface"),
-            loadSpinner: $("#spinner-wrapper"),
-            polarisationSwitchInputs: $("#polarisation-switch input"),
-            refractiveIndexInput: $("input#refractive-index"),
-            angleInput: $("input#angle")
-        },
-        plt = {
-            MaxTraceNo: 12
-        },
-        phys = {
-            polarisation: "s",
-            refractiveIndexIndex: 6,
-            angleIndex: 10,
-            data: [],
-            setPolarisation: function(polarisation) {
-                this.polarisation = polarisation;
-            },
-            setRefractiveIndexIndex: function(index) {
-                this.refractiveIndexIndex = index;
-            },
-            setAngleIndex: function(index) {
-                this.angleIndex = index;
-            },
-            getPlotData: function() {
-                return this.data[this.polarisation][this.refractiveIndexIndex][this.angleIndex];
-            }
+    var canvas = document.getElementById("graph"),
+        graph = {
+            ctx: canvas.getContext('2d'),
+            dim: canvas.height
         };
+        graph.imageData = graph.ctx.getImageData(0, 0, graph.dim, graph.dim);
+        graph.numPixels = graph.dim * graph.dim;
 
-    $.when(
-        $.getJSON("https://rawgit.com/binaryfunt/Imperial-Vis-Raw/master/planewave.JSON")
-    ).then(function(data) {
-        var trace = data[0],
-            layout = data[1],
-            frames = data[2];
-
-        // NOTE HOLD YOUR HORSES
-        init(trace, layout, frames);
-
-        // dom.polarisationSwitchInputs.on("change", handlePolarisationSwitch);
-        // dom.refractiveIndexInput.on("input", handleRefractiveIndexSlider);
-        // dom.angleInput.on("input", handleAngleSlider);
-
-    }, showJSONLoadError);
+    var cmath = math,
+        pi = Math.PI;
+        // phase = 0;
 
 
-    function init(trace, layout, frames) {
-        // phys.data = data;
-
-        endLoadingScreen();
-
-        // Plotly.plot(div='graph', deepCopy(phys.getPlotData()), layout=layout);
-        console.log(trace);
-        console.log(layout);
-        console.log(frames);
-        Plotly.plot(div='graph', data=[trace], layout=layout).then(function() {
-            Plotly.addFrames(div='graph', frames)
-        })
+    function pixelIndexToCoord(pixel) {
+        return [pixel % graph.dim, Math.floor(pixel / graph.dim)];
+    }
+    function coordToPixelIndex(x, y) {
+        return y * graph.dim + x;
     }
 
+    function degToRad(angle) {
+        return (angle / 180) * pi;
+    }
 
-    function handlePolarisationSwitch() {
-        if (this.value === "s-polarisation") {
-            phys.setPolarisation("s");
-        } else if (this.value === "p-polarisation") {
-            phys.setPolarisation("p");
+    function isComplex(number) {
+        if (typeof number === "number") {
+            return false;
+        } else if (typeof number === "object"){
+            return true;
+        } else {
+            throw new TypeError("isComplex() only takes type `number` or `object`");
         }
-        updatePlot();
-    }
-
-    function handleRefractiveIndexSlider() {
-        phys.setRefractiveIndexIndex(
-            input2index($(this), phys.data[phys.polarisation])
-        );
-        updatePlot();
-    }
-
-    function handleAngleSlider() {
-        phys.setAngleIndex(
-            input2index($(this), phys.data[phys.polarisation][phys.refractiveIndexIndex])
-        );
-        updatePlot();
     }
 
 
-    function endLoadingScreen() {
-        dom.loadSpinner.fadeOut(0);
-    }
-
-
-    function input2index(domInput, array) {
-        // Compute the corresponding JSON array index for a given input value, rounding to the nearest integer
-        var inputValue = domInput.val(),
-            maxInput = domInput.attr("max"),
-            minInput = domInput.attr("min"),
-            arrayLen = array.length;
-        return Math.round(((inputValue - minInput) / (maxInput - minInput)) * (arrayLen - 1));
-    }
-
-
-    function updatePlot() {
-        var update = {},
-            plotData = phys.getPlotData();
-        for (var trace = 0; trace < plotData.length - 1; trace++) {
-            update[trace] = {
-                x: plotData[trace].x,
-                y: plotData[trace].y,
-                z: plotData[trace].z,
-                opacity: 1
-            };
+    function cosSnell(n1, n2, thetaI) {
+        var cosSquaredThetaT = 1 - Math.pow((n1/n2) * Math.sin(thetaI), 2);
+        if (cosSquaredThetaT < 0) {
+            return cmath.sqrt(cosSquaredThetaT);
+        } else {
+            return Math.sqrt(cosSquaredThetaT);
         }
-        for (var trace = plotData.length - 1; trace < plt.MaxTraceNo; trace++) {
-            update[trace] = {
-                opacity: 0
-            };
+    }
+
+
+
+
+    var Boundary = {
+        init: function(angle, n1, n2, polarisation, interference) {
+            this.theta = degToRad(angle);
+            this.n1 = n1;
+            this.n2 = n2;
+            this.polarisation = polarisation;
+
+            this.frame = 0;
+            this.numFrames = 63; //126
+
+            this.data = new Array(this.numFrames);
+                for (var frame = 0; frame < this.numFrames; frame++) {
+                    this.data[frame] = new Float32Array(4*graph.numPixels);
+                }
+
+            var incident = this.createWave(this.theta, amplitude=1, material=1);
+            this.transmit();
+            if (interference === true && this.n1 !== this.n2) {
+                this.reflect();
+            }
+            this.convertToColorVals();
+        },
+
+
+        transmit: function() {
+            var cosThetaI = Math.cos(this.theta),
+                cosThetaT = cosSnell(this.n1, this.n2, this.theta),
+                plotThetaT = cmath.acos(cosThetaT);
+            if (isComplex(cosThetaT)) {
+                console.log("Total internal reflection");
+                cosThetaT = 0;
+            }
+
+            var t;
+            if (this.polarisation === "s") {
+                t = (2 * this.n1 * cosThetaI) / (this.n1 * cosThetaI + this.n2 * cosThetaT);
+            } else {
+                t = (2 * this.n1 * cosThetaI) / (this.n1 * cosThetaT + this.n2 * cosThetaI);
+            }
+            return this.createWave(theta=plotThetaT, amplitude=t, material=2);
+        },
+
+
+        reflect: function() {
+            if (this.n1 === this.n2) {
+                console.log("Refractive indices equal - no reflection");
+                return;
+            }
+            var cosThetaI = Math.cos(this.theta),
+                thetaR = this.theta,
+                cosThetaT = cosSnell(this.n1, this.n2, this.theta),
+                plotThetaR = -thetaR;
+
+            if (isComplex(cosThetaT)) {
+                cosThetaT = 0;
+            }
+
+            var r;
+            if (this.polarisation === "s") {
+                r = (this.n1 * cosThetaI - this.n2 * cosThetaT) / (this.n1 * cosThetaI + this.n2 * cosThetaT);
+            } else {
+                r = (this.n1 * cosThetaT - this.n2 * cosThetaI) / (this.n1 * cosThetaT + this.n2 * cosThetaI);
+            }
+            return this.createWave(theta=plotThetaR, amplitude=r, material=1);
+        },
+
+
+        createWave: function(theta, amplitude, material, reversePhase) {
+            if (typeof reversePhase === "undefined") reversePhase = false;
+
+            var xMin, xMax, n;
+            if (material === 1) {
+                xMin = 0;
+                xMax = graph.dim / 2;
+                n = this.n1;
+            } else if (material === 2) {
+                xMin = graph.dim / 2;
+                xMax = graph.dim;
+                n = this.n2;
+            } else {
+                throw new RangeError("material must be 1 or 2");
+            }
+            var yMin = 0,
+                yMax = graph.dim;
+
+                // xRange = np.range(xMin, xMax),
+                // yRange = np.range(0, graph.dim),
+
+            function waveFunc(x, y, phase) {
+                x = 2*x/graph.dim - 1;
+                y = -2*y/graph.dim - 1;
+                var k_x, k_y;
+                if (isComplex(theta)) {
+                    k_x = cmath.multiply(n, cmath.cos(theta));
+                    k_y = cmath.multiply(n, cmath.sin(theta));
+                } else {
+                    k_x = n * Math.cos(theta);
+                    k_y = -n * Math.sin(theta);
+                }
+
+                if (reversePhase === false) {
+                    return amplitude * Math.cos( 8*pi * (k_x*x + k_y*y - phase) );
+                } else if (reversePhase === true) {
+                    return amplitude * Math.cos( 8*pi * (k_x*x + k_y*y + phase) );
+                } else {
+                    throw new TypeError("`createWave()` arg `reversePhase` must be of type `bool`");
+                }
+            }
+
+            // xy =
+            for (var frame = 0; frame < this.numFrames; frame++) {
+                for (var x = xMin; x < xMax; x++) {
+                    for (var y = yMin; y < yMax; y++) {
+                        var pixel = coordToPixelIndex(x, y);
+                        this.data[frame][4*pixel] += waveFunc(x, y, 2*frame/graph.dim);
+                        // this.data[frame][4*pixel + 1] += waveVal;
+                        // this.data[frame][4*pixel + 2] += waveVal;
+                        this.data[frame][4*pixel + 3] = 255;
+                    }
+                }
+                console.log("Calculated frame data");
+            }
+            console.log("Created wave");
+            return;
+        },
+
+
+        /** Return intensity value between 0-255 for a given pixel */
+        convertToColorVals: function() {
+            for (var frame = 0; frame < this.numFrames; frame++) {
+                for (var pixel = 0; pixel < graph.numPixels; pixel++) {
+                    this.data[frame][4*pixel] = this.data[frame][4*pixel]*127.5 + 127.5;
+                }
+            }
+            console.log("Converted colour values");
+        },
+
+
+        updatePlot: function() {
+            graph.imageData.data.set(this.data[this.frame]);
+            // console.log(this.data[this.frame][4000], graph.imageData.data[this.frame][4000]);
+            graph.ctx.putImageData(graph.imageData, 0, 0);
+            this.frame++;
+            if (this.frame === this.numFrames) {
+                console.log("Reached end of frames");
+                this.frame = 0;
+            }
+            // console.log("Updated plot;");
+            // console.log(graph.imageData);
+            // console.log(this.data);
         }
-        Plotly.animate(div="graph", {
-            data: getObjValues(update),
-            traces: getObjKeysAsInts(update),
-            layout: {}
-        }, {
-            transition: {duration: 0},
-            frame: {duration: 0, redraw: false}
-        });
-    }
 
+    };
 
-    function showJSONLoadError() {
-        dom.loadSpinner.children(".spinner-span").html("Error: Failed to load JSON resources");
-        dom.loadSpinner.children("div").fadeOut(0);
-    }
+    Boundary.init(angle=53.6, n1=1, n2=1.5, polarisation="s", interference=true);
+    Boundary.updatePlot();
 
+    var animIntervalID = window.setInterval(function() {
+        Boundary.updatePlot();
+    }, 50);
+    setTimeout(function() {
+        clearInterval(animIntervalID);
+    }, 30000);
 
-    function getObjKeys(obj) {
-        return Object.keys(obj);
-    }
-    function getObjKeysAsInts(obj) {
-        return Object.keys(obj).map(Number);
-    }
-    function getObjValues(obj) {
-        return Object.keys(obj).map(function(key) {
-            return obj[key];
-        });
-    }
+    // console.log(np.range(-2, 15));
 
-    function deepCopy(obj) {
-        return JSON.parse(JSON.stringify(obj));
-    }
-
-});
+};

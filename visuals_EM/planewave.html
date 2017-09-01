@@ -10,8 +10,7 @@
   <link rel="stylesheet" href="toggle-style.css">
   <link rel="stylesheet" href="loading-spinner.css">
 
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/mathjs/3.16.2/math.min.js"></script>
   <script src="planewave.js"></script>
 </head>
 <body>
@@ -19,19 +18,19 @@
   <div class="container">
     <h1>Plane wave dielectric boundary</h1>
 
-    <div id="spinner-wrapper">
+    <!-- <div id="spinner-wrapper">
       <span class="spinner-span">Loading</span>
       <div>
         <div class="spinner-mask"></div>
         <div id="spinner-bar"></div>
         <div class="spinner-mask"></div>
       </div>
-    </div>
+    </div> -->
 
     <div class="row">
 
       <div class="eight columns">
-        <div id="graph"></div>
+        <canvas id="graph" width="500" height="500"></canvas>
       </div>
 
       <div class="four columns">
