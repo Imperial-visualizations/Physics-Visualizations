@@ -24,6 +24,11 @@ window.onload = function() {
         return (angle / 180) * pi;
     }
 
+    /** Return intensity value between 0-255 for a given pixel */
+    function convertToColorVal(rawValue) {
+        return rawValue*127.5 + 127.5;
+    }
+
     function isComplex(number) {
         if (typeof number === "number") {
             return false;
@@ -53,11 +58,14 @@ window.onload = function() {
             this.n1 = n1;
             this.n2 = n2;
             this.polarisation = polarisation;
+            this.interference = interference;
 
             this.numSines = 2 * 4;
 
             this.frame = 0;
             this.numFrames = Math.round(graph.dim/this.numSines);//63; //126
+
+            this.createWaves();
 
             var animIntervalID = window.setInterval(function() {
                 this.updatePlot();
@@ -68,20 +76,132 @@ window.onload = function() {
         },
 
 
-        createFrame: function() {
-            this.data = new Float32Array(4*graph.numPixels);
-            var incident = this.createWave(this.theta, amplitude=1, material=1);
-            this.transmit();
-            if (interference === true && this.n1 !== this.n2) {
-                this.reflect();
+        createWaves: function() {
+            // this.waveImgData = new Float32Array(4*graph.numPixels);
+            // this.incident = this.setWaveData(this.theta, amplitude=1, waveType="incident");
+            this.incident = new Wave(this.theta, 1, this.n1, this.polarisation);
+            this.transmitted = this.incident.transmit(this.n2);
+            // this.incident.reflect(this.n2);
+            if (this.interference === true && this.n1 !== this.n2) {
+                this.reflected = this.incident.reflect(this.n2);
+            } else {
+                this.reflected = false;
             }
-            this.convertToColorVals();
+            // this.convertToColorVals();
         },
 
 
-        transmit: function() {
+        updateFrame: function() {
+            this.waveImgData = new Float32Array(4*graph.numPixels);
+            this.setWaveData();
+        },
+
+
+        setWaveData: function() {
+            var phase = 2*this.frame/graph.dim;
+            for (var x = 0; x < graph.dim; x++) {
+                for (var y = 0; y < graph.dim; y++) {
+                    var pixel = coordToPixelIndex(x, y),
+                        rawValue;
+                    if (x < graph.dim/2) {
+                        if (this.reflected) {
+                            rawValue = this.incident.waveFunc(x, y, phase) + this.reflected.waveFunc(x, y, phase);
+                        } else {
+                            rawValue = this.incident.waveFunc(x, y, phase);
+                        }
+                    } else {
+                        rawValue = this.transmitted.waveFunc(x, y, phase);
+                    }
+                    this.waveImgData[4*pixel] = convertToColorVal(rawValue);
+                    // this.waveImgData[4*pixel + 1] += waveVal;
+                    // this.waveImgData[4*pixel + 2] += waveVal;
+                    this.waveImgData[4*pixel + 3] = 255;
+                }
+            }
+            // console.log("Calculated frame data");
+        },
+
+
+        updatePlot: function() {
+            this.updateFrame();
+            graph.imageData.data.set(this.waveImgData);
+            // console.log(this.waveImgData[4000], graph.imageData.data[4000]);
+            graph.ctx.putImageData(graph.imageData, 0, 0);
+            this.frame++;
+            if (this.frame === this.numFrames) {
+                console.log("Reached end of frames");
+                this.frame = 0;
+            }
+            // console.log("Updated plot;");
+            // console.log(graph.imageData);
+            // console.log(this.waveImgData);
+        }
+
+    };
+
+
+
+    function Wave(theta, amplitude, n, polarisation, reversePhase) {
+        /** @param waveType - "incident", "reflected" or "transmitted" */
+        this.init = function() {
+            this.theta = theta;
+            this.amplitude = amplitude;
+            this.n1 = n;
+            // this.reversePhase = reversePhase;
+            this.coeffs = {};
+            this.calculateCoeffs();
+        };
+
+
+        this.calculateCoeffs = function() {
+            if (isComplex(this.theta)) {
+                // Fast complex sin & cos
+                var p = this.theta.re,
+                    q = this.theta.im,
+
+                    cosP = Math.cos(p),
+                    sinP = Math.sin(p),
+                    coshQ = Math.cosh(q),
+                    sinhQ = Math.sinh(q);
+
+                this.coeffs.a = cosP * coshQ;
+                this.coeffs.b = -sinP * sinhQ;
+                this.coeffs.c = -sinP * coshQ;
+                this.coeffs.d = -cosP * sinhQ;
+            } else {
+                this.coeffs.k_x = this.n1 * Math.cos(this.theta);
+                this.coeffs.k_y = -this.n1 * Math.sin(this.theta);
+            }
+        };
+
+
+        this.waveFunc = function(x, y, phase) {//, refresh) {
+            // if (refresh !== true) refresh = false;
+
+            x = 2*x/graph.dim - 1;
+            y = -2*y/graph.dim - 1;
+
+            // if (refresh) {
+            //     this[waveType] = new Wave(theta, amplitude=1, waveType);
+            // }
+            // var thisWave = this[waveType];
+
+            if (isComplex(this.theta)) {
+                var g = Boundary.numSines*pi*this.n1;
+                return this.amplitude * Math.cos( g * (this.coeffs.a*x + this.coeffs.c*y - phase) ) * Math.exp( -g * (this.coeffs.b*x + this.coeffs.d*y) );
+            } else {
+                if (reversePhase) {
+                    return this.amplitude * Math.cos( Boundary.numSines*pi * (this.coeffs.k_x*x + this.coeffs.k_y*y + phase) );
+                } else {
+                    return this.amplitude * Math.cos( Boundary.numSines*pi * (this.coeffs.k_x*x + this.coeffs.k_y*y - phase) );
+                }
+            }
+        };
+
+
+        this.transmit = function(n2) {
             var cosThetaI = Math.cos(this.theta),
-                cosThetaT = cosSnell(this.n1, this.n2, this.theta),
+                cosThetaT = cosSnell(this.n1, n2, this.theta),
                 plotThetaT;
             if (isComplex(cosThetaT)) {
                 console.log("Total internal reflection");
@@ -91,139 +211,45 @@ window.onload = function() {
                 plotThetaT = Math.acos(cosThetaT);
             }
 
-            var t;
-            if (this.polarisation === "s") {
-                t = (2 * this.n1 * cosThetaI) / (this.n1 * cosThetaI + this.n2 * cosThetaT);
+            var amplitude;
+            if (polarisation === "s") {
+                amplitude = (2 * this.n1 * cosThetaI) / (this.n1 * cosThetaI + n2 * cosThetaT);
             } else {
-                t = (2 * this.n1 * cosThetaI) / (this.n1 * cosThetaT + this.n2 * cosThetaI);
+                amplitude = (2 * this.n1 * cosThetaI) / (this.n1 * cosThetaT + n2 * cosThetaI);
             }
-            return this.createWave(theta=plotThetaT, amplitude=t, material=2);
-        },
+            return new Wave(plotThetaT, amplitude, n2, polarisation);
+        };
 
 
-        reflect: function() {
-            if (this.n1 === this.n2) {
+        this.reflect =  function(n2) {
+            if (this.n1 === n2) {
                 console.log("Refractive indices equal - no reflection");
-                return;
+                return false;
             }
             var cosThetaI = Math.cos(this.theta),
                 thetaR = this.theta,
-                cosThetaT = cosSnell(this.n1, this.n2, this.theta),
+                cosThetaT = cosSnell(this.n1, n2, this.theta),
                 plotThetaR = -thetaR;
 
             if (isComplex(cosThetaT)) {
                 cosThetaT = 0;
             }
 
-            var r;
-            if (this.polarisation === "s") {
-                r = (this.n1 * cosThetaI - this.n2 * cosThetaT) / (this.n1 * cosThetaI + this.n2 * cosThetaT);
+            var amplitude;
+            if (polarisation === "s") {
+                amplitude = (this.n1 * cosThetaI - n2 * cosThetaT) / (this.n1 * cosThetaI + n2 * cosThetaT);
             } else {
-                r = (this.n1 * cosThetaT - this.n2 * cosThetaI) / (this.n1 * cosThetaT + this.n2 * cosThetaI);
+                amplitude = (this.n1 * cosThetaT - n2 * cosThetaI) / (this.n1 * cosThetaT + n2 * cosThetaI);
             }
-            return this.createWave(theta=plotThetaR, amplitude=r, material=1, reversePhase=true);
-        },
+            return new Wave(plotThetaR, amplitude, this.n1, polarisation, true);
+        };
+
+        this.init();
+    }
 
 
-        createWave: function(theta, amplitude, material, reversePhase) {
-            if (typeof reversePhase === "undefined") reversePhase = false;
 
-            var xMin, xMax, n;
-            if (material === 1) {
-                xMin = 0;
-                xMax = graph.dim / 2;
-                n = this.n1;
-            } else if (material === 2) {
-                xMin = graph.dim / 2;
-                xMax = graph.dim;
-                n = this.n2;
-            } else {
-                throw new RangeError("material must be 1 or 2");
-            }
-            var yMin = 0,
-                yMax = graph.dim,
-                numSines = this.numSines;
-
-                // xRange = np.range(xMin, xMax),
-                // yRange = np.range(0, graph.dim),
-
-            function waveFunc(x, y, phase) {
-                x = 2*x/graph.dim - 1;
-                y = -2*y/graph.dim - 1;
-                // console.log(foo);
-                if (isComplex(theta)) {
-                    // Fast complex sin & cos:
-                    var p = theta.re,
-                        q = theta.im,
-
-                        cosP = Math.cos(p),
-                        sinP = Math.sin(p),
-                        coshQ = Math.cosh(q),
-                        sinhQ = Math.sinh(q),
-
-                        a = cosP * coshQ,
-                        b = -sinP * sinhQ,
-                        c = -sinP * coshQ,
-                        d = -cosP * sinhQ,
-                        g = numSines*pi*n;
-                    return amplitude * Math.cos( g * (a*x + c*y - phase) ) * Math.exp( -g * (b*x + d*y) );
-                } else {
-                    var k_x = n * Math.cos(theta),
-                        k_y = -n * Math.sin(theta);
-
-                    if (reversePhase === false) {
-                        return amplitude * Math.cos( numSines*pi * (k_x*x + k_y*y - phase) );
-                    } else if (reversePhase === true) {
-                        return amplitude * Math.cos( numSines*pi * (k_x*x + k_y*y + phase) );
-                    } else {
-                        throw new TypeError("`createWave()` arg `reversePhase` must be of type `bool`");
-                    }
-                }
-            }
-
-            // xy =
-            var phase = 2*this.frame/graph.dim;
-            for (var x = xMin; x < xMax; x++) {
-                for (var y = yMin; y < yMax; y++) {
-                    var pixel = coordToPixelIndex(x, y);
-                    this.data[4*pixel] += waveFunc(x, y, phase);
-                    // this.data[4*pixel + 1] += waveVal;
-                    // this.data[4*pixel + 2] += waveVal;
-                    this.data[4*pixel + 3] = 255;
-                }
-            }
-            // console.log("Calculated frame data");
-            return;
-        },
-
-
-        /** Return intensity value between 0-255 for a given pixel */
-        convertToColorVals: function() {
-            for (var pixel = 0; pixel < graph.numPixels; pixel++) {
-                this.data[4*pixel] = this.data[4*pixel]*127.5 + 127.5;
-            }
-            // console.log("Converted colour values");
-        },
-
-
-        updatePlot: function() {
-            this.createFrame();
-            graph.imageData.data.set(this.data);
-            // console.log(this.data[4000], graph.imageData.data[4000]);
-            graph.ctx.putImageData(graph.imageData, 0, 0);
-            this.frame++;
-            if (this.frame === this.numFrames) {
-                console.log("Reached end of frames");
-                this.frame = 0;
-            }
-            // console.log("Updated plot;");
-            // console.log(graph.imageData);
-            // console.log(this.data);
-        }
-
-    };
-
-    Boundary.init(angle=50, n1=1.5, n2=1., polarisation="s", interference=true);
+    Boundary.init(30, 1, 1.5, "s", true);
     // Boundary.updatePlot();
 
 
