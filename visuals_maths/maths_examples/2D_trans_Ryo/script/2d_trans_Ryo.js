@@ -328,8 +328,8 @@ function main() {
         $("#skewmatrix").html(makeTableHTML([[1,0],[1,1]]));
     }
     var myTable = makeTableInput(2,2)
-    console.log(myTable)
     $("#tableInput").append(myTable)
+    $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
 }
 
 // Function which takes array as input and returns a table
@@ -337,13 +337,26 @@ function makeTableHTML(myArray) {
     var result = "<table class='matrix'><tbody>";
     for(var i=0; i<myArray.length; i++) {
         result += "<tr>";
-        for(var j=0; j<myArray[i].length; j++){
+        for (var j=0; j<myArray[i].length; j++){
             result += "<td>"+myArray[i][j]+"</td>";
         }
         result += "</tr>";
     }
     result += "</tbody></table>";
     return result;
+}
+
+function makeMatrixEqnHTML(myMatrix, myVec) {
+    var result = "<table class='matrixWrapper'><tbody><tr><td>"
+    var round = roundedmat(myMatrix)
+    result += makeTableHTML(round);
+    result += "</td><td>&nbspx&nbsp</td><td>"
+    result += makeTableHTML(myVec)
+    result += "</td><td>&nbsp=&nbsp</td><td>"
+    var answer = math.multiply(myMatrix, myVec)
+    result += makeTableHTML(roundedmat(answer))
+    result += "</td></tr></tbody></table>"
+    return result
 }
 
 // Function which takes array as input and returns a table
@@ -359,7 +372,6 @@ function makeTableInput(m, n) {
                 result += "<td>"+"<input type='number' id='row"+String(i)+"col"+String(j)+
                 "' oninput='customMatrix()'"+" value='0'"+"'>"+"</td>";
             }
-//            result += "<td>"+"Hello World"+"</td>";
         }
         result += "</tr>";
     }
@@ -367,28 +379,33 @@ function makeTableInput(m, n) {
     return result;
 }
 
+
+
 // Plot the graphs after reading data from sliders
 function plotRotate() {
-  var x = $("#rotateID").val();
-  var th = Math.PI*x;
-  plotterRotate(th,vertex1,vertex2,vertex3);
+    var x = $("#rotateID").val();
+    $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
+    plotterRotate(th,vertex1,vertex2,vertex3);
 }
 
 
 function plotSkew() {
-  if (document.getElementById("x").checked) {
-    plotterSkew(0, vertex1, vertex2, vertex3);
-  } else {
-    plotterSkew(1,vertex1,vertex2,vertex3);
-  }
+    if (document.getElementById("x").checked) {
+        plotterSkew(0, vertex1, vertex2, vertex3);
+        $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
+    } else {
+        plotterSkew(1,vertex1,vertex2,vertex3);
+        $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
+    }
 
 }
 
 
 function plotScale() {
-  var scale1 = document.getElementById('scale1ID').value;
-  var scale2 = document.getElementById('scale2ID').value;
-  plotterScale(scale1,scale2,vertex1,vertex2,vertex3);
+    var scale1 = document.getElementById('scale1ID').value;
+    var scale2 = document.getElementById('scale2ID').value;
+    plotterScale(scale1,scale2,vertex1,vertex2,vertex3);
+    $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
 }
 
 
@@ -398,6 +415,7 @@ function plotCustom() {
     var c = $("#row1col0").val();
     var d = $("#row1col1").val();
     plotterCustom(a,b,c,d,vertex1,vertex2,vertex3);
+    $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
 
 }
 
@@ -432,6 +450,7 @@ function rotateMatrix() {
 function scaleMatrix() {
     var scale1 = $("#scale1ID").val();
     var scale2 = $("#scale2ID").val();
+
     $("#scalematrix").html(makeTableHTML([[scale1,0],[0,scale2]]))
     $("#scale1IDDisplay").text($("#scale1ID").val());
     $("#scale2IDDisplay").text($("#scale2ID").val());
@@ -444,6 +463,7 @@ function customMatrix() {
     var c = $("#row1col0").val();
     var d = $("#row1col1").val();
     document.getElementById('custommatrix').innerHTML=makeTableHTML([[a,b],[c,d]])
+
 }
 
 
@@ -466,6 +486,7 @@ function resetStuff() {
     vertex2 = [1,1];
     vertex3 = [0,1];
     my_matrix = math.matrix([[1,0],[0,1]]);
+    $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
 }
 
 
