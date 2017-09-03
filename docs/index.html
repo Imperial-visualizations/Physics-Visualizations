@@ -50,6 +50,29 @@
             background-position: bottom 20px left 20px;
             background-size: 126.67px 32.86px;
         }
+        @media (max-width: 767px) {
+            .section.intro{
+                background: #003E74 url(assects/imperial-white-logo.svg) no-repeat scroll;
+                background-position: bottom 20px left 20px;
+                /*background-size: 190px 49.3px;*/
+                background-size: 126.67px 32.86px;
+            }
+            .section.works{
+                background: #FFDD00 url(assects/imperial-black-logo.svg) no-repeat scroll;
+                background-position: bottom 20px left 20px;
+                background-size: 126.67px 32.86px;
+            }
+            .section.license{
+                background: #E40043 url(assects/imperial-white-logo.svg) no-repeat scroll;
+                background-position: bottom 20px left 20px;
+                background-size: 126.67px 32.86px;
+            }
+            .section.contact{
+                background: #66A40A url(assects/imperial-white-logo.svg) no-repeat scroll;
+                background-position: bottom 20px left 20px;
+                background-size: 126.67px 32.86px;
+            }
+        }
 
         .nav-link,.nav-link:hover,.nav-link:active,.nav-link:visited{
             position: absolute;
@@ -70,13 +93,13 @@
             border-bottom: 2px solid #fff;
         }
         .section.works>.nav-link.works{
-            border-bottom: 2px solid #FFDD00;
-        }
-        .section.license>.nav-link.license{
             border-bottom: 2px solid #000;
         }
+        .section.license>.nav-link.license{
+            border-bottom: 2px solid #FFDD00;
+        }
         .section.contact>.nav-link.contact{
-            border-bottom: 2px solid #EC7300;
+            border-bottom: 2px solid #D4EFFC;
         }
 
 
@@ -247,6 +270,18 @@
             display: flex;
             flex-wrap: no-wrap;
         }
+
+        .section.intro .content{
+            color: #fff;
+            font-size: 10px;
+            unicode-bidi: embed;
+            font-family: monospace;
+            white-space: pre;
+            overflow-wrap: break-word;
+            border: 10px solid rgba(255,255,255,0);
+            border-top: 80px solid rgba(255,255,255,0);
+            border-bottom: 80px solid rgba(255,255,255,0);
+        }
         
 
 @media (min-width: 321px) {
@@ -265,6 +300,13 @@
             border-top: 100px solid rgba(255,255,255,0);
             border-bottom: 100px solid rgba(255,255,255,0);
         }
+
+        .section.intro .content{
+            font-size: 12px;
+            border: 30px solid rgba(255,255,255,0);
+            border-top: 100px solid rgba(255,255,255,0);
+            border-bottom: 100px solid rgba(255,255,255,0);
+        }
         .card{
             width: 300px;
             height: 300px;
@@ -280,6 +322,13 @@
             border-top: 100px solid rgba(255,255,255,0);
             border-bottom: 100px solid rgba(255,255,255,0);
         }
+
+        .section.intro .content{
+            font-size: 16px;
+            border: 60px solid rgba(255,255,255,0);
+            border-top: 100px solid rgba(255,255,255,0);
+            border-bottom: 100px solid rgba(255,255,255,0);
+        }
         .section.works .card{
             width: 400px;
             height: 400px;
@@ -292,6 +341,13 @@
 @media (min-width: 769px) {
         .content{
             border: 100px solid rgba(255,255,255,0);
+        }
+
+        .section.intro .content{
+            font-size: 24px;
+            border: 300px solid rgba(255,255,255,0);
+            border-top: 100px solid rgba(255,255,255,0);
+            border-bottom: 100px solid rgba(255,255,255,0);
         }
         .center{
             justify-content: center;
@@ -331,6 +387,7 @@
 </head>
 <body class="no-nav">
     <div class="section intro">
+        <div class="content" id="greeting"></div>
         <a class="nav-link logo" href="#intro">Imperial<br>Visualisation</a>
         <a class="nav-link intro" href="#intro">Intro</a>
         <a class="nav-link works" href="#works">Works</a>
@@ -339,6 +396,7 @@
     </div>
     <div class="section works">
         <div class="content left" id="works">
+            <div class="card"><h2>Works</h2>Scroll right for a list of virsualisations we have done..</div>
             
         </div>
         <a class="nav-link logo" href="#intro">Imperial<br>Visualisation</a>
@@ -369,6 +427,7 @@
         <a class="nav-link license" href="#license">License</a>
         <a class="nav-link contact" href="#contact">Contact</a>
     </div>
+    <script src="./scripts/typed.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script>
         // Or put your javascript/jQuery code here.
@@ -449,6 +508,35 @@
                 }, 200);
             }
         });
+        var team = {
+            members: ["Akash Bhattacharya","Dom Ko","Mangle Kuo","Amna Askari","Ansh Bhatnagar","Anthony Li","Caroline Clewley","Celie Valentiny","Cyd Cowley","Dimitri Vvdensky","Ed Keys","Jamie Coombes","Jonathan Eastwood","Mikolaj Metelsky","Peter Török","Robert King","Rohan Kamath","Ronnie Dutta","Ryo Kurashina"],
+            getNumber: function(){return this.members.length;},
+            displayMembers: function(){
+                this.members.sort();
+                text = "[";
+                for (var i = 0; i < this.members.length; i++) {
+                    text += "\""+this.members[i]+"\",";
+                    if(i%3==0 && i != (this.members.length-1)){
+                        text += "<br>";
+                    }
+                }
+                text = text.substr(0,text.length-1);
+                text += "]";
+                return text;
+            }
+
+        };
+        var greeting = new Typed('#greeting', {
+            strings: ['> greetingMessage^400 ⏎^1200\n`&lt; "Hello, we are Imperial Visualisation."\n>`^1200 tools^400 ⏎^1200\n`&lt; ["Javascript","Python","Jupytor Notebook"]\n>`^1200 aim^400 ⏎^1200\n`&lt; "Create visual tools to help student <br>understand abstract concept better."\n>`^1200 currentCooperatingDepartments^400 ⏎^1200\n`&lt; ["Physics Department","Chemistry Department", <br>"Math Department"]\n>`^1200 team.sort()^400 ⏎^1200\n> team.length^400 ⏎^400\n`&lt; '+team.getNumber()+'\n>`^1200 team^400 ⏎^1200\n`&lt; '+team.displayMembers()+'\n>\n`^1200'],
+            typeSpeed: 40,
+            backSpeed: 0,
+            cursorChar: '_',
+            smartBackspace: false,
+            loop: false,
+            onComplete: function(self){
+              var objDiv = document.getElementById("greeting");
+              objDiv.scrollTop = objDiv.scrollHeight;}
+          });
     </script>
 </body>
 </html>
