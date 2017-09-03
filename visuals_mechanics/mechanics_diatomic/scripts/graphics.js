@@ -91,45 +91,47 @@ function flashGraphs(){
         });
     });
 }
-/**
- * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
- * off the input field.
- */
-$('body').on('click', '[data-change]', function() {
-    // Storing current element and its attributes.
-    var $element = $(this);
-    var $title = $(this).attr("title");
-    var $el_id = $(this).attr("id");
-    var $unit = $(this).attr("data-unit");
 
-    // Creating input form.
-    var $input = $('<input style="width:50%;"/>').val(parseFloat($element.text()));
-    $input.attr("id", $el_id);                                  // Setting ID attribute (same as text).
-    $input.attr("title", $title);                               // Setting title attribute (same as text).
-    $element.replaceWith($input);                               // Replacing text with input form.
-
-    var save = function save() {
-        var $a = $('<a data-change />').text($input.val() + $unit);
-
-        // Restoring text with same attributes as original.
-        $a.attr("title", $title);
-        $a.attr("id", $el_id);
-        $a.attr("data-unit", $unit);
-        $input.replaceWith($a);
-        init_s1 = parseFloat($('#s1').text());
-        init_e1 = parseFloat($('#e1').text());
-        init_s2 = parseFloat($('#s2').text());
-        init_e2 = parseFloat($('#e2').text());
-        reset();
-        if ($a.text().indexOf("Display") === -1) {
-            var $divSlider = $a.attr("id").replace("Display", "");
-            $('#' + $divSlider).attr("value", parseFloat($a.text()));
-        }
-    };
-
-    // When clicking away from element (blurring), revert from input form to text.
-    $input.one('blur', save).focus();
-});
+// /**
+//  * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
+//  * off the input field.
+//  */
+// $('body').on('click', '[data-change]', function() {
+//     // Storing current element and its attributes.
+//     var $element = $(this);
+//     var $title = $(this).attr("title");
+//     var $el_id = $(this).attr("id");
+//     var $unit = $(this).attr("data-unit");
+//
+//     // Creating input form.
+//     var $input = $('<input style="width:50%;"/>').val(parseFloat($element.text()));
+//     $input.attr("id", $el_id);                                  // Setting ID attribute (same as text).
+//     $input.attr("title", $title);                               // Setting title attribute (same as text).
+//     $element.replaceWith($input);                               // Replacing text with input form.
+//
+//     var save = function save() {
+//         var $a = $('<a data-change />').text($input.val() + $unit);
+//
+//         // Restoring text with same attributes as original.
+//         $a.attr("title", $title);
+//         $a.attr("id", $el_id);
+//         $a.attr("data-unit", $unit);
+//         $input.replaceWith($a);
+//         init_s1 = parseFloat($('#s1').text());
+//         init_e1 = parseFloat($('#e1').text());
+//         init_s2 = parseFloat($('#s2').text());
+//         init_e2 = parseFloat($('#e2').text());
+//         dT = parseFloat($('#dT').text());
+//         reset();
+//         if ($a.text().indexOf("Display") === -1) {
+//             var $divSlider = $a.attr("id").replace("Display", "");
+//             $('#' + $divSlider).attr("value", parseFloat($a.text()));
+//         }
+//     };
+//
+//     // When clicking away from element (blurring), revert from input form to text.
+//     $input.one('blur', save).focus();
+// });
 
 /**
  * Start/Pause button code.
