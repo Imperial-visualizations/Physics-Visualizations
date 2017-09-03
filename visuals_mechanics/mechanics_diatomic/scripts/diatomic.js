@@ -59,8 +59,8 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
     }
     this.a1 = a1;
     this.a2 = a2;
-
     this.V = potential;                                         // Potential used as a bond between atoms.
+    this.maxKE_V = keVib_0;
 
     this.tot_m =(a1.mass + a2.mass);                            // Finding total mass of the system.
     this.reducedM =  (a1.mass * a2.mass) / (this.tot_m);        // Finding system's reduced mass.
@@ -220,7 +220,23 @@ Molecule.prototype.softReset = function (ke_vib0, ke_rot0) {
     new_mol.r = dir;
     new_mol.separation = new_mol.getSeparation();
     new_mol.w = this.w;
-    if (this.v > 0) mol1.v = -mol1.v;
 
+    if (ke_vib0 > this.maxKE_V) {
+        var tmp_mol = new Molecule(this.a1, this.a2, this.V, ke_vib0, ke_rot0);
+
+        if (tmp_mol.separation < new_mol.separation) {
+            while (tmp_mol.separation < new_mol.separation) tmp_mol.update(1 / 400);
+        }
+
+        else {
+            tmp_mol.v = -tmp_mol.v;
+            while (tmp_mol.separation > new_mol.separation) tmp_mol.update(1 / 500);
+        }
+
+        new_mol.v = tmp_mol.v;
+        if (this.v > 0) new_mol.v = -new_mol.v;
+    }
+
+    else new_mol.v = 0;
     return new_mol;
 };

@@ -437,8 +437,10 @@ function update(){
             layoutE.xaxis.range[1] = Math.max(arrTime[arrTime.length - 1] + 0.5, GRAPH_TIME);
 
             // Hiding legend if plot is high enough.
-            if (arrRotKE[arrRotKE.length - 1] > 0.85 * layoutE.yaxis[1] ||
-                arrVibKE[arrVibKE.length - 1] > 0.85 * layoutE.yaxis[1]) layoutE.showlegend = false;
+            if (arrRotKE[arrRotKE.length - 1] > 0.55 * layoutE.yaxis.range[1] ||
+                arrVibKE[arrVibKE.length - 1] > 0.55 * layoutE.yaxis.range[1]) {
+                layoutE.showlegend = false;
+            }
 
             // Plotting dat energie.
             Plotly.restyle("graphE", {data: [{x: arrTime, y: arrVibKE}, {x: arrTime, y: arrRotKE},
