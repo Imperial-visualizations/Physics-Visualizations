@@ -1,0 +1,23 @@
+Visualisation Name,Location (%branches%:%path of the file under the Imperial-Visualizations folder%),Deadlines,Who To Blame When Things Break,Reviewers
+EM: Biot Savart Law,visualizations/EM: \visuals_EM\Biot Savart Law\FinalBiot.html,Done,Amna,
+EM: Dielectric Boundary ,visualizations/EM: \visuals_EM\dielectric-boundary.html,Done,Ed & Ronnie,Ryo (Reviewed)
+EM: Plane Wave,,,Ed & Ronnie,
+EM: Static Charge Surfaces,visualizations/EM: \visuals_EM\Static_surfaces.html,Done,Cyd & Ansh & Amna,Ryo (Reviewed)
+EM: Electrostatic Field Visualiser ,visualizations/EM: \visuals_EM\Electrostatics 1.ipynb,Done,Ansh,Dom (Reviewed)
+EM: Cyclotron,,Done,Ansh,Ryo (Reviewed)
+EM: Motor Generator Effect ,,02/09/2017,Ansh & Amna,
+"Math: Points, Lines, Planes intersections",,3/9/2017,Nick,
+Math: Animating frames for JS,visuals/Dom's/Util/animateUtil.js (Need to initialise first),Done,Dom,
+Math: Arrow/Quiver for JS,visuals/maths: ,Done,Ryo,
+Math: 2D Transformations,visuals/maths: /visuals_maths/maths_examples/2D_trans_Ryo/2d_trans_Ryo.html,Done,Ryo,Mangle (Reviewed)
+Math: Parallelopiped,visuals/maths: /visuals_maths/maths_examples/PPed/plotpped.html,Done,Ryo,Mangle (Reviewed)
+Math: 3D Transformations- Sphere,visuals/maths: /visuals_maths/Dom's/Point-Sphere/sphere3d.html,Done,Dom,Mangle (Reviewed)
+Math: 3D Transformations -Cube,visuals/maths:  /visuals_maths/3DRotations/cubeplot.html,Done,Rohan,Ed (Reviewed)
+Math: Riley Diagrams,visuals/maths: /visuals_maths/Dom's/VC-Riley/riley.html,Done,Dom,Ed (Reviewed)
+Math: Basis Vectors,visuals/maths: /visuals_maths/Dom's/VC-COB/basis.html,Done,Dom,Ed (Reviewed)
+Math: Greens Theorem,visuals/maths: /visuals_maths/Green's Theorem/green.html,Done,Ryo,Ansh (Reviewing)
+Math: Triple Integration ,visuals/maths: /visuals_maths/maths_examples/Triple Integration/Triple Integration.html,Done,Rohan,Ansh (Reviewed)
+MnV: 2 Body Collision ,visualizations/mechanics/: /visuals_mechanics/mechanics_collisions/twoBody.html,Done,Mangle & Rob,Ed (Reviewed)
+MnV: Diatomic ,visualizations/mechanics/: /visuals_mechanics/mechanics_diatomic/diatomic.html,DONE,Akash & Rob & Mangle,Ansh (Reviewing)
+MnV: Pulse at Interface,visualizations/mechanics/: /visuals_mechanics/mechanics_group_phase/pulse_anim.html,Done,Anthony & Célié,Dom (Reviewed)
+MnV: Dispersion ,visualizations/mechanics/: /visuals_mechanics/mechanics_dispersion/waves.html,01/09/2017,Anthony & Célié,
