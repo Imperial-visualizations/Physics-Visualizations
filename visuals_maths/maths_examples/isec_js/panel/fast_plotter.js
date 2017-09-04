@@ -51,16 +51,17 @@ function fastPlotHandler(divHandle) {
     console.log("fast-plotter : highlightPlotObjs : ",plotObjArray)
     var toHighlight = [];
     for(var idx=0;idx<plotObjArray.length;idx++) {
-      toHighlight.push(plotObjArray[idx]);
+      toHighlight.push(plotObjArray[idx].plotId);
     }
+    console.log("toHighlight", toHighlight)
     this.highlightTraces(toHighlight);
   }
   this.highlightPlotObj = function(plotObj) {
     console.log("fast-plotter : highlightPlotObj : ",plotObj)
     this.highlightTraces([plotObj.plotId]);
   }
-  this.unhighlightPlotObj = function(plotObj) {
-    console.log("fast-plotter : unPlotObj : ",plotObj)
+  this.unHighlightPlotObjs = function() {
+    console.log("fast-plotter : unHighlightPlotObjs ")
     this.unHighlightTraces();
   }
 
@@ -97,7 +98,7 @@ function fastPlotHandler(divHandle) {
       visible: false
     };
     for(var idx=0; idx<idArray.length; idx++) {
-      toHide.push(_getIdxByPlotObjId(this.handle,idArray[idx])); //see which ones are supposed to be highlighed
+      toHide.push(_getIdxByPlotId(this.handle,idArray[idx])); //see which ones are supposed to be highlighed
     }
     Plotly.restyle(this.handle, hide, toHide); //decrease opacity of everthing
   };

@@ -46,6 +46,8 @@ var my_pped = {
         var uby = Math.abs(this.u[1])+Math.abs(this.v[1])+Math.abs(this.w[1]);
         var ubz = Math.abs(this.u[2])+Math.abs(this.v[2])+Math.abs(this.w[2]);
         var layout = {
+            title: 'Plot with given input vectors',
+
             xaxis: {
                 title: 'x',
                 range:[-ubx,ubx]
@@ -70,7 +72,7 @@ var my_pped = {
                 l: 0,
                 r: 0,
                 b: 0,
-                t: 0
+                t: 25
             }
         }
         return layout
@@ -89,7 +91,7 @@ function makeTableInputU(m, n) {
     for (var i=0; i<m; i++) {
         result += "<tr>";
         for (var j=0; j<n; j++){
-            if (i === 1) {
+            if (i === 0) {
                 result += "<td>"+"<input type='number' id='Urow"+String(i)+"col"+String(j)+
                     "' oninput='ppedPlotter()'"+" value='1'"+"'>"+"</td>";
             } else {
@@ -199,7 +201,7 @@ function main() {
     arrow1.shaft['name'] = 'u'
     var arrow2 = new Arrow3D(v[0],v[1],v[2],[0,0,0], 5,'rgb(2,137,59)',true);
     arrow2.shaft['name'] = 'v'
-    var arrow3 = new Arrow3D(w[0],w[1],w[2],[0,0,0], 5,'rgb(221,37,1)',true);
+    var arrow3 = new Arrow3D(w[0],w[1],w[2],[0,0,0], 5,'rgb(255,0,255)',true);
     arrow3.shaft['name'] = 'w'
 
     var data = [my_pped.gopped(),arrow1.data.shaft,arrow1.data.wings,arrow2.data.shaft,arrow2.data.wings
@@ -235,7 +237,7 @@ function ppedPlotter() {
     arrow1.shaft['name'] = 'u'
     var arrow2 = new Arrow3D(v[0],v[1],v[2],[0,0,0], 5,'rgb(2,137,59)',true);
     arrow2.shaft['name'] = 'v'
-    var arrow3 = new Arrow3D(w[0],w[1],w[2],[0,0,0], 5,'rgb(221,37,1)',true);
+    var arrow3 = new Arrow3D(w[0],w[1],w[2],[0,0,0], 5,'rgb(255,0,255)',true);
     arrow3.shaft['name'] = 'w'
 
     // Arrow data and PPed data

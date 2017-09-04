@@ -385,8 +385,9 @@ function makeTableInput(m, n) {
 function plotRotate() {
     var x = $("#rotateID").val();
     var th = Math.PI*x;
-    $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
     plotterRotate(th,vertex1,vertex2,vertex3);
+    $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
+
 }
 
 
