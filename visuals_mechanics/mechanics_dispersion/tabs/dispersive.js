@@ -21,18 +21,20 @@ var nb  = nb_waves;
 // x and t coordinates
 var n = 1000;
 var y_i = [], y_d = [];
-var x = numeric.linspace(0, 100, n);
+var x = numeric.linspace(0, 60, n);
 var t = 0.0;
 var dt = 0.02;
 var is_paused = true;
 var y_range = 1;
 var omega_input = false;
-var funct;
+var funct= "1*k";
+var focus = 1;
 
 // Colours
 
-const IMPERIAL_BLUE = 0x003E74;
-const CHERRY = 0xE40043;
+const POOL_BLUE = '#00ACD7';
+const CHERRY ='#E40043';
+const NAVY = '#002147';
 
 //--------------------------------------------INTERACTS--------------------------------------------
 
@@ -119,16 +121,7 @@ $("#function").on('keyup', function () {
                 throw new Error;
             }
             funct = $('#function').val();
-            for (var i = 0; i < nb_waves; i++) {
-                if (funct.includes('k')) {
-                    k = k_array[i];
-                    omega_disp[i] = calculator.parse(funct.replace(/k/g, k));
-                }
-                else {
-                    omega_disp[i] = calculator.parse(funct);
-                }
-            }
-
+            eval_omega_disp();
             $('#dispersionRelation').text($('#function').val());
             $('#error_omega').text("");
             omega_input = true;
@@ -147,10 +140,22 @@ $('#slider_waves').on('input', function () {
     if ($('input[name=type]:checked').val()=== "sine") {
         nb_waves = parseFloat($("#slider_waves").val());
         $("#waves_display").text(" " + nb_waves);
+        $('#slider_focus').attr('max', nb_waves);
+        $('#focusMax').text(nb_waves);
+        if (focus > nb_waves) {
+            focus = nb_waves;
+            $('#focus_display').text(" " + focus);
+        }
     }
     else if ($('input[name=type]:checked').val() === "fourier") {
         nb_terms = parseFloat($("#slider_waves").val());
         $("#waves_display").text(" " + nb_terms);
+        $('#slider_focus').attr('max', nb_terms);
+        $('#focusMax').text(nb_terms);
+        if (focus > nb_waves) {
+            focus = nb_waves;
+            $('#focus_display').text(" " + focus);
+        }
     }
     onReset();
     update_y_range();
@@ -160,6 +165,8 @@ $('#slider_waves').on('input', function () {
             "yaxis2.range": [-y_range, y_range],
         })
     }
+
+
 });
 
 // Slider phase velocity
@@ -169,8 +176,26 @@ $('#velocityPhase').on('input', function () {
     onReset();
 });
 
+// Slider focus
+$('#slider_focus').on('input', function () {
+     focus = parseFloat($("#slider_focus").val());
+     $('#focus_display').text(" " + focus);
+     update_focus();
+
+});
+
 //--------------------------------------------FUNCTIONS--------------------------------------------
 
+function eval_omega_disp() {
+    for (var i = 0; i < nb; i++) {
+        if (funct.includes('k')) {
+            omega_disp[i] = calculator.parse(funct.replace(/k/g, k_array[i]));
+        }
+        else {
+            omega_disp[i] = calculator.parse(funct);
+        }
+    }
+}
 function sum_sin() {
     for (var i = 0; i < n; i++) {
         y_i[i] = 0;
@@ -215,14 +240,7 @@ function initial_data(){
         omega_disp = omega_nondisp.slice();
     }
     else {
-        for (var j = 0; j < nb; j++) {
-            if (funct.includes('k')) {
-                omega_disp[j] = calculator.parse(funct.replace(/k/g, k_array[j]));
-            }
-            else {
-                omega_disp[j] = calculator.parse(funct);
-            }
-        }
+        eval_omega_disp();
     }
     if ($('input[name=type]:checked').val()=== "sine") {
          sum_sin();
@@ -230,6 +248,7 @@ function initial_data(){
     else if ($('input[name=type]:checked').val() === "fourier") {
         sum_fourier();
     }
+    $('#focus_k').text(k_array[focus-1]);
 
 }
 
@@ -243,6 +262,7 @@ function onReset() {
     is_paused = true;
     t = 0;
     initial_data();
+    update_focus();
 
     Plotly.animate('graph',
             {data: [{y: y_i}, {y: y_d}]},
@@ -255,12 +275,7 @@ function onReset() {
 
 function update_y_range() {
     if ($('input[name=type]:checked').val() === "sine") {
-        if (nb_waves < 4) {
-            y_range = 4;
-        }
-        else {
-            y_range = (nb_waves - (nb_waves % 5)) + 5;
-        }
+        y_range = nb_waves + 0.2;
     }
     else{
         y_range = 1.3;
@@ -276,7 +291,7 @@ var incident = {
     x: x,
     y: y_i,
     name: "non-dispersive",
-    line: {width: 2, color: '#E40043', simplify: false}
+    line: {width: 2, color: CHERRY, simplify: false}
 };
 
 var dispersive = {
@@ -285,7 +300,7 @@ var dispersive = {
     xaxis: 'x2',
     yaxis: 'y2',
     name: "dispersive",
-    line: {width: 2, color: '#00ACD7', simplify: false}
+    line: {width: 2, color: POOL_BLUE, simplify: false}
 };
 
 var layout =
@@ -306,7 +321,7 @@ var layout =
         },
         yaxis: {
             autorange: false,
-            range: [-4, 4],
+            range: [-2, 2],
             domain: [0.6, 1],
         },
         xaxis2: {
@@ -315,7 +330,7 @@ var layout =
         },
         yaxis2: {
             autorange: false,
-            range: [-4, 4],
+            range: [-2, 2],
             domain: [0, 0.4],
         },
         legend: {
@@ -343,14 +358,11 @@ var t_start = t;
 function compute() {
     // tab =  $('.tab-pane.active').attr('id');
     t += dt;
-    // need to find a way to define time limit
-    if (t < t_start + 50) {
-        if ($('input[name=type]:checked').val() === "sine") {
-            sum_sin();
-        }
-        else if ($('input[name=type]:checked').val() === "fourier") {
-            sum_fourier();
-        }
+    if ($('input[name=type]:checked').val() === "sine") {
+        sum_sin();
+    }
+    else if ($('input[name=type]:checked').val() === "fourier") {
+        sum_fourier();
     }
 }
 
@@ -372,27 +384,90 @@ function update() {
 
 //--------------------------------------------Dispersion relation plot--------------------------------------
 function dispRelPlot() {
-    dataNonDisp.x = numeric.linspace(k0-1, kend+3, nb);
-    dataNonDisp.y = numeric.linspace((k0-1)*v, (kend+3)*v, nb);
-    dataDisp.x = k_array;
-    dataDisp.y = omega_disp;
+    dataNonDisp.x = numeric.linspace(k0-1, kend+2, 100);
+    dataNonDisp.y = numeric.linspace((k0-1)*v, (kend+2)*v, 100);
+    dataDisp.x = numeric.linspace(k0-1, kend+2, 100);
+    for (var i = 0; i < 100; i++) {
+        if (funct.includes('k')) {
+            omega_disp2[i] = calculator.parse(funct.replace(/k/g, dataDisp.x[i]));
+        }
+        else {
+            omega_disp2[i] = calculator.parse(funct);
+        }
+    }
+    dataDisp.y = omega_disp2
     Plotly.redraw('dispersionRelationGraph');
 }
+
+var comparisonText;
+var tangent_y = [];
+var tangent_x = [];
+var vpLine_x = [];
+var vpLine_y = [];
+var slope_tangent;
+var t;
+var vp = omega_disp[focus-1]/k_array[focus-1];
+var vg = vp; //default: non-dispersive
+var omega_disp2 = [];
 var marT = 30, marB = 23, marR = 5, marL = 35;
 var dispRel_layout = {title: "Dispersion Relation", titlefont: {size: 12}, margin: {l: marL, r: marR, b: marB + 10, t: marT},
                 legend: {x: 0.67, y: 1, "orientation": "v"},
                 yaxis: { title: "omega", titlefont: {size: 10}},
                 xaxis: { title: "wave number (k)", titlefont: {size: 10}}};
-var dataNonDisp = {x: numeric.linspace(k0-1, kend+3, nb), y: numeric.linspace((k0-1)*v, (kend+3)*v, nb), name: "non-dispersive", mode: "lines" };
-var dataDisp = {x: k_array, y: omega_disp, name: "dispersive", mode: "markers",
-        marker: {size: 10, color: CHERRY, symbol: "circle-open"}};
-Plotly.newPlot('dispersionRelationGraph',[dataDisp, dataNonDisp], dispRel_layout);
+var dataNonDisp = {x: numeric.linspace(k0-1, kend+2, 100), y: numeric.linspace((k0-1)*v, (kend+2)*v, 100), name: "non-dispersive", mode: "lines", line: {width: 2, color: CHERRY}};
+var dataDisp = {x: numeric.linspace(k0-1, kend+2, 100), y: numeric.linspace((k0-1)*v, (kend+2)*v, 100), name: "dispersive", mode: "lines", line: {width: 2, color: POOL_BLUE}};
+var dataFocus = { x:[], y:[], name:"focus", mode:'markers+text',showlegend: false, marker: {size: 10, color: NAVY, symbol: "circle-open"},
+    text: [comparisonText], textposition: 'bottom_right'};
+var dataTangent = {x: [], y: [],  name: "tangent (V_g)", mode: "lines", line: {width: 2, color: NAVY}};
+var dataVpLine = {x: [], y: [],  name: "line from origin (V_p)", mode: "lines", line: {width: 2, color: NAVY, dash:'dot'}};
+Plotly.newPlot('dispersionRelationGraph',[dataDisp, dataNonDisp, dataFocus, dataTangent, dataVpLine], dispRel_layout);
+update_focus();
 
+// //-------------------------------------Tangent------------------------------------------------------------------
 
+//plot point on focus
+function update_focus()  {
+    dataFocus.x = [k_array[focus-1]];
+    dataFocus.y = [omega_disp[focus-1]];
+    vp = omega_disp[focus-1]/k_array[focus-1];
+    tangent();
+    vpLine();
+    if (vp === slope_tangent) {
+        comparisonText = 'V_group = V_phase: <br>non-dispersive';
+    }
+    else if (vp > slope_tangent){
+        comparisonText = 'V_group < V_phase: <br>normal dispersion';
+    }
+    else {
+        comparisonText = 'V_group > V_phase: <br>anomalous dispersion';
+    }
+    dataFocus.text = [comparisonText];
+    Plotly.redraw('dispersionRelationGraph');
+    $('#focus_k').text(Math.round(k_array[focus-1]*100)/100);
+    $('#focus_omega').text(Math.round(omega_disp[focus-1]*100)/100);
+    $('#focus_vp').text(Math.round(vp*100)/100); // gradient line with origin
+    $('#focus_vg').text(Math.round(slope_tangent*100)/100); //gradient of tangent
+
+}
+
+function tangent() {
+    slope_tangent = math.derivative(funct, 'k').eval({k: k_array[focus-1]});
+    for (var i=0; i<10; i++) {
+        tangent_x[i] = k_array[focus-1] - 0.5 + i*0.1;
+        tangent_y[i] = slope_tangent*(tangent_x[i] - k_array[focus-1]) + omega_disp[focus-1];
+    }
+    dataTangent.x = tangent_x;
+    dataTangent.y = tangent_y;
+
+}
+
+function vpLine() {
+    for (var i = 0; i<100; i++){
+        vpLine_x[i] = i*k_array[focus-1]/100;
+        vpLine_y[i] = vp*vpLine_x[i];
+    }
+    dataVpLine.x = vpLine_x;
+    dataVpLine.y = vpLine_y;
+}
 // ToDo: Tooltips for input boxes
-// ToDo: change nb_waves or terms to nb.
-// ToDo: when I change k equation doesn't update
-
-// Maybe at beginning: need to specify v (ratio of w and k) and how w (/k cause they are
-// proportional) changes with the added sine wave
-
+// ToDo; dispersion relation accepts 2k. solve this.
