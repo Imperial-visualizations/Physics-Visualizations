@@ -53,7 +53,7 @@ function computeFrames(transformation, start, end, startVec, frameSize, addTrace
     historyVectors[historyIndex % historyLimit] = newVec;
     return frames;
 }
-function computeCompositeRotations(rotation1, rotation2, angle1, angle2, initialVec, frameSize, color1, color2, symbol) {
+function computeCompositeRotations(rotation1, rotation2, angle1, angle2, initialVec, frameSize, arrowColor, color1, color2, symbol) {
     var intermediate1 = numeric.linspace(0.0, angle1, frameSize);
     var intermediate2 = numeric.linspace(0.0, angle2, frameSize);
     var trace1 = [initialVec];
@@ -69,8 +69,8 @@ function computeCompositeRotations(rotation1, rotation2, angle1, angle2, initial
         firstTrace = new Line(trace1);
         frames.push({
             data:[
-                newLine.gObject(black),
-                newLine.arrowHead(black),
+                newLine.gObject(arrowColor),
+                newLine.arrowHead(arrowColor),
                 firstTrace.gObject(color1),
                 new Line([[0., 0., 0.], [0., 0., 0.]]).gObject()
             ]
@@ -84,8 +84,8 @@ function computeCompositeRotations(rotation1, rotation2, angle1, angle2, initial
         newLine = new Line([[0,0,0], newVec2]);
         frames.push({
             data:[
-                newLine.gObject(black),
-                newLine.arrowHead(black),
+                newLine.gObject(arrowColor),
+                newLine.arrowHead(arrowColor),
                 new Line(trace2).gObject(color2),
                 firstTrace.gObject(color1.slice(0, -1) + ",0.7)")
             ]
@@ -99,14 +99,14 @@ function computeCommute(rotation1, rotation2, theta1, theta2, frameSize) {
         rotation1, rotation2,
         theta1, theta2,
         initialVec, frameSize,
-        lilac, orange, "circle"
+        white, lilac, orange, "circle"
     );
 
     var frameList2 = computeCompositeRotations(
         rotation2, rotation1,
         theta2, theta1,
         initialVec, frameSize,
-        orange, lilac, "square"
+        black, orange, lilac, "square"
     );
 
     var frames = [], data;
@@ -135,7 +135,7 @@ function showCommute() {
     $('.rotate3D').hide();
     $('.rotateCommute').show();
     $('#frameSlider').show();
-    plotCommute();
+    commutePlot();
     isFrameSliderDisplayed = true;
 }
 
@@ -206,14 +206,17 @@ function histPlot(index) {
 
 //Animation
 function animateTransformation(frames) {
+    //$("#rotateAnimate").prop("disabled",true);
     Plotly.animate('graph', frames,
         {
             fromcurrent: true,
             transition: {duration: 55, easing: "quadratic-in-out"},
             frame: {duration: 55, redraw: false,},
-            mode: "immediate"
+            mode: "immediate",
+            onComplete: function(){$("#rotateAnimate").prop("disabled",false);}
         }
     );
+
     return;
 }
 
@@ -237,9 +240,11 @@ function animateRotate() {
 
     updateMatrixDisplay(displayRotationMatrix(slider, rotateAxis), "rotateMatrix");
     animateTransformation(frames);
+
     return;
 }
 function animateReflect() {
+    $("#rotateAnimate").prop("disabled",true);
     var frames;
     var plane = document.getElementById('reflectSelect').value;
     var frameSize = 10;
@@ -254,13 +259,12 @@ function animateReflect() {
 
     updateMatrixDisplay(displayReflectionMatrix(plane), "reflectMatrix");
     animateTransformation(frames);
-    plotPlane(plane);
+    planePlot(plane);
     return;
 }
 //Plot for planes:
-function plotPlane(plane) {
+function planePlot(plane) {
     if (historyIndex > 1) {
-        console.log("hello")
         Plotly.deleteTraces("graph", -1);
     }
 
@@ -302,7 +306,7 @@ function plotPlane(plane) {
     Plotly.addTraces('graph', data);
 }
 //Plot for commute
-function plotCommute() {
+function commutePlot() {
     Plotly.purge("graph");
     var theta1 = document.getElementById('rotator1').value * Math.PI;
     var theta2 = document.getElementById('rotator2').value * Math.PI;

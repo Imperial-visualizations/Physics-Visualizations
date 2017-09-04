@@ -52,8 +52,9 @@ function displayRotationMatrix(angle, rotationType) {
     return result;
 }
 function displayReflectionMatrix(reflectionType) {
+    var result;
     if (reflectionType === "reflectX") {
-        document.getElementById("reflectMatrix").innerHTML=makeTableHTML(
+        result = makeTableHTML(
             [
                 ["-1", "0", "0"],
                 ["0", "1", "0"],
@@ -61,7 +62,7 @@ function displayReflectionMatrix(reflectionType) {
             ]
         )
     } else if (reflectionType === "reflectY") {
-        document.getElementById("reflectMatrix").innerHTML=makeTableHTML(
+        result = makeTableHTML(
             [
                 ["1", "0", "0"],
                 ["0", "-1", "0"],
@@ -69,7 +70,7 @@ function displayReflectionMatrix(reflectionType) {
             ]
         )
     } else if (reflectionType === "reflectZ") {
-        document.getElementById("reflectMatrix").innerHTML=makeTableHTML(
+        result = makeTableHTML(
             [
                 ["1", "0", "0"],
                 ["0", "1", "0"],
@@ -77,6 +78,7 @@ function displayReflectionMatrix(reflectionType) {
             ]
         )
     }
+    return result;
 }
 function displayScaleMatrix() {
     var factor = document.getElementById("scaler").value;
