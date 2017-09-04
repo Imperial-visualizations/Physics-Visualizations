@@ -842,6 +842,8 @@ function runfunctionrunnew(func,a, b, order){
         {x:[0,0], y:[0,0], z:[0,0], type:"mesh3d", showscale: false}
     ]}]; //defined some dummy!!! must be the same type as the frames!!!
     frames = frames.concat(func());
+    $("#frame").attr("max",frames.length);
+    $("#frameMax").text(frames.length);
     init("#frame","playPause", frames, [tetrahedron], [a, b],order);
 }
 
