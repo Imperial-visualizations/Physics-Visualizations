@@ -79,6 +79,7 @@ function update() {
                 fromcurrent: true,
                 transition: {duration: duration,},
                 frame: {duration: duration, redraw: false,},
+                mode: "next"
             }
         );
         pauseComp(duration + 5);

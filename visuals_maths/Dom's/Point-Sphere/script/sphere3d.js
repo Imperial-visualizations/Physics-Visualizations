@@ -205,17 +205,16 @@ function histPlot(index) {
 }
 
 //Animation
-function animateTransformation(frames) {
-    //$("#rotateAnimate").prop("disabled",true);
+function animateTransformation(frames, playID) {
+    $(playID).prop("disabled",true);
     Plotly.animate('graph', frames,
         {
             fromcurrent: true,
             transition: {duration: 55, easing: "quadratic-in-out"},
             frame: {duration: 55, redraw: false,},
-            mode: "immediate",
-            onComplete: function(){$("#rotateAnimate").prop("disabled",false);}
+            mode: "next",
         }
-    );
+    ).then(function() {$(playID).prop("disabled",false);});
 
     return;
 }
@@ -239,12 +238,10 @@ function animateRotate() {
     }
 
     updateMatrixDisplay(displayRotationMatrix(slider, rotateAxis), "rotateMatrix");
-    animateTransformation(frames);
-
+    animateTransformation(frames, "#rotateAnimate");
     return;
 }
 function animateReflect() {
-    $("#rotateAnimate").prop("disabled",true);
     var frames;
     var plane = document.getElementById('reflectSelect').value;
     var frameSize = 10;
@@ -258,7 +255,7 @@ function animateReflect() {
     }
 
     updateMatrixDisplay(displayReflectionMatrix(plane), "reflectMatrix");
-    animateTransformation(frames);
+    animateTransformation(frames, "#reflectAnimate");
     planePlot(plane);
     return;
 }
