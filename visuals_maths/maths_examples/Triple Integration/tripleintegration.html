@@ -63,7 +63,7 @@
                 $$ 
                 The middle integral is given by
                 $$
-                \int_{y = 0}^{b(1-\frac{x}{a})}\rho(x,y),dy 
+                \int_{y = 0}^{b(1-\frac{x}{a})}\rho '(x,y),dy 
                 $$
                 and is integrated over a constant X.
                 This corresponds to building a slice of cake with the tower elements
@@ -73,11 +73,11 @@
                 The mass of the tetrahedron is given by:
                 $$
                     M   =\iiint_V \rho(x,y,z) \,dx\,dy\,dz
-                        = \color{red}\int_\color{red}{x= 0}^\color{red}{a} \int_{y = 0}^{b(1-\frac{x}{a})} \int_{z=0}^{a(1-\frac{x}{a} - \frac{y}{b})} \rho(x,y,z) \,dz\,dy \,\color{red}d\color{red}x
+                        = \color{red}\int_\color{red}{x= 0}^\color{red}{a} \int_{y = 0}^{b(1-\frac{x}{a})} \int_{z=0}^{a(1-\frac{x}{a} - \frac{y}{b})} \rho ''(x,y,z) \,dz\,dy \,\color{red}d\color{red}x
                 $$ 
                 The outer integral is given by 
                 $$
-                \int_{x= 0}^{a}\rho(x) \,dx
+                \int_{x= 0}^{a}\rho''(x) \,dx
                 $$
                 and must be integrated between two constants. 
                 This corresponds to building the tetrahedron with the slices.
@@ -115,7 +115,7 @@
                 $$  
                 The middle integral is given by
                 $$
-                \int_{y = 0}^{b(1-\frac{z}{c})}\rho(y,z),dy 
+                \int_{y = 0}^{b(1-\frac{z}{c})}\rho '(y,z),dy 
                 $$
                 and is integrated over a constant Z.
                 This corresponds to building a slice of cake with the tower elements
@@ -131,7 +131,7 @@
                 $$    
                 The outer integral is given by 
                 $$
-                \int_{z= 0}^{a}\rho(z)\,dz
+                \int_{z= 0}^{a}\rho ''(z)\,dz
                 $$
                 and must be integrated between two constants. 
                 This corresponds to building the tetrahedron with the slices.
@@ -170,7 +170,7 @@
                 $$  
                 The middle integral is given by
                 $$
-                \int_{z = 0}^{c(1-\frac{x}{a})}\rho(x,z),dz 
+                \int_{z = 0}^{c(1-\frac{x}{a})}\rho '(x,z),dz 
                 $$
                 and is integrated over a constant X.
                 This corresponds to building a slice of cake with the tower elements
@@ -186,7 +186,7 @@
                 $$    
                 The outer integral is given by 
                 $$
-                \int_{x= 0}^{a}\rho(x)\,dx
+                \int_{x= 0}^{a}\rho ''(x)\,dx
                 $$
                 and must be integrated between two constants. 
                 This corresponds to building the tetrahedron with the slices.
