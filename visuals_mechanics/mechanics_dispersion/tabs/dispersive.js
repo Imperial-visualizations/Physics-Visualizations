@@ -2,6 +2,8 @@
 
 // Defining variables (need to update later anyway so importing from e.g. json is meaningless)
 // Wave characteristics:
+var comparisonText;
+
 var terms_i = [];  //for fourier
 var terms_d = [];  //for fourier
 var nb_waves = parseInt($("#slider_waves").val());
@@ -19,7 +21,7 @@ var nb  = nb_waves;
 // var tab =  $('.tab-pane.active').attr('id');
 
 // x and t coordinates
-var n = 1000;
+var n = 500;
 var y_i = [], y_d = [];
 var x = numeric.linspace(0, 60, n);
 var t = 0.0;
@@ -44,8 +46,8 @@ const NAVY = '#002147';
          $('#nb_title').text('Number of sine waves:');
          $('#slider_waves').val(nb_waves);
          $("#waves_display").text(" " + nb_waves);
-         layout.xaxis.range = [0, 100];
-         layout.xaxis2.range = [0, 100];
+         layout.xaxis.range = [0, 60];
+         layout.xaxis2.range = [0, 60];
          $('#wave_number').show();
 
      }
@@ -395,11 +397,10 @@ function dispRelPlot() {
             omega_disp2[i] = calculator.parse(funct);
         }
     }
-    dataDisp.y = omega_disp2
+    dataDisp.y = omega_disp2;
     Plotly.redraw('dispersionRelationGraph');
 }
 
-var comparisonText;
 var tangent_y = [];
 var tangent_x = [];
 var vpLine_x = [];
@@ -414,8 +415,8 @@ var dispRel_layout = {title: "Dispersion Relation", titlefont: {size: 12}, margi
                 legend: {x: 0.67, y: 1, "orientation": "v"},
                 yaxis: { title: "omega", titlefont: {size: 10}},
                 xaxis: { title: "wave number (k)", titlefont: {size: 10}}};
-var dataNonDisp = {x: numeric.linspace(k0-1, kend+2, 100), y: numeric.linspace((k0-1)*v, (kend+2)*v, 100), name: "non-dispersive", mode: "lines", line: {width: 2, color: CHERRY}};
-var dataDisp = {x: numeric.linspace(k0-1, kend+2, 100), y: numeric.linspace((k0-1)*v, (kend+2)*v, 100), name: "dispersive", mode: "lines", line: {width: 2, color: POOL_BLUE}};
+var dataNonDisp = {x: numeric.linspace(k_array[0]-1, k_array[-1]+2, 100), y: numeric.linspace((k_array[0]-1)*v, (k_array[-1]+2)*v, 100), name: "non-dispersive", mode: "lines", line: {width: 2, color: CHERRY}};
+var dataDisp = {x: numeric.linspace(k_array[0]-1, k_array[-1]+2, 100), y: numeric.linspace((k_array[0]-1)*v, (k_array[-1]+2)*v, 100), name: "dispersive", mode: "lines", line: {width: 2, color: POOL_BLUE}};
 var dataFocus = { x:[], y:[], name:"focus", mode:'markers+text',showlegend: false, marker: {size: 10, color: NAVY, symbol: "circle-open"},
     text: [comparisonText], textposition: 'bottom_right'};
 var dataTangent = {x: [], y: [],  name: "tangent (V_g)", mode: "lines", line: {width: 2, color: NAVY}};

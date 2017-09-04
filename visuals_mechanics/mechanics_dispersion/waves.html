@@ -67,13 +67,6 @@
                         </label>
                     </div>
                     <div class="one-half column">
-                        <!--Input - Dispersion Relation-->
-                        <label>Define Dispersion Relation: <br />
-                            &omega;(k) = <span id ="dispersionRelation"> </span>
-                            <input id = "function" name="function">
-                        </label>
-                        <p id= "error_omega" style="color:#ff0000"></p>
-
                         <!--Input - Wavenumber-->
                         <div id="wave_number">
                             <label>Define wave number: <br />
@@ -94,9 +87,16 @@
             <div class="four columns">
                 <div id='dispersionRelationGraph'></div>  <!-- Plotly chart will be drawn inside this DIV -->
 
+                 <!--Input - Dispersion Relation-->
+                        <label>Define Dispersion Relation: <br />
+                            &omega;(k) = <span id ="dispersionRelation"> </span>
+                            <input id = "function" name="function">
+                        </label>
+                        <p id= "error_omega" style="color:#ff0000"></p>
+
                 <!--Slider - Wave on focus-->
                 <label class="sliderTitle">
-                    <br><span id="focus_title">Wave on focus:</span>
+                    <span id="focus_title">Wave on focus:</span>
                     <span id="focus_display"> 1 </span>
                 </label>
                 <label class="slider">
