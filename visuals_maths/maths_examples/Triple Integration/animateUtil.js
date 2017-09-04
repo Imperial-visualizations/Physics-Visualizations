@@ -195,7 +195,7 @@ function sliderchange() {
         document.getElementById('outerXYZ').style.display = "none"
 
         counter = 2     
-    } else if (document.getElementById('frame').value> changeValues[1]){
+    } else if (document.getElementById('frame').value > changeValues[1]){
         document.getElementById('innerXYZ').style.display = "none"
         document.getElementById('middleXYZ').style.display = "none"
         document.getElementById('outerXYZ').style.display = "block"
@@ -222,7 +222,7 @@ function sliderchange() {
     } 
     }else if (typeInteg ===3) {
 
-    if (document.getElementById('frame').value< changeValues[0]){
+    if (document.getElementById('frame').value < changeValues[0]){
         document.getElementById('innerYZX').style.display = "block"
         document.getElementById('middleYZX').style.display = "none"
         document.getElementById('outerYZX').style.display = "none"
@@ -233,7 +233,7 @@ function sliderchange() {
         document.getElementById('outerYZX').style.display = "none"
 
         counter = 2    
-    } else if (document.getElementById('frame').value> changeValues[2]){
+    } else if (document.getElementById('frame').value> changeValues[1]){
         document.getElementById('innerYZX').style.display = "none"
         document.getElementById('middleYZX').style.display = "none"
         document.getElementById('outerYZX').style.display = "block"
