@@ -384,6 +384,7 @@ function makeTableInput(m, n) {
 // Plot the graphs after reading data from sliders
 function plotRotate() {
     var x = $("#rotateID").val();
+    var th = Math.PI*x;
     $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
     plotterRotate(th,vertex1,vertex2,vertex3);
 }
