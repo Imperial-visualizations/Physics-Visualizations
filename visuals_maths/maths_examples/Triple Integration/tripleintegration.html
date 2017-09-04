@@ -22,7 +22,7 @@
                     <span id="frameDisplay" data-unit="">1</span>
                 </label>
                 <label class="slider">
-                    <input id="frame" class="inputs" type="range" value="1" min="1" max="24" step="1"/>
+                    <input id="frame" class="inputs" type="range" value="1" min="1" max="24" step="1" onchange = "sliderchange()"/>
                     <span class="sliderMin">1</span><span class="sliderMax">24</span>
                 </label>
             </div>
@@ -106,6 +106,8 @@
                 </div>
                 
             <div id = "middleZYX" style="display:none">
+                The mass of the tetrahedron is given by:
+
                 $$
 
                     M   = \iiint_V \rho(x,y,z) \,dx\,dy\,dz
@@ -120,10 +122,12 @@
                 </div>
                 
             <div id = "outerZYX" style="display:none">
+                The mass of the tetrahedron is given by:
+
                 $$
 
                     M   = \iiint_V \rho(x,y,z) \,dx\,dy\,dz
-                        = \color{red}\int_{z= 0}^\color{red}{c} \int_{y = 0}^{b(1-\frac{z}{c})} \int_{x=0}^{a(1-\frac{y}{b} - \frac{z}{c})} \rho(x,y,z) \,dx\,dy \,\color{red}d\color{red}z
+                        = \color{red}\int_\color{red}{z= 0}^\color{red}{c} \int_{y = 0}^{b(1-\frac{z}{c})} \int_{x=0}^{a(1-\frac{y}{b} - \frac{z}{c})} \rho(x,y,z) \,dx\,dy \,\color{red}d\color{red}z
                 $$    
                 The outer integral is given by 
                 $$
@@ -157,6 +161,8 @@
                 </div>
                 
             <div id = "middleYZX" style="display:none">
+                The mass of the tetrahedron is given by:
+
                 $$
 
                     M   = \iiint_V \rho(x,y,z) \,dy\,dz\,dx
@@ -171,10 +177,12 @@
                 </div>
                 
             <div id = "outerYZX" style="display:none">
+                The mass of the tetrahedron is given by:
+
                 $$
 
                     M   = \iiint_V \rho(x,y,z) \,dx\,dy\,dz
-                        = \color{red}\int_{x= 0}^\color{red}{a} \int_{z = 0}^{c(1-\frac{x}{a})} \int_{y=0}^{b(1-\frac{x}{a} - \frac{z}{c})} \rho(x,y,z) \,dy\,dz \,\color{red}d\color{red}x
+                        = \color{red}\int_\color{red}{x= 0}^\color{red}{a} \int_{z = 0}^{c(1-\frac{x}{a})} \int_{y=0}^{b(1-\frac{x}{a} - \frac{z}{c})} \rho(x,y,z) \,dy\,dz \,\color{red}d\color{red}x
                 $$    
                 The outer integral is given by 
                 $$

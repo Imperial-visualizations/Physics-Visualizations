@@ -1,8 +1,8 @@
 var a = 1, b = 1, c = 1;
+var a = 1, b = 1, c = 1;
 //var zinteglimit = (10*c) -1
 //var yinteglimit = (10* b) - 1
 //var xinteglimit = (10* a)
-
 var xx,zz, yy;
 var frames = [], data;
 
@@ -836,15 +836,13 @@ function runFunctionRun(func) {
 //runFunctionRun(YZXintegrator)
 
 
-function runfunctionrunnew(func,a, b){
+function runfunctionrunnew(func,a, b, order){
         frames = [{data:[
         {x:[0,0], y:[0,0], z:[0,0], type:"mesh3d", showscale: false},
         {x:[0,0], y:[0,0], z:[0,0], type:"mesh3d", showscale: false}
     ]}]; //defined some dummy!!! must be the same type as the frames!!!
-    console.log(frames);
     frames = frames.concat(func());
-    console.log(frames);
-    init("#frame","playPause", frames, [tetrahedron], [a, b]);
+    init("#frame","playPause", frames, [tetrahedron], [a, b],order);
 }
 
 function main() {
@@ -855,7 +853,7 @@ function main() {
             historyPlot(parseInt($(this).val()));
         });
     });
-    runfunctionrunnew(XYZintegrator,4,10);
+    runfunctionrunnew(XYZintegrator,4,10,1);
     
     $(function() {
         $('ul.tab-nav li a.button').click(function() {
@@ -867,11 +865,11 @@ function main() {
             $('.tab-pane.active', $(href).parent()).removeClass('active');
             $(href).addClass('active');
             if (href === "#XYZ") {
-                runfunctionrunnew(XYZintegrator,4,10);
+                runfunctionrunnew(XYZintegrator,4,10,1);
             } else if (href === "#ZYX") {
-                runfunctionrunnew(ZYXintegrator,5,14);
+                runfunctionrunnew(ZYXintegrator,5,14,2);
             } else if (href === "#YZX") {
-                runfunctionrunnew(YZXintegrator,3,10);
+                runfunctionrunnew(YZXintegrator,3,10,3);
             }
             return false;
     });

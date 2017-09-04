@@ -5,8 +5,11 @@ var isPaused = false;
 var stops;
 var idName, playID;
 var counter = 1
-
-function init(sliderName, playName, allFrames, extra=[], stopValues=[0, 0]) {
+var changeValues
+var typeInteg
+function init(sliderName, playName, allFrames, extra=[], stopValues=[0, 0], order) {
+    typeInteg = order
+    changeValues = stopValues
     idName = sliderName;
     playID = playName;
     frames = allFrames;
@@ -173,4 +176,70 @@ function startAnimation (type) {
     }   
     }
     return;
+}
+
+function sliderchange() {
+    console.log($('.nav-tabs .active').text())
+    console.log(typeInteg)
+    console.log(changeValues)
+    console.log(document.getElementById('frame').value)
+    if (typeInteg === 1){
+    if (document.getElementById('frame').value< changeValues[0]){
+        document.getElementById('innerXYZ').style.display = "block"
+        document.getElementById('middleXYZ').style.display = "none"
+        document.getElementById('outerXYZ').style.display = "none"
+        counter = 1
+    } else if (document.getElementById('frame').value< changeValues[1]){
+        document.getElementById('innerXYZ').style.display = "none"
+        document.getElementById('middleXYZ').style.display = "block"
+        document.getElementById('outerXYZ').style.display = "none"
+
+        counter = 2     
+    } else if (document.getElementById('frame').value> changeValues[1]){
+        document.getElementById('innerXYZ').style.display = "none"
+        document.getElementById('middleXYZ').style.display = "none"
+        document.getElementById('outerXYZ').style.display = "block"
+        counter = 3 
+    }
+    }else if (typeInteg ===2) {
+
+    if (document.getElementById('frame').value < changeValues[0]){
+        document.getElementById('innerZYX').style.display = "block"
+        document.getElementById('middleZYX').style.display = "none"
+        document.getElementById('outerZYX').style.display = "none"
+        counter = 1 
+    } else if (document.getElementById('frame').value < changeValues[1]){
+        document.getElementById('innerZYX').style.display = "none"
+        document.getElementById('middleZYX').style.display = "block"
+        document.getElementById('outerZYX').style.display = "none"
+
+        counter = 2    
+    } else if (document.getElementById('frame').value> changeValues[1]){
+        document.getElementById('innerZYX').style.display = "none"
+        document.getElementById('middleZYX').style.display = "none"
+        document.getElementById('outerZYX').style.display = "block"
+        counter = 3
+    } 
+    }else if (typeInteg ===3) {
+
+    if (document.getElementById('frame').value< changeValues[0]){
+        document.getElementById('innerYZX').style.display = "block"
+        document.getElementById('middleYZX').style.display = "none"
+        document.getElementById('outerYZX').style.display = "none"
+        counter = 1 
+    } else if (document.getElementById('frame').value< changeValues[1]){
+        document.getElementById('innerYZX').style.display = "none"
+        document.getElementById('middleYZX').style.display = "block"
+        document.getElementById('outerYZX').style.display = "none"
+
+        counter = 2    
+    } else if (document.getElementById('frame').value> changeValues[2]){
+        document.getElementById('innerYZX').style.display = "none"
+        document.getElementById('middleYZX').style.display = "none"
+        document.getElementById('outerYZX').style.display = "block"
+        counter = 3 
+    }   
+    }
+    return;
+        
 }
