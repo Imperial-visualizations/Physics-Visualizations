@@ -7,7 +7,7 @@ var layout = {
     yaxis: {range: [-1.5, 1.5], autorange:false, zeroline:false},
     zaxis: {range: [0, 1.5], autorange:false, zeroline:false},
     aspectmode: 'cube',
-    camera: {center: {x:0,y:0,z:0},eye: {x: 1,y: -1,z: 0.1}}
+    camera: {center: {x:0,y:0,z:0},eye: {x: 1,y: -2.2,z: 0.7}}
   },
   margin: {},
   showlegend: false,
