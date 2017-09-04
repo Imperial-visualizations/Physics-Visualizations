@@ -21,11 +21,11 @@
     <div class="row">
         <div class="six columns">
             <h1>2D Transformations</h1>
-            <div id='graph' style="width:450px; height:450px;"></div>  <!-- Plotly chart will be drawn inside this DIV -->
-            <input class="button-primary" type="submit" value="Show Matrix" onclick="showMatrix()" title="Reveal the
-overall composition of transformations">
-            <!--<input type="checkbox",id="myCheck">-->
-            <!--<span class="label-body">Show initial plot</span>-->
+            <div id='graph' style="width:400px; height:400px;"></div>  <!-- Plotly chart will be drawn inside this DIV -->
+            <!--<input class="button-primary" type="submit" value="Overall Transformation" onclick="showMatrix()" title="Reveal the-->
+<!--overall composition of transformations">-->
+            <h6>Overall Equation:</h6>
+            <p id="overallMatrix"></p>
         </div>
 
         <div class="six columns">
@@ -49,11 +49,6 @@ overall composition of transformations">
                     <input type="radio" name="axis" id="y"/><span for="radio"></span>
                     </label>
                     <label class="radioLabel">y</label>
-                    <!--<label class="sliderTitle">Axis:</label>-->
-                    <!--<label>-->
-                        <!--<input id="skewID" class="inputs" type ="range" value="0" min ="0" max="1" step ="1" onchange="skewMatrix()"/>-->
-                        <!--<span class="sliderMin">x</span><span class="sliderMax">y</span>-->
-                     <!--</label>-->
                 </div>
                 <div class="sliderSkew">
                     <h4>Skew Matrix:</h4>
@@ -88,7 +83,6 @@ overall composition of transformations">
                           <p id="rotatematrix"></p><br>
                       </div>
                   </div>
-                    <!--<input type="button" value="Start", onclick="plotterRotate()">-->
                       <input class="button-primary" type="submit" value="Apply" onclick="plotRotate()">
                       <input type="button" value="Reset" onclick="resetStuff()">
                 </div>
@@ -124,34 +118,6 @@ overall composition of transformations">
               <div class="tab-pane" id="custom">
                   <span><b>Type input:</b></span><br><br>
                   <p id="tableInput"></p>
-                <!--<div class="sliderCustom">-->
-                    <!--<label class="sliderTitle">a:</label>-->
-                     <!--<label>-->
-                         <!--<input id="aID" type ="range" value="0" min ="-2" max="2" step ="0.1" onchange="customMatrix()"/>-->
-                         <!--<span class="sliderMin">-2</span><span class="sliderMax">2</span>-->
-                     <!--</label>-->
-                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div class="sliderCustom">&ndash;&gt;-->
-                    <!--<label class="sliderTitle">b:</label>-->
-                     <!--<label>-->
-                         <!--<input id="bID" type ="range" value="0" min ="-2" max="2" step ="0.1" onchange="customMatrix()"/>-->
-                         <!--<span class="sliderMin">-2</span><span class="sliderMax">2</span>-->
-                     <!--</label>-->
-                <!--</div>-->
-                <!--<div class="sliderCustom">-->
-                    <!--<label class="sliderTitle">c:</label>-->
-                     <!--<label>-->
-                         <!--<input id="cID" type ="range" value="0" min ="-2" max="2" step ="0.1" onchange="customMatrix()"/>-->
-                         <!--<span class="sliderMin">-2</span><span class="sliderMax">2</span>-->
-                     <!--</label>-->
-                <!--</div>-->
-                <!--<div class="sliderCustom">-->
-                    <!--<label class="sliderTitle">d:</label>-->
-                     <!--<label>-->
-                         <!--<input id="dID" type ="range" value="0" min ="-2" max="2" step ="0.1" onchange="customMatrix()"/>-->
-                         <!--<span class="sliderMin">-2</span><span class="sliderMax">2</span>-->
-                     <!--</label>-->
-                <!--</div>-->
                   <h4>Custom Matrix:</h4>
                     <p id="custommatrix"></p>
                 <div class="sliderCustom">
@@ -168,17 +134,6 @@ overall composition of transformations">
 </div>
 
 
-<!--<div class="container">-->
-<!--&lt;!&ndash;<a class="button" href="#">Anchor button</a>&ndash;&gt;-->
-<!--&lt;!&ndash;<button>Button element</button>&ndash;&gt;-->
-<!--&lt;!&ndash;<input type="submit" value="submit input">&ndash;&gt;-->
-    <!--<input type="button" value="Reset", onclick="squareplotter()">-->
-    <!--<input type="button" value="Skew", onclick="revealSkew()">-->
-    <!--<input type="button" value="Scale", onclick="revealScale()">-->
-    <!--<input type="button" value="Rotate", onclick="revealRotate()">-->
-    <!--<input type="button" value="Custom", onclick="revealCustom()">-->
-
-<!--</div>-->
 
 
 

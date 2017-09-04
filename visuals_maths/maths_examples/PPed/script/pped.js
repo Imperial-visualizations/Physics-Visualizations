@@ -3,6 +3,14 @@ var u = [1,0,0];
 var v = [0,1,0];
 var w = [0,0,1];
 
+function tableVec(vec) {
+    var result = [];
+    for (var i=0; i<3; i++) {
+        result.push([vec[i]])
+    }
+    return result
+}
+
 // Parallelipiped object
 var my_pped = {
     u: u,
@@ -57,24 +65,134 @@ var my_pped = {
                 weight: 900
             },
             fill : 'tonexty',
-            showlegend: true
+            showlegend: true,
+            margin: {
+                l: 0,
+                r: 0,
+                b: 0,
+                t: 0
+            }
         }
         return layout
     }
 }
 
-// Completely useless at the moment
-function getImage() {
-    var x = document.createElement("ppedImage");
-    x.setAttribute("src","pped_image.png");
-    x.setAttribute("height","300")
-    x.setAttribute("height","300")
-    document.getElementById("panel").appendChild(x);
+
+// Function which takes array as input and returns a table
+function makeTableInputU(m, n) {
+    var result = "<table class='matrixWrapper'><tbody><tr><td>"
+    result += "<td>";
+    result += "\\(\\vec{u}\\)";
+    result += "</td>"
+    result += "<td>&nbsp=&nbsp</td>"
+    result += "<td><table class='matrix'><tbody>";
+    for (var i=0; i<m; i++) {
+        result += "<tr>";
+        for (var j=0; j<n; j++){
+            if (i === 1) {
+                result += "<td>"+"<input type='number' id='Urow"+String(i)+"col"+String(j)+
+                    "' oninput='ppedPlotter()'"+" value='1'"+"'>"+"</td>";
+            } else {
+                result += "<td>"+"<input type='number' id='Urow"+String(i)+"col"+String(j)+
+                    "' oninput='ppedPlotter()'"+" value='0'"+"'>"+"</td>";
+            }
+        }
+    }
+        result += "</tr>";
+
+    result += "</tbody></table></td>";
+    result += "</td></tr></tbody></table>";
+    return result;
+}
+
+// Function which takes array as input and returns a table
+function makeTableInputV(m, n) {
+    var result = "<table class='matrixWrapper'><tbody><tr><td>"
+    result += "<td>";
+    result += "\\(\\vec{v}\\)";
+    result += "</td>"
+    result += "<td>&nbsp=&nbsp</td>"
+    result += "<td><table class='matrix'><tbody>";
+    for (var i=0; i<m; i++) {
+        result += "<tr>";
+        for (var j=0; j<n; j++){
+            if (i === 1) {
+                result += "<td>"+"<input type='number' id='Vrow"+String(i)+"col"+String(j)+
+                    "' oninput='ppedPlotter()'"+" value='1'"+"'>"+"</td>";
+            } else {
+                result += "<td>"+"<input type='number' id='Vrow"+String(i)+"col"+String(j)+
+                    "' oninput='ppedPlotter()'"+" value='0'"+"'>"+"</td>";
+            }
+        }
+    }
+        result += "</tr>";
+
+    result += "</tbody></table></td>";
+    result += "</td></tr></tbody></table>";
+    return result;
+}
+
+// Function which takes array as input and returns a table
+function makeTableInputW(m, n) {
+    var result = "<table class='matrixWrapper'><tbody><tr><td>"
+    result += "<td>";
+    result += "\\(\\vec{w}\\)";
+    result += "</td>"
+    result += "<td>&nbsp=&nbsp</td>"
+    result += "<td><table class='matrix'><tbody>";
+    for (var i=0; i<m; i++) {
+        result += "<tr>";
+        for (var j=0; j<n; j++){
+            if (i === 2) {
+                result += "<td>"+"<input type='number' id='Wrow"+String(i)+"col"+String(j)+
+                    "' oninput='ppedPlotter()'"+" value='1'"+"'>"+"</td>";
+            } else {
+                result += "<td>"+"<input type='number' id='Wrow"+String(i)+"col"+String(j)+
+                    "' oninput='ppedPlotter()'"+" value='0'"+"'>"+"</td>";
+            }
+        }
+    }
+        result += "</tr>";
+
+    result += "</tbody></table></td>";
+    result += "</td></tr></tbody></table>";
+    return result;
+}
+
+
+// Function which takes array as input and returns a table
+function makeTableHTML(myArray) {
+    var result = "<table class='matrix'><tbody>";
+    for(var i=0; i<myArray.length; i++) {
+        result += "<tr>";
+        for (var j=0; j<myArray[i].length; j++){
+            result += "<td>"+myArray[i][j]+"</td>";
+        }
+        result += "</tr>";
+    }
+    result += "</tbody></table>";
+    return result;
+}
+
+function tripleProduct(u, v, w) {
+    var result = "<table class='matrixWrapper'><tbody><tr><td>";
+    result += "<td>" + makeTableHTML(tableVec(u)) + "</td>";
+    result += "<td>&nbsp.&nbsp</td>";
+    result += "<td>" + makeTableHTML(tableVec(v)) + "</td>";
+    result += "<td>x</td>";
+    result += "<td>" + makeTableHTML(tableVec(w)) + "</td>";
+    result += "<td>=&nbsp" + String(my_pped.volume()) + "&nbsp</td>"
+    result += "</td></tr></tbody></table>";
+    return result
+
 }
 
 
 function main() {
-    var vol = my_pped.volume();
+    $("#u").append(makeTableInputU(3,1))
+    $("#v").append(makeTableInputV(3,1))
+    $("#w").append(makeTableInputW(3,1))
+    $("#triple").append(tripleProduct(u,v,w))
 
     // Give arrows names as well for legends
     var arrow1 = new Arrow3D(u[0],u[1],u[2],[0,0,0], 5,'rgb(0,62,116)',true);
@@ -88,30 +206,23 @@ function main() {
         ,arrow3.data.shaft,arrow3.data.wings];
 
     var layout = my_pped.lytpped();
-
-    document.getElementById("volume").innerHTML = String(vol);
     Plotly.newPlot('graph',data,layout)
-    $("#panel").hide()
-    $("#reveal").click(function() {
-        $("#panel").slideToggle("slow");
-    });
-    getImage();
 }
 
-function ppedplotter() {
-    var ux = Number(document.getElementById('ux').value);
-    var uy = Number(document.getElementById('uy').value);
-    var uz = Number(document.getElementById('uz').value);
+function ppedPlotter() {
+    var ux = Number(document.getElementById('Urow0col0').value);
+    var uy = Number(document.getElementById('Urow1col0').value);
+    var uz = Number(document.getElementById('Urow2col0').value);
     u = [ux,uy,uz];
 
-    var vx = Number(document.getElementById('vx').value);
-    var vy = Number(document.getElementById('vy').value);
-    var vz = Number(document.getElementById('vz').value);
+    var vx = Number(document.getElementById('Vrow0col0').value);
+    var vy = Number(document.getElementById('Vrow1col0').value);
+    var vz = Number(document.getElementById('Vrow2col0').value);
     v = [vx,vy,vz];
 
-    var wx = Number(document.getElementById('wx').value);
-    var wy = Number(document.getElementById('wy').value);
-    var wz = Number(document.getElementById('wz').value);
+    var wx = Number(document.getElementById('Wrow0col0').value);
+    var wy = Number(document.getElementById('Wrow1col0').value);
+    var wz = Number(document.getElementById('Wrow2col0').value);
     w = [wx,wy,wz];
 
     my_pped.u = u;
@@ -133,7 +244,8 @@ function ppedplotter() {
     var layout = my_pped.lytpped();
 
     Plotly.newPlot('graph',data,layout)
-    vol = my_pped.volume();
-    document.getElementById("volume").innerHTML = String(vol);
+    $("#triple").html(tripleProduct(u, v, w))
 }
+
+
 $(document).ready(main);
