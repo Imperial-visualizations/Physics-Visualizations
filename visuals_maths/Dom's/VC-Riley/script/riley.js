@@ -182,7 +182,7 @@ function plotCylinderElement(rho, phi, z) {
                 z: zPhi2,
                 line: {color: "rgb(0,255,0)", width: 7, dash: "solid"},
                 text: rhodphiText,
-                textposition: "bottom",
+                textposition: "top",
                 textfont: {color:"rgb(0,255,0)"}
             },
             {
@@ -410,7 +410,7 @@ function plotSphereElement(r, theta, phi) {
                 line: {color: "rgb(0,255,0)", width: 7},
                 text: rsinthetadphiText,
                 textfont: {color: "rgb(0,255,0)"},
-                textposition: "bottom"
+                textposition: "top"
             },
             {
                 type: "scatter3d",

@@ -1,379 +1,318 @@
+'use strict';
 //Global Initial Parameters:
-var initialPoint = [-2., -2., 2.];
-var historyPoint = [initialPoint];
+var initialVec = [-2., -2., 2.];
+var historyVectors = [initialVec];
 var historyIndex = 0;
 var historyCount = 0;
-var historyLimit = 15;
+var historyLimit = 10;
 var radius = 2*Math.sqrt(3);
 var sphere = new Sphere(radius).gObject(cyan, white);
 var axes = createAxes(4);
-var animatePause = false;
-var isCommputeDisplayed = false;
 var layout = {
     width: 450, height: 450,
     margin: {l:0, r:0, t:0, b:0},
     hovermode: "closest",
     showlegend: false,
     scene: {
-        camera: createView([1, 1, 1]),
-        xaxis: {range: [-4, 4], zeroline: true, scaleratio: 1},
-        yaxis: {range: [-4, 4], zeroline: true, scaleratio: 1},
-        zaxis: {range: [-4, 4], zeroline: true, scaleratio: 1}
+        camera: {
+            up: {x: 0, y: 0, z: 1},
+            eye: {x: -0.5, y: -1.5, z: 0.9},
+            center: {x: 0, y: 0, z: -0.15}
+        },
+        aspectratio: {x:1, y:1, z:1},
+        xaxis: {range: [-4, 4], autorange: false, zeroline: true,},
+        yaxis: {range: [-4, 4], autorange: false, zeroline: true,},
+        zaxis: {range: [-4, 4], autorange: false, zeroline: true,},
     }
 }
 
-//Transformation algorithms
-function computeFrames(transformation, start, end, startPoint, frameSize) {
+//Computing transformation frames
+function computeFrames(transformation, start, end, startVec, frameSize, addTrace = true) {
     var intermediate = numeric.linspace(start, end, frameSize);
-    var traceLine = [startPoint];
-    var frames =[];
-    var newPoint;
+    var traceLine = [startVec];
+    var frames =[], data;
+    var newVec, newLine;
 
     for (var i = 0, n = intermediate.length; i < n; ++i) {
-        newPoint = math.multiply(transformation(intermediate[i]), startPoint);
-        traceLine.push(newPoint);
-        frames.push({
-            data: [
-                    {
-                        x: [newPoint[0]],
-                        y: [newPoint[1]],
-                        z: [newPoint[2]]
-                    },
-                    new Line(traceLine).gObject(orange)
-            ]
-        })
+        newVec = math.multiply(transformation(intermediate[i]), startVec);
+        traceLine.push(newVec);
+        newLine = new Line([[0,0,0], newVec]);
+        data = [
+            newLine.gObject(black),
+            newLine.arrowHead(black)
+        ];
+        if (addTrace) {
+            data.push(new Line(traceLine).gObject(orange));
+        }
+        frames.push({data: data});
     }
     historyIndex++;
     if(historyCount < historyLimit - 1) {
         historyCount++;
     }
-    historyPoint[historyIndex % historyLimit] = newPoint;
+    historyVectors[historyIndex % historyLimit] = newVec;
     return frames;
 }
-function computeCompositeRotations(rotation1, rotation2, angle1, angle2, initialPoint, frameSize, color1, color2, symbol) {
+function computeCompositeRotations(rotation1, rotation2, angle1, angle2, initialVec, frameSize, color1, color2, symbol) {
     var intermediate1 = numeric.linspace(0.0, angle1, frameSize);
     var intermediate2 = numeric.linspace(0.0, angle2, frameSize);
-    var trace1 = [initialPoint];
+    var trace1 = [initialVec];
     var frames = [];
+    var firstTrace;
+    var newLine;
 
+    var newVec, newVec2;
     for (var i = 0, n = intermediate1.length; i < n; ++i) {
-        var newPoint = math.multiply(rotation1(intermediate1[i]), initialPoint);
-        trace1.push(newPoint);
-        var firstTrace = new Line(trace1);
-        frames.push(
-            [
-                new Point(newPoint).gObject("rgb(22,20,128)", symbol),
+        newVec = math.multiply(rotation1(intermediate1[i]), initialVec);
+        trace1.push(newVec);
+        newLine = new Line([[0,0,0], newVec]);
+        firstTrace = new Line(trace1);
+        frames.push({
+            data:[
+                newLine.gObject(black),
+                newLine.arrowHead(black),
                 firstTrace.gObject(color1),
                 new Line([[0., 0., 0.], [0., 0., 0.]]).gObject()
             ]
-        );
+        });
     }
-    var trace2 = [newPoint];
+
+    var trace2 = [newVec];
     for (var i = 1, n = intermediate2.length; i < n; ++i) {
-        var newPoint2 = math.multiply(rotation2(intermediate2[i]), newPoint);
-        trace2.push(newPoint2);
-        frames.push(
-            [
-                new Point(newPoint2).gObject("rgb(22,20,128)", symbol),
+        newVec2 = math.multiply(rotation2(intermediate2[i]), newVec);
+        trace2.push(newVec2);
+        newLine = new Line([[0,0,0], newVec2]);
+        frames.push({
+            data:[
+                newLine.gObject(black),
+                newLine.arrowHead(black),
                 new Line(trace2).gObject(color2),
                 firstTrace.gObject(color1.slice(0, -1) + ",0.7)")
             ]
-        );
+        });
     }
+
     return frames;
 }
 function computeCommute(rotation1, rotation2, theta1, theta2, frameSize) {
     var frameList1 = computeCompositeRotations(
         rotation1, rotation2,
         theta1, theta2,
-        initialPoint, frameSize,
+        initialVec, frameSize,
         lilac, orange, "circle"
     );
 
     var frameList2 = computeCompositeRotations(
         rotation2, rotation1,
         theta2, theta1,
-        initialPoint, frameSize,
+        initialVec, frameSize,
         orange, lilac, "square"
     );
 
-    var frames = [];
-    for (var i = 0; i < frameList1.length; ++i) {
-        frames.push({
-            data: [
-                frameList1[i][0], frameList1[i][1], frameList1[i][2],
-                frameList2[i][0], frameList2[i][1], frameList2[i][2]
-            ]
-        })
+    var frames = [], data;
+    for (var i=0, n=frameList1.length; i < n; ++i) {
+        data = [];
+        for (var j=0, m=frameList1[i].data.length; j < m; ++j) {
+            data.push(frameList1[i].data[j]);
+            data.push(frameList2[i].data[j]);
+        }
+        frames.push({data: data});
     }
     return frames;
 }
 
 //Hide/Show Option (Rotation) - for better interface
-//Rotation
-var rotationType = 0; //To keep track of which button is active also keep track of toggle
-function hideRotate() {
-    $('.rotateCP1').hide();
-    $('.rotateCP2').hide();
-    $('.rotateCP3').hide();
+//Commute - Rotation
+var isFrameSliderDisplayed = false;
+function hideCommute() {
+    $('.rotate3D').show();
     $('.rotateCommute').hide();
     $('#frameSlider').hide();
-}
-function showRotate(axis) {
-    if (axis === 1 & axis !== rotationType){
-        hideRotate();
-        $('.rotateCP1').slideToggle(600);
-    } else if (axis === 2 & axis !== rotationType){
-        hideRotate();
-        $('.rotateCP2').slideToggle(600);
-    } else if (axis === 3 & axis !== rotationType){
-        hideRotate();
-        $('.rotateCP3').slideToggle(600);
-    }
-    rotationType = axis;
-}
-var rotateMain = true;
-function revealRotate(axis) {
-    $('.rotateCommute').hide();
-    $('#frameSlider').hide();
-    showRotate(axis);
-}
-//Commute - Rotatation
-function revealCommute() {
-    $('.rotate3D').slideToggle(600);
-    $('.rotateSlider').slideToggle(600);
-    hideRotate();
-    $('.rotateCommute').slideToggle(600);
-    $('#frameSlider').slideToggle(600);
-    $('.tab-nav').hide();
+    initPlot();
+    isFrameSliderDisplayed = false;
+} //has purging here!!!
+function showCommute() {
+    $('.rotate3D').hide();
+    $('.rotateCommute').show();
+    $('#frameSlider').show();
     plotCommute();
-    rotationType = 0;
-    isCommputeDisplayed = true;
-}
-function unrevealCommute() {
-    $('.tab-nav').slideToggle(600);
-    $('.rotate3D').slideToggle(600);
-    $('.rotateSlider').slideToggle(600);
-    plotInit();
-    revealRotate(1);
-    isCommputeDisplayed = false;
-}
-//Reflection
-var reflectionType = 0;
-function hideReflect() {
-    $('.xReflect').hide();
-    $('.yReflect').hide();
-    $('.zReflect').hide();
-}
-function showReflect(plane) {
-    if (plane === 1 & plane !== reflectionType){
-        hideReflect();
-        $('.xReflect').slideToggle(600);
-    } else if (plane === 2 & plane !== reflectionType){
-        hideReflect();
-        $('.yReflect').slideToggle(600);
-    } else if (plane === 3 & plane !== reflectionType){
-        hideReflect();
-        $('.zReflect').slideToggle(600);
-    }
-    reflectionType = plane;
-}
-var scaleType = 0;
-function hideScale() {
-    $('.xScale').hide();
-    $('.yScale').hide();
-    $('.zScale').hide();
-}
-function showScale(dir) {
-    if (dir === 1 & dir !== scaleType){
-        hideScale();
-        $('.xScale').slideToggle(600);
-    } else if (dir === 2 & dir !== scaleType){
-        hideScale();
-        $('.yScale').slideToggle(600);
-    } else if (dir === 3 & dir !== scaleType){
-        hideScale();
-        $('.zScale').slideToggle(600);
-    }
-    scaleType = dir;
+    isFrameSliderDisplayed = true;
 }
 
 
-//Update Positions
-function updatePositionDisplay() {
-    var previousPos;
-    if (historyIndex === 0) {
-        previousPos = "N/A";
-    } else {
-        previousPos = "("
-            + String(Math.round(historyPoint[historyIndex-1][0]*100)/100) + ", "
-            + String(Math.round(historyPoint[historyIndex-1][1]*100)/100) + ", "
-            + String(Math.round(historyPoint[historyIndex-1][2]*100)/100)
-            + ")";
-    }
-    document.getElementById("previousPosition").innerHTML= previousPos;
-    document.getElementById("currentPosition").innerHTML=
-        "("
-        + String(Math.round(historyPoint[historyIndex][0]*100)/100) + ", "
-        + String(Math.round(historyPoint[historyIndex][1]*100)/100) + ", "
-        + String(Math.round(historyPoint[historyIndex][2]*100)/100)
-        + ")";
+//Update Equation Display
+function updateMatrixDisplay(matrix, idName) {
+    var index = historyIndex % historyLimit;
+    var current = makeTableHTML(
+        [
+            [Math.round(historyVectors[index][0]*100)/100],
+            [Math.round(historyVectors[index][1]*100)/100],
+            [Math.round(historyVectors[index][2]*100)/100]
+        ]
+    )
+
+    var previous = makeTableHTML(
+        [
+            [Math.round(historyVectors[index - 1][0]*100)/100],
+            [Math.round(historyVectors[index - 1][1]*100)/100],
+            [Math.round(historyVectors[index - 1][2]*100)/100]
+        ]
+    )
+
+    document.getElementById(idName).innerHTML = "<table class='matrixWrapper'>" + "<tbody>" + "<tr>"
+        + "<td>" + current + "</td>"
+        + "<td>=</td>"
+        + "<td>" + matrix + "</td>"
+        + "<td>x</td>"
+        + "<td>" + previous + "</td>"
+        + "</tr>" + "</tbody>" + "<table>";
+
+    return;
 }
-
-function animateTransformation (frames) {
-    Plotly.animate('graph', frames,{
-        fromcurrent: true,
-        transition: {duration: 55, easing: "quadratic-in-out"},
-        frame: {duration: 55, redraw: false,},
-        mode: "immediate"
-    });
-
-    updatePositionDisplay();
+function displayCurrent(index) {
+    var current = makeTableHTML(
+        [
+            [Math.round(historyVectors[index][0]*100)/100],
+            [Math.round(historyVectors[index][1]*100)/100],
+            [Math.round(historyVectors[index][2]*100)/100]
+        ]
+    )
+    document.getElementById("rotateMatrix").innerHTML = current;
+    document.getElementById("reflectMatrix").innerHTML = current;
 }
 
 //Plots
-function plotInit() {
+function initPlot() {
+    historyVectors = [initialVec];
     historyIndex = 0;
     historyCount = 0;
-    historyPoint = [initialPoint];
-
-    plotHistory(0);
-    updatePositionDisplay();
+    displayCurrent(0)
+    histPlot(0);
 }
-function plotHistory(version) {
+function histPlot(index) {
+    Plotly.purge("graph");
     var data = [];
-    data.push(new Point(historyPoint[version]).gObject(lilac));
-    data = data.concat(axes);
+    var initVec = new Line([[0,0,0], historyVectors[index]]);
+    data.push(initVec.gObject(black));
+    data.push(initVec.arrowHead(black));
+    data.push({type:"scatter3d"});
     data.push(sphere);
-
-    var figure = {data: data, layout: layout}
-    Plotly.newPlot('graph', figure,);
-}
-function plotPreviousCurrent(position) {
-    var initialPosition = new Point(position);
-    var data = []
-    data.push(initialPosition.gObject(lilac));
-    data.push(new Line([[0,0,0], [0,0,0]]).gObject());
-    data.push(initialPosition.gObject(lilac.slice(0,-1) + ",0.5)"));
     data = data.concat(axes);
-    data.push(sphere);
-
-    var figure = {data: data, layout: layout}
-    Plotly.newPlot('graph', figure,);
+    Plotly.newPlot(
+        "graph",
+        {data: data, layout: layout}
+    );
 }
-function plotRotate(axis) {
+
+//Animation
+function animateTransformation(frames) {
+    Plotly.animate('graph', frames,
+        {
+            fromcurrent: true,
+            transition: {duration: 55, easing: "quadratic-in-out"},
+            frame: {duration: 55, redraw: false,},
+            mode: "immediate"
+        }
+    );
+    return;
+}
+
+function animateRotate() {
+    var frames;
+    var rotateAxis = document.getElementById("rotateSelect").value
     var slider = document.getElementById('rotator').value;
     var angle = slider * Math.PI;
-    var frames;
-    var frameSize = Math.round(24 * Math.abs(slider)); //frameSize proportional to angle. multi of "8";
-    if (angle === 0){
-        frameSize = 8;
+    var frameSize = 8;
+    if (angle !== 0) {
+        frameSize = Math.round(24 * Math.abs(slider)); //frameSize proportional to angle. multi of "8";
     }
     var index = historyIndex % historyLimit;
-    if (axis === 1) {
-        frames = computeFrames(rotationX, 0, angle, historyPoint[index], frameSize);
-    } else if (axis === 2) {
-        frames = computeFrames(rotationY, 0, angle, historyPoint[index], frameSize);
-    } else if (axis === 3) {
-        frames = computeFrames(rotationZ, 0, angle, historyPoint[index], frameSize);
+    if (rotateAxis === "rotateX") {
+        frames = computeFrames(rotationX, 0, angle, historyVectors[index], frameSize);
+    } else if (rotateAxis === "rotateY") {
+        frames = computeFrames(rotationY, 0, angle, historyVectors[index], frameSize);
+    } else if (rotateAxis === "rotateZ") {
+        frames = computeFrames(rotationZ, 0, angle, historyVectors[index], frameSize);
     }
-    plotPreviousCurrent(historyPoint[index]);
+
+    updateMatrixDisplay(displayRotationMatrix(slider, rotateAxis), "rotateMatrix");
     animateTransformation(frames);
-    displayRotationMatrix();
+    return;
 }
-function plotReflect(plane) {
+function animateReflect() {
     var frames;
-    var frameSize = 15;
+    var plane = document.getElementById('reflectSelect').value;
+    var frameSize = 10;
     var index = historyIndex % historyLimit;
-    if (plane === 1) {
-        frames = computeFrames(scaleX, 1, -1, historyPoint[index], frameSize);
-    } else if (plane === 2) {
-        frames = computeFrames(scaleY, 1, -1, historyPoint[index], frameSize);
-    } else if (plane === 3) {
-        frames = computeFrames(scaleZ, 1, -1, historyPoint[index], frameSize);
+    if (plane === "reflectX") {
+        frames = computeFrames(scaleX, 1, -1, historyVectors[index], frameSize, false);
+    } else if (plane === "reflectY") {
+        frames = computeFrames(scaleY, 1, -1, historyVectors[index], frameSize, false);
+    } else if (plane === "reflectZ") {
+        frames = computeFrames(scaleZ, 1, -1, historyVectors[index], frameSize, false);
     }
 
-    reflectionType = plane;
-
-    plotPreviousCurrent(historyPoint[index]);
+    updateMatrixDisplay(displayReflectionMatrix(plane), "reflectMatrix");
     animateTransformation(frames);
     plotPlane(plane);
-    displayReflectionMatrix();
-}
-function plotScale(direction) {
-    var factor  = document.getElementById('scaler').value;
-    var frames;
-    var frameSize = 10;
-    var scaling = [1, 1, 1];
-    var index = historyIndex % historyLimit;
-    if (direction === 1) {
-        frames = computeFrames(scaleX, 1, factor, historyPoint[index], frameSize);
-    } else if (direction === 2) {
-        frames = computeFrames(scaleY, 1, factor, historyPoint[index], frameSize);
-    } else if (direction === 3) {
-        frames = computeFrames(scaleZ, 1, factor, historyPoint[index], frameSize);
-    }
-
-    scaleType = direction;
-    plotPreviousCurrent(historyPoint[index]);
-    animateTransformation(frames);
-    displayScaleMatrix();
+    return;
 }
 //Plot for planes:
 function plotPlane(plane) {
+    if (historyIndex > 1) {
+        console.log("hello")
+        Plotly.deleteTraces("graph", -1);
+    }
+
     var data = [];
-    if (plane === 1) {
+    if (plane === "reflectX") {
         data.push({
             x: [0, 0],
             y: [-4, 4],
             z: [[-4, 4],
                 [-4, 4]],
             colorscale: [[0.0, lilac.slice(0,-1) + ",0.5)"], [1.0, white]],
+            opacity: 0.5,
             showscale: false,
             type: "surface"
         });
-    } else if (plane === 2) {
+    } else if (plane === "reflectY") {
         data.push({
             x: [-4, 4],
             y: [0, 0],
             z: [[-4, -4],
                 [4, 4]],
             colorscale: [[0.0, lilac.slice(0,-1) + ",0.5)"], [1.0, white]],
+            opacity: 0.5,
             showscale: false,
             type: "surface"
         });
-    } else if (plane === 3) {
+    } else if (plane === "reflectZ") {
         data.push({
             x: [-4, 4],
             y: [-4, 4],
             z: [[0, 0],
                 [0, 0]],
             colorscale: [[0.0, lilac.slice(0,-1) + ",0.5)"], [1.0, white]],
+            opacity: 0.5,
             showscale: false,
             type: "surface"
         });
     }
-    Plotly.plot('graph', data);
+    Plotly.addTraces('graph', data);
 }
 //Plot for commute
 function plotCommute() {
+    Plotly.purge("graph");
     var theta1 = document.getElementById('rotator1').value * Math.PI;
     var theta2 = document.getElementById('rotator2').value * Math.PI;
     var frameSize = 20;
 
-    var data = [];
-    for (var i = 0; i < 6; ++i) {
-        data.push(new Line([[0.,0.,0.], [0.,0.,0.]]).gObject("rgb(0,0,0)"));
-    }
-
-    var frames = [{data: data}];
-    frames = frames.concat(computeCommute(rotationY, rotationZ, theta1, theta2, frameSize));
-
+    var frames = computeCommute(rotationY, rotationZ, theta1, theta2, frameSize);
     var extra = axes;
     extra.push(sphere);
-    //extra.push(new Point(initialPoint).gObject(black, "diamond"));
 
-    initAnimation("#frame", frames, extra, layout, 10, [0, 20]);
+    initAnimation("commuteAnimate", frames, extra, layout, 10, [0, 19], true);
 }
 
 //Memento
@@ -383,20 +322,10 @@ function undo(){
     }
     historyIndex--;
     historyCount--;
-    plotHistory(historyIndex % historyLimit);
-
-    document.getElementById("previousPosition").innerHTML=
-        "("
-        + String(Math.round(historyPoint[historyIndex+1][0]*100)/100) + ", "
-        + String(Math.round(historyPoint[historyIndex+1][1]*100)/100) + ", "
-        + String(Math.round(historyPoint[historyIndex+1][2]*100)/100)
-        + ")";
-    document.getElementById("currentPosition").innerHTML=
-        "("
-        + String(Math.round(historyPoint[historyIndex][0]*100)/100) + ", "
-        + String(Math.round(historyPoint[historyIndex][1]*100)/100) + ", "
-        + String(Math.round(historyPoint[historyIndex][2]*100)/100)
-        + ")";
+    var index = historyIndex % historyLimit;
+    displayCurrent(index);
+    histPlot(index);
+    return;
 }
 
 function main() {
@@ -404,7 +333,7 @@ function main() {
         var displayEl;
         $(this).on('input', function(){
             $("#"+$(this).attr("id") + "Display").text( $(this).val() + $("#"+$(this).attr("id") + "Display").attr("data-unit") );
-            if (isCommputeDisplayed){
+            if (isFrameSliderDisplayed){
                 historyPlot(parseInt($(this).val()));
             }
             $("#"+$(this).attr("id") + "DisplayA2").text( parseFloat($(this).val())*180 + $("#" + $(this).attr("id") + "DisplayA2").attr("data-unit") );
@@ -428,18 +357,10 @@ function main() {
             $(this).addClass('active');
             $('.tab-pane.active', $(href).parent()).removeClass('active');
             $(href).addClass('active');
+            hideCommute();
             return false;
         });
     });
-    plotInit();
-    revealRotate(1); //Since Rotate is the active tab (html)
-    showReflect(1);
-    showScale(1);
-    document.getElementById("initialPosition").innerHTML=
-        "("
-        + String(initialPoint[0]) + ", "
-        + String(initialPoint[1]) + ", "
-        + String(initialPoint[2])
-        + ")";
+    hideCommute();
 }
 $(document).ready(main);
