@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans:300,400,500,600&subset=greek');
+
+body#bso {
+  font-family: "Fira Sans", system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Arial Nova", Helvetica, Arial, sans-serif;
+}
+
+#bso .row > * {
+  flex-basis: auto;
+}
+
+/*#bso .navbar {
+  width: 100%;
+  width: calc(100% - 40px);
+}*/
+
+#bso .navbar.bg-light {
+  background-color: rgba(247, 249, 250, 0.9) !important;
+}
+
+#bso #content {
+  position: relative; /* Needed for scrollspy */
+}
+
+#bso #content > div:first-child {
+  padding-top: 120px;
+}
+
+#bso .vis-category.container {
+  padding: 40px;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body#bso {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+#bso .footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  line-height: 60px; /* Vertically center the text there */
+  background-color: #f5f5f5;
+}
