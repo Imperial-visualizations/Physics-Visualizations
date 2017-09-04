@@ -23,10 +23,19 @@ Atom = function( mass, color) {
     this.sprite = addAtom(this);
 };
 
+/**
+ * Finds last position of Atom.
+ * @returns {number} Phaser coords.
+ */
 Atom.prototype.getPos = function(){
     if(this.pos.length === 0 ) return;
     return this.pos[this.pos.length - 1];
 };
+
+/**
+ * Updates Array of past coordinates of atoms.
+ * @param newPos: New position to add to array.
+ */
 Atom.prototype.setPos = function(newPos){
     if(this.pos.length > 90) this.pos.shift();      // Storing last 90 positions, deleting older ones
     this.pos.push(newPos);                          // Pushing new position.
@@ -50,26 +59,30 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
     }
     this.a1 = a1;
     this.a2 = a2;
-
     this.V = potential;                                         // Potential used as a bond between atoms.
+    this.maxKE_V = keVib_0;
 
-    this.tot_m =(a1.mass + a2.mass);                             // Finding total mass of the system.
-    this.reducedM =  (a1.mass * a2.mass) / (this.tot_m);           // Finding system's reduced mass.
+    this.tot_m =(a1.mass + a2.mass);                            // Finding total mass of the system.
+    this.reducedM =  (a1.mass * a2.mass) / (this.tot_m);        // Finding system's reduced mass.
 
-    this.I =  this.reducedM * Math.pow(this.V.getR_0(),2);        // Calculate initial Moment of Inertia.
+    this.I =  this.reducedM * Math.pow(this.V.getR_0(), 2);     // Calculate initial Moment of Inertia.
     this.omega = Math.sqrt(2 * keRot_0 / this.I);               // Calculate initial angular velocity.
     this.L = this.I * this.omega;                               // Calculate angular momentum (conserved).
-    this.r = new Vector([1, 0]).multiply(this.init_r_0(0.01,this.L));      // Initial radius, due to centrifugal distortion
-    //this.V.s = this.r.mag() / Math.pow(2, 1 / 6);               // Centrifugal distortion changes potential.
-    this.v = Math.sqrt(2 * keVib_0 / this.reducedM);           // Initial linear velocity of molecule.
-
-    a1.setPos(this.r.multiply(a1.mass / this.tot_m));
-    a2.setPos(this.r.multiply(-a2.mass / this.tot_m));
+    this.separation = this.init_r_0(0.0001, this.L);            // Initial separation (scalar).
+    this.r = new Vector([1, 0]).multiply(this.separation);      // Initial separation (vector).
+    this.v = Math.sqrt(2 * keVib_0 / this.reducedM);            // Initial linear velocity of molecule.
 
     // System's vibrational & rotational KEs, and total energy.
     this.KE_V = this.getKE_V();
     this.KE_R = this.getKE_R();
-    this.tot_E = keVib_0 +  this.V.calcCorrV(this.r.mag(), this.L, this.reducedM);
+    this.PE = this.getPE();
+    this.corrPE = this.getCorrPE();
+    this.tot_E = keVib_0 + this.corrPE;
+
+    a1.setPos(this.r.multiply(a1.mass / this.tot_m));
+    a2.setPos(this.r.multiply(-a2.mass / this.tot_m));
+
+
 };
 
 /** ================================================= Class Methods ==================================================*/
@@ -77,8 +90,8 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
  *  Calculates the centrifugally corrected value of r at the time t = 0 seconds.
  * @returns {number} Corrected value of r_0
  */
-Molecule.prototype.init_r_0 = function(resolution,L) {
-        var min = [0,Number.MAX_VALUE];
+Molecule.prototype.init_r_0 = function(resolution, L) {
+        var min = [0, Number.MAX_VALUE];
         for(var i = Math.floor(0.75*this.V.getR_0()/resolution); i < Math.ceil(1.25*this.V.getR_0()/resolution); i++){
             var potVal = this.V.calcV(i*resolution) +  Math.pow(L/(i*resolution),2)/(2 * this.reducedM);
             if(min[1] > potVal) min = [i*resolution,potVal];
@@ -100,8 +113,11 @@ Molecule.prototype.update = function(deltaTime){
     this.calcRotCoords(deltaTime);
     this.calcExtCoords(deltaTime);
 
+    this.separation = this.getSeparation();
     this.KE_V = this.getKE_V();
     this.KE_R = this.getKE_R();
+    this.PE = this.getPE();
+    this.corrPE = this.getCorrPE();
 
     // Update atom coordinates in CoM frame.
     a1.setPos(this.r.multiply(a1.mass / this.tot_m));
@@ -113,7 +129,7 @@ Molecule.prototype.update = function(deltaTime){
  * @param dT: Time elapsed since previous timestep.
  */
 Molecule.prototype.calcExtCoords = function (dT) {
-    var a = (this.V.calcF(this.r.mag()) / this.reducedM) +  Math.pow(this.omega, 2) * this.r.mag();
+    var a = (this.V.calcF(this.separation) / this.reducedM) +  Math.pow(this.omega, 2) * this.separation;
     this.v += a * dT;
     this.r = this.r.add(this.r.unit().multiply(this.v * dT));
 };
@@ -132,7 +148,7 @@ Molecule.prototype.calcRotCoords = function(dt) {
  * @returns {number} I
  */
 Molecule.prototype.calcMoI = function() {
-    return this.reducedM * Math.pow(this.r.mag(),2);                            // Return Moment of Inertia (scalar).
+    return this.reducedM * Math.pow(this.separation, 2);                            // Return Moment of Inertia (scalar).
 };
 
 /**
@@ -143,16 +159,51 @@ Molecule.prototype.calcAngVel = function () {
     return this.L / this.I;
 };
 
+/**
+ * Gets vector from one atom to another.
+ */
 Molecule.prototype.calcDir = function() {
     return a1.getPos().subtract(a2.getPos());
 };
 
+/**
+ * Calculates rotational KE.
+ * @returns {number} Rotational KE.
+ */
 Molecule.prototype.getKE_R = function () {
-    return 0.5 * this.I * Math.pow(this.omega,2);
+    return 0.5 * this.I * Math.pow(this.omega, 2);
 };
 
+/**
+ * Calculates vibrational KE.
+ * @returns {number} Vibrational KE
+ */
 Molecule.prototype.getKE_V = function () {
-    return 0.5 * this.reducedM * Math.pow(this.v,2);
+    return 0.5 * this.reducedM * Math.pow(this.v, 2);
+};
+
+/**
+ * Gets Potential Energy.
+ * @returns {number} Ideal LJ PE.
+ */
+Molecule.prototype.getPE = function() {
+    return this.V.calcV(this.separation);
+};
+
+/**
+ * Gets corrected Potential Energy due to rotation.
+ * @returns {number} Corrected PE.
+ */
+Molecule.prototype.getCorrPE = function() {
+    return this.V.calcCorrV(this.separation, this.L, this.reducedM);
+};
+
+/**
+ * Finds scalar separation of atoms.
+ * @returns {number} Distance
+ */
+Molecule.prototype.getSeparation = function() {
+    return this.r.mag();
 };
 
 /**
@@ -163,14 +214,29 @@ Molecule.prototype.getKE_V = function () {
  */
 Molecule.prototype.softReset = function (ke_vib0, ke_rot0) {
     var dir = this.calcDir();
-
     var new_mol = new Molecule(this.a1, this.a2, this.V, ke_vib0, ke_rot0);
 
     new_mol.a1.pos.splice(-1, 1); new_mol.a2.pos.splice(-1, 1);
     new_mol.r = dir;
+    new_mol.separation = new_mol.getSeparation();
     new_mol.w = this.w;
-    new_mol.KE_V = new_mol.tot_E - new_mol.KE_R;
-    if (this.v > 0) mol1.v = -mol1.v;
 
+    if (ke_vib0 > this.maxKE_V) {
+        var tmp_mol = new Molecule(this.a1, this.a2, this.V, ke_vib0, ke_rot0);
+
+        if (tmp_mol.separation < new_mol.separation) {
+            while (tmp_mol.separation < new_mol.separation) tmp_mol.update(1 / 400);
+        }
+
+        else {
+            tmp_mol.v = -tmp_mol.v;
+            while (tmp_mol.separation > new_mol.separation) tmp_mol.update(1 / 500);
+        }
+
+        new_mol.v = tmp_mol.v;
+        if (this.v > 0) new_mol.v = -new_mol.v;
+    }
+
+    else new_mol.v = 0;
     return new_mol;
 };

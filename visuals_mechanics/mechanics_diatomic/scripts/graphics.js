@@ -27,7 +27,7 @@ var arrPE = [];
 var arrVibKE = [];
 var arrVibKESlider;
 var LJ_scatter, LJCentr_scatter;
-var curr_LJ,curr_E_connector,curr_corrLJ;
+var curr_LJ,curr_E_connector,curr_E;
 var LJ_layout;
 var titleFontsize = 12, labelFontsize = 10;                     // Text sizes.
 var marT = 30, marB = 23, marR = 5, marL = 35;                  // Margins.
@@ -76,25 +76,26 @@ function spoiler() {
 /**
  * Hide the graph after the page is loaded, and the element sizes have been allocated according to the css
  */
-// $(document).ready(flashGraphs, 900);
-//
-// function flashGraphs(){
-//     setTimeout(function() {
-//         $(".graphs").each(function(){
-//             if (!$(this).hasClass("expanded")) {
-//                 $(this).slideDown(500);
-//                 $(this).addClass("expanded")
-//             }
-//
-//             $(this).slideUp(500);
-//             $(this).removeClass("expanded");
-//         });
-//     });
-// }
-/**
- * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
- * off the input field.
- */
+$(document).ready(flashGraphs, 900);
+
+function flashGraphs(){
+    setTimeout(function() {
+        $(".graphs").each(function(){
+            if (!$(this).hasClass("expanded")) {
+                $(this).slideDown(500);
+                $(this).addClass("expanded")
+            }
+
+            $(this).slideUp(500);
+            $(this).removeClass("expanded");
+        });
+    });
+}
+
+// /**
+//  * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
+//  * off the input field.
+//  */
 // $('body').on('click', '[data-change]', function() {
 //     // Storing current element and its attributes.
 //     var $element = $(this);
@@ -120,6 +121,7 @@ function spoiler() {
 //         init_e1 = parseFloat($('#e1').text());
 //         init_s2 = parseFloat($('#s2').text());
 //         init_e2 = parseFloat($('#e2').text());
+//         dT = parseFloat($('#dT').text());
 //         reset();
 //         if ($a.text().indexOf("Display") === -1) {
 //             var $divSlider = $a.attr("id").replace("Display", "");
@@ -223,7 +225,8 @@ function plotE() {
         titlefont: {size: titleFontsize}, margin: {l: marL, r: marR, b: marB, t: marT},
         xaxis: {title: "t / s", titlefont: {size: 10}, range: [0, GRAPH_TIME], nticks: 20},
         title: "KE and PE against Time",
-        legend: {x: 0.67, y: 1, orientation: "h"}
+        legend: {x: 0.67, y: 1, orientation: "h"},
+        showlegend: true
     };
 
     var data = [{x: arrTime, y: arrVibKE, mode: "lines", line: {width: 2, color: "#FFDD00"}, name: "KE" + "vib".sub()},
@@ -232,7 +235,7 @@ function plotE() {
             {x: arrTime, y: arrRotKE, mode: "lines", line: {width: 2, color: "#66A40A"}, name: "KE" + "rot".sub()},
             {x: [- 1, 1000000], y: arrRotKESlider,
                 line: {width: 1, color: "#49830a", dash: "dash"}, name: "KE" + "rot, slider".sub(), showlegend: false},
-            {x: arrTime, y: arrPE, mode: "lines", line: {width: 2, color: "#003E74"}, name: "PE"}];
+            {x: arrTime, y: arrPE, mode: "lines", line: {width: 2, color: "#003E74"}, name: "PE" + "LJ".sub()}];
 
     Plotly.newPlot("graphE", data, layoutE, options);
 }
@@ -241,10 +244,13 @@ function plotE() {
  * Plots Lennard-Jones function and a marker to show current V against current separation using Plotly.
  */
 function plotLJ() {
-    LJ_layout = {title: "Lennard-Jones Potential", titlefont: {size: 12}, margin: {l: marL, r: marR, b: marB + 10, t: marT},
-                legend: {x: 0.75, y: 1, "orientation": "v"},
-                yaxis: {range: [-1.1 * potential.e, 0.7 * potential.e], nticks: 20, title: "LJ Potential / eV", titlefont: {size: 10}},
-                xaxis: {range: [0.9 * potential.s, 3 * potential.s], nticks: 20, title: "r" + "AB".sub() + " / nm", titlefont: {size: 10}}};
+    LJ_layout = {title: "Lennard-Jones Potential", titlefont: {size: 12},
+                margin: {l: marL, r: marR, b: marB + 10, t: marT}, legend: {x: 0.46, y: 1, "orientation": "h"},
+                showlegend: true,
+                yaxis: {range: [-1.1 * potential.e, 0.7 * potential.e],
+                    nticks: 20, title: "LJ Potential / eV", titlefont: {size: 10}},
+                xaxis: {range: [0.9 * potential.s, 3 * potential.s],
+                    nticks: 20, title: "r" + "AB".sub() + " / nm", titlefont: {size: 10}}};
 
     // Remove all points outside visible range on graph.
     while (LJ_scatter.y[0] > LJ_layout.yaxis.range[1]) {
@@ -257,27 +263,26 @@ function plotLJ() {
     LJ_layout.yaxis.range[1] = LJCentr_scatter.y[0];     // Re-optimising y-axis scaling.
 
     // Drawing red marker that shows current LJ potential against current separation.
-    var curr_sep = mol1.r.mag();
-    var curr_V = potential.calcV(curr_sep);
-    var curr_cent_V = potential.calcCorrV(curr_sep, mol1.L, mol1.reducedM);
 
     var tot_E_plot = {x: [LJ_layout.xaxis.range[0] - 1, LJ_layout.xaxis.range[1] + 1], y: [mol1.tot_E, mol1.tot_E],
+        legendgroup: 'group2',
         name: "E" + "tot".sub(), mode: "lines", line: {dash: "dash", width: 1}};
-    curr_E_connector = {x:[curr_sep,curr_sep],y:[curr_V,curr_cent_V],
-        mode:"lines",line:{dash:"dash",width:1}};
-    curr_LJ = {x: [curr_sep], y: [curr_V], name: "LJ" + "curr".sub(), mode: "markers",
+    curr_E_connector = {x:[mol1.separation,mol1.separation], y:[mol1.PE, mol1.corrPE], mode:"lines",
+        line:{dash:"dash", width:1}, showlegend: false};
+    curr_LJ = {x: [mol1.separation], y: [mol1.PE], name: "LJ" + "curr".sub(), mode: "markers", legendgroup: 'group2',
         marker: {size: 10, color: CHERRY, symbol: "circle-open"}};
-    curr_corrLJ = {x: [curr_sep], y: [curr_cent_V], name: "LJ" + "curr, corr".sub(), mode: "markers",
+    curr_E = {x: [mol1.separation], y: [mol1.corrPE], name: "LJ" + "curr, corr".sub(), mode: "markers",
+        legendgroup: 'group2',
         marker: {size: 10, color: "#ff9030", symbol: "circle-open"}};
 
-    var data = [LJ_scatter, LJCentr_scatter, curr_LJ, curr_corrLJ, tot_E_plot,curr_E_connector];
+    var data = [LJ_scatter, LJCentr_scatter, curr_LJ, curr_E, tot_E_plot,curr_E_connector];
     Plotly.newPlot("LJ_scatter", data, LJ_layout, options);
 }
 
 /**
  * Function to draw a 'spring' between two Atom instances to signify a bond.
- * @param starting {Vector}: Position where spring starts.
- * @param end {Vector}: Position where spring ends.
+ * @param starting {number}: Position where spring starts.
+ * @param end {number}: Position where spring ends.
  */
 function drawBond(starting, end) {
     var curr_pot = mol1.V.calcV(mol1.r.mag());
@@ -384,10 +389,11 @@ function reset(){
     drawBond(a1.getPos(), a2.getPos());
 
     if (!running) {
-        arrRotKE = [];
-        arrTime = [];
-        arrPE = [];
-        arrVibKE = [];
+        arrTime = [0];
+        arrRotKE = [initKRot];
+        arrVibKE = [initKVib];
+        arrPE = [-mol1.V.e];
+
     }
     arrVibKESlider = [initKVib, initKVib];
     arrRotKESlider = [initKRot, initKRot];
@@ -407,33 +413,15 @@ function update(){
         a2.sprite.y = a2.getPos().items[1] * zoom + phaserInstance.world.centerY;
         drawTrail(a1);
         drawTrail(a2);
-        drawBond(a1.getPos(),a2.getPos());
+        drawBond(a1.getPos(), a2.getPos());
 
-        // Calculate Rotational KE and update array.
-        var rotKE = 0.5 * mol1.I * Math.pow(mol1.omega, 2);
-        arrRotKE.push(rotKE);
+        // Update time array with current time.
+        arrTime.push(arrTime[arrTime.length - 1] + dT);
 
-        // Calculate PE and update array.
-        var curr_sep = mol1.r.mag();                    // Current separation
-        var curr_V = mol1.V.calcV(curr_sep);            // Current potential
-        var curr_cent_V = mol1.V.calcCorrV(curr_sep, mol1.L, mol1.reducedM);
-        arrPE.push(curr_V);
-
-        // Calculate Vibrational KE and update array.
-        var vibKE = 0.5 * mol1.reducedM * Math.pow(mol1.v,2);
-        arrVibKE.push(vibKE);
-
-        // Updating current LJ r and V(r) and LJ_corr(r).
-        curr_LJ.x = [curr_sep]; curr_LJ.y = [curr_V];
-        curr_corrLJ.x = [curr_sep]; curr_corrLJ.y = [curr_cent_V];
-        curr_E_connector.x =[curr_sep,curr_sep]; curr_E_connector.y = [curr_V,curr_cent_V];
-
-
-        // Update time array.
-        var t;
-        if (arrTime.length > 0) t = arrTime[arrTime.length - 1] + dT;
-        else t = dT;
-        arrTime.push(t);
+        // Calculate energies and update the respective arrays.
+        arrRotKE.push(mol1.KE_R);
+        arrPE.push(mol1.PE);
+        arrVibKE.push(mol1.KE_V);
 
         // Delete older data to keep graphs neater and to limit memory usage.
         if (arrRotKE.length > Math.ceil(GRAPH_TIME / dT)) {
@@ -443,24 +431,34 @@ function update(){
             arrPE.shift();
         }
 
-        // Updating x-axis of Energies vs Time plot to show appropriate data.
-        layoutE.xaxis.range[0] = arrTime[0];
-        layoutE.xaxis.range[1] = Math.max(arrTime[arrTime.length - 1] + 0.5, GRAPH_TIME);
-
-
         // Animating all graphs if shown.
         if ($("#graphE").hasClass("expanded")) {
-            Plotly.restyle("graphE", {data: [{x: arrTime, y: arrVibKE},
-                        {x: arrTime, y: arrRotKE},
-                        {x: arrTime, y: arrPE}],
-                        traces: [0, 1, 2]},
+
+            // Updating x-axis of Energies vs Time plot to show appropriate data.
+            layoutE.xaxis.range[0] = arrTime[0];
+            layoutE.xaxis.range[1] = Math.max(arrTime[arrTime.length - 1] + 0.5, GRAPH_TIME);
+
+            // Hiding legend if plot is high enough.
+            if (arrRotKE[arrRotKE.length - 1] > 0.55 * layoutE.yaxis.range[1] ||
+                arrVibKE[arrVibKE.length - 1] > 0.55 * layoutE.yaxis.range[1]) {
+                layoutE.showlegend = false;
+            }
+
+            // Plotting dat energie.
+            Plotly.restyle("graphE", {data: [{x: arrTime, y: arrVibKE}, {x: arrTime, y: arrRotKE},
+                        {x: arrTime, y: arrPE}], traces: [0, 1, 2]},
                         {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
         }
 
         if ($('#LJ_scatter').hasClass("expanded")) {
-            Plotly.restyle("LJ_scatter", {
-                    data: [curr_LJ, curr_corrLJ,curr_E_connector],
-                    traces: [0, 1, 2]},
+
+            // Updating current LJ r and V(r) and LJ_corr(r).
+            curr_LJ.x = [mol1.separation]; curr_LJ.y = [mol1.PE];
+            curr_E.x = [mol1.separation]; curr_E.y = [mol1.corrPE];
+            curr_E_connector.x = [mol1.separation, mol1.separation]; curr_E_connector.y = [mol1.PE, mol1.corrPE];
+
+            // Plotting the LJ and stuff.
+            Plotly.restyle("LJ_scatter", {data: [curr_LJ, curr_E, curr_E_connector], traces: [0, 1, 2]},
                 {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
         }
     }
