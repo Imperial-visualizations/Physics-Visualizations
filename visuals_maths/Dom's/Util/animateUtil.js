@@ -1,44 +1,50 @@
-var frames, addOn;
-var animateIndex = 0, animateLimit = 0;
+'use strict';
+var animationFrames;
+var animationIndex, animationLimit;
 var duration = 50;
 var isPaused = false;
 var stops;
-var idName;
+var playID, sliderID;
 
-function initAnimation(sliderName, allFrames, extra=[], layout={}, setDuration = 50, stopValues=[0, 0]) {
-    idName = sliderName;
+function initAnimation(playButtonID, allFrames, extra=[], layout={}, setDuration = 50, stopValues=[0, 0]) {
+    Plotly.purge("graph");
+    playID = playButtonID;
+    sliderID = "#" + playID.slice() + "Slider";
     duration = setDuration;
-    frames = allFrames;
-    animateLimit = frames.length;
-    addOn = extra;
+    animationFrames = allFrames;
+    animationLimit = animationFrames.length;
     stops = stopValues;
     isPaused = true;
-    animateIndex = 0;
+    animationIndex = 0;
     var data = [];
-    for (var i = 0, n = frames[1].data.length; i < n; ++i) {
-        data.push(frames[animateIndex].data[i]);
+    for (var i = 0, n = animationFrames[0].data.length; i < n; ++i) {
+        data.push(
+            {
+                type: animationFrames[0].data.type,
+            }
+        );
     }
-    for (var i = 0, n = addOn.length; i < n; ++i){
-        data.push(addOn[i]);
+    for (var i = 0, n = extra.length; i < n; ++i){
+        data.push(extra[i]);
     }
-    Plotly.newPlot('graph', data = data, layout = layout);
+    Plotly.newPlot("graph", data = data, layout = layout);
     reset();
 }
 
 function reset() {
     isPaused = true;
-    animateIndex = 1;
-    historyPlot(animateIndex);
-    document.getElementById('playPause').value = (isPaused) ? "Play":"Pause";
-    resetSlider();
+    animationIndex = 0;
+    historyPlot(animationIndex);
+    document.getElementById(playID).value = (isPaused) ? "Play":"Pause";
+    updateSlider();
     return;
 }
 
 function historyPlot(index) {
-    animateIndex = index;
+    animationIndex = index;
     var data = [];
-    for (var i = 0, n = frames[index].data.length; i < n; ++i) {
-        data.push(frames[index].data[i]);
+    for (var i = 0, n = animationFrames[index].data.length; i < n; ++i) {
+        data.push(animationFrames[index].data[i]);
     }
     Plotly.animate(
         'graph',
@@ -50,21 +56,21 @@ function historyPlot(index) {
         }
     );
     isPaused = true;
-    document.getElementById('playPause').value = (isPaused) ? "Play":"Pause";
+    document.getElementById(playID).value = (isPaused) ? "Play":"Pause";
     return;
 }
 
 function update() {
-    animateIndex++;
-    if (animateIndex === animateLimit) {
+    animationIndex++;
+    if (animationIndex === animationLimit) {
         isPaused = true;
-        document.getElementById('playPause').value = (isPaused) ? "Play":"Pause";
+        document.getElementById(playID).value = "Reset";
         return;
     }
     if (!isPaused) {
-        data = [];
-        for (var i = 0, n = frames[1].data.length; i < n; ++i) {
-            data.push(frames[animateIndex].data[i]);
+        var data = [];
+        for (var i = 0, n = animationFrames[1].data.length; i < n; ++i) {
+            data.push(animationFrames[animationIndex].data[i]);
         }
         Plotly.animate(
             'graph',
@@ -75,13 +81,13 @@ function update() {
                 frame: {duration: duration, redraw: false,},
             }
         );
-        pauseComp(duration + 1);
+        pauseComp(duration + 5);
         requestAnimationFrame(update);
-        resetSlider();
+        updateSlider();
         //Add stopping functionality here!!!
-        if (animateIndex === stops[0] || animateIndex === stops[1]){
+        if (animationIndex === stops[0] || animationIndex === stops[1]){
             isPaused = !isPaused;
-            document.getElementById('playPause').value = (isPaused) ? "Play":"Pause";
+            document.getElementById(playID).value = "Continue";
         }
     }
     return;
@@ -93,17 +99,18 @@ function pauseComp(ms) {
     return;
 }
 
-function resetSlider() {
-    $(idName).val(animateIndex);
-    $(idName + "Display").text(animateIndex);
-    return;
+function updateSlider() {
+    $(sliderID).val(animationIndex);
+    $(sliderID + "Display").text(animationIndex);
 }
 
 function startAnimation () {
-    if (animateIndex < animateLimit){
+    if (animationIndex < animationLimit){
         isPaused = !isPaused;
-        document.getElementById('playPause').value = (isPaused) ? "Play":"Pause";
+        document.getElementById(playID).value = (isPaused) ? "Play":"Pause";
         requestAnimationFrame(update);
+    } else {
+        reset();
     }
     return;
 }

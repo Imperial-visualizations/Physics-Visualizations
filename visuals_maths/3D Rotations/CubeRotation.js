@@ -119,9 +119,17 @@ function master(transformation, initalparam, finalparam,xinit1,yinit1,zinit1){
         for (var j = 0 ; j < 8 ; j++) {  //This is to loop through 8 points of the cube
             point = [xinit1[j],yinit1[j],zinit1[j]];
             pointOut = transformation(point,t[i]);
+            if (math.max(pointOut) > 3){
+                xrot1 = xinit1
+                yrot1 = yinit1
+                zrot1 = zinit1
+                alert("you've overshot the layout!")
+                return;
+            } else {
             xrot1.push(pointOut[0]);
             yrot1.push(pointOut[1]);
             zrot1.push(pointOut[2]);
+            }
         }
 
         cubeRotation = [{  //This generates the cube
@@ -152,34 +160,11 @@ function master(transformation, initalparam, finalparam,xinit1,yinit1,zinit1){
     return frames;
 }
 
-//This it to make the tabs work on the html
-function openTrans(evt, TransName) {
-    // Declare all variables
-    var i, tabcontent, tablinks;
-
-    // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-
-    // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-
-    // Show the current tab, and add an "active" class to the button that opened the tab
-    document.getElementById(TransName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
-
 //This is to make the graph reset
 function graphReset(where){
     xrot1 = [-1., -1., 1., 1., -1., -1., 1., 1.];
     yrot1 = [-1., 1., 1., -1., -1., 1., 1., -1.];
     zrot1 = [-1., -1., -1., -1., 1., 1., 1., 1.];
-    scaleSelector = 1
 
     what = [{
         type: "mesh3d",
@@ -328,28 +313,8 @@ function Skew(){
 function Scale(){
     axisSelector = document.getElementById("ScaleSelect").value
     scaleSelector = document.getElementById("ScaleSlider").value
-
-    if (axisSelector ==="ScaleXaxis") {
-        alert("Sorry, don't scale too much this program isn't perfect")
-        return;
-    }
-    if ((scaleTotalY > 2.5) && (scaleSelector > 1) && (axisSelector ==="ScaleYaxis")){
-        alert("Sorry, don't scale too much this program isn't perfect")
-        return;
-    }
-    if ((scaleTotalZ > 2.5) && (scaleSelector > 1) && (axisSelector ==="ScaleZaxis")){
-        alert("Sorry, don't scale too much this program isn't perfect")
-        return;
-    }
-        if  ((axisSelector ==="ScaleZaxis") && ((scaleTotalZ > 2.5) ||(scaleTotalZ > 2.5)||(scaleTotalZ > 2.5))){
-        alert("Sorry, don't scale too much this program isn't perfect")
-        return;
-    }
-    
-    
     
     if (axisSelector ==="ScaleXaxis") {
-        scaleTotalX = scaleTotalX*scaleSelector
         framesnew = master(scaleXaxis,1,scaleSelector,xrot1,yrot1,zrot1)
         Plotly.animate('graph', framesnew, {transition: {
           duration: 100,

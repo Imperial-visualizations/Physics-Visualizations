@@ -20,15 +20,15 @@
             <div id='graph' style="width:450px; height:450px;"></div>
             <script src=CubeRotation.js></script>  
         </div>
+        <br> 
     <div class = "six columns">
-    <div> </div>
-        <div class="tab">
-            <button class="tablinks" onclick="openTrans(event, 'Rotate')">Rotate</button>
-            <button class="tablinks" onclick="openTrans(event, 'Skew')">Skew</button>
-            <button class="tablinks" onclick="openTrans(event, 'Scale')">Scale</button>
-        </div>
-
-        <div id="Rotate" class="tabcontent" style="display: none">
+        <ul class="tab-nav">
+            <li><a class="button active" href="#Rotate">Rotate</a></li>
+            <li><a class="button" href="#Skew">Skew</a></li>
+            <li><a class="button" href="#Scale">Scale </a> </li>
+            </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="Rotate">
             <h3>Rotate</h3>
             <div>
                 <p><strong>Select Axis:</strong></p> 
@@ -48,7 +48,7 @@
             </div>
             <h7> This is the transformation matrix.</h7>
             <div>
-                <table id = "rotateTable">
+                <table id = "rotateTable" class="matrix">
                     <tr>
                         <td align = "center">1</td>
                         <td align = "center">0</td>
@@ -66,11 +66,10 @@
                     </tr>
                 </table>
             </div>
-            <div><button onclick="Rotate()">Go</button></div>    
-        </div>
-
-        <div id="Skew" class="tabcontent" style="display: none">
-          <h3>Skew</h3>
+            <div><button onclick="Rotate()">Go</button></div> 
+            </div>
+            <div class="tab-pane" id="Skew">
+                <h3>Skew</h3>
             <div>
                 <p><strong>Select Axis:</strong></p> 
                 <select id = "SkewSelect">
@@ -88,7 +87,7 @@
             </div>
             <h7> This is the transformation matrix.</h7>
             <div>
-                <table id = "skewTable">
+                <table id = "skewTable" class="matrix">
                     <tr>
                         <td align = "center">1</td>
                         <td align = "center">0</td>
@@ -108,11 +107,9 @@
             </div>
             <div><button onclick = "Skew()">Go!</button></div>
 
-
-        </div>
-
-        <div id="Scale" class="tabcontent" style="display: none">
-          <h3>Scale</h3><div>
+            </div>
+            <div class="tab-pane" id="Scale"> 
+                          <h3>Scale</h3><div>
                 <p><strong>Select Axis:</strong></p> 
                 <select id ="ScaleSelect">
                     <option value="ScaleXaxis">X Axis</option> 
@@ -132,7 +129,7 @@
             <h7> This is the transformation matrix.</h7>
 
             <div>
-                <table id = "scaleTable">
+                <table id = "scaleTable" class="matrix">
                     <tr>
                         <td align = "center">1</td>
                         <td align = "center">0</td>
@@ -150,12 +147,13 @@
                     </tr>
                 </table>
             </div>
-            <div><button onclick = "Scale()">Go!</button></div>    
-        </div>
+            <div><button onclick = "Scale()">Go!</button></div>   
+            </div>
+
     </div>
     </div>
     </div>
-    
+    </div>
 <div><button onclick="graphReset('graph')">Reset</button></div>
 
 </body>

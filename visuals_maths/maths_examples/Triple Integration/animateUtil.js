@@ -3,15 +3,19 @@ var animateIndex = 0, animateLimit = 0;
 var duration = 150;
 var isPaused = false;
 var stops;
-var idName;
-
-function init(sliderName, allFrames, extra=[], stopValues=[0, 0]) {
+var idName, playID;
+var counter = 1
+var changeValues
+var typeInteg
+function init(sliderName, playName, allFrames, extra=[], stopValues=[0, 0], order) {
+    typeInteg = order
+    changeValues = stopValues
     idName = sliderName;
+    playID = playName;
     frames = allFrames;
     animateLimit = frames.length;
     addOn = extra;
     stops = stopValues;
-    console.log(stops);
     isPaused = true;
     animateIndex = 0;
     var data = [];
@@ -28,8 +32,12 @@ function reset() {
     isPaused = true;
     animateIndex = 1;
     historyPlot(animateIndex);
-    document.getElementById('playPause').value = (isPaused) ? "Play":"Pause";
+    document.getElementById(playID).value = (isPaused) ? "Play":"Pause";
     resetSlider();
+    counter = 1
+    document.getElementById('innerXYZ').style.display = "block"
+    document.getElementById('middleXYZ').style.display = "none"
+    document.getElementById('outerXYZ').style.display = "none"
     return;
 }
 
@@ -48,7 +56,7 @@ function historyPlot(index) {
         }
     );
     isPaused = true;
-    document.getElementById('playPause').value = (isPaused) ? "Play":"Pause";
+    document.getElementById(playID).value = (isPaused) ? "Play":"Pause";
     return;
 }
 
@@ -56,7 +64,7 @@ function update() {
     animateIndex++;
     if (animateIndex === animateLimit) {
         isPaused = true;
-        document.getElementById('playPause').value = (isPaused) ? "Play":"Pause";
+        document.getElementById(playID).value = (isPaused) ? "Play":"Pause";
         return;
     }
     if (!isPaused) {
@@ -78,7 +86,7 @@ function update() {
         //Add stopping functionality here!!!
         if (animateIndex === stops[0] || animateIndex === stops[1]){
             isPaused = !isPaused;
-            document.getElementById('playPause').value = (isPaused) ? "Play":"Pause";
+            document.getElementById(playID).value = (isPaused) ? "Play":"Pause";
         }
     }
     return;
@@ -96,11 +104,142 @@ function resetSlider() {
     return;
 }
 
-function startAnimation () {
-    if (animateIndex < animateLimit){
+function startAnimation (type) {
+    if (type === 1){
+        if (animateIndex < animateLimit){
         isPaused = !isPaused;
-        document.getElementById('playPause').value = (isPaused) ? "Play":"Pause";
+        document.getElementById(playID).value = (isPaused) ? "Play":"Pause";
         requestAnimationFrame(update);
     }
+    if (counter === 1){
+        document.getElementById('innerXYZ').style.display = "block"
+        document.getElementById('middleXYZ').style.display = "none"
+        document.getElementById('outerXYZ').style.display = "none"
+        counter = counter + 1 
+    } else if (counter === 2){
+        document.getElementById('innerXYZ').style.display = "none"
+        document.getElementById('middleXYZ').style.display = "block"
+        document.getElementById('outerXYZ').style.display = "none"
+
+        counter = counter + 1     
+    } else if (counter === 3){
+        document.getElementById('innerXYZ').style.display = "none"
+        document.getElementById('middleXYZ').style.display = "none"
+        document.getElementById('outerXYZ').style.display = "block"
+        counter = counter + 1  
+    }
+    }else if (type ===2) {
+        if (animateIndex < animateLimit){
+        isPaused = !isPaused;
+        document.getElementById(playID).value = (isPaused) ? "Play":"Pause";
+        requestAnimationFrame(update);
+        }
+    if (counter === 1){
+        document.getElementById('innerZYX').style.display = "block"
+        document.getElementById('middleZYX').style.display = "none"
+        document.getElementById('outerZYX').style.display = "none"
+        counter = counter + 1 
+    } else if (counter === 2){
+        document.getElementById('innerZYX').style.display = "none"
+        document.getElementById('middleZYX').style.display = "block"
+        document.getElementById('outerZYX').style.display = "none"
+
+        counter = counter + 1     
+    } else if (counter === 3){
+        document.getElementById('innerZYX').style.display = "none"
+        document.getElementById('middleZYX').style.display = "none"
+        document.getElementById('outerZYX').style.display = "block"
+        counter = counter + 1  
+    } 
+    }else if (type ===3) {
+        if (animateIndex < animateLimit){
+        isPaused = !isPaused;
+        document.getElementById(playID).value = (isPaused) ? "Play":"Pause";
+        requestAnimationFrame(update);
+    }
+    if (counter === 1){
+        document.getElementById('innerYZX').style.display = "block"
+        document.getElementById('middleYZX').style.display = "none"
+        document.getElementById('outerYZX').style.display = "none"
+        counter = counter + 1 
+    } else if (counter === 2){
+        document.getElementById('innerYZX').style.display = "none"
+        document.getElementById('middleYZX').style.display = "block"
+        document.getElementById('outerYZX').style.display = "none"
+
+        counter = counter + 1     
+    } else if (counter === 3){
+        document.getElementById('innerYZX').style.display = "none"
+        document.getElementById('middleYZX').style.display = "none"
+        document.getElementById('outerYZX').style.display = "block"
+        counter = counter + 1  
+    }   
+    }
     return;
+}
+
+function sliderchange() {
+    console.log($('.nav-tabs .active').text())
+    console.log(typeInteg)
+    console.log(changeValues)
+    console.log(document.getElementById('frame').value)
+    if (typeInteg === 1){
+    if (document.getElementById('frame').value< changeValues[0]){
+        document.getElementById('innerXYZ').style.display = "block"
+        document.getElementById('middleXYZ').style.display = "none"
+        document.getElementById('outerXYZ').style.display = "none"
+        counter = 1
+    } else if (document.getElementById('frame').value< changeValues[1]){
+        document.getElementById('innerXYZ').style.display = "none"
+        document.getElementById('middleXYZ').style.display = "block"
+        document.getElementById('outerXYZ').style.display = "none"
+
+        counter = 2     
+    } else if (document.getElementById('frame').value > changeValues[1]){
+        document.getElementById('innerXYZ').style.display = "none"
+        document.getElementById('middleXYZ').style.display = "none"
+        document.getElementById('outerXYZ').style.display = "block"
+        counter = 3 
+    }
+    }else if (typeInteg ===2) {
+
+    if (document.getElementById('frame').value < changeValues[0]){
+        document.getElementById('innerZYX').style.display = "block"
+        document.getElementById('middleZYX').style.display = "none"
+        document.getElementById('outerZYX').style.display = "none"
+        counter = 1 
+    } else if (document.getElementById('frame').value < changeValues[1]){
+        document.getElementById('innerZYX').style.display = "none"
+        document.getElementById('middleZYX').style.display = "block"
+        document.getElementById('outerZYX').style.display = "none"
+
+        counter = 2    
+    } else if (document.getElementById('frame').value> changeValues[1]){
+        document.getElementById('innerZYX').style.display = "none"
+        document.getElementById('middleZYX').style.display = "none"
+        document.getElementById('outerZYX').style.display = "block"
+        counter = 3
+    } 
+    }else if (typeInteg ===3) {
+
+    if (document.getElementById('frame').value < changeValues[0]){
+        document.getElementById('innerYZX').style.display = "block"
+        document.getElementById('middleYZX').style.display = "none"
+        document.getElementById('outerYZX').style.display = "none"
+        counter = 1 
+    } else if (document.getElementById('frame').value< changeValues[1]){
+        document.getElementById('innerYZX').style.display = "none"
+        document.getElementById('middleYZX').style.display = "block"
+        document.getElementById('outerYZX').style.display = "none"
+
+        counter = 2    
+    } else if (document.getElementById('frame').value> changeValues[1]){
+        document.getElementById('innerYZX').style.display = "none"
+        document.getElementById('middleYZX').style.display = "none"
+        document.getElementById('outerYZX').style.display = "block"
+        counter = 3 
+    }   
+    }
+    return;
+        
 }

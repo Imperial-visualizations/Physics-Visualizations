@@ -1,3 +1,4 @@
+'use strict';
 //Objects:
 function Line(points) {
     this.x = [];
@@ -20,17 +21,44 @@ function Line(points) {
         }
         return lineObject;
     }
+
+    this.arrowHead = function(color, width=7, dash="solid") {
+        var lastElm = this.x.length - 1;
+        var [r, theta, phi] = c2sp(this.x[lastElm], this.y[lastElm], this.z[lastElm]);
+        var frac = 0.1*r;
+        var sin45 = Math.sin(Math.PI/4);
+        var d = r - frac * sin45;
+        var wingLength = Math.sqrt(Math.pow(frac*sin45,2) + d*d);
+        var wingAngle = Math.acos(d/wingLength);
+
+
+        var wings_xyz = [
+            sp2c(wingLength, theta + wingAngle, phi),
+            sp2c(wingLength, theta - wingAngle, phi)
+        ];
+
+        var wings = {
+            type: "scatter3d",
+            mode: "lines",
+            x: [wings_xyz[0][0], this.x[lastElm], wings_xyz[1][0]],
+            y: [wings_xyz[0][1], this.y[lastElm], wings_xyz[1][1]],
+            z: [wings_xyz[0][2], this.z[lastElm], wings_xyz[1][2]],
+            line: {color: color, width: width}
+        }
+
+        return wings;
+    }
 }
 function Point(position) {
     this.position = position;
-    this.gObject = function(color, symbol="circle") {
-        pointObject = {
+    this.gObject = function(color, size = 7, symbol="circle") {
+        var pointObject = {
             type: "scatter3d",
             mode: "markers",
             x: [this.position[0]],
             y: [this.position[1]],
             z: [this.position[2]],
-            marker: {"color": color, "size": 7, "symbol": symbol}
+            marker: {"color": color, "size": size, "symbol": symbol}
         }
         return pointObject;
     }
@@ -56,7 +84,7 @@ function Sphere(radius) {
             y: this.y,
             z: this.z,
             showscale: false,
-            opacity: 0.7,
+            opacity: 0.6,
             colorscale: [[0.0, color1], [1.0, color2]]
         }
         return sphere;
