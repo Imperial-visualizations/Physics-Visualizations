@@ -26,7 +26,8 @@ var arrTime = [];
 var arrPE = [];
 var arrVibKE = [];
 var arrVibKESlider;
-var LJ_scatter, LJCentr_scatter;
+var LJ_scatter, LJCentr_scatter, tot_E_plot;
+var KE_V_T, KE_V_slider, KE_R_T, KE_R_slider, PE_T;
 var curr_LJ,curr_E_connector,curr_E;
 var LJ_layout;
 var titleFontsize = 12, labelFontsize = 10;                     // Text sizes.
@@ -229,15 +230,15 @@ function plotE() {
         showlegend: true
     };
 
-    var data = [{x: arrTime, y: arrVibKE, mode: "lines", line: {width: 2, color: "#FFDD00"}, name: "KE" + "vib".sub()},
-            {x: [- 1, 1000000], y: arrVibKESlider,
-                line: {width: 1, color: "#ac8e00", dash: "dash"}, name: "KE" + "vib, slider".sub(), showlegend: false},
-            {x: arrTime, y: arrRotKE, mode: "lines", line: {width: 2, color: "#66A40A"}, name: "KE" + "rot".sub()},
-            {x: [- 1, 1000000], y: arrRotKESlider,
-                line: {width: 1, color: "#49830a", dash: "dash"}, name: "KE" + "rot, slider".sub(), showlegend: false},
-            {x: arrTime, y: arrPE, mode: "lines", line: {width: 2, color: "#003E74"}, name: "PE" + "LJ".sub()}];
+    KE_V_T = {x: arrTime, y: arrVibKE, mode: "lines", line: {width: 2, color: "#FFDD00"}, name: "KE" + "vib".sub()};
+    KE_V_slider = {x: [- 1, GRAPH_TIME + 2], y: arrVibKESlider,
+        line: {width: 1, color: "#ac8e00", dash: "dash"}, name: "KE" + "vib, slider".sub(), showlegend: false};
+    KE_R_T = {x: arrTime, y: arrRotKE, mode: "lines", line: {width: 2, color: "#66A40A"}, name: "KE" + "rot".sub()};
+    KE_R_slider = {x: [- 1, GRAPH_TIME + 2], y: arrRotKESlider,
+        line: {width: 1, color: "#49830a", dash: "dash"}, name: "KE" + "rot, slider".sub(), showlegend: false};
+    PE_T = {x: arrTime, y: arrPE, mode: "lines", line: {width: 2, color: "#003E74"}, name: "PE" + "LJ".sub()};
 
-    Plotly.newPlot("graphE", data, layoutE, options);
+    Plotly.newPlot("graphE", [KE_V_T, KE_V_slider, KE_R_T, KE_R_slider, PE_T], layoutE, options);
 }
 
 /**
@@ -264,7 +265,7 @@ function plotLJ() {
 
     // Drawing red marker that shows current LJ potential against current separation.
 
-    var tot_E_plot = {x: [LJ_layout.xaxis.range[0] - 1, LJ_layout.xaxis.range[1] + 1], y: [mol1.tot_E, mol1.tot_E],
+    tot_E_plot = {x: [LJ_layout.xaxis.range[0] - 1, LJ_layout.xaxis.range[1] + 1], y: [mol1.tot_E, mol1.tot_E],
         legendgroup: 'group2',
         name: "E" + "tot".sub(), mode: "lines", line: {dash: "dash", width: 1}};
     curr_E_connector = {x:[mol1.separation,mol1.separation], y:[mol1.PE, mol1.corrPE], mode:"lines",
@@ -275,7 +276,7 @@ function plotLJ() {
         legendgroup: 'group2',
         marker: {size: 10, color: "#ff9030", symbol: "circle-open"}};
 
-    var data = [LJ_scatter, LJCentr_scatter, curr_LJ, curr_E, tot_E_plot,curr_E_connector];
+    var data = [LJ_scatter, LJCentr_scatter, curr_LJ, curr_E, tot_E_plot, curr_E_connector];
     Plotly.newPlot("LJ_scatter", data, LJ_layout, options);
 }
 
@@ -444,9 +445,11 @@ function update(){
                 layoutE.showlegend = false;
             }
 
+            KE_R_slider.x[0] = KE_V_slider.x[0] = layoutE.xaxis.range[0] - 1;
+            KE_R_slider.x[1] = KE_V_slider.x[1] = layoutE.xaxis.range[1] + 1;
+
             // Plotting dat energie.
-            Plotly.restyle("graphE", {data: [{x: arrTime, y: arrVibKE}, {x: arrTime, y: arrRotKE},
-                        {x: arrTime, y: arrPE}], traces: [0, 1, 2]},
+            Plotly.animate("graphE", {data: [KE_V_T, KE_V_slider, KE_R_T, KE_R_slider, PE_T], traces: [0, 1, 2, 3, 4]},
                         {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
         }
 
@@ -458,7 +461,8 @@ function update(){
             curr_E_connector.x = [mol1.separation, mol1.separation]; curr_E_connector.y = [mol1.PE, mol1.corrPE];
 
             // Plotting the LJ and stuff.
-            Plotly.restyle("LJ_scatter", {data: [curr_LJ, curr_E, curr_E_connector], traces: [0, 1, 2]},
+            Plotly.animate("LJ_scatter", {data: [LJ_scatter, LJCentr_scatter, curr_LJ, curr_E, tot_E_plot, curr_E_connector],
+                    traces: [0, 1, 2, 3, 4, 5]},
                 {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
         }
     }
