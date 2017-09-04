@@ -138,6 +138,22 @@ function showCommute() {
     commutePlot();
     isFrameSliderDisplayed = true;
 }
+function disableUndoReset() {
+    $("#undoRo").prop("disabled",true);
+    $("#undoRe").prop("disabled",true);
+    $("#resetRo").prop("disabled",true);
+    $("#resetRe").prop("disabled",true);
+}
+function enableUndoReset() {
+    $("#undoRo").prop("disabled",false);
+    $("#undoRe").prop("disabled",false);
+    $("#resetRo").prop("disabled",false);
+    $("#resetRe").prop("disabled",false);
+}
+function enablePlay() {
+    $("#rotateAnimate").prop("disabled",false);
+    $("#reflectAnimate").prop("disabled",false);
+}
 
 
 //Update Equation Display
@@ -188,6 +204,8 @@ function initPlot() {
     historyCount = 0;
     displayCurrent(0)
     histPlot(0);
+    enablePlay();
+    disableUndoReset();
 }
 function histPlot(index) {
     Plotly.purge("graph");
@@ -239,6 +257,7 @@ function animateRotate() {
 
     updateMatrixDisplay(displayRotationMatrix(slider, rotateAxis), "rotateMatrix");
     animateTransformation(frames, "#rotateAnimate");
+    enableUndoReset();
     return;
 }
 function animateReflect() {
@@ -257,6 +276,7 @@ function animateReflect() {
     updateMatrixDisplay(displayReflectionMatrix(plane), "reflectMatrix");
     animateTransformation(frames, "#reflectAnimate");
     planePlot(plane);
+    enableUndoReset();
     return;
 }
 //Plot for planes:
@@ -318,14 +338,14 @@ function commutePlot() {
 
 //Memento
 function undo(){
-    if(historyIndex === 0){
-        return;
-    }
     historyIndex--;
     historyCount--;
     var index = historyIndex % historyLimit;
     displayCurrent(index);
     histPlot(index);
+    if(historyIndex === 0){
+        disableUndo();
+    }
     return;
 }
 

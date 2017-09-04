@@ -59,7 +59,8 @@
                         </label>
                         <div class="rotateButton">
                             <input id="rotateAnimate" class="button-primary" type="submit" value="Play", onclick="animateRotate()">
-                            <input type="button" value="&#10554; Undo", onclick="undo()">
+                            <input id="undoRo" type="button" value="&#10554; Undo", onclick="undo()">
+                            <input id="resetRo" type="button" value="Reset to (-2,-2,2)", onclick="initPlot()">
                         </div>
                         <div>
                             <h3>Transformation: </h3>
@@ -67,7 +68,6 @@
                             <p id="rotateMatrix"></p>
 
                         </div>
-                        <input type="button" value="Reset to (-2,-2,2)", onclick="initPlot()">
                         <input type="button" value="Commute?", onclick="showCommute()">
                     </div>
                     <!--Commute?-->
@@ -109,14 +109,14 @@
                     </select>
                     <div class="reflectButton">
                         <input id="reflectAnimate" class="button-primary" type="submit" value="Play", onclick="animateReflect()">
-                        <input type="button" value="&#10554; Undo", onclick="undo()">
+                        <input id="undoRe" type="button" value="&#10554; Undo", onclick="undo()">
+                        <input id="resetRe" type="button" value="Reset to (-2,-2,2)", onclick="initPlot()">
                     </div>
                     <div>
                         <h3>Transformation: </h3>
                         <label>Current Vector = M x Previous Vector</label>
                         <p id="reflectMatrix"></p>
                     </div>
-                    <input type="button" value="Reset to (-2,-2,2)", onclick="initPlot()">
                 </div>
                 <!--Scalation-->
                 <!--<div class="tab-pane" id="scale"></div>-->
