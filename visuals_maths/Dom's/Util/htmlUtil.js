@@ -1,9 +1,9 @@
 //Slider Value and Matrix grid Value
 function makeTableHTML(myArray) {
     var result = "<table class='matrix'><tbody>";
-    for(var i=0; i<myArray.length; i++) {
+    for(var i=0, n=myArray.length; i<n; ++i) {
         result += "<tr>";
-        for(var j=0; j<myArray[i].length; j++){
+        for(var j=0, m=myArray[i].length; j<m; ++j){
             result += "<td>"+myArray[i][j]+"</td>";
         }
         result += "</tr>";
@@ -13,33 +13,35 @@ function makeTableHTML(myArray) {
 }
 
 //Matrix Display Value
-function displayRotationMatrix() {
-    var angle = document.getElementById("rotator").value;
+function displayRotationMatrix(angle, rotationType) {
+    var result;
     var cosAngle = "cos("+String(Math.abs(angle))+"π"+")";
     var sinAngle1 = "sin(0)", sinAngle2 = "-sin(0)";
-    if (angle > 0) {
+    if (angle === "0" || angle === "-2" || angle === "2"){
+        cosAngle = "1"; sinAngle1 = "0"; sinAngle2 = "0";
+    } else if (angle > 0) {
         sinAngle1 = "sin(" + String(angle)+"π)"; sinAngle2 = "-sin(" + String(angle)+"π)";
     } else if (angle < 0) {
         sinAngle1 = "-sin(" + String(-angle)+"π)"; sinAngle2 = "sin(" + String(-angle)+"π)";
     }
-    if (rotationType === 1) {
-        document.getElementById("rotateMatrix").innerHTML=makeTableHTML(
+    if (rotationType === "rotateX") {
+        result = makeTableHTML(
             [
                 ["1", "0", "0"],
                 ["0", cosAngle, sinAngle2],
                 ["0", sinAngle1, cosAngle]
             ]
         )
-    } else if (rotationType === 2) {
-        document.getElementById("rotateMatrix").innerHTML=makeTableHTML(
+    } else if (rotationType === "rotateY") {
+        result = innerHTML=makeTableHTML(
             [
                 [cosAngle, "0", sinAngle1],
                 ["0", "1", "0"],
                 [sinAngle2, "0", cosAngle]
             ]
         )
-    } else if (rotationType === 3) {
-        document.getElementById("rotateMatrix").innerHTML=makeTableHTML(
+    } else if (rotationType === "rotateZ") {
+        result = innerHTML=makeTableHTML(
             [
                 [cosAngle, sinAngle2, "0"],
                 [sinAngle1, cosAngle, "0"],
@@ -47,9 +49,10 @@ function displayRotationMatrix() {
             ]
         )
     }
+    return result;
 }
-function displayReflectionMatrix() {
-    if (reflectionType === 1) {
+function displayReflectionMatrix(reflectionType) {
+    if (reflectionType === "reflectX") {
         document.getElementById("reflectMatrix").innerHTML=makeTableHTML(
             [
                 ["-1", "0", "0"],
@@ -57,7 +60,7 @@ function displayReflectionMatrix() {
                 ["0", "0", "1"]
             ]
         )
-    } else if (reflectionType === 2) {
+    } else if (reflectionType === "reflectY") {
         document.getElementById("reflectMatrix").innerHTML=makeTableHTML(
             [
                 ["1", "0", "0"],
@@ -65,7 +68,7 @@ function displayReflectionMatrix() {
                 ["0", "0", "1"]
             ]
         )
-    } else if (reflectionType === 3) {
+    } else if (reflectionType === "reflectZ") {
         document.getElementById("reflectMatrix").innerHTML=makeTableHTML(
             [
                 ["1", "0", "0"],
