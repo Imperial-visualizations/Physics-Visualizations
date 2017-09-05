@@ -402,134 +402,36 @@ function intersect(obj1, obj2) {
 	else {
 		throw new TypeError("Argument error: intersect can only take Point, Line and Plane arguments.");
 	}
-	ans.name = "("+obj1.name+" intersects "+obj2.name+")";
+	ans.name = obj1.name+" & "+obj2.name;
 	return ans;
-}
-
-// Calculate intersections between multiple objects.
-function getGen(a) {
-	var points = [];
-	var lines = [];
-	var planes = [];
-	for (var idx=0; idx<a.length; idx++) {
-		for (var other=idx+1; other<a.length; other++) {
-			try {
-				var toPush = intersect(a[idx],a[other]);
-				if(toPush instanceof Point) {
-					points.push(toPush);
-				}
-				if(toPush instanceof Line) {
-					lines.push(toPush);
-				}
-				if(toPush instanceof Plane) {
-					planes.push(toPush);
-				}
-			}
-			catch(err) {
-				console.log(err);
-			}
-		}
-	}
-	var ans = {'points': points, 'lines': lines, 'planes': planes};
-	return ans;
-}
-function whereInArray(algObj,array) {
-	for(var idx=0;idx<array.length;idx++) {
-		var one = algObj;
-		var other = array[idx];
-		if(one instanceof Point && other instanceof Point) {
-			if(one.pos.isEqualTo(other.pos)) {
-				return idx;
-			}
-		}
-		if(one instanceof Line && other instanceof Line) {
-			if( ( one.dir.isEqualTo(other.dir) || one.dir.isEqualTo(other.dir.mul(-1)) ) && one.off.isEqualTo(other.off) ) {
-				return idx;
-			}
-		}
-		if(one instanceof Plane && other instanceof Plane) {
-			if( ( one.normal.isEqualTo(other.normal) || one.normal.isEqualTo(other.normal.mul(-1)) ) && one.off.isEqualTo(other.off) ) {
-				return idx;
-			}
-		}
-	}
-	return -1; //no success in finding
-}
-function reduceAlgObjArray(array) {
-	//remove copies from array of algObjs
-	var ans=[]
-	for(var idx=0;idx<array.length;idx++) {
-		var position = whereInArray(array[idx],ans);
-		if(position==-1) {
-			// if the object is not in ans array
-			ans.push(array[idx])
-		}
-	}
-	return ans;
-	/*
-	function whereInArrayTest() {
-	// whereInArray unit test
-	var line1 = new Line(new Vector(1,1,0), new Vector(-1,0,0));
-	var line2 = new Line(new Vector(1,0,1), new Vector(0,0,1));
-	var line3 = new Line(new Vector(1,0,0), new Vector(-3,0,1));
-	var plane1 = new Plane(new Vector(1,0,1), new Vector(0,0,1));
-	var arr = [line1,line2,plane1,line2];
-	var test1=(whereInArray(line1,arr)==0);
-	console.log("where in array 1. ",test1);
-	var test2=(whereInArray(line2,arr)==1);
-	console.log("where in array 2. ",test2);
-	var test3=(whereInArray(plane1,arr)==2);
-	console.log("where in array 3. ",test3);
-	test4=(whereInArray(line3,arr)==-1);
-	console.log("where in array 4. ",test4)
-	return [test1,test2,test3,test4]
-}
-*/
 }
 
 function intersectList(algObjsArray) {
 	// Intersect many elements together.
 	console.log("new new version intersectList called");
-	var ans = [];
-	for(var idx=0;idx<algObjsArray.length;idx++) {
-		for(var other=idx+1;other<algObjsArray.length;other++) {
-			try {
-				var toPush = intersect(algObjsArray[idx],algObjsArray[other]);
-				toPush.parents = [];
-				if(algObjsArray[idx].hasOwnProperty('parents')) {
-					Array.prototype.push.apply(toPush.parents, algObjsArray[idx].parents);
+	try {
+		var isec = intersect(algObjsArray[0],algObjsArray[1]);
+	}
+	catch(err) {
+		console.log(err)
+		throw err;
+	}
+	if(algObjsArray.length > 2) {
+		for(var idx=1;idx<algObjsArray.length;idx++) {
+			for(var other=idx+1;other<algObjsArray.length;other++) {
+				try {
+					isec = intersect(isec,algObjsArray[other]);
+					isec.name += " & "+algObjsArray[other].name;
 				}
-				else {
-					toPush.parents.push(algObjsArray[idx]);
+				catch(err) {
+					console.log(err)
+					throw err;
 				}
-				if(algObjsArray[other].hasOwnProperty('parents')) {
-					Array.prototype.push.apply(toPush.parents, algObjsArray[other].parents);
-				}
-				else {
-					toPush.parents.push(algObjsArray[other]);
-				}
-				ans.push(toPush);
-			}
-			catch(err) {
-				console.log(err)
 			}
 		}
 	}
-	return ans;
-	/*
-	var isec;
-	var gen_1, gen_2, gen_3; //three generations of intersections
-	isec = getGen(array);
-	gen_1 = reduceAlgObjArray(isec.points.concat(isec.lines.concat(isec.planes)));
-	console.log("gen_1", gen_1);
-	isec = getGen(gen_1);
-	gen_2 = reduceAlgObjArray(isec.points.concat(isec.lines));
-	console.log("gen_2", gen_2);
-	isec = getGen(gen_2);
-	gen_3 = reduceAlgObjArray(isec.points);
-	console.log("gen_3", gen_3);
-	return reduceAlgObjArray(array.concat(gen_1.concat(gen_2.concat(gen_3))));
-	*/
+	isec.name = "("+isec.name+")"
+	return isec;
 }
 
 function _point_point_intersect(obj1, obj2) {
