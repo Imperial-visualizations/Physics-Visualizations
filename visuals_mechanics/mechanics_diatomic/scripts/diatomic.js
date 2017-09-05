@@ -163,7 +163,7 @@ Molecule.prototype.calcAngVel = function () {
  * Gets vector from one atom to another.
  */
 Molecule.prototype.calcDir = function() {
-    return a1.getPos().subtract(a2.getPos());
+    return (a1.getPos().subtract(a2.getPos())).unit();
 };
 
 /**
@@ -216,22 +216,35 @@ Molecule.prototype.softReset = function (ke_vib0, ke_rot0) {
     var dir = this.calcDir();
     var new_mol = new Molecule(this.a1, this.a2, this.V, ke_vib0, ke_rot0);
 
-    // if (this.maxKE_V > ke_vib0)
-    // if (this.separation > new_mol.separation) {
-    //     while (this.separation > new_mol.separation) {
-    //         new_mol.update(1/500);
-    //     }
-    // }
-    //
-    // else {
-    //     while (this.separation < new_mol.separation) {
-    //         new_mol.update(1/500);
-    //     }
-    // }
-    //
-    // new_mol.r = dir;
-    new_mol.a1.pos.splice(-1, 1); new_mol.a2.pos.splice(-1, 1);
-    new_mol.r = dir;
-    new_mol.L = this.L;
+    // Is current separation more than new equilibrium separation?
+    var bool_r = (new_mol.separation < this.separation);
+    var vReverse = 0;
+    var vDir = (this.v / new_mol.v > 0);
+
+    // Update new molecule until new molecule has either passed separation value of current molecule.
+    while ((new_mol.separation < this.separation) !== bool_r) {
+
+        // Update number of times direction has been changed.
+        if ((this.v / new_mol.v > 0) !== vDir) vReverse++;
+
+        // If velocity hasn't changed direction twice, then some separation values yet to be tested for crossing.
+        if (vReverse < 2) {
+            new_mol.update(1/300);                                          // Time step << dT to ensure minimal errors.
+        }
+
+        // If velocity direction has changed twice, then all possible separation values covered - exiting loop.
+        else {
+            new_mol.r = dir.multiply(new_mol.separation);   // Keeping orientation of molecule same, extreme separation.
+            new_mol.a1.pos = []; new_mol.a2.pos = [];                       // Removing trail.
+            new_mol.omega = this.omega;                                     // Keeping angular momentum same.
+            console.error("New molecule's maximum separation cannot reach current separation! Hard resetting...");
+            return new_mol
+        }
+    }
+
+    // In case separation has been matched, by above loop, then returning updating new molecule to ensure continuity.
+    new_mol.a1.pos = this.a1.pos; new_mol.a2.pos = this.a2.pos;             // Updating new molecule's position Arrays.
+    new_mol.r = dir.multiply(new_mol.separation);           // Keeping orientation of molecule same, extreme separation.
+    new_mol.a1.pos.splice(-1, 1); new_mol.a2.pos.splice(-1, 1);             // Cleaning up trail.
     return new_mol;
 };

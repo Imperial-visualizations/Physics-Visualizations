@@ -17,7 +17,7 @@ const CHERRY = 0xE40043;
 const GRAPH_TIME = 5;                                               // x-axis range for Energy against Time plots.
 
 var running = false;                                                // Animation status.
-var dT = 1/60;                                                      // Timestep.
+var dT = 1/65;                                                      // Timestep.
 
 // Global Variables to store data for graph-drawing.
 var arrRotKE = [];
@@ -445,12 +445,13 @@ function update(){
                 layoutE.showlegend = false;
             }
 
+            // Moving along the slider level line, innit
             KE_R_slider.x[0] = KE_V_slider.x[0] = layoutE.xaxis.range[0] - 1;
             KE_R_slider.x[1] = KE_V_slider.x[1] = layoutE.xaxis.range[1] + 1;
 
             // Plotting dat energie.
             Plotly.animate("graphE", {data: [KE_V_T, KE_V_slider, KE_R_T, KE_R_slider, PE_T], traces: [0, 1, 2, 3, 4]},
-                        {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
+                        {frame: {redraw: false, duration: 0}, transition: {duration: dT}});
         }
 
         if ($('#LJ_scatter').hasClass("expanded")) {
