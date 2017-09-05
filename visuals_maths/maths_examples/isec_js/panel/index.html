@@ -374,7 +374,6 @@
       log("No saved state found.")
       console.log("no saved state... defaulting");
     }
-  });
     $("#addPoint").on('click',function() {
       var newPoint = new Point(new Vector(getRandomInt(),getRandomInt(),getRandomInt()));
       newPoint.name = nextName(); //generate name
@@ -461,6 +460,7 @@
     }
   });
     $("#save").on('click',save);
+  });
   function getSelectedAlgObjs() {
     /* Retrieve a list of selected items in the panel.
     It compares the ids of selected labels with entries of
