@@ -4,7 +4,7 @@ body#bso {
   font-family: "Fira Sans", system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Arial Nova", Helvetica, Arial, sans-serif;
 }
 
-#bso .row > * {
+#bso .row > .nav-item {
   flex-basis: auto;
 }
 
@@ -23,6 +23,43 @@ body#bso {
 
 #bso #content > div:first-child {
   padding-top: 120px;
+}
+
+#bso .cover {
+  height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+}
+
+#bso .cover .col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#bso .grad-blue-purple {
+  background: linear-gradient(45deg, #33adff, #99008a);
+  color: #FFF;
+}
+#bso .grad-blue-purple .btn-outline-primary {
+  color: #FFF;
+  border-color: #FFF;
+}
+#bso .grad-blue-purple .btn-outline-primary:hover {
+  color: #222;
+  background: #FFF;
+}
+
+#bso .col.login {
+  width: 300px;
+  flex: 0 1 auto;
+}
+
+#bso .login input:first-of-type {
+  margin-top: 20px;
+}
+#bso .login input:last-of-type {
+  margin-bottom: 20px;
 }
 
 #bso .vis-category.container {
