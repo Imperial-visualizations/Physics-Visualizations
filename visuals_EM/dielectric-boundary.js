@@ -21,13 +21,13 @@ $(window).on('load', function() {
                 scene: {
                     aspectmode: "cube",
                     xaxis: {
-                        range: [-1, 1], autorange: false, zeroline: true
+                        range: [-1, 1], autorange: false, zeroline: true, showspikes: false
                     },
                     yaxis: {
-                        range: [-1, 1], autorange: false, zeroline: true
+                        range: [-1, 1], autorange: false, zeroline: true, showspikes: false
                     },
                     zaxis: {
-                        range: [-1, 1], autorange: false, zeroline: true
+                        range: [-1, 1], autorange: false, zeroline: true, showspikes: false
                     }
                 },
                 hovermode: false
