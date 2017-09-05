@@ -79,6 +79,7 @@ function Point(pos) {
 		}
 		else {
 			this.pos = pos;
+			this.usrPos = pos;
 		}
 	}
 	this.assignPos(pos);
@@ -98,7 +99,7 @@ function Point(pos) {
 			x:[this.pos.x],
 			y:[this.pos.y],
 			z:[this.pos.z],
-			plotId: this.id //for internal use, to keep track of what is what
+			plotId: this.plotId //for internal use, to keep track of what is what
 		}
 	}
 	this.toString = function() {
@@ -115,6 +116,7 @@ function Point(pos) {
 		return ans;
 	}
 	this.id = (objcounter++) + "point"; //assign id
+	this.plotId = this.id; //assign plotId for use in fast-plotter.js
 	console.log("New Alg Object: ", this); //notify when created
 	this.type = "point";
 }
@@ -194,7 +196,7 @@ function Line(dir,off) {
 			x:xyz.x,
 			y:xyz.y,
 			z:xyz.z,
-			plotId: this.id
+			plotId: this.plotId
 		}
 	}
 	this.toString = function() {
@@ -213,6 +215,7 @@ function Line(dir,off) {
 		return ans;
 	}
 	this.id = (objcounter++) + "line";
+	this.plotId = this.id; //assign plotId for use in fast-plotter.js
 	console.log("New Alg Object: ", this); //notify of new object creation
 	this.type = "line";
 }
@@ -324,7 +327,7 @@ function Plane(normal,off) {
 			x:xyz.x,
 			y:xyz.y,
 			z:xyz.z,
-			plotId: this.id
+			plotId: this.plotId
 		}
 	}
 	this.toString = function() {
@@ -343,6 +346,7 @@ function Plane(normal,off) {
 		return ans;
 	}
 	this.id = (objcounter++)+"plane";
+	this.plotId = this.id; //assign plotId for use in fast-plotter.js
 	console.log("New Alg Object: ", this);
 	this.type = "plane";
 }
@@ -431,7 +435,7 @@ function getGen(a) {
 }
 function whereInArray(algObj,array) {
 	for(var idx=0;idx<array.length;idx++) {
-		var one = algObj;	
+		var one = algObj;
 		var other = array[idx];
 		if(one instanceof Point && other instanceof Point) {
 			if(one.pos.isEqualTo(other.pos)) {
@@ -483,9 +487,36 @@ function reduceAlgObjArray(array) {
 */
 }
 
-function intersectList(array) {
+function intersectList(algObjsArray) {
 	// Intersect many elements together.
-	console.log("new version intersectList called");
+	console.log("new new version intersectList called");
+	var ans = [];
+	for(var idx=0;idx<algObjsArray.length;idx++) {
+		for(var other=idx+1;other<algObjsArray.length;other++) {
+			try {
+				var toPush = intersect(algObjsArray[idx],algObjsArray[other]);
+				toPush.parents = [];
+				if(algObjsArray[idx].hasOwnProperty('parents')) {
+					Array.prototype.push.apply(toPush.parents, algObjsArray[idx].parents);
+				}
+				else {
+					toPush.parents.push(algObjsArray[idx]);
+				}
+				if(algObjsArray[other].hasOwnProperty('parents')) {
+					Array.prototype.push.apply(toPush.parents, algObjsArray[other].parents);
+				}
+				else {
+					toPush.parents.push(algObjsArray[other]);
+				}
+				ans.push(toPush);
+			}
+			catch(err) {
+				console.log(err)
+			}
+		}
+	}
+	return ans;
+	/*
 	var isec;
 	var gen_1, gen_2, gen_3; //three generations of intersections
 	isec = getGen(array);
@@ -498,7 +529,7 @@ function intersectList(array) {
 	gen_3 = reduceAlgObjArray(isec.points);
 	console.log("gen_3", gen_3);
 	return reduceAlgObjArray(array.concat(gen_1.concat(gen_2.concat(gen_3))));
-
+	*/
 }
 
 function _point_point_intersect(obj1, obj2) {

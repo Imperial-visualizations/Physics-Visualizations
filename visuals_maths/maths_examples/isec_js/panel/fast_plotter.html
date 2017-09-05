@@ -88,9 +88,9 @@ $('#canvas').ready(function() {
     line2 = new Line(new Vector(3,1,-4), new Vector(-1,-2,-1));
     plane1 = new Plane(new Vector(0,2,-1),new Vector(1,-1,1));
     plot.init();
-    plot.addAlgObj(line1);
-    plot.addAlgObj(line2);
-    plot.addAlgObj(plane1);
+    plot.addPlotObj(line1);
+    plot.addPlotObj(line2);
+    plot.addPlotObj(plane1);
   })
   $('#delete').click(function() {
     plot.deleteTrace(plane1.id);
@@ -99,7 +99,7 @@ $('#canvas').ready(function() {
     plot.highlightTraces([line1.id]);
   })
   $('#unhighlight').click(function() {
-    plot.unHighlight();
+    plot.unHighlightTraces();
   })
   $('#hide').click(function() {
     plot.hideTraces([line2.id]);
@@ -107,12 +107,48 @@ $('#canvas').ready(function() {
   $('#unhide').click(function() {
     plot.showTraces([line2.id]);
   })
+
+  $('#redrawpo').click(function() {
+    plot.purge();
+    line1 = new Line(new Vector(1,-1,1), new Vector(0,2,-1));
+    line2 = new Line(new Vector(3,1,-4), new Vector(-1,-2,-1));
+    plane1 = new Plane(new Vector(0,2,-1),new Vector(1,-1,1));
+    plot.init();
+    plot.addPlotObj(line1);
+    plot.addPlotObj(line2);
+    plot.addPlotObj(plane1);
+  })
+  $('#deletepo').click(function() {
+    plot.deletePlotObj(plane1);
+  })
+  $('#highlightpo').click(function() {
+    plot.highlightPlotObjs([line1]);
+  })
+  $('#unhighlightpo').click(function() {
+    plot.unHighlightPlotObjs();
+  })
+  $('#hidepo').click(function() {
+    plot.hidePlotObj(line2);
+  })
+  $('#unhidepo').click(function() {
+    plot.showPlotObj(line2);
+  })
 });
 </script>
 <div id="canvas"></div>
+<div id="tracesexample">
 <a id="redraw">redraw graph</a><br>
 <a id="highlight">highlight line</a><br>
 <a id="unhighlight">unhighlight</a><br>
 <a id="hide">hide</a><br>
 <a id="unhide">unhide</a><br>
 <a id="delete">delete plane</a><br>
+</div>
+<div id="plotObjexample">
+<a id="redrawpo">redraw graph</a><br>
+<a id="highlightpo">highlight line</a><br>
+<a id="unhighlightpo">unhighlight</a><br>
+<a id="hidepo">hide</a><br>
+<a id="unhidepo">unhide</a><br>
+<a id="deletepo">delete plane</a><br>
+</div>

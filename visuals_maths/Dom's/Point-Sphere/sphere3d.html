@@ -59,7 +59,8 @@
                         </label>
                         <div class="rotateButton">
                             <input id="rotateAnimate" class="button-primary" type="submit" value="Play", onclick="animateRotate()">
-                            <input type="button" value="&#10554; Undo", onclick="undo()">
+                            <input id="undoRo" type="button" value="&#10554; Undo", onclick="undo()">
+                            <input id="resetRo" type="button" value="Reset to (-2,-2,2)", onclick="initPlot()">
                         </div>
                         <div>
                             <h3>Transformation: </h3>
@@ -67,7 +68,6 @@
                             <p id="rotateMatrix"></p>
 
                         </div>
-                        <input type="button" value="Reset to (-2,-2,2)", onclick="initPlot()">
                         <input type="button" value="Commute?", onclick="showCommute()">
                     </div>
                     <!--Commute?-->
@@ -78,7 +78,7 @@
                             <span id="rotator1DisplayA2" data-unit="º">90º</span>
                         </label>
                         <label class="slider">
-                            <input id="rotator1" class="inputs" type="range" value="0.5" min="-2" max="2" step="0.125" onchange="plotCommute()"/>
+                            <input id="rotator1" class="inputs" type="range" value="0.5" min="-2" max="2" step="0.125" onchange="commutePlot()"/>
                             <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
                         </label>
 
@@ -88,15 +88,15 @@
                             <span id="rotator2DisplayA2" data-unit="º">90º</span>
                         </label>
                         <label class="slider">
-                            <input id="rotator2" class="inputs" type="range" value="0.5" min="-2" max="2" step="0.125" onchange="plotCommute()"/>
+                            <input id="rotator2" class="inputs" type="range" value="0.5" min="-2" max="2" step="0.125" onchange="commutePlot()"/>
                             <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
                         </label>
 
                         <input id="commuteAnimate" class="button-primary" type="submit" value="Play", onclick="startAnimation()">
-                        <input type="button" value="Reset", onclick="reset()">
-                        <h3>&#x25CF;: <font style="color:rgb(182,109,255);">A</font> &#8594; <font style="color:rgb(219,209,0)">B</font></h3>
-                        <h3>&#x25A0;: <font style="color:rgb(219,209,0)">B</font> &#8594; <font style="color:rgb(182,109,255);">A</font></h3>
-                        <input type="button" value="Go Back", onclick="hideCommute()">
+                        <!--<input type="button" value="Reset", onclick="reset()">-->
+                        <h3>&#x25B3;: <font style="color:rgb(182,109,255);">A</font> &#8594; <font style="color:rgb(219,209,0)">B</font></h3>
+                        <h3>&#x25B2;: <font style="color:rgb(219,209,0)">B</font> &#8594; <font style="color:rgb(182,109,255);">A</font></h3>
+                        <input type="button" value="&#x21B2; Go Back", onclick="hideCommute()">
                     </div>
                 </div>
                 <!--Reflection-->
@@ -109,14 +109,14 @@
                     </select>
                     <div class="reflectButton">
                         <input id="reflectAnimate" class="button-primary" type="submit" value="Play", onclick="animateReflect()">
-                        <input type="button" value="&#10554; Undo", onclick="undo()">
+                        <input id="undoRe" type="button" value="&#10554; Undo", onclick="undo()">
+                        <input id="resetRe" type="button" value="Reset to (-2,-2,2)", onclick="initPlot()">
                     </div>
                     <div>
                         <h3>Transformation: </h3>
                         <label>Current Vector = M x Previous Vector</label>
                         <p id="reflectMatrix"></p>
                     </div>
-                    <input type="button" value="Reset to (-2,-2,2)", onclick="initPlot()">
                 </div>
                 <!--Scalation-->
                 <!--<div class="tab-pane" id="scale"></div>-->
