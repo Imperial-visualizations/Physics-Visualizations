@@ -30,7 +30,7 @@
 
             <div class="tab-content">
                 <div class="tab-pane active" id="cylin">
-                    <h5 style="border-left: solid 5px rgb(255,0,0); padding-left: 8px;">ρ-coordinate(index)</h5>
+                    <h5 style="border-left: solid 5px rgb(219,209,0); padding-left: 8px;">ρ-coordinate(index)</h5>
                     <label class="sliderTitle">ρ:&nbsp;
                         <span id="rhoControllerDisplay" data-unit="">0</span>
                     </label>
@@ -38,7 +38,7 @@
                         <input id="rhoController" class="inputs" type="range" value="3" min="3" max="4.4" step="0.2"/>
                         <span class="sliderMin">3</span><span class="sliderMax">4.4</span>
                     </label>
-                    <h5 style="border-left: solid 5px rgb(0,255,0); padding-left: 8px;">φ-coordinate(middle):</h5>
+                    <h5 style="border-left: solid 5px rgb(182,109,255); padding-left: 8px;">φ-coordinate(middle):</h5>
                     <label class="sliderTitle">φ:&nbsp;
                         <span id="phiControllerDisplayA1" data-unit="π rad">0π rad</span>&nbsp;or&nbsp;
                         <span id="phiControllerDisplayA2" data-unit="º">0º</span>
@@ -47,7 +47,7 @@
                         <input id="phiController" class="inputs" type="range" value="0" min="0" max="2" step="0.125"/>
                         <span class="sliderMin">0</span><span class="sliderMax">2π</span>
                     </label>
-                    <h5 style="border-left: solid 5px rgb(0,0,255); padding-left: 8px;">z-coordinate(thumb):</h5>
+                    <h5 style="border-left: solid 5px rgb(0,146,146); padding-left: 8px;">z-coordinate(thumb):</h5>
                     <label class="sliderTitle">z:&nbsp;
                         <span id="z1ControllerDisplay" data-unit="">1</span>
                     </label>
@@ -57,7 +57,7 @@
                     </label>
                 </div>
                 <div class="tab-pane" id="spher">
-                    <h5 style="border-left: solid 5px rgb(0,0,255); padding-left: 8px;">r-coordinate(thumb)</h5>
+                    <h5 style="border-left: solid 5px rgb(0,146,146); padding-left: 8px;">r-coordinate(thumb)</h5>
                     <label class="sliderTitle">r:&nbsp;
                         <span id="rControllerDisplay" data-unit="">0</span>
                     </label>
@@ -65,7 +65,7 @@
                         <input id="rController" class="inputs" type="range" value="3.8" min="3.8" max="5.2" step="0.2"/>
                         <span class="sliderMin">3.8</span><span class="sliderMax">5.2</span>
                     </label>
-                    <h5 style="border-left: solid 5px rgb(255,0,0); padding-left: 8px;">θ-coordinate(index):</h5>
+                    <h5 style="border-left: solid 5px rgb(219,209,0); padding-left: 8px;">θ-coordinate(index):</h5>
                     <label class="sliderTitle">θ:&nbsp;
                         <span id="thetaControllerDisplayA1" data-unit="π rad">0π rad</span>&nbsp;or&nbsp;
                         <span id="thetaControllerDisplayA2" data-unit="º">0º</span>
@@ -74,7 +74,7 @@
                         <input id="thetaController" class="inputs" type="range" value="0" min="0" max="1" step="0.125"/>
                         <span class="sliderMin">0</span><span class="sliderMax">1π</span>
                     </label>
-                    <h5 style="border-left: solid 5px rgb(0,255,0); padding-left: 8px;">φ-coordinate(middle):</h5>
+                    <h5 style="border-left: solid 5px rgb(182,109,255); padding-left: 8px;">φ-coordinate(middle):</h5>
                     <label class="sliderTitle">φ:&nbsp;
                         <span id="phi1ControllerDisplayA1" data-unit="π rad">0π rad</span>&nbsp;or&nbsp;
                         <span id="phi1ControllerDisplayA2" data-unit="º">0º</span>
@@ -84,6 +84,12 @@
                         <span class="sliderMin">0</span><span class="sliderMax">2π</span>
                     </label>
                 </div>
+
+                <label class="checkbox">
+                    <input type="checkbox" id="blackText" value="on" checked/><span for="checkbox"></span>
+                </label>
+                <label class="checkboxTitle">Show Black Text</label>
+
             </div>
         </div>
     </div>

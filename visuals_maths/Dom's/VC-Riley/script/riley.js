@@ -8,19 +8,20 @@ var layout = {
     scene: {
         camera: {
             up: {x: 0, y: 0, z: 1},
-            eye: {x: 1.2, y: -0.3, z: 0.5},
+            eye: {x: 1.1, y: -0.2, z: 0.4},
             center: {x: 0, y: 0, z: 0}
         },
         xaxis: {range: [-6, 6], zeroline: true, scaleratio: 1},
         yaxis: {range: [-6, 6], zeroline: true, scaleratio: 1},
-        zaxis: {range: [-6, 6], zeroline: true, scaleratio: 1}
+        zaxis: {range: [-6, 6], zeroline: true, scaleratio: 1},
+        aspectratio: {x:1, y:1, z:1},
     }
 }
 var coorType = 0; //(2 = Cylindrical, 3 = Spherical)
 var currentPoint = initialPoint;
 var initialRho = 0, initialPhi = 0, initialR = 0, initialTheta = 0;
 var axes = createAxes(5);
-var rho, phi, z, r, theta;
+var blackTextType = "lines+text"
 
 //Add more curvature definition:
 function curveMore(arraySize) {
@@ -41,8 +42,19 @@ function curveMore(arraySize) {
     return hello.concat(hello2.reverse());
 }
 
-//Plots
+//Black Text
+function hideShowBlackText() {
+    var x = document.getElementById("blackText").value;
+    console.log(x);
+    if (x !== "on") {
+        blackTextType = "lines";
+    }
+}
+
+//Plot - Master Plot
 function plotVolumeElement(coor) {
+    hideShowBlackText();
+    var rho, phi, z, r, theta;
     if (coor === 2){
         if (coorType !== 2) {
             initialRho = Math.sqrt(currentPoint[0]*currentPoint[0] + currentPoint[1]*currentPoint[1]);
@@ -169,10 +181,10 @@ function plotCylinderElement(rho, phi, z) {
                 x: [x0, x0+0.5*Math.cos(phi), x0+0.8*Math.cos(phi)],
                 y: [y0, y0+0.5*Math.sin(phi), y0+0.8*Math.sin(phi)],
                 z: [z0, z0, z0],
-                line: {color: "rgb(255,0,0)", width: 7, dash: "solid"},
+                line: {color: orange, width: 7, dash: "solid"},
                 text: ["", "dρ", ""],
                 textposition: "top left",
-                textfont: {color:"rgb(255,0,0)"}
+                textfont: {color:orange, size:17}
             },
             {
                 type: "scatter3d",
@@ -180,10 +192,10 @@ function plotCylinderElement(rho, phi, z) {
                 x: xPhi2,
                 y: yPhi2,
                 z: zPhi2,
-                line: {color: "rgb(0,255,0)", width: 7, dash: "solid"},
+                line: {color: lilac, width: 7, dash: "solid"},
                 text: rhodphiText,
                 textposition: "top",
-                textfont: {color:"rgb(0,255,0)"}
+                textfont: {color:lilac, size:17}
             },
             {
                 type: "scatter3d",
@@ -191,14 +203,14 @@ function plotCylinderElement(rho, phi, z) {
                 x: [x0, x0, x0],
                 y: [y0, y0, y0],
                 z: [z0, z0+0.4, z1],
-                line: {color: "rgb(0,0,255)", width: 7, dash: "solid"},
+                line: {color: cyan, width: 7, dash: "solid"},
                 text: ["", "dz", ""],
                 textposition: "left",
-                textfont: {color:"rgb(0,0,255)"}
+                textfont: {color:cyan, size:17}
             },
             {
                 type: "scatter3d",
-                mode: "lines+text",
+                mode: blackTextType,
                 x: [0, 3*x0/5, x0],
                 y: [0, 3*y0/5, y0],
                 z: [0, 0, 0],
@@ -211,7 +223,7 @@ function plotCylinderElement(rho, phi, z) {
             new Line([[x1, y1, 0], [x1, y1, z]]).gObject("rgb(0,0,0)", 2, "longdash"),
             {
                 type: "scatter3d",
-                mode: "lines+text",
+                mode: blackTextType,
                 x: xPhi0,
                 y: yPhi0,
                 z: zPhi0,
@@ -221,7 +233,7 @@ function plotCylinderElement(rho, phi, z) {
             },
             {
                 type: "scatter3d",
-                mode: "lines+text",
+                mode: blackTextType,
                 x: xPhi1,
                 y: yPhi1,
                 z: zPhi1,
@@ -231,7 +243,7 @@ function plotCylinderElement(rho, phi, z) {
             },
             {
                 type: "scatter3d",
-                mode: "lines+text",
+                mode: blackTextType,
                 x: xPhi2,
                 y: yPhi2,
                 z: zPhi1,
@@ -396,9 +408,9 @@ function plotSphereElement(r, theta, phi) {
                 x: [x0, x0+0.6*Math.cos(phi)*Math.sin(theta), x0+0.8*Math.cos(phi)*Math.sin(theta)],
                 y: [y0, y0+0.6*Math.sin(phi)*Math.sin(theta), y0+0.8*Math.sin(phi)*Math.sin(theta)],
                 z: [z0, z0+0.6*Math.cos(theta), z0+0.8*Math.cos(theta)],
-                line: {color: "rgb(0,0,255)", width: 7},
+                line: {color: cyan, width: 7},
                 text: ["", "dr", ""],
-                textfont: {color: "rgb(0,0,255)"},
+                textfont: {color: cyan, size:17},
                 textposition: "top center"
             },
             {
@@ -407,9 +419,9 @@ function plotSphereElement(r, theta, phi) {
                 x: xPhi2,
                 y: yPhi2,
                 z: zPhi2,
-                line: {color: "rgb(0,255,0)", width: 7},
+                line: {color: lilac, width: 7},
                 text: rsinthetadphiText,
-                textfont: {color: "rgb(0,255,0)"},
+                textfont: {color: lilac, size:17},
                 textposition: "top"
             },
             {
@@ -418,14 +430,14 @@ function plotSphereElement(r, theta, phi) {
                 x: xTheta2,
                 y: yTheta2,
                 z: zTemp1,
-                line: {color: "rgb(255,0,0)", width: 7},
+                line: {color: orange, width: 7},
                 text: rdthetaText,
-                textfont: {color: "rgb(255,0,0)"},
+                textfont: {color: orange, size:17},
                 textposition: "left"
             },
             {
                 type: "scatter3d",
-                mode: "lines+text",
+                mode: blackTextType,
                 x: [0, 3*x0/5, x0],
                 y: [0, 3*y0/5, y0],
                 z: [0, 0, 0],
@@ -435,7 +447,7 @@ function plotSphereElement(r, theta, phi) {
             },
             {
                 type: "scatter3d",
-                mode: "lines+text",
+                mode: blackTextType,
                 x: [0, 3*x0/5, x0],
                 y: [0, 3*y0/5, y0],
                 z: [z0, z0, z0],
@@ -445,7 +457,7 @@ function plotSphereElement(r, theta, phi) {
             },
             {
                 type: "scatter3d",
-                mode: "lines+text",
+                mode: blackTextType,
                 x: [0, 0.65*x0, x0],
                 y: [0, 0.65*y0, y0],
                 z: [0, 0.65*z0, z0],
@@ -460,7 +472,7 @@ function plotSphereElement(r, theta, phi) {
             new Line([[x1, y1, 0], [x1, y1, z0]]).gObject("rgb(0,0,0)", 2, "longdash"),
             {
                 type: "scatter3d",
-                mode: "lines+text",
+                mode: blackTextType,
                 x: xPhi0,
                 y: yPhi0,
                 z: zPhi0,
@@ -470,7 +482,7 @@ function plotSphereElement(r, theta, phi) {
             },
             {
                 type: "scatter3d",
-                mode: "lines+text",
+                mode: blackTextType,
                 x: xPhi1,
                 y: yPhi1,
                 z: zPhi2,
@@ -480,7 +492,7 @@ function plotSphereElement(r, theta, phi) {
             },
             {
                 type: "scatter3d",
-                mode: "lines+text",
+                mode: blackTextType,
                 x: xPhi1,
                 y: yPhi1,
                 z: zPhi1,
@@ -490,7 +502,7 @@ function plotSphereElement(r, theta, phi) {
             },
             {
                 type: "scatter3d",
-                mode: "lines+text",
+                mode: blackTextType,
                 x: xPhi2,
                 y: yPhi2,
                 z: zPhi1,
@@ -500,7 +512,7 @@ function plotSphereElement(r, theta, phi) {
             },
             {
                 type: "scatter3d",
-                mode: "lines+text",
+                mode: blackTextType,
                 x: xTheta0,
                 y: yTheta0,
                 z: zTheta0,
@@ -510,7 +522,7 @@ function plotSphereElement(r, theta, phi) {
             },
             {
                 type: "scatter3d",
-                mode: "lines+text",
+                mode: blackTextType,
                 x: xTheta1,
                 y: yTheta1,
                 z: zTheta1,
@@ -559,18 +571,24 @@ function main() {
         $(this).on('input', function(){
             $("#"+$(this).attr("id") + "Display").text( $(this).val() + $("#"+$(this).attr("id") + "Display").attr("data-unit") );
             $("#"+$(this).attr("id") + "DisplayA2").text( parseFloat($(this).val())*180 + $("#" + $(this).attr("id") + "DisplayA2").attr("data-unit") );
+
             if (parseFloat($(this).val())*8 % 8 === 0.0) {
-                displayEl = $(this).val() + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit");
+                displayEl = $(this).val();
             } else if (parseFloat($(this).val())*8 % 4 === 0.0) {
-                displayEl = "(" + $(this).val()*2 + "/2)" + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit");
+                displayEl = "(" + $(this).val()*2 + "/2)";
             } else if (parseFloat($(this).val())*8 % 2 === 0.0) {
-                displayEl = "(" + $(this).val()*4 + "/4)" + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit");
+                displayEl = "(" + $(this).val()*4 + "/4)";
             } else {
-                displayEl = "(" + $(this).val()*8 + "/8)" + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit");
+                displayEl = "(" + $(this).val()*8 + "/8)";
             }
-            $("#"+$(this).attr("id") + "DisplayA1").text( displayEl );
+            $("#"+$(this).attr("id") + "DisplayA1").text( displayEl + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit"));
             plotVolumeElement(coorType);
         });
+    });
+
+    $("input[type=checkbox]").each(function () {
+            console.log($(this).val());
+            console.log("hello");
     });
 
     $(function() {
@@ -588,6 +606,7 @@ function main() {
             return false;
         });
     });
+
     plotVolumeElement(2);
 }
 $(document).ready(main);

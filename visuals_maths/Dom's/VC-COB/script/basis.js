@@ -1,3 +1,4 @@
+"use strict";
 //Global Initial Parameters:
 var initialPoint = [1., 1., 1.];
 var layout = {
@@ -7,9 +8,10 @@ var layout = {
     showlegend: false,
     scene: {
         camera: createView([1,1,1]),
-        xaxis: {range: [-6, 6], zeroline: true, scaleratio: 1},
-        yaxis: {range: [-6, 6], zeroline: true, scaleratio: 1},
-        zaxis: {range: [-6, 6], zeroline: true, scaleratio: 1}
+        xaxis: {range: [-6, 6], zeroline: true, autorange: false,},
+        yaxis: {range: [-6, 6], zeroline: true, autorange: false,},
+        zaxis: {range: [-6, 6], zeroline: true, autorange: false,},
+        aspectratio: {x:1, y:1, z:1},
     }
 }
 var coorType = 0; //(1 = Cartesian, 2 = Cylindrical, 3 = Spherical)
@@ -82,20 +84,23 @@ function plotInit(coor) {
 }
 //Plot for basis for corresponding coordinate systems:
 function plotCartesian(x, y, z) {
-    cuboid = new Cuboid(x, y, z);
+    Plotly.purge("graph");
+    var cuboid = new Cuboid(x, y, z);
     Plotly.newPlot('graph',
         [
-            cuboid.gObject("rgb(0,62,116"),
-            new Line([[x, y, z], [x + 1, y, z]]).gObject("rgb(255,0,0)"),
-            new Line([[x, y, z], [x, y + 1, z]]).gObject("rgb(0,255,0)"),
-            new Line([[x, y, z], [x, y, z + 1]]).gObject("rgb(0,0,255)")
+            cuboid.gObject(impBlue),
+            new Line([[x, y, z], [x + 1, y, z]]).gObject(orange),
+            new Line([[x, y, z], [x, y + 1, z]]).gObject(lilac),
+            new Line([[x, y, z], [x, y, z + 1]]).gObject(cyan)
         ],
         layout
     )
+
     currentPoint = [Math.round(x*10)/10, Math.round(y*10)/10, Math.round(z*10)/10];
 }
 function plotCylinder(rho, phi, z) {
-    cylinder = new Cylinder(rho, z);
+    Plotly.purge("graph");
+    var cylinder = new Cylinder(rho, z);
     var x = rho*Math.cos(phi);
     var y = rho*Math.sin(phi);
 
@@ -112,19 +117,19 @@ function plotCylinder(rho, phi, z) {
     }
     Plotly.newPlot('graph',
         [
-            cylinder.gObjectCurve("rgb(0,62,116)", "rgb(255,255,255)"),
+            cylinder.gObjectCurve(impBlue, white),
             cylinder.gObjectTop("rgb(0,62,116)"),
             cylinder.gObjectBottom("rgb(0,62,116)"),
-            new Line([[x, y, z], [x + Math.cos(phi), y + Math.sin(phi), z]]).gObject("rgb(255,0,0)"),
-            new Line([[x, y, z], [x - Math.sin(phi), y + Math.cos(phi), z]]).gObject("rgb(0,255,0)"),
-            new Line([[x, y, z], [x, y, z + 1]]).gObject("rgb(0,0,255)"),
+            new Line([[x, y, z], [x + Math.cos(phi), y + Math.sin(phi), z]]).gObject(orange),
+            new Line([[x, y, z], [x - Math.sin(phi), y + Math.cos(phi), z]]).gObject(lilac),
+            new Line([[x, y, z], [x, y, z + 1]]).gObject(cyan),
             {
                 type: "scatter3d",
                 mode: "lines",
                 x: xTrace,
                 y: yTrace,
                 z: zTrace,
-                line: {color: "rgb(0,0,0)", width: 2}
+                line: {color: black, width: 2}
             }
         ],
         layout
@@ -132,7 +137,8 @@ function plotCylinder(rho, phi, z) {
     currentPoint = [Math.round(x*10)/10, Math.round(y*10)/10, Math.round(z*10)/10];
 }
 function plotSphere(r, theta, phi) {
-    sphere = new Sphere(r);
+    Plotly.purge("graph");
+    var sphere = new Sphere(r);
     var x = r*Math.cos(phi)*Math.sin(theta);
     var y = r*Math.sin(phi)*Math.sin(theta);
     var z = r*Math.cos(theta);
@@ -156,17 +162,17 @@ function plotSphere(r, theta, phi) {
     }
     Plotly.newPlot('graph',
         [
-            sphere.gObject("rgb(0,62,116)", "rgb(255,255,255)"),
-            new Line([[x, y, z], [x + Math.cos(phi)*Math.sin(theta), y + Math.sin(phi)*Math.sin(theta), z + Math.cos(theta)]]).gObject("rgb(0,0,255)"),
-            new Line([[x, y, z], [x - Math.sin(phi), y + Math.cos(phi), z]]).gObject("rgb(0,255,0)"),
-            new Line([[x, y, z], [x + Math.cos(phi)*Math.cos(theta), y + Math.sin(phi)*Math.cos(theta), z - Math.sin(theta)]]).gObject("rgb(255,0,0)"),
+            sphere.gObject(impBlue, white),
+            new Line([[x, y, z], [x + Math.cos(phi)*Math.sin(theta), y + Math.sin(phi)*Math.sin(theta), z + Math.cos(theta)]]).gObject(cyan),
+            new Line([[x, y, z], [x - Math.sin(phi), y + Math.cos(phi), z]]).gObject(lilac),
+            new Line([[x, y, z], [x + Math.cos(phi)*Math.cos(theta), y + Math.sin(phi)*Math.cos(theta), z - Math.sin(theta)]]).gObject(orange),
             {
                 type: "scatter3d",
                 mode: "lines",
                 x: xTrace,
                 y: yTrace,
                 z: zTrace,
-                line: {color: "rgb(0,0,0)", width: 2}
+                line: {color: black, width: 2}
             },
             {
                 type: "scatter3d",
@@ -174,7 +180,7 @@ function plotSphere(r, theta, phi) {
                 x: xTrace1,
                 y: yTrace1,
                 z: zTrace1,
-                line: {color: "rgb(0,0,0)", width: 2}
+                line: {color: black, width: 2}
             }
         ],
         layout
@@ -188,16 +194,17 @@ function main() {
         $(this).on('input', function(){
             $("#"+$(this).attr("id") + "Display").text( $(this).val() + $("#"+$(this).attr("id") + "Display").attr("data-unit") );
             $("#"+$(this).attr("id") + "DisplayA2").text( parseFloat($(this).val())*180 + $("#" + $(this).attr("id") + "DisplayA2").attr("data-unit") );
+
             if (parseFloat($(this).val())*8 % 8 === 0.0) {
-                displayEl = $(this).val() + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit");
+                displayEl = $(this).val();
             } else if (parseFloat($(this).val())*8 % 4 === 0.0) {
-                displayEl = "(" + $(this).val()*2 + "/2)" + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit");
+                displayEl = "(" + $(this).val()*2 + "/2)";
             } else if (parseFloat($(this).val())*8 % 2 === 0.0) {
-                displayEl = "(" + $(this).val()*4 + "/4)" + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit");
+                displayEl = "(" + $(this).val()*4 + "/4)";
             } else {
-                displayEl = "(" + $(this).val()*8 + "/8)" + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit");
+                displayEl = "(" + $(this).val()*8 + "/8)";
             }
-            $("#"+$(this).attr("id") + "DisplayA1").text( displayEl );
+            $("#"+$(this).attr("id") + "DisplayA1").text( displayEl + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit"));
             plotInit(coorType);
         });
     });
