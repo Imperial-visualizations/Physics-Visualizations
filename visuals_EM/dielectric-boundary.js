@@ -10,7 +10,46 @@ $(window).on('load', function() {
             angleDisplay: $("#angle-display")
         },
         plt = {
-            MaxTraceNo: 12
+            MaxTraceNo: 12,
+            layout: {
+                autosize: true,
+                width: 450,
+                height: 350,
+                margin: {
+                    l: 0, r: 0, b: 0, t: 1, pad: 5
+                },
+                scene: {
+                    aspectmode: "cube",
+                    xaxis: {
+                        range: [-1, 1], autorange: false, zeroline: true
+                    },
+                    yaxis: {
+                        range: [-1, 1], autorange: false, zeroline: true
+                    },
+                    zaxis: {
+                        range: [-1, 1], autorange: false, zeroline: true
+                    }
+                },
+                hovermode: false
+            },
+            layoutFres: {
+                width: 350,
+                height: 300,
+                xaxis: {
+                    range: [0, 90],
+                    title: "Angle"
+                },
+                yaxis: {
+                   range: [-1, 2.1]
+                },
+                margin: {
+                   l: 40, r: 10, b: 40, t: 1, pad: 5
+               },
+               legend: {
+                   x: 0, y: 10,
+                   orientation: "h"
+               }
+            }
         },
         phys = {
             polarisation: "s",
@@ -43,14 +82,12 @@ $(window).on('load', function() {
 
     $.when(
         $.getJSON("https://rawgit.com/binaryfunt/Imperial-Visualizations/master/dielectric_boundary_data3.JSON"),
-        $.getJSON("https://rawgit.com/binaryfunt/Imperial-Visualizations/master/dielectric_boundary_layout.JSON"),
         $.getJSON("https://rawgit.com/EdKeys/Imperial-Visualizations/master/fresnel_data.JSON")
-    ).then(function(data, layout, dataFres) { // i.e., function(JSON1, JSON2) {// success}, function() {// error}
+    ).then(function(data, dataFres) { // i.e., function(JSON1, JSON2) {// success}, function() {// error}
         data = data[0];
         dataFres = dataFres[0];
-        layout = layout[0];
 
-        init(data, layout, dataFres);
+        init(data, dataFres);
 
         dom.polarisationSwitchInputs.on("change", handlePolarisationSwitch);
         dom.refractiveIndexInput.on("input", handleRefractiveIndexSlider);
@@ -59,25 +96,14 @@ $(window).on('load', function() {
     }, showJSONLoadError);
 
 
-    function init(data, layout, dataFres) {
+    function init(data, dataFres) {
         phys.data = data;
         phys.dataFres = dataFres;
-        layout.width = 600;
-        layout.height = 350;
-        layout.xaxis = {
-            range: [0, 90],
-            title: "Angle"
-        };
-        layout.yaxis = {
-            range: [-1, 2.1]
-        };
-        layout.margin = {
-            l: 40, r: 10, b: 40, t: 1, pad: 5
-        };
+
         endLoadingScreen();
 
-        Plotly.plot(div='graph', deepCopy(phys.getPlotData()), layout=layout, {displayModeBar: false});
-        Plotly.newPlot(div='graph2', deepCopy(phys.getCurvePlotData()), layout=layout, {displayModeBar: false});
+        Plotly.plot(div='graph', deepCopy(phys.getPlotData()), layout=plt.layout);
+        Plotly.newPlot(div='graph2', deepCopy(phys.getCurvePlotData()), layout=plt.layoutFres, {displayModeBar: false});
     }
 
 
