@@ -11,10 +11,9 @@ var initKVib, initKRot;                                             // Initial K
 var init_s1 = 2, init_s2 = 2, init_e1 = 10, init_e2 = 10;           // Initial LJ parameters.
 
 // Colours
-
-const IMPERIAL_BLUE = 0x003E74;
-const CHERRY = 0xE40043;
-const GRAPH_TIME = 5;                                               // x-axis range for Energy against Time plots.
+var IMPERIAL_BLUE = 0x003E74;
+var CHERRY = 0xE40043;
+var GRAPH_TIME = 5;                                               // x-axis range for Energy against Time plots.
 
 var running = false;                                                // Animation status.
 var dT = 1/65;                                                      // Timestep.
@@ -93,46 +92,50 @@ function flashGraphs(){
     });
 }
 
-// /**
-//  * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
-//  * off the input field.
-//  */
-// $('body').on('click', '[data-change]', function() {
-//     // Storing current element and its attributes.
-//     var $element = $(this);
-//     var $title = $(this).attr("title");
-//     var $el_id = $(this).attr("id");
-//     var $unit = $(this).attr("data-unit");
-//
-//     // Creating input form.
-//     var $input = $('<input style="width:50%;"/>').val(parseFloat($element.text()));
-//     $input.attr("id", $el_id);                                  // Setting ID attribute (same as text).
-//     $input.attr("title", $title);                               // Setting title attribute (same as text).
-//     $element.replaceWith($input);                               // Replacing text with input form.
-//
-//     var save = function save() {
-//         var $a = $('<a data-change />').text($input.val() + $unit);
-//
-//         // Restoring text with same attributes as original.
-//         $a.attr("title", $title);
-//         $a.attr("id", $el_id);
-//         $a.attr("data-unit", $unit);
-//         $input.replaceWith($a);
-//         init_s1 = parseFloat($('#s1').text());
-//         init_e1 = parseFloat($('#e1').text());
-//         init_s2 = parseFloat($('#s2').text());
-//         init_e2 = parseFloat($('#e2').text());
-//         dT = parseFloat($('#dT').text());
-//         reset();
-//         if ($a.text().indexOf("Display") === -1) {
-//             var $divSlider = $a.attr("id").replace("Display", "");
-//             $('#' + $divSlider).attr("value", parseFloat($a.text()));
-//         }
-//     };
-//
-//     // When clicking away from element (blurring), revert from input form to text.
-//     $input.one('blur', save).focus();
-// });
+/**
+ * Finds element in body with data-change attribute, and changes text to support input. Reverts to text when clicked
+ * off the input field.
+ */
+$('body').on('click', '[data-change]', function() {
+    // Storing current element and its attributes.
+    var $element = $(this);
+    var $title = $(this).attr("title");
+    var $el_id = $(this).attr("id");
+    var $unit = $(this).attr("data-unit");
+
+    // Creating input form.
+    var $input = $('<input style="width:50%;"/>').val(parseFloat($element.text()));
+    $input.attr("id", $el_id);                                  // Setting ID attribute (same as text).
+    $input.attr("title", $title);                               // Setting title attribute (same as text).
+    $element.replaceWith($input);                               // Replacing text with input form.
+
+    var save = function save() {
+        var $a = $('<a data-change />').text($input.val() + $unit);
+
+        // Restoring text with same attributes as original.
+        $a.attr("title", $title);
+        $a.attr("id", $el_id);
+        $a.attr("data-unit", $unit);
+        $input.replaceWith($a);
+
+        // LJ Params
+        init_s1 = parseFloat($('#s1').text());
+        init_e1 = parseFloat($('#e1').text());
+        init_s2 = parseFloat($('#s2').text());
+        init_e2 = parseFloat($('#e2').text());
+
+        // Timestep
+        dT = parseFloat($('#dT').text());
+        reset();
+        if ($a.text().indexOf("Display") === -1) {
+            var $divSlider = $a.attr("id").replace("Display", "");
+            $('#' + $divSlider).attr("value", parseFloat($a.text()));
+        }
+    };
+
+    // When clicking away from element (blurring), revert from input form to text.
+    $input.one('blur', save).focus();
+});
 
 /**
  * Start/Pause button code.
@@ -222,8 +225,8 @@ function addAtom(atom) {
 function plotE() {
     layoutE = {
         yaxis: {title: "Energy / eV", titlefont: {size: labelFontsize},
-            range: [-1.1 * mol1.V.e, 1.7 * Math.max(initKVib, initKRot)], nticks: 20},
-        titlefont: {size: titleFontsize}, margin: {l: marL, r: marR, b: marB, t: marT},
+            range: [-1.1 * mol1.V.e, Math.max(initKVib, initKRot) / 0.55], nticks: 20},
+        titlefont: {size: titleFontsize}, margin: {l: marL, r: marR, b: marB + 5, t: marT},
         xaxis: {title: "t / s", titlefont: {size: 10}, range: [0, GRAPH_TIME], nticks: 20},
         title: "KE and PE against Time",
         legend: {x: 0.67, y: 1, orientation: "h"},
@@ -286,8 +289,7 @@ function plotLJ() {
  * @param end {number}: Position where spring ends.
  */
 function drawBond(starting, end) {
-    var curr_pot = mol1.V.calcV(mol1.r.mag());
-    if (-curr_pot / mol1.V.e < 0.01) {
+    if (-mol1.PE / mol1.V.e < 0.01) {
         if(typeof mol1.bondSprite !== 'undefined') {
             mol1.bondSprite.destroy();
         }
@@ -299,7 +301,7 @@ function drawBond(starting, end) {
     var arrowG = phaserInstance.add.graphics(0,0);
 
     var wiggles = 2 * Math.ceil(mol1.V.s);
-    arrowG.lineStyle(4, IMPERIAL_BLUE, (-curr_pot / mol1.V.e));
+    arrowG.lineStyle(4 * (-mol1.corrPE / mol1.V.e), IMPERIAL_BLUE, (-mol1.PE / mol1.V.e));
     arrowG.lineTo(widthOfSpring / (wiggles * 4), 0);
     for (var i = 2; i < wiggles * 4 - 1; i += 2) {
         arrowG.lineTo(i * widthOfSpring / (wiggles * 4), ((i % 4) - 1) * heightOfSpring / 2);
@@ -364,6 +366,7 @@ function reset(){
         }
     }
 
+    // Destroying trail.
     if(typeof a1 !== 'undefined'){
         if(a1.lineSprite !== null){
             a1.lineSprite.destroy();
@@ -439,19 +442,17 @@ function update(){
             layoutE.xaxis.range[0] = arrTime[0];
             layoutE.xaxis.range[1] = Math.max(arrTime[arrTime.length - 1] + 0.5, GRAPH_TIME);
 
-            // Hiding legend if plot is high enough.
-            if (arrRotKE[arrRotKE.length - 1] > 0.55 * layoutE.yaxis.range[1] ||
-                arrVibKE[arrVibKE.length - 1] > 0.55 * layoutE.yaxis.range[1]) {
-                layoutE.showlegend = false;
-            }
+            //
+            if (arrTime[arrTime.length - 1] > GRAPH_TIME - 1) layoutE.showlegend = false;
 
             // Moving along the slider level line, innit
             KE_R_slider.x[0] = KE_V_slider.x[0] = layoutE.xaxis.range[0] - 1;
             KE_R_slider.x[1] = KE_V_slider.x[1] = layoutE.xaxis.range[1] + 1;
 
             // Plotting dat energie.
-            Plotly.animate("graphE", {data: [KE_V_T, KE_V_slider, KE_R_T, KE_R_slider, PE_T], traces: [0, 1, 2, 3, 4]},
-                        {frame: {redraw: false, duration: 0}, transition: {duration: dT}});
+            Plotly.animate("graphE", {data: [KE_V_T, KE_V_slider, KE_R_T, KE_R_slider, PE_T],
+                        traces: [0, 1, 2, 3, 4]},
+                        {frame: {redraw: false, duration: dT}, transition: {duration: dT}});
         }
 
         if ($('#LJ_scatter').hasClass("expanded")) {

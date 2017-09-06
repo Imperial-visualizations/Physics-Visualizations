@@ -1,7 +1,6 @@
 /** ============================================ Class Declarations ==============================================*/
 /**
  * Class to describe attributes of atoms that can be used to make up molecules.
- * @param radius: Radius of atom.
  * @param mass: Mass of atom.
  * @param color: Color of atom for phaser code.(cosmetic only)
  * @constructor: Atom
@@ -60,7 +59,6 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
     this.a1 = a1;
     this.a2 = a2;
     this.V = potential;                                         // Potential used as a bond between atoms.
-    this.maxKE_V = keVib_0;
 
     this.tot_m =(a1.mass + a2.mass);                            // Finding total mass of the system.
     this.reducedM =  (a1.mass * a2.mass) / (this.tot_m);        // Finding system's reduced mass.
@@ -237,6 +235,10 @@ Molecule.prototype.softReset = function (ke_vib0, ke_rot0) {
             new_mol.r = dir.multiply(new_mol.separation);   // Keeping orientation of molecule same, extreme separation.
             new_mol.a1.pos = []; new_mol.a2.pos = [];                       // Removing trail.
             new_mol.omega = this.omega;                                     // Keeping angular momentum same.
+
+            if ((Math.sign(this.v) === -1 && Math.sign(new_mol.v) === 1) ||
+                Math.sign(this.v) === 1 && Math.sign(new_mol.v === -1)) new_mol.v = -new_mol.v;
+
             console.error("New molecule's maximum separation cannot reach current separation! Hard resetting...");
             return new_mol
         }
@@ -246,5 +248,9 @@ Molecule.prototype.softReset = function (ke_vib0, ke_rot0) {
     new_mol.a1.pos = this.a1.pos; new_mol.a2.pos = this.a2.pos;             // Updating new molecule's position Arrays.
     new_mol.r = dir.multiply(new_mol.separation);           // Keeping orientation of molecule same, extreme separation.
     new_mol.a1.pos.splice(-1, 1); new_mol.a2.pos.splice(-1, 1);             // Cleaning up trail.
+
+    if ((Math.sign(this.v) === -1 && Math.sign(new_mol.v) === 1) ||
+        Math.sign(this.v) === 1 && Math.sign(new_mol.v === -1)) new_mol.v = -new_mol.v;
+
     return new_mol;
 };
