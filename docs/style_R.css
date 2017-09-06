@@ -15,13 +15,17 @@ body#bso {
 
 #bso .navbar.bg-light {
   background-color: rgba(247, 249, 250, 0.9) !important;
+  border-bottom: 1px solid hsl(0, 0%, 92%);
 }
 
 #bso #content {
   position: relative; /* Needed for scrollspy */
 }
 
-#bso #content > div:first-child {
+#bso #content > .row:first-child {
+  padding-top: 56px;
+}
+#bso #content > .jumbotron:first-child {
   padding-top: 120px;
 }
 
@@ -65,6 +69,36 @@ body#bso {
 #bso .vis-category.container {
   padding: 40px;
 }
+
+/* Sidebar styles
+-------------------------------------------------- */
+.sidebar {
+  padding: 0;
+  position: fixed;
+  height: 100%;
+  top: 56px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: hsl(0, 0%, 98%);
+  border-right: 1px solid hsl(0, 0%, 92%);
+}
+.sidebar form {
+  padding: 10px;
+  border-bottom: 1px solid hsl(0,0%,92%);
+  margin-bottom: 10px;
+}
+.sidebar .nav-link {
+  border-radius: 0;
+}
+.sidebar .nav-link:not(.active) {
+  color: #222;
+}
+.sidebar .nav-link:not(.active):hover {
+  color: #222;
+  background: #c1d3e6;
+}
+
+
 
 /* Sticky footer styles
 -------------------------------------------------- */
