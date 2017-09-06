@@ -1,0 +1,558 @@
+<!doctype html>
+<!-- **This line is extremely important, it tells the browser to use HTML5 instead of HTML 4.1**  -->
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Imperial Visualisations</title>
+    <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=3">
+    <style type="text/css">
+        /* css here */
+        body{
+            display: block;
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            height: 100%; min-height: 100%; width: 100%; min-width: 100%;
+            position: absolute; top: 0; right: 0; bottom: 0; left: 0;/* make it full-screen */
+        }
+        .main{
+            display: flex;
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+            background: #002147 url(assets/imperial-white-logo.svg) no-repeat fixed;
+            background-position: bottom 20px left 20px;
+            /*background-size: 190px 49.3px;*/
+            background-size: 126.67px 32.86px;
+        }
+        #imperialVirsualisationTextWhite1{
+            width: 511.9px;
+            height:140.2px;
+            position: absolute;
+            left: 50%;
+            top: 10%;
+            margin-left: -255.95px;
+            margin-top: -70.1px;
+            fill: #FFFFFF;
+            mix-blend-mode: screen;
+            transform-origin: center center 0px; 
+            transition: all 0.2s cubic-bezier(0.855,1.650,0.625,0.680) 0s;
+
+            transform: scale(0.8);
+
+        }
+        #imperialVirsualisationTextWhite1.moveRight{
+            transform: matrix3d(0.9,0,0.34,-0.0007,0.00,0.9,-0.17,0.002,-0.34,0.17,0.9211999999999999,0,20,-20,0,1);
+        }
+        #imperialVirsualisationTextWhite1.moveLeft{
+            transform: matrix3d(0.9,0,-0.34,0.0007,0.00,0.9,-0.17,0.002,0.34,0.17,0.9211999999999999,0,-20,-20,0,1);
+        }
+
+        .circle{
+
+            width: 700px;
+            height: 700px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -350px;
+            margin-top: -350px;
+            border-radius: 700px;
+            background-color: #DD2501;
+            mix-blend-mode: screen;
+
+            transition: all 100ms ease;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .circle>span:nth-child(1){
+            color: #fff;
+            font-size: 30px;
+            padding: 0px;
+            margin: 0px;
+            line-height: 0px;
+            font-weight: 600;
+        }
+        .circle>span:nth-child(3){
+            color: #fff;
+            font-size: 90px;
+            padding: 0px;
+            margin: 0px;
+            line-height: 120px;
+            font-weight: 900;
+            letter-spacing: 4px;
+        }
+        .circle>object:nth-child(2){
+            width: 300px;
+            height: 300px;
+            margin-top: 10px;
+        }
+
+        #lecturer{
+            left: 30%;
+            background-color: #00ACD7;
+        }
+        #lecturer:hover{
+            box-shadow: inset 0px 0px 10px #DDFFFF;
+            -webkit-animation-name: lectureBreath; 
+            -webkit-animation-duration: 3600ms; 
+            -webkit-animation-iteration-count: infinite; 
+            -webkit-animation-direction: alternate; 
+            animation-name: lectureBreath;
+            animation-duration: 3600ms;
+            animation-iteration-count: infinite;
+            animation-direction: alternate; 
+            transform: scale(1.02);
+        }   
+
+@-webkit-keyframes lectureBreath {
+0%{ box-shadow: inset 0px 0px 10px #DDFFFF; }
+5%{ box-shadow: inset 0px 0px 11.846748910729335px #DDFFFF; }
+10%{ box-shadow: inset 0px 0px 17.34152255572697px #DDFFFF; }
+15%{ box-shadow: inset 0px 0px 26.349021371744815px #DDFFFF; }
+20%{ box-shadow: inset 0px 0px 38.64745084375788px #DDFFFF; }
+25%{ box-shadow: inset 0px 0px 53.93398282201787px #DDFFFF; }
+30%{ box-shadow: inset 0px 0px 71.832212156129px #DDFFFF; }
+35%{ box-shadow: inset 0px 0px 91.90142503906797px #DDFFFF; }
+40%{ box-shadow: inset 0px 0px 113.64745084375788px #DDFFFF; }
+45%{ box-shadow: inset 0px 0px 136.53483024396536px #DDFFFF; }
+50%{ box-shadow: inset 0px 0px 159.99999999999997px #DDFFFF; }
+55%{ box-shadow: inset 0px 0px 183.4651697560346px #DDFFFF; }
+60%{ box-shadow: inset 0px 0px 206.35254915624205px #DDFFFF; }
+65%{ box-shadow: inset 0px 0px 228.098574960932px #DDFFFF; }
+70%{ box-shadow: inset 0px 0px 248.16778784387094px #DDFFFF; }
+75%{ box-shadow: inset 0px 0px 266.06601717798213px #DDFFFF; }
+80%{ box-shadow: inset 0px 0px 281.3525491562421px #DDFFFF; }
+85%{ box-shadow: inset 0px 0px 293.6509786282552px #DDFFFF; }
+90%{ box-shadow: inset 0px 0px 302.65847744427305px #DDFFFF; }
+95%{ box-shadow: inset 0px 0px 308.15325108927067px #DDFFFF; }
+100%{ box-shadow: inset 0px 0px 310px #DDFFFF; }
+}
+
+@keyframes lectureBreath {
+0%{ box-shadow: inset 0px 0px 10px #DDFFFF; }
+5%{ box-shadow: inset 0px 0px 11.846748910729335px #DDFFFF; }
+10%{ box-shadow: inset 0px 0px 17.34152255572697px #DDFFFF; }
+15%{ box-shadow: inset 0px 0px 26.349021371744815px #DDFFFF; }
+20%{ box-shadow: inset 0px 0px 38.64745084375788px #DDFFFF; }
+25%{ box-shadow: inset 0px 0px 53.93398282201787px #DDFFFF; }
+30%{ box-shadow: inset 0px 0px 71.832212156129px #DDFFFF; }
+35%{ box-shadow: inset 0px 0px 91.90142503906797px #DDFFFF; }
+40%{ box-shadow: inset 0px 0px 113.64745084375788px #DDFFFF; }
+45%{ box-shadow: inset 0px 0px 136.53483024396536px #DDFFFF; }
+50%{ box-shadow: inset 0px 0px 159.99999999999997px #DDFFFF; }
+55%{ box-shadow: inset 0px 0px 183.4651697560346px #DDFFFF; }
+60%{ box-shadow: inset 0px 0px 206.35254915624205px #DDFFFF; }
+65%{ box-shadow: inset 0px 0px 228.098574960932px #DDFFFF; }
+70%{ box-shadow: inset 0px 0px 248.16778784387094px #DDFFFF; }
+75%{ box-shadow: inset 0px 0px 266.06601717798213px #DDFFFF; }
+80%{ box-shadow: inset 0px 0px 281.3525491562421px #DDFFFF; }
+85%{ box-shadow: inset 0px 0px 293.6509786282552px #DDFFFF; }
+90%{ box-shadow: inset 0px 0px 302.65847744427305px #DDFFFF; }
+95%{ box-shadow: inset 0px 0px 308.15325108927067px #DDFFFF; }
+100%{ box-shadow: inset 0px 0px 310px #DDFFFF; }
+}
+            
+        #student{
+            left: 70%;
+            background-color: #E40043;
+        }
+        #student:hover{
+            box-shadow: inset 0px 0px 10px #b4aace;
+            -webkit-animation-name: lectureBreath; 
+            -webkit-animation-duration: 2400ms; 
+            -webkit-animation-iteration-count: infinite; 
+            -webkit-animation-direction: alternate; 
+            animation-name: lectureBreath;
+            animation-duration: 2400ms;
+            animation-iteration-count: infinite;
+            animation-direction: alternate; 
+            transform: scale(1.02);
+        }   
+
+@-webkit-keyframes studentBreath {
+0%{ box-shadow: inset 0px 0px 10px #e4cbc6; }
+5%{ box-shadow: inset 0px 0px 11.846748910729335px #e4cbc6; }
+10%{ box-shadow: inset 0px 0px 17.34152255572697px #e4cbc6; }
+15%{ box-shadow: inset 0px 0px 26.349021371744815px #e4cbc6; }
+20%{ box-shadow: inset 0px 0px 38.64745084375788px #e4cbc6; }
+25%{ box-shadow: inset 0px 0px 53.93398282201787px #e4cbc6; }
+30%{ box-shadow: inset 0px 0px 71.832212156129px #e4cbc6; }
+35%{ box-shadow: inset 0px 0px 91.90142503906797px #e4cbc6; }
+40%{ box-shadow: inset 0px 0px 113.64745084375788px #e4cbc6; }
+45%{ box-shadow: inset 0px 0px 136.53483024396536px #e4cbc6; }
+50%{ box-shadow: inset 0px 0px 159.99999999999997px #e4cbc6; }
+55%{ box-shadow: inset 0px 0px 183.4651697560346px #e4cbc6; }
+60%{ box-shadow: inset 0px 0px 206.35254915624205px #e4cbc6; }
+65%{ box-shadow: inset 0px 0px 228.098574960932px #e4cbc6; }
+70%{ box-shadow: inset 0px 0px 248.16778784387094px #e4cbc6; }
+75%{ box-shadow: inset 0px 0px 266.06601717798213px #e4cbc6; }
+80%{ box-shadow: inset 0px 0px 281.3525491562421px #e4cbc6; }
+85%{ box-shadow: inset 0px 0px 293.6509786282552px #e4cbc6; }
+90%{ box-shadow: inset 0px 0px 302.65847744427305px #e4cbc6; }
+95%{ box-shadow: inset 0px 0px 308.15325108927067px #e4cbc6; }
+100%{ box-shadow: inset 0px 0px 310px #e4cbc6; }
+}
+
+@keyframes studentBreath {
+0%{ box-shadow: inset 0px 0px 10px #e4cbc6; }
+5%{ box-shadow: inset 0px 0px 11.846748910729335px #e4cbc6; }
+10%{ box-shadow: inset 0px 0px 17.34152255572697px #e4cbc6; }
+15%{ box-shadow: inset 0px 0px 26.349021371744815px #e4cbc6; }
+20%{ box-shadow: inset 0px 0px 38.64745084375788px #e4cbc6; }
+25%{ box-shadow: inset 0px 0px 53.93398282201787px #e4cbc6; }
+30%{ box-shadow: inset 0px 0px 71.832212156129px #e4cbc6; }
+35%{ box-shadow: inset 0px 0px 91.90142503906797px #e4cbc6; }
+40%{ box-shadow: inset 0px 0px 113.64745084375788px #e4cbc6; }
+45%{ box-shadow: inset 0px 0px 136.53483024396536px #e4cbc6; }
+50%{ box-shadow: inset 0px 0px 159.99999999999997px #e4cbc6; }
+55%{ box-shadow: inset 0px 0px 183.4651697560346px #e4cbc6; }
+60%{ box-shadow: inset 0px 0px 206.35254915624205px #e4cbc6; }
+65%{ box-shadow: inset 0px 0px 228.098574960932px #e4cbc6; }
+70%{ box-shadow: inset 0px 0px 248.16778784387094px #e4cbc6; }
+75%{ box-shadow: inset 0px 0px 266.06601717798213px #e4cbc6; }
+80%{ box-shadow: inset 0px 0px 281.3525491562421px #e4cbc6; }
+85%{ box-shadow: inset 0px 0px 293.6509786282552px #e4cbc6; }
+90%{ box-shadow: inset 0px 0px 302.65847744427305px #e4cbc6; }
+95%{ box-shadow: inset 0px 0px 308.15325108927067px #e4cbc6; }
+100%{ box-shadow: inset 0px 0px 310px #e4cbc6; }
+}
+
+.bottomText{
+    color: #D4EFFC;
+    width: 200px;
+    height: 20px;
+    text-align: center;
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    margin-left: -100px;
+    margin-top: -10px;
+}
+.bottomText a{
+    color: #D4EFFC;
+}
+.bottomText a:hover{
+    color: #379F9F;
+}
+
+
+@media (max-width: 1260px) {
+
+        #imperialVirsualisationTextWhite1{
+            transform: scale(0.5);
+
+        }
+        #imperialVirsualisationTextWhite1.moveRight{
+            transform: matrix3d(0.55,0,0.34,-0.0007,0.00,0.55,-0.17,0.002,-0.34,0.17,0.9211999999999999,0,20,-20,0,1);
+            top: 12%;
+        }
+        #imperialVirsualisationTextWhite1.moveLeft{
+            transform: matrix3d(0.55,0,-0.34,0.0007,0.00,0.55,-0.17,0.002,0.34,0.17,0.9211999999999999,0,-20,-20,0,1);
+            top: 12%;
+        }
+        .circle{
+            width: 600px;
+            height: 600px;
+            margin-left: -300px;
+            margin-top: -300px;
+            border-radius: 600px;
+        }
+        .circle>span:nth-child(1){
+            font-size: 20px;
+            line-height: 0px;
+            font-weight: 600;
+        }
+        .circle>span:nth-child(3){
+            font-size: 70px;
+            line-height: 80px;
+            font-weight: 900;
+            letter-spacing: 4px;
+        }
+        .circle>object:nth-child(2){
+            width: 260px;
+            height: 260px;
+            margin-top: 10px;
+        }
+
+        #lecturer{
+            left: 28%;
+        }
+            
+        #student{
+            left: 72%;
+        }
+
+}
+
+@media (max-width: 1000px) {
+
+        #imperialVirsualisationTextWhite1{
+            transform: scale(0.5);
+
+        }
+        #imperialVirsualisationTextWhite1.moveRight{
+            transform: matrix3d(0.55,0,0.34,-0.0007,0.00,0.55,-0.17,0.002,-0.34,0.17,0.9211999999999999,0,20,-20,0,1);
+        }
+        #imperialVirsualisationTextWhite1.moveLeft{
+            transform: matrix3d(0.55,0,-0.34,0.0007,0.00,0.55,-0.17,0.002,0.34,0.17,0.9211999999999999,0,-20,-20,0,1);
+        }
+        .circle{
+            width: 500px;
+            height: 500px;
+            margin-left: -250px;
+            margin-top: -250px;
+            border-radius: 500px;
+        }
+        .circle>span:nth-child(1){
+            font-size: 20px;
+            line-height: 0px;
+            font-weight: 600;
+        }
+        .circle>span:nth-child(3){
+            font-size: 60px;
+            line-height: 60px;
+            font-weight: 900;
+            letter-spacing: 4px;
+        }
+        .circle>object:nth-child(2){
+            width: 220px;
+            height: 220px;
+            margin-top: 20px;
+        }
+
+        #lecturer{
+            left: 28%;
+        }
+            
+        #student{
+            left: 72%;
+        }
+    }
+
+@media (max-width: 810px) {
+
+        #imperialVirsualisationTextWhite1{
+            transform: scale(0.4);
+            top: 6%;
+
+        }
+        #imperialVirsualisationTextWhite1.moveRight{
+            transform: matrix3d(0.43,0,0.34,-0.0007,0.00,0.43,-0.17,0.002,-0.34,0.17,0.9211999999999999,0,20,-20,0,1);
+            top: 12%;
+        }
+        #imperialVirsualisationTextWhite1.moveLeft{
+            transform: matrix3d(0.43,0,-0.34,0.0007,0.00,0.43,-0.17,0.002,0.34,0.17,0.9211999999999999,0,-20,-20,0,1);
+            top: 12%;
+        }
+        .circle{
+            width: 420px;
+            height: 420px;
+            margin-left: -210px;
+            margin-top: -210px;
+            border-radius: 420px;
+        }
+        .circle>span:nth-child(1){
+            font-size: 16px;
+            line-height: 0px;
+            font-weight: 600;
+        }
+        .circle>span:nth-child(3){
+            font-size: 40px;
+            line-height: 60px;
+            font-weight: 900;
+            letter-spacing: 4px;
+        }
+        .circle>object:nth-child(2){
+            width: 160px;
+            height: 160px;
+            margin-top: 10px;
+        }
+
+        #lecturer{
+            left: 28%;
+            top: 44%;
+        }
+            
+        #student{
+            left: 72%;
+            top: 56%;
+        }
+    }
+
+@media (max-width: 570px) {
+
+        #imperialVirsualisationTextWhite1{
+            transform: scale(0.4);
+            top: 6%;
+
+        }
+        #imperialVirsualisationTextWhite1.moveRight{
+            transform: matrix3d(0.43,0,0.34,-0.0007,0.00,0.43,-0.17,0.002,-0.34,0.17,0.9211999999999999,0,20,-20,0,1);
+            top: 8%;
+        }
+        #imperialVirsualisationTextWhite1.moveLeft{
+            transform: matrix3d(0.43,0,-0.34,0.0007,0.00,0.43,-0.17,0.002,0.34,0.17,0.9211999999999999,0,-20,-20,0,1);
+            top: 8%;
+        }
+        .circle{
+            width: 320px;
+            height: 320px;
+            margin-left: -160px;
+            margin-top: -160px;
+            border-radius: 320px;
+        }
+        .circle>span:nth-child(1){
+            font-size: 16px;
+            line-height: 0px;
+            font-weight: 600;
+        }
+        .circle>span:nth-child(3){
+            font-size: 34px;
+            line-height: 40px;
+            font-weight: 900;
+            letter-spacing: 4px;
+        }
+        .circle>object:nth-child(2){
+            width: 120px;
+            height: 120px;
+            margin-top: 10px;
+        }
+
+        #lecturer{
+            left: 28%;
+            top: 36%;
+        }
+            
+        #student{
+            left: 72%;
+            top: 64%;
+        }
+        .bottomText{
+            bottom: 10%;
+        }
+    }
+
+@media (max-width: 400px) {
+
+        #imperialVirsualisationTextWhite1{
+            transform: scale(0.4);
+            top: 6%;
+
+        }
+        #imperialVirsualisationTextWhite1.moveRight{
+            transform: matrix3d(0.43,0,0.34,-0.0007,0.00,0.43,-0.17,0.002,-0.34,0.17,0.9211999999999999,0,20,-20,0,1);
+            top: 10%;
+        }
+        #imperialVirsualisationTextWhite1.moveLeft{
+            transform: matrix3d(0.43,0,-0.34,0.0007,0.00,0.43,-0.17,0.002,0.34,0.17,0.9211999999999999,0,-20,-20,0,1);
+            top: 10%;
+        }
+        .circle{
+            width: 260px;
+            height: 260px;
+            margin-left: -130px;
+            margin-top: -130px;
+            border-radius: 260px;
+        }
+        .circle>span:nth-child(1){
+            font-size: 16px;
+            line-height: 10px;
+            font-weight: 600;
+        }
+        .circle>span:nth-child(3){
+            font-size: 28px;
+            line-height: 36px;
+            font-weight: 900;
+            letter-spacing: 0px;
+        }
+        .circle>object:nth-child(2){
+            width: 80px;
+            height: 80px;
+            margin-top: 10px;
+        }
+
+        #lecturer{
+            left: 26%;
+            top: 40%;
+        }
+            
+        #student{
+            left: 74%;
+            top: 60%;
+        }
+        .bottomText{
+            bottom: 12%;
+        }
+    }
+
+
+
+    </style>
+</head>
+<body class="no-nav">
+<div class="main">
+    <div id="lecturer" class="circle"><span>I am a.. </span><object data="./assets/np_professor_625996_FFFFFF.svg"></object><span>Lecturer</span></div>
+    <div id="student" class="circle"><span>I am a.. </span><object data="./assets/np_learning_626017_FFFFFF.svg"></object><span>Student</span></div>
+    <svg version="1.1" id="imperialVirsualisationTextWhite1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+         viewBox="0 0 511.9 140.2" style="enable-background:new 0 0 511.9 140.2;" xml:space="preserve">
+    <g><path class="st0" d="M99.3,0.4H112V60H99.3V0.4z"/><path class="st0" d="M177.5,37c0-5.5-3-8.5-6.8-8.5c-4.3,0-7.7,3.4-7.7,9.8V60h-11.5V37c0-5.5-3-8.5-6.8-8.5
+            c-4.3,0-7.7,3.4-7.7,9.8V60h-11.5V18.3h11.5v5.1c0,0,3.8-6,11.1-6c8.9,0,11.9,7.2,11.9,7.2s4.7-7.2,14-7.2c8.9,0,14.9,6,14.9,18.3
+            V60h-11.5V37z"/><path class="st0" d="M212.4,54.8v23h-11.5V18.3h11.5v5.1c0,0,4.3-6,12.3-6c10.6,0,20,9.4,20,21.7c0,12.3-9.4,21.7-20,21.7
+            C216.6,60.8,212.4,54.8,212.4,54.8z M212.4,39.1c0,6.8,4.7,11.5,10.2,11.5s10.2-4.7,10.2-11.5c0-6.8-4.7-11.5-10.2-11.5
+            S212.4,32.3,212.4,39.1z"/><path class="st0" d="M263.4,42.9c0.9,4.3,4.7,8.1,11.1,8.1c7.2,0,11.1-5.1,11.1-5.1l6,7.7c0,0-6.4,7.2-17.9,7.2
+            c-12.3,0-22.1-9.8-22.1-21.7s9.8-21.7,21.7-21.7S294,26.4,294,38.3c0,3-0.4,4.7-0.4,4.7H263.4z M263.4,34.9h19.1
+            c-0.9-4.3-4.3-7.7-9.4-7.7S264.7,30.6,263.4,34.9z"/><path class="st0" d="M328.5,29.3c0,0-1.3-0.4-3.8-0.4c-6,0-9.8,3.8-9.8,11.1v20h-11.5V18.3h11.5v5.1c0,0,4.3-5.5,11.9-5.5h1.7V29.3
+            z"/><path class="st0" d="M341.6,12.8c-3.8,0-6.4-2.6-6.4-6.4s2.6-6.4,6.4-6.4c4.3,0,6.8,2.6,6.8,6.4S345.9,12.8,341.6,12.8z M347.6,60
+            h-11.5V18.3h11.5V60z"/><path class="st0" d="M382.9,55.7c0,0-4.3,5.1-11.5,5.1c-8.5,0-14-5.5-14-11.9c0-6.8,4.7-11.6,12.3-12.9l13.2-2.4c0-3.4-2.6-6-7.2-6
+            c-6.4,0-9.4,4.3-9.4,4.3l-6.4-6.4c0,0,5.5-8.1,16.6-8.1c10.6,0,17.9,7.2,17.9,16.6V60c0,0-8.9,0-11.5,0V55.7z M382.9,42.1v-1.3
+            l-9.4,1.7c-3,0.5-4.7,2.1-4.7,4.7c0,2.6,1.7,4.3,5.5,4.3C379.5,51.4,382.9,48,382.9,42.1z"/><path class="st0" d="M418.2,60h-11.5V0.4h11.5V60z"/><path class="st0" d="M0,79.8h13.6L28.9,124l15.3-44.2h13.6l-22.1,59.5H22.1L0,79.8z"/><path class="st0" d="M71.4,92.1c-3.8,0-6.4-2.6-6.4-6.4s2.6-6.4,6.4-6.4c4.3,0,6.8,2.6,6.8,6.4S75.7,92.1,71.4,92.1z M77.4,139.3
+            H65.9V97.7h11.5V139.3z"/><path class="st0" d="M112.7,110c0,0-2.6-3.4-6.8-3.4c-3.4,0-5.1,1.7-5.1,3.4c0,6,19.1,3,19.1,17c0,7.2-6,13.2-16.6,13.2
+            c-11.9,0-17-7.7-17-7.7l6.4-6.4c0,0,3.4,4.7,8.9,4.7c3.8,0,5.5-1.7,5.5-3.8c0-6.4-19.1-3.2-19.1-17c0-6.4,6.8-13.2,16.2-13.2
+            c9.8,0,14.5,6.4,14.5,6.4L112.7,110z"/><path class="st0" d="M157.3,135.1c0,0-4.3,5.1-11.9,5.1c-9.4,0-16.2-6.8-16.2-17.6V97.7h11.5v23.8c0,4.7,3.4,8.1,8.1,8.1
+            c5.1,0,8.5-3.4,8.5-9.8V97.7h11.5v41.7h-11.5V135.1z"/><path class="st0" d="M204.1,135.1c0,0-4.3,5.1-11.5,5.1c-8.5,0-14-5.5-14-11.9c0-6.8,4.7-11.6,12.3-12.9l13.2-2.4
+            c0-3.4-2.6-6-7.2-6c-6.4,0-9.4,4.3-9.4,4.3l-6.4-6.4c0,0,5.5-8.1,16.6-8.1c10.6,0,17.9,7.2,17.9,16.6v25.9c0,0-8.9,0-11.5,0V135.1z
+             M204.1,121.5v-1.3l-9.4,1.7c-3,0.5-4.7,2.1-4.7,4.7c0,2.6,1.7,4.3,5.5,4.3C200.7,130.8,204.1,127.4,204.1,121.5z"/><path class="st0" d="M239.4,139.3h-11.5V79.8h11.5V139.3z"/><path class="st0" d="M257.7,92.1c-3.8,0-6.4-2.6-6.4-6.4s2.6-6.4,6.4-6.4c4.3,0,6.8,2.6,6.8,6.4S261.9,92.1,257.7,92.1z
+             M263.6,139.3h-11.5V97.7h11.5V139.3z"/><path class="st0" d="M298.9,110c0,0-2.6-3.4-6.8-3.4c-3.4,0-5.1,1.7-5.1,3.4c0,6,19.1,3,19.1,17c0,7.2-6,13.2-16.6,13.2
+            c-11.9,0-17-7.7-17-7.7l6.4-6.4c0,0,3.4,4.7,8.9,4.7c3.8,0,5.5-1.7,5.5-3.8c0-6.4-19.1-3.2-19.1-17c0-6.4,6.8-13.2,16.2-13.2
+            c9.8,0,14.5,6.4,14.5,6.4L298.9,110z"/><path class="st0" d="M338.4,135.1c0,0-4.3,5.1-11.5,5.1c-8.5,0-14-5.5-14-11.9c0-6.8,4.7-11.6,12.3-12.9l13.2-2.4
+            c0-3.4-2.6-6-7.2-6c-6.4,0-9.4,4.3-9.4,4.3l-6.4-6.4c0,0,5.5-8.1,16.6-8.1c10.6,0,17.9,7.2,17.9,16.6v25.9c0,0-8.9,0-11.5,0V135.1z
+             M338.4,121.5v-1.3l-9.4,1.7c-3,0.5-4.7,2.1-4.7,4.7c0,2.6,1.7,4.3,5.5,4.3C335,130.8,338.4,127.4,338.4,121.5z"/><path class="st0" d="M366.9,85.3h10.2v13.2h8.5v10.2h-8.5v16.6c0,2.6,2.1,4.7,5.1,4.7c2.6,0,4.3-0.9,4.3-0.9v9.8
+            c0,0-3.4,1.3-7.7,1.3c-8.5,0-13.2-4.7-13.2-14.5v-17h-7.2V98.5h3.8c2.6,0,4.7-2.1,4.7-5.5V85.3z"/><path class="st0" d="M403.1,92.1c-3.8,0-6.4-2.6-6.4-6.4s2.6-6.4,6.4-6.4c4.3,0,6.8,2.6,6.8,6.4S407.3,92.1,403.1,92.1z M409,139.3
+            h-11.5V97.7H409V139.3z"/><path class="st0" d="M440.9,140.2c-11.9,0-22.1-10.2-22.1-21.7s10.2-21.7,22.1-21.7S463,107,463,118.5S452.8,140.2,440.9,140.2z
+             M440.9,129.5c5.5,0,10.2-4.7,10.2-11.1c0-6.4-4.7-11.1-10.2-11.1s-10.2,4.7-10.2,11.1C430.7,124.9,435.4,129.5,440.9,129.5z"/><path class="st0" d="M483.9,102.8c0,0,4.3-6,11.9-6c9.4,0,16.2,6.8,16.2,18.3v24.2h-11.5v-23c0-5.1-3.4-8.5-8.1-8.5
+            c-5.1,0-8.5,3.4-8.5,9.8v21.7h-11.5V97.7h11.5V102.8z"/>
+    </g>
+    </svg> 
+
+    <div class="bottomText"><em><a href="./term.html">Terms</a></em>&nbsp;&nbsp;,&nbsp;&nbsp;<em><a href="./contact.html">Contact</a></em>&nbsp;&nbsp;&&nbsp;&nbsp;<em><a href="./developer.html">Developer</a></em></div>
+    </div>
+ <output></output>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>
+        $("#lecturer").hover(function(){
+            $("#imperialVirsualisationTextWhite1").toggleClass("moveRight");
+        });
+        $("#student").hover(function(){
+            $("#imperialVirsualisationTextWhite1").toggleClass("moveLeft");
+        });
+        // text = "";
+        // for(i = 0;i<101;i+=5){
+
+        //     text += i+"%{ box-shadow: inset 0px 0px "+((Math.cos(i*Math.PI/100)-1)/-2*300+10)+"px #b4aace; }<br>";
+        // }
+        // $("output").html(text);
+    </script>
+</body>
+</html>
