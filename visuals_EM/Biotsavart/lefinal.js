@@ -7,10 +7,19 @@ var layout = {
     yaxis: {range: [-1.5, 1.5], autorange:false, zeroline:false},
     zaxis: {range: [0, 1.5], autorange:false, zeroline:false},
     aspectmode: 'cube',
-    camera: {center: {x:0,y:0,z:0},eye: {x: 1,y: -2.2,z: 0.7}}
+    camera: {center: {x:0,y:0,z:0},eye: {x: 1,y: -1,z: 1}}
   },
   margin: {},
-  showlegend: false,
+          legend: {x:0.75,y:0.75,z:1,
+            orientation: 'v',
+            fontsize: 20
+        },
+        font: {
+            family: 'Lato',
+            size: 16,
+            color: '#003E74',
+            weight: 900
+        },
     
 };
 
@@ -130,7 +139,7 @@ function startAnimation () {
 
     var ourRequest = new XMLHttpRequest();
 
-    ourRequest.open('GET','https://rawgit.com/amna-askari/JSONfilesforVisualisations/master/BiotAnimatePos.JSON')
+    ourRequest.open('GET','https://rawgit.com/amna-askari/JSONfilesforVisualisations/master/BiotAnimate.JSON')
 
     ourRequest.onload=function(){
         
