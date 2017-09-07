@@ -29,7 +29,7 @@
     padding: 4px;
     font-family: "Consolas","Courier New","Lucida Console","Lucida Sans Typewriter","Monaco","Andale Mono";
     font-size: 0.8em;
-    overflow: scroll;
+    overflow-y: scroll;
   }
   #panelHeadWrapper>label{
     font-size: 26px;
@@ -236,6 +236,14 @@
   blue{
     font-weight: 600;
     color: #006EAF;
+  }
+
+  @media (max-width: 500px) {
+    panel{
+      position: fixed;
+      top: 90px;
+      left: 0;
+    }
   }
   </style>
 </head>
@@ -769,6 +777,7 @@
     //console.log("redisplaying graph...")
     //redrawPlot();
   }
+  redisplay();
   </script>
 </body>
 </html>
