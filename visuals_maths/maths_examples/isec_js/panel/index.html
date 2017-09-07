@@ -26,10 +26,13 @@
     height: 80px;
     box-sizing: border-box;
     border: 1px solid #000;
+    border-bottom: 0px solid #000;
     padding: 4px;
     font-family: "Consolas","Courier New","Lucida Console","Lucida Sans Typewriter","Monaco","Andale Mono";
     font-size: 0.8em;
-    overflow: scroll;
+    overflow-y: scroll;
+    position: relative;
+    box-shadow: inset -6px 0px 0px 0px #000;
   }
   #panelHeadWrapper>label{
     font-size: 26px;
@@ -40,13 +43,34 @@
     height: 390px;
     box-sizing: border-box;
     border: 1px solid #000;
-    overflow: scroll;
+    overflow-y: scroll;
+    box-shadow: inset -6px 0px 0px 0px #000;
+  }
+
+  #panelItemsWrapper::-webkit-scrollbar-track,#panelHeadWrapper::-webkit-scrollbar-track
+  {
+  }
+
+  #panelItemsWrapper::-webkit-scrollbar,#panelHeadWrapper::-webkit-scrollbar
+  {
+    width: 5px;
+    background-color: #eee;
+  }
+
+  #panelItemsWrapper::-webkit-scrollbar-thumb,#panelHeadWrapper::-webkit-scrollbar-thumb
+  {
+    background-color: #000;
+    border-right: 1px solid #eee;
+    border-left: 1px solid #eee;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
   }
   #panelItemsWrapper>item{
     box-sizing: border-box;
     width: 100%;
     height: 30px;
     border: 1px solid #000;
+    border-right: 2px solid #000; 
     display: block;
     position: relative;
   }
@@ -237,6 +261,14 @@
     font-weight: 600;
     color: #006EAF;
   }
+
+  @media (max-width: 500px) {
+    panel{
+      position: fixed;
+      top: 90px;
+      left: 0;
+    }
+  }
   </style>
 </head>
 <body>
@@ -374,6 +406,7 @@
       log("No saved state found.")
       console.log("no saved state... defaulting");
     }
+    redisplay();
     $("#addPoint").on('click',function() {
       var newPoint = new Point(new Vector(getRandomInt(),getRandomInt(),getRandomInt()));
       newPoint.name = nextName(); //generate name
@@ -445,7 +478,8 @@
         console.log("idx: ", i, ", object: ", algObjs[i].toString());
         purgeAlgObj(algObjs[i]);
       }
-      //redisplay();
+      redisplay();
+      //To display the message (press button to add points etc..)
     });
     $("#delete").on('click',function(){
       if($(this).hasClass("active")) {
@@ -769,6 +803,7 @@
     //console.log("redisplaying graph...")
     //redrawPlot();
   }
+  
   </script>
 </body>
 </html>

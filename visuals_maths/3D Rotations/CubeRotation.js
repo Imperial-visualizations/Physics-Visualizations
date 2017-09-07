@@ -346,9 +346,7 @@ function Scale(){
         },mode: 'immediate'},layout);
     }  else {
         framesnew = master(scaleallaxis ,1,scaleSelector,xrot1,yrot1,zrot1)
-        scaleTotalX = scaleTotalX*scaleSelector
-        scaleTotalY = scaleTotalY*scaleSelector
-        scaleTotalZ = scaleTotalZ*scaleSelector
+
 
 
         Plotly.animate('graph', framesnew, {transition: {
