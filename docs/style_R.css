@@ -4,10 +4,6 @@ body#bso {
   font-family: "Fira Sans", system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Arial Nova", Helvetica, Arial, sans-serif;
 }
 
-#bso .row > .nav-item {
-  flex-basis: auto;
-}
-
 /*#bso .navbar {
   width: 100%;
   width: calc(100% - 40px);
@@ -16,6 +12,21 @@ body#bso {
 #bso .navbar.bg-light {
   background-color: rgba(247, 249, 250, 0.9) !important;
   border-bottom: 1px solid hsl(0, 0%, 92%);
+}
+#bso .navbar-links {
+  display: flex;
+  position: relative;
+}
+#bso .navbar-links .dropdown-menu {
+  margin-top: 9px;
+  background: rgba(255, 255, 255, 0.9);
+}
+#bso .navbar-links .dropdown-item {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+#bso .navbar-links > .nav-item {
+  flex-basis: auto;
 }
 
 #bso #content {
