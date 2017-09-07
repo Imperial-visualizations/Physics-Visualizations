@@ -21,15 +21,15 @@ var nb  = nb_waves;
 // var tab =  $('.tab-pane.active').attr('id');
 
 // x and t coordinates
-var n = 500;
+var n = 400;
 var y_i = [], y_d = [];
 var x = numeric.linspace(0, 60, n);
 var t = 0.0;
-var dt = 0.02;
+var dt = 0.1;
 var is_paused = true;
 var y_range = 1;
 var omega_input = false;
-var funct= "1*k";
+var funct= "v*k";
 var focus = 1;
 
 // Colours
@@ -40,6 +40,40 @@ const NAVY = '#002147';
 
 //--------------------------------------------INTERACTS--------------------------------------------
 
+$(".showHideButton").on("click", spoiler);
+
+function spoiler() {
+    var text = ($($(this).attr("for")).hasClass("expanded")) ? "Show" : "Hide";
+    $(this).html(text+$(this).attr("data-graph-name"));
+    $($(this).attr("for")).slideToggle(250);
+    $($(this).attr("for")).toggleClass("expanded");
+    if  (text === "Show") {
+        $("#waveOnFocus").hide();
+    }
+    else {
+        $("#waveOnFocus").show();
+    }
+}
+
+$(document).ready(flashGraphs, 900);
+
+function flashGraphs(){
+    setTimeout(function() {
+        $(".graphs").each(function(){
+            if (!$(this).hasClass("expanded")) {
+                $(this).slideDown(500);
+                $(this).addClass("expanded");
+                $("#waveOnFocus").show();
+            }
+
+            $(this).slideUp(500);
+            $(this).removeClass("expanded");
+            $("#waveOnFocus").hide();
+        });
+    });
+}
+
+
  $('input[type=radio][name=type]').change(function() {
 
      if (this.value === 'sine') {
@@ -49,6 +83,10 @@ const NAVY = '#002147';
          layout.xaxis.range = [0, 60];
          layout.xaxis2.range = [0, 60];
          $('#wave_number').show();
+         $('#slider_focus').attr('max', nb_waves);
+         $('#focusMax').text(nb_waves);
+         focus = nb_waves;
+         $('#focus_display').text(" " + focus);
 
      }
      else if (this.value === 'fourier') {
@@ -58,6 +96,10 @@ const NAVY = '#002147';
          layout.xaxis.range = [0, 20];
          layout.xaxis2.range = [0, 20];
          $('#wave_number').hide();
+         $('#slider_focus').attr('max', nb_terms);
+         $('#focusMax').text(nb_terms);
+         focus = nb_terms;
+         $('#focus_display').text(" " + focus);
 
      }
      update_y_range();
@@ -119,7 +161,7 @@ $("#function").on('keyup', function () {
     if(event.keyCode == 13) {
         try {
             // All the characters allowed are in the square brackets
-            if (/[^0-9k().*/+-^]/.test($('#function').val())) {
+            if (/[^0-9kv().*/+-^]/.test($('#function').val())) {
                 throw new Error;
             }
             funct = $('#function').val();
@@ -154,8 +196,8 @@ $('#slider_waves').on('input', function () {
         $("#waves_display").text(" " + nb_terms);
         $('#slider_focus').attr('max', nb_terms);
         $('#focusMax').text(nb_terms);
-        if (focus > nb_waves) {
-            focus = nb_waves;
+        if (focus > nb_terms) {
+            focus = nb_terms;
             $('#focus_display').text(" " + focus);
         }
     }
@@ -191,7 +233,7 @@ $('#slider_focus').on('input', function () {
 function eval_omega_disp() {
     for (var i = 0; i < nb; i++) {
         if (funct.includes('k')) {
-            omega_disp[i] = calculator.parse(funct.replace(/k/g, k_array[i]));
+            omega_disp[i] = calculator.parse(funct.replace(/k/g, k_array[i]).replace(/v/g, v));
         }
         else {
             omega_disp[i] = calculator.parse(funct);
@@ -268,7 +310,7 @@ function onReset() {
 
     Plotly.animate('graph',
             {data: [{y: y_i}, {y: y_d}]},
-            {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
+            {transition: {duration: 10}, frame: {duration: 10, redraw: false}}
     );
     document.getElementById('run_button').value = (is_paused) ? "Play" : "Pause";
 
@@ -319,7 +361,7 @@ var layout =
         },
         //plot_bgcolor: '#EBEEEE',
         xaxis: {
-            range: [0, x[-1]],
+            range: [0, x[x.length-1]],
         },
         yaxis: {
             autorange: false,
@@ -327,7 +369,7 @@ var layout =
             domain: [0.6, 1],
         },
         xaxis2: {
-            range: [0, x[-1]],
+            range: [0, x[x.length-1]],
             anchor: 'y2',
         },
         yaxis2: {
@@ -377,7 +419,7 @@ function update() {
 
         Plotly.animate('graph',
                 {data: [{y: y_i}, {y: y_d}]},
-                {transition: {duration: 0}, frame: {duration: 0, redraw: false}}
+                {transition: {duration: 15}, frame: {duration: 15, redraw: false}}
                 // vastly speeds up animation but won't update any non-animated properties
         );
         requestAnimationFrame(update);
@@ -386,12 +428,12 @@ function update() {
 
 //--------------------------------------------Dispersion relation plot--------------------------------------
 function dispRelPlot() {
-    dataNonDisp.x = numeric.linspace(k0-1, kend+2, 100);
-    dataNonDisp.y = numeric.linspace((k0-1)*v, (kend+2)*v, 100);
-    dataDisp.x = numeric.linspace(k0-1, kend+2, 100);
+    dataNonDisp.x = numeric.linspace(k_array[0]-1, k_array[k_array.length-1]+2, 100);
+    dataNonDisp.y = numeric.linspace((k_array[0]-1)*v, (k_array[k_array.length-1]+2)*v, 100);
+    dataDisp.x = numeric.linspace(k_array[0]-1, k_array[k_array.length-1]+2, 100);
     for (var i = 0; i < 100; i++) {
         if (funct.includes('k')) {
-            omega_disp2[i] = calculator.parse(funct.replace(/k/g, dataDisp.x[i]));
+            omega_disp2[i] = calculator.parse(funct.replace(/k/g, dataDisp.x[i]).replace(/v/g, v));
         }
         else {
             omega_disp2[i] = calculator.parse(funct);
@@ -411,12 +453,12 @@ var vp = omega_disp[focus-1]/k_array[focus-1];
 var vg = vp; //default: non-dispersive
 var omega_disp2 = [];
 var marT = 30, marB = 23, marR = 5, marL = 35;
-var dispRel_layout = {title: "Dispersion Relation", titlefont: {size: 12}, margin: {l: marL, r: marR, b: marB + 10, t: marT},
-                legend: {x: 0.67, y: 1, "orientation": "v"},
+var dispRel_layout = { margin: {l: marL, r: marR, b: marB + 10, t: marT},
+                legend: {x: 0.01, y: 1},
                 yaxis: { title: "omega", titlefont: {size: 10}},
                 xaxis: { title: "wave number (k)", titlefont: {size: 10}}};
-var dataNonDisp = {x: numeric.linspace(k_array[0]-1, k_array[-1]+2, 100), y: numeric.linspace((k_array[0]-1)*v, (k_array[-1]+2)*v, 100), name: "non-dispersive", mode: "lines", line: {width: 2, color: CHERRY}};
-var dataDisp = {x: numeric.linspace(k_array[0]-1, k_array[-1]+2, 100), y: numeric.linspace((k_array[0]-1)*v, (k_array[-1]+2)*v, 100), name: "dispersive", mode: "lines", line: {width: 2, color: POOL_BLUE}};
+var dataNonDisp = {x: numeric.linspace(k_array[0]-1, k_array[k_array.length-1]+2, 100), y: numeric.linspace((k_array[0]-1)*v, (k_array[k_array.length-1]+2)*v, 100), name: "non-dispersive", mode: "lines", line: {width: 2, color: CHERRY}};
+var dataDisp = {x: numeric.linspace(k_array[0]-1, k_array[k_array.length-1]+2, 100), y: numeric.linspace((k_array[0]-1)*v, (k_array[k_array.length-1]+2)*v, 100), name: "dispersive", mode: "lines", line: {width: 2, color: POOL_BLUE}};
 var dataFocus = { x:[], y:[], name:"focus", mode:'markers+text',showlegend: false, marker: {size: 10, color: NAVY, symbol: "circle-open"},
     text: [comparisonText], textposition: 'bottom_right'};
 var dataTangent = {x: [], y: [],  name: "tangent (V_g)", mode: "lines", line: {width: 2, color: NAVY}};
@@ -452,7 +494,7 @@ function update_focus()  {
 }
 
 function tangent() {
-    slope_tangent = math.derivative(funct, 'k').eval({k: k_array[focus-1]});
+    slope_tangent = math.derivative(funct.replace(/v/g,v), 'k').eval({k: k_array[focus-1]});
     for (var i=0; i<10; i++) {
         tangent_x[i] = k_array[focus-1] - 0.5 + i*0.1;
         tangent_y[i] = slope_tangent*(tangent_x[i] - k_array[focus-1]) + omega_disp[focus-1];
