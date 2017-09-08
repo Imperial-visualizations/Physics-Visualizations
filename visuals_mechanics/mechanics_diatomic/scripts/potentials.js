@@ -109,7 +109,7 @@ LJ.prototype.plotLJ = function(ppu) {
         r.push(i / ppu);
         v.push(this.calcV(i / ppu));
     }
-    return {x: r, y: v, legendgroup:'group1', name: "V" + "LJ".sub() + "(r)", mode: "lines",
+    return {x: r, y: v, name: "V" + "LJ".sub() + "(r)", mode: "lines",
         line: {width: this.e / 10, opacity: 0.8, color: "#003E74"}};
 };
 
@@ -130,6 +130,6 @@ LJ.prototype.plotLJCorr = function (ppu, L, mu) {
         r.push(i / ppu);
         v.push(this.calcCorrV(i / ppu, L, mu));
     }
-    return {x:r, y:v, legendgroup: 'group1', name:"LJ" + "corr".sub(), mode:"lines",
+    return {x:r, y:v, name:"EP", mode:"lines",
         line: {width: this.e / 10, opacity:0.8, color:'#FF0000'}};
 };

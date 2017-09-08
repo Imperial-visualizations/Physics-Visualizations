@@ -25,13 +25,13 @@ var arrTime = [];
 var arrPE = [];
 var arrVibKE = [];
 var arrVibKESlider;
-var LJ_scatter, LJCentr_scatter, tot_E_plot;
-var KE_V_T, KE_V_slider, KE_R_T, KE_R_slider, PE_T;
-var curr_LJ,curr_E_connector,curr_E;
-var LJ_layout;
+var scatterLJ, scatterEP, totEPlot;                             // LJ, Effective Potential, Total Energy plots.
+var KE_V_T, KE_V_slider, KE_R_T, KE_R_slider, PE_T;             // Slider levels plots.
+var currLJ, EP_to_LJ, currEP;                                   // Current LJ & EP and EP - LJ connector plots
+var LJ_layout;                                                  // Layout of potential plots.
+var layoutE;                                                    // Layout of energy vs time plots.
 var titleFontsize = 12, labelFontsize = 10;                     // Text sizes.
-var marT = 30, marB = 23, marR = 5, marL = 35;                  // Margins.
-var layoutE;
+var marT = 30, marB = 23, marR = 5, marL = 35;                  // Plotly plot margins.
 var options = {
     scrollZoom: false, // lets us scroll to zoom in and out - works
     showLink: false, // removes the link to edit on plotly - works
@@ -240,11 +240,11 @@ function plotE() {
 
     KE_V_T = {x: arrTime, y: arrVibKE, mode: "lines", line: {width: 2, color: "#FFDD00"}, name: "KE" + "vib".sub()};
     KE_V_slider = {x: [- 1, GRAPH_TIME + 2], y: arrVibKESlider,
-        line: {width: 1, color: "#ac8e00", dash: "dash"}, name: "KE" + "vib, slider".sub(), showlegend: false};
+        line: {width: 1, color: "#ac8e00", dash: "2px, 2px"}, name: "KE" + "vib, slider".sub(), showlegend: false};
     KE_R_T = {x: arrTime, y: arrRotKE, mode: "lines", line: {width: 2, color: "#66A40A"}, name: "KE" + "rot".sub()};
     KE_R_slider = {x: [- 1, GRAPH_TIME + 2], y: arrRotKESlider,
-        line: {width: 1, color: "#49830a", dash: "dash"}, name: "KE" + "rot, slider".sub(), showlegend: false};
-    PE_T = {x: arrTime, y: arrPE, mode: "lines", line: {width: 2, color: "#003E74"}, name: "PE" + "LJ".sub()};
+        line: {width: 1, color: "#49830a", dash: "2px, 2px"}, name: "KE" + "rot, slider".sub(), showlegend: false};
+    PE_T = {x: arrTime, y: arrPE, mode: "lines", line: {width: 2, color: "#003E74"}, name: "U" + "LJ".sub()};
 
     Plotly.newPlot("graphE", [KE_V_T, KE_V_slider, KE_R_T, KE_R_slider, PE_T], layoutE, options);
 }
@@ -257,35 +257,33 @@ function plotLJ() {
                 margin: {l: marL, r: marR, b: marB + 10, t: marT}, legend: {x: 0.46, y: 1, "orientation": "h"},
                 showlegend: true,
                 yaxis: {range: [-1.1 * potential.e, 0.7 * potential.e],
-                    nticks: 20, title: "LJ Potential / eV", titlefont: {size: 10}},
+                    nticks: 20, title: "U / eV", titlefont: {size: 10}},
                 xaxis: {range: [0.9 * potential.s, 3 * potential.s],
                     nticks: 20, title: "r" + "AB".sub() + " / nm", titlefont: {size: 10}}};
 
     // Remove all points outside visible range on graph.
-    while (LJ_scatter.y[0] > LJ_layout.yaxis.range[1]) {
-        LJ_scatter.x.shift();
-        LJ_scatter.y.shift();
-        LJCentr_scatter.x.shift();
-        LJCentr_scatter.y.shift();
+    while (scatterLJ.y[0] > LJ_layout.yaxis.range[1]) {
+        scatterLJ.x.shift();
+        scatterLJ.y.shift();
+        scatterEP.x.shift();
+        scatterEP.y.shift();
     }
 
-    LJ_layout.yaxis.range[1] = LJCentr_scatter.y[0];     // Re-optimising y-axis scaling.
+    LJ_layout.yaxis.range[1] = scatterEP.y[0];     // Re-optimising y-axis scaling.
 
     // Drawing red marker that shows current LJ potential against current separation.
 
-    tot_E_plot = {x: [LJ_layout.xaxis.range[0] - 1, LJ_layout.xaxis.range[1] + 1], y: [mol1.tot_E, mol1.tot_E],
-        legendgroup: 'group2',
-        name: "E" + "tot".sub(), mode: "lines", line: {dash: "dash", width: 1}};
-    curr_E_connector = {x:[mol1.separation,mol1.separation], y:[mol1.PE, mol1.corrPE], mode:"lines",
-        line:{dash:"dash", width:1}, showlegend: false};
-    curr_LJ = {x: [mol1.separation], y: [mol1.PE], name: "LJ" + "curr".sub(), mode: "markers", legendgroup: 'group2',
-        marker: {size: 10, color: CHERRY, symbol: "circle-open"}};
-    curr_E = {x: [mol1.separation], y: [mol1.corrPE], name: "LJ" + "curr, corr".sub(), mode: "markers",
-        legendgroup: 'group2',
-        marker: {size: 10, color: "#ff9030", symbol: "circle-open"}};
+    totEPlot = {x: [LJ_layout.xaxis.range[0] - 1, LJ_layout.xaxis.range[1] + 1], y: [mol1.tot_E, mol1.tot_E],
+        name: "E" + "tot".sub(), mode: "lines", line: {dash: "1px, 2px", width: 2}};
+    EP_to_LJ = {x:[mol1.separation,mol1.separation], y:[mol1.PE, Math.max(0, mol1.effPE)], mode:"lines",
+        line:{dash:"1px, 2px", width:2}, showlegend: false};
+    currLJ = {x: [mol1.separation], y: [mol1.PE], name: "U" + "LJ, curr".sub(), mode: "markers",
+        marker: {size: 10, color: CHERRY, symbol: "x"}, showlegend: false};
+    currEP = {x: [mol1.separation], y: [mol1.effPE], name: "EP", mode: "markers",
+        marker: {size: 10, color: "#ff9030", symbol: "x"}, showlegend: false};
 
-    var data = [LJ_scatter, LJCentr_scatter, curr_LJ, curr_E, tot_E_plot, curr_E_connector];
-    Plotly.newPlot("LJ_scatter", data, LJ_layout, options);
+    var data = [scatterLJ, scatterEP, currLJ, currEP, totEPlot, EP_to_LJ];
+    Plotly.newPlot("ScatterLJ", data, LJ_layout, options);
 }
 
 /**
@@ -306,7 +304,7 @@ function drawBond(starting, end) {
     var arrowG = phaserInstance.add.graphics(0,0);
 
     var wiggles = 2 * Math.ceil(mol1.V.s);
-    arrowG.lineStyle(4 * (-mol1.corrPE / mol1.V.e), IMPERIAL_BLUE, (-mol1.PE / mol1.V.e));
+    arrowG.lineStyle(4 * (-mol1.effPE / mol1.V.e), IMPERIAL_BLUE, (-mol1.PE / mol1.V.e));
     arrowG.lineTo(widthOfSpring / (wiggles * 4), 0);
     for (var i = 2; i < wiggles * 4 - 1; i += 2) {
         arrowG.lineTo(i * widthOfSpring / (wiggles * 4), ((i % 4) - 1) * heightOfSpring / 2);
@@ -387,8 +385,8 @@ function reset(){
     else mol1 = mol1.softReset(initKVib, initKRot);
 
     // Creating x and y coordinates to plot.
-    LJ_scatter  = potential.plotLJ(35);
-    LJCentr_scatter = potential.plotLJCorr(35, mol1.L, mol1.reducedM);
+    scatterLJ  = potential.plotLJ(35);
+    scatterEP = potential.plotLJCorr(35, mol1.L, mol1.reducedM);
 
     a1.sprite.x = a1.getPos().items[0] * zoom + phaserInstance.world.centerX;
     a1.sprite.y = a1.getPos().items[1] * zoom + phaserInstance.world.centerY;
@@ -460,15 +458,18 @@ function update(){
                         {frame: {redraw: false, duration: dT}, transition: {duration: dT}});
         }
 
-        if ($('#LJ_scatter').hasClass("expanded")) {
+        if ($('#ScatterLJ').hasClass("expanded")) {
 
             // Updating current LJ r and V(r) and LJ_corr(r).
-            curr_LJ.x = [mol1.separation]; curr_LJ.y = [mol1.PE];
-            curr_E.x = [mol1.separation]; curr_E.y = [mol1.corrPE];
-            curr_E_connector.x = [mol1.separation, mol1.separation]; curr_E_connector.y = [mol1.PE, mol1.corrPE];
+            currLJ.x = [mol1.separation]; currLJ.y = [mol1.PE];
+            currEP.x = [mol1.separation]; currEP.y = [mol1.effPE];
+
+            EP_to_LJ.x = [mol1.separation, mol1.separation];
+            EP_to_LJ.y = [mol1.PE, Math.max(0, mol1.effPE)];
 
             // Plotting the LJ and stuff.
-            Plotly.animate("LJ_scatter", {data: [LJ_scatter, LJCentr_scatter, curr_LJ, curr_E, tot_E_plot, curr_E_connector],
+            Plotly.animate("ScatterLJ",
+                {data: [scatterLJ, scatterEP, currLJ, currEP, totEPlot, EP_to_LJ],
                     traces: [0, 1, 2, 3, 4, 5]},
                 {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
         }

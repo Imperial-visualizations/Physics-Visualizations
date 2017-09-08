@@ -1,6 +1,6 @@
 var BRANCH = "mechanics";                       // Subject branch - determines database name
 var VISUALISATION = "diatomic";                 // Name of visualisation.
-var sessHistory = {};                           // User actions in this session.
+var sessHistory = {branch: BRANCH};                           // User actions in this session.
 var count = 0;
 
 /**
@@ -46,7 +46,7 @@ function log(object) {
  * Before navigating away, send all sessHistory to server.
  */
 window.onbeforeunload = function() {
-    $.post("/database.js", sessHistory);
+    $.post("/scripts/database.js", sessHistory);
     sessHistory = {}; count = 0;
     return confirm("You're about to leave this page, are you sure?");
 };

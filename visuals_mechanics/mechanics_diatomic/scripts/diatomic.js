@@ -74,8 +74,8 @@ Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
     this.KE_V = this.getKE_V();
     this.KE_R = this.getKE_R();
     this.PE = this.getPE();
-    this.corrPE = this.getCorrPE();
-    this.tot_E = keVib_0 + this.corrPE;
+    this.effPE = this.getCorrPE();
+    this.tot_E = keVib_0 + this.effPE;
 
     a1.setPos(this.r.multiply(a1.mass / this.tot_m));
     a2.setPos(this.r.multiply(-a2.mass / this.tot_m));
@@ -115,7 +115,7 @@ Molecule.prototype.update = function(deltaTime){
     this.KE_V = this.getKE_V();
     this.KE_R = this.getKE_R();
     this.PE = this.getPE();
-    this.corrPE = this.getCorrPE();
+    this.effPE = this.getCorrPE();
 
     // Update atom coordinates in CoM frame.
     a1.setPos(this.r.multiply(a1.mass / this.tot_m));
