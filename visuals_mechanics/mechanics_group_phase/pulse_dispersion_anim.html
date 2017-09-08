@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>Pulse Animation</title>
+    <title>Dispersive Wave</title>
     <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
     <link rel="icon" href="./images/favicon.ico" type="image/x-icon">
     <style>
@@ -45,6 +45,7 @@
             <!--Dispersion Relation-->
             <label>Define Dispersion Relation: <br /> &omega;(k) =
                 <span id ="dispersionRelation"> </span>
++
             </label>
             <input id = "function" name="function"><br>
             <p id= "error_omega" style="color:#ff0000"></p>
@@ -66,7 +67,6 @@
             <!--Checkbox-->
             <input type="checkbox">
 
-
         </div>
     </div>
 </div>
@@ -77,6 +77,7 @@
 <script src="./calculator.js"></script>
 
 <script>
+
     // Defining variables (need to update later anyway so importing from e.g. json is meaningless)
     // Wave characteristics:
     var nb_waves = parseInt($("#slider_waves").val());
@@ -98,39 +99,7 @@
     var omega_input = false;
     var funct;
 
-    var layout =
-        {
-            autosize: false,
-            width: 700,
-            height: 400,
-            margin: {
-                l: 60,
-                r: 35,
-                b: 50,
-                t: 40,
-                pad: 4
-            },
-            //plot_bgcolor: '#EBEEEE',
-            xaxis: {
-                range: [-50, 50],
-            },
-            yaxis: {
-                autorange: false,
-                range: [-4, 4],
-            },
-            legend: {
-                orientation: 'h',
-                x: -0.05,
-                y: 1.2,
-                fontsize: 25
-            },
-            font: {
-                family: 'Lato',
-                size: 16,
-                color: '#003E74',
-                weight: 900
-            }
-        };
+    //--------------------------------------------INTERACTS--------------------------------------------
 
     // k0
     $("#k0_input").on('keyup',function () {
@@ -206,7 +175,6 @@
 
     })
 
-
     // Slider waves
     $('#slider_waves').on('input', function () {
         nb_waves = parseFloat($("#slider_waves").val());
@@ -216,8 +184,7 @@
         if (is_paused === true) {
             Plotly.relayout('graph', {
                 "yaxis.range": [-y_range, y_range],
-            }
-            )
+            })
         }
     });
 
@@ -227,6 +194,8 @@
         $("#phaseVelocityDisplay").text(" " + v + " m/s");
         onReset();
     });
+
+    //--------------------------------------------FUNCTIONS--------------------------------------------
 
     function initial_data(){
         k_array = numeric.linspace(k0, kend, nb_waves);
@@ -251,32 +220,21 @@
                     }
                 }
         }
-        for (var i = 0; i <= n; i++) {
-            if (x[i] < 0) {
-                y_i[i] = 0;
-                y_r[i] = 0;
+        for (var i_ = 0; i_ <= n; i_++) {
+            if (x[i_] < 0) {
+                y_i[i_] = 0;
+                y_r[i_] = 0;
                 for (var j = 0; j < nb_waves; j++) {
-                    y_i[i] += Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
-                    y_r[i] += Math.sin(k_array[j] * x[i] - omega_nondisp[j] * t);
+                    y_i[i_] += Math.sin(k_array[j] * x[i_] - omega_nondisp[j] * t);
+                    y_r[i_] += Math.sin(k_array[j] * x[i_] - omega_nondisp[j] * t);
                 }
             }
-            else if (x[i] >= 0){
-                y_t[i] = 0;
-                for (var j_ = 0; j_ < nb_waves; j_++) {
-                    var omega_test = 2 * k_array[j_];
-                    B = (2 * (omega_test / k_array[j_]) / (v + (omega_test / k_array[j_])));
-                    y_t[i] += B * Math.sin((v / (omega_test / k_array[j_])) * k_array[j_] * x[i] - v * omega_test * t);
+            else if (x[i_] >= 0){
+                y_t[i_] = 0;
+                for (var l = 0; l < nb_waves; l++) {
+                    y_t[i_] += Math.sin(k_array[l] * x[i_] - omega_disp[l] * t);
                 }
             }
-        }
-    }
-
-    function update_y_range() {
-        if (nb_waves < 4) {
-            y_range = 4
-        }
-        else {
-            y_range = (nb_waves - (nb_waves % 5)) + 5
         }
     }
 
@@ -291,6 +249,17 @@
         );
         document.getElementById('run_button').value = (is_paused) ? "Play" : "Pause";
     }
+
+    function update_y_range() {
+        if (nb_waves < 4) {
+            y_range = 4
+        }
+        else {
+            y_range = (nb_waves - (nb_waves % 5)) + 5
+        }
+    }
+
+    //--------------------------------------------PLOTTING--------------------------------------------
 
     // Data
     initial_data();
@@ -313,6 +282,8 @@
     var transmitted = {
         x: x,
         y: y_t,
+        xaxis: 'x2',
+        yaxis: 'y2',
         name: "transmitted",
         line: {width: 2, color: '#00ACD7', simplify: false}
     };
@@ -332,10 +303,54 @@
         showlegend: false,
         line: {width: 2, color: '#003E74', simplify: false}
     };
-
+    var layout =
+        {
+            autosize: false,
+            width: 700,
+            height: 400,
+            margin: {
+                l: 60,
+                r: 35,
+                b: 50,
+                t: 40,
+                pad: 4
+            },
+            //plot_bgcolor: '#EBEEEE',
+            xaxis: {
+                range: [-50, 0],
+            },
+            yaxis: {
+                autorange: false,
+                range: [-4, 4],
+                domain: [0.6, 1],
+            },
+            xaxis2: {
+                range: [0, 50],
+                anchor: 'y2',
+            },
+            yaxis2: {
+                autorange: false,
+                range: [-4, 4],
+                domain: [0, 0.4],
+            },
+            legend: {
+                orientation: 'h',
+                x: -0.05,
+                y: 1.2,
+                fontsize: 25
+            },
+            font: {
+                family: 'Lato',
+                size: 16,
+                color: '#003E74',
+                weight: 900
+            }
+        };
 
     // Plot graph with interactivity
     Plotly.plot('graph', [incident, reflected, transmitted, boundary, xline], layout);
+
+    //--------------------------------------------ANIMATION--------------------------------------------
 
     // Data update function for animation
     var t_start = t;
@@ -356,9 +371,7 @@
                 else if (x[i] >= 0) {
                     y_t[i] = 0;
                     for (var j_ = 0; j_ < nb_waves; j_++) {
-                        var omega_test = 2 * k_array[j_];
-                        B = (2 * (omega_test / k_array[j_]) / (v + (omega_test / k_array[j_])));
-                        y_t[i] += B * Math.sin((v / (omega_test / k_array[j_])) * k_array[j_] * x[i] - v * omega_test * t);
+                        y_t[i] += Math.sin(k_array[j_] * x[i] - omega_disp[j_] * t);
                     }
                 }
             }
@@ -387,7 +400,6 @@
         requestAnimationFrame(update);
     }
 
-    // ToDo: update boundary
     // ToDo: tooltips for input boxes
     // ToDo: Change Initial Wave
     // ToDo: Python?
