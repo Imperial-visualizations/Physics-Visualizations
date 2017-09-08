@@ -17,8 +17,8 @@
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <!-- <link rel="stylesheet" href="styles/styles.css"> -->
-  <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=3">
+  <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=5">
+  <!-- <link rel="stylesheet" href="../styles/styles.css?v=3"> -->
   <style type="text/css">
     .example-grid .column, .example-grid .columns {
       background: #EEE;
@@ -46,8 +46,8 @@
     </section>
               
     <!-- README -->
-    <div id="GettingStarted">
-      <h3>Getting Started</h3>
+    <div>
+      <h3 id="GettingStarted">Getting Started</h3>
         <div class="row">
           <div class="seven columns">
 <ol>
@@ -55,14 +55,13 @@
 </li>
 <li><p>Open <em>index.html</em> with PyCharm or whatever code-editor you like:</p>
 </li>
-<li><p>Start adding HTML elements by copy and paste from this page in between the <code>&lt;div class=&quot;container&quot;&gt; &lt;/div&gt;</code> tags.</p>
+<li><p>Start adding HTML elements by copy and paste from this page to the space between<code>&lt;div class=&quot;container&quot;&gt; &lt;/div&gt;</code> tags in your <em>index.html</em>.</p>
 </li>
 </ol>
           </div>
           <div class="five columns">
 <pre>
-<code>
-Recommonded folder structure for your <em>index.html</em>:
+<code>Recommonded folder structure for your <em>index.html</em>:
 
 + HTML/
 | + assets/
@@ -115,55 +114,18 @@ Recommonded folder structure for your <em>index.html</em>:
     </div>
 
 
-    <div id="dropdown">
-      <h3 class="docs-header">The dropdown menu</h3>
+    <div>
+      <h3 id="dropdown" class="docs-header">The dropdown menu</h3>
         <ul class="dropdown">
             <li>
                 <span id="Menu">Menu</span>
-                <ul>
-                <li class="popover-item">
-                  <a class="popover-link" href="#GettingStarted">Getting Started</a>
-                </li>
-                <li class="popover-item">
-                  <a class="popover-link" href="#dropdown">Dropdown</a>
-                </li>
-                <li class="popover-item">
-                  <a class="popover-link" href="#grid">Grid</a>
-                </li>
-                <li class="popover-item">
-                  <a class="popover-link" href="#typography">Typography</a>
-                </li>
-                <li class="popover-item">
-                  <a class="popover-link" href="#buttons">Buttons</a>
-                </li>
-                <li class="popover-item">
-                  <a class="popover-link" href="#forms">Forms</a>
-                </li>
-                <li class="popover-item">
-                  <a class="popover-link" href="#lists">Lists</a>
-                </li>
-                <li class="popover-item">
-                  <a class="popover-link" href="#code">Code</a>
-                </li>
-                <li class="popover-item">
-                  <a class="popover-link" href="#tabs">Tabs</a>
-                </li>
-                <li class="popover-item">
-                  <a class="popover-link" href="#tablesNmatrix">Tables & Matrix</a>
-                </li>
-                <li class="popover-item">
-                  <a class="popover-link" href="#queries">Queries</a>
-                </li>
-                <li class="popover-item">
-                  <a class="popover-link" href="#utilities">Utilities</a>
-                </li>
+                <ul id="MenuItemContainer">
                 </ul>
             </li>
         </ul>
-      <p>The drop down menu can be used in combination with plotly to control the graph or as a navigation bar.</p>
+      <p>Use the drop down menu as a navigation of your page.</p>
 <pre>
-<code>
-&#x3C;ul class=&#x22;dropdown&#x22;&#x3E;
+<code>&#x3C;ul class=&#x22;dropdown&#x22;&#x3E;
             &#x3C;li&#x3E;
                 &#x3C;span id=&#x22;Menu&#x22;&#x3E;Menu&#x3C;/span&#x3E;
                 &#x3C;ul&#x3E;
@@ -187,8 +149,8 @@ Recommonded folder structure for your <em>index.html</em>:
     </div>
 
     <!-- Grid -->
-    <div class="docs-section" id="grid">
-      <h3 class="docs-header">The grid</h3>
+    <div class="docs-section">
+      <h3 class="docs-header" id="grid">The grid</h3>
       <p>The grid is a <u>12-column fluid grid with a max width of 960px</u>, that shrinks with the browser/device at smaller sizes. The max width can be changed with one line of CSS and all columns will resize accordingly. The syntax is simple and it makes coding responsive much easier. Go ahead, resize the browser. </p>
       <div class="example-grid docs-example">
         <div class="row">
@@ -280,13 +242,13 @@ browser/device sizes) --&gt;
     </div>
 
     <!-- Typography -->
-    <div id="typography">
-      <h3>Typography</h3>
+    <div>
+      <h3 id="typography">Typography</h3>
       <p>Type is all set with the <code>rems</code>, so font-sizes and spacial relationships can be responsively sized based on a single <code>&lt;html&gt;</code> font-size property. Out of the box, Skeleton never changes the <code>&lt;html&gt;</code> font-size, but it's there in case you need it for your project. All measurements are still base 10 though so, an <code>&lt;h1&gt;</code> with <code>5.0rem</code>font-size just means <code>50px</code>.</p>
       <div>
         <div class="row">
           <div class="six columns">
-            <p><strong>The typography base</strong> is <a href="https://fonts.google.com/specimen/Lato">Lato</a> served by Google, set at 15rem (15px) over a 1.6 line height (24px). Other type basics like <a href="#">anchors</a>, <strong>strong</strong>, <em>emphasis</em>, and <u>underline</u> are all obviously included.</p>
+            <p><strong>The typography base</strong> is <a href="https://fonts.google.com/specimen/Fira+Sans">Fira Sans</a> served by Google, set at 15rem (15px) over a 1.6 line height (24px). Other type basics like <a href="#">anchors</a>, <strong>strong</strong>, <em>emphasis</em>, and <u>underline</u> are all obviously included. In the css we have <code>font-weight</code> 300,400,500,600,700 imported.</p>
             <p><strong>Headings</strong> create a family of distinct sizes each with specific <code>letter-spacing</code>, <code>line-height</code>, and <code>margins</code>.</p>
           </div>
           <div class="six columns">
@@ -329,8 +291,8 @@ browser/device sizes) --&gt;
     </div>
 
     <!-- Buttons -->
-    <div class="docs-section" id="buttons">
-      <h3 class="docs-header">Buttons</h3>
+    <div class="docs-section">
+      <h3 class="docs-header" id="buttons">Buttons</h3>
       <p>Buttons come in two basic flavors in Skeleton. The standard <code>&lt;button&gt;</code> element is plain, whereas the <code>.button-primary</code> button is vibrant and prominent. Button styles are applied to a number of appropriate form elements, but can also be arbitrarily attached to anchors with a <code>.button</code> class.</p>
       <div class="docs-example">
         <div>
@@ -371,18 +333,30 @@ browser/device sizes) --&gt;
     </div>
 
     <!-- Forms -->
-    <div class="docs-section" id="forms">
-      <h3 class="docs-header">Forms</h3>
+    <div class="docs-section">
+      <h3 class="docs-header" id="forms">Forms</h3>
       <p>Forms are a huge pain, but hopefully these styles make it a bit easier. All inputs, select, and buttons are normalized for a common height cross-browser so inputs can be stacked or placed alongside each other.</p>
       <div class="docs-example docs-example-forms">
         <form>
+          <h2 class="centre-aligned">Feedback Form</h4>
+          <div class="row">
+            <div class="twelve columns">
+              <label class="radioTitle">I'm a: </label> 
+              <label class="radio" data-title="Student">
+                  <input type="radio" name="studentOrStuff" value="student" checked /><span for="radio"></span>
+              </label>
+              <label class="radio" data-title="Stuff">
+                  <input type="radio" name="studentOrStuff" value="stuff"/><span for="radio"></span>
+              </label>
+            </div>
+          </div>
           <div class="row">
             <div class="six columns">
-              <label>School email</label>
-              <input class="u-full-width" type="email" placeholder="ab1219@ic.ac.uk" id="email">
+                <label>Office Location:</label>
+                <input class="u-full-width" type="text" placeholder="BLK314" id="officeLocation" disabled="disabled">
             </div>
             <div class="six columns">
-              <label>Department</label>
+              <label>Department:</label>
               <select class="u-full-width" id="department">
               <optgroup label="Faculty of Engineering">
                 <option value="Aeronautics">Aeronautics</option>
@@ -440,29 +414,36 @@ browser/device sizes) --&gt;
             </div>
           </div>
           <div class="row">
+            <div class="six columns">
+              <label>School email:</label>
+              <input class="u-full-width" type="email" placeholder="ab1219@ic.ac.uk" id="email">
+            </div>
+            <div class="six columns">
+                <label>Phone Number:</label>
+                <input class="u-full-width" type="tel" placeholder="07888888888" id="phoneNumber">
+            </div>
+          </div>
+          <div class="row">
             <div class="twelve columns"> 
-              <label>Feedbacks</label>
+              <label>Feedbacks:</label>
               <textarea class="u-full-width" placeholder="Hi Dave &hellip;" id="feedbacks"></textarea>
             </div>
           </div>
           <div class="row">
           <div class="six columns">
             <label class="radioTitle">My gender is: </label> 
-            <label class="radio">
-                <input type="radio" name="gender" checked /><span for="radio"></span>
+            <label class="radio" data-title="Male">
+                <input type="radio" name="gender" value="male" checked /><span for="radio"></span>
             </label>
-            <label class="radioLabel">Male</label> 
-            <label class="radio">
-                <input type="radio" name="gender" /><span for="radio"></span>
+            <label class="radio" data-title="Female">
+                <input type="radio" name="gender" value="female"/><span for="radio"></span>
             </label>
-            <label class="radioLabel">Female</label> 
-            <label class="radio">
-                <input type="radio" name="gender" /><span for="radio"></span>
+            <label class="radio" data-title="Else/Prefer not to say">
+                <input type="radio" name="gender" value="else" /><span for="radio"></span>
             </label>
-            <label class="radioLabel">Else/Prefer not to say</label> 
           </div>
           <div class="six columns">
-            <label class="sliderTitle">Overall Ranking: <span id="rankingDisplay" data-unit=" stars">1 stars</span></label> 
+            <label class="sliderTitle">Overall Ranking: <span id="rankingDisplay" data-unit=" stars">10 stars</span></label> 
             <label class="slider">
             <input id="ranking" class="inputs" type="range" value="10" min ="0" max="10" step ="1"/>
             <span class="sliderMin">0(worst)</span><span class="sliderMax">10(satisfactory)</span>
@@ -470,12 +451,11 @@ browser/device sizes) --&gt;
           </div>
           <div class="row">
           <div class="twelve columns">
-            <label class="checkbox">
-                <input type="checkbox" id="sendAnonymously" checked /><span for="checkbox"></span>
+            <label class="checkbox" data-title="I give permission for the school to contact me regarding my feedbacks.">
+                <input type="checkbox" id="permission" checked /><span for="checkbox"></span>
             </label>
-            <label class="checkboxTitle">Send anonymously</label> 
             <br>
-            <input class="button-primary" type="button" value="Submit">
+            <input class="button-primary centre-aligned u-full-width" type="button" value="Submit">
           </div>
           </div>
         </form>
@@ -486,71 +466,123 @@ browser/device sizes) --&gt;
 <pre class="code-example">
 <code class="code-example-body prettyprint"><!-- The above form looks like this -->
 &lt;!-- The above form looks like this --&gt;
-        &#x3C;form&#x3E;
-          &#x3C;div class=&#x22;row&#x22;&#x3E;
-            &#x3C;div class=&#x22;six columns&#x22;&#x3E;
-              &#x3C;label for=&#x22;exampleEmailInput&#x22;&#x3E;Your email&#x3C;/label&#x3E;
-              &#x3C;input class=&#x22;u-full-width&#x22; type=&#x22;email&#x22; placeholder=&#x22;test@mailbox.com&#x22; id=&#x22;exampleEmailInput&#x22;&#x3E;
-            &#x3C;/div&#x3E;
-            &#x3C;div class=&#x22;six columns&#x22;&#x3E;
-              &#x3C;label for=&#x22;exampleRecipientInput&#x22;&#x3E;Reason for contacting&#x3C;/label&#x3E;
-              &#x3C;select class=&#x22;u-full-width&#x22; id=&#x22;exampleRecipientInput&#x22;&#x3E;
-                &#x3C;option value=&#x22;Option 1&#x22;&#x3E;Questions&#x3C;/option&#x3E;
-                &#x3C;option value=&#x22;Option 2&#x22;&#x3E;Admiration&#x3C;/option&#x3E;
-                &#x3C;option value=&#x22;Option 3&#x22;&#x3E;Can I get your number?&#x3C;/option&#x3E;
-              &#x3C;/select&#x3E;
-            &#x3C;/div&#x3E;
-          &#x3C;/div&#x3E;
-          &#x3C;label for=&#x22;exampleMessage&#x22;&#x3E;Message&#x3C;/label&#x3E;
-          &#x3C;textarea class=&#x22;u-full-width&#x22; placeholder=&#x22;Hi Dave &#x26;hellip;&#x22; id=&#x22;exampleMessage&#x22;&#x3E;&#x3C;/textarea&#x3E;
-
-          &#x3C;label class=&#x22;checkbox&#x22;&#x3E;
-              &#x3C;input type=&#x22;checkbox&#x22; checked /&#x3E;&#x3C;span for=&#x22;checkbox&#x22;&#x3E;&#x3C;/span&#x3E;
-          &#x3C;/label&#x3E;
-          &#x3C;label class=&#x22;checkboxTitle&#x22;&#x3E;Send a copy to yourself&#x3C;/label&#x3E; 
-
-          &#x3C;br&#x3E;
-
-          &#x3C;label class=&#x22;radioTitle&#x22;&#x3E;My gender is: &#x3C;/label&#x3E; 
-          &#x3C;label class=&#x22;radio&#x22;&#x3E;
-              &#x3C;input type=&#x22;radio&#x22; name=&#x22;gender&#x22; checked /&#x3E;&#x3C;span for=&#x22;radio&#x22;&#x3E;&#x3C;/span&#x3E;
-          &#x3C;/label&#x3E;
-          &#x3C;label class=&#x22;radioLabel&#x22;&#x3E;Male&#x3C;/label&#x3E; 
-          &#x3C;label class=&#x22;radio&#x22;&#x3E;
-              &#x3C;input type=&#x22;radio&#x22; name=&#x22;gender&#x22; /&#x3E;&#x3C;span for=&#x22;radio&#x22;&#x3E;&#x3C;/span&#x3E;
-          &#x3C;/label&#x3E;
-          &#x3C;label class=&#x22;radioLabel&#x22;&#x3E;Female&#x3C;/label&#x3E; 
-          &#x3C;label class=&#x22;radio&#x22;&#x3E;
-              &#x3C;input type=&#x22;radio&#x22; name=&#x22;gender&#x22; /&#x3E;&#x3C;span for=&#x22;radio&#x22;&#x3E;&#x3C;/span&#x3E;
-          &#x3C;/label&#x3E;
-          &#x3C;label class=&#x22;radioLabel&#x22;&#x3E;Else/Prefer not to say&#x3C;/label&#x3E; 
-
-          &#x3C;label class=&#x22;sliderTitle&#x22;&#x3E;Size: &#x3C;span id=&#x22;yourSliderIDDisplay&#x22; data-unit=&#x22;meter&#x22;&#x3E;1meter&#x3C;/span&#x3E;&#x3C;/label&#x3E; 
-          &#x3C;label class=&#x22;slider&#x22;&#x3E;
-          &#x3C;input id=&#x22;yourSliderID&#x22; class=&#x22;inputs&#x22; type=&#x22;range&#x22; value=&#x22;1&#x22; min =&#x22;1&#x22; max=&#x22;100&#x22; step =&#x22;1&#x22;/&#x3E;
-          &#x3C;span class=&#x22;sliderMin&#x22;&#x3E;1&#x3C;/span&#x3E;&#x3C;span class=&#x22;sliderMax&#x22;&#x3E;100&#x3C;/span&#x3E;
-          &#x3C;/label&#x3E;
-
-
-          &#x3C;input class=&#x22;button-primary&#x22; type=&#x22;submit&#x22; value=&#x22;Submit&#x22;&#x3E;
-        &#x3C;/form&#x3E;
+        &lt;form&gt;
+          &lt;h2 class=&quot;centre-aligned&quot;&gt;Feedback Form&lt;/h4&gt;
+          &lt;div class=&quot;row&quot;&gt;
+            &lt;div class=&quot;twelve columns&quot;&gt;
+              &lt;label class=&quot;radioTitle&quot;&gt;I&#39;m a: &lt;/label&gt; 
+              &lt;label class=&quot;radio&quot; data-title=&quot;Student&quot;&gt;
+                  &lt;input type=&quot;radio&quot; name=&quot;studentOrStuff&quot; value=&quot;student&quot; checked /&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
+              &lt;/label&gt;
+              &lt;label class=&quot;radio&quot; data-title=&quot;Stuff&quot;&gt;
+                  &lt;input type=&quot;radio&quot; name=&quot;studentOrStuff&quot; value=&quot;stuff&quot;/&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
+              &lt;/label&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;row&quot;&gt;
+            &lt;div class=&quot;six columns&quot;&gt;
+                &lt;label&gt;Office Location:&lt;/label&gt;
+                &lt;input class=&quot;u-full-width&quot; type=&quot;text&quot; placeholder=&quot;BLK314&quot; id=&quot;officeLocation&quot; disabled=&quot;disabled&quot;&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;six columns&quot;&gt;
+              &lt;label&gt;Department:&lt;/label&gt;
+              &lt;select class=&quot;u-full-width&quot; id=&quot;department&quot;&gt;
+              &lt;optgroup label=&quot;Faculty of Engineering&quot;&gt;
+                &lt;option value=&quot;Aeronautics&quot;&gt;Aeronautics&lt;/option&gt;
+                &lt;option value=&quot;Bioengineering&quot;&gt;Bioengineering&lt;/option&gt;
+                &lt;option value=&quot;Chemical Engineering&quot;&gt;Chemical Engineering&lt;/option&gt;
+                &lt;option value=&quot;Civil and Environmental Engineering&quot;&gt;Civil and Environmental Engineering&lt;/option&gt;
+              .
+              .
+              .
+              .
+              &lt;/optgroup&gt;
+              .
+              .
+              .
+              .
+              &lt;/select&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;row&quot;&gt;
+            &lt;div class=&quot;six columns&quot;&gt;
+              &lt;label&gt;School email:&lt;/label&gt;
+              &lt;input class=&quot;u-full-width&quot; type=&quot;email&quot; placeholder=&quot;ab1219@ic.ac.uk&quot; id=&quot;email&quot;&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;six columns&quot;&gt;
+                &lt;label&gt;Phone Number:&lt;/label&gt;
+                &lt;input class=&quot;u-full-width&quot; type=&quot;tel&quot; placeholder=&quot;07888888888&quot; id=&quot;phoneNumber&quot;&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;row&quot;&gt;
+            &lt;div class=&quot;twelve columns&quot;&gt; 
+              &lt;label&gt;Feedbacks:&lt;/label&gt;
+              &lt;textarea class=&quot;u-full-width&quot; placeholder=&quot;Hi Dave &amp;hellip;&quot; id=&quot;feedbacks&quot;&gt;&lt;/textarea&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;row&quot;&gt;
+          &lt;div class=&quot;six columns&quot;&gt;
+            &lt;label class=&quot;radioTitle&quot;&gt;My gender is: &lt;/label&gt; 
+            &lt;label class=&quot;radio&quot; data-title=&quot;Male&quot;&gt;
+                &lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;male&quot; checked /&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
+            &lt;/label&gt;
+            &lt;label class=&quot;radio&quot; data-title=&quot;Female&quot;&gt;
+                &lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;female&quot;/&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
+            &lt;/label&gt;
+            &lt;label class=&quot;radio&quot; data-title=&quot;Else/Prefer not to say&quot;&gt;
+                &lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;else&quot; /&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
+            &lt;/label&gt;
+            &lt;!-- ↓ THIS IS THE OLD HTML ⬇︎ PLEASE CHANGE TO THE ↑ NEW ONE ⬆︎
+            &lt;label class=&quot;radio&quot;&gt;
+                &lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;else&quot; /&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
+            &lt;/label&gt;
+            &lt;label class=&quot;radioLabel&quot;&gt;Else/Prefer not to say&lt;/label&gt;
+             --&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;six columns&quot;&gt;
+            &lt;label class=&quot;sliderTitle&quot;&gt;Overall Ranking: &lt;span id=&quot;rankingDisplay&quot; data-unit=&quot; stars&quot;&gt;10 stars&lt;/span&gt;&lt;/label&gt; 
+            &lt;label class=&quot;slider&quot;&gt;
+            &lt;input id=&quot;ranking&quot; class=&quot;inputs&quot; type=&quot;range&quot; value=&quot;10&quot; min =&quot;0&quot; max=&quot;10&quot; step =&quot;1&quot;/&gt;
+            &lt;span class=&quot;sliderMin&quot;&gt;0(worst)&lt;/span&gt;&lt;span class=&quot;sliderMax&quot;&gt;10(satisfactory)&lt;/span&gt;
+            &lt;/label&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;row&quot;&gt;
+          &lt;div class=&quot;twelve columns&quot;&gt;
+            &lt;label class=&quot;checkbox&quot; data-title=&quot;I give permission for the school to contact me regarding my feedbacks.&quot;&gt;
+                &lt;input type=&quot;checkbox&quot; id=&quot;permission&quot; checked /&gt;&lt;span for=&quot;checkbox&quot;&gt;&lt;/span&gt;
+            &lt;/label&gt;
+            &lt;!-- ↓ THIS IS THE OLD HTML ⬇︎ PLEASE CHANGE TO THE ↑ NEW ONE ⬆︎
+            &lt;label class=&quot;checkbox&quot;&gt;
+                &lt;input type=&quot;checkbox&quot; id=&quot;permission&quot; checked /&gt;&lt;span for=&quot;checkbox&quot;&gt;&lt;/span&gt;
+            &lt;/label&gt;
+            &lt;label class=&quot;checkboxTitle&quot;&gt;I give permission for the school to contact me regarding my feedbacks.&lt;/label&gt;
+             --&gt;
+            &lt;br&gt;
+            &lt;input class=&quot;button-primary centre-aligned u-full-width&quot; type=&quot;button&quot; value=&quot;Submit&quot;&gt;
+          &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/form&gt;
 
 &lt;!-- Note: The class .u-full-width is just a utility class shorthand for width: 100% --&gt;
 
 </code>
 </pre>
-<p> Always wrap checkbox and radio inputs in a label and use a <code>&lt;span class="label-body"&gt;&#x3C;/span&#x3E;</code> inside of it </p>
+<p> The checkbox and radio elements requires extra <code>&lt;label&#x3E; and &lt;span&#x3E;</code> elements to work. </p>
 <p> The complete slider includes two label tag, one with class "sliderTitle", one with class "slider". In the sliderTitle the ID of the span has to be the ID of the input element + "Display", for the value display to work. </p>
 <p> The slider value display requires the following jQuery to work: </p>
-
 <pre>
-<code>
-$("input[type=range]").each(function () {
+<code>$("input[type=range]").each(function () {
   $(this).on('input', function(){
         $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
   });
 });
 
+</code>
+</pre>
+<p> You can disale/enable input elements in jQuery by doing:</p>
+<pre>
+<code>$("#elementToDisable").prop("disabled",true);
+$("#elementToDisable").prop("disabled",false);
 </code>
 </pre>
 <!-- ————————————————————————————————————————————————————— -->
@@ -559,8 +591,8 @@ $("input[type=range]").each(function () {
     </div>
 
     <!-- Lists -->
-    <div class="docs-section" id="lists">
-      <h3 class="docs-header">Lists</h3>
+    <div class="docs-section">
+      <h3 class="docs-header" id="lists">Lists</h3>
       <div class="row docs-example">
         <div class="six columns">
           <ul>
@@ -644,11 +676,11 @@ $("input[type=range]").each(function () {
 
 
     <!-- Tabs -->
-<div class="docs-section" id="tabs">
-  <h3 class="docs-header">Tabs</h3>
+<div class="docs-section">
+  <h3 class="docs-header" id="tabs">Tabs</h3>
   <div class="row docs-example">
     <div class="six columns">
-      <p>The tab requires jQuery to work properly. If you don't understand jQuery, please see tutorial/DOM/DoubleClickMe.html .</p>
+      <p>The tab requires jQuery to work properly. If you don't understand jQuery, please see <a href="../DOM/DoubleClickMe.html">tutorial/DOM/DoubleClickMe.html</a> .</p>
     </div>
     <div class="six columns">
        <ul class="tab-nav">
@@ -743,8 +775,8 @@ jQuery code:
   </div>
 </div>
     <!-- Tables & Matrix -->
-    <div class="docs-section" id="tablesNmatrix">
-      <h3 class="docs-header">Tables & Matrix</h3>
+    <div class="docs-section">
+      <h3 class="docs-header" id="tablesNmatrix">Tables & Matrix</h3>
       <p>Be sure to use properly formed table markup with <code>&lt;thead&gt;</code> and <code>&lt;tbody&gt;</code> when building a <code>table</code>.</p>
       <div class="docs-example">
         <table class="u-full-width">
@@ -930,8 +962,8 @@ jQuery code:
     </div>
 
     <!-- Queries -->
-    <div class="docs-section" id="queries">
-      <h3 class="docs-header">Media queries</h3>
+    <div class="docs-section">
+      <h3 class="docs-header" id="queries">Media queries</h3>
       <p>Skeleton uses media queries to serve its scalable grid, but also has a list of queries for convenience of styling your site across devices. The queries are mobile-first, meaning they target <code>min-width</code>. Mobile-first queries are how Skeleton's grid is built and is the preferrable method of organizing CSS. It means all styles outside of a query apply to all devices, then larger devices are targeted for enhancement. This prevents small devices from having to parse tons of unused CSS. The sizes for the queries are:</p>
       <div class="docs-example row">
         <div class="six columns">
@@ -979,24 +1011,39 @@ jQuery code:
 
 
     <!-- Utilities and Misc. -->
-    <div class="docs-section" id="utilities">
-      <h3 class="docs-header">Utilities</h3>
+    <div class="docs-section">
+      <h3 class="docs-header" id="utilities">Utilities</h3>
       <p>Skeleton has a number of small utility classes that act as easy-to-use helpers. Sometimes it's better to use a utility class than create a whole new class just to float an element.</p>
 
 
 <!-- CODE EXAMPLE ———————————————————————————————————————— -->
 <pre class="code-example">
 <code class="code-example-body prettyprint">/* Utility Classes */
-
 /* Make element full width */
 .u-full-width {
   width: 100%;
-  box-sizing: border-box; }
+  box-sizing: border-box; 
+}
+
+.u-half-width {
+  width: 50%;
+  box-sizing: border-box; 
+}
+.u-quarter-width {
+  width: 25%;
+  box-sizing: border-box; 
+}
 
 /* Make sure elements don't run outside containers (great for images in columns) */
 .u-max-full-width {
   max-width: 100%;
   box-sizing: border-box; }
+
+/* Make the text inside center aligned */
+.centre-aligned{
+  text-align: center;
+  vertical-align: middle;
+}
 
 /* Float either direction */
 .u-pull-right {
@@ -1009,14 +1056,15 @@ jQuery code:
   content: "";
   display: table;
   clear: both; }
+
 </code>
 </pre>
 <!-- ————————————————————————————————————————————————————— -->
     </div>
   </div>
 
-
-<br><br><br><br>
+  <div class="container centre-aligned">Created by <a href="mailto:hk1415@ic.ac.uk">Mangle Kuo</a>. Last update 08/09/2017.</div>
+<br><br>
 
 
 
@@ -1040,6 +1088,17 @@ jQuery code:
       $(this).on('input', function(){
             $("#"+$(this).attr("id") + "Display").text(  $(this).val() + $("#"+$(this).attr("id")+"Display").attr("data-unit")  );
       });
+    });
+
+    $( ":header" ).each(function(){
+      if($(this).attr("id") != "" && $(this).attr("id") != undefined && $(this).attr("id") != false){
+        $("#MenuItemContainer").append('<li class="popover-item"><a class="popover-link" href="#'+$(this).attr("id")+'">'+$(this).html()+'</a></li>');
+      }
+    });
+
+    $("input[type=radio][name=studentOrStuff]").on('click',function(){
+      var isStuff = !($('input[name=studentOrStuff]:checked').val() == "student");
+      $("#officeLocation").prop("disabled",!isStuff);
     });
 
   </script>
