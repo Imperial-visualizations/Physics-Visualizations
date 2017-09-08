@@ -71,6 +71,7 @@ function spoiler() {
     $(this).html(text+$(this).attr("data-graph-name"));
     $($(this).attr("for")).slideToggle(250);
     $($(this).attr("for")).toggleClass("expanded");
+    log(this);
 }
 
 /**
@@ -123,6 +124,7 @@ $('body').on('click', '[data-change]', function() {
         init_e1 = parseFloat($('#e1').text());
         init_s2 = parseFloat($('#s2').text());
         init_e2 = parseFloat($('#e2').text());
+        log(this);
 
         // Timestep
         dT = parseFloat($('#dT').text());
@@ -143,6 +145,7 @@ $('body').on('click', '[data-change]', function() {
 $('#playPauseButton').on('click',function() {
     var text = running ? "Start" : "Pause";
     $("#playPauseButton").text(text);
+    log(this);
     running = !running;
 });
 
@@ -153,6 +156,7 @@ $('#resetButton').on('click', function() {
     a1.pos = []; a2.pos = [];
     running = false;
     $('#playPauseButton').text("Start");
+    log(this);
     reset();
 });
 
@@ -169,7 +173,8 @@ function updateLabels() {
     // Updating KE values and resetting.
     initKVib = parseFloat($('#vibKEDisplay').text());
     initKRot = parseFloat($('#rotKEDisplay').text());
-    reset();
+    try {log(this); reset();}
+    catch (e) {reset();}
 }
 
 /**

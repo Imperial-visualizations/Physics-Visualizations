@@ -107,10 +107,10 @@
 
         <div class="five columns">
             <div id="LJ_scatter" class="twelve columns graphs expanded"></div>
-            <em><a for="#LJ_scatter" class="showHideButton" data-graph-name=" LJ potential">Show LJ potential</a></em>
+            <em><a for="#LJ_scatter" id="spoilerLJ" class="showHideButton" data-graph-name=" LJ potential">Show LJ potential</a></em>
 
             <div id="graphE" class="twelve columns graphs expanded" style="height: 330px;"></div>
-            <em><a for="#graphE" class="showHideButton" data-graph-name=" Energy vs Time">Show Energy vs Time</sub></a></em>
+            <em><a for="#graphE" id="spoilerEvT" class="showHideButton" data-graph-name=" Energy vs Time">Show Energy vs Time</sub></a></em>
         </div>
     </div>
 
@@ -119,17 +119,18 @@
             <span>dT = </span><a id="dT" data-change data-unit=" s" title="dT">0.015</a>
         </div>
     </div>
-    <em><a for="#advanced" class="showHideButton" data-graph-name=" Advanced Settings">Show Advanced Settings</sub></a></em>
+    <em><a for="#advanced" id="advSettings" class="showHideButton" data-graph-name=" Advanced Settings">Show Advanced Settings</sub></a></em>
 </div>
 
 <script src=https://code.jquery.com/jquery-latest.min.js></script>
 <script src = "https://github.com/photonstorm/phaser-ce/releases/download/v2.8.3/phaser.min.js"></script>
 <script src=https://cdn.plot.ly/plotly-latest.min.js></script>
+<script src="./scripts/log.js"></script>
 <script src = "./scripts/potentials.js"></script>
 <script src = "./scripts/vecops.js"></script>
 <script src = "./scripts/diatomic.js"></script>
 <script src="./scripts/graphics.js"></script>
-<script src="./scripts/log.js"></script>
+
 
 </body>
 </html>
