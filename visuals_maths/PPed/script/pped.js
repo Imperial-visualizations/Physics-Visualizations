@@ -11,7 +11,7 @@ function tableVec(vec) {
     return result
 }
 
-// Parallelipiped object
+// Parallelepiped object
 var my_pped = {
     u: u,
     v: v,
