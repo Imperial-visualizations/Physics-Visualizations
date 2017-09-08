@@ -105,7 +105,7 @@ function updateSlider() {
     $(sliderID + "Display").text(animationIndex);
 }
 
-function startAnimation () {
+function startAnimation() {
     if (animationIndex < animationLimit){
         isPaused = !isPaused;
         document.getElementById(playID).value = (isPaused) ? "Play":"Pause";

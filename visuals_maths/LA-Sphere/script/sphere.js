@@ -26,6 +26,118 @@ var layout = {
     }
 }
 
+///Matrix Utilities:
+//Rotation Matrices (axis of rotation along x/y/z-axix):
+function rotationX(angle) {
+    var matrix = [[1, 0, 0], [0, Math.cos(angle), -Math.sin(angle)], [0, Math.sin(angle), Math.cos(angle)]];
+    return matrix;
+}
+function rotationY(angle) {
+    var matrix = [[Math.cos(angle), 0, Math.sin(angle)], [0, 1, 0], [-Math.sin(angle), 0, Math.cos(angle)]];
+    return matrix;
+}
+function rotationZ(angle) {
+    var matrix = [[Math.cos(angle), -Math.sin(angle), 0], [Math.sin(angle), Math.cos(angle), 0], [0, 0 ,1]];
+    return matrix;
+}
+
+//Scaling Matrices
+function scaleX(factor) {
+    var matrix = [[factor, 0, 0], [0, 1, 0], [0, 0, 1]];
+    return matrix;
+}
+function scaleY(factor) {
+    var matrix = [[1, 0, 0], [0, factor, 0], [0, 0, 1]];
+    return matrix;
+}
+function scaleZ(factor) {
+    var matrix = [[1, 0, 0], [0, 1, 0], [0, 0 ,factor]];
+    return matrix;
+}
+
+//HTML Matrices Display
+function makeTableHTML(myArray) {
+    var result = "<table class='matrix'><tbody>";
+    for(var i=0, n=myArray.length; i<n; ++i) {
+        result += "<tr>";
+        for(var j=0, m=myArray[i].length; j<m; ++j){
+            result += "<td>"+myArray[i][j]+"</td>";
+        }
+        result += "</tr>";
+    }
+    result += "</tbody></table>";
+    return result;
+}
+
+//Matrix Display Value
+function displayRotationMatrix(angle, rotationType) {
+    var result;
+    var cosAngle = "cos("+String(Math.abs(angle))+"π"+")";
+    var sinAngle1 = "sin(0)", sinAngle2 = "-sin(0)";
+    if (angle === "0" || angle === "-2" || angle === "2"){
+        cosAngle = "1"; sinAngle1 = "0"; sinAngle2 = "0";
+    } else if (angle > 0) {
+        sinAngle1 = "sin(" + String(angle)+"π)"; sinAngle2 = "-sin(" + String(angle)+"π)";
+    } else if (angle < 0) {
+        sinAngle1 = "-sin(" + String(-angle)+"π)"; sinAngle2 = "sin(" + String(-angle)+"π)";
+    }
+    if (rotationType === "rotateX") {
+        result = makeTableHTML(
+            [
+                ["1", "0", "0"],
+                ["0", cosAngle, sinAngle2],
+                ["0", sinAngle1, cosAngle]
+            ]
+        )
+    } else if (rotationType === "rotateY") {
+        result = makeTableHTML(
+            [
+                [cosAngle, "0", sinAngle1],
+                ["0", "1", "0"],
+                [sinAngle2, "0", cosAngle]
+            ]
+        )
+    } else if (rotationType === "rotateZ") {
+        result = makeTableHTML(
+            [
+                [cosAngle, sinAngle2, "0"],
+                [sinAngle1, cosAngle, "0"],
+                ["0", "0", "1"]
+            ]
+        )
+    }
+    return result;
+}
+function displayReflectionMatrix(reflectionType) {
+    var result;
+    if (reflectionType === "reflectX") {
+        result = makeTableHTML(
+            [
+                ["-1", "0", "0"],
+                ["0", "1", "0"],
+                ["0", "0", "1"]
+            ]
+        )
+    } else if (reflectionType === "reflectY") {
+        result = makeTableHTML(
+            [
+                ["1", "0", "0"],
+                ["0", "-1", "0"],
+                ["0", "0", "1"]
+            ]
+        )
+    } else if (reflectionType === "reflectZ") {
+        result = makeTableHTML(
+            [
+                ["1", "0", "0"],
+                ["0", "1", "0"],
+                ["0", "0", "-1"]
+            ]
+        )
+    }
+    return result;
+}
+
 //Computing transformation frames
 function computeFrames(transformation, start, end, startVec, frameSize, addTrace = true) {
     var intermediate = numeric.linspace(start, end, frameSize);
@@ -123,20 +235,19 @@ function computeCommute(rotation1, rotation2, theta1, theta2, frameSize) {
 
 //Hide/Show Option (Rotation) - for better interface
 //Commute - Rotation
-var isFrameSliderDisplayed = false;
 function hideCommute() {
     $('.rotate3D').show();
     $('.rotateCommute').hide();
     $('#frameSlider').hide();
-    initPlot();
-    isFrameSliderDisplayed = false;
+    var index = historyIndex % historyLimit;
+    displayCurrent(index);
+    histPlot(index);
 } //has purging here!!!
 function showCommute() {
     $('.rotate3D').hide();
     $('.rotateCommute').show();
     $('#frameSlider').show();
     commutePlot();
-    isFrameSliderDisplayed = true;
 }
 function disableUndoReset() {
     $("#undoRo").prop("disabled",true);
@@ -213,9 +324,11 @@ function histPlot(index) {
     var initVec = new Line([[0,0,0], historyVectors[index]]);
     data.push(initVec.gObject(black));
     data.push(initVec.arrowHead(black));
-    data.push({type:"scatter3d"});
+    data.push({type:"scatter3d"}); // trace line
     data.push(sphere);
     data = data.concat(axes);
+    data.push({type:"scatter3d"}); // Plane surfaces
+
     Plotly.newPlot(
         "graph",
         {data: data, layout: layout}
@@ -230,7 +343,7 @@ function animateTransformation(frames, playID) {
             fromcurrent: true,
             transition: {duration: 55, easing: "quadratic-in-out"},
             frame: {duration: 55, redraw: false,},
-            mode: "next",
+            mode: "afterall",
         }
     ).then(function() {$(playID).prop("disabled",false);});
 
@@ -341,11 +454,11 @@ function undo(){
     historyIndex--;
     historyCount--;
     var index = historyIndex % historyLimit;
+    if(historyIndex === 0){
+        disableUndoReset();
+    }
     displayCurrent(index);
     histPlot(index);
-    if(historyIndex === 0){
-        disableUndo();
-    }
     return;
 }
 
@@ -354,20 +467,18 @@ function main() {
         var displayEl;
         $(this).on('input', function(){
             $("#"+$(this).attr("id") + "Display").text( $(this).val() + $("#"+$(this).attr("id") + "Display").attr("data-unit") );
-            if (isFrameSliderDisplayed){
+            $("#"+$(this).attr("id") + "DisplayA2").text( parseFloat($(this).val())*180 + $("#" + $(this).attr("id") + "DisplayA2").attr("data-unit") );
+
+            if (parseFloat($(this).val())*8 % 8 === 0.0) {displayEl = $(this).val();
+            } else if (parseFloat($(this).val())*8 % 4 === 0.0) {displayEl = "(" + $(this).val()*2 + "/2)";
+            } else if (parseFloat($(this).val())*8 % 2 === 0.0) {displayEl = "(" + $(this).val()*4 + "/4)";
+            } else {displayEl = "(" + $(this).val()*8 + "/8)";
+            }
+            $("#"+$(this).attr("id") + "DisplayA1").text( displayEl + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit"));
+
+            if ("#"+$(this).attr("id") === "#commuteAnimateSlider"){
                 historyPlot(parseInt($(this).val()));
             }
-            $("#"+$(this).attr("id") + "DisplayA2").text( parseFloat($(this).val())*180 + $("#" + $(this).attr("id") + "DisplayA2").attr("data-unit") );
-            if (parseFloat($(this).val())*8 % 8 === 0.0) {
-                displayEl = $(this).val() + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit");
-            } else if (parseFloat($(this).val())*8 % 4 === 0.0) {
-                displayEl = "(" + $(this).val()*2 + "/2)" + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit");
-            } else if (parseFloat($(this).val())*8 % 2 === 0.0) {
-                displayEl = "(" + $(this).val()*4 + "/4)" + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit");
-            } else {
-                displayEl = "(" + $(this).val()*8 + "/8)" + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit");
-            }
-            $("#"+$(this).attr("id") + "DisplayA1").text( displayEl );
         });
     });
 
