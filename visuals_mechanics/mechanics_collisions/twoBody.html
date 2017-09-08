@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Two Body Collision</title>
-    <!-- <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1"> -->
-    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
+    <link rel="stylesheet" href="../styles/styles.css?v=1">
+    <!-- <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2"> -->
     <link rel = "icon" href = "images/favicon.ico" type="image/x-icon">
     <style type="text/css">
         #canvasWrapper{
@@ -28,10 +28,10 @@
         }
     </style>
     <script>
-        if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1))
-        {
-            window.location.href = "unsupported.html";
-        }
+        // if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1))
+        // {
+        //     window.location.href = "unsupported.html";
+        // }
     </script>
 </head>
 <body>
@@ -67,7 +67,6 @@
                 <span id="ball1LabVelocityYDisplay" class="velocityDisplay" data-unit="m/s">0m/s</span>
             </label>
 
-            <br>
             <h4 class="ball2Title">Ball 2</h4>
             <label class="sliderTitle">Mass:
                 <span id="ball2LabMassDisplay" data-unit="kg">1kg</span>
@@ -95,10 +94,9 @@
             <span class="sliderMin">-90º</span><span class="sliderMax">90º</span>
             </label>
 
-            <label class="checkbox">
+            <label class="checkbox" data-title="Enable vector drawing">
                 <input type="checkbox" value="None" id="vectorDrawEnable" name="check" checked /><span for="checkbox"></span>
             </label>
-            <label class="checkboxTitle">Enable vector drawing</label>
 
             <br>
             <input id="runButton" class="inputs" type="button" value="Run"/>
