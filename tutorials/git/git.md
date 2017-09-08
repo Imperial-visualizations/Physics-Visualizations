@@ -2,23 +2,24 @@
 
 *This is a basic tutorial to using git for file history and version control in this project. If you really want to make the most of this powerful tool I recommend reading and working through the "Pro Git" book by Scott Chacon and Ben Straub, particularly chapters 1, 2, and 3. It is available online at https://git-scm.com/book/en/v2.*
 
-In this tutorial the % sign is used to signify a placeholder. For example %username% would mean to use the applicable username. Aside from this tutorial a multitude of other tutorials are available [here](https://anthonyli358.github.io/Imperial-Visualizations/tutorials "tutorials").
+In this tutorial the % sign is used to signify a placeholder. For example, %username% would mean to use the applicable username. Various other tutorials are available [here](https://anthonyli358.github.io/Imperial-Visualizations/tutorials "tutorials").
+
 
 ## Introduction
 
 Git is a version control system (VCS) used for tracking and coordinating changes in computer files, and is particularly useful for work involving multiple people. For this Imperial Visualizations project we will be using GitHub - a web based version control repository (repo) and internet hosting service. 
 
+
 ## Getting Started
 
 1. Create a GitHub account https://github.com/. You can also use your student email address to activate the Student Develop Pack https://education.github.com/pack which comes with a multitude of software development tools and perks such as private repos (lasts a limited time).
 
-2. Contact Caroline Clewley (@c.clewley) with your GitHub username/email to be added to the Imperial-Visualizations repo.
+2. The repo owner (@c.clewley) can add collaborators via the https://github.com/cclewley/Imperial-Visualizations/settings/collaboration page.
 
-3. The owner of the repo can add collaborators by going to *Repositories -> Imperial-Visualizations -> Settings -> Collaborators -> (scroll to bottom) Search by username, full name, or email address*.
+3. Work through the GitHub "Hello World" guide available at https://guides.github.com/activities/hello-world/ to get to grips with the basic concepts. 
 
-4. Work through the GitHub "Hello World" guide available at https://guides.github.com/activities/hello-world/ to get to grips with the basic concepts. 
+4. Have a look at the other guides available at https://guides.github.com/ (non-essential).  
 
-5. Have a look at the other guides available at https://guides.github.com/ (non-essential).  
 
 ## GitKraken
 
@@ -32,7 +33,8 @@ GitKraken is a GUI (Graphic User Interface) git client that greatly speeds up th
 
 3. You are now ready to use GitKraken to contribute to the Imperial-Visualizations repo. Although you can simply read the rest of the tutorial, it is recommended to create a test repo and repeat the step 2 (above) to clone this new repo before continuing. You should use this test repo to test, break, and mess around with git to make sure that you understand the features outlined below. 
 
-   --create test repo-- 
+   --gitkraken_3_createrepo-- 
+
 
 ## The Basics 
 
@@ -44,7 +46,7 @@ Now that you have access to the repo you can make changes.
 
 1. Any changes made within the local repo folder will be recognised by GitKraken. Changes will in appear the top row of GitKraken as //WIP (Work in Progress) and file changes will be defined as green (added), yellow (edited), red (deleted), or blue (moved). In this example a file has been added.
 
- ![alt: make-changes](images/basics_commit_1_changes.gif)
+ ![alt: make-changes](images/basics_commit_1_makechanges.gif)
 
 2. **Committing**
 
@@ -58,32 +60,34 @@ Now that you have access to the repo you can make changes.
    
  ![alt: commit-changes](images/basics_commit_2_commit.gif)
    
-   Using commits means that our work at that stage is saved as part of the project workflow. This allows us to revert back to that repo (and hence file) state if anything goes wrong. To do this right click on the node, go to *reset %branch% to this commit* and choose how strongly to revert changes. In this case we are working on the master branch (more on branches later). 
+   Using commits means that our work at that stage is saved as part of the project workflow. This allows us to revert back to that repo (and hence file) state if anything goes wrong. To do this right click on the node, go to *reset %branch% to this commit* and choose how strongly to revert changes. In this case we are working on the master branch (more on branches later).
    
-   --revert changes to a commit--
+   --basics_commit_2_revert--
    
 3. **Pushing**
 
    Although the changes have been committed they have not yet been pushed online, so other collaborators accessing the repo cannot see them. This is the difference between local and remote files (covered in the [next section](https://anthonyli358.github.io/Imperial-Visualizations/git/git#local-and-remote-files "The Basics/Local and Remote Files")) and in order for other collaborators to see our changes we must first *Push* them. 
+   
+   --basics_commit_3_push--
 
    You can also perform multiple commits before pushing. This is especially useful for squashing fairly insignificant commits together or even completely resetting commits themselves, neither of which can be done once the commits are pushed online.
    
-   --renaming a file twice (2 commits) then squashing before pushing--
-   --reverting a commit--
+   --basics_commit_3_squash--
+   --basics_commit_3_revert--
 
 4. **Pulling**
 
    If another collaborator pushes changes they will appear as remote changes. In this example imagine the changes made on the GitHub website represent those made by another collaborator. In order to apply these changes to our local files we must first *Pull* them to our local files. 
 
-   --make and pulls some changes--
+   --basics_commit_4_pull--
    
    If both collaborators work at the same time and collaborator 1 pushes commits while collaborator 2 is still at work, git recognises that the local files of collaborator 2 are no longer in sync with the remote files. If collaborator 2 then attempts to push some commits, GitHub automatically merges the remote and local files before applying the changes. 
    
-   --merge remote--
+   --basics_commit_4_mergeremote--
    
    This can look quite ugly on the DAG, so it is important to solve this by pulling before making any commits. This ensures that local and remote files are synced and GitKraken automatically stashes and pops any WIP to avoid losing work (more on stashing and popping later).
 
-   --fix merge remote & auto stash and pop--
+   --basics_commit_4_fixmergeremote--
    
 >*Life Pro Tip*: Pull before you Commit, Commit before you Push.
 
@@ -99,6 +103,7 @@ We discussed these a lot in the [previous section](https://anthonyli358.github.i
 
    Remote files are online in the GitHub repo and any pushed commits will affect these files. This is the repo that everyone is working together on and changes made by other collaborators are pulled to local from here. 
    
+   
 ## Important Notes
 
 This section covers some important features of git (not necessarily GitKraken) which it is important to be aware of.
@@ -111,7 +116,7 @@ You will notice that when file are ready to be staged you can click on them to s
 
 2. Whenever a Jupyter Notebook is opened the notebook saves any changes to the cell output (even if the notebook has not necessarily been run). This appears as fairly meaningless base 64 in the git-diff, making it difficult to actually see what useful changes (markdown and code) have been made. 
 
-3. In order to solve this issue @rd1313 made some changes to the jupyter_notebook_config.py file to allow changes made to Jupyter Notebooks to meaningfully seen in the gif-diff. This file can be seen as the first pinned item on the *#general* channel in Slack and should be copied to the *.jupyter* installation folder, which on windows is usually found under *C:/Users/%User%/.jupyter* (I'm afraid I don't know where it is for other OS). 
+3. In order to solve this issue @rd1313 made some changes to the jupyter_notebook_config.py file to allow changes made to Jupyter Notebooks to meaningfully seen in the gif-diff. This file can be seen as the first pinned item on the *#general* channel in Slack and should be copied to the *.jupyter* installation folder, which on windows is usually found under *C:/Users/%User%/.jupyter* (I'm afraid I don't know this location for other OS). 
 
 ### .gitignore
 
@@ -120,6 +125,7 @@ In the highest level of each branch of the repo should be a nameless file with t
 1. \# is a comment (like in Python), . refers to a file, and / refers to a folder. * is a wildcard, so *.pyc means that anything with the extension .pyc will be ignored by git. 
 
 2. By adding .ipynb_checkpoints/ to the .gitignore, the clutter from any .ipynb_checkpoint files for Jupyter Notebooks is successfully ignored when using git.
+
 
 ## Other Key Features
 
@@ -133,7 +139,7 @@ Branches are a very powerful tool for software development but can be quite tric
 
    A branch can be started from any commit by right clicking and selecting *Create branch here*. After naming the branch (ideally with its purpose or following a defined branch naming convention) this copies the repo state at that commit to a new branch. You must first push a locally created branch to have it appear in the remote repo.
 
-   -- starting branch--
+   --other_branches_1_createandpush--
 
 2. **Why Branches?**
 
@@ -141,13 +147,13 @@ Branches are a very powerful tool for software development but can be quite tric
 
  >*Note*: This also allows for commits to be cleaned up (e.g. squashed) before rebasing or merging to the main development branch (more on merging and workflows later).
 
-   --separate commits--
+   --other_branches_2_whybranches--
 
 3. **Branch Navigation**
 
    To create branches under an overarching subgroup, folders can be created by naming the branch using *%subgroup%/%purpose%* e.g.  *fix/particle_physics* would create a *particle_physics* branch under a *fix* folder. All branches in the repo are shown in GitKraken under *REMOTE* on the left-hand toolbar. To pull a branch to your computer double click on it and it should now also appear under *LOCAL*. 
    
- ![alt: local-remote-branches](images/other_branches_3_local_remote.png)
+ ![alt: local-remote-branches](images/other_branches_3_localremote.png)
    
    In order to stay on task you should ideally only pull branches that you're working on to your *LOCAL*. You can also freely delete local branches and this won't affect any *REMOTE* branches but will help keep your number of working branches a bit cleaner.
    
@@ -157,11 +163,11 @@ Branches are a very powerful tool for software development but can be quite tric
 
    To switch between branches simply double click on the local branch that you want to access. This will change the local files to reflect the content in that branch. 
    
-   --double click --
+   --other_branches_4_switchbranches--
    
    Occasionally if you personally want to move a specific file from another branch for reference you can 'cheat' by copying that file outside your *%local repo%* folder. Upon switching branches the file will still be there (since it is no longer in the local repo which is being changed), and you can then copy that file back into the local repo for your own working branch for reference. 
-   
-   --cheating--
+    
+   --other_branches_4_cheating--
    
 5. **Hiding Branches**
 
@@ -169,7 +175,7 @@ Branches are a very powerful tool for software development but can be quite tric
    
    It makes sense to first delete the branch it from *LOCAL* since if you're hiding it generally means you're not working on it. Then you can freely hide it from *REMOTE*. You can also hide the local branches if for example you are only not working on it temporarily. In the example below we delete the local *bugs/plotly* branch but hide the local *bugs/particle_plotting* branch, then hide remote for a similar result.
    
-   --hiding branches--
+   --other_branches_5_hiding--
 
 ### Stashing and Popping
 
@@ -179,13 +185,13 @@ Stashing and Popping can be used to store work for later without committing, but
 
    If you have WIP and attempt to change branches, you will receive an error message saying *Checkout Failed*. This is because we need to first commit any WIP but if the work isn't useful enough to commit yet then we can *Stash* it for later.
 
-   --attempt to switch, then stash and switch--
+   --other_stashing_1_stash--
 
 2. **Popping a Stash**
 
    Stashes appear as a dotted square node on the DAG. Upon returning to the branch with the stashed work we can *Pop* the stash to retrieve our WIP.
 
-   --return to branch, pop stash and show work returning to WIP--
+   --other_stashing_2_pop--
    
    It is also possible to pop stashes onto other branches but this is rarely used since the development of a file usually differs between branches.
 
@@ -203,21 +209,23 @@ After completing work in a branch we need to merge it back to the main developme
 
    To merge a branch to another branch, first work in the branch that you want to merge to (e.g. dev) and right click on the branch you want to merge to it. Then simply click on *Merge %branch% to into %branch%* and commit the change. 
 
-   --right click and merge--
+   --other_merge_1_merge--
 
 2. **Resolving Merge Conflicts**
 
    Merge conflicts will arise if a file has been changed both in the branch being merged and in the branch being merged to. GitKraken has a very useful tool which allows us to see and resolve these conflicts. Simply click on the conflicted file and a view of the file in both branches will be opened. Conflicted code will be highlighted so simply tick the code that you want to keep (you can even keep the code from both branches) then click on the *Save and mark resolved* button when done. You can now commit the change.
    
-   --mark some as resolved and save and commit--
+   --other_merge_2_resolveconflicts--
 
 3. **Pull Requests** 
 
    It is also possible to merge via a pull request Here when right clicking we use *Push %branch% and start a pull request to %branch%* instead of simply merging. This starts a pull request online where everyone collaborating on the repo can view the commits that have been made to the branch being merged. They can then review and comment on the commits to suggest their thoughts or possible changes, ensuring that everyone agrees that the commits should be applied before a merge is completed. 
    
-   --show and pull request--
+   --other_merge_3_startpullrequest--
    
    Pull requests encourage discussion driven development in which everyone can see and understand the changes being made. This helps the team to be on the same page throughout the project.
+   
+   --other_merge_3_checkpullrequests--
 
 ### Workflows
 
@@ -252,6 +260,7 @@ After completing work in a branch we need to merge it back to the main developme
    Another idea may be to fork the Imperial-Visualizations repo to a new repo for each subgroup and then merge any completed work back to the dev branch in the main repo via pull request. This has a similar structure to the previous suggestion but without the repo showing a multitude of different branches which are unrelated to each subgroup's individual work. Since this year the entire team is encountering similar obstacles and thus working closely together it currently makes sense to keep all work in a single repo to instantly share any progress.
    
 >*Note*: If using these workflows it is recommended to keep the dev and master branches protected to only be merged by pull request.
+
 
 ## Further Reading
 

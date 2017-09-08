@@ -17,8 +17,8 @@
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
-  <!-- <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=3"> -->
+  <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=5">
+  <!-- <link rel="stylesheet" href="../styles/styles.css?v=3"> -->
   <style type="text/css">
     .example-grid .column, .example-grid .columns {
       background: #EEE;
@@ -55,7 +55,7 @@
 </li>
 <li><p>Open <em>index.html</em> with PyCharm or whatever code-editor you like:</p>
 </li>
-<li><p>Start adding HTML elements by copy and paste from this page in between the <code>&lt;div class=&quot;container&quot;&gt; &lt;/div&gt;</code> tags.</p>
+<li><p>Start adding HTML elements by copy and paste from this page to the space between<code>&lt;div class=&quot;container&quot;&gt; &lt;/div&gt;</code> tags in your <em>index.html</em>.</p>
 </li>
 </ol>
           </div>
@@ -248,7 +248,7 @@ browser/device sizes) --&gt;
       <div>
         <div class="row">
           <div class="six columns">
-            <p><strong>The typography base</strong> is <a href="https://fonts.google.com/specimen/Lato">Lato</a> served by Google, set at 15rem (15px) over a 1.6 line height (24px). Other type basics like <a href="#">anchors</a>, <strong>strong</strong>, <em>emphasis</em>, and <u>underline</u> are all obviously included.</p>
+            <p><strong>The typography base</strong> is <a href="https://fonts.google.com/specimen/Fira+Sans">Fira Sans</a> served by Google, set at 15rem (15px) over a 1.6 line height (24px). Other type basics like <a href="#">anchors</a>, <strong>strong</strong>, <em>emphasis</em>, and <u>underline</u> are all obviously included. In the css we have <code>font-weight</code> 300,400,500,600,700 imported.</p>
             <p><strong>Headings</strong> create a family of distinct sizes each with specific <code>letter-spacing</code>, <code>line-height</code>, and <code>margins</code>.</p>
           </div>
           <div class="six columns">
@@ -342,14 +342,12 @@ browser/device sizes) --&gt;
           <div class="row">
             <div class="twelve columns">
               <label class="radioTitle">I'm a: </label> 
-              <label class="radio">
+              <label class="radio" data-title="Student">
                   <input type="radio" name="studentOrStuff" value="student" checked /><span for="radio"></span>
               </label>
-              <label class="radioLabel">Student</label> 
-              <label class="radio">
+              <label class="radio" data-title="Stuff">
                   <input type="radio" name="studentOrStuff" value="stuff"/><span for="radio"></span>
               </label>
-              <label class="radioLabel">Stuff</label> 
             </div>
           </div>
           <div class="row">
@@ -434,18 +432,15 @@ browser/device sizes) --&gt;
           <div class="row">
           <div class="six columns">
             <label class="radioTitle">My gender is: </label> 
-            <label class="radio">
+            <label class="radio" data-title="Male">
                 <input type="radio" name="gender" value="male" checked /><span for="radio"></span>
             </label>
-            <label class="radioLabel">Male</label> 
-            <label class="radio">
+            <label class="radio" data-title="Female">
                 <input type="radio" name="gender" value="female"/><span for="radio"></span>
             </label>
-            <label class="radioLabel">Female</label> 
-            <label class="radio">
+            <label class="radio" data-title="Else/Prefer not to say">
                 <input type="radio" name="gender" value="else" /><span for="radio"></span>
             </label>
-            <label class="radioLabel">Else/Prefer not to say</label> 
           </div>
           <div class="six columns">
             <label class="sliderTitle">Overall Ranking: <span id="rankingDisplay" data-unit=" stars">10 stars</span></label> 
@@ -456,10 +451,9 @@ browser/device sizes) --&gt;
           </div>
           <div class="row">
           <div class="twelve columns">
-            <label class="checkbox">
+            <label class="checkbox" data-title="I give permission for the school to contact me regarding my feedbacks.">
                 <input type="checkbox" id="permission" checked /><span for="checkbox"></span>
             </label>
-            <label class="checkboxTitle">I give permission for the school to contact me regarding my feedbacks.</label> 
             <br>
             <input class="button-primary centre-aligned u-full-width" type="button" value="Submit">
           </div>
@@ -477,14 +471,12 @@ browser/device sizes) --&gt;
           &lt;div class=&quot;row&quot;&gt;
             &lt;div class=&quot;twelve columns&quot;&gt;
               &lt;label class=&quot;radioTitle&quot;&gt;I&#39;m a: &lt;/label&gt; 
-              &lt;label class=&quot;radio&quot;&gt;
+              &lt;label class=&quot;radio&quot; data-title=&quot;Student&quot;&gt;
                   &lt;input type=&quot;radio&quot; name=&quot;studentOrStuff&quot; value=&quot;student&quot; checked /&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
               &lt;/label&gt;
-              &lt;label class=&quot;radioLabel&quot;&gt;Student&lt;/label&gt; 
-              &lt;label class=&quot;radio&quot;&gt;
+              &lt;label class=&quot;radio&quot; data-title=&quot;Stuff&quot;&gt;
                   &lt;input type=&quot;radio&quot; name=&quot;studentOrStuff&quot; value=&quot;stuff&quot;/&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
               &lt;/label&gt;
-              &lt;label class=&quot;radioLabel&quot;&gt;Stuff&lt;/label&gt; 
             &lt;/div&gt;
           &lt;/div&gt;
           &lt;div class=&quot;row&quot;&gt;
@@ -499,15 +491,16 @@ browser/device sizes) --&gt;
                 &lt;option value=&quot;Aeronautics&quot;&gt;Aeronautics&lt;/option&gt;
                 &lt;option value=&quot;Bioengineering&quot;&gt;Bioengineering&lt;/option&gt;
                 &lt;option value=&quot;Chemical Engineering&quot;&gt;Chemical Engineering&lt;/option&gt;
-                .
-                .
-                .
-                .
-                .
-                &lt;option value=&quot;Library&quot;&gt;Library&lt;/option&gt;
-                &lt;option value=&quot;Post Doc Development Centre&quot;&gt;Post Doc Development Centre&lt;/option&gt;
-                &lt;option value=&quot;School of Professional Development&quot;&gt;School of Professional Development&lt;/option&gt;
+                &lt;option value=&quot;Civil and Environmental Engineering&quot;&gt;Civil and Environmental Engineering&lt;/option&gt;
+              .
+              .
+              .
+              .
               &lt;/optgroup&gt;
+              .
+              .
+              .
+              .
               &lt;/select&gt;
             &lt;/div&gt;
           &lt;/div&gt;
@@ -530,18 +523,21 @@ browser/device sizes) --&gt;
           &lt;div class=&quot;row&quot;&gt;
           &lt;div class=&quot;six columns&quot;&gt;
             &lt;label class=&quot;radioTitle&quot;&gt;My gender is: &lt;/label&gt; 
-            &lt;label class=&quot;radio&quot;&gt;
+            &lt;label class=&quot;radio&quot; data-title=&quot;Male&quot;&gt;
                 &lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;male&quot; checked /&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
             &lt;/label&gt;
-            &lt;label class=&quot;radioLabel&quot;&gt;Male&lt;/label&gt; 
-            &lt;label class=&quot;radio&quot;&gt;
+            &lt;label class=&quot;radio&quot; data-title=&quot;Female&quot;&gt;
                 &lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;female&quot;/&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
             &lt;/label&gt;
-            &lt;label class=&quot;radioLabel&quot;&gt;Female&lt;/label&gt; 
+            &lt;label class=&quot;radio&quot; data-title=&quot;Else/Prefer not to say&quot;&gt;
+                &lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;else&quot; /&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
+            &lt;/label&gt;
+            &lt;!-- ↓ THIS IS THE OLD HTML ⬇︎ PLEASE CHANGE TO THE ↑ NEW ONE ⬆︎
             &lt;label class=&quot;radio&quot;&gt;
                 &lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;else&quot; /&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
             &lt;/label&gt;
-            &lt;label class=&quot;radioLabel&quot;&gt;Else/Prefer not to say&lt;/label&gt; 
+            &lt;label class=&quot;radioLabel&quot;&gt;Else/Prefer not to say&lt;/label&gt;
+             --&gt;
           &lt;/div&gt;
           &lt;div class=&quot;six columns&quot;&gt;
             &lt;label class=&quot;sliderTitle&quot;&gt;Overall Ranking: &lt;span id=&quot;rankingDisplay&quot; data-unit=&quot; stars&quot;&gt;10 stars&lt;/span&gt;&lt;/label&gt; 
@@ -552,10 +548,15 @@ browser/device sizes) --&gt;
           &lt;/div&gt;
           &lt;div class=&quot;row&quot;&gt;
           &lt;div class=&quot;twelve columns&quot;&gt;
+            &lt;label class=&quot;checkbox&quot; data-title=&quot;I give permission for the school to contact me regarding my feedbacks.&quot;&gt;
+                &lt;input type=&quot;checkbox&quot; id=&quot;permission&quot; checked /&gt;&lt;span for=&quot;checkbox&quot;&gt;&lt;/span&gt;
+            &lt;/label&gt;
+            &lt;!-- ↓ THIS IS THE OLD HTML ⬇︎ PLEASE CHANGE TO THE ↑ NEW ONE ⬆︎
             &lt;label class=&quot;checkbox&quot;&gt;
                 &lt;input type=&quot;checkbox&quot; id=&quot;permission&quot; checked /&gt;&lt;span for=&quot;checkbox&quot;&gt;&lt;/span&gt;
             &lt;/label&gt;
-            &lt;label class=&quot;checkboxTitle&quot;&gt;I give permission for the school to contact me regarding my feedbacks.&lt;/label&gt; 
+            &lt;label class=&quot;checkboxTitle&quot;&gt;I give permission for the school to contact me regarding my feedbacks.&lt;/label&gt;
+             --&gt;
             &lt;br&gt;
             &lt;input class=&quot;button-primary centre-aligned u-full-width&quot; type=&quot;button&quot; value=&quot;Submit&quot;&gt;
           &lt;/div&gt;
@@ -1062,8 +1063,8 @@ jQuery code:
     </div>
   </div>
 
-
-<br><br><br><br>
+  <div class="container centre-aligned">Created by <a href="mailto:hk1415@ic.ac.uk">Mangle Kuo</a>. Last update 08/09/2017.</div>
+<br><br>
 
 
 

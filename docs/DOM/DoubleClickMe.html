@@ -226,8 +226,7 @@
           </div>
           <div class="five columns">
 <pre>
-<code>
-Recommonded folder structure for your <em>index.html</em>:
+<code>Recommonded folder structure for your <em>index.html</em>:
 
 + DOM/
 | + assets/
@@ -396,7 +395,7 @@ Recommonded folder structure for your <em>index.html</em>:
 </p>
 <p>As you have seen, often the property of the HTML element you&#39;ll need to change is a CSS style, which is why we are talking about them all at the same time in this tutorial.</p>
 <p>You write HTML tags to represent the structure of your website, write Javascript/jQuery code to do dynamic stuff, and write css to style them.</p>
-<h2 id="simple-button">Simple Button</h2>
+<h2 id="simple-button-example">Simple Button Example</h2>
 <h3 id="final-result">Final result</h3>
 <p>Let's try to create something which look like this (sound effect not included in this tutorial): </p>
           <div class="playStopButton">▶︎ PLAY</div>
@@ -676,11 +675,11 @@ var myObj = {
         <h2 id="jquery-basics">jQuery basics</h2>
         <div class="row">
           <div class="twelve columns">
-<h3 id="console-">Console:</h3>
+<h3 id="console-your-best-friend-for-debugging">Console, your best friend for debugging</h3>
 <p><code>right-click on your webpage -&gt; &quot;inspect&quot; -&gt; &quot;console&quot;</code>
 This will take you to the javascript console. Try typing in <code>console.log(&#39;Hello World&#39;);</code>. Use this to help you debug your bugzzz.</p>
-<h3 id="for-an-element-">For an element:</h3>
-<p>for the element <code>&lt;div id=&quot;yellowButton&quot; data-message=&quot;hahaha&quot;&gt;I am a yellow button&lt;/div&gt;</code>, you can do:</p>
+<h3 id="what-you-can-do-to-an-element">What you can do to an element</h3>
+<p>1. for the element <code>&lt;div id=&quot;yellowButton&quot; data-message=&quot;hahaha&quot;&gt;I am a yellow button&lt;/div&gt;</code>, you can do:</p>
 <pre><code>$(&quot;#yellowButton&quot;).text();
 // returns &quot;I am a yellow button&quot;
 
@@ -743,7 +742,7 @@ $(&quot;#yellowButton&quot;).width();
 
 $(&quot;#yellowButton&quot;).height();
 // returns whatever the height of the element is in px
-</code></pre><p>for the element <code>&lt;input id=&quot;someSlider&quot; class=&quot;inputs&quot; type=&quot;range&quot; value=&quot;10&quot; min =&quot;0&quot; max=&quot;10&quot; step =&quot;1&quot;/&gt;</code>, you can do:</p>
+</code></pre><p>2. for the element <code>&lt;input id=&quot;someSlider&quot; class=&quot;inputs&quot; type=&quot;range&quot; value=&quot;10&quot; min =&quot;0&quot; max=&quot;10&quot; step =&quot;1&quot;/&gt;</code>, you can do:</p>
 <pre><code>$(&quot;#someSlider&quot;).val();
 // returns 10
 
@@ -761,67 +760,92 @@ $(&quot;#someSlider&quot;).on(&#39;input&#39;,function(){
         <div class="row">
           <div class="twelve columns">
           <blockquote>Avoid hosting these libraries youself (on the server), always use the CDN if possible.<em>-Server Manager</em></blockquote>
-<h3 id="python">Python</h3>
-<h4 id="plotly">plotly</h4>
-<p>Library for data virsualisations.
-<a href="https://plot.ly/">https://plot.ly/</a>
-<em>Copyright (c) 2016-2017 Plotly, Inc</em></p>
-<ul>
-<li>Open-Source (MIT License)</li>
-<li><a href="https://github.com/plotly/plotly.py/blob/master/LICENSE.txt">https://github.com/plotly/plotly.py/blob/master/LICENSE.txt</a></li>
-</ul>
-<h3 id="javascript">Javascript</h3>
-<h4 id="jquery">jQuery</h4>
-<p>For easier DOM access.
-<a href="https://jquery.org/">https://jquery.org/</a>
-<em>Copyright 2017 The jQuery Foundation.</em></p>
-<ul>
-<li>Open-Source (MIT License)</li>
-<li><a href="https://jquery.org/license/">License</a></li>
-</ul>
-<h4 id="plotly">plotly</h4>
-<p>Library for data visualisations.
-<a href="https://plot.ly/">https://plot.ly/</a>
-<em>Copyright (c) 2016-2017 Plotly, Inc</em></p>
-<ul>
-<li>Open-Source (MIT License)</li>
-<li><a href="https://github.com/plotly/plotly.py/blob/master/LICENSE.txt">License</a></li>
-<li><a href="https://plot.ly/javascript/open-source-announcement/">https://plot.ly/javascript/open-source-announcement/</a></li>
-<li>Commercial use is fine as long it&#39;s as not hosted on their website <a href="https://plot.ly/terms-of-service/">https://plot.ly/terms-of-service/</a></li>
-</ul>
-<h4 id="phaser-io">phaser.io</h4>
-<p>Library for drawing stuff on Canvas. Use this instead of Plotly when you want full control over your UI.
-<a href="https://phaser.io/">https://phaser.io/</a>
-<em>Copyright (c) 2017 Richard Davey, Photon Storm Ltd.</em></p>
-<ul>
-<li>Open-Source (MIT License)</li>
-<li><a href="https://github.com/photonstorm/phaser-ce/blob/v2.8.4/license.txt">License</a></li>
-</ul>
-<h4 id="mathjax">MathJax</h4>
-<p>For displaying LaTeX on your HTML page.
-<a href="https://www.mathjax.org/">https://www.mathjax.org/</a>
-<em>Copyright (c) 2009-2017 The MathJax Consortium</em></p>
-<ul>
-<li>Open-Source (Apache License, Version 2.0)</li>
-<li><a href="https://github.com/mathjax/MathJax/blob/master/LICENSE">License</a></li>
-</ul>
-<h4 id="marked-js">marked.js</h4>
-<p>For displaying Markdown on your HTML page.
-<a href="https://github.com/chjj/marked">https://github.com/chjj/marked</a>
-<em>Copyright (c) 2011-2014, Christopher Jeffrey (<a href="https://github.com/chjj/">https://github.com/chjj/</a>)</em></p>
-<ul>
-<li>Open-Source (MIT License)</li>
-<li><a href="https://github.com/chjj/marked/blob/master/LICENSE">License</a></li>
-</ul>
-<h4 id="jison">Jison</h4>
-<p>For converting <code>E^sqrt(3*k^2)</code> to <code>Math.pow(Math.E,Math.sqrt(3*Math.pow(k,2)))</code>
-<a href="http://zaa.ch/jison/">http://zaa.ch/jison/</a>
-<em>Copyright (c) 2009-2013 Zachary Carter</em></p>
-<ul>
-<li>Open-Source (MIT License)</li>
-<li><a href="http://zaa.ch/jison/docs/#license">License</a></li>
-</ul>
-<h2 id="css">CSS</h2>
+
+<hr>
+<h3 id="python">PYTHON</h3>
+<div class="row">
+  <div class="six columns">
+  <h4 id="plotly">plotly</h4>
+  <p>Library for data virsualisations.
+  <a href="https://plot.ly/">https://plot.ly/</a>
+  <em>Copyright (c) 2016-2017 Plotly, Inc</em></p>
+  <ul>
+  <li>Open-Source (MIT License)</li>
+  <li><a href="https://github.com/plotly/plotly.py/blob/master/LICENSE.txt">https://github.com/plotly/plotly.py/blob/master/LICENSE.txt</a></li>
+  </ul>
+  </div>
+  <div class="six columns">
+  <h4 id="matplotlib">matplotlib</h4>
+  <p>Library for plotting graphs (not commandeered, please use Plotly when possible).
+  <a href="https://matplotlib.org">https://matplotlib.org</a>
+  <em>(c) Copyright 2002 - 2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the Matplotlib development team</em></p>
+  <ul>
+  <li>Open-Source (PSF License)</li>
+  <li><a href="https://matplotlib.org/users/license.html">https://matplotlib.org/users/license.html</a></li>
+  </ul>
+  </div>
+</div>
+<hr>
+<h3 id="javascript">JAVASCRIPT</h3>
+<div class="row">
+<div class="six columns">
+  <h4 id="jquery">jQuery</h4>
+  <p>For easier DOM access.
+  <a href="https://jquery.org/">https://jquery.org/</a>
+  <em>Copyright 2017 The jQuery Foundation.</em></p>
+  <ul>
+  <li>Open-Source (MIT License)</li>
+  <li><a href="https://jquery.org/license/">License</a></li>
+  </ul>
+  <h4 id="plotly">plotly</h4>
+  <p>Library for data visualisations.
+  <a href="https://plot.ly/">https://plot.ly/</a>
+  <em>Copyright (c) 2016-2017 Plotly, Inc</em></p>
+  <ul>
+  <li>Open-Source (MIT License)</li>
+  <li><a href="https://github.com/plotly/plotly.py/blob/master/LICENSE.txt">License</a></li>
+  <li><a href="https://plot.ly/javascript/open-source-announcement/">https://plot.ly/javascript/open-source-announcement/</a></li>
+  <li>Commercial use is fine as long it&#39;s as not hosted on their website <a href="https://plot.ly/terms-of-service/">https://plot.ly/terms-of-service/</a></li>
+  </ul>
+  <h4 id="phaser-io">phaser.io</h4>
+  <p>Library for drawing stuff on Canvas. Use this instead of Plotly when you want full control over your UI.
+  <a href="https://phaser.io/">https://phaser.io/</a>
+  <em>Copyright (c) 2017 Richard Davey, Photon Storm Ltd.</em></p>
+  <ul>
+  <li>Open-Source (MIT License)</li>
+  <li><a href="https://github.com/photonstorm/phaser-ce/blob/v2.8.4/license.txt">License</a></li>
+  </ul>
+</div>
+<div class="six columns">
+
+  <h4 id="mathjax">MathJax</h4>
+  <p>For displaying LaTeX on your HTML page.
+  <a href="https://www.mathjax.org/">https://www.mathjax.org/</a>
+  <em>Copyright (c) 2009-2017 The MathJax Consortium</em></p>
+  <ul>
+  <li>Open-Source (Apache License, Version 2.0)</li>
+  <li><a href="https://github.com/mathjax/MathJax/blob/master/LICENSE">License</a></li>
+  </ul>
+  <h4 id="marked-js">marked.js</h4>
+  <p>For displaying Markdown on your HTML page.
+  <a href="https://github.com/chjj/marked">https://github.com/chjj/marked</a>
+  <em>Copyright (c) 2011-2014, Christopher Jeffrey (<a href="https://github.com/chjj/">https://github.com/chjj/</a>)</em></p>
+  <ul>
+  <li>Open-Source (MIT License)</li>
+  <li><a href="https://github.com/chjj/marked/blob/master/LICENSE">License</a></li>
+  </ul>
+  <h4 id="jison">Jison</h4>
+  <p>For converting <code>E^sqrt(3*k^2)</code> to <code>Math.pow(Math.E,Math.sqrt(3*Math.pow(k,2)))</code>
+  <a href="http://zaa.ch/jison/">http://zaa.ch/jison/</a>
+  <em>Copyright (c) 2009-2013 Zachary Carter</em></p>
+  <ul>
+  <li>Open-Source (MIT License)</li>
+  <li><a href="http://zaa.ch/jison/docs/#license">License</a></li>
+  </ul>
+</div>
+</div>
+<hr>
+<h3 id="css">CSS</h3>
 <h4 id="skeleton">Skeleton</h4>
 <p>What our current CSS is based on. We&#39;ve added a lot to it, but all the margins and paddings are determinant by Skeleton.
 <a href="http://getskeleton.com/">http://getskeleton.com/</a>
@@ -834,6 +858,9 @@ $(&quot;#someSlider&quot;).on(&#39;input&#39;,function(){
         </div>
     </div>
     
+  <div class="container centre-aligned">Created by <a href="mailto:hk1415@ic.ac.uk">Mangle Kuo</a>. Last update 08/09/2017.</div>
+<br><br>
+
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
 
@@ -959,5 +986,6 @@ $(&quot;#someSlider&quot;).on(&#39;input&#39;,function(){
 
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
 </body>
 </html>
