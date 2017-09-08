@@ -4,16 +4,14 @@
 <head>
     <title>2D Transformations</title>
     <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
-    <!-- <link rel="stylesheet" href="skeleton-tabs.css"> -->
+     <link rel="stylesheet" href="tabs/skeleton-tabs.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>-->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
     <script src="script/2D.js"></script>
-    <script src="skeleton-tabs.js"></script>
+    <script src="tabs/skeleton-tabs.js"></script>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <!-- jquery for json importing and parsing -->
 </head>
 <body>
 
@@ -21,9 +19,7 @@
     <div class="row">
         <div class="six columns">
             <h1>2D Transformations</h1>
-            <div id='graph' style="width:400px; height:400px;"></div>  <!-- Plotly chart will be drawn inside this DIV -->
-            <!--<input class="button-primary" type="submit" value="Overall Transformation" onclick="showMatrix()" title="Reveal the-->
-<!--overall composition of transformations">-->
+            <div id='graph' style="width:400px; height:400px;"></div>
             <h6>Overall Equation:</h6>
             <p id="overallMatrix"></p>
         </div>
@@ -40,93 +36,93 @@
             <div class="tab-content">
                 <div class="tab-pane active" id="skew">
                     <div class="sliderSkew">
-                    <label class="radioTitle">Axis: </label>
-                    <label class="radio">
-                    <input type="radio" name="axis" id="x" checked /><span for="radio"></span>
-                    </label>
-                    <label class="radioLabel">x</label><br>
-                    <label class="radio">
-                    <input type="radio" name="axis" id="y"/><span for="radio"></span>
-                    </label>
-                    <label class="radioLabel">y</label>
-                </div>
+                        <label class="radioTitle">Axis: </label>
+                        <label class="radio">
+                        <input type="radio" name="axis" id="x" checked /><span for="radio"></span>
+                        </label>
+                        <label class="radioLabel">x</label><br>
+                        <label class="radio">
+                        <input type="radio" name="axis" id="y"/><span for="radio"></span>
+                        </label>
+                        <label class="radioLabel">y</label>
+                    </div>
                 <div class="sliderSkew">
                     <h4>Skew Matrix:</h4>
-                  <p id="skewmatrix"></p>
+                    <p id="skewmatrix"></p>
                     <input class="button-primary" type="submit" value="Apply" onclick="plotSkew()">
                     <input type="button" value="Reset" onclick="resetStuff()" >
                 </div>
 
 
 
-              </div>
+                </div>
 
-              <div class="tab-pane" id="rotate">
+                <div class="tab-pane" id="rotate">
                 <div class="sliderRotate">
                     <label class="sliderTitle" >Rotation Angle (θ):</label>
                         <label>
-                           <input id="rotateID" type ="range" value="0" min ="0" max="2" step ="0.05" oninput="rotateMatrix()" data-unit="radians"/>
+                            <input id="rotateID" type ="range" value="0" min ="0" max="2" step ="0.05" oninput="rotateMatrix()" data-unit="radians"/>
                             <span class="sliderMin">0</span><span class="sliderMax">2π rad</span>
                         </label>
                 </div>
                 <div class="sliderRotate">
                     <p id="showtheta"></p>
 
-                  <h4>Rotation Matrix:</h4>
-                  <div class="row">
-                      <div class="six columns">
-                          <h5>Trigonometric Form</h5>
-                          <p id="rotatematrix2"></p>
-                      </div>
-                      <div class="six columns">
-                          <h5>Decimal Form</h5>
-                          <p id="rotatematrix"></p><br>
-                      </div>
-                  </div>
-                      <input class="button-primary" type="submit" value="Apply" onclick="plotRotate()">
-                      <input type="button" value="Reset" onclick="resetStuff()">
-                </div>
+                    <h4>Rotation Matrix:</h4>
+                    <div class="row">
+                        <div class="six columns">
+                            <h5>Trigonometric Form</h5>
+                            <p id="rotatematrix2"></p>
+                        </div>
+                        <div class="six columns">
+                            <h5>Decimal Form</h5>
+                            <p id="rotatematrix"></p><br>
+                        </div>
+                    </div>
+                        <input class="button-primary" type="submit" value="Apply" onclick="plotRotate()">
+                        <input type="button" value="Reset" onclick="resetStuff()">
+                    </div>
 
 
 
               </div>
 
               <div class="tab-pane" id="scale">
-                <div class="sliderScale">
-                    <label class="sliderTitle">x-scale: <span id="scale1IDDisplay">1</span></label>
-                    <label>
-                        <input id="scale1ID" type ="range" value="1" min ="-4" max="4" step ="0.1" oninput="scaleMatrix()"/>
-                        <span class="sliderMin">-4</span><span class="sliderMax">4</span>
-                    </label>
-                </div>
-                <div class="sliderScale">
-                    <label class="sliderTitle">y-scale: <span id="scale2IDDisplay">1</span></label>
-                    <label>
-                        <input id="scale2ID" type ="range" value="1" min ="-4" max="4" step ="0.1" oninput="scaleMatrix()"/>
-                        <span class="sliderMin">-4</span><span class="sliderMax">4</span>
-                    </label>
-                </div>
+                  <div class="sliderScale">
+                      <label class="sliderTitle">x-scale: <span id="scale1IDDisplay">1</span></label>
+                      <label>
+                          <input id="scale1ID" type ="range" value="1" min ="-4" max="4" step ="0.1" oninput="scaleMatrix()"/>
+                          <span class="sliderMin">-4</span><span class="sliderMax">4</span>
+                      </label>
+                  </div>
+                  <div class="sliderScale">
+                      <label class="sliderTitle">y-scale: <span id="scale2IDDisplay">1</span></label>
+                      <label>
+                          <input id="scale2ID" type ="range" value="1" min ="-4" max="4" step ="0.1" oninput="scaleMatrix()"/>
+                          <span class="sliderMin">-4</span><span class="sliderMax">4</span>
+                      </label>
+                  </div>
                   <h4>Scaling Matrix:</h4>
                   <p id="scalematrix"></p>
-                <div class="sliderScale">
-                    <input class="button-primary" type="submit" value="Apply" onclick="plotScale()">
-                    <input type="button" value="Reset" onclick="resetStuff()">
-                </div>
+                  <div class="sliderScale">
+                      <input class="button-primary" type="submit" value="Apply" onclick="plotScale()">
+                      <input type="button" value="Reset" onclick="resetStuff()">
+                  </div>
 
-              </div>
+                  </div>
 
               <div class="tab-pane" id="custom">
                   <span><b>Type input:</b></span><br><br>
                   <p id="tableInput"></p>
                   <h4>Custom Matrix:</h4>
-                    <p id="custommatrix"></p>
-                <div class="sliderCustom">
-                    <input class="button-primary" type="submit" value="Apply" onclick="plotCustom()">
-                    <input type="button" value="Reset" onclick="resetStuff()">
+                      <p id="custommatrix"></p>
+                  <div class="sliderCustom">
+                      <input class="button-primary" type="submit" value="Apply" onclick="plotCustom()">
+                      <input type="button" value="Reset" onclick="resetStuff()">
+                  </div>
+
+
                 </div>
-
-
-              </div>
             </div>
         </div>
     </div>

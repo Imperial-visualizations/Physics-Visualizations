@@ -1,3 +1,5 @@
+// Arrow object and quiver functions come from the __utils__.js file
+
 // Rotation matrix
 function rotmat(th) {
   var rotator = [[Math.cos(th),-Math.sin(th)],[Math.sin(th),Math.cos(th)]];
@@ -6,24 +8,24 @@ function rotmat(th) {
 
 // Rotation function returns arrays x,y for smooth transition
 function rotation(vec,th) {
-  // Parameters
-  var N = 10;
-  var t = numeric.linspace(0,th,N);
-  // Rotation matrix
-  var x = [];
-  var y = [];
-  var myvec = math.matrix(vec);
-  for (var i=0; i<N; i++) {
-    var newvec = math.multiply(rotmat(t[i]),myvec);
-      // Pull out x and y components
-        x.push(newvec._data[0])
-        y.push(newvec._data[1])
-  }
-  return [x,y];
+    // Parameters
+    var N = 10;
+    var t = numeric.linspace(0,th,N);
+    // Rotation matrix
+    var x = [];
+    var y = [];
+    var myvec = math.matrix(vec);
+    for (var i=0; i<N; i++) {
+        var newvec = math.multiply(rotmat(t[i]),myvec);
+            // Pull out x and y components
+            x.push(newvec._data[0])
+            y.push(newvec._data[1])
+    }
+    return [x,y];
 }
 
 // Takes wings of an arrow and rotates anti-clockwise about head by 90 degrees, this is used for the
-// circulation integral diagram
+// circulation integral diagram to prevent glitching with plotly.animate.
 function wingRotation(wings, offset, th) {
     var rotated = [];
     var x = [], y = [], addedXVec = [], addedYVec = [];
@@ -64,6 +66,7 @@ function arrowBox(n,color1,color2) {
     data = [];
     new_data = [];
     var v0 = [0,0], v1 = [0,0], v2 = [0,0], v3 = [0,0];
+    // Various cases to consider such as different arrow colours on the outside of the box...
     for (var i=0; i<n; i++) {
         for (var j=0; j<n; j++) {
             if (j === 0) {
@@ -76,6 +79,7 @@ function arrowBox(n,color1,color2) {
                     var arrow0 = new Arrow2D(v1[0]-v0[0],v1[1]-v0[1],math.add(v0,[0.1*l,0.1*l]),1,color1,false,0.7)
                     var arrow1 = new Arrow2D(v0[0]-v3[0],v0[1]-v3[1],math.add(v3,[0.1*l,-0.1*l]),1,color1,false,0.7)
 
+                    // parameters to be passed into quiver function
                     var points = [math.add(v1,[-0.1*l,0.1*l]),
                         math.add(v2,[-0.1*l,-0.1*l])];
                     var vecs = [math.add(v2,[-v1[0],-v1[1]]),
@@ -83,6 +87,7 @@ function arrowBox(n,color1,color2) {
 
                     new_data = getQuiver2D(points, vecs, 1, color2, 0.7);
 
+                    // Add arrow data
                     data.push(arrow0.shaft)
                     data.push(arrow0.wings)
                     data.push(arrow1.shaft)
@@ -273,6 +278,7 @@ function circulationPlot() {
 
     var initialData = [];
     var ratio = 1.2;
+    // Create arrows
     var arrow0 = new Arrow2D(1,0,[0,0],2,'rgb(0,0,0)',false,ratio);
     var wings0 = arrow0.data.wings;
     var arrow1 = new Arrow2D(0,1,[1,0],2,'rgb(0,0,0)',false,ratio);
@@ -286,7 +292,7 @@ function circulationPlot() {
     wings1.y = math.add(wings1.y,[-ratio+0.5,-ratio+0.5,-ratio+0.5])
     wings2.x = math.add(wings2.x,[ratio-0.5,ratio-0.5,ratio-0.5])
     wings3.y = math.add(wings3.y,[ratio-0.5,ratio-0.5,ratio-0.5])
-
+    // Arrow wings to be plotted only
     initialData = [wings0,wings1,wings2,wings3]
 
     var myLabel = {
@@ -379,9 +385,6 @@ function circulationPlot() {
     var w3 = {x: wings3.x, y: math.add(wings3.y,[-0.5,-0.5,-0.5])}
 
     shifted0 = wingRotation(w0, [1,0], Math.PI/2)
-    console.log(shifted0)
-    console.log(shifted0[0])
-    console.log(shifted0[0][0])
     shifted1 = wingRotation(w1, [1,1], Math.PI/2)
     shifted2 = wingRotation(w2, [0,1], Math.PI/2)
     shifted3 = wingRotation(w3, [0,0], Math.PI/2)
@@ -495,7 +498,7 @@ function circulationPlot() {
         }
         frames.push(newData)
     }
-
+    // Plot with animate
     Plotly.newPlot('circulation_graph',initialData,layout)
     Plotly.animate('circulation_graph',frames, {
     transition: {
@@ -590,7 +593,7 @@ function curlPlot(n) {
     Plotly.newPlot('curl_graph',data,layout)
 }
 
-// Function which zooms into curl diagram plot to show single rotating region
+// Function which zooms into curl diagram plot to show single rotating region using animate
 function zoom() {
     Plotly.animate('curl_graph',{layout: {
         title: 'Plot of D split up into rotating regions',
