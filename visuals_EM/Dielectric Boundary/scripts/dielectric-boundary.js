@@ -89,10 +89,6 @@ $(window).on('load', function() {
 
         init(data, dataFres);
 
-        dom.polarisationSwitchInputs.on("change", handlePolarisationSwitch);
-        dom.refractiveIndexInput.on("input", handleRefractiveIndexSlider);
-        dom.angleInput.on("input", handleAngleSlider);
-
     }, showJSONLoadError);
 
 
@@ -104,6 +100,10 @@ $(window).on('load', function() {
 
         Plotly.plot(div='graph', deepCopy(phys.getPlotData()), layout=plt.layout);
         Plotly.newPlot(div='graph2', deepCopy(phys.getCurvePlotData()), layout=plt.layoutFres, {displayModeBar: false});
+
+        dom.polarisationSwitchInputs.on("change", handlePolarisationSwitch);
+        dom.refractiveIndexInput.on("input", handleRefractiveIndexSlider);
+        dom.angleInput.on("input", handleAngleSlider);
     }
 
 
@@ -122,7 +122,7 @@ $(window).on('load', function() {
         );
         updatePlot();
         dom.refractiveIndexDisplay.html(
-            $(this).val()
+            roundInput($(this), phys.data[phys.polarisation])
         );
     }
 
@@ -132,7 +132,7 @@ $(window).on('load', function() {
         );
         updatePlot();
         dom.angleDisplay.html(
-            $(this).val().concat('&deg;')
+            roundInput($(this), phys.data[phys.polarisation][phys.refractiveIndexIndex]).concat('&deg;')
         );
     }
 
@@ -143,12 +143,20 @@ $(window).on('load', function() {
 
 
     function input2index(domInput, array) {
-        // Compute the corresponding JSON array index for a given input value, rounding to the nearest integer
+        /** Compute the corresponding JSON array index for a given input value, rounding to the nearest integer */
         var inputValue = domInput.val(),
-            maxInput = domInput.attr("max"),
-            minInput = domInput.attr("min"),
+            maxInput = parseFloat(domInput.attr("max")),
+            minInput = parseFloat(domInput.attr("min")),
             arrayLen = array.length;
         return Math.round(((inputValue - minInput) / (maxInput - minInput)) * (arrayLen - 1));
+    }
+    function roundInput(domInput, array) {
+        /** Round a given input value to the actual value in the array. Returns a string */
+        var inputValue = domInput.val(),
+            maxInput = parseFloat(domInput.attr("max")),
+            minInput = parseFloat(domInput.attr("min")),
+            arrayLen = array.length;
+        return (minInput + ((maxInput - minInput) / (arrayLen - 1)) * input2index(domInput, array)).toFixed(2);
     }
 
 
