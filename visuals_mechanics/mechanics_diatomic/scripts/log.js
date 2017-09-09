@@ -1,16 +1,13 @@
 var BRANCH = "mechanics";                       // Subject branch - determines database name
 var VISUALISATION = "diatomic";                 // Name of visualisation.
-var sessHistory = {branch: BRANCH};                           // User actions in this session.
+var COMMAND_LIMIT = 25;                         // Number of commands before history is sent to server.
+var sessHistory = {branch: BRANCH};             // User actions in this session.
 var count = 0;
 
-// /**
-//  * Before navigating away, send all sessHistory to server.
-//  */
-// window.onbeforeunload = function() {
-//     $.post("/scripts/db.php", sessHistory);
-//     sessHistory = {}; count = 0;
-//     return confirm("You're about to leave this page, are you sure?");
-// };
+/**
+ * Before navigating away, send all sessHistory to server.
+ */
+window.onbeforeunload = function() {sendLog(); return confirm("Are you sure you want to leave this page?")};
 
 /**
  * Stores log data in an Array as an SQlite ADD command.
@@ -35,22 +32,28 @@ function log(object) {
     // Event type
     action.event = object.type;
 
-    if (action.event === "submit") action.targetValue = object.innerHTML;
-    else if (action.event === "") {action.event = "spoiler"; action.targetValue = object.innerHTML.slice(0, 4);}
-    else action.targetValue = object.value;
+    if (action.event === "submit") action.targetValue = object.innerHTML;                                                   // Button
+    else if (action.event === "") {action.event = "spoiler"; action.targetValue = object.innerHTML.slice(0, 4);}            // Spoiler
+    else action.targetValue = object.value;                                                                                 // Slider, input, and others.
 
     // Target element.
     for (var i = 0; i < targetAttr.length; i++) {
         if (targetAttr[i] === undefined) console.error('Attribute has undefined value!');
         else action.target += targetAttr[i] + " ";
     }
-    action.target = action.target.replace("undefined", "");
-
-    // Name of visualisation.
-    action.visualisation = VISUALISATION;
+    action.target = action.target.replace("undefined", "");     // Handling errors.
+    action.visualisation = VISUALISATION;                       // Name of visualisation.
 
     // Adding this command to dictionary of sessHistory.
     count++;
     sessHistory[count] = action;
-    console.log(action);
+
+    if (count > COMMAND_LIMIT) sendLog();
+    console.log(sessHistory);
+}
+
+function sendLog() {
+    $.post("db.php", sessHistory);                 // jQuery AJAX POST
+    count = 0;                                                  // Resetting command count.
+    sessHistory = {branch: BRANCH};                             // Resetting session history JSON.
 }
