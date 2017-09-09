@@ -3,6 +3,15 @@ var VISUALISATION = "diatomic";                 // Name of visualisation.
 var sessHistory = {branch: BRANCH};                           // User actions in this session.
 var count = 0;
 
+// /**
+//  * Before navigating away, send all sessHistory to server.
+//  */
+// window.onbeforeunload = function() {
+//     $.post("/scripts/db.php", sessHistory);
+//     sessHistory = {}; count = 0;
+//     return confirm("You're about to leave this page, are you sure?");
+// };
+
 /**
  * Stores log data in an Array as an SQlite ADD command.
  * @param object: Element clicked on.
@@ -12,12 +21,16 @@ function log(object) {
     var currDate = new Date();
     var targetAttr = [object.tagName, object.id];
 
-    action.time = currDate.getDate() + "/"
-        + (currDate.getMonth()+1)  + "/"
-        + currDate.getFullYear() + " "
-        + currDate.getHours() + ":"
-        + currDate.getMinutes() + ":"
-        + currDate.getSeconds();
+    function pad(n) {
+        return (n < 10) ? ('0' + n.toString()) : n.toString();
+    }
+
+    action.time = pad(currDate.getDate()) + "/"
+        + pad(currDate.getMonth() + 1)  + "/"
+        + pad(currDate.getFullYear()) + " "
+        + pad(currDate.getHours()) + ":"
+        + pad(currDate.getMinutes()) + ":"
+        + pad(currDate.getSeconds());
 
     // Event type
     action.event = object.type;
@@ -41,12 +54,3 @@ function log(object) {
     sessHistory[count] = action;
     console.log(action);
 }
-
-/**
- * Before navigating away, send all sessHistory to server.
- */
-window.onbeforeunload = function() {
-    $.post("/scripts/database.js", sessHistory);
-    sessHistory = {}; count = 0;
-    return confirm("You're about to leave this page, are you sure?");
-};

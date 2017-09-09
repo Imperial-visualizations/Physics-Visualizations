@@ -68,10 +68,10 @@ $(".showHideButton").on("click", spoiler);
 
 function spoiler() {
     var text = ($($(this).attr("for")).hasClass("expanded")) ? "Show" : "Hide";
+    log(this);
     $(this).html(text+$(this).attr("data-graph-name"));
     $($(this).attr("for")).slideToggle(250);
     $($(this).attr("for")).toggleClass("expanded");
-    log(this);
 }
 
 /**
@@ -143,9 +143,9 @@ $('body').on('click', '[data-change]', function() {
  * Start/Pause button code.
  */
 $('#playPauseButton').on('click',function() {
+    log(this);
     var text = running ? "Start" : "Pause";
     $("#playPauseButton").text(text);
-    log(this);
     running = !running;
 });
 
@@ -155,8 +155,8 @@ $('#playPauseButton').on('click',function() {
 $('#resetButton').on('click', function() {
     a1.pos = []; a2.pos = [];
     running = false;
-    $('#playPauseButton').text("Start");
     log(this);
+    $('#playPauseButton').text("Start");
     reset();
 });
 

@@ -51,7 +51,6 @@ Atom.prototype.setPos = function(newPos){
  * @constructor
  */
 Molecule = function(a1, a2, potential, keVib_0, keRot_0) {
-
     // Checking objects of class Atom passed in in the list.
     if (a1.constructor !== Atom || a2.constructor !== Atom){
         console.error("Can't run simulation without two valid atom objects");
