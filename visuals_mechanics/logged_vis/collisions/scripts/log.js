@@ -34,6 +34,8 @@ function log(object) {
 
     if (action.event === "submit") action.targetValue = object.innerHTML;                                                   // Button
     else if (action.event === "") {action.event = "spoiler"; action.targetValue = object.innerHTML.slice(0, 4);}            // Spoiler
+    else if (action.event ==="checkbox")
+    {action.targetValue = $("#" + targetAttr[1].toString())[0].checked ? 'Enabled' : 'Disabled';}                           // Checkbox
     else action.targetValue = object.value;                                                                                 // Slider, input, and others.
 
     // Target element.
@@ -49,11 +51,12 @@ function log(object) {
     sessHistory[count] = action;
 
     if (count > COMMAND_LIMIT) sendLog();
-    console.log(sessHistory);
+    // console.log(action);
 }
 
+// TODO: Configure up DB path.
 function sendLog() {
-    $.post("db.php", sessHistory);                 // jQuery AJAX POST
+    $.post("db.php", sessHistory);                              // jQuery AJAX POST
     count = 0;                                                  // Resetting command count.
     sessHistory = {branch: BRANCH};                             // Resetting session history JSON.
 }

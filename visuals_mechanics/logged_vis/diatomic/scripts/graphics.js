@@ -68,6 +68,7 @@ $(".showHideButton").on("click", spoiler);
 
 function spoiler() {
     var text = ($($(this).attr("for")).hasClass("expanded")) ? "Show" : "Hide";
+    log(this);
     $(this).html(text+$(this).attr("data-graph-name"));
     $($(this).attr("for")).slideToggle(250);
     $($(this).attr("for")).toggleClass("expanded");
@@ -123,6 +124,7 @@ $('body').on('click', '[data-change]', function() {
         init_e1 = parseFloat($('#e1').text());
         init_s2 = parseFloat($('#s2').text());
         init_e2 = parseFloat($('#e2').text());
+        log(this);
 
         // Timestep
         dT = parseFloat($('#dT').text());
@@ -141,6 +143,7 @@ $('body').on('click', '[data-change]', function() {
  * Start/Pause button code.
  */
 $('#playPauseButton').on('click',function() {
+    log(this);
     var text = running ? "Start" : "Pause";
     $("#playPauseButton").text(text);
     running = !running;
@@ -152,6 +155,7 @@ $('#playPauseButton').on('click',function() {
 $('#resetButton').on('click', function() {
     a1.pos = []; a2.pos = [];
     running = false;
+    log(this);
     $('#playPauseButton').text("Start");
     reset();
 });
@@ -169,7 +173,8 @@ function updateLabels() {
     // Updating KE values and resetting.
     initKVib = parseFloat($('#vibKEDisplay').text());
     initKRot = parseFloat($('#rotKEDisplay').text());
-    reset();
+    try {log(this); reset();}
+    catch (e) {reset();}
 }
 
 /**
