@@ -346,6 +346,7 @@ function makeTableHTML(myArray) {
     return result;
 }
 
+// Function which creates a matrix equation for HTML
 function makeMatrixEqnHTML(myMatrix, myVec) {
     var result = "<table class='matrixWrapper'><tbody><tr><td>"
     var round = roundedmat(myMatrix)
@@ -381,7 +382,7 @@ function makeTableInput(m, n) {
 
 
 
-// Plot the graphs after reading data from sliders
+// Replots the graphs after reading data from sliders
 function plotRotate() {
     var x = $("#rotateID").val();
     var th = Math.PI*x;
@@ -437,6 +438,7 @@ $("#scale2ID").each(function () {
 });
 
 
+// Prints the matrix onto the page on input
 function rotateMatrix() {
     var x = $("#rotateID").val();
     var th = Math.PI*x;
@@ -482,6 +484,7 @@ function roundedmat(A) {
 }
 
 
+// Resets everything when reset button is hit
 function resetStuff() {
     squarePlotter();
     vertex1 = [1,0];
@@ -492,11 +495,13 @@ function resetStuff() {
 }
 
 
-function showMatrix() {
-    var A = [[my_matrix.get([0,0]),my_matrix.get([0,1])],[my_matrix.get([1,0]),my_matrix.get([1,1])]];
-    A = roundedmat(A);
-    alert(math.matrix(A));
-}
+// Now unused feature
+//function showMatrix() {
+//    var A = [[my_matrix.get([0,0]),my_matrix.get([0,1])],[my_matrix.get([1,0]),my_matrix.get([1,1])]];
+//    A = roundedmat(A);
+//    alert(math.matrix(A));
+//}
+
 
 
 $(document).ready(function() {
