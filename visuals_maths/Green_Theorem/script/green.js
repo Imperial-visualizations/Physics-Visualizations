@@ -1,29 +1,43 @@
-// Rotation matrix
+// Arrow object and quiver functions come from the __utils__.js file
+
+/** Rotation matrix
+* @function
+* @param {float} th - angle of rotation
+*/
 function rotmat(th) {
   var rotator = [[Math.cos(th),-Math.sin(th)],[Math.sin(th),Math.cos(th)]];
   return rotator;
 }
 
-// Rotation function returns arrays x,y for smooth transition
+/** Rotation function returns arrays x,y for smooth transition
+* @function
+* @param {array} vec - array/vector to rotate
+* @param {float} th - angle of rotation
+*/
 function rotation(vec,th) {
-  // Parameters
-  var N = 10;
-  var t = numeric.linspace(0,th,N);
-  // Rotation matrix
-  var x = [];
-  var y = [];
-  var myvec = math.matrix(vec);
-  for (var i=0; i<N; i++) {
-    var newvec = math.multiply(rotmat(t[i]),myvec);
-      // Pull out x and y components
-        x.push(newvec._data[0])
-        y.push(newvec._data[1])
-  }
-  return [x,y];
+    // Parameters
+    var N = 10;
+    var t = numeric.linspace(0,th,N);
+    // Rotation matrix
+    var x = [];
+    var y = [];
+    var myvec = math.matrix(vec);
+    for (var i=0; i<N; i++) {
+        var newvec = math.multiply(rotmat(t[i]),myvec);
+            // Pull out x and y components
+            x.push(newvec._data[0])
+            y.push(newvec._data[1])
+    }
+    return [x,y];
 }
 
-// Takes wings of an arrow and rotates anti-clockwise about head by 90 degrees, this is used for the
-// circulation integral diagram
+/** Takes wings of an arrow and rotates anti-clockwise about head by 90 degrees, this is used for the
+// circulation integral diagram to prevent glitching with plotly.animate.
+* @function
+* @param {Arrow.wings} wings - wings of arrow object
+* @param {array} offset - offset of wings
+* @param {float} th - angle of rotation
+*/
 function wingRotation(wings, offset, th) {
     var rotated = [];
     var x = [], y = [], addedXVec = [], addedYVec = [];
@@ -47,7 +61,10 @@ function wingRotation(wings, offset, th) {
 }
 
 
-// Creates nxn grid for a unit box
+/** Creates nxn grid for a unit box
+* @function
+* @param {int} n - dimensions of box
+*/
 function box(n) {
     var X = numeric.linspace(0, 1, n+1);
     var Y = numeric.linspace(0, 1, n+1);
@@ -55,7 +72,11 @@ function box(n) {
 }
 
 
-// Creates circulating arrows inside the nxn grid
+/** Creates circulating arrows inside the nxn grid
+* @function
+* @param {int} n - dimensions of box
+* @param {rgb/hex color} color - colours of arrows
+*/
 function arrowBox(n,color1,color2) {
     // length of box
     var l = 1/n;
@@ -64,6 +85,7 @@ function arrowBox(n,color1,color2) {
     data = [];
     new_data = [];
     var v0 = [0,0], v1 = [0,0], v2 = [0,0], v3 = [0,0];
+    // Various cases to consider such as different arrow colours on the outside of the box...
     for (var i=0; i<n; i++) {
         for (var j=0; j<n; j++) {
             if (j === 0) {
@@ -76,6 +98,7 @@ function arrowBox(n,color1,color2) {
                     var arrow0 = new Arrow2D(v1[0]-v0[0],v1[1]-v0[1],math.add(v0,[0.1*l,0.1*l]),1,color1,false,0.7)
                     var arrow1 = new Arrow2D(v0[0]-v3[0],v0[1]-v3[1],math.add(v3,[0.1*l,-0.1*l]),1,color1,false,0.7)
 
+                    // parameters to be passed into quiver function
                     var points = [math.add(v1,[-0.1*l,0.1*l]),
                         math.add(v2,[-0.1*l,-0.1*l])];
                     var vecs = [math.add(v2,[-v1[0],-v1[1]]),
@@ -83,6 +106,7 @@ function arrowBox(n,color1,color2) {
 
                     new_data = getQuiver2D(points, vecs, 1, color2, 0.7);
 
+                    // Add arrow data
                     data.push(arrow0.shaft)
                     data.push(arrow0.wings)
                     data.push(arrow1.shaft)
@@ -254,7 +278,10 @@ function arrowBox(n,color1,color2) {
     return data
 }
 
-// Function which runs the animation for the circulation integral
+
+/** Function which runs the animation for the circulation integral
+* @function
+*/
 function circulationPlot() {
     // Vector field with the help of getQuiver
     var X = numeric.linspace(0,1,2);
@@ -273,6 +300,7 @@ function circulationPlot() {
 
     var initialData = [];
     var ratio = 1.2;
+    // Create arrows
     var arrow0 = new Arrow2D(1,0,[0,0],2,'rgb(0,0,0)',false,ratio);
     var wings0 = arrow0.data.wings;
     var arrow1 = new Arrow2D(0,1,[1,0],2,'rgb(0,0,0)',false,ratio);
@@ -286,7 +314,7 @@ function circulationPlot() {
     wings1.y = math.add(wings1.y,[-ratio+0.5,-ratio+0.5,-ratio+0.5])
     wings2.x = math.add(wings2.x,[ratio-0.5,ratio-0.5,ratio-0.5])
     wings3.y = math.add(wings3.y,[ratio-0.5,ratio-0.5,ratio-0.5])
-
+    // Arrow wings to be plotted only
     initialData = [wings0,wings1,wings2,wings3]
 
     var myLabel = {
@@ -379,9 +407,6 @@ function circulationPlot() {
     var w3 = {x: wings3.x, y: math.add(wings3.y,[-0.5,-0.5,-0.5])}
 
     shifted0 = wingRotation(w0, [1,0], Math.PI/2)
-    console.log(shifted0)
-    console.log(shifted0[0])
-    console.log(shifted0[0][0])
     shifted1 = wingRotation(w1, [1,1], Math.PI/2)
     shifted2 = wingRotation(w2, [0,1], Math.PI/2)
     shifted3 = wingRotation(w3, [0,0], Math.PI/2)
@@ -389,25 +414,25 @@ function circulationPlot() {
     for (var i=0; i<5; i++) {
         newData = {
             data: [{
-                  x: [shifted0[0][i], shifted0[2][i], shifted0[4][i]],
-                  y: [shifted0[1][i], shifted0[3][i], shifted0[5][i]],
-                  name: 'frame'+parseInt(i)
+                 x: [shifted0[0][i], shifted0[2][i], shifted0[4][i]],
+                 y: [shifted0[1][i], shifted0[3][i], shifted0[5][i]],
+                 name: 'frame'+parseInt(i)
 
             },
             {
-                  x: [shifted1[0][i], shifted1[2][i], shifted1[4][i]],
-                  y: [shifted1[1][i], shifted1[3][i], shifted1[5][i]],
-                  name: 'frame'+parseInt(i)
+                 x: [shifted1[0][i], shifted1[2][i], shifted1[4][i]],
+                 y: [shifted1[1][i], shifted1[3][i], shifted1[5][i]],
+                 name: 'frame'+parseInt(i)
             },
             {
-                  x: [shifted2[0][i], shifted2[2][i], shifted2[4][i]],
-                  y: [shifted2[1][i], shifted2[3][i], shifted2[5][i]],
-                  name: 'frame'+parseInt(i)
+                 x: [shifted2[0][i], shifted2[2][i], shifted2[4][i]],
+                 y: [shifted2[1][i], shifted2[3][i], shifted2[5][i]],
+                 name: 'frame'+parseInt(i)
             },
             {
-                  x: [shifted3[0][i], shifted3[2][i], shifted3[4][i]],
-                  y: [shifted3[1][i], shifted3[3][i], shifted3[5][i]],
-                  name: 'frame'+parseInt(i)
+                 x: [shifted3[0][i], shifted3[2][i], shifted3[4][i]],
+                 y: [shifted3[1][i], shifted3[3][i], shifted3[5][i]],
+                 name: 'frame'+parseInt(i)
 
             },
             {
@@ -452,9 +477,9 @@ function circulationPlot() {
         t = 0.5*i/(N-1)
         newData = {
             data: [{
-                  x: math.add(wings0.x,[t,t,t]),
-                  y: wings0.y,
-                  name: 'frame'+parseInt(i)
+                 x: math.add(wings0.x,[t,t,t]),
+                 y: wings0.y,
+                 name: 'frame'+parseInt(i)
 
             },
             {
@@ -495,7 +520,7 @@ function circulationPlot() {
         }
         frames.push(newData)
     }
-
+    // Plot with animate
     Plotly.newPlot('circulation_graph',initialData,layout)
     Plotly.animate('circulation_graph',frames, {
     transition: {
@@ -578,7 +603,10 @@ function initialPlot() {
     Plotly.newPlot('circulation_graph',initialData,layout)
 }
 
-// Plot for diagram visualising curl
+/** Plot for diagram visualising curl
+* @function
+* @param {int} n - dimension of box
+*/
 function curlPlot(n) {
     var data = arrowBox(n,'rgb(0,62,116)','rgb(0,62,116)');
     var layout = {
@@ -590,7 +618,9 @@ function curlPlot(n) {
     Plotly.newPlot('curl_graph',data,layout)
 }
 
-// Function which zooms into curl diagram plot to show single rotating region
+/** Function which zooms into curl diagram plot to show single rotating region using animate
+* @function
+*/
 function zoom() {
     Plotly.animate('curl_graph',{layout: {
         title: 'Plot of D split up into rotating regions',
@@ -606,7 +636,9 @@ function zoom() {
     })
 }
 
-// Unzoom function which reverses the zoom
+/** Unzoom function which reverses the zoom
+* @function
+*/
 function unzoom() {
     Plotly.animate('curl_graph',{layout: {
         title: 'Plot of D split up into rotating regions',
@@ -622,8 +654,11 @@ function unzoom() {
     })
 }
 
-// Plots the same graph as in the "curl tab" but with colour coded arrows to indicate
+/** Plots the same graph as in the "curl tab" but with colour coded arrows to indicate
 // "cancelled arrows"
+* @function
+* @param {int} n - ""
+*/
 function overallPlot(n) {
     var data = arrowBox(n,'rgb(255,0,255)','rgb(34,139,34)');
     var layout = {
@@ -636,27 +671,31 @@ function overallPlot(n) {
 }
 
 
-// Replots the graph above for different values of n
+/** Replots the graph above for different values of n
+* @function
+*/
 function overallReplot() {
     var N = document.getElementById('getN').value;
     overallPlot(Number(N))
 }
 
 
-// Was used before to be able to toggle text
+/** Was used before to be able to toggle text
+* @function
+*/
 function toggleText() {
     $("#circ_para").slideToggle(600)
     $("#curl_para").slideToggle(600)
     $("#overall_para").slideToggle(600)
 }
 
+/** Main function
+* @function
+*/
 function main(){
-//    circulationPlot()
     curlPlot(10)
     overallPlot(2)
     initialPlot()
 }
-
-
 
 $(document).ready(main)

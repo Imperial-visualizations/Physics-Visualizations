@@ -3,6 +3,10 @@ var u = [1,0,0];
 var v = [0,1,0];
 var w = [0,0,1];
 
+/** Converts 1D array to 2D array to convert to matrix equation later
+* @function
+* @param {array} - 1D array vector
+*/
 function tableVec(vec) {
     var result = [];
     for (var i=0; i<3; i++) {
@@ -11,18 +15,24 @@ function tableVec(vec) {
     return result
 }
 
-// Parallelipiped object
+/** Parallelepiped object
+* @Prototype
+*/
 var my_pped = {
     u: u,
     v: v,
     w: w,
-    // Method to find volume
+    /** Method to find volume
+    * @method
+    */
     volume: function() {
         var crossp = math.cross(this.v,this.w);
         var vol = math.dot(this.u,crossp);
         return Math.abs(vol)
     },
-    // Method to return object to plot on plotly
+    /** Method to return object to plot on plotly
+    * @method
+    */
     gopped: function() {
         var data = {
         type: "mesh3d",
@@ -40,7 +50,9 @@ var my_pped = {
         }
         return data
     },
-    // Layout object
+    /** Layout object
+    * @object
+    */
     lytpped: function() {
         var ubx = Math.abs(this.u[0])+Math.abs(this.v[0])+Math.abs(this.w[0]);
         var uby = Math.abs(this.u[1])+Math.abs(this.v[1])+Math.abs(this.w[1]);
@@ -80,7 +92,10 @@ var my_pped = {
 }
 
 
-// Function which takes array as input and returns a table
+/** Function which takes array as input and returns a table
+* @function
+* @param {int} m,n - integers for dimensions of matrix/array
+*/
 function makeTableInputU(m, n) {
     var result = "<table class='matrixWrapper'><tbody><tr><td>"
     result += "<td>";
@@ -107,7 +122,10 @@ function makeTableInputU(m, n) {
     return result;
 }
 
-// Function which takes array as input and returns a table
+/** Function which takes array as input and returns a table
+* @function
+* @param {int} m,n - integers for dimensions of matrix/array
+*/
 function makeTableInputV(m, n) {
     var result = "<table class='matrixWrapper'><tbody><tr><td>"
     result += "<td>";
@@ -134,7 +152,10 @@ function makeTableInputV(m, n) {
     return result;
 }
 
-// Function which takes array as input and returns a table
+/** Function which takes array as input and returns a table
+* @function
+* @param {int} m,n - integers for dimensions of matrix/array
+*/
 function makeTableInputW(m, n) {
     var result = "<table class='matrixWrapper'><tbody><tr><td>"
     result += "<td>";
@@ -162,7 +183,10 @@ function makeTableInputW(m, n) {
 }
 
 
-// Function which takes array as input and returns a table
+/** Function which takes array as input and returns a table
+* @function
+* @param {array} myArray - array to convert to HTML table
+*/
 function makeTableHTML(myArray) {
     var result = "<table class='matrix'><tbody>";
     for(var i=0; i<myArray.length; i++) {
@@ -176,6 +200,10 @@ function makeTableHTML(myArray) {
     return result;
 }
 
+/** Takes 3 vectors u,v,w and returns an HTML table for the product
+* @function
+* @param{array} u,v,w - three arrays length 3
+*/
 function tripleProduct(u, v, w) {
     var result = "<table class='matrixWrapper'><tbody><tr><td>";
     result += "<td>" + makeTableHTML(tableVec(u)) + "</td>";
@@ -189,7 +217,9 @@ function tripleProduct(u, v, w) {
 
 }
 
-
+/** Main function
+* @function
+*/
 function main() {
     $("#u").append(makeTableInputU(3,1))
     $("#v").append(makeTableInputV(3,1))
@@ -211,6 +241,9 @@ function main() {
     Plotly.newPlot('graph',data,layout)
 }
 
+/** Plot the parallelepiped
+* @function
+*/
 function ppedPlotter() {
     var ux = Number(document.getElementById('Urow0col0').value);
     var uy = Number(document.getElementById('Urow1col0').value);

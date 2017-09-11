@@ -4,17 +4,17 @@
 <head>
     <title>Green's Theorem</title>
     <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
-     <link rel="stylesheet" href="skeleton-tabs.css">
+     <link rel="stylesheet" href="tabs/skeleton-tabs.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
     <script src="__utils__.js"></script>
-    <script src="green.js"></script>
+    <script src="script/green.js"></script>
     <script type="text/javascript" async
         src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
-    <script src="skeleton-tabs.js"></script>
+    <script src="tabs/skeleton-tabs.js"></script>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
 <body>
@@ -134,7 +134,7 @@
                             </div>
 
                         <label>
-                            <input id="getN" type ="range" value="2" min ="2" max="8" step ="1" onchange="overallReplot()"/>
+                            <input id="getN" type ="range" value="2" min ="2" max="8" step ="1" oninput="overallReplot()"/>
                             <span class="sliderMin">2</span><span class="sliderMax">8</span>
                         </label>
                         <!--<input type="button" value="Toggle Text" onclick="toggleText()">-->
