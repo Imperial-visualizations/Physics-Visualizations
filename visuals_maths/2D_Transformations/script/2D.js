@@ -4,14 +4,24 @@ var vertex1 = [1,0];
 var vertex2 = [1,1];
 var vertex3 = [0,1];
 var my_matrix = math.matrix([[1,0],[0,1]])
+var det = 1
 
-// Rotation matrix
+/**
+* Returns a rotation matrix
+* @function
+* @param {float} th - Angle of rotation (anti-clockwise)
+*/
 function rotmat(th) {
     var rotator = [[Math.cos(th),-Math.sin(th)],[Math.sin(th),Math.cos(th)]];
     return rotator;
 }
 
-// Rotation function returns arrays x,y for smooth transition
+/**
+* Returns arrays [x, y] for smooth transition with Plotly Animate
+* @function
+* @param {array} vec - Array length 2 consisting of vector to rotate e.g. [1,1]
+* @param {float} th - Rotation Angle
+*/
 function rotation(vec,th) {
     // Parameters
     var N = 50;
@@ -29,9 +39,19 @@ function rotation(vec,th) {
     return [x,y];
 }
 
-// Scale function returns arrays of similar form to rotation()
-// Arguments must go in of the form (vec, scale1, scale2)
-function scale() {
+/** Scale function returns arrays of similar form to rotation()
+* @function
+* @param {array}
+Either:
+    * Array length 2:
+        * @param {array} vec - Array length 2
+        * @param {float} scale - float to scale both axes
+    * Array lengh 3:
+        * @param {array} vec - Array length 2
+        * @param {float} scale1 - float to scale x axis
+        * @param {float} scale2 - float to scale y axis
+*/
+function myScale() {
     // Define variables and parameters
     var N = 50;
     var vec = arguments[0];
@@ -45,6 +65,11 @@ function scale() {
     return [x,y]
 }
 
+/** Function which returns arrays in same form as rotate() and myScale() but for skew transformation
+* @function
+* @param {array} - length 2 array
+* @param {axis} - 0 or 1 indicating skew in x or y direction
+*/
 function skew(vec,axis) {
     // Number of frames
     var N = 50;
@@ -65,7 +90,11 @@ function skew(vec,axis) {
     }
 }
 
-// Custom matrix transformation, arguments form matrix [[a,b],[c,d]]
+/** Custom matrix transformation, arguments form matrix [[a,b],[c,d]]
+* @function
+* @param {array} vec - length 2 array
+* @param {float} a, b, c, d - Entries for matrix
+*/
 function custom(vec,a,b,c,d) {
     var N = 50;
     var A = [[a,b],[c,d]];
@@ -77,7 +106,10 @@ function custom(vec,a,b,c,d) {
     return[x,y]
 }
 
-// Convert x,y arrays returned from functions in json format for animate
+/** Convert x,y arrays returned from functions in json format for animate
+* @function
+* @param {array} x, y - arrays which are returned by above 4 matrix transformation functions
+*/
 function jsonFormat(x,y) {
     var myJson = [];
     var N = x.length;
@@ -87,20 +119,16 @@ function jsonFormat(x,y) {
     return myJson;
 }
 
-// Custom linspace function, probably will not need it...
-function mylinspace(a,b,n) {
-    var h = (b-a)/(n-1);
-    var myinterval = [];
-    for (var i=0; i<n; i++) {
-        myinterval.push(a+i*h);
-    }
-    return myinterval;
-}
 
 ///// NOW START TO DEFORM SQUARES WITH FUNCTIONS WE'VE ALREADY WRITTEN /////
 
-// Structure of this function goes:
+/** Write a wrapper function to combine everything above to deform squares instead of vectors.
 // (string for transformation, parameters, 3 vertex arguments then matrix)
+* @function
+* @param {string} - String to determine which type of transformation to apply. e.g. "rotate"
+* @param {float} (possibly multiple) - Floats must be entered next. e.g. for rotate enter a float for rotation angle.
+* @param {array} vertex - 3 vertices indicating the points of the square (origin stays at 0).
+*/
 function squareTrans() {
     if (arguments[0] === "rotate") {
         var th = arguments[1];
@@ -117,22 +145,22 @@ function squareTrans() {
           if (arguments.length === 5) {
               var s = arguments[1];
               my_matrix = math.multiply([[s,0],[0,s]],my_matrix)
-              var [x0,y0] = scale(arguments[2],s);
+              var [x0,y0] = myScale(arguments[2],s);
               vertex1 = [x0[x0.length-1],y0[y0.length-1]]
-              var [x1,y1] = scale(arguments[3],s);
+              var [x1,y1] = myScale(arguments[3],s);
               vertex2 = [x1[x1.length-1],y1[y1.length-1]]
-              var [x2,y2] = scale(arguments[4],s);
+              var [x2,y2] = myScale(arguments[4],s);
               vertex3 = [x2[x2.length-1],y2[y2.length-1]]
               return [x0,x1,x2,y0,y1,y2]
           } else if (arguments.length === 6){
               var s1 = arguments[1];
               var s2 = arguments[2];
               my_matrix = math.multiply([[s1,0],[0,s2]],my_matrix)
-              var [x0,y0] = scale(arguments[3],s1,s2);
+              var [x0,y0] = myScale(arguments[3],s1,s2);
               vertex1 = [x0[x0.length-1],y0[y0.length-1]]
-              var [x1,y1] = scale(arguments[4],s1,s2);
+              var [x1,y1] = myScale(arguments[4],s1,s2);
               vertex2 = [x1[x1.length-1],y1[y1.length-1]]
-              var [x2,y2] = scale(arguments[5],s1,s2);
+              var [x2,y2] = myScale(arguments[5],s1,s2);
               vertex3 = [x2[x2.length-1],y2[y2.length-1]]
               return [x0,x1,x2,y0,y1,y2]
           }
@@ -164,7 +192,10 @@ function squareTrans() {
   }
 }
 
-// Convert x,y arrays returned from functions in json format for animate
+/** Upgrade of jsonFormat(x, y) which can handle more arrays for square transformation.
+* @function
+* @param {array} x0, x1, x2, y0, y1, y2 - arrays returned by squareTrans()
+*/
 function jsonFormat2(x0,x1,x2,y0,y1,y2) {
     var myJson = [];
     var N = x0.length;
@@ -175,7 +206,10 @@ function jsonFormat2(x0,x1,x2,y0,y1,y2) {
     return myJson;
 }
 
-// Layout object to be used for all plots
+
+/** Layout object to be used for all plots
+* @global {object} layout
+*/
 var layout = {xaxis: {range: [-4, 4], title:"x"},
     yaxis: {range: [-4, 4], title:"y"},
     margin: {l:30, r:30, t:30, b:30},
@@ -187,7 +221,10 @@ var layout = {xaxis: {range: [-4, 4], title:"x"},
     }
     };
 
-// Plots a 1x1 square on the grid and reset vertices
+
+/** Plots a 1x1 square on the grid and reset vertices
+* @function
+*/
 function squarePlotter(){
     Plotly.newPlot('graph', [{
         x : [0,1,1,0,0],
@@ -200,7 +237,12 @@ function squarePlotter(){
     )
 }
 
-// Plots animated skew
+
+/** Plots animated skew
+* @function
+* @param {float} axis - axis of skew
+* @param {array} vertex - array for vertex coordinate
+*/
 function plotterSkew(axis,vertex1,vertex2,vertex3) {
     var myArray = squareTrans("skew",axis,vertex1,vertex2,vertex3);
     var frames = jsonFormat2(...myArray);
@@ -229,7 +271,11 @@ function plotterSkew(axis,vertex1,vertex2,vertex3) {
     });
 }
 
-// Plots animated scale
+/** Plots animated scale
+* @function
+* @param {float} s1, s2 - floats for scaling in each axis direction.
+@ param {array} vertex - vertex coordinates.
+*/
 function plotterScale(s1,s2,vertex1,vertex2,vertex3) {
     var myArray = squareTrans("scale",s1,s2,vertex1,vertex2,vertex3);
     var frames = jsonFormat2(...myArray);
@@ -258,7 +304,10 @@ function plotterScale(s1,s2,vertex1,vertex2,vertex3) {
     });
 }
 
-// Plots animated rotation
+/** Plots animated rotation
+* @function
+* @param {array} vertex - ""
+*/
 function plotterRotate(th,vertex1,vertex2,vertex3) {
     var myArray = squareTrans("rotate",th,vertex1,vertex2,vertex3);
     var frames = jsonFormat2(...myArray);
@@ -287,7 +336,11 @@ function plotterRotate(th,vertex1,vertex2,vertex3) {
   });
 }
 
-// Plots animated custom
+/** Plots animated custom
+* @function
+* @param {float} a, b, c, d - Entries for matrix
+@ @param {array} vertex - vertex coordinates
+*/
 function plotterCustom(a,b,c,d,vertex1,vertex2,vertex3) {
     var myArray = squareTrans("custom",a,b,c,d,vertex1,vertex2,vertex3);
     var frames = jsonFormat2(...myArray);
@@ -302,37 +355,25 @@ function plotterCustom(a,b,c,d,vertex1,vertex2,vertex3) {
         layout
     );
 
-  // Animation
-  Plotly.animate('graph', frames, {
-    transition: {
-      duration: 25,
-      easing: 'linear'
-    },
-    frame: {
-      duration: 25,
-      redraw: false,
-    },
-    mode: 'immediate'
-  });
+    // Animation
+    Plotly.animate('graph', frames, {
+        transition: {
+            duration: 25,
+            easing: 'linear'
+        },
+        frame: {
+            duration: 25,
+            redraw: false,
+        },
+        mode: 'immediate'
+        });
 }
 
-// Main function to run when page is ready
-function main() {
-    squarePlotter();
-    rotateMatrix();
-    scaleMatrix();
-    $("#custommatrix").append(makeTableHTML([[1,0],[0,1]]))
-    if ($("#x").is(":checked")) {
-        $("#skewmatrix").html(makeTableHTML([[1,1],[0,1]]));
-    } if ($("#y").is(":checked")) {
-        $("#skewmatrix").html(makeTableHTML([[1,0],[1,1]]));
-    }
-    var myTable = makeTableInput(2,2)
-    $("#tableInput").append(myTable)
-    $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
-}
 
-// Function which takes array as input and returns a table
+/** Function which takes array as input and returns a table
+* @function
+* @param {2D array} - Array to be returned as HTML table.
+*/
 function makeTableHTML(myArray) {
     var result = "<table class='matrix'><tbody>";
     for(var i=0; i<myArray.length; i++) {
@@ -346,6 +387,11 @@ function makeTableHTML(myArray) {
     return result;
 }
 
+/** Function which creates a matrix equation for HTML
+* @function
+* @param {2D array} myMatrix - 2D array
+* @param {array} myVec - length 2 array
+*/
 function makeMatrixEqnHTML(myMatrix, myVec) {
     var result = "<table class='matrixWrapper'><tbody><tr><td>"
     var round = roundedmat(myMatrix)
@@ -359,7 +405,24 @@ function makeMatrixEqnHTML(myMatrix, myVec) {
     return result
 }
 
-// Function which takes array as input and returns a table
+function makeMatrixEqnHTML2(myMatrix) {
+    var result = "<table class='matrixWrapper'><tbody><tr><td>"
+    result += "A&nbsp=&nbsp</td><td>"
+    var round = roundedmat(myMatrix)
+    result += makeTableHTML(round);
+    result += "</td>"
+//    result += makeTableHTML(myVec)
+//    result += "</td>"
+//    var answer = math.multiply(myMatrix, myVec)
+//    result += makeTableHTML(roundedmat(answer))
+    result += "</tr></tbody></table>"
+    return result
+}
+
+/** Function which takes array as input and returns a table
+* @function
+* @param {int} m, n - indicate dimensions of matrix/array
+*/
 function makeTableInput(m, n) {
     var result = "<table class='matrix'><tbody>";
     for (var i=0; i<m; i++) {
@@ -379,64 +442,105 @@ function makeTableInput(m, n) {
     return result;
 }
 
+/** Main function to run when page is ready
+* @function
+*/
+function main() {
+    squarePlotter();
+    rotateMatrix();
+    scaleMatrix();
+    $("#custommatrix").append(makeTableHTML([[1,0],[0,1]]))
+    if ($("#x").is(":checked")) {
+        $("#skewmatrix").html(makeTableHTML([[1,1],[0,1]]));
+    } if ($("#y").is(":checked")) {
+        $("#skewmatrix").html(makeTableHTML([[1,0],[1,1]]));
+    }
+    var myTable = makeTableInput(2,2)
+    $("#tableInput").append(myTable)
+    $("#overallMatrix").html(makeMatrixEqnHTML2(my_matrix._data))
+    printDet()
+}
 
 
-// Plot the graphs after reading data from sliders
+/** Replots the graphs after reading data from sliders
+* @function
+*/
 function plotRotate() {
     var x = $("#rotateID").val();
     var th = Math.PI*x;
     plotterRotate(th,vertex1,vertex2,vertex3);
-    $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
+    $("#overallMatrix").html(makeMatrixEqnHTML2(my_matrix._data))
+    printDet()
 
 }
 
-
+/** Replots the graphs after reading data from sliders
+* @function
+*/
 function plotSkew() {
     if (document.getElementById("x").checked) {
         plotterSkew(0, vertex1, vertex2, vertex3);
-        $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
+        $("#overallMatrix").html(makeMatrixEqnHTML2(my_matrix._data))
+        printDet()
     } else {
         plotterSkew(1,vertex1,vertex2,vertex3);
-        $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
+        $("#overallMatrix").html(makeMatrixEqnHTML2(my_matrix._data))
+        printDet()
     }
 
 }
 
-
+/** Replots the graphs after reading data from sliders
+* @function
+*/
 function plotScale() {
     var scale1 = document.getElementById('scale1ID').value;
     var scale2 = document.getElementById('scale2ID').value;
     plotterScale(scale1,scale2,vertex1,vertex2,vertex3);
-    $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
+    $("#overallMatrix").html(makeMatrixEqnHTML2(my_matrix._data))
+    printDet()
 }
 
-
+/** Replots the graphs after reading data from sliders
+* @function
+*/
 function plotCustom() {
     var a = $("#row0col0").val();
     var b = $("#row0col1").val();
     var c = $("#row1col0").val();
     var d = $("#row1col1").val();
     plotterCustom(a,b,c,d,vertex1,vertex2,vertex3);
-    $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
+    $("#overallMatrix").html(makeMatrixEqnHTML2(my_matrix._data))
+    printDet()
 
 }
 
 
-// Display values above sliders for scale tab
+/** Display values above sliders for scale tab
+* @JQuery method
+*/
 $("#scale1ID").each(function () {
   $(this).on('input', function() {
         $("#"+$(this).attr("id") + "Display").text($(this).val());
   });
 });
 
-
+/** Display values above sliders for scale tab
+* @JQuery method
+*/
 $("#scale2ID").each(function () {
   $(this).on('input', function() {
         $("#"+$(this).attr("id") + "Display").text($(this).val());
   });
 });
 
+function printDet() {
+    $("#determinant").text(String(math.abs((math.round(math.det(my_matrix)*100))/100)));
+}
 
+/** Prints the matrix onto the page on input
+* @function
+*/
 function rotateMatrix() {
     var x = $("#rotateID").val();
     var th = Math.PI*x;
@@ -448,28 +552,34 @@ function rotateMatrix() {
     $("#showtheta").html("θ = " + th + " rad or θ =  " + x.toString() + "π rad")
 }
 
-
+/** Prints the matrix onto the page on input
+* @function
+*/
 function scaleMatrix() {
     var scale1 = $("#scale1ID").val();
     var scale2 = $("#scale2ID").val();
-
     $("#scalematrix").html(makeTableHTML([[scale1,0],[0,scale2]]))
     $("#scale1IDDisplay").text($("#scale1ID").val());
     $("#scale2IDDisplay").text($("#scale2ID").val());
 }
 
-
+/** Prints the matrix onto the page on input
+* @function
+*/
 function customMatrix() {
     var a = $("#row0col0").val();
     var b = $("#row0col1").val();
     var c = $("#row1col0").val();
     var d = $("#row1col1").val();
-    document.getElementById('custommatrix').innerHTML=makeTableHTML([[a,b],[c,d]])
+    document.getElementById('custommatrix').innerHTML = makeTableHTML([[a,b],[c,d]])
 
 }
 
 
-// Rounds all elements in a mxn array to 2 d.p.
+/** Rounds all elements in a mxn array to 2 d.p.
+* @function
+* @param {2D array} A - array to be rounded
+*/
 function roundedmat(A) {
     m = A.length
     n = A[0].length
@@ -482,34 +592,37 @@ function roundedmat(A) {
 }
 
 
+/** Resets everything when reset button is hit
+* @function
+*/
 function resetStuff() {
     squarePlotter();
     vertex1 = [1,0];
     vertex2 = [1,1];
     vertex3 = [0,1];
     my_matrix = math.matrix([[1,0],[0,1]]);
-    $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
+    $("#overallMatrix").html(makeMatrixEqnHTML2(my_matrix._data))
+    printDet()
 }
 
 
-function showMatrix() {
-    var A = [[my_matrix.get([0,0]),my_matrix.get([0,1])],[my_matrix.get([1,0]),my_matrix.get([1,1])]];
-    A = roundedmat(A);
-    alert(math.matrix(A));
-}
-
-
+/** Add tables to skew table when ready
+* @JQuery method
+*/
 $(document).ready(function() {
     $(".radio").click(function() {
         if ($("#x").is(":checked")) {
-            document.getElementById("skewmatrix").innerHTML=makeTableHTML([[1,1],[0,1]]);
+            document.getElementById("skewmatrix").innerHTML = makeTableHTML([[1,1],[0,1]]);
         } if ($("#y").is(":checked")) {
-            document.getElementById("skewmatrix").innerHTML=makeTableHTML([[1,0],[1,1]]);
+            document.getElementById("skewmatrix").innerHTML = makeTableHTML([[1,0],[1,1]]);
         }
 
     })
 });
 
 
+/** Run main function when ready
+* @JQuery method
+*/
 $(document).ready(main);
 
