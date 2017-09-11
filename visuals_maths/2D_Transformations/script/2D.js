@@ -405,6 +405,20 @@ function makeMatrixEqnHTML(myMatrix, myVec) {
     return result
 }
 
+function makeMatrixEqnHTML2(myMatrix) {
+    var result = "<table class='matrixWrapper'><tbody><tr><td>"
+    result += "A&nbsp=&nbsp</td><td>"
+    var round = roundedmat(myMatrix)
+    result += makeTableHTML(round);
+    result += "</td>"
+//    result += makeTableHTML(myVec)
+//    result += "</td>"
+//    var answer = math.multiply(myMatrix, myVec)
+//    result += makeTableHTML(roundedmat(answer))
+    result += "</tr></tbody></table>"
+    return result
+}
+
 /** Function which takes array as input and returns a table
 * @function
 * @param {int} m, n - indicate dimensions of matrix/array
@@ -443,7 +457,7 @@ function main() {
     }
     var myTable = makeTableInput(2,2)
     $("#tableInput").append(myTable)
-    $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
+    $("#overallMatrix").html(makeMatrixEqnHTML2(my_matrix._data))
     printDet()
 }
 
@@ -455,7 +469,7 @@ function plotRotate() {
     var x = $("#rotateID").val();
     var th = Math.PI*x;
     plotterRotate(th,vertex1,vertex2,vertex3);
-    $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
+    $("#overallMatrix").html(makeMatrixEqnHTML2(my_matrix._data))
     printDet()
 
 }
@@ -466,11 +480,11 @@ function plotRotate() {
 function plotSkew() {
     if (document.getElementById("x").checked) {
         plotterSkew(0, vertex1, vertex2, vertex3);
-        $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
+        $("#overallMatrix").html(makeMatrixEqnHTML2(my_matrix._data))
         printDet()
     } else {
         plotterSkew(1,vertex1,vertex2,vertex3);
-        $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
+        $("#overallMatrix").html(makeMatrixEqnHTML2(my_matrix._data))
         printDet()
     }
 
@@ -483,7 +497,7 @@ function plotScale() {
     var scale1 = document.getElementById('scale1ID').value;
     var scale2 = document.getElementById('scale2ID').value;
     plotterScale(scale1,scale2,vertex1,vertex2,vertex3);
-    $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
+    $("#overallMatrix").html(makeMatrixEqnHTML2(my_matrix._data))
     printDet()
 }
 
@@ -496,7 +510,7 @@ function plotCustom() {
     var c = $("#row1col0").val();
     var d = $("#row1col1").val();
     plotterCustom(a,b,c,d,vertex1,vertex2,vertex3);
-    $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
+    $("#overallMatrix").html(makeMatrixEqnHTML2(my_matrix._data))
     printDet()
 
 }
@@ -587,7 +601,8 @@ function resetStuff() {
     vertex2 = [1,1];
     vertex3 = [0,1];
     my_matrix = math.matrix([[1,0],[0,1]]);
-    $("#overallMatrix").html(makeMatrixEqnHTML(my_matrix._data,[[1],[1]]))
+    $("#overallMatrix").html(makeMatrixEqnHTML2(my_matrix._data))
+    printDet()
 }
 
 /** Add tables to skew table when ready
