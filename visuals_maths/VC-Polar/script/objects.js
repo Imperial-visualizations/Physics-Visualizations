@@ -241,23 +241,25 @@ function Cuboid(x, y, z){
     }
 }
 //2D Objects:
-function Circle(radius) {
+function Circle(radius){
     this.radius = radius;
-
     this.gObject = function(color=cyan, centre=[0,0]) {
-        var phi = numeric.linspace(0, 2*Math.PI, 16);
+        var phi = numeric.linspace(0, 2*Math.PI, 32);
         var x = [], y = [];
         for (var i=0, n=phi.length; i<n; ++i) {
             x.push(this.radius*Math.cos(phi[i]) + centre[0]);
             y.push(this.radius*Math.sin(phi[i]) + centre[1]);
         }
+        console.log(x)
         var circle = {
             type: "scatter",
             mode: "lines",
             x: x,
             y: y,
             line: {simplify: false, color: color},
-            fill:'tonexty',
+            fill:'toself',
+            opacity: 0.7
         }
+        return circle;
     }
 }

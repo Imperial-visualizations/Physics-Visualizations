@@ -57,18 +57,6 @@
                                 <input id="rotator" class="inputs" type="range" value="0.25" min="-2" max="2" step="0.125" onchange=""/>
                                 <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
                             </label>
-                            <div class="rotateButton">
-                                <input id="rotateAnimate" class="button-primary" type="submit" value="Play", onclick="animateRotate()">
-                                <input id="undoRo" type="button" value="&#10554; Undo", onclick="undo()">
-                                <input id="resetRo" type="button" value="Reset to (-2,-2,2)", onclick="initPlot()">
-                            </div>
-                            <div>
-                                <h3>Transformation: </h3>
-                                <label>Current Vector = M x Previous Vector</label>
-                                <p id="rotateMatrix"></p>
-
-                            </div>
-                            <input type="button" value="Commute?", onclick="showCommute()">
                         </div>
                         <!--Commute?-->
                         <div class="rotateCommute">
@@ -107,19 +95,18 @@
                             <option value="reflectY">Y = 0</option>
                             <option value="reflectZ">Z = 0</option>
                         </select>
-                        <div class="reflectButton">
-                            <input id="reflectAnimate" class="button-primary" type="submit" value="Play", onclick="animateReflect()">
-                            <input id="undoRe" type="button" value="&#10554; Undo", onclick="undo()">
-                            <input id="resetRe" type="button" value="Reset to (-2,-2,2)", onclick="initPlot()">
-                        </div>
-                        <div>
-                            <h3>Transformation: </h3>
-                            <label>Current Vector = M x Previous Vector</label>
-                            <p id="reflectMatrix"></p>
-                        </div>
                     </div>
-                    <!--Scalation-->
-                    <!--<div class="tab-pane" id="scale"></div>-->
+
+                    <div class="playButtons">
+                        <input id="animate" class="button-primary" type="submit" value="Play", onclick="playAnimation()">
+                        <input id="undo" type="button" value="&#10554; Undo", onclick="undo()">
+                        <input id="reset" type="button" value="Reset to (-2,-2,2)", onclick="initPlot()">
+
+                        <h3>Transformation: </h3>
+                        <label>Current Vector = M x Previous Vector</label>
+                        <p id="matrixDisplay"></p>
+                    </div>
+                    <input id="commuteButton" type="button" value="Commute?", onclick="showCommute()">
                 </div>
             </div>
         </div>

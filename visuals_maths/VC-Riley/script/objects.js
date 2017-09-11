@@ -69,6 +69,7 @@ function c2sp(x,y,z) {
 }
 
 ///Shape Objects:
+//3D Objects:
 function Line(points) {
     this.x = [];
     this.y = [];
@@ -237,5 +238,26 @@ function Cuboid(x, y, z){
             showscale: false
         }
         return cuboid
+    }
+}
+//2D Objects:
+function Circle(radius) {
+    this.radius = radius;
+
+    this.gObject = function(color=cyan, centre=[0,0]) {
+        var phi = numeric.linspace(0, 2*Math.PI, 16);
+        var x = [], y = [];
+        for (var i=0, n=phi.length; i<n; ++i) {
+            x.push(this.radius*Math.cos(phi[i]) + centre[0]);
+            y.push(this.radius*Math.sin(phi[i]) + centre[1]);
+        }
+        var circle = {
+            type: "scatter",
+            mode: "lines",
+            x: x,
+            y: y,
+            line: {simplify: false, color: color},
+            fill:'tonexty',
+        }
     }
 }

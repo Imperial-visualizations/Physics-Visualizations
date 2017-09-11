@@ -238,28 +238,29 @@ function computeCommute(rotation1, rotation2, theta1, theta2, frameSize) {
 function hideCommute() {
     $('.rotate3D').show();
     $('.rotateCommute').hide();
+    $('.playButtons').show();
+    $('#commuteButton').show();
     $('#frameSlider').hide();
     var index = historyIndex % historyLimit;
     displayCurrent(index);
     histPlot(index);
-} //has purging here!!!
+}
 function showCommute() {
     $('.rotate3D').hide();
     $('.rotateCommute').show();
+    $('.playButtons').hide();
+    $('#commuteButton').hide();
     $('#frameSlider').show();
     commutePlot();
 }
 function disableUndoReset() {
-    $("#undoRo").prop("disabled",true);
-    $("#undoRe").prop("disabled",true);
-    $("#resetRo").prop("disabled",true);
-    $("#resetRe").prop("disabled",true);
+    console.log("hello");
+    $("#undo").prop("disabled",true);
+    $("#reset").prop("disabled",true);
 }
 function enableUndoReset() {
-    $("#undoRo").prop("disabled",false);
-    $("#undoRe").prop("disabled",false);
-    $("#resetRo").prop("disabled",false);
-    $("#resetRe").prop("disabled",false);
+    $("#undo").prop("disabled",false);
+    $("#reset").prop("disabled",false);
 }
 function enablePlay() {
     $("#rotateAnimate").prop("disabled",false);
@@ -297,15 +298,16 @@ function updateMatrixDisplay(matrix, idName) {
     return;
 }
 function displayCurrent(index) {
-    var current = makeTableHTML(
-        [
+    var current = "<table class='matrixWrapper'>" + "<tbody>" + "<tr>"
+        + "<td>" + makeTableHTML([
             [Math.round(historyVectors[index][0]*100)/100],
             [Math.round(historyVectors[index][1]*100)/100],
             [Math.round(historyVectors[index][2]*100)/100]
-        ]
-    )
-    document.getElementById("rotateMatrix").innerHTML = current;
-    document.getElementById("reflectMatrix").innerHTML = current;
+        ]) + "</td>"
+        + "</tr>" + "</tbody>" + "<table>";
+
+    document.getElementById("matrixDisplay").innerHTML = current;
+    return;
 }
 
 //Plots
@@ -314,6 +316,7 @@ function initPlot() {
     historyIndex = 0;
     historyCount = 0;
     displayCurrent(0)
+    hideCommute();
     histPlot(0);
     enablePlay();
     disableUndoReset();
@@ -349,6 +352,13 @@ function animateTransformation(frames, playID) {
 
     return;
 }
+function playAnimation() {//Master PLAY
+    if ($('ul.tab-nav li a.active').attr('href') === "#rotate") {
+        animateRotate();
+    } else if($('ul.tab-nav li a.active').attr('href') === "#reflect") {
+        animateReflect();
+    }
+}
 
 function animateRotate() {
     var frames;
@@ -368,8 +378,8 @@ function animateRotate() {
         frames = computeFrames(rotationZ, 0, angle, historyVectors[index], frameSize);
     }
 
-    updateMatrixDisplay(displayRotationMatrix(slider, rotateAxis), "rotateMatrix");
-    animateTransformation(frames, "#rotateAnimate");
+    updateMatrixDisplay(displayRotationMatrix(slider, rotateAxis), "matrixDisplay");
+    animateTransformation(frames, "#animate");
     enableUndoReset();
     return;
 }
@@ -386,8 +396,8 @@ function animateReflect() {
         frames = computeFrames(scaleZ, 1, -1, historyVectors[index], frameSize, false);
     }
 
-    updateMatrixDisplay(displayReflectionMatrix(plane), "reflectMatrix");
-    animateTransformation(frames, "#reflectAnimate");
+    updateMatrixDisplay(displayReflectionMatrix(plane), "matrixDisplay");
+    animateTransformation(frames, "#animate");
     planePlot(plane);
     enableUndoReset();
     return;
@@ -490,9 +500,14 @@ function main() {
             $('.tab-pane.active', $(href).parent()).removeClass('active');
             $(href).addClass('active');
             hideCommute();
+            if (href === "#rotate") {
+                $('#commuteButton').show();
+            } else {
+                $('#commuteButton').hide();
+            }
             return false;
         });
     });
-    hideCommute();
+    initPlot();
 }
 $(document).ready(main);
