@@ -605,6 +605,7 @@ function resetStuff() {
     printDet()
 }
 
+
 /** Add tables to skew table when ready
 * @JQuery method
 */
@@ -618,6 +619,7 @@ $(document).ready(function() {
 
     })
 });
+
 
 /** Run main function when ready
 * @JQuery method
