@@ -2,7 +2,7 @@
  * Created to simplify some of the vector calculations frequently used in calculations, e.g. addition,
  * subtraction, cos, sin, tan. Soon to include features such as sum (all elements in vector), dot & cross products.
  *
- * - Akash Bhattacharya & Robert King.
+ * - Akash B.
  ******************************************************************************************************************* **/
 
 /** Function to check if input, n, is a finite number. **/
@@ -174,11 +174,7 @@ Vector.prototype.power = function power(number) {
 
     return new Vector(result);
 };
-/**
- * function rotates vector by degrees theta and returns the new vector
- * @param {Number} theta - the angle to rotate the vector by
- * @returns {Vector} - a new vector which represents the vector object rotated by degrees thetea.
- */
+
 Vector.prototype.rotate = function rotate(theta) {
 
     var new_x = 0;

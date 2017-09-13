@@ -12,9 +12,9 @@ class ToolTip{
         roundedRectG.beginFill(0x003E74);
         roundedRectG.drawRoundedRect(0,0,200,(fontSize + 7)*4,5);
         this.sprite = uiGroup.create(position.x,position.y,roundedRectG.generateTexture());
-        this.title = game.add.text(position.x + 5,position.y,title,{font:"20px Fira Sans",fill:"#ffffff"});
+        this.title = game.add.text(position.x + 5,position.y,title,{font:"20px Lato",fill:"#ffffff"});
         uiGroup.add(this.title);
-        this.text = game.add.text(position.x + 5,position.y + fontSize+10,text,{font:"12px Fira Sans",fill:"#ffffff"});
+        this.text = game.add.text(position.x + 5,position.y + fontSize+10,text,{font:"12px Lato",fill:"#ffffff"});
         uiGroup.add(this.text);
         roundedRectG.destroy();
     }
@@ -152,7 +152,7 @@ UI handling
 */
 
 $(document).ready(function(){
-    $("#lodaingMessage").remove();
+    $("#loadingMessage").remove();
 });
 function updateScatterAngle() {
     initAngle = -degToRad(parseFloat($("#ballCollisionAngle").val()));
@@ -172,7 +172,10 @@ $(".inputs").each(function () {
 
 });
 
-$('#vectorDrawEnable').on('click', updateLabels);
+$('#vectorDrawEnable').on('click', function () {
+    log(this);
+    updateLabels;
+});
 
 function updateLabels() {
     $(".inputs").each(function () {
@@ -210,6 +213,7 @@ function updateLabels() {
     ball1.CoM.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
     ball2.Lab.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
     ball2.CoM.spriteInstance.blendMode = PIXI.blendModes.DARKEN;
+    log(this);
 }
 
 function updateRadius(ball) {
@@ -238,6 +242,7 @@ function updateRadius(ball) {
 
 
 $("#runButton").on('click', function () {
+    log(this);
     if (!isRunning) {
         isRunning = true;
         $("#runButton").val("Reset");
@@ -334,20 +339,6 @@ function onCollision() {
     isColliding = true;
 }
 
-WebFontConfig = {
-
-    //  'active' means all requested fonts have finished loading
-    //  We set a 1 second delay before calling 'createText'.
-    //  For some reason if we don't the browser cannot render the text the first time it's created.
-    active: function() { game.time.events.add(Phaser.Timer.SECOND, createText, this); },
-
-    //  The Google Fonts we want to load (specify as many as you like in the array)
-    google: {
-      families: ['Fira Sans']
-    }
-
-};
-
 
 /*
 ++++++++++++++++++++++++++++++++++++
@@ -388,7 +379,6 @@ function preload() {
         game.load.image('v1', 'images/v1latex.png');
         game.load.image('v2', 'images/v2latex.png');
     }
-     game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
     textScaleDown = window.devicePixelRatio;
 
 }
@@ -472,7 +462,7 @@ function create() {
 
 
     let style = {
-        font: (18 * textScaleDown) + "px Fira Sans",
+        font: (18 * textScaleDown) + "px Lato",
         fill: "#003E74",
         wordWrap: false,
         align: "left",
@@ -643,7 +633,7 @@ function drawArrow(originV, vectorV, rectIndex, color = 0x006EAF, latexID = "") 
     arrowSprites.push(markerGroup.create((canvasWidth / 2 + startingX*disStarting + originV.x * scaleFactor), (canvasHeight * (rectIndex * 2 - 1) / 6 + startingY*disStarting - originV.y * scaleFactor), arrowG.generateTexture()));
     arrowSprites[arrowSprites.length - 1].anchor.set(0, 0.5);
     arrowSprites[arrowSprites.length - 1].rotation = -1*vectorV.getArg();
-    console.log(-1*vectorV.getArg());
+    // console.log(-1*vectorV.getArg());
 
     if (latexID !== "") {
         arrowSprites.push(markerGroup.create((canvasWidth / 2 + startingX*disStarting + originV.x * scaleFactor + vectorV.x * scaleFactor / 2), (canvasHeight * (rectIndex * 2 - 1) / 6 + startingY*disStarting - originV.y * scaleFactor - vectorV.y * scaleFactor / 2), latexID));
@@ -710,7 +700,7 @@ function recalculateVector() {
 
     clearVectors();
     if ($('#vectorDrawEnable').is(':checked')) {
-        console.log("Checked");
+        // console.log("Checked");
 
         let scalefactor = canvasWidth / 16;
         let colPoint = 100-ball2.radius;
