@@ -50,12 +50,6 @@
         }
 
     </style>
-        <script>
-        if (navigator.appName === 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) ||
-                navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie === 1)) {
-            window.location.href = "unsupported.html";
-        }
-    </script>
     </head>
 <body>
 <div class="container">
@@ -70,7 +64,7 @@
             <h4 class="titleKE">Kinetic Energies</h4>
 
             <!-- Vib KE slider -->
-            <label class="sliderTitle" style="padding-bottom: 10px">Vibrational:
+            <label class="sliderTitle" style="padding-bottom: 10px">Vibrational Kinetic Energy at r0:
                 <span class="txtInputs" id="vibKEDisplay" data-change data-unit=" eV">0 eV</span>
             </label>
             <label class="slider">
@@ -79,7 +73,7 @@
             </label>
 
             <!-- Rot KE slider -->
-            <label class="sliderTitle" style="margin-bottom: 0">Rotational:
+            <label class="sliderTitle" style="margin-bottom: 0">Rotational Kinetic Energy at r0:
                 <span class="txtInputs" id="rotKEDisplay" data-unit=" eV" data-change>5 eV</span>
             </label>
             <label class="slider">
@@ -88,7 +82,23 @@
             </label>
 
             <!-- Atom A and Atom B LJ Parameter input fields -->
-            <div class="row">
+
+        </div>
+
+        <div class="five columns">
+            <div id="ScatterLJ" class="twelve columns graphs expanded"></div>
+            <em><a for="#ScatterLJ" id="spoilerLJ" class="showHideButton" data-graph-name=" LJ potential">Show LJ potential</a></em>
+            <div id="graphE" class="twelve columns graphs expanded" style="height: 330px;"></div>
+            <em><a for="#graphE" id="spoilerEvT" class="showHideButton" data-graph-name=" Energy vs Time">Show Energy vs Time</sub></a></em>
+        </div>
+    </div>
+
+    <div class="row" id="advanced" style="display: none">
+        <div class="three columns">
+            <span>dT = </span><a id="dT" data-change data-unit=" s" title="dT">0.015</a>
+        </div>
+        <br>
+         <div class="row">
                 <div class="one-half column">
                     <h5 class="titleAtomA">Atom A</h5>
                     <span>&sigma; = </span><a id="s1" data-change title="&sigma;" data-unit=" nm">2 nm</a>
@@ -103,23 +113,8 @@
                 </div>
             </div>
 
-        </div>
-
-        <div class="five columns">
-            <div id="LJ_scatter" class="twelve columns graphs expanded"></div>
-            <em><a for="#LJ_scatter" class="showHideButton" data-graph-name=" LJ potential">Show LJ potential</a></em>
-
-            <div id="graphE" class="twelve columns graphs expanded" style="height: 330px;"></div>
-            <em><a for="#graphE" class="showHideButton" data-graph-name=" Energy vs Time">Show Energy vs Time</sub></a></em>
-        </div>
     </div>
-
-    <div class="row" id="advanced" style="display: none">
-        <div class="three columns">
-            <span>dT = </span><a id="dT" data-change data-unit=" s" title="dT">0.015</a>
-        </div>
-    </div>
-    <em><a for="#advanced" class="showHideButton" data-graph-name=" Advanced Settings">Show Advanced Settings</sub></a></em>
+    <em><a for="#advanced" id="advSettings" class="showHideButton" data-graph-name=" Advanced Settings">Show Advanced Settings</sub></a></em>
 </div>
 
 <script src=https://code.jquery.com/jquery-latest.min.js></script>
@@ -129,8 +124,9 @@
 <script src = "./scripts/vecops.js"></script>
 <script src = "./scripts/diatomic.js"></script>
 <script src="./scripts/graphics.js"></script>
-<script src="./scripts/log.js"></script>
 
 </body>
 </html>
+
+
 

@@ -12,9 +12,9 @@ class ToolTip{
         roundedRectG.beginFill(0x003E74);
         roundedRectG.drawRoundedRect(0,0,200,(fontSize + 7)*4,5);
         this.sprite = uiGroup.create(position.x,position.y,roundedRectG.generateTexture());
-        this.title = game.add.text(position.x + 5,position.y,title,{font:"20px Lato",fill:"#ffffff"});
+        this.title = game.add.text(position.x + 5,position.y,title,{font:"20px Fira Sans",fill:"#ffffff"});
         uiGroup.add(this.title);
-        this.text = game.add.text(position.x + 5,position.y + fontSize+10,text,{font:"12px Lato",fill:"#ffffff"});
+        this.text = game.add.text(position.x + 5,position.y + fontSize+10,text,{font:"12px Fira Sans",fill:"#ffffff"});
         uiGroup.add(this.text);
         roundedRectG.destroy();
     }
@@ -334,6 +334,20 @@ function onCollision() {
     isColliding = true;
 }
 
+WebFontConfig = {
+
+    //  'active' means all requested fonts have finished loading
+    //  We set a 1 second delay before calling 'createText'.
+    //  For some reason if we don't the browser cannot render the text the first time it's created.
+    active: function() { game.time.events.add(Phaser.Timer.SECOND, createText, this); },
+
+    //  The Google Fonts we want to load (specify as many as you like in the array)
+    google: {
+      families: ['Fira Sans']
+    }
+
+};
+
 
 /*
 ++++++++++++++++++++++++++++++++++++
@@ -374,6 +388,7 @@ function preload() {
         game.load.image('v1', 'images/v1latex.png');
         game.load.image('v2', 'images/v2latex.png');
     }
+     game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
     textScaleDown = window.devicePixelRatio;
 
 }
@@ -457,7 +472,7 @@ function create() {
 
 
     let style = {
-        font: (18 * textScaleDown) + "px Lato",
+        font: (18 * textScaleDown) + "px Fira Sans",
         fill: "#003E74",
         wordWrap: false,
         align: "left",
