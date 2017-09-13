@@ -6,8 +6,9 @@
   <title>Dielectric Boundary - Imperial Visualisations</title>
 
   <!-- <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1"> -->
-  <link rel="stylesheet" href="../debug-style.css">
-  <link rel="stylesheet" href="../toggle-style.css">
+  <!-- <link rel="stylesheet" href="../debug-style.css"> -->
+  <!-- <link rel="stylesheet" href="../toggle-style.css"> -->
+  <link rel="stylesheet" href="https://ghcpuman902.github.io/styles/styles.css">
   <link rel="stylesheet" href="../loading-spinner.css">
 
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -19,13 +20,13 @@
   <div class="container">
     <h1>Dielectric boundary</h1>
 
-    <div id="spinner-wrapper">
-        <span class="spinner-span">Loading</span>
-        <div>
-            <div class="spinner-mask"></div>
-            <div id="spinner-bar"></div>
-            <div class="spinner-mask"></div>
-        </div>
+    <div id="loading-spinner">
+      <span class="loading-message">Loading</span>
+      <div>
+        <div class="spinner-mask"></div>
+        <div id="spinner-bar"></div>
+        <div class="spinner-mask"></div>
+      </div>
     </div>
 
     <div class="row">
@@ -43,11 +44,15 @@
 
         <div class="two columns">
           <div id="polarisation-switch" class="switch">
-            <label class="sliderTitle">Polarisation:</label>
-            <input type="radio" id="s-polarisation" value="s-polarisation" name="polarisation-switch" checked="checked">
-            <label for="s-polarisation" class="radio-label">s</label>
-            <input type="radio" id="p-polarisation" value="p-polarisation" name="polarisation-switch">
-            <label for="p-polarisation" class="radio-label">p</label>
+            <label class="radioTitle">Polarisation:</label>
+            <label class="radio" data-title="s">
+              <input type="radio" id="s-polarisation" value="s-polarisation" name="polarisation-switch" checked="checked">
+              <span></span>
+            </label>
+            <label class="radio" data-title="p">
+              <input type="radio" id="p-polarisation" value="p-polarisation" name="polarisation-switch">
+              <span></span>
+            </label>
           </div>
         </div>
 
@@ -68,7 +73,7 @@
             <span class="sliderMin">0.5</span><span class="sliderMax">2</span>
           </div>
         </div>
-        
+
       </div>
     </div>
 

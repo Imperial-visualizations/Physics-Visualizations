@@ -6,8 +6,9 @@
   <title>Plane wave dielectric boundary - Imperial Visualisations</title>
 
   <!-- <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1"> -->
-  <link rel="stylesheet" href="../debug-style.css">
-  <link rel="stylesheet" href="../toggle-style.css">
+  <!-- <link rel="stylesheet" href="../debug-style.css"> -->
+  <!-- <link rel="stylesheet" href="../toggle-style.css"> -->
+  <link rel="stylesheet" href="https://ghcpuman902.github.io/styles/styles.css">
 
   <script src="http://cdnjs.cloudflare.com/ajax/libs/mathjs/3.16.2/math.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
@@ -37,11 +38,15 @@
         <div id="interface">
 
           <div id="polarisation-switch" class="switch">
-            <label class="sliderTitle">Polarisation:</label>
-            <input type="radio" id="s-polarisation" value="s-polarisation" name="polarisation-switch" checked="checked">
-            <label for="s-polarisation" class="radio-label">s</label>
-            <input type="radio" id="p-polarisation" value="p-polarisation" name="polarisation-switch">
-            <label for="p-polarisation" class="radio-label">p</label>
+            <label class="radioTitle">Polarisation:</label>
+            <label class="radio" data-title="s">
+              <input type="radio" id="s-polarisation" value="s-polarisation" name="polarisation-switch" checked="checked">
+              <span></span>
+            </label>
+            <label class="radio" data-title="p">
+              <input type="radio" id="p-polarisation" value="p-polarisation" name="polarisation-switch">
+              <span></span>
+            </label>
           </div>
 
           <div id="angle-slider">
@@ -57,9 +62,9 @@
           </div>
 
           <div id="interference-checkbox">
-            <label for="interference" class="checkbox">
+            <label for="interference" class="checkbox" data-title="Show interference">
               <input type="checkbox" id="interference" name="interference" checked="checked">
-              <span>Show interference</span>
+              <span></span>
             </label>
           </div>
 

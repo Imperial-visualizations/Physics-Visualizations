@@ -2,7 +2,7 @@ $(window).on('load', function() {
 
     var dom = {
             intface: $("#interface"),
-            loadSpinner: $("#spinner-wrapper"),
+            loadSpinner: $("#loading-spinner"),
             polarisationSwitchInputs: $("#polarisation-switch input"),
             refractiveIndexInput: $("input#refractive-index"),
             refractiveIndexDisplay: $("#refractive-index-display"),

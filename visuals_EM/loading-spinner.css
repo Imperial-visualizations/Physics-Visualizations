@@ -1,4 +1,4 @@
-#spinner-wrapper {
+#loading-spinner {
   height: 100%;
   width: 100%;
   position: absolute;
@@ -10,7 +10,7 @@
   z-index: 50;
 }
 
-.spinner-span {
+.loading-message {
   display: block;
   font-size: 16px;
   font-weight: 600;
@@ -25,7 +25,7 @@
   width: 40px;
   height: 10px;
   background: #222;
-  animation-name: loading;
+  animation-name: loading-spinner;
   animation-duration: 0.8s;
   animation-iteration-count: infinite;
   animation-direction: alternate;
@@ -40,7 +40,7 @@
   z-index: 100;
 }
 
-@keyframes loading {
+@keyframes loading-spinner {
   0% {transform: translateX(32px);}
   100% {transform: translateX(-32px);}
 }
