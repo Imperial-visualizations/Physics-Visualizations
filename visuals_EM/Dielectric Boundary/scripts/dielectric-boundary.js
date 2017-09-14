@@ -30,11 +30,15 @@ $(window).on('load', function() {
                         range: [-1, 1], autorange: false, zeroline: true, showspikes: false
                     }
                 },
-                hovermode: false
+                hovermode: false,
+                font: {
+                    family: "Fira Sans",
+                    size: 13
+                }
             },
             layoutFres: {
                 width: 350,
-                height: 300,
+                height: 320,
                 xaxis: {
                     range: [0, 90],
                     title: "Angle"
@@ -43,11 +47,15 @@ $(window).on('load', function() {
                    range: [-1, 2.1]
                 },
                 margin: {
-                   l: 40, r: 10, b: 40, t: 1, pad: 5
+                   l: 40, r: 10, b: 60, t: 1, pad: 5
                },
                legend: {
                    x: 0, y: 10,
                    orientation: "h"
+               },
+               font: {
+                   family: "Fira Sans",
+                   size: 15
                }
             }
         },
