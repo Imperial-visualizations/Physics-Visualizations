@@ -44,7 +44,7 @@
       <h1 class="title">Imperial Visualisation Cheatsheet</h1>
       <h6>Declaration: This page is an alternation of the contents on <a href="http://getskeleton.com/#">http://getskeleton.com/</a>, which is also what the Imperial Visualisation css style is based on.</h6>
     </section>
-              
+
     <!-- README -->
     <div>
       <h3 id="GettingStarted">Getting Started</h3>
@@ -100,8 +100,8 @@
         &lt;/div&gt;
     &lt;/div&gt;
     &lt;br&gt;&lt;br&gt;&lt;br&gt;
-    &lt;script src=&quot;scripts/program.js&quot;&gt;&lt;/script&gt;&lt;!-- You can iether put your code 
-                                                    inside this file ( which you&#39;ll 
+    &lt;script src=&quot;scripts/program.js&quot;&gt;&lt;/script&gt;&lt;!-- You can iether put your code
+                                                    inside this file ( which you&#39;ll
                                                     have to create yourself) --&gt;
     &lt;script&gt;
         // Or put your javascript code here.
@@ -230,8 +230,8 @@
 
 &lt;/div&gt;
 
-&lt;!-- Note: columns can be nested, but it's not recommended since Skeleton's grid has %-based gutters, 
-meaning a nested grid results in variable with gutters (which can end up being *really* small on certain 
+&lt;!-- Note: columns can be nested, but it's not recommended since Skeleton's grid has %-based gutters,
+meaning a nested grid results in variable with gutters (which can end up being *really* small on certain
 browser/device sizes) --&gt;
 
 </code>
@@ -341,12 +341,14 @@ browser/device sizes) --&gt;
           <h2 class="centre-aligned">Feedback Form</h4>
           <div class="row">
             <div class="twelve columns">
-              <label class="radioTitle">I'm a: </label> 
-              <label class="radio" data-title="Student">
-                  <input type="radio" name="studentOrStuff" value="student" checked /><span for="radio"></span>
+              <label class="radioTitle">I'm a: </label>
+              <label class="radio" for="student">
+                  <input type="radio" name="studentOrStuff" value="student" id="student" checked />
+                  <span>Student</span>
               </label>
-              <label class="radio" data-title="Stuff">
-                  <input type="radio" name="studentOrStuff" value="stuff"/><span for="radio"></span>
+              <label class="radio" for="staff">
+                  <input type="radio" name="studentOrStuff" value="staff" id="staff"/>
+                  <span>Staff</span>
               </label>
             </div>
           </div>
@@ -398,7 +400,7 @@ browser/device sizes) --&gt;
                 <option value="Institute of Global Health Innovation">Institute of Global Health Innovation</option>
                 <option value="Energy Futures Lab">Energy Futures Lab</option>
                 <option value="Institute for Security Science and Technology">Institute for Security Science and Technology</option>
-                <option value="Institute for Molecular Science and Engineering">Institute for Molecular Science and Engineering</option>            
+                <option value="Institute for Molecular Science and Engineering">Institute for Molecular Science and Engineering</option>
               </optgroup>
               <optgroup label="Education centres and schools">
                 <option value="Careers Service">Careers Service</option>
@@ -424,26 +426,29 @@ browser/device sizes) --&gt;
             </div>
           </div>
           <div class="row">
-            <div class="twelve columns"> 
+            <div class="twelve columns">
               <label>Feedbacks:</label>
               <textarea class="u-full-width" placeholder="Hi Dave &hellip;" id="feedbacks"></textarea>
             </div>
           </div>
           <div class="row">
           <div class="six columns">
-            <label class="radioTitle">My gender is: </label> 
-            <label class="radio" data-title="Male">
-                <input type="radio" name="gender" value="male" checked /><span for="radio"></span>
+            <label class="radioTitle">My gender is: </label>
+            <label class="radio" for="male">
+                <input type="radio" name="gender" value="male" id="male" checked />
+                <span>Male</span>
             </label>
-            <label class="radio" data-title="Female">
-                <input type="radio" name="gender" value="female"/><span for="radio"></span>
+            <label class="radio" for="female">
+                <input type="radio" name="gender" value="female" id="female"/>
+                <span>Female</span>
             </label>
-            <label class="radio" data-title="Else/Prefer not to say">
-                <input type="radio" name="gender" value="else" /><span for="radio"></span>
+            <label class="radio" for="else">
+                <input type="radio" name="gender" value="else" id="else"/>
+                <span>Else/Prefer not to say</span>
             </label>
           </div>
           <div class="six columns">
-            <label class="sliderTitle">Overall Ranking: <span id="rankingDisplay" data-unit=" stars">10 stars</span></label> 
+            <label class="sliderTitle">Overall Ranking: <span id="rankingDisplay" data-unit=" stars">10 stars</span></label>
             <label class="slider">
             <input id="ranking" class="inputs" type="range" value="10" min ="0" max="10" step ="1"/>
             <span class="sliderMin">0(worst)</span><span class="sliderMax">10(satisfactory)</span>
@@ -470,12 +475,14 @@ browser/device sizes) --&gt;
           &lt;h2 class=&quot;centre-aligned&quot;&gt;Feedback Form&lt;/h4&gt;
           &lt;div class=&quot;row&quot;&gt;
             &lt;div class=&quot;twelve columns&quot;&gt;
-              &lt;label class=&quot;radioTitle&quot;&gt;I&#39;m a: &lt;/label&gt; 
-              &lt;label class=&quot;radio&quot; data-title=&quot;Student&quot;&gt;
-                  &lt;input type=&quot;radio&quot; name=&quot;studentOrStuff&quot; value=&quot;student&quot; checked /&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
+              &lt;label class=&quot;radioTitle&quot;&gt;I&#39;m a: &lt;/label&gt;
+              &lt;label class=&quot;radio&quot; for=&quot;student&quot;&gt;
+                  &lt;input type=&quot;radio&quot; name=&quot;studentOrStuff&quot; value=&quot;student&quot; id=&quot;student&quot; checked /&gt;
+                  &lt;span&gt;Student&lt;/span&gt;
               &lt;/label&gt;
-              &lt;label class=&quot;radio&quot; data-title=&quot;Stuff&quot;&gt;
-                  &lt;input type=&quot;radio&quot; name=&quot;studentOrStuff&quot; value=&quot;stuff&quot;/&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
+              &lt;label class=&quot;radio&quot; for=&quot;staff&quot;&gt;
+                  &lt;input type=&quot;radio&quot; name=&quot;studentOrStuff&quot; value=&quot;staff&quot; id=&quot;staff&quot;/&gt;
+                  &lt;span&gt;Staff&lt;/span&gt;
               &lt;/label&gt;
             &lt;/div&gt;
           &lt;/div&gt;
@@ -515,32 +522,29 @@ browser/device sizes) --&gt;
             &lt;/div&gt;
           &lt;/div&gt;
           &lt;div class=&quot;row&quot;&gt;
-            &lt;div class=&quot;twelve columns&quot;&gt; 
+            &lt;div class=&quot;twelve columns&quot;&gt;
               &lt;label&gt;Feedbacks:&lt;/label&gt;
               &lt;textarea class=&quot;u-full-width&quot; placeholder=&quot;Hi Dave &amp;hellip;&quot; id=&quot;feedbacks&quot;&gt;&lt;/textarea&gt;
             &lt;/div&gt;
           &lt;/div&gt;
           &lt;div class=&quot;row&quot;&gt;
           &lt;div class=&quot;six columns&quot;&gt;
-            &lt;label class=&quot;radioTitle&quot;&gt;My gender is: &lt;/label&gt; 
-            &lt;label class=&quot;radio&quot; data-title=&quot;Male&quot;&gt;
-                &lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;male&quot; checked /&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
+            &lt;label class=&quot;radioTitle&quot;&gt;My gender is: &lt;/label&gt;
+            &lt;label class=&quot;radio&quot; for=&quot;male&quot;&gt;
+                &lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;male&quot; id=&quot;male&quot; checked /&gt;
+                &lt;span&gt;Male&lt;/span&gt;
             &lt;/label&gt;
-            &lt;label class=&quot;radio&quot; data-title=&quot;Female&quot;&gt;
-                &lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;female&quot;/&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
+            &lt;label class=&quot;radio&quot; for=&quot;female&quot;&gt;
+                &lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;female&quot; id=&quot;female&quot;/&gt;
+                &lt;span&gt;Female&lt;/span&gt;
             &lt;/label&gt;
-            &lt;label class=&quot;radio&quot; data-title=&quot;Else/Prefer not to say&quot;&gt;
-                &lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;else&quot; /&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
+            &lt;label class=&quot;radio&quot; for=&quot;else&quot;&gt;
+                &lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;else&quot; id=&quot;else&quot;/&gt;
+                &lt;span&gt;Else/Prefer not to say&lt;/span&gt;
             &lt;/label&gt;
-            &lt;!-- ↓ THIS IS THE OLD HTML ⬇︎ PLEASE CHANGE TO THE ↑ NEW ONE ⬆︎
-            &lt;label class=&quot;radio&quot;&gt;
-                &lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;else&quot; /&gt;&lt;span for=&quot;radio&quot;&gt;&lt;/span&gt;
-            &lt;/label&gt;
-            &lt;label class=&quot;radioLabel&quot;&gt;Else/Prefer not to say&lt;/label&gt;
-             --&gt;
           &lt;/div&gt;
           &lt;div class=&quot;six columns&quot;&gt;
-            &lt;label class=&quot;sliderTitle&quot;&gt;Overall Ranking: &lt;span id=&quot;rankingDisplay&quot; data-unit=&quot; stars&quot;&gt;10 stars&lt;/span&gt;&lt;/label&gt; 
+            &lt;label class=&quot;sliderTitle&quot;&gt;Overall Ranking: &lt;span id=&quot;rankingDisplay&quot; data-unit=&quot; stars&quot;&gt;10 stars&lt;/span&gt;&lt;/label&gt;
             &lt;label class=&quot;slider&quot;&gt;
             &lt;input id=&quot;ranking&quot; class=&quot;inputs&quot; type=&quot;range&quot; value=&quot;10&quot; min =&quot;0&quot; max=&quot;10&quot; step =&quot;1&quot;/&gt;
             &lt;span class=&quot;sliderMin&quot;&gt;0(worst)&lt;/span&gt;&lt;span class=&quot;sliderMax&quot;&gt;10(satisfactory)&lt;/span&gt;
@@ -697,7 +701,7 @@ $("#elementToDisable").prop("disabled",false);
         <div class="tab-content">
           <div class="tab-pane active" id="one">
             <h5>Tab 1</h5>
-            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque 
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
             laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto
              beatae vitae dicta sunt explicabo.</p>
           </div>
@@ -708,11 +712,11 @@ $("#elementToDisable").prop("disabled",false);
           </div>
           <div class="tab-pane" id="three">
             <h5>Tab 3</h5>
-            <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci 
-            velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam 
+            <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci
+            velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam
             quaerat voluptatem.</p>
           </div>
-        </div> 
+        </div>
       </div>
   <div class="row docs-example">
        <div class="twelve columns">
@@ -734,24 +738,24 @@ Html code:
         &#x3C;div class=&#x22;tab-content&#x22;&#x3E;
           &#x3C;div class=&#x22;tab-pane active&#x22; id=&#x22;one&#x22;&#x3E;
             &#x3C;h5&#x3E;Tab 1&#x3C;/h5&#x3E;
-            &#x3C;p&#x3E;Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium 
-            doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi 
+            &#x3C;p&#x3E;Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+            doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi
             architecto beatae vitae dicta sunt explicabo.&#x3C;/p&#x3E;
           &#x3C;/div&#x3E;
           &#x3C;div class=&#x22;tab-pane&#x22; id=&#x22;two&#x22;&#x3E;
             &#x3C;h5&#x3E;Tab 2&#x3C;/h5&#x3E;
-            &#x3C;p&#x3E;Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed 
+            &#x3C;p&#x3E;Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
             quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.&#x3C;/p&#x3E;
           &#x3C;/div&#x3E;
           &#x3C;div class=&#x22;tab-pane&#x22; id=&#x22;three&#x22;&#x3E;
             &#x3C;h5&#x3E;Tab 3&#x3C;/h5&#x3E;
-            &#x3C;p&#x3E;Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, 
-            adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam 
+            &#x3C;p&#x3E;Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
+            adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam
             aliquam quaerat voluptatem.&#x3C;/p&#x3E;
           &#x3C;/div&#x3E;
-        &#x3C;/div&#x3E; 
+        &#x3C;/div&#x3E;
 
-</code>   
+</code>
 </pre>
 jQuery code:
 <pre class="code-example">
@@ -769,7 +773,7 @@ jQuery code:
           return false;
       });
     });
-</code>   
+</code>
 </pre>
     </div>
   </div>
@@ -1022,16 +1026,16 @@ jQuery code:
 /* Make element full width */
 .u-full-width {
   width: 100%;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 .u-half-width {
   width: 50%;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 .u-quarter-width {
   width: 25%;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 /* Make sure elements don't run outside containers (great for images in columns) */
