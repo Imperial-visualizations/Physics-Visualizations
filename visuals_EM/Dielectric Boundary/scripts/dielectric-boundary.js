@@ -33,7 +33,7 @@ $(window).on('load', function() {
                 hovermode: false,
                 font: {
                     family: "Fira Sans",
-                    size: 13
+                    size: 14
                 }
             },
             layoutFres: {
@@ -55,7 +55,7 @@ $(window).on('load', function() {
                },
                font: {
                    family: "Fira Sans",
-                   size: 15
+                   size: 16
                }
             }
         },
