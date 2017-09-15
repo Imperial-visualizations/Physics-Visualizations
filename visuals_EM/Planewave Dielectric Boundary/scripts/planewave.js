@@ -117,10 +117,10 @@ window.onload = function() {
                     } else {
                         rawValue = this.transmitted.waveFunc(x, y, phase);
                     }
-                    this.waveImgData[4*pixel] = convertToColorVal(rawValue);
+                    graph.imageData.data[4*pixel] = convertToColorVal(rawValue);
                     // this.waveImgData[4*pixel + 1] += waveVal;
                     // this.waveImgData[4*pixel + 2] += waveVal;
-                    this.waveImgData[4*pixel + 3] = 255;
+                    graph.imageData.data[4*pixel + 3] = 255;
                 }
             }
             // console.log("Calculated frame data");
@@ -129,7 +129,7 @@ window.onload = function() {
 
         updatePlot: function() {
             this.setWaveData();
-            graph.imageData.data.set(this.waveImgData);
+            // graph.imageData.data.set(this.waveImgData);
             // console.log(this.waveImgData[4000], graph.imageData.data[4000]);
             graph.ctx.putImageData(graph.imageData, 0, 0);
             this.frame++;
@@ -137,6 +137,9 @@ window.onload = function() {
                 console.log("Reached end of frames");
                 this.frame = 0;
             }
+            this.animFrameID = window.requestAnimationFrame(function() {
+                this.updatePlot();
+            }.bind(this));
             // console.log("Updated plot;");
             // console.log(graph.imageData);
             // console.log(this.waveImgData);
@@ -144,12 +147,12 @@ window.onload = function() {
 
 
         playAnimation: function() {
-            this.animIntervalID = window.setInterval(function() {
+            this.animFrameID = window.requestAnimationFrame(function() {
                 this.updatePlot();
-            }.bind(this), 100);
+            }.bind(this));
         },
         pauseAnimation: function() {
-            clearInterval(this.animIntervalID);
+            window.cancelAnimationFrame(this.animFrameID);
         },
 
 
