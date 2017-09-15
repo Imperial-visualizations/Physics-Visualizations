@@ -67,6 +67,7 @@ function update() {
 		Plotly.animate("particle", {data: [{y: xy.y0.slice(0, counter_y0), x: xy.x0.slice(0, counter_x0)}], traces: [0]}, {transition: {duration: 0}, frame: {redraw: false, duration: 0}}); 
 		requestAnimationFrame(update); 
 	}
+
 }
  
 function onToggleRun() { 
@@ -77,10 +78,10 @@ function onToggleRun() {
 function onReset() { 
 	 counter_x0 = 0;
 	 counter_y0 = 0;
-	
-	 if (is_paused) { 
-			Plotly.animate("particle", {data: [{y: xy.y0.slice(0, counter_y0), x: xy.x0.slice(0, counter_x0)}], traces: [0]}, {transition: {duration: 0}, frame: {redraw: false, duration: 0}}); 
-	} 
+
+     if (!is_paused) { 
+            Plotly.animate("particle", {data: [{y: xy.y0.slice(0, counter_y0), x: xy.x0.slice(0, counter_x0)}], traces: [0]}, {transition: {duration: 0}, frame: {redraw: false, duration: 0}}); 
+    } 
 } 
 
     
@@ -160,9 +161,11 @@ ourRequest.onload=function(){
                                             
                                         
 ourRequest.send();
-    
 
-    
+
+   
+
+
 
 
 
@@ -184,8 +187,8 @@ ourRequest.send();
 
                 <div id="E-slider">
                     <label for="E" class="sliderTitle">E field strength:</label>
-                    <input type="range" id="E" name="E" min="0" max="50" step="10" value="40">
-                    <span class="sliderMin">0</span><span class="sliderMax">50</span>
+                    <input type="range" id="E" name="E" min="10" max="50" step="10" value="40">
+                    <span class="sliderMin">10</span><span class="sliderMax">50</span>
                 </div>
                 
                 <div id="M-slider">
