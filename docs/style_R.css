@@ -13,7 +13,7 @@ body#bso {
   background-color: rgba(247, 249, 250, 0.9) !important;
   border-bottom: 1px solid hsl(0, 0%, 92%);
 }
-#bso .navbar-links {
+/*#bso .navbar-left, #bso .navbar-right {
   display: flex;
   position: relative;
 }
@@ -27,6 +27,9 @@ body#bso {
 }
 #bso .navbar-links > .nav-item {
   flex-basis: auto;
+}*/
+#bso .navbar-nav:last-of-type {
+  margin-right: -0.5rem;
 }
 
 #bso #content {
