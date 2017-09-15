@@ -5,7 +5,9 @@ window.onload = function() {
         loadSpinner: $("#spinner-wrapper"),
         polarisationSwitchInputs: $("#polarisation-switch input"),
         refractiveIndexInput: $("input#refractive-index"),
+        refractiveIndexDisplay: $("#refractive-index-display"),
         angleInput: $("input#angle"),
+        angleDisplay: $("#angle-display"),
         interferenceInput: $("input#interference")
     };
 
@@ -33,6 +35,7 @@ window.onload = function() {
     function handleRefractiveIndexSlider() {
         Boundary.pauseAnimation();
         Boundary.n2 = $(this).val();
+        dom.refractiveIndexDisplay.html($(this).val());
         Boundary.createWaves();
         Boundary.playAnimation();
     }
@@ -40,6 +43,7 @@ window.onload = function() {
     function handleAngleSlider() {
         Boundary.pauseAnimation();
         Boundary.theta = degToRad($(this).val());
+        dom.angleDisplay.html($(this).val().concat("&deg;"));
         Boundary.createWaves();
         Boundary.playAnimation();
     }
