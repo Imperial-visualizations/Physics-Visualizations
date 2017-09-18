@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 
-<?php include "head.php"; ?>
+<?php include "includes/head.php"; ?>
 
 <body id="bso">
 
@@ -9,7 +9,7 @@
   $loggedIn = 0;
   ?>
 
-  <?php include "header.php"; ?>
+  <?php include "includes/header.php"; ?>
 
 
   <div id="content">
@@ -42,13 +42,7 @@
   </div>
 
 
-  <footer class="footer">
-
-    <div class="container">
-      <span class="text-muted">&copy; 2017 Imperial College London</span>
-    </div>
-
-  </footer>
+  <?php include "includes/footer.php"; ?>
 
 </body>
 </html>
