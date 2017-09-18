@@ -1,0 +1,72 @@
+<!doctype html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Biot Savart Law</title>
+    <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1">
+    <style type="text/css">
+        /* css here */
+    </style> 
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> 
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+        </script>
+
+<style></style></head>
+<body>
+       <div class="container">
+        <h1>Biot Savart Law</h1>
+        <div class="row">
+            <div id="graph"></div>
+
+           </div>
+           <div class ='row'>
+           
+           </div>
+           <div class="row">
+               <p>
+               
+For a circular current loop, the magnetic field of a current element dI can be found first by looking at the infinitesimal magnetic field element 'dB' generated due to the current: $$ d\mathbf{B} = \frac{{\mu}_oI}{4\pi} \times \frac{d\mathbf{I} \times \mathbf{r}}{r^3}$$ 
+                   
+To calculate the total magnetic field at the point P we must integrate the infinitesimal magnetic field element across the entire loop: 
+                   
+$$\mathbf{B} = \frac{{\mu}_oI}{4\pi}  \int_{C}\frac{d\mathbf{I} \times \mathbf{r}}{r^2} $$
+               </p>
+            <div class="four columns">
+            <label class="sliderTitle">Point Position:
+            </label>
+
+            <label class="slider">
+                <input id="position" class="inputs" type="range" value="0" min="0" max="4" step="1">
+                <span class="sliderMin">0</span><span class="sliderMax">5</span>
+            
+                </label>
+                
+               </div>
+               <div class = "four columns">
+                <label class="sliderTitle">Animation Slider:
+            </label>
+
+            <label class="slider">
+                <input id="animation" class="inputs" type="range" value="0" min="0" max="10" step="1">
+                <span class="sliderMin">1</span><span class="sliderMax">10</span>
+            </label>
+            </div>
+               <div class="row">
+            <input id="playPause" type="button" value="Play" onclick="startAnimation()" style="width:200px">
+            <input id="reset_button" type="button" value="reset" onclick="reset()" style="width:200px">
+
+               </div>
+                    
+        </div>
+    </div>
+    <br><br><br>
+    <br><br><br>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="scripts/biotanimation.js"></script>
+   
+    </body>
+</html>
+
+
