@@ -1,72 +1,43 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-  <link rel="stylesheet" href="style_R.css">
-
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-  <script src="script_R.js"></script>
-</head>
+<?php include "includes/head.php"; ?>
 
 <body id="bso" data-spy="scroll" data-target="#nav" data-offset="20">
 
-  <header>
+  <?php
+  $loggedIn = 0;
 
-    <nav id="nav" class="navbar navbar-light bg-light nav-pills nav-justified justify-content-end fixed-top">
-      <div class="container">
-        <a class="navbar-brand" href="#">Imperial Visualisations</a>
-        <div class="row">
-          <a class="nav-item nav-link" href="#">About</a>
-          <a class="nav-item nav-link" href="#">Help</a>
-        </div>
-      </div>
-    </nav>
-
-  </header>
+  include "includes/header.php";
+  ?>
 
 
   <div id="content">
 
-    <div id="intro" class="jumbotron jumbotron-fluid cover grad-blue-purple">
+    <div class="jumbotron jumbotron-fluid grad-blue-purple">
       <div class="container">
-        <div class="row">
+        <h1>About Imperial Visualisations</h1>
+      </div>
+    </div>
 
-          <div class="col">
-            <h1 class="display-4">Imperial Visualisations</h1>
-            <p class="lead">Visualisations designed to enhance your understanding of abstract concepts.</p>
-          </div>
-
-          <div class="col login">
-            <form class="form-signin">
-              <h4 class="form-signin-heading">Please log in</h4>
-              <label for="CID" class="sr-only">College ID</label>
-              <input type="text" id="CID" class="form-control" placeholder="College ID" required="" autofocus="">
-              <label for="inputPassword" class="sr-only">Password</label>
-              <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
-              <!-- <button class="btn btn-outline-primary btn-block" type="submit">Log in</button> -->
-              <a href="visualisations-physics_R.html" class="btn btn-outline-primary btn-block">Log in</a>
-            </form>
-          </div>
-
-        </div>
+    <div class="jumbotron jumbotron-fluid bg-white">
+      <div class="container">
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vitae aliquet velit, eu pulvinar mauris. Morbi mollis arcu ac faucibus vulputate. Maecenas lacus nibh, ullamcorper euismod justo non, convallis convallis velit. Suspendisse varius diam id nisl mollis, at mattis sapien imperdiet. Pellentesque eu semper diam, quis mattis lacus. Pellentesque nec lacus ac elit consequat interdum. Pellentesque pulvinar nisi condimentum, rhoncus orci id, vulputate neque. Proin accumsan urna finibus nulla placerat aliquam. Cras facilisis sodales justo et condimentum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent placerat convallis dapibus.
+        </p>
+        <p>
+          Sed et ante nec augue finibus aliquam tincidunt eu ex. Donec quis dui interdum, sollicitudin mauris sit amet, fermentum nisi. Integer commodo eros ipsum, vitae tincidunt eros aliquam a. Fusce vitae tristique turpis. Phasellus rhoncus sapien felis. Fusce vitae commodo turpis. Nam malesuada arcu metus, ac elementum nisi sagittis non. Suspendisse potenti. Nam aliquam ac tortor a facilisis. Aliquam semper pharetra turpis ut imperdiet. Vestibulum nec molestie felis. Nulla tristique purus sed dapibus sollicitudin. Integer vel hendrerit libero. Integer eget mi ac lectus laoreet sagittis vel at quam. Phasellus sapien nisl, tempor non pellentesque eu, sagittis eget metus.
+        </p>
+        <p>
+          Integer non sollicitudin lectus. Fusce sit amet euismod orci. Fusce elit nisi, ornare in libero vitae, auctor facilisis elit. Nulla viverra sagittis lorem, id pretium dolor vulputate sed. Etiam imperdiet massa nec lorem dapibus, vitae vestibulum ipsum imperdiet. Sed tempor leo in fringilla egestas. Aliquam pulvinar cursus augue, eget gravida elit facilisis nec. Nullam rutrum tortor vitae ligula pellentesque, vel accumsan ipsum pharetra. Maecenas vel erat risus. Duis ex elit, facilisis quis mi a, pulvinar pretium mi. Nulla augue mi, mattis non ultricies nec, dictum eget tortor. Etiam dictum, enim et malesuada dictum, risus eros suscipit eros, a convallis tortor dolor id metus. In finibus urna a ligula dignissim, sed dictum enim gravida. Cras nisl ligula, ullamcorper accumsan nunc at, venenatis ullamcorper nulla.
+        </p>
       </div>
     </div>
 
   </div>
 
 
-  <footer class="footer">
-
-    <div class="container">
-      <span class="text-muted">&copy; 2017 Imperial College London</span>
-    </div>
-
-  </footer>
+  <?php include "includes/footer.php"; ?>
 
 </body>
 </html>
