@@ -1,13 +1,34 @@
 <!doctype html>
 <html lang="en">
 
-<?php include "includes/head.php"; ?>
+<?php
+include "includes/head.php";
+
+$deptList = array("Physics", "Maths", "Chemistry");
+$yearList = array("1", "2");
+
+parse_str($_SERVER["QUERY_STRING"], $queryStr);
+// check if dept and year are valid
+if (isset($queryStr)) {
+  if ( !isset($queryStr["dept"]) || !in_array($queryStr["dept"], $deptList) ) {
+    $queryStr["dept"] = "Physics";
+  }
+  if ( !isset($queryStr["year"]) || !in_array($queryStr["year"], $yearList) ) {
+    $queryStr["year"] = "1";
+  }
+} else {
+  $queryStr = array(
+    "dept" => "Physics",
+    "year" => "1"
+  );
+};
+?>
 
 <body id="bso" data-spy="scroll" data-target="#sidebar-nav" data-offset="70">
 
   <?php
-  $usrDepartment = "Physics";
-  $usrYear = 1;
+  $usrDepartment = $queryStr["dept"];
+  $usrYear = $queryStr["year"];
   $loggedIn = 1;
   ?>
 

@@ -16,9 +16,9 @@
               Department of <?php echo $usrDepartment; ?>
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDeptDropdown">
-              <a class="dropdown-item" href="#">Physics</a>
-              <a class="dropdown-item" href="#">Maths</a>
-              <a class="dropdown-item" href="#">Chemistry</a>
+              <a class="dropdown-item" href="?dept=Physics&amp;year=<?php echo $usrYear; ?>">Physics</a>
+              <a class="dropdown-item" href="?dept=Maths&amp;year=<?php echo $usrYear; ?>">Maths</a>
+              <a class="dropdown-item" href="?dept=Chemistry&amp;year=<?php echo $usrYear; ?>">Chemistry</a>
             </div>
           </li>
           <li class="nav-item dropdown">
@@ -26,8 +26,8 @@
               Year <?php echo $usrYear; ?>
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarYearDropdown">
-              <a class="dropdown-item" href="#">Year 1</a>
-              <a class="dropdown-item" href="#">Year 2</a>
+              <a class="dropdown-item" href="?dept=<?php echo $usrDepartment; ?>&amp;year=1">Year 1</a>
+              <a class="dropdown-item" href="?dept=<?php echo $usrDepartment; ?>&amp;year=2">Year 2</a>
             </div>
           </li>
         </ul>
