@@ -42,6 +42,9 @@ body#bso {
 #bso #content > .jumbotron:first-child {
   padding-top: 120px;
 }
+#bso .jumbotron + .jumbotron {
+  margin-top: -2rem;
+}
 
 #bso .cover {
   height: calc(100vh - 60px);
