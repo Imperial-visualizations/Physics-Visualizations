@@ -39,7 +39,10 @@ require "includes/query-string.php";
       <div class="col-10 ml-auto">
 
         <?php
-        $mathsVisualisations = array(
+        require_once "includes/templater.php";
+
+        $mathsCards = new Template();
+        $mathsCards->visualisations = array(
           array(
             "title" => "Visualisation 1",
             "imgSrc" => "boundary.png",
@@ -105,56 +108,7 @@ require "includes/query-string.php";
 
         <div id="maths" class="vis-category container">
           <h2>Maths</h2>
-          <div class="card-deck">
-
-          <?php foreach ($mathsVisualisations as $key => $vis): ?>
-            <div class="card">
-              <img class="card-img-top" src="boundary.png" alt="Card image cap">
-              <div class="card-body">
-                <h4 class="card-title"><?php echo $vis["title"]; ?></h4>
-                <!-- <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
-                <p class="card-text"><small class="text-muted">Last updated 5 days ago</small></p>
-              </div>
-              <div class="card-footer">
-                <div class="btn-group btn-block">
-                  <a href="<?php echo $vis["openLinks"]["web"]; ?>" class="btn btn-primary btn-block">
-                    Open
-                  </a>
-                  <a href="#" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="sr-only">Toggle Dropdown</span>
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="<?php echo $vis["openLinks"]["web"]; ?>">
-                      Web visualisation
-                    </a>
-                    <a class="dropdown-item" href="<?php echo $vis["openLinks"]["ipynb"]; ?>">
-                      Python notebook
-                    </a>
-                  </div>
-                </div>
-                <div class="btn-group btn-block">
-                  <a href="<?php echo $vis["downloadLinks"]["ipynb"]; ?>" class="btn btn-outline-primary btn-block">
-                    Download
-                  </a>
-                  <a href="#" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="sr-only">Toggle Dropdown</span>
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="<?php echo $vis["downloadLinks"]["ipynb"]; ?>">
-                      Python notebook (.ipynb)
-                    </a>
-                    <?php if (array_key_exists("py", $vis["downloadLinks"])): ?>
-                    <a class="dropdown-item" href="<?php echo $vis["downloadLinks"]["py"]; ?>">
-                      Python (.py)
-                    </a>
-                    <?php endif; ?>
-                  </div>
-                </div>
-              </div>
-            </div>
-          <?php endforeach; ?>
-
-          </div>
+          <?php $mathsCards->render("card-deck.phtml"); ?>
         </div>
 
         <div id="mechanics" class="vis-category container">
