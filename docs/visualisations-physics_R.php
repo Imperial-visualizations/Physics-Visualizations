@@ -2,35 +2,14 @@
 <html lang="en">
 
 <?php
-include "includes/head.php";
+$pageTitle = "Imperial Visualisations";
+$loggedIn = 1;
 
-$deptList = array("Physics", "Maths", "Chemistry");
-$yearList = array("1", "2");
-
-parse_str($_SERVER["QUERY_STRING"], $queryStr);
-// check if dept and year are valid
-if (isset($queryStr)) {
-  if ( !isset($queryStr["dept"]) || !in_array($queryStr["dept"], $deptList) ) {
-    $queryStr["dept"] = "Physics";
-  }
-  if ( !isset($queryStr["year"]) || !in_array($queryStr["year"], $yearList) ) {
-    $queryStr["year"] = "1";
-  }
-} else {
-  $queryStr = array(
-    "dept" => "Physics",
-    "year" => "1"
-  );
-};
+require "includes/head.php";
+require "includes/query-string.php";
 ?>
 
 <body id="bso" data-spy="scroll" data-target="#sidebar-nav" data-offset="70">
-
-  <?php
-  $usrDepartment = $queryStr["dept"];
-  $usrYear = $queryStr["year"];
-  $loggedIn = 1;
-  ?>
 
   <?php include "includes/header.php"; ?>
 

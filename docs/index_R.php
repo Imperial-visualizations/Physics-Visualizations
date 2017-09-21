@@ -1,13 +1,14 @@
 <!doctype html>
 <html lang="en">
 
-<?php include "includes/head.php"; ?>
+<?php
+$pageTitle = "Imperial Visualisations";
+$loggedIn = 0;
+
+require "includes/head.php";
+?>
 
 <body id="bso">
-
-  <?php
-  $loggedIn = 0;
-  ?>
 
   <?php include "includes/header.php"; ?>
 

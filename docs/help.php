@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="en">
 
-<?php include "includes/head.php"; ?>
+<?php
+$pageTitle = "Help - Imperial Visualisations";
+$loggedIn = 0;
+require "includes/head.php";
+?>
 
 <body id="bso" data-spy="scroll" data-target="#nav" data-offset="20">
 
-  <?php
-  $loggedIn = 0;
-
-  include "includes/header.php";
-  ?>
+  <?php include "includes/header.php"; ?>
 
 
   <div id="content">
