@@ -87,6 +87,16 @@ body#bso {
   padding: 40px;
 }
 
+#bso .bso-card-deck {
+  /*margin: -15px;*/
+}
+#bso .bso-card-deck .col {
+  margin: 15px 0;
+}
+#bso .bso-card-deck .card {
+  height: 100%;
+}
+
 /* Sidebar styles
 -------------------------------------------------- */
 .sidebar {
