@@ -32,7 +32,7 @@ require "includes/head.php";
               <label for="inputPassword" class="sr-only">Password</label>
               <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
               <!-- <button class="btn btn-outline-primary btn-block" type="submit">Log in</button> -->
-              <a href="visualisations-physics_R.php" class="btn btn-outline-primary btn-block">Log in</a>
+              <a href="visualisations-physics.php" class="btn btn-outline-primary btn-block">Log in</a>
             </form>
           </div>
 

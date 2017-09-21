@@ -36,7 +36,7 @@
         <ul class="navbar-nav ml-auto">
           <!-- <div class="navbar-divider"></div> -->
           <li class="nav-item">
-            <a class="nav-link" href="about_R.php">About</a>
+            <a class="nav-link" href="about.php">About</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="help.php">Help</a>
