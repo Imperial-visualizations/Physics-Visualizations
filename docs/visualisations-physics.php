@@ -90,18 +90,57 @@ require "includes/query-string.php";
               "py" => "#"
             )
           )
-          // array(
-          //   "title" => "Visualisation 5",
-          //   "imgSrc" => "boundary.png",
-          //   "openLinks" => array(
-          //     "web" => "#",
-          //     "ipynb" => "#"
-          //   ),
-          //   "downloadLinks" => array(
-          //     "ipynb" => "#",
-          //     "py" => "#"
-          //   )
-          // )
+        );
+
+        $mechanicsCards = new Template();
+        $mechanicsCards->visualisations = array(
+          array(
+            "title" => "Visualisation 1",
+            "imgSrc" => "boundary.png",
+            "openLinks" => array(
+              "web" => "#",
+              "ipynb" => "#"
+            ),
+            "downloadLinks" => array(
+              "ipynb" => "#"
+            )
+          ),
+          array(
+            "title" => "Visualisation 2",
+            "imgSrc" => "boundary.png",
+            "openLinks" => array(
+              "web" => "#",
+              "ipynb" => "#"
+            ),
+            "downloadLinks" => array(
+              "ipynb" => "#",
+              "py" => "#"
+            )
+          ),
+          array(
+            "title" => "Visualisation 3",
+            "imgSrc" => "boundary.png",
+            "openLinks" => array(
+              "web" => "#",
+              "ipynb" => "#"
+            ),
+            "downloadLinks" => array(
+              "ipynb" => "#",
+              "py" => "#"
+            )
+          ),
+          array(
+            "title" => "Visualisation 4",
+            "imgSrc" => "boundary.png",
+            "openLinks" => array(
+              "web" => "#",
+              "ipynb" => "#"
+            ),
+            "downloadLinks" => array(
+              "ipynb" => "#",
+              "py" => "#"
+            )
+          )
         );
         ?>
 
@@ -113,44 +152,7 @@ require "includes/query-string.php";
 
         <div id="mechanics" class="vis-category container">
           <h2>Mechanics and Vibrations &amp; Waves</h2>
-          <div class="card-deck">
-            <div class="card">
-              <img class="card-img-top" src="boundary.png" alt="Card image cap">
-              <div class="card-body">
-                <h4 class="card-title">Lorem ipsum</h4>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                <p class="card-text"><small class="text-muted">Last updated 5 days ago</small></p>
-              </div>
-              <div class="card-footer">
-                <a href="#" class="btn btn-primary btn-block">View Web Visualisation</a>
-                <a href="#" class="btn btn-outline-primary btn-block">View Python Notebook</a>
-              </div>
-            </div>
-            <div class="card">
-              <img class="card-img-top" src="boundary.png" alt="Card image cap">
-              <div class="card-body">
-                <h4 class="card-title">Dolor sit amet</h4>
-                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                <p class="card-text"><small class="text-muted">Last updated 5 days ago</small></p>
-              </div>
-              <div class="card-footer">
-                <a href="#" class="btn btn-primary btn-block">View Web Visualisation</a>
-                <a href="#" class="btn btn-outline-primary btn-block">View Python Notebook</a>
-              </div>
-            </div>
-            <div class="card">
-              <img class="card-img-top" src="boundary.png" alt="Card image cap">
-              <div class="card-body">
-                <h4 class="card-title">Gregor Samsa awoke</h4></h4>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                <p class="card-text"><small class="text-muted">Last updated 5 days ago</small></p>
-              </div>
-              <div class="card-footer">
-                <a href="#" class="btn btn-primary btn-block">View Web Visualisation</a>
-                <a href="#" class="btn btn-outline-primary btn-block">View Python Notebook</a>
-              </div>
-            </div>
-          </div>
+          <?php $mechanicsCards->render("card-deck.phtml"); ?>
         </div>
 
       </div>
