@@ -9,8 +9,8 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <?php if ($loggedIn): ?>
-        <ul class="navbar-nav mr-auto">
+      <?php //if ($loggedIn): ?>
+        <!-- <ul class="navbar-nav mr-auto">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDeptDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Department of <?php echo $usrDepartment; ?>
@@ -30,14 +30,14 @@
               <a class="dropdown-item" href="?dept=<?php echo $usrDepartment; ?>&amp;year=2">Year 2</a>
             </div>
           </li>
-        </ul>
-      <?php endif; ?>
+        </ul> -->
+      <?php //endif; ?>
 
         <ul class="navbar-nav ml-auto">
           <!-- <div class="navbar-divider"></div> -->
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" href="about.php">About</a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a class="nav-link" href="help.php">Help</a>
           </li>

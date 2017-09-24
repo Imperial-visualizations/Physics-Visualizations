@@ -26,13 +26,13 @@ require "includes/head.php";
 
           <div class="col login">
             <form class="form-signin">
-              <h4 class="form-signin-heading">Please log in</h4>
+              <!-- <h4 class="form-signin-heading">Please log in</h4>
               <label for="CID" class="sr-only">College ID</label>
               <input type="text" id="CID" class="form-control" placeholder="College ID" required="" autofocus="">
               <label for="inputPassword" class="sr-only">Password</label>
               <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
-              <!-- <button class="btn btn-outline-primary btn-block" type="submit">Log in</button> -->
-              <a href="visualisations-physics.php" class="btn btn-outline-primary btn-block">Log in</a>
+              <button class="btn btn-outline-primary btn-block" type="submit">Log in</button> -->
+              <a href="visualisations.php" class="btn btn-outline-primary btn-block">Enter</a>
             </form>
           </div>
 
