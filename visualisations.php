@@ -48,7 +48,7 @@ require "includes/query-string.php";
             "title" => "2D Transformations",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
-              "web" => "2D_transformations/2D_Transformations.html"
+              "web" => "2D_Transformations/2D_Transformations.html"
             ),
             "downloadLinks" => array()
           ),
