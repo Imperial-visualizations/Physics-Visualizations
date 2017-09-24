@@ -7,30 +7,34 @@
       <img class="card-img-top" src="boundary.png" alt="Card image cap">
 
       <div class="card-body">
-        <h4 class="card-title"><?php echo $vis["title"]; ?></h4>
+        <h5 class="card-title"><?php echo $vis["title"]; ?></h5>
         <!-- <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
-        <p class="card-text"><small class="text-muted">Last updated 5 days ago</small></p>
+        <!-- <p class="card-text"><small class="text-muted">Last updated 5 days ago</small></p> -->
       </div>
 
       <div class="card-footer">
 
         <div class="btn-group btn-block">
-          <a href="<?php echo $vis["openLinks"]["web"]; ?>" class="btn btn-primary btn-block">
+          <?php $webLink = $this->folder . $vis["openLinks"]["web"]; ?>
+          <a href="<?php echo $webLink; ?>" class="btn btn-primary btn-block">
             Open
           </a>
           <a href="#" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span class="sr-only">Toggle Dropdown</span>
           </a>
           <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="<?php echo $vis["openLinks"]["web"]; ?>">
+            <a class="dropdown-item" href="<?php echo $webLink; ?>">
               Web visualisation
             </a>
+            <?php if (array_key_exists("ipynb", $vis["openLinks"])): ?>
             <a class="dropdown-item" href="<?php echo $vis["openLinks"]["ipynb"]; ?>">
               Python notebook
             </a>
+            <?php endif; ?>
           </div>
         </div>
 
+        <?php if (array_key_exists("ipynb", $vis["downloadLinks"])): ?>
         <div class="btn-group btn-block">
           <a href="<?php echo $vis["downloadLinks"]["ipynb"]; ?>" class="btn btn-outline-primary btn-block">
             Download
@@ -49,7 +53,8 @@
             <?php endif; ?>
           </div>
         </div>
-        
+        <?php endif; ?>
+
       </div>
 
     </div>

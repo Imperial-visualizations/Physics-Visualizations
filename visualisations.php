@@ -30,9 +30,9 @@ require "includes/query-string.php";
           <form class="form">
             <input class="form-control form-control-sm" type="text" placeholder="Search..." aria-label="Search">
           </form>
+          <a href="#em" class="nav-link">Electromagnetism</a>
           <a href="#maths" class="nav-link active">Maths</a>
           <a href="#mechanics" class="nav-link">Mechanics/V&amp;W</a>
-          <a href="#em" class="nav-link">Electromagnetism</a>
         </nav>
       </div>
 
@@ -42,108 +42,129 @@ require "includes/query-string.php";
         require_once "includes/templater.php";
 
         $mathsCards = new Template();
+        $mathsCards->folder = "visuals_maths/";
         $mathsCards->visualisations = array(
           array(
-            "title" => "Visualisation 1",
+            "title" => "2D Transformations",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
-              "web" => "#",
-              "ipynb" => "#"
+              "web" => "2D_transformations/2D_Transformations.html"
             ),
-            "downloadLinks" => array(
-              "ipynb" => "#"
-            )
+            "downloadLinks" => array()
           ),
           array(
-            "title" => "Visualisation 2",
+            "title" => "Green's Theorem",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
-              "web" => "#",
-              "ipynb" => "#"
+              "web" => "Green_Theorem/green.html"
             ),
-            "downloadLinks" => array(
-              "ipynb" => "#",
-              "py" => "#"
-            )
+            "downloadLinks" => array()
           ),
           array(
-            "title" => "Visualisation 3",
+            "title" => "LA Sphere",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
-              "web" => "#",
-              "ipynb" => "#"
+              "web" => "LA-Sphere/sphere.html"
             ),
-            "downloadLinks" => array(
-              "ipynb" => "#",
-              "py" => "#"
-            )
+            "downloadLinks" => array()
           ),
           array(
-            "title" => "Visualisation 4",
+            "title" => "Parallelpiped",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
-              "web" => "#",
-              "ipynb" => "#"
+              "web" => "PPed/plotpped.html"
             ),
-            "downloadLinks" => array(
-              "ipynb" => "#",
-              "py" => "#"
-            )
+            "downloadLinks" => array()
+          ),
+          array(
+            "title" => "Parallelpiped",
+            "imgSrc" => "boundary.png",
+            "openLinks" => array(
+              "web" => "PPed/plotpped.html"
+            ),
+            "downloadLinks" => array()
           )
         );
 
         $mechanicsCards = new Template();
+        $mechanicsCards->folder = "visuals_mechanics/";
         $mechanicsCards->visualisations = array(
           array(
-            "title" => "Visualisation 1",
+            "title" => "Two Body Collisions",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
-              "web" => "#",
-              "ipynb" => "#"
+              "web" => "mechanics_collisions/twoBody.html"
             ),
-            "downloadLinks" => array(
-              "ipynb" => "#"
-            )
+            "downloadLinks" => array()
           ),
           array(
-            "title" => "Visualisation 2",
+            "title" => "Diatomic Molecules",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
-              "web" => "#",
-              "ipynb" => "#"
+              "web" => "mechanics_diatomic/diatomic.html"
             ),
-            "downloadLinks" => array(
-              "ipynb" => "#",
-              "py" => "#"
-            )
+            "downloadLinks" => array()
           ),
           array(
-            "title" => "Visualisation 3",
+            "title" => "Wave Dispersion",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
-              "web" => "#",
-              "ipynb" => "#"
+              "web" => "mechanics_dispersion/waves.html"
             ),
-            "downloadLinks" => array(
-              "ipynb" => "#",
-              "py" => "#"
-            )
+            "downloadLinks" => array()
           ),
           array(
-            "title" => "Visualisation 4",
+            "title" => "Pulse At Interface",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
-              "web" => "#",
-              "ipynb" => "#"
+              "web" => "mechanics_pulse_at_interface/pulse_anim.html"
             ),
-            "downloadLinks" => array(
-              "ipynb" => "#",
-              "py" => "#"
-            )
+            "downloadLinks" => array()
           )
         );
+
+        $EMCards = new Template();
+        $EMCards->folder = "visuals_EM/";
+        $EMCards->visualisations = array(
+          array(
+            "title" => "Dielectric Boundary",
+            "imgSrc" => "boundary.png",
+            "openLinks" => array(
+              "web" => "Dielectric%20Boundary/index.html"
+            ),
+            "downloadLinks" => array()
+          ),
+          array(
+            "title" => "Planewave Dielectric Boundary",
+            "imgSrc" => "boundary.png",
+            "openLinks" => array(
+              "web" => "Planewave%20Dielectric%20Boundary/index.html"
+            ),
+            "downloadLinks" => array()
+          ),
+          array(
+            "title" => "Biot Savart Law",
+            "imgSrc" => "boundary.png",
+            "openLinks" => array(
+              "web" => "BiotSavart/BiotSavartLaw.html"
+            ),
+            "downloadLinks" => array()
+          ),
+          array(
+            "title" => "Cyclotron",
+            "imgSrc" => "boundary.png",
+            "openLinks" => array(
+              "web" => "Cyclotron/index.html"
+            ),
+            "downloadLinks" => array()
+          )
+        )
         ?>
 
+        <div id="em" class="vis-category container">
+          <h2>Electromagnetism</h2>
+          <?php $EMCards->render("card-deck.phtml"); ?>
+        </div>
 
         <div id="maths" class="vis-category container">
           <h2>Maths</h2>
