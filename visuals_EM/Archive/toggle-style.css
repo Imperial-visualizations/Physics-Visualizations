@@ -1,0 +1,37 @@
+.switch {
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.switch input {
+  position: absolute !important;
+  height: 0;
+  width: 0;
+}
+
+.switch .radio-label {
+  display: inline-block;
+  float: left;
+  width: 60px;
+  color: #555;
+  background-color: #DDD;
+  font-size: 14px;
+  text-align: center;
+  padding: 4px 7px;
+  margin: 0;
+  border: none;
+}
+.switch .radio-label:hover {
+	cursor: pointer;
+}
+.switch input:checked + label {
+  background-color: #003E74;
+  color: #FFF;
+}
+.switch input:checked:focus + label {
+  background-color: #04549C;
+}
+.switch input:not(:checked):hover + label {
+  color: #000;
+  background: #CCC;
+}

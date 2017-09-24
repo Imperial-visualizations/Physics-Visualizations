@@ -65,9 +65,9 @@ class Wave:
         rot_B_sine = self.rotate_sinusoid(B_sine, self.theta, self._x_reflect)
         
         E_trace = go.Scatter3d(x=rot_E_sine[0].tolist(), y=rot_E_sine[1].tolist(), z=rot_E_sine[2].tolist(),
-                               mode = 'lines', marker = dict(color='#0099FF'))
+                               showlegend = False, mode = 'lines', marker = dict(color='#0099FF'))
         B_trace = go.Scatter3d(x=rot_B_sine[0].tolist(), y=rot_B_sine[1].tolist(), z=rot_B_sine[2].tolist(),
-                               mode = 'lines', marker = dict(color='#FF0099'))
+                               showlegend = False, mode = 'lines', marker = dict(color='#FF0099'))
         
         return [E_trace, B_trace]
         

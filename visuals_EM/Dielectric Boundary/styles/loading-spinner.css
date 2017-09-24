@@ -1,0 +1,46 @@
+#loading-spinner {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background: #FFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 50;
+}
+
+.loading-message {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+#spinner-bar {
+  display: inline-block;
+  position: relative;
+  width: 40px;
+  height: 10px;
+  background: #222;
+  animation-name: loading-spinner;
+  animation-duration: 0.8s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-timing-function: ease-in-out;
+}
+.spinner-mask {
+  display: inline-block;
+  position: relative;
+  width: 100px;
+  height: 10px;
+  background: #FFF;
+  z-index: 100;
+}
+
+@keyframes loading-spinner {
+  0% {transform: translateX(32px);}
+  100% {transform: translateX(-32px);}
+}
