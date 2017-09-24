@@ -31,6 +31,14 @@ body#bso {
 #bso .navbar-nav:last-of-type {
   margin-right: -0.5rem;
 }
+#bso .navbar-brand .badge {
+  border: 1px solid #CCC;
+  color: #AAA;
+  font-weight: 300;
+  text-transform: uppercase;
+  vertical-align: text-bottom;
+  margin-left: 5px;
+}
 
 #bso #content {
   position: relative; /* Needed for scrollspy */
