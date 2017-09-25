@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Imperial Visualisations</title>
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
     <link rel="stylesheet" href="https://rawgit.com/cydcowley/Imperial-Visualizations/master/styles.css">
 </head>
 <body>
-<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.6/jquery-ui.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.6/jquery-ui.min.js"></script>
 <div class="container">
   <h1>Electromagnetic Surface</h1>
     <div class="row">
-      
+
       <div class="three columns">
           <div class="row">
           <br><br><br>
@@ -38,7 +38,7 @@
           </div>
       </div>
       <div class="nine columns">
-        <div id='graph',style="margin:0 auto;"></div> 
+        <div id='graph',style="margin:0 auto;"></div>
       </div>
     </div>
 </div>
@@ -56,7 +56,7 @@ var layout = {
     camera: {center: {x:0,y:0,z:0},eye: {x: 1,y: -1,z: 0.1}}
   },
   margin: {},
-  showlegend: false 
+  showlegend: false
 };
 // Import data in json file as "frames" variable (same data structure as initially output in Python)
 var ourRequest = new XMLHttpRequest();

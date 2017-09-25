@@ -5,11 +5,11 @@
     <!-- <link rel="stylesheet" href="skeleton-tabs.css"> -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="https://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
     <script src=CubeRotation.js></script>
     <script src="skeleton-tabs.js"></script>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">  
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
 
 <body>
@@ -18,9 +18,9 @@
         <div class="six columns">
             <h1>3D Transformations</h1>
             <div id='graph' style="width:450px; height:450px;"></div>
-            <script src=CubeRotation.js></script>  
+            <script src=CubeRotation.js></script>
         </div>
-        <br> 
+        <br>
     <div class = "six columns">
         <ul class="tab-nav">
             <li><a class="button active" href="#Rotate">Rotate</a></li>
@@ -31,11 +31,11 @@
             <div class="tab-pane active" id="Rotate">
             <h3>Rotate</h3>
             <div>
-                <p><strong>Select Axis:</strong></p> 
+                <p><strong>Select Axis:</strong></p>
                 <select id = "RotateSelect">
-                    <option value="RotXaxis">X Axis</option> 
-                    <option value="RotYaxis"> Y Axis</option> 
-                    <option value="RotZaxis">Z Axis</option> 
+                    <option value="RotXaxis">X Axis</option>
+                    <option value="RotYaxis"> Y Axis</option>
+                    <option value="RotZaxis">Z Axis</option>
                 </select>
             </div>
             <div class="SliderRot">
@@ -66,16 +66,16 @@
                     </tr>
                 </table>
             </div>
-            <div><button onclick="Rotate()">Go</button></div> 
+            <div><button onclick="Rotate()">Go</button></div>
             </div>
             <div class="tab-pane" id="Skew">
                 <h3>Skew</h3>
             <div>
-                <p><strong>Select Axis:</strong></p> 
+                <p><strong>Select Axis:</strong></p>
                 <select id = "SkewSelect">
-                    <option value="SkewXaxis">X Axis</option> 
-                    <option value="SkewYaxis"> Y Axis</option> 
-                    <option value="SkewZaxis">Z Axis</option> 
+                    <option value="SkewXaxis">X Axis</option>
+                    <option value="SkewYaxis"> Y Axis</option>
+                    <option value="SkewZaxis">Z Axis</option>
                 </select>
             </div>
             <div class="sliderSkew">
@@ -108,14 +108,14 @@
             <div><button onclick = "Skew()">Go!</button></div>
 
             </div>
-            <div class="tab-pane" id="Scale"> 
+            <div class="tab-pane" id="Scale">
                           <h3>Scale</h3><div>
-                <p><strong>Select Axis:</strong></p> 
+                <p><strong>Select Axis:</strong></p>
                 <select id ="ScaleSelect">
-                    <option value="ScaleXaxis">X Axis</option> 
-                    <option value="ScaleYaxis"> Y Axis</option> 
-                    <option value="ScaleZaxis">Z Axis</option> 
-                    <option value="ScaleAllAxis">All Axes</option> 
+                    <option value="ScaleXaxis">X Axis</option>
+                    <option value="ScaleYaxis"> Y Axis</option>
+                    <option value="ScaleZaxis">Z Axis</option>
+                    <option value="ScaleAllAxis">All Axes</option>
 
                 </select>
             </div>
@@ -147,7 +147,7 @@
                     </tr>
                 </table>
             </div>
-            <div><button onclick = "Scale()">Go!</button></div>   
+            <div><button onclick = "Scale()">Go!</button></div>
             </div>
 
     </div>
