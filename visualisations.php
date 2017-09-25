@@ -61,7 +61,7 @@ require "includes/query-string.php";
             "downloadLinks" => array()
           ),
           array(
-            "title" => "LA Sphere",
+            "title" => "Linear Algebra Sphere",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
               "web" => "LA-Sphere/sphere.html"
@@ -77,10 +77,34 @@ require "includes/query-string.php";
             "downloadLinks" => array()
           ),
           array(
-            "title" => "Parallelpiped",
+            "title" => "Triple Integration",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
-              "web" => "PPed/plotpped.html"
+              "web" => "Triple%20Integration/tripleintegration.html"
+            ),
+            "downloadLinks" => array()
+          ),
+          array(
+            "title" => "Vector Calculus Basis",
+            "imgSrc" => "boundary.png",
+            "openLinks" => array(
+              "web" => "VC-Basis/basis.html"
+            ),
+            "downloadLinks" => array()
+          ),
+          array(
+            "title" => "Vector Calculus Polar",
+            "imgSrc" => "boundary.png",
+            "openLinks" => array(
+              "web" => "VC-Polar/polar.html"
+            ),
+            "downloadLinks" => array()
+          ),
+          array(
+            "title" => "Vector Calculus &quot;Riley&quot;",
+            "imgSrc" => "boundary.png",
+            "openLinks" => array(
+              "web" => "VC-Riley/riley.html"
             ),
             "downloadLinks" => array()
           )
