@@ -45,7 +45,7 @@ require "includes/query-string.php";
         $mathsCards->folder = "visuals_maths/";
         $mathsCards->visualisations = array(
           array(
-            "title" => "2D Transformations",
+            "title" => "2D Transformations <span class='badge badge-danger'>numeric</span>",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
               "web" => "2D_Transformations/2D_Transformations.html"
@@ -53,7 +53,7 @@ require "includes/query-string.php";
             "downloadLinks" => array()
           ),
           array(
-            "title" => "Green's Theorem",
+            "title" => "Green's Theorem <span class='badge badge-danger'>numeric</span>",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
               "web" => "Green_Theorem/green.html"
@@ -61,7 +61,7 @@ require "includes/query-string.php";
             "downloadLinks" => array()
           ),
           array(
-            "title" => "Linear Algebra Sphere",
+            "title" => "Linear Algebra Sphere <span class='badge badge-danger'>numeric</span>",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
               "web" => "LA-Sphere/sphere.html"
@@ -85,7 +85,7 @@ require "includes/query-string.php";
             "downloadLinks" => array()
           ),
           array(
-            "title" => "Vector Calculus Basis",
+            "title" => "Vector Calculus Basis <span class='badge badge-danger'>numeric</span>",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
               "web" => "VC-Basis/basis.html"
@@ -93,7 +93,7 @@ require "includes/query-string.php";
             "downloadLinks" => array()
           ),
           array(
-            "title" => "Vector Calculus Polar",
+            "title" => "Vector Calculus Polar <span class='badge badge-danger'>numeric</span>",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
               "web" => "VC-Polar/polar.html"
@@ -101,7 +101,7 @@ require "includes/query-string.php";
             "downloadLinks" => array()
           ),
           array(
-            "title" => "Vector Calculus &quot;Riley&quot;",
+            "title" => "Vector Calculus &quot;Riley&quot; <span class='badge badge-danger'>numeric</span>",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
               "web" => "VC-Riley/riley.html"
@@ -130,7 +130,7 @@ require "includes/query-string.php";
             "downloadLinks" => array()
           ),
           array(
-            "title" => "Wave Dispersion",
+            "title" => "Wave Dispersion <span class='badge badge-danger'>numeric</span>",
             "imgSrc" => "boundary.png",
             "openLinks" => array(
               "web" => "mechanics_dispersion/waves.html"

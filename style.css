@@ -105,6 +105,12 @@ body#bso {
   height: 100%;
 }
 
+#bso .card-title .badge {
+  font-size: 10px;
+  vertical-align: middle;
+  font-weight: 400;
+}
+
 /* Sidebar styles
 -------------------------------------------------- */
 .sidebar {
