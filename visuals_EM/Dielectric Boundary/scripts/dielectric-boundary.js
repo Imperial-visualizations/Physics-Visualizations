@@ -83,7 +83,6 @@ $(window).on('load', function() {
             getCurvePlotData: function(){
                 var plotData = this.dataFres.Curves[this.polarisation][this.refractiveIndexIndex].concat(
                     [this.dataFres[this.polarisation][this.refractiveIndexIndex][this.angleIndex]]);
-                console.log(plotData);
                 return plotData;
             }
         };
