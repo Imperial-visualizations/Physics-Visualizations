@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Dielectric Boundary - Imperial Visualisations</title>
+
+  <!-- <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=1"> -->
+  <!-- <link rel="stylesheet" href="../debug-style.css"> -->
+  <!-- <link rel="stylesheet" href="../toggle-style.css"> -->
+  <link rel="stylesheet" href="https://ghcpuman902.github.io/styles/styles.css">
+  <link rel="stylesheet" href="styles/loading-spinner.css">
+<link rel="stylesheet" href="styles/navigation.css">
+
+
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="scripts/dielectric-boundary.js"></script>
+
+</head>
+<body>
+<div class="rightnav"></div>
+<div class="leftnav"></div>
+  <div class="container">
+    <h1>Dielectric boundary</h1>
+
+    <div id="loading-spinner">
+      <span class="loading-message">Loading</span>
+      <div>
+        <div class="spinner-mask"></div>
+        <div id="spinner-bar"></div>
+        <div class="spinner-mask"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="six columns">
+        <div id="graph"></div>
+      </div>
+
+      <div class="six columns">
+        <div id="graph2"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div id="interface">
+
+        <div class="two columns">
+          <div id="polarisation-switch" class="switch">
+            <label class="radioTitle">Polarisation:</label>
+            <label for="s-polarisation" class="radio">
+              <input type="radio" id="s-polarisation" value="s-polarisation" name="polarisation-switch" checked="checked">
+              <span>s</span>
+            </label>
+            <label for="p-polarisation" class="radio">
+              <input type="radio" id="p-polarisation" value="p-polarisation" name="polarisation-switch">
+              <span>p</span>
+            </label>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+<script src="scripts/navigation.js"></script>
+
+</body>
+</html>
