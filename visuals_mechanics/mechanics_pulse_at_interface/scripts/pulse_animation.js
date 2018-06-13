@@ -1,11 +1,11 @@
     // Defining variables (need to update later anyway so importing from e.g. json is meaningless)
-    var n = 801;
+    var n = 801; // var declares a new variable
     var x = [], y_i = [], y_r = [], y_t = [];
-    var t = 0.0;
-    var dt = 0.02;
-    var v1 = 1;
+    var t = 0.0; // initialize time variable
+    var dt = 0.02; // time step variable
+    var v1 = 1; // first velocity (initialized) but will change via slider
     var alpha = valueSlider(parseInt($("#alpha").val()));
-    var v2 = alpha*v1;
+    var v2 = alpha*v1; // second velocity
     var A = (v2-v1)/(v1+v2);
     var B = 2*v1/(v1+v2);
     var is_paused = true;
@@ -14,7 +14,7 @@
             autosize: false,
             width: 700,
             height: 600,
-            margin: {
+            margin: {    // set margins : Left, Right, Bottom, Top
                 l: 50,
                 r: 50,
                 b: 100,
@@ -23,13 +23,13 @@
             },
             //plot_bgcolor: '#EBEEEE',
             xaxis: {
-                range: [-10, 10]
+                range: [-10, 10]   // define x axis limits
             },
             yaxis: {
-                range: [-1.6, 1.6]
+                range: [-1.6, 1.6] // define y axis limits
             },
             font: {
-                family: 'Lato',
+                family: 'Lato',  // font, size color for graph axis
                 size: 18,
                 color: '#003E74',
                 weight: 900
@@ -37,7 +37,7 @@
         };
 
 
-    //(ax+b) *  exp(-(cx+d)^2 + (ex+f))
+    //(ax+b) *  exp(-(cx+d)^2 + (ex+f))  Equation of the wave
     // Variables to change wave shape
     var C = 0;
     var D = 1;
@@ -68,7 +68,7 @@
     $('#v1').on('input', function () {
         v1 = parseInt($("#v1").val());
         $("#v1Display").text(" " + v1 + " m/s");
-        v2 = alpha*v1;
+        v2 = alpha*v1; // redundant
         A = (v2-v1)/(v1+v2);
         B = 2*v1/(v1+v2);
         onReset();
@@ -86,10 +86,9 @@
         onReset();
     });
 
-
     for (var i = 0; i < n; i++) {
         x[i] = -10 + i / 40;
-        y_i[i] = D*(x[i] + 6 + C) * Math.exp(-1*((x[i] + 6) * (x[i] + 6)) + (x[i] + 6));
+        y_i[i] = D*(x[i] + 6 + C) * Math.exp(-1*((x[i] + 6) * (x[i] + 6)) + (x[i] + 6));  //implement the equation of the pulse
         //y_i[i] = (x[i]+3)*Math.exp(-( x[i]+3)*(x[i]+3)+(x[i]+3));
         y_r[i] = 0;
         y_t[i] = 0;
@@ -160,10 +159,11 @@
 
    //-(1.0/3.0)*((-x-0.0)-1.0*(1+1.5))*exp(-((-x-0.0)-1.0*(1+1.5))*((-x-0.0)-1.0*(1.0+1.5))+((-x-0.0)-1.0*(1.0+1.5)))
    // Data update function for animation
+    
    var t_start = t;
 
    function compute() {
-       t += dt;
+       t += dt; // increment time
        // need to find a way to define time limit
        if (t < t_start + 16) {
            for (var i = 0; i < n; i++) {
@@ -185,7 +185,7 @@
 
        if (is_paused === false) {
 
-           compute();
+           compute();   //call
 
            Plotly.animate('graph',
                {data: [{y: y_i}, {y: y_r}, {y: y_t}]},
