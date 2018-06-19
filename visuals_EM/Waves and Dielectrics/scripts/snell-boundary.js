@@ -1,6 +1,7 @@
 $(window).on('load', function() {
-
+    console.log("</h1>")
     var dom = {
+            //defining shorthands for our html elements
             intface: $("#interface"),
             loadSpinner: $("#loading-spinner"),
             polarisationSwitchInputs: $("#polarisation-switch input"),
@@ -9,42 +10,19 @@ $(window).on('load', function() {
             angleInput: $("input#angle"),
             angleDisplay: $("#angle-display")
         },
+        //define initial layout for the plot
         plt = {
-            MaxTraceNo: 12,
+            MaxTraceNo: 3,
             layout: {
-                autosize: true,
-                width: 450,
-                height: 350,
-                margin: {
-                    l: 0, r: 0, b: 0, t: 1, pad: 5
-                },
-                scene: {
-                    aspectmode: "cube",
-                    xaxis: {
-                        range: [-1, 1], autorange: false, zeroline: true, showspikes: false
-                    },
-                    yaxis: {
-                        range: [-1, 1], autorange: false, zeroline: true, showspikes: false
-                    },
-                    zaxis: {
-                        range: [-1, 1], autorange: false, zeroline: true, showspikes: false
-                    }
-                },
-                hovermode: false,
-                font: {
-                    family: "Fira Sans",
-                    size: 14
-                }
-            },
-            layoutFres: {
-                width: 350,
-                height: 320,
+                autosize: true, //make the plot the size of the div
                 xaxis: {
-                    range: [0, 90],
-                    title: "Angle"
+                    range: [-1, 1],
+                    autorange: false,
                 },
+
                 yaxis: {
-                   range: [-1, 2.1]
+                    range: [-1, 1],
+                    autorange: false,
                 },
                 margin: {
                    l: 40, r: 10, b: 60, t: 1, pad: 5
@@ -59,12 +37,12 @@ $(window).on('load', function() {
                }
             }
         },
+
         phys = {
             polarisation: "s",
             refractiveIndexIndex: 6,
             angleIndex: 10,
             data: [],
-            dataFres: [],
             setPolarisation: function(polarisation) {
                 this.polarisation = polarisation;
             },
@@ -77,50 +55,34 @@ $(window).on('load', function() {
             getPlotData: function() {
                 return this.data[this.polarisation][this.refractiveIndexIndex][this.angleIndex];
             },
-            getFresPlotData: function() {
-                return [this.dataFres[this.polarisation][this.refractiveIndexIndex][this.angleIndex]];
-            },
-            getCurvePlotData: function(){
-                var plotData = this.dataFres.Curves[this.polarisation][this.refractiveIndexIndex].concat(
-                    [this.dataFres[this.polarisation][this.refractiveIndexIndex][this.angleIndex]]);
-                return plotData;
-            }
         };
 
+    //import JSON data from online
     $.when(
         $.getJSON("https://rawgit.com/binaryfunt/Imperial-Visualizations/master/dielectric_boundary_data3.JSON"),
         $.getJSON("https://rawgit.com/EdKeys/Imperial-Visualizations/master/fresnel_data.JSON")
-    ).then(function(data, dataFres) { // i.e., function(JSON1, JSON2) {// success}, function() {// error}
+    ).then(function(data) { // i.e., function(JSON1, JSON2) {// success}, function() {// error}
         data = data[0];
-        dataFres = dataFres[0];
-
-        init(data, dataFres);
+        init(data);
 
     }, showJSONLoadError);
 
-
-    function init(data, dataFres) {
+    function init(data) {
         phys.data = data;
-        phys.dataFres = dataFres;
-
         endLoadingScreen();
+        var traces = []
+        //define the initial 3 traces
+        traces.push({name: "Incident Wave", x: deepCopy(phys.getPlotData())[0].x,y:deepCopy(phys.getPlotData())[0].z,
+        mode: "lines",line: {width: 3}})
+        traces.push({name: "Transmitted Wave",x: deepCopy(phys.getPlotData())[4].x,y:deepCopy(phys.getPlotData())[4].z,
+        mode: "lines",line: {width: 3,dash: "longdash"}})
+        traces.push({name: "Reflected Wave",x: deepCopy(phys.getPlotData())[8].x,y:deepCopy(phys.getPlotData())[8].z,
+        mode: "lines",line: {width: 3,dash: "longdash"}})
+        //plot initial graph
+        Plotly.plot(div='graph', traces, layout=plt.layout,{displayModeBar: false});
 
-        Plotly.plot(div='graph', deepCopy(phys.getPlotData()), layout=plt.layout);
-        Plotly.newPlot(div='graph2', deepCopy(phys.getCurvePlotData()), layout=plt.layoutFres, {displayModeBar: false});
-
-        dom.polarisationSwitchInputs.on("change", handlePolarisationSwitch);
         dom.refractiveIndexInput.on("input", handleRefractiveIndexSlider);
         dom.angleInput.on("input", handleAngleSlider);
-    }
-
-
-    function handlePolarisationSwitch() {
-        if (this.value === "s-polarisation") {
-            phys.setPolarisation("s");
-        } else if (this.value === "p-polarisation") {
-            phys.setPolarisation("p");
-        }
-        updatePlot();
     }
 
     function handleRefractiveIndexSlider() {
@@ -143,11 +105,9 @@ $(window).on('load', function() {
         );
     }
 
-
     function endLoadingScreen() {
         dom.loadSpinner.fadeOut(0);
     }
-
 
     function input2index(domInput, array) {
         /** Compute the corresponding JSON array index for a given input value, rounding to the nearest integer */
@@ -157,6 +117,7 @@ $(window).on('load', function() {
             arrayLen = array.length;
         return Math.round(((inputValue - minInput) / (maxInput - minInput)) * (arrayLen - 1));
     }
+
     function roundInput(domInput, array) {
         /** Round a given input value to the actual value in the array. Returns a string */
         var inputValue = domInput.val(),
@@ -166,23 +127,24 @@ $(window).on('load', function() {
         return (minInput + ((maxInput - minInput) / (arrayLen - 1)) * input2index(domInput, array)).toFixed(2);
     }
 
-
     function updatePlot() {
+        var traces = [0,4,8]
         var update = {},
-            plotData = phys.getPlotData();
-        for (var trace = 0; trace < plotData.length - 1; trace++) {
-            update[trace] = {
-                x: plotData[trace].x,
-                y: plotData[trace].y,
-                z: plotData[trace].z,
-                opacity: 1
-            };
+        plotData = phys.getPlotData();
+        update[0] = {
+            x: plotData[0].x,
+            y: plotData[0].z,
+            opacity: 1,
         }
-        // Hide/show reflected ray depending on whether TIR:
-        for (trace = plotData.length - 1; trace < plt.MaxTraceNo; trace++) {
-            update[trace] = {
-                opacity: 0
-            };
+        update[1] = {
+            x: plotData[4].x,
+            y: plotData[4].z,
+            opacity: 1,
+        }
+        update[2]={
+            x: [plotData[0].x[0],-1*plotData[0].x[1]],
+            y: plotData[0].z,
+            opacity: 1,
         }
         Plotly.animate(div="graph", {
             data: getObjValues(update),
@@ -192,38 +154,12 @@ $(window).on('load', function() {
             transition: {duration: 0},
             frame: {duration: 0, redraw: false}
         });
-
-        var update2 = {},
-            plotData2 = phys.getCurvePlotData();
-        for (var trace2 = 0; trace2 < plotData2.length - 1; trace2++) {
-            update2[trace2] = {
-                x: plotData2[trace2].x,
-                y: plotData2[trace2].y,
-                z: plotData2[trace2].z,
-                opacity: 1
-            };
-        }
-        Plotly.animate(div="graph2", {
-            data: getObjValues(update2),
-            traces: getObjKeysAsInts(update2),
-            layout: {}
-        }, {
-            transition: {duration: 0},
-            frame: {duration: 0, redraw: false}
-        });
-        Plotly.restyle(div="graph2", {
-            x: [phys.dataFres[phys.polarisation][phys.refractiveIndexIndex][phys.angleIndex].x],
-            y: [phys.dataFres[phys.polarisation][phys.refractiveIndexIndex][phys.angleIndex].y]
-        }, [2]);
     }
-
 
     function showJSONLoadError() {
         dom.loadSpinner.children(".spinner-span").html("Error: Failed to load JSON resources");
         dom.loadSpinner.children("div").fadeOut(0);
     }
-
-
     function getObjKeys(obj) {
         return Object.keys(obj);
     }
@@ -235,9 +171,7 @@ $(window).on('load', function() {
             return obj[key];
         });
     }
-
     function deepCopy(obj) {
         return JSON.parse(JSON.stringify(obj));
     }
-
 });
