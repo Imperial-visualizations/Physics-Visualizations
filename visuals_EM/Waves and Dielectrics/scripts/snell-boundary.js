@@ -1,4 +1,4 @@
-$(window).on('load', function() {
+    $(window).on('load', function() {
     console.log("</h1>")
     var dom = {
             //defining shorthands for our html elements

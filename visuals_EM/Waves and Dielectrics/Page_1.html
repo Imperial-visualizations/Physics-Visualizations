@@ -7,6 +7,7 @@
     <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
     <!-- Import stylesheets -->
     <link rel="stylesheet" href="https://ghcpuman902.github.io/styles/styles.css">
+    <link rel="stylesheet" href="styles/loading-spinner.css">
     <link rel="stylesheet" href="styles/navigation.css">
     <!-- Import js files -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -19,6 +20,16 @@
 <body>
 
 <div class="rightnav"> ▶ </div>
+
+<div id="loading-spinner">
+    <span class="loading-message">Loading</span>
+    <div>
+        <div class="spinner-mask"></div>
+        <div id="spinner-bar"></div>
+        <div class="spinner-mask"></div>
+    </div>
+</div>
+
 <!-- Div containing writing -->
 <div class="container">
     <h1>1. Boundary Conditions</h1>
