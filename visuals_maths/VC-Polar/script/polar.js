@@ -11,10 +11,13 @@ var layout = {
 };
 var currentPoint = initialPoint;
 var initialRho = 0, initialPhi = 0, initialR = 0, initialTheta = 0;
-var isBlackText = true;
-var blackTextType = "lines+text";
+var isBlackText = false;
+var blackTextType = "lines";
 
-//Add more curvature definition:
+/**
+ * It adds more curvatures to multiply to the curve array.
+ * @param {float} arraySize - size of the curve array.
+ */
 function curveMore(arraySize) {
     var hello = [], hello2;
     if (arraySize%2 === 0) {
@@ -34,6 +37,10 @@ function curveMore(arraySize) {
 }
 
 //Plot
+/**
+ * Resets and plots initial area element or basis vectors of plane polar.
+ * @param {string} type - basis vectors or area element
+ */
 function initPolar(type) {
     Plotly.purge("graph");
     initialRho = Math.sqrt(currentPoint[0]*currentPoint[0] + currentPoint[1]*currentPoint[1]);
@@ -57,7 +64,11 @@ function initPolar(type) {
     }
     return;
 }
-//Plot for basis for corresponding coordinate systems:
+/**
+ * Computes the basis vectors of plane polar.
+ * @param {float} rho - rho value.
+ * @param {float} phi - phi value.
+ */
 function computeBasis(rho, phi) {
     var x = rho*Math.cos(phi);
     var y = rho*Math.sin(phi);
@@ -73,21 +84,13 @@ function computeBasis(rho, phi) {
         yTrace[i] = rho*Math.sin(t[i]);
     }
     var circle = new Circle(rho);
+    rhoLine = new Line2d([[x, y], [x+Math.cos(phi), y+Math.sin(phi)]]);
+    phiLine = new Line2d([[x, y], [x-Math.sin(phi), y+Math.cos(phi)]]);
     var data = [
-        {
-            type: "scatter",
-            mode: "lines",
-            x: [x, x+Math.cos(phi)],
-            y: [y, y+Math.sin(phi)],
-            line: {color: orange, width: 3}
-        },
-        {
-            type: "scatter",
-            mode: "lines",
-            x: [x, x-Math.sin(phi)],
-            y: [y, y+Math.cos(phi)],
-            line: {color: lilac, width: 3}
-        },
+        rhoLine.gObject(orange, 3),
+        rhoLine.arrowHead(orange, 3),
+        phiLine.gObject(lilac, 3),
+        phiLine.arrowHead(lilac, 3),
         {
             type: "scatter",
             mode: "lines",
@@ -100,6 +103,11 @@ function computeBasis(rho, phi) {
 
     return data;
 }
+/**
+ * Computes the area element of plane polar.
+ * @param {float} rho - rho value.
+ * @param {float} phi - phi value.
+ */
 function computeArea(rho, phi) {
     var x0 = rho*Math.cos(phi);
     var y0 = rho*Math.sin(phi);
@@ -131,8 +139,8 @@ function computeArea(rho, phi) {
         yPhi1[i] = 0.45*rho*Math.sin(intermediatePhi1[i]);
         xPhi2[i] = curved[i]*rho*Math.cos(intermediatePhi1[i]);
         yPhi2[i] = curved[i]*rho*Math.sin(intermediatePhi1[i]);
-        xPhi3[i] = curved[i]*(rho + 0.8)*Math.cos(intermediatePhi1[i]);
-        yPhi3[i] = curved[i]*(rho + 0.8)*Math.sin(intermediatePhi1[i]);
+        xPhi3[i] = curved[i]*(rho + 1)*Math.cos(intermediatePhi1[i]);
+        yPhi3[i] = curved[i]*(rho + 1)*Math.sin(intermediatePhi1[i]);
     }
 
     var xTrace = xPhi2.concat(xPhi3.reverse());
@@ -165,7 +173,7 @@ function computeArea(rho, phi) {
             y: [y0, y0+0.5*Math.sin(phi), y0+Math.sin(phi)],
             line: {color: orange, width: 3, dash: "solid"},
             text: ["", "dρ", ""],
-            textfont: {color:orange, size:15}
+            textfont: {color:orange, size:16}
         },
         {
             type: "scatter",
@@ -174,7 +182,7 @@ function computeArea(rho, phi) {
             y: yPhi2,
             line: {color: lilac, width: 3, dash: "solid"},
             text: rhodphiText,
-            textfont: {color:lilac, size:15}
+            textfont: {color:lilac, size:16}
         },
         {
             type: "scatter",
@@ -198,9 +206,11 @@ function computeArea(rho, phi) {
     return data;
 }
 
+/** updates the plot according to the slider controls. */
 function updatePlot() {
     var data = [];
-    var href = $('ul.tab-nav li a.active.button').attr('href'); // active href
+    // NB: updates according to the active tab
+    var href = $('ul.tab-nav li a.active.button').attr('href'); // finds out which tab is active
 
     var rho = parseFloat(document.getElementById('rhoController').value);
     var phi = parseFloat(document.getElementById('phiController').value)*Math.PI;
@@ -224,12 +234,18 @@ function updatePlot() {
 }
 
 function main() {
+    /*Jquery*/ //NB: Put Jquery stuff in the main not in HTML
     $("input[type=range]").each(function () {
         var displayEl;
+        /*Allows for live update for display values*/
         $(this).on('input', function(){
+            //Displays: (FLT Value) + (Corresponding Unit(if defined))
             $("#"+$(this).attr("id") + "Display").text( $(this).val() + $("#"+$(this).attr("id") + "Display").attr("data-unit") );
+
+            //To display angle in degree
             $("#"+$(this).attr("id") + "DisplayA2").text( parseFloat($(this).val())*180 + $("#" + $(this).attr("id") + "DisplayA2").attr("data-unit") );
 
+            //To display the angle in radian in terms of fraction multiple of pi
             if (parseFloat($(this).val())*8 % 8 === 0.0) {
                 displayEl = $(this).val();
             } else if (parseFloat($(this).val())*8 % 4 === 0.0) {
@@ -241,10 +257,14 @@ function main() {
             }
             $("#"+$(this).attr("id") + "DisplayA1").text( displayEl + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit"));
 
-            updatePlot();
+            //NB: Display values are restricted by their definition in the HTML to always display nice number.
+
+            updatePlot(); //Updating the plot is linked with display (Just My preference)
         });
+
     });
 
+    /*Checkbox*/
     $("input[type=checkbox]").each(function () {
         $(this).on("change", function() {
             isBlackText = !isBlackText;
@@ -253,11 +273,12 @@ function main() {
             } else {
                 blackTextType = "lines";
             }
-            initPolar($('ul.tab-nav li a.active.button').attr('href'));
+            initPolar($('ul.tab-nav li a.active.button').attr('href')); // re-initialise with/out the black label
 
         });
     });
 
+    /*Tabs*/
     $(function() {
         $('ul.tab-nav li a.button').click(function() {
             var href = $(this).attr('href');
@@ -266,11 +287,12 @@ function main() {
             $('.tab-pane.active', $(href).parent()).removeClass('active');
             $(href).addClass('active');
 
-            initPolar(href);
+            initPolar(href); //re-initialise when tab is changed
             return false;
         });
     });
 
+    //The First Initialisation - I use 's' rather than 'z' :p
     initPolar("#basis");
 }
-$(document).ready(main);
+$(document).ready(main); //Load main when document is ready.
