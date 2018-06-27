@@ -1,5 +1,5 @@
 $(window).on('load', function() {
-    //create shorthand for html elements
+    /** Define dom shorthands for key html elements */
     var dom = {
         intface: $("#interface"),
         loadSpinner: $("#loading-spinner"),
@@ -8,13 +8,11 @@ $(window).on('load', function() {
         positionInput: $("input#position"),
         positionDisplay: $("#position-display"),
         },
-        //define original layout of the plotly plot
+        /** Create initial layout of plotly plot */
         plt = {
             MaxTraceNo: 12,
             layout: {
                 autosize: true,
-                width: 450,
-                height: 350,
                   legend: {
                     x: 0,
                       y: 1
@@ -41,7 +39,7 @@ $(window).on('load', function() {
                 }
             },
         },
-        //create a "class" with functions to set slider values and change data based on slider values
+        /** Phys is a ish-class that stores and updates the js animation position and data variables */
         phys = {
             animation: 1,
             position: 0,
@@ -56,17 +54,9 @@ $(window).on('load', function() {
                 return this.data.Position[this.position].Animation[this.animation];
             },
         };
-    function make_arrows(pointsx,pointsy,pointsz){
-        var x = pointsx[1],
-            y = pointsy[1],
-            z = pointsz[[1]],
-            u = 0.5*(pointsx[1]-pointsx[0])
-            v = 0.5*(pointsy[1]-pointsy[0])
-            w =0.5*(pointsz[1]-pointsz[0])
-        return[x,y,z,u,v,w]
-    };
 
-    //import JSON and define an onload function
+
+    /** import JSON and define an onload function  */
     $.when(
         $.getJSON("https://rawgit.com/cydcowley/public-test-data/master/BiotData.json"),
     ).then(function(data) { // i.e., function(JSON1, JSON2) {// success}, function() {// error}
@@ -82,6 +72,7 @@ $(window).on('load', function() {
         traces = [];
         linewidth = 5;
         colors = ["#1A40B1","#E47F1A","#2E9849","#D81C1C"]
+
         traces.push({type: "scatter3d",mode: "lines",name: "dI", line: {width: linewidth,color:colors[0]},x: deepCopy(phys.getPlotData())[0].x,
             y:deepCopy(phys.getPlotData())[0].y,z:deepCopy(phys.getPlotData())[0].z,})
         traces.push({type: "scatter3d",mode: "lines",name: "dB", line: {width: linewidth,color:colors[1]},x: deepCopy(phys.getPlotData())[1].x,
@@ -93,6 +84,7 @@ $(window).on('load', function() {
         traces.push({type: "scatter3d",mode: "lines",name: "Circle", line: {width: 10},x: deepCopy(phys.getPlotData())[4].x,
             y:deepCopy(phys.getPlotData())[4].y,z:deepCopy(phys.getPlotData())[4].z})
 
+        //Create arrowheads for each necessary trace
         for (let i = 0; i < 4; i++) {
             [x,y,z,u,v,w] = make_arrows(deepCopy(phys.getPlotData())[i].x,deepCopy(phys.getPlotData())[i].y,deepCopy(phys.getPlotData())[i].z)
             traces.push({type: "cone",colorscale: [[0, colors[i]], [1, colors[i]]],x:[x],y:[y],z:[z],u:[u],v:[v],w:[w],sizemode: "absolute",sizeref :0.125,showscale: false})
@@ -102,7 +94,19 @@ $(window).on('load', function() {
         dom.positionInput.on("input", handlePositionSlider);
     }
 
+    function make_arrows(pointsx,pointsy,pointsz){
+        /** Returns an arrowhead based on an inputed line */
+        var x = pointsx[1],
+            y = pointsy[1],
+            z = pointsz[[1]],
+            u = 0.5*(pointsx[1]-pointsx[0]),
+            v = 0.5*(pointsy[1]-pointsy[0]),
+            w =0.5*(pointsz[1]-pointsz[0]);
+        return[x,y,z,u,v,w]
+    }
+
     function handlePositionSlider() {
+        /** Updates plotly plot with new position */
         phys.setPosition(
             input2index($(this), phys.data.Position)
         );
@@ -113,6 +117,7 @@ $(window).on('load', function() {
     }
 
     function handleAnimationSlider() {
+        /** Updates plotly plot with new animation frame*/
         phys.setAnimation(
             input2index($(this), phys.data.Position[phys.position].Animation)
         );

@@ -14,8 +14,6 @@ $(window).on('load', function() {
             MaxTraceNo: 12,
             layout: {
                 autosize: true,
-                width: 450,
-                height: 350,
                 margin: {
                     l: 0, r: 0, b: 0, t: 1, pad: 5
                 },
@@ -38,8 +36,7 @@ $(window).on('load', function() {
                 }
             },
             layoutFres: {
-                width: 350,
-                height: 320,
+                autosize: true,
                 xaxis: {
                     range: [0, 90],
                     title: "Angle"
