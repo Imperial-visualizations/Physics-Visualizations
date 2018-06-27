@@ -13,15 +13,13 @@ $(window).on('load', function() {
             MaxTraceNo: 12,
             layout: {
                 autosize: true,
-                  legend: {
-                    x: 0,
-                      y: 1
-                },
+                 showlegend: false,
                 margin: {
                     l: 0, r: 0, b: 0, t: 1, pad: 5
                 },
                 scene: {
                     aspectmode: "cube",
+                    camera:{eye:{x:-1.25,},},
                     xaxis: {
                         range: [-1, 1], autorange: false, zeroline: true, showspikes: false,dtick: 0.5,
                     },
