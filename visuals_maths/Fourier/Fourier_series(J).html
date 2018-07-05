@@ -43,26 +43,38 @@
 
                     <!--Slider Display-->
                     <label class="sliderTitle">A:<!--rho-->
-                        <span id="AControllerDisplay" data-unit="">0</span> <!--default: 0-->
+                        <span id="AControllerDisplay" data-unit="">1</span> <!--default: 0-->
                     </label>
 
                     <!--Slider-->
                     <!--NB: Be careful with classes and types-->
                     <label class="slider">
-                        <input id="AController" class="inputs" type="range" value="0" min="-5" max="5" step="0.1"/>
+                        <input id="AController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
                         <span class="sliderMin">-5</span><span class="sliderMax">5</span></label>
                     <!--END Slider-->
 
                     <!--BEGIN Slider-->
                     <h5 style="border-left: solid 5px rgb(0,225,0); padding-left: 8px;">Number of terms:</h5>
                     <label class="sliderTitle">N:
-                        <span id="NControllerDisplay" data-unit="">0</span>
+                        <span id="NControllerDisplay" data-unit="">1</span>
                     </label>
                     <label class="slider">
-                        <input id="NController" class="inputs" type="range" value="0" min="0" max="50" step="1"/>
+                        <input id="NController" class="inputs" type="range" value="1" min="0" max="50" step="1"/>
                         <span class="sliderMin">0</span><span class="sliderMax">50</span>
                     </label>
                     <!--END Slider-->
+
+                    <!--BEGIN Slider-->
+                    <h5 style="border-left: solid 5px rgb(0,0,225); padding-left: 8px;">Period:</h5>
+                    <label class="sliderTitle">L:
+                        <span id="LControllerDisplay" data-unit="">1</span>
+                    </label>
+                    <label class="slider">
+                        <input id="LController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
+                        <span class="sliderMin">-5</span><span class="sliderMax">5</span>
+                    </label>
+                    <!--END Slider-->
+
 
                     <!--Unique Areas-->
                     <!--BEGIN Basis Vector Area-->
@@ -77,16 +89,7 @@
                     </div>
                     <!--END Area-->
 
-                    <!--BEGIN Slider-->
-                    <h5 style="border-left: solid 5px rgb(0,0,225); padding-left: 8px;">Period:</h5>
-                    <label class="sliderTitle">L:
-                        <span id="LControllerDisplay" data-unit="">0</span>
-                    </label>
-                    <label class="slider">
-                        <input id="LController" class="inputs" type="range" value="0" min="-5" max="5" step="0.1"/>
-                        <span class="sliderMin">-5</span><span class="sliderMax">5</span>
-                    </label>
-                    <!--END Slider-->
+
 
                 </div>
             </div>
