@@ -12,8 +12,8 @@ const layout = {
 var currentPoint = initialPoint;
 var initX = 0, initY = 0;
 var z = numeric.linspace(0,2*Math.PI,1000);
-// 0 is triangular, 1 is square, 2 is sawtooth
-var shape = 2
+// 0 is triangular, 1 is square, 2 is sawtooth, 3 is delta's,
+var shape = 1;
 
 
 //Plot
@@ -67,9 +67,11 @@ function selection(n,A,L,x,type){
     if (type===0){
         formula = (8*A*1/((2*(n)-1) *Math.PI)**2)*(-1)**(n) * Math.sin(x*(2*n -1) *Math.PI /L);
     } else if (type===1){
-        formula = A/(n*Math.PI) *(1-(-1)**n) *Math.sin(n*Math.PI *x/L);
+        formula = 2*A/(n*Math.PI) *(1-(-1)**n) *Math.sin(n*Math.PI *x/L);
     } else if (type===2){
         formula = 2*A*(-1)**(n+1) /(n*Math.PI) * Math.sin(n *Math.PI* x/L);
+    } else if (type===3){
+        formula = 1/L * Math.cos(n*Math.PI*x/L);
     }
     return formula
 }
@@ -141,6 +143,7 @@ function computePlot(x){
 
 
 }
+
 
 
 /** updates the plot according to the slider controls. */
