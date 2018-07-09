@@ -1,0 +1,58 @@
+<head>
+<script src="https://cdn.plot.ly/plotly-latest.js" charset="UTF-8"></script>
+<script src="__javascript__/plp_js_test.js"></script>
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<h1>PointsLinesPlanes js porting test</h1>
+<div id="point">
+<h2>Points</h2>
+<form id="point_form">
+    x: <input type="text" id="point_x" value="1"><br>
+    y: <input type="text" id="point_y" value="0.5"><br>
+    z: <input type="text" id="point_z" value="1e-7"><br>
+</form> 
+<button onclick="plp_js_test.point_test()">Test point module</button>
+<div id="point_pos">...</div>
+<div id="point_getXYZ">...</div>
+<div id="point_goify">...</div>
+<div id="scatter3d"></div>
+</div>
+
+<div id="line">
+<h2>Lines</h2>
+<form id="line_form">
+    direction x: <input type="text" id="line_dir_x" value="1">
+    direction y: <input type="text" id="line_dir_y" value="1">
+    direction z: <input type="text" id="line_dir_z" value="1">
+    <br>
+    offset x: <input type="text" id="line_off_x" value="0">
+    offset y: <input type="text" id="line_off_y" value="0">
+    offset z: <input type="text" id="line_off_z" value="0">
+</form> 
+<div id="line_dir">...</div>
+<div id="line_off">...</div>
+<div id="line_getXYZ">...</div>
+<div id="line_goify">...</div>
+<button onclick="plp_js_test.line_test()">Test line module</button>
+</div>
+
+<div id="plane">
+<h2>Planes</h2>
+<form id="plane_form">
+    normal x: <input type="text" id="plane_n_x" value="1">
+    normal y: <input type="text" id="plane_n_y" value="1">
+    normal z: <input type="text" id="plane_n_z" value="1">
+    <br>
+    offset x: <input type="text" id="plane_off_x" value="0">
+    offset y: <input type="text" id="plane_off_y" value="0">
+    offset z: <input type="text" id="plane_off_z" value="0">
+</form> 
+<div id="plane_normal">...</div>
+<div id="plane_off">...</div>
+<div id="plane_getXYZ">...</div>
+<div id="plane_goify">...</div>
+<button onclick="plp_js_test.plane_test()">Test plane module</button>
+</div>
+
+</body>

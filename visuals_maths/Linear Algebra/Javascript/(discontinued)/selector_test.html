@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <script src="./selector.js"></script>
+    <!--<link rel="stylesheet" href="./styles.css">-->
+  </head>
+  <body>
+    <button type="button" onclick="showSelector()">Show</button>
+    <button type="button" onclick="check()">Check</button>
+    <button type="button" onclick="remove()">Remove</button>
+    <button type="button" onclick="add()">Add new</button>
+    <button type="button" onclick="rename()">Rename</button>
+    <div id="selector"> </div>
+    <script type="text/javascript">
+    function Obj() {
+      this.toString = function() {
+        if(this.hasOwnProperty('name')) {
+          return this.name;
+        }
+        else {
+          return "something"
+        }
+      }
+    }
+    var selector = new Selector('selector')
+    selector.add([new Obj(),new Obj(),new Obj()]);
+    function showSelector() {
+      console.log("showing Selector: ", selector);
+      var out = document.getElementById('selector');
+      out.replaceChild(selector.generate(),out.childNodes[0]);
+    }
+    function rename() {
+      var toRename = selector.checked();
+      console.log("to rename:", toRename, " length: ", toRename.length)
+      selector.rename(toRename);
+    }
+    function add() {
+      selector.add([new Obj()]);
+    }
+    function check() {
+      console.log(selector.checked());
+    }
+    function remove() {
+      var toRemove = selector.checked();
+      console.log("removing "+toRemove + "from selector "+selector.id)
+      selector.remove(toRemove);
+      showSelector()
+    }
+    </script>
+  </body>
+</html>

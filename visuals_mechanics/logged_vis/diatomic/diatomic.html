@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+<head>
+    <title>Diatomic Molecule</title>
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
+    <link rel = "icon" href = "images/favicon.ico" type="image/x-icon">
+
+    <style type="text/css">
+        input[type=range] {
+        }
+        #phaser{
+            margin-bottom: 8px;
+        }
+        .titleKE {
+            padding-left: 8px;
+            font-weight:400;
+            border-left: 8px solid #02893B;
+        }
+
+        .titleAtomA {
+            padding-left: 4px;
+            font-weight:200;
+            border-left: 4px solid #006EAF;
+        }
+
+        .titleAtomB {
+            padding-left: 4px;
+            font-weight:200;
+            border-left: 4px solid #9F004E;
+        }
+
+        .graphs{
+            height: 300px;
+            border: 1px solid #EBEEEE;
+            box-sizing: border-box;
+            box-shadow: 1px 1px 0px 2px #EBEEEE;
+        }
+        .showHideButton{
+            display: block;
+            color: #000;
+            background: #EBEEEE;
+            text-decoration: underline;
+            margin-top: 0;
+            text-align: right;
+            width: 100%;
+            border-top: 2px solid #e1e4e4;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.8em;
+        }
+
+    </style>
+        <script>
+        if (navigator.appName === 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) ||
+                navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie === 1)) {
+            window.location.href = "unsupported.html";
+        }
+    </script>
+    </head>
+<body>
+<div class="container">
+    <h1>Diatomic Molecule: Vibration and Rotation</h1>
+    <!--Phaser animation and KE plots & input sliders-->
+    <div class="row">
+        <div class="seven columns">
+            <div id="phaser"><span id="loadingMessage"></span></div>
+            <button id="playPauseButton">Start</button>
+            <button id="resetButton">Reset</button>
+
+            <h4 class="titleKE">Kinetic Energies</h4>
+
+            <!-- Vib KE slider -->
+            <label class="sliderTitle" style="padding-bottom: 10px">Vibrational:
+                <span class="txtInputs" id="vibKEDisplay" data-change data-unit=" eV">0 eV</span>
+            </label>
+            <label class="slider">
+                <input id="vibKE" class="inputs" title="Vib KE" type="range" value="0" min="0" max="10.0" step="0.05"/>
+                <span class="sliderMin">0.00</span><span class="sliderMax">10.00</span>
+            </label>
+
+            <!-- Rot KE slider -->
+            <label class="sliderTitle" style="margin-bottom: 0">Rotational:
+                <span class="txtInputs" id="rotKEDisplay" data-unit=" eV" data-change>5 eV</span>
+            </label>
+            <label class="slider">
+                <input id="rotKE" class="inputs" title="Rot KE" type="range" value="0" min="0" max="15.0" step="0.05"/>
+                <span class="sliderMin">0.00</span><span class="sliderMax">15.00</span>
+            </label>
+
+            <!-- Atom A and Atom B LJ Parameter input fields -->
+            <div class="row">
+                <div class="one-half column">
+                    <h5 class="titleAtomA">Atom A</h5>
+                    <span>&sigma; = </span><a id="s1" data-change title="&sigma;" data-unit=" nm">2 nm</a>
+                    <br>
+                    <span>&epsilon; = </span><a id="e1" data-change title="&epsilon;" data-unit=" eV">10 eV</a>
+                </div>
+                <div class="one-half column">
+                    <h5 class="titleAtomB">Atom B</h5>
+                    <span>&sigma; = </span><a id="s2" data-change data-unit=" nm" title="&sigma;">2 nm</a>
+                    <br>
+                    <span>&epsilon; = </span><a id="e2" data-change data-unit=" eV" title="&epsilon;">10 eV</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="five columns">
+            <div id="ScatterLJ" class="twelve columns graphs expanded"></div>
+            <em><a for="#ScatterLJ" id="spoilerLJ" class="showHideButton" data-graph-name=" LJ potential">Show LJ potential</a></em>
+            <div id="graphE" class="twelve columns graphs expanded" style="height: 330px;"></div>
+            <em><a for="#graphE" id="spoilerEvT" class="showHideButton" data-graph-name=" Energy vs Time">Show Energy vs Time</sub></a></em>
+        </div>
+    </div>
+
+    <div class="row" id="advanced" style="display: none">
+        <div class="three columns">
+            <span>dT = </span><a id="dT" data-change data-unit=" s" title="dT">0.015</a>
+        </div>
+    </div>
+    <em><a for="#advanced" id="advSettings" class="showHideButton" data-graph-name=" Advanced Settings">Show Advanced Settings</sub></a></em>
+</div>
+
+<script src=https://code.jquery.com/jquery-latest.min.js></script>
+<script src = "https://github.com/photonstorm/phaser-ce/releases/download/v2.8.3/phaser.min.js"></script>
+<script src=https://cdn.plot.ly/plotly-latest.min.js></script>
+<script src="./scripts/log.js"></script>
+<script src = "./scripts/potentials.js"></script>
+<script src = "./scripts/vecops.js"></script>
+<script src = "./scripts/diatomic.js"></script>
+<script src="./scripts/graphics.js"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,154 @@
+<script src="./intersections.js"></script>
+<script src="./fast_plotter.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<!--
+<script>
+"use strict"
+var layout = {
+  scene: {
+    xaxis: {
+      range: [-10,10]
+    },
+    yaxis: {
+      range: [-10,10]
+    },
+    zaxis: {
+      range: [-10,10]
+    },
+    camera: {
+      up: {
+        x: 0,
+        y: 0,
+        z: 1
+      },
+      eye: {
+        x: -1.7428,
+        y: 1.0707,
+        z: 0.7100
+      }
+    },
+    aspectratio: {x: 1, y: 1, z: 1},
+  },
+  showlegend: false,
+  margin: {l:0,r:0,b:0,t:0}
+};
+var line1 = new Line(new Vector(1,-1,1), new Vector(0,2,-1));
+var line2 = new Line(new Vector(3,1,-4), new Vector(-1,-2,-1));
+var plane1 = new Plane(new Vector(0,2,-1),new Vector(1,-1,1));
+var data = [line1.goify(layout), line2.goify(layout), plane1.goify(layout)];
+console.log("original data: ", data)
+$('#canvas').ready(function() {
+  Plotly.newPlot('canvas',data,layout);
+  var plotDiv = document.getElementById('canvas');
+  console.log("data in plotDiv: ", plotDiv.data);
+  console.log("lookup: ", _createAlgObjId2UidLookup('canvas'));
+  console.log("findIdxByAlgObjId: ", _findIdxByAlgObjId('canvas',line2.id));
+});
+</script>-->
+<script>
+$('#canvas').ready(function() {
+  var layout = {
+    scene: {
+      xaxis: {
+        range: [-10,10]
+      },
+      yaxis: {
+        range: [-10,10]
+      },
+      zaxis: {
+        range: [-10,10]
+      },
+      camera: {
+        up: {
+          x: 0,
+          y: 0,
+          z: 1
+        },
+        eye: {
+          x: -1.7428,
+          y: 1.0707,
+          z: 0.7100
+        }
+      },
+      aspectratio: {x: 1, y: 1, z: 1},
+    },
+    showlegend: false,
+    margin: {l:0,r:0,b:0,t:0}
+  };
+  var line1;
+  var line2;
+  var plane1;
+  var plot = new fastPlotHandler('canvas');
+  plot.init();
+  plot.setLayout(layout);
+  $('#redraw').click(function() {
+    plot.purge();
+    line1 = new Line(new Vector(1,-1,1), new Vector(0,2,-1));
+    line2 = new Line(new Vector(3,1,-4), new Vector(-1,-2,-1));
+    plane1 = new Plane(new Vector(0,2,-1),new Vector(1,-1,1));
+    plot.init();
+    plot.addPlotObj(line1);
+    plot.addPlotObj(line2);
+    plot.addPlotObj(plane1);
+  })
+  $('#delete').click(function() {
+    plot.deleteTrace(plane1.id);
+  })
+  $('#highlight').click(function() {
+    plot.highlightTraces([line1.id]);
+  })
+  $('#unhighlight').click(function() {
+    plot.unHighlightTraces();
+  })
+  $('#hide').click(function() {
+    plot.hideTraces([line2.id]);
+  })
+  $('#unhide').click(function() {
+    plot.showTraces([line2.id]);
+  })
+
+  $('#redrawpo').click(function() {
+    plot.purge();
+    line1 = new Line(new Vector(1,-1,1), new Vector(0,2,-1));
+    line2 = new Line(new Vector(3,1,-4), new Vector(-1,-2,-1));
+    plane1 = new Plane(new Vector(0,2,-1),new Vector(1,-1,1));
+    plot.init();
+    plot.addPlotObj(line1);
+    plot.addPlotObj(line2);
+    plot.addPlotObj(plane1);
+  })
+  $('#deletepo').click(function() {
+    plot.deletePlotObj(plane1);
+  })
+  $('#highlightpo').click(function() {
+    plot.highlightPlotObjs([line1]);
+  })
+  $('#unhighlightpo').click(function() {
+    plot.unHighlightPlotObjs();
+  })
+  $('#hidepo').click(function() {
+    plot.hidePlotObj(line2);
+  })
+  $('#unhidepo').click(function() {
+    plot.showPlotObj(line2);
+  })
+});
+</script>
+<div id="canvas"></div>
+<div id="tracesexample">
+<a id="redraw">redraw graph</a><br>
+<a id="highlight">highlight line</a><br>
+<a id="unhighlight">unhighlight</a><br>
+<a id="hide">hide</a><br>
+<a id="unhide">unhide</a><br>
+<a id="delete">delete plane</a><br>
+</div>
+<div id="plotObjexample">
+<a id="redrawpo">redraw graph</a><br>
+<a id="highlightpo">highlight line</a><br>
+<a id="unhighlightpo">unhighlight</a><br>
+<a id="hidepo">hide</a><br>
+<a id="unhidepo">unhide</a><br>
+<a id="deletepo">delete plane</a><br>
+</div>

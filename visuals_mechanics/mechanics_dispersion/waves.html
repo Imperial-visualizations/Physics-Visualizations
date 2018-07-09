@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Waves</title>
+
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
+    <link rel="stylesheet" href="scripts/skeleton-tabs.js">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <style>
+        #graph {
+            border: 2px solid #EBEEEE;
+            box-sizing: border-box;
+            box-shadow: 1px 1px 1px 1px #EBEEEE;
+        }
+        .graphs {
+            height: 450px;
+            border: 1px solid #EBEEEE;
+            box-sizing: border-box;
+            box-shadow: 1px 1px 0px 2px #EBEEEE;
+        }
+
+        .showHideButton{
+            display: block;
+            color: #000;
+            background: #EBEEEE;
+            text-decoration: underline;
+            margin-top: 0;
+            text-align: right;
+            width: 100%;
+            border-top: 2px solid #e1e4e4;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.8em;
+        }
+
+        .characteristicsBox {
+            border-left: 3px solid #00ACD7;
+            margin-left: 10px;
+        }
+    </style>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="scripts/calculator.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/mathjs/3.16.3/math.min.js"></script>
+
+</head>
+
+<body>
+
+    <h1>Waves - Dispersion</h1>
+
+    <div class="container">
+        <div class="row">
+
+            <div class="eight columns">
+                <div id='graph'></div>  <!-- Plotly chart will be drawn inside this DIV -->
+                <div class="row">
+                    <div class="one-half column">
+                        <!--Buttons - Play/Pause/Reset-->
+                        <input id="run_button" type="button" value="play" onclick="onStart()" style="width:145px"/>
+                        <input id="reset_button" type="button" value="reset" onclick="onReset()" style="width:145px"/>
+
+                        <!--Slider - Number of Waves-->
+                        <label class="sliderTitle">
+                            <br><span id="nb_title">Number of sine waves:</span>
+                            <span id="waves_display"> 2 </span>
+                        </label>
+                        <label class="slider">
+                            <input id="slider_waves" class="inputs" type="range" value="2" min="1" max="100" step="1"/>
+                            <span class="sliderMin">1</span><span class="sliderMax">100</span>
+                        </label>
+                        <!--Slider - Phase Velocity-->
+                        <label class="sliderTitle">Phase Velocity (non-dispersive): v =
+                            <span id="phaseVelocityDisplay" data-unit="m/s"> 1 m/s</span>
+                        </label>
+                        <label class="slider">
+                            <input id="velocityPhase" class="inputs" type="range" value="1" min="0.0" max="10" step="0.05"/>
+                            <span class="sliderMin">0</span><span class="sliderMax">10</span>
+                        </label>
+                    </div>
+                    <div class="one-half column">
+                        <!--Checkbox-->
+                        <label class="radioTitle">Type of wave: </label>
+                        <label class="radio">
+                              <input type="radio" name="type" checked value="sine" /><span for="radio"></span>
+                        </label>
+                        <label class="radioLabel">sum of sine waves</label>
+                        <label class="radio">
+                              <input type="radio" name="type" value="fourier" /><span for="radio"></span>
+                        </label>
+                        <label class="radioLabel">square fourier</label><br/>
+
+                        <!--Input - Wavenumber-->
+                        <div id="wave_number">
+                            <br/><label>Define wave number: <br />
+                                <!--k0-->
+                                 k<sub>0</sub> = <span id ="k0"> </span>
+                                <input id = "k0_input" ><br>
+                                <!--kend-->
+                                k<sub>end</sub> = <span id ="kend"> </span>
+                                <input id = "kend_input" >
+                                <p id= "error_k0" style="color:#ff0000"></p>
+                                <p id= "error_kend" style="color:#ff0000"></p>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="four columns">
+                <div id='dispersionRelationGraph' class="twelve columns graphs expanded"></div>  <!-- Plotly chart will be drawn inside this DIV -->
+                <em><a for="#dispersionRelationGraph" class="showHideButton" data-graph-name=" Dispersion Relation">Show Dispersion Relation</a></em>
+
+                 <!--Input - Dispersion Relation-->
+                        <label>Define Dispersion Relation: <br />
+                            &omega;(k) = <span id ="dispersionRelation"> </span>
+                            <input id = "function" name="function"><br/>
+                            <a id= "error_omega" style="color:#ff0000"></a>
+                        </label>
+
+
+                <!--Slider - Wave on focus-->
+                <div id="waveOnFocus">
+                    <label class="sliderTitle">
+                        <span id="focus_title">Wave on focus:</span>
+                        <span id="focus_display"> 1 </span>
+                    </label>
+                    <label class="slider">
+                        <input id="slider_focus" class="inputs" type="range" value="1" min="1" max="2" step="1"/>
+                        <span class="sliderMin">1</span><span id="focusMax" class="sliderMax">2</span>
+                    </label>
+                    <label> Wave properties:
+                        <div class="characteristicsBox">
+                            k = <span id="focus_k"> </span>
+                            ; &omega; = <span id="focus_omega"> </span><br/>
+                            V_group = <span id="focus_vg"></span> m/s
+                            ; V_phase = <span id="focus_vp"></span> m/s<br/>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Plotting scripts-->
+    <script src="scripts/dispersive.js"></script>
+
+</body>
+</html>
