@@ -340,6 +340,29 @@ function Circle(radius) {
     }
 }
 /**
+ * Represents a rectangle.
+ * @constructor
+ * @param {float} x0 - width (x direction).
+ * @param {float} y0 - length (y direction).
+ */
+function Rectangle(x0, y0) {
+    this.x0 = x0;
+    this.y0 = y0;
+
+    this.gObject = function(color=cyan, centre=[0,0]) {
+        var rectangle = {
+            type: "scatter",
+            mode: "lines",
+            x: [0, this.x0, this.x0, 0, 0],
+            y: [0, 0, this.y0, this.y0, 0],
+            line: {simplify: false, color: color},
+            fill:'toself',
+            opacity: 0.5
+        }
+        return rectangle;
+    }
+}
+/**
  * Represents a line.
  * @constructor
  * @param {list} points - list of the points in the line.
@@ -374,7 +397,6 @@ function Line2d(points) {
         var wingLength = Math.sqrt(Math.pow(frac*sin45,2) + d*d);
         var wingAngle = Math.acos(d/wingLength);
 
-        console.log(offset);
         var wings_xyz = [
             math.add(p2c(wingLength, phi + wingAngle), offset),
             math.add(p2c(wingLength, phi - wingAngle), offset)
