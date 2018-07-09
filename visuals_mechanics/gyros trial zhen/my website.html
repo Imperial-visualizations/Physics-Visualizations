@@ -1,0 +1,44 @@
+
+<!---html-->
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://rawgit.com/cydcowley/public-test-data/master/Style2.css">
+<link rel = "icon" href = "images/favicon.ico" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <title> Rotational motion </title>
+</head>
+<body>
+
+<div class = "container">
+<div class = "row">
+         <h4 class="titleKE">Initial conditions</h4> <div id = "test" class = "seven columns"> <!---plotting the image-->
+</div> <div class = "five columns"> <button id="playPauseButton">Start</button> <button id="resetButton">Reset</button> </div>
+    <!-- Rot KE slider -->
+
+
+    <div class="five columns"> <!--- slider title-->
+        <label class="sliderTitle" style="margin-bottom: 0">Angle to vertical (rad/s^(-1)) <span class="txtInputs" id="Angletitle" data-unit=" " data-change>(no units)</span> </label>
+        <!--- slider here--> <label class="slider"> <input id="angle" class="inputs" title="Vib KE" type="range" value="0" min="0" max="10.0" step="0.05"/> <span class="sliderMin">0.00</span><span class="sliderMax">10.00</span> </label>
+        <!--- slider title--> <label class="sliderTitle" style="padding-bottom: 10px">Speed of earth (/ms^-1) <span class="txtInputs" id="vibKEDisplay" data-change data-unit="ms^-1 ">ms^-1</span> </label>
+        <!--- slider -->
+    <label class="slider"> <input id="omega" class="inputs" title="Vib KE" type="range" value="0" min="0" max="10.0" step="0.05"/> <span class="sliderMin">0.00</span><span class="sliderMax">10.00</span> </label> <!--- slider title--> <label class="sliderTitle" style="padding-bottom: 10px" id ="sliderr">Angle to horizontal /degrees <span class="txtInputs" id="DIFFERENT Display" data-change data-unit="degrees">degrees</span> </label> <!--- slider --> <label class="slider"> <input id = "KE" class="inputs" title="DIFFERENT KE" type="range" value="4" min="0" max="10.0" step="0.05"/> <span class="sliderMin">0.00</span><span class="sliderMax">10.00</span> </label> <!-- changing this new slider changes the data values of a DIFFERENT slider --> <a href= "" >Click here to show a graph of theta against time </a> <p href= "" >Click here to show a demonstration of the Euler Force </p> </div>
+</div>
+</div>
+
+<script src= "my website.js" ></script>
+<script src=https://cdn.plot.ly/plotly-latest.min.js></script>
+<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="jquery-1.6.1.js"></script>
+<script src="my_jquery.js"></script>-->
+<!--<script src = "https://github.com/photonstorm/phaser-ce/releases/download/v2.8.3/phaser.min.js"></script>
+<script src=https://cdn.plot.ly/plotly-latest.min.js></script>
+<script src = "./scripts/vecops.js"></script>
+<script src=h0tps://code.jquery.com/jquery-latest.min.js></script>
+<script src = "./scripts/potentials.js"></script>
+<script src = "./scripts/diatomic.js"></script>
+<script src="./scripts/graphics.js"></script>
+-->
+</body>
+</html>
