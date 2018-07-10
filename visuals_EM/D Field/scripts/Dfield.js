@@ -252,8 +252,9 @@ $(window).on('load', function() {//main
         Plotly.newPlot('graph', computeData(), plt.layout);
         //Hide the slider
         console.log("initialising");
-        $('.container').show();
-        $('#spinner').hide();
+        $('#spinner').fadeOut(500);
+        $('.container').fadeIn(500);
+
         dom.mSwitch.on("change", update_graph);
         dom.fSwitch.on("change", update_graph);
         dom.vSlider.on("input", update_graph);
