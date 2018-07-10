@@ -53,8 +53,8 @@ function draw() {
             F_r[0] /= F_mag * 0.25;
             F_r[1] /= F_mag * 0.25;
             line(x, y, x + F_r[0], y + F_r[1]); //Draw the line!
-            //line(x+F_r[0],y+F_r[1],x+F_r[0]-0.5,y+F_r[1] + 0.5);
-            //line(x+F_r[0],y+F_r[1],x+F_r[0]-0.5,y+F_r[1] - 0.5);
+            //line(x+F_r[0],y+F_r[Fields],x+F_r[0]-0.5,y+F_r[Fields] + 0.5);
+            //line(x+F_r[0],y+F_r[Fields],x+F_r[0]-0.5,y+F_r[Fields] - 0.5);
         }
     }
     for (let i = 0; i < charges.length; i++) {
