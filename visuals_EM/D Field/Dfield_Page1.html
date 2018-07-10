@@ -12,23 +12,31 @@
     <script type="text/javascript" async
         src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
+
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+    <style>
+    #spinner{
+      text-align: center;
+      position: absolute;
+      top:50%;
+      width:100%;
+    }
+    </style>
+
 </head>
 
 <body>
-<!-- Navigation elements (not currently used)
-<div class="rightnav">▶ </div>
-<div class="leftnav">◀ </div>-->
 
-<!--<div id="loading-spinner">
-    <span class="loading-message">Loading</span>
-    <div>
-        <div class="spinner-mask"></div>
-        <div id="spinner-bar"></div>
-        <div class="spinner-mask"></div>
-    </div>
-</div>-->
 
+  <div id='spinner'>
+      <span class="loading-message">Loading</span>
+      <div>
+          <div class="spinner-mask"></div>
+          <div id="spinner-bar"></div>
+          <div class="spinner-mask"></div>
+      </div>
+  </div>
 <div class="container">
     <h1>Electric, Polarisation and D Fields in a Capacitor</h1>
     <div class="row">
@@ -84,6 +92,7 @@
 
         <!--put animation of capacitor here-->
         <div class="six columns">
+
             <div id = "graph" style="width: 45vw; height: 63vh;"></div>
 
             <div id="voltage-slider">
@@ -96,7 +105,9 @@
         </div>
     </div>
 </div>
-
+<script>
+  $('.container').hide();
+</script>
 <script src="scripts/Dfield.js"></script>
 </body>
 </html>

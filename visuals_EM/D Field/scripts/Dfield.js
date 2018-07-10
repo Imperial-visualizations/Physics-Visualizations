@@ -245,12 +245,15 @@ $(window).on('load', function() {//main
     };
 
     function initial() {
+        //showslider
         const maxVolt   = 50,//use max voltage to set the number of empty traces required
             maxArrows   = (maxVolt/10)**2;
         Plotly.purge("graph")
         Plotly.newPlot('graph', computeData(), plt.layout);
+        //Hide the slider
         console.log("initialising");
-
+        $('.container').show();
+        $('#spinner').hide();
         dom.mSwitch.on("change", update_graph);
         dom.fSwitch.on("change", update_graph);
         dom.vSlider.on("input", update_graph);
