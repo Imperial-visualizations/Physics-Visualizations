@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fields in a Capacitor - Imperial Visualisations</title>
+    <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://rawgit.com/cydcowley/public-test-data/master/Style2.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+
+<body>
+<!-- Navigation elements (not currently used)
+<div class="rightnav">▶ </div>
+<div class="leftnav">◀ </div>-->
+
+<!--<div id="loading-spinner">
+    <span class="loading-message">Loading</span>
+    <div>
+        <div class="spinner-mask"></div>
+        <div id="spinner-bar"></div>
+        <div class="spinner-mask"></div>
+    </div>
+</div>-->
+
+<div class="container">
+    <h1>Electric, Polarisation and D Fields in a Capacitor</h1>
+    <div class="row">
+        <div class="six columns">
+            <p>
+                A capacitor constructed from two parallel plates when considering the electric field will have a constant electric field between the two plates.
+                The <span style="color:#0F8291; font-weight:bold">Electric field </span>magnitude in the vacuum is given by \( E = V/d\), where the separation between plates \(d\), is much smaller than the plate size as to avoid edge effects.
+
+                When a Dielectric material is introduced between the two plates the fields change. Inside the dielectric a <span style ="color:#D24000;font-weight:bold">Polarisation
+            field</span> will be created given by
+                $$\mathbf{P} = \chi_{e}\varepsilon_{0}\mathbf{E}$$
+
+            The <span style="color:#9F004E;font-weight:bold">D Field</span>, "electric displacement", is defined as
+                $$\mathbf{D} = \varepsilon_{0}\mathbf{E} + \mathbf{P}$$
+            </p>
+
+            <!--buttons to switch between vaccume and dielectic in capacitor-->
+            <div id="material-switch" name = "material-switch" class="switch">
+            <label class="radioTitle">Material</label>
+
+            <label for="vacuum" class="radio">
+              <input type="radio" id="vacuum" value="vacuum" name="material-switch" checked="checked">
+              <span>Vacuum</span>
+            </label>
+
+
+            <label for="dielectric" class="radio">
+              <input type="radio" id="dielectric" value="dielectric" name="material-switch">
+              <span>HIL Dielectric</span>
+            </label>
+            </div>
+
+            <!--buttons to switch between fields-->
+            <div id="field-switch" name = "field-switch" class="switch">
+            <label class="radioTitle">Field Type</label>
+
+            <label for="e-field" class="radio">
+              <input type="radio" id="e-field" value="e-field" name="field-switch" checked="checked">
+              <span>Electric Field</span>
+            </label>
+
+            <label for="p-field" class="radio">
+                <input type="radio" id="p-field" value="p-field" name="field-switch">
+                <span>Polarisation Field</span>
+            </label>
+
+            <label for="d-field" class="radio">
+              <input type="radio" id="d-field" value="d-field" name="field-switch">
+              <span>D-Field</span>
+            </label>
+            </div>
+        </div>
+
+        <!--put animation of capacitor here-->
+        <div class="six columns">
+            <div id = "graph" style="width: 45vw; height: 63vh;"></div>
+
+            <div id="voltage-slider">
+                <label for="voltage" class="sliderTitle">Voltage:
+                    <span id="voltage-display">0V</span>
+                </label>
+                <input type="range" id="voltage" name="voltage" min="0" max="50" value="0">
+                <span class="sliderMin">0V</span><span class="sliderMax">50V</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="scripts/Dfield.js"></script>
+</body>
+</html>
