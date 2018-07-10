@@ -26,36 +26,43 @@ var layout = {
     }
 }
 
-///Matrix Utilities:
-//Rotation Matrices (axis of rotation along x/y/z-axix):
+//Matrix Utilities:
+/** Rotation Matrix about x-axis */
 function rotationX(angle) {
     var matrix = [[1, 0, 0], [0, Math.cos(angle), -Math.sin(angle)], [0, Math.sin(angle), Math.cos(angle)]];
     return matrix;
 }
+/** Rotation Matrix about y-axis */
 function rotationY(angle) {
     var matrix = [[Math.cos(angle), 0, Math.sin(angle)], [0, 1, 0], [-Math.sin(angle), 0, Math.cos(angle)]];
     return matrix;
 }
+/** Rotation Matrix about z-axis */
 function rotationZ(angle) {
     var matrix = [[Math.cos(angle), -Math.sin(angle), 0], [Math.sin(angle), Math.cos(angle), 0], [0, 0 ,1]];
     return matrix;
 }
-
-//Scaling Matrices
+/** Scalation Matrix in x-direction */
 function scaleX(factor) {
     var matrix = [[factor, 0, 0], [0, 1, 0], [0, 0, 1]];
     return matrix;
 }
+/** Scalation Matrix in y-direction */
 function scaleY(factor) {
     var matrix = [[1, 0, 0], [0, factor, 0], [0, 0, 1]];
     return matrix;
 }
+/** Scalation Matrix in z-direction */
 function scaleZ(factor) {
     var matrix = [[1, 0, 0], [0, 1, 0], [0, 0 ,factor]];
     return matrix;
 }
 
 //HTML Matrices Display
+/**
+ * This function makes table for matrix display
+ * @param {array} myArray - array of matrix
+ */
 function makeTableHTML(myArray) {
     var result = "<table class='matrix'><tbody>";
     for(var i=0, n=myArray.length; i<n; ++i) {
@@ -70,6 +77,11 @@ function makeTableHTML(myArray) {
 }
 
 //Matrix Display Value
+/**
+ * Produces display for rotation matrix.
+ * @param {float} angle - angle of rotation.
+ * @param {string} rotationType - rotation about three coordinate axes.
+ */
 function displayRotationMatrix(angle, rotationType) {
     var result;
     var cosAngle = "cos("+String(Math.abs(angle))+"π"+")";
@@ -108,6 +120,10 @@ function displayRotationMatrix(angle, rotationType) {
     }
     return result;
 }
+/**
+ * Produces display for reflection matrix.
+ * @param {string} reflectionType - reflection on three planes: (x = 0, y = 0 and, z = 0).
+ */
 function displayReflectionMatrix(reflectionType) {
     var result;
     if (reflectionType === "reflectX") {
@@ -138,7 +154,16 @@ function displayReflectionMatrix(reflectionType) {
     return result;
 }
 
-//Computing transformation frames
+//Computation functions
+/**
+ * Produces animation frames with given transformation.
+ * @param {@function} transformation - matrices (linear functions).
+ * @param {float} start - starting value for the frames.
+ * @param {float} end - ending value for the frames.
+ * @param {array} startVec - initial vectors.
+ * @param {int} frameSize - size of the frames.
+ * @param {bool} addTrace - if it is true, it will add trace line. (default: true)
+ */
 function computeFrames(transformation, start, end, startVec, frameSize, addTrace = true) {
     var intermediate = numeric.linspace(start, end, frameSize);
     var traceLine = [startVec];
@@ -165,7 +190,19 @@ function computeFrames(transformation, start, end, startVec, frameSize, addTrace
     historyVectors[historyIndex % historyLimit] = newVec;
     return frames;
 }
-function computeCompositeRotations(rotation1, rotation2, angle1, angle2, initialVec, frameSize, arrowColor, color1, color2, symbol) {
+/**
+ * Produces animation frames of composite of 2 rotations.
+ * @param {@function} rotation1 - rotation matrix (linear functions).
+ * @param {@function} rotation2 - rotation matrix (linear functions).
+ * @param {float} angle1 - angle value for rotation1.
+ * @param {float} angle2 - angle value for rotation2.
+ * @param {array} initialVec - initial vectors.
+ * @param {int} frameSize - size of the frames.
+ * @param {string} arrowColor - color of the vector.
+ * @param {string} color1 - color of first rotation.
+ * @param {string} color2 - color of second rotation.
+ */
+function computeCompositeRotations(rotation1, rotation2, angle1, angle2, initialVec, frameSize, arrowColor, color1, color2) {
     var intermediate1 = numeric.linspace(0.0, angle1, frameSize);
     var intermediate2 = numeric.linspace(0.0, angle2, frameSize);
     var trace1 = [initialVec];
@@ -206,19 +243,27 @@ function computeCompositeRotations(rotation1, rotation2, angle1, angle2, initial
 
     return frames;
 }
-function computeCommute(rotation1, rotation2, theta1, theta2, frameSize) {
+/**
+ * Fuses two frames produced by @computeCompositeRotations.
+ * @param {@function} rotation1 - rotation matrix (linear functions).
+ * @param {@function} rotation2 - rotation matrix (linear functions).
+ * @param {float} angle1 - angle value for rotation1.
+ * @param {float} angle2 - angle value for rotation2.
+ * @param {int} frameSize - size of the frames.
+ */
+function computeCommute(rotation1, rotation2, angle1, angle2, frameSize) {
     var frameList1 = computeCompositeRotations(
         rotation1, rotation2,
-        theta1, theta2,
+        angle1, angle2,
         initialVec, frameSize,
-        white, lilac, orange, "circle"
+        white, lilac, orange
     );
 
     var frameList2 = computeCompositeRotations(
         rotation2, rotation1,
-        theta2, theta1,
+        angle2, angle1,
         initialVec, frameSize,
-        black, orange, lilac, "square"
+        black, orange, lilac
     );
 
     var frames = [], data;
@@ -233,42 +278,12 @@ function computeCommute(rotation1, rotation2, theta1, theta2, frameSize) {
     return frames;
 }
 
-//Hide/Show Option (Rotation) - for better interface
-//Commute - Rotation
-function hideCommute() {
-    $('.rotate3D').show();
-    $('.rotateCommute').hide();
-    $('.playButtons').show();
-    $('#commuteButton').show();
-    $('#frameSlider').hide();
-    var index = historyIndex % historyLimit;
-    displayCurrent(index);
-    histPlot(index);
-}
-function showCommute() {
-    $('.rotate3D').hide();
-    $('.rotateCommute').show();
-    $('.playButtons').hide();
-    $('#commuteButton').hide();
-    $('#frameSlider').show();
-    commutePlot();
-}
-function disableUndoReset() {
-    console.log("hello");
-    $("#undo").prop("disabled",true);
-    $("#reset").prop("disabled",true);
-}
-function enableUndoReset() {
-    $("#undo").prop("disabled",false);
-    $("#reset").prop("disabled",false);
-}
-function enablePlay() {
-    $("#rotateAnimate").prop("disabled",false);
-    $("#reflectAnimate").prop("disabled",false);
-}
-
-
 //Update Equation Display
+/**
+ * It updates the matrix equation display below the play button.
+ * @param {array} matrix - matrix array.
+ * @param {string} idName - display id in html.
+ */
 function updateMatrixDisplay(matrix, idName) {
     var index = historyIndex % historyLimit;
     var current = makeTableHTML(
@@ -278,6 +293,10 @@ function updateMatrixDisplay(matrix, idName) {
             [Math.round(historyVectors[index][2]*100)/100]
         ]
     )
+
+    if (historyVectors.length > 1 && index === 0) {
+        index = historyVectors.length;
+    }
 
     var previous = makeTableHTML(
         [
@@ -297,7 +316,7 @@ function updateMatrixDisplay(matrix, idName) {
 
     return;
 }
-function displayCurrent(index) {
+function displayCurrent(index, idName) {
     var current = "<table class='matrixWrapper'>" + "<tbody>" + "<tr>"
         + "<td>" + makeTableHTML([
             [Math.round(historyVectors[index][0]*100)/100],
@@ -306,21 +325,59 @@ function displayCurrent(index) {
         ]) + "</td>"
         + "</tr>" + "</tbody>" + "<table>";
 
-    document.getElementById("matrixDisplay").innerHTML = current;
+    document.getElementById(idName).innerHTML = current;
     return;
 }
 
-//Plots
+//Hide/Show - for better interface
+/** It hides [Commute?] interface. */
+function hideCommute() {
+    $('.rotate3D').show();
+    $('.rotateCommute').hide();
+    $('.playButtons').show();
+    $('#showCommute').show();
+    $('#frameSlider').hide();
+    var index = historyIndex % historyLimit;
+    displayCurrent(index, "matrixDisplay");
+    histPlot(index);
+    $("#animate").prop("disabled",false);
+}
+/** It shows [Commute?] interface. */
+function showCommute() {
+    $('.rotate3D').hide();
+    $('.rotateCommute').show();
+    $('.playButtons').hide();
+    $('#showCommute').hide();
+    $('#frameSlider').show();
+    commutePlot();
+}
+/** It disable undo and reset buttons. */
+function disableUndoReset() {
+    $("#undo").prop("disabled",true);
+    $("#reset").prop("disabled",true);
+}
+/** It enable undo and reset buttons. */
+function enableUndoReset() {
+    $("#undo").prop("disabled",false);
+    $("#reset").prop("disabled",false);
+}
+
+//Plot
+/** It resets and plots initial plot. */
 function initPlot() {
     historyVectors = [initialVec];
     historyIndex = 0;
     historyCount = 0;
-    displayCurrent(0)
+    displayCurrent(0, "matrixDisplay");
     hideCommute();
     histPlot(0);
-    enablePlay();
+    $("#animate").prop("disabled",false);
     disableUndoReset();
 }
+/**
+ * It plots the index-th vector in the historyVectors.
+ * @param {int} index - index of historyVectors.
+ */
 function histPlot(index) {
     Plotly.purge("graph");
     var data = [];
@@ -339,6 +396,11 @@ function histPlot(index) {
 }
 
 //Animation
+/**
+ * It animates the give frames and links it with given play button id
+ * @param {object} frames - frame object.
+ * @param {string} playID - id of play button in html.
+ */
 function animateTransformation(frames, playID) {
     $(playID).prop("disabled",true);
     Plotly.animate('graph', frames,
@@ -352,6 +414,7 @@ function animateTransformation(frames, playID) {
 
     return;
 }
+/** Master Play button */
 function playAnimation() {//Master PLAY
     if ($('ul.tab-nav li a.active').attr('href') === "#rotate") {
         animateRotate();
@@ -360,6 +423,7 @@ function playAnimation() {//Master PLAY
     }
 }
 
+/** It creates rotations animation frames */
 function animateRotate() {
     var frames;
     var rotateAxis = document.getElementById("rotateSelect").value
@@ -379,10 +443,11 @@ function animateRotate() {
     }
 
     updateMatrixDisplay(displayRotationMatrix(slider, rotateAxis), "matrixDisplay");
-    animateTransformation(frames, "#animate");
     enableUndoReset();
+    animateTransformation(frames, "#animate");
     return;
 }
+/** It creates reflection animation frames */
 function animateReflect() {
     var frames;
     var plane = document.getElementById('reflectSelect').value;
@@ -397,12 +462,15 @@ function animateReflect() {
     }
 
     updateMatrixDisplay(displayReflectionMatrix(plane), "matrixDisplay");
-    animateTransformation(frames, "#animate");
     planePlot(plane);
     enableUndoReset();
+    animateTransformation(frames, "#animate");
     return;
 }
-//Plot for planes:
+/**
+ * Plots a plane: x = 0, y = 0 or z = 0
+ * @param {string} plane - plane type.
+ */
 function planePlot(plane) {
     if (historyIndex > 1) {
         Plotly.deleteTraces("graph", -1);
@@ -445,21 +513,21 @@ function planePlot(plane) {
     }
     Plotly.addTraces('graph', data);
 }
-//Plot for commute
+/** prepares the plots and interface for [commute?] */
 function commutePlot() {
     Plotly.purge("graph");
-    var theta1 = document.getElementById('rotator1').value * Math.PI;
-    var theta2 = document.getElementById('rotator2').value * Math.PI;
+    var angle1 = document.getElementById('rotator1').value * Math.PI;
+    var angle2 = document.getElementById('rotator2').value * Math.PI;
     var frameSize = 20;
 
-    var frames = computeCommute(rotationY, rotationZ, theta1, theta2, frameSize);
+    var frames = computeCommute(rotationX, rotationY, angle1, angle2, frameSize);
     var extra = axes;
     extra.push(sphere);
 
     initAnimation("commuteAnimate", frames, extra, layout, 10, [0, 19], true);
 }
 
-//Memento
+/** undos performed transformation */
 function undo(){
     historyIndex--;
     historyCount--;
@@ -467,12 +535,13 @@ function undo(){
     if(historyIndex === 0){
         disableUndoReset();
     }
-    displayCurrent(index);
+    displayCurrent(index, "matrixDisplay");
     histPlot(index);
     return;
 }
 
 function main() {
+    //Sliders
     $("input[type=range]").each(function () {
         var displayEl;
         $(this).on('input', function(){
@@ -486,12 +555,20 @@ function main() {
             }
             $("#"+$(this).attr("id") + "DisplayA1").text( displayEl + $("#"+$(this).attr("id") + "DisplayA1").attr("data-unit"));
 
-            if ("#"+$(this).attr("id") === "#commuteAnimateSlider"){
+            if ($(this).attr("id") === "commuteAnimateSlider"){
                 historyPlot(parseInt($(this).val()));
+            }
+        });
+
+        $(this).on("change", function(){
+            var rotatorName = $(this).attr("id");
+            if (rotatorName === "rotator1" || rotatorName === "rotator2"){
+                commutePlot();
             }
         });
     });
 
+    //Tab
     $(function() {
         $('ul.tab-nav li a.button').click(function() {
             var href = $(this).attr('href');
@@ -501,13 +578,38 @@ function main() {
             $(href).addClass('active');
             hideCommute();
             if (href === "#rotate") {
-                $('#commuteButton').show();
+                $('#showCommute').show();
             } else {
-                $('#commuteButton').hide();
+                $('#showCommute').hide();
             }
             return false;
         });
     });
+
+    $("input[type=submit]").click(function () {
+        //log(this);
+        var idName = $(this).attr("id");
+        if (idName === "animate") {
+            playAnimation();
+        } else if (idName === "commuteAnimate"){
+            startAnimation();
+        }
+    });
+
+    $("input[type=button]").click(function () {
+        var idName = $(this).attr("id");
+        if (idName === "undo") {
+            undo();
+        } else if (idName === "reset"){
+            initPlot();
+        } else if (idName === "showCommute"){
+            showCommute();
+        } else if (idName === "hideCommute"){
+            hideCommute();
+        }
+    });
+
+    //Initialisation
     initPlot();
 }
 $(document).ready(main);

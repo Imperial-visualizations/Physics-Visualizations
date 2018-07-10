@@ -1,4 +1,5 @@
 'use strict';
+// Global variables:
 var animationFrames;
 var animationIndex, animationLimit;
 var duration = 50;
@@ -6,6 +7,15 @@ var isPaused = false;
 var stops;
 var playID, sliderID;
 
+/**
+ * initialises the animation frames.
+ * @param {string} playButtonID - Play button ID.
+ * @param {object} allFrames - The frames needed to animate.
+ * @param {list} extra - list of objects with inanimated plots.
+ * @param {object} layout - layout for the animation.
+ * @param {float} setDuration - frame transition duration (ms).
+ * @param {list} stopValues - stopping points (limit: upto 2 stops can be introduced)
+ */
 function initAnimation(playButtonID, allFrames, extra=[], layout={}, setDuration = 50, stopValues=[0, 0]) {
     Plotly.purge("graph");
     playID = playButtonID;
@@ -31,6 +41,7 @@ function initAnimation(playButtonID, allFrames, extra=[], layout={}, setDuration
     reset();
 }
 
+/** resets animation. */
 function reset() {
     isPaused = true;
     animationIndex = 0;
@@ -40,6 +51,10 @@ function reset() {
     return;
 }
 
+/**
+ * plots index-th frame
+ * @param {int} index - index of the frame
+ */
 function historyPlot(index) {
     animationIndex = index;
     var data = [];
@@ -60,6 +75,7 @@ function historyPlot(index) {
     return;
 }
 
+/** Updates animation. */
 function update() {
     animationIndex++;
     if (animationIndex === animationLimit) {
@@ -94,17 +110,23 @@ function update() {
     return;
 }
 
+/**
+ * pauses the computation.
+ * @param {float} - time duration to pause the computation. (ms)
+ */
 function pauseComp(ms) {
     ms +=new Date().getTime();
     while (new Date() < ms){}
     return;
 }
 
+/** updates linked frame slider value and position. */
 function updateSlider() {
     $(sliderID).val(animationIndex);
     $(sliderID + "Display").text(animationIndex);
 }
 
+/** Starts the animation. */
 function startAnimation() {
     if (animationIndex < animationLimit){
         isPaused = !isPaused;

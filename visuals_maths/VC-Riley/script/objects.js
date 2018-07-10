@@ -1,5 +1,5 @@
 'use strict';
-///Colour definitions
+// Colour definitions:
 var magenta = "#FF00FF",
     blue = "#0000FF",
     green = "#008000",
@@ -10,7 +10,11 @@ var magenta = "#FF00FF",
     lilac = "rgb(182,109,255)", //2
     orange = "rgb(219,209,0)"; //3
 
-///Plot Utilities:
+// Plot Utilities:
+/**
+ * sets camera options in layout.
+ * @param {array} point - point of viewpoint.
+ */
 function createView(point) {
   var norm = Math.sqrt(point[0]*point[0] + (5*point[1])*(5*point[1]) + point[2]*point[2]);
   var a = 0.5 + point[0]/norm, b = 1 +  5*point[1]/norm, c = 0.5 + point[2]/norm;
@@ -21,7 +25,10 @@ function createView(point) {
   }
   return camera
 }
-//Create Axes Object
+/**
+ * Creates Axes Object.
+ * @param {float} length - length of the half axes.
+ */
 function createAxes(length) {
     var axes = [];
     var vector = [0, length];
@@ -48,8 +55,13 @@ function createAxes(length) {
     return axes;
 }
 
-///Change of Basis:
-//Spherical 2 Cartesian
+// Change of Basis:
+/**
+ * changes spherical to cartesian coordinates
+ * @param {float} r - r.
+ * @param {float} theta - theta.
+ * @param {float} phi - phi.
+ */
 function sp2c(r,theta,phi) {
     return [
         r * Math.sin(theta) * Math.cos(phi),
@@ -57,7 +69,12 @@ function sp2c(r,theta,phi) {
         r * Math.cos(theta)
     ];
 }
-//Cartesian 2 Spherical
+/**
+ * changes cartesian to spherical coordinates
+ * @param {float} x - x.
+ * @param {float} y - y.
+ * @param {float} z - z.
+ */
 function c2sp(x,y,z) {
     var r = 0, theta = 0, phi = 0;
     if (x*x + y*y + z*z !== 0) {
@@ -67,9 +84,39 @@ function c2sp(x,y,z) {
     }
     return [r, theta, phi];
 }
+/**
+ * changes polar to cartesian coordinates
+ * @param {float} rho - rho.
+ * @param {float} phi - phi.
+ */
+function p2c(rho, phi) {
+    return [
+        rho * Math.cos(phi),
+        rho * Math.sin(phi)
+    ];
+}
+/**
+ * changes cartesian to polar coordinates
+ * @param {float} x - x.
+ * @param {float} y - y.
+ */
+function c2p(x,y) {
+    var rho = 0, phi = 0;
+    if (x*x + y*y !== 0) {
+        rho = Math.sqrt(x*x + y*y);
+        phi = Math.atan2(y,x);
+    }
+    return [rho, phi];
+}
+
 
 ///Shape Objects:
 //3D Objects:
+/**
+ * Represents a line.
+ * @constructor
+ * @param {list} points - list of the points in the line.
+ */
 function Line(points) {
     this.x = [];
     this.y = [];
@@ -92,10 +139,11 @@ function Line(points) {
         return lineObject;
     }
 
-    this.arrowHead = function(color, width=7, dash="solid") {
+    this.arrowHead = function(color, width=7, wingLen=0.1, dash="solid") {
         var lastElm = this.x.length - 1;
-        var [r, theta, phi] = c2sp(this.x[lastElm], this.y[lastElm], this.z[lastElm]);
-        var frac = 0.1*r;
+        var [r, theta, phi] = c2sp(this.x[lastElm]-this.x[0], this.y[lastElm]-this.y[0], this.z[lastElm]-this.z[0]);
+        var offset = [this.x[0], this.y[0], this.z[0]];
+        var frac = wingLen*r;
         var sin45 = Math.sin(Math.PI/4);
         var d = r - frac * sin45;
         var wingLength = Math.sqrt(Math.pow(frac*sin45,2) + d*d);
@@ -103,8 +151,8 @@ function Line(points) {
 
 
         var wings_xyz = [
-            sp2c(wingLength, theta + wingAngle, phi),
-            sp2c(wingLength, theta - wingAngle, phi)
+            math.add(sp2c(wingLength, theta + wingAngle, phi), offset),
+            math.add(sp2c(wingLength, theta - wingAngle, phi), offset)
         ];
 
         var wings = {
@@ -119,6 +167,11 @@ function Line(points) {
         return wings;
     }
 }
+/**
+ * Represents a point.
+ * @constructor
+ * @param {array} position - position of the point.
+ */
 function Point(position) {
     this.position = position;
     this.gObject = function(color, size = 7, symbol="circle") {
@@ -133,6 +186,11 @@ function Point(position) {
         return pointObject;
     }
 }
+/**
+ * Represents a sphere.
+ * @constructor
+ * @param {float} radius - radius of the sphere.
+ */
 function Sphere(radius) {
     this.radius = radius;
     var meshSize = 20;
@@ -160,6 +218,12 @@ function Sphere(radius) {
         return sphere;
     }
 }
+/**
+ * Represents a cylinder.
+ * @constructor
+ * @param {float} radius - radius of the circular cross-section.
+ * @param {float} height - height of the cylinder.
+ */
 function Cylinder(radius, height){
     this.radius = radius;
     this.height = height;
@@ -219,6 +283,13 @@ function Cylinder(radius, height){
         return bottom;
     }
 }
+/**
+ * Represents a cuboid.
+ * @constructor
+ * @param {float} x - half length of cuboid in x-direction.
+ * @param {float} y - half length of cuboid in y-direction.
+ * @param {float} z - half length of cuboid in z-direction.
+ */
 function Cuboid(x, y, z){
     this.width = x,
     this.length = y,
@@ -241,11 +312,16 @@ function Cuboid(x, y, z){
     }
 }
 //2D Objects:
+/**
+ * Represents a circle.
+ * @constructor
+ * @param {float} radius - radius of the circle.
+ */
 function Circle(radius) {
     this.radius = radius;
 
     this.gObject = function(color=cyan, centre=[0,0]) {
-        var phi = numeric.linspace(0, 2*Math.PI, 16);
+        var phi = numeric.linspace(0, 2*Math.PI, 40);
         var x = [], y = [];
         for (var i=0, n=phi.length; i<n; ++i) {
             x.push(this.radius*Math.cos(phi[i]) + centre[0]);
@@ -257,7 +333,61 @@ function Circle(radius) {
             x: x,
             y: y,
             line: {simplify: false, color: color},
-            fill:'tonexty',
+            fill:'toself',
+            opacity: 0.5
         }
+        return circle;
+    }
+}
+/**
+ * Represents a line.
+ * @constructor
+ * @param {list} points - list of the points in the line.
+ */
+function Line2d(points) {
+    this.x = [];
+    this.y = [];
+
+    for (var i = 0; i  < points.length; ++i) {
+        this.x.push(points[i][0]);
+        this.y.push(points[i][1]);
+    }
+
+    this.gObject = function(color, width=7, dash="solid") {
+        var lineObject = {
+            type: "scatter",
+            mode: "lines",
+            x: this.x,
+            y: this.y,
+            line: {color: color, width: width, dash:dash}
+        }
+        return lineObject;
+    }
+
+    this.arrowHead = function(color, width=7, dash="solid") {
+        var lastElm = this.x.length - 1;
+        var [rho, phi] = c2p(this.x[lastElm] - this.x[0], this.y[lastElm] - this.y[0]);
+        var offset = [this.x[0], this.y[0]];
+        var frac = 0.2*rho;
+        var sin45 = Math.sin(Math.PI/4);
+        var d = rho - frac * sin45;
+        var wingLength = Math.sqrt(Math.pow(frac*sin45,2) + d*d);
+        var wingAngle = Math.acos(d/wingLength);
+
+        console.log(offset);
+        var wings_xyz = [
+            math.add(p2c(wingLength, phi + wingAngle), offset),
+            math.add(p2c(wingLength, phi - wingAngle), offset)
+        ];
+
+        var wings = {
+            type: "scatter",
+            mode: "lines",
+            x: [wings_xyz[0][0], this.x[lastElm], wings_xyz[1][0]],
+            y: [wings_xyz[0][1], this.y[lastElm], wings_xyz[1][1]],
+            line: {color: color, width: width}
+        }
+
+        return wings;
     }
 }

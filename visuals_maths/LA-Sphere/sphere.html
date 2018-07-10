@@ -54,37 +54,37 @@
                                 <span id="rotatorDisplayA2" data-unit="º">45º</span>
                             </label>
                             <label class="slider">
-                                <input id="rotator" class="inputs" type="range" value="0.25" min="-2" max="2" step="0.125" onchange=""/>
+                                <input id="rotator" class="inputs" type="range" value="0.25" min="-2" max="2" step="0.125"/>
                                 <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
                             </label>
                         </div>
                         <!--Commute?-->
                         <div class="rotateCommute">
                             <h3 style="border-left: solid 5px rgb(182,109,255); padding-left: 8px;">Rotation A</h3>
-                            <label class="sliderTitle">Rotation about y-axis:&nbsp;
+                            <label class="sliderTitle">Rotation about x-axis:&nbsp;
                                 <span id="rotator1DisplayA1" data-unit="π rad">(1/2)π rad</span>&nbsp;or&nbsp;
                                 <span id="rotator1DisplayA2" data-unit="º">90º</span>
                             </label>
                             <label class="slider">
-                                <input id="rotator1" class="inputs" type="range" value="0.5" min="-2" max="2" step="0.125" onchange="commutePlot()"/>
+                                <input id="rotator1" class="inputs" type="range" value="0.5" min="-2" max="2" step="0.125"/>
                                 <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
                             </label>
 
                             <h3 style="border-left: solid 5px rgb(219,209,0); padding-left: 8px;">Rotation B</h3>
-                            <label class="sliderTitle">Rotation about z-axis:&nbsp;
+                            <label class="sliderTitle">Rotation about y-axis:&nbsp;
                                 <span id="rotator2DisplayA1" data-unit="π rad">(1/2)π rad</span>&nbsp;or&nbsp;
                                 <span id="rotator2DisplayA2" data-unit="º">90º</span>
                             </label>
                             <label class="slider">
-                                <input id="rotator2" class="inputs" type="range" value="0.5" min="-2" max="2" step="0.125" onchange="commutePlot()"/>
+                                <input id="rotator2" class="inputs" type="range" value="0.5" min="-2" max="2" step="0.125"/>
                                 <span class="sliderMin">-2π</span><span class="sliderMax">2π</span>
                             </label>
 
-                            <input id="commuteAnimate" class="button-primary" type="submit" value="Play", onclick="startAnimation()">
+                            <input id="commuteAnimate" class="button-primary" type="submit" value="Play">
                             <!--<input type="button" value="Reset", onclick="reset()">-->
                             <h3>&#x25B3;: <font style="color:rgb(182,109,255);">A</font> &#8594; <font style="color:rgb(219,209,0)">B</font></h3>
                             <h3>&#x25B2;: <font style="color:rgb(219,209,0)">B</font> &#8594; <font style="color:rgb(182,109,255);">A</font></h3>
-                            <input type="button" value="&#x21B2; Go Back", onclick="hideCommute()">
+                            <input id="hideCommute" type="button" value="&#x21B2; Go Back">
                         </div>
                     </div>
                     <!--Reflection-->
@@ -98,15 +98,15 @@
                     </div>
 
                     <div class="playButtons">
-                        <input id="animate" class="button-primary" type="submit" value="Play", onclick="playAnimation()">
-                        <input id="undo" type="button" value="&#10554; Undo", onclick="undo()">
-                        <input id="reset" type="button" value="Reset to (-2,-2,2)", onclick="initPlot()">
+                        <input id="animate" class="button-primary" type="submit" value="Play">
+                        <input id="undo" type="button" value="&#10554; Undo">
+                        <input id="reset" type="button" value="Reset to (-2,-2,2)">
 
                         <h3>Transformation: </h3>
                         <label>Current Vector = M x Previous Vector</label>
                         <p id="matrixDisplay"></p>
                     </div>
-                    <input id="commuteButton" type="button" value="Commute?", onclick="showCommute()">
+                    <input id="showCommute" type="button" value="Commute?">
                 </div>
             </div>
         </div>
