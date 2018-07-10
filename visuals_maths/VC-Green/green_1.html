@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>VC: Green's Theorem 1</title>
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
+    <link rel="stylesheet" href="../util/navigation.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+    <div class="container">
+        <h1>Circulation</h1>
+        <div class="row">
+            <!-- Graph -->
+            <div class="five columns">
+                <div id='graph' style="width:450px; height:450px;"></div>
+            </div>
+
+            <!--Bottons-->
+            <div class="seven columns">
+                <div id="circu">
+                    <p>
+                        Consider an arbitrary curve, \(C\),
+                        <ul>
+                            <li>Simple and Closed,</li>
+                            <li>Positive (Anti-Clockwise) Orientation,</li>
+                            <li>\(D\) is an area enclosed by the curve, \(C\).</li>
+                        </ul>
+                        Then, for a vector field, \(\mathbf{A}\), the circulation, \(\Gamma\) is defined to be the line integral,
+                        \[
+                            \Gamma = \oint_C \mathbf{A} \cdot \, d\mathbf{r}.
+                        \]
+                        Therefore, for
+                        \(
+                            \mathbf{A} = P(x,\,y)\mathbf{\hat{i}} + Q(x,\,y)\mathbf{\hat{j}},
+                        \)
+                        the circulation, \(\Gamma\), is
+                        \[
+                            \Gamma = \oint_C P(x,\;y(x))\;dx + Q(x(y),\;y)\;dy,
+                        \]
+                    </p>
+                    <p>
+                        where \(d\mathbf{r}=dx\mathbf{\hat{i}} + dy\mathbf{\hat{j}}\).<br><br>
+
+                        <b>N.B.</b> When integrating \(P\) and \(Q\), remember to convert \(P\) as a function of \(x\) <b>only</b>
+                                and \(Q\) as a function of \(y\) <b>only</b>. <br><br>
+                                Circulation is a measure of how much the vector
+                                field is "spinning" overall, it is called the <b>macroscopic circulation</b>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="rightnav">▶</div>
+    <script src=../util/objects.js></script>
+    <script src=script/green.js></script>
+</body>
+
+</html>
