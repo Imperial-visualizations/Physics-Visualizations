@@ -20,10 +20,13 @@ var layout = {
 var currentPoint = initialPoint;
 var initialRho = 0, initialPhi = 0, initialR = 0, initialTheta = 0;
 var axes = createAxes(5);
-var isBlackText = true;
-var blackTextType = "lines+text";
+var isBlackText = false;
+var blackTextType = "lines";
 
-//Add more curvature definition:
+/**
+ * It adds more curvatures to multiply to the curve array.
+ * @param {float} arraySize - size of the curve array.
+ */
 function curveMore(arraySize) {
     var hello = [], hello2;
     if (arraySize%2 === 0) {
@@ -43,6 +46,10 @@ function curveMore(arraySize) {
 }
 
 //Plot
+/**
+ * Resets and plots initial volume element.
+ * @param {string} coor - type of coordinate systems
+ */
 function initRiley(coor) {
     Plotly.purge("graph");
     if (coor === "#cylin"){
@@ -89,7 +96,12 @@ function initRiley(coor) {
     }
     return;
 }
-//Plot for basis for corresponding coordinate systems:
+/**
+ * Computes the volume element of the cylindrical coordinate system.
+ * @param {float} rho - rho value.
+ * @param {float} phi - phi value.
+ * @param {float} z - z value.
+ */
 function computeCylindrical(rho, phi, z) {
     var x0 = rho*Math.cos(phi);
     var y0 = rho*Math.sin(phi);
@@ -205,7 +217,8 @@ function computeCylindrical(rho, phi, z) {
             z: [0, 0, 0],
             line: {color: "rgb(0,0,0)", width: 2},
             text: ["", "ρ", ""],
-            textposiition: "bottom"
+            textfont: {size:16},
+            //textposiition: "bottom"
         },
         new Line([[0, 0, 0], [x1, y1, 0]]).gObject("rgb(0,0,0)", 2),
         new Line([[x0, y0, 0], [x0, y0, z]]).gObject("rgb(0,0,0)", 2, "longdash"),
@@ -218,6 +231,7 @@ function computeCylindrical(rho, phi, z) {
             z: zPhi0,
             line: {color: "rgb(0,0,0)", width: 2},
             text: phiText,
+            textfont: {size:16},
             //textposition: "bottom"
         },
         {
@@ -228,7 +242,8 @@ function computeCylindrical(rho, phi, z) {
             z: zPhi1,
             line: {color: "rgb(0,0,0)", width: 2},
             text: dphiText,
-            textposition: "top"
+            textfont: {size:16},
+            //textposition: "top"
         },
         {
             type: "scatter3d",
@@ -238,6 +253,7 @@ function computeCylindrical(rho, phi, z) {
             z: zPhi1,
             line: {color: "rgb(0,0,0)", width: 2},
             text: rhodphiText,
+            textfont: {size:16},
             //textposition: "bottom"
         },
         {
@@ -273,6 +289,12 @@ function computeCylindrical(rho, phi, z) {
 
     return data;
 }
+/**
+ * Computes the volumne element of the spherical coordinate system.
+ * @param {float} r - rho value.
+ * @param {float} theta - theta value.
+ * @param {float} phi - phi value.
+ */
 function computeSpherical(r, theta, phi) {
     var x0 = r*Math.cos(phi)*Math.sin(theta);
     var y0 = r*Math.sin(phi)*Math.sin(theta);
@@ -398,7 +420,7 @@ function computeSpherical(r, theta, phi) {
             z: [z0, z0+0.6*Math.cos(theta), z0+0.8*Math.cos(theta)],
             line: {color: cyan, width: 7},
             text: ["", "dr", ""],
-            textfont: {color: cyan, size:17},
+            textfont: {color: cyan, size:18},
             //textposition: "top center"
         },
         {
@@ -409,7 +431,7 @@ function computeSpherical(r, theta, phi) {
             z: zPhi2,
             line: {color: lilac, width: 7},
             text: rsinthetadphiText,
-            textfont: {color: lilac, size:17},
+            textfont: {color: lilac, size:18},
             //textposition: "top"
         },
         {
@@ -420,7 +442,7 @@ function computeSpherical(r, theta, phi) {
             z: zTemp1,
             line: {color: orange, width: 7},
             text: rdthetaText,
-            textfont: {color: orange, size:17},
+            textfont: {color: orange, size:18},
             //textposition: "left"
         },
         {
@@ -431,6 +453,7 @@ function computeSpherical(r, theta, phi) {
             z: [0, 0, 0],
             line: {color: "rgb(0,0,0)", width: 2},
             text: ["", "r sin(θ)", ""],
+            textfont: {size:16},
             //textposition: "bottom"
         },
         {
@@ -441,6 +464,7 @@ function computeSpherical(r, theta, phi) {
             z: [z0, z0, z0],
             line: {color: "rgb(0,0,0)", width: 2},
             text: ["(0, 0, r cos(θ))", "r sin(θ)", ""],
+            textfont: {size:16},
             //textposition: "bottom"
         },
         {
@@ -451,6 +475,7 @@ function computeSpherical(r, theta, phi) {
             z: [0, 0.65*z0, z0],
             line: {color: "rgb(0,0,0)", width: 2},
             text: ["", "r", ""],
+            textfont: {size:16},
             //textposition: "top"
         },
         new Line([[0, 0, 0], [x2, y2, z2]]).gObject("rgb(0,0,0)", 2),
@@ -466,6 +491,7 @@ function computeSpherical(r, theta, phi) {
             z: zPhi0,
             line: {color: "rgb(0,0,0)", width: 2},
             text: phiText,
+            textfont: {size:16},
             //textposition: "bottom"
         },
         {
@@ -476,6 +502,7 @@ function computeSpherical(r, theta, phi) {
             z: zPhi2,
             line: {color: "rgb(0,0,0)", width: 2},
             text: dphiText,
+            textfont: {size:16},
             //textposition: "top"
         },
         {
@@ -486,6 +513,7 @@ function computeSpherical(r, theta, phi) {
             z: zPhi1,
             line: {color: "rgb(0,0,0)", width: 2},
             text: dphiText,
+            textfont: {size:16},
             //textposition: "top"
         },
         {
@@ -496,6 +524,7 @@ function computeSpherical(r, theta, phi) {
             z: zPhi1,
             line: {color: "rgb(0,0,0)", width: 2},
             text: rsinthetadphiText,
+            textfont: {size:16},
             //textposition: "bottom"
         },
         {
@@ -506,6 +535,7 @@ function computeSpherical(r, theta, phi) {
             z: zTheta0,
             line: {color: "rgb(0,0,0)", width: 2},
             text: thetaText,
+            textfont: {size:16},
             //textposition: "top"
         },
         {
@@ -516,6 +546,7 @@ function computeSpherical(r, theta, phi) {
             z: zTheta1,
             line: {color: "rgb(0,0,0)", width: 2},
             text: dthetaText,
+            textfont: {size:16},
             //textposition: "bottom"
         },
         {
@@ -552,6 +583,7 @@ function computeSpherical(r, theta, phi) {
     return data;
 }
 
+/** updates the plot according to the slider controls. */
 function updatePlot() {
     var data = [];
     var href = $('ul.tab-nav li a.active.button').attr('href'); // active href
