@@ -7,11 +7,16 @@ Created on Thu Jul 05 11:14:00 2018
 import numpy as np
 import matplotlib.pyplot as plt
 
-A = 5
-L = 10.3
-N = 2
+
+
 """shapes: 0 = Triangle, 1 = square, 2 = sawtooth, 3 = ?, 4 = -x/2, 5 = x^2, 6 = x, 7 = |x|, 8 = x+|x|"""
 Titles = ["f(x) = Triangle", "f(x) = Square", "f(x) = Sawtooth", "f(x) = ?", "f(x) = -x/2", "$f(x) = x^2$", "f(x) = x", "f(x) = |x|", "f(x) = x+|x|"]
+
+
+A = 5
+L = 1.03
+N = 100
+histogram_accuracy = 1000 #Suggest 1000
 shape = 8
 axis_length = 5 #Number of periods visualized
 resolution = 10**3
@@ -30,7 +35,7 @@ def amplitude(n,number,x):
     elif number ==2:
         amplitude = 2*A*(-1)**(n+1) /(n*np.pi) * np.sin(n *np.pi * x/L)
     elif number ==3:
-        amplitude =8/(n*np.pi) * (-1)**(n+1)*np.sin(n*np.pi*x/L) + 2/(n*np.pi) * ((-1)**n -1)
+        amplitude =8/(n*np.pi) * (-1)**(n+1)*np.sin(n*np.pi*x/L) + 2/(n*np.pi) * ((-1)**n -1)*np.cos(n*np.pi*x/L)
     elif number ==4:
         amplitude = 2L/(n*np.pi)**2 *(1-(-1)**n)*np.cos(n*np.pi*x/L)
     elif number ==5: #Missed out L**2 terms here
@@ -170,40 +175,81 @@ plot2 = plot2(N,x,shape)
 
 
 
-def amplitude3(shape, n):
-    if shape ==8:
-        amplitude = (8*A*1/((2*(n)-1) *np.pi)**2)*((-1)**(n))    
+def amplitude3(number, n):
+    if number == 0:
+        amplitude = (8*A*1/((2*(n)-1) *np.pi)**2)*((-1)**(n))
+    elif number == 1:
+        amplitude = A/(n*np.pi) *(1-(-1)**n) 
+    elif number ==2:
+        amplitude = 2*A*(-1)**(n+1) /(n*np.pi) 
+    elif number ==3:
+        amplitude =8/(n*np.pi) * (-1)**(n+1) + 2/(n*np.pi) * ((-1)**n -1)
+    elif number ==4:
+        amplitude = 2/(n*np.pi)**2 *(1-(-1)**n)
+    elif number ==5: #Missed out L**2 terms here
+        if n == 0 :
+            amplitude = 2/3  
+        else:
+            amplitude = 4/(n*np.pi)**2 *(-1)**n 
+    elif number ==6:
+        amplitude = A*(2/(n*np.pi)**1 *(-1)**(n+1))
+    elif number ==7:
+        amplitude = (2*A/(n*np.pi)**2)*((-1)**n - 1)
+            
+    elif number ==8:
+        amplitude = A*(2/(n*np.pi)**1 *(-1)**(n+1)) + (2*A/(n*np.pi)**2)*((-1)**n - 1)
+            
     return amplitude
-
 
     
 def set_of_coefficients():
     k = [] # k = n pi/L
     Ik = []
+    Ik_negative = []
     term = []
     for n in range(1, N+1):
         k.append(n*np.pi/L)
         term.append(n)
-        Ik.append(amplitude3(shape, n))
+        Ik.append((amplitude3(shape, n)))
+        Ik_negative.append(-(amplitude3(shape, n)))
 
-    return k, Ik, term
-k,Ik, terms = set_of_coefficients()
-print (k, Ik)
-"""
-def Count_amplitude(x,y):
+    return k, Ik, Ik_negative, term
+k,Ik,Ik_negative, terms = set_of_coefficients()
+
+
+
+def Count_amplitude(terms,Ik):
     z = []
-    for i in range(1,len(x)+1):
-        for j in range(0, (y[i-1])):
-            z.append(x[i-1])
+    Ik_large = []
+    Ik_large_rounded = []
+    z = []
+    for i in Ik:
+        Ik_large.append(i*histogram_accuracy)
+    for i in Ik_large:
+        Ik_large_rounded.append(round(i,0))
+    for i in range(1,len(terms)+1):
+        for j in range(0, int(Ik_large_rounded[i-1])):
+            z.append(terms[i-1])
     return (z)
 
-Ik = Count_amplitude(terms,Ik)
 
 
-fig_1 = plt.figure(1)
-fig_1.set_size_inches(7,2)
+k_mag_scaled = Count_amplitude(k,Ik)
+k_mag = []
+for i in k_mag_scaled:
+    k_mag.append(i*L/np.pi)
+    
+k_mag_scaled_negative = Count_amplitude(k, Ik_negative)
+k_mag_negative = []
+for i in k_mag_scaled_negative:
+    k_mag_negative.append(i*L/np.pi)
+
+
+
+fig_3 = plt.figure(3)
+fig_3.set_size_inches(7,2)
 numb_bins = len(k)
-n, bins, patches = plt.hist(Ik, num_bins, facecolor='blue', alpha=0.5)
+n, bins, patches = plt.hist(k_mag, numb_bins, facecolor='blue', alpha=1.0, label = "Positive contributions", normed = 1)
+n, bins, patches = plt.hist(k_mag_negative, numb_bins, facecolor = 'red', alpha = 1.0, label = "Negative contributions", normed = 1)
+plt.legend(loc = 1)
 plt.show()
-
-"""
