@@ -1,0 +1,278 @@
+
+<!doctype html>
+<html>
+
+<head>
+    <!--Page Info-->
+    <title>Fourier Series</title>
+    <!--css link-->
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
+    <link rel="stylesheet" href="../util/navigation.css">
+    <!--Required JS resources--> <!--NB: better to have resources before the main body but still works even if they are not-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+    <div class="leftnav">◀</div>
+    <div class="container">
+        <div class="row">
+            <!-- Graph -->
+            <div class="six columns">
+                <h1>Fourier Series of Triangular Function:</h1>
+                <div id='graph' style="width:450px; height:450px;"></div>
+            </div>
+
+            <!--Bottons/Sliders-->
+            <div class="six columns">
+                <!--Main Options/Tabs-->
+                <ul class="tab-nav">
+                    <li><a class="button active" href="#maths">Maths Derivation</a></li><!--Default: set using 'active'-->
+                    <li><a class="button" href="#plot">Plot</a></li>
+                    <li><a class="button" href="#component">Component</a></li>
+                </ul>
+
+                <!--Main body contents-->
+                <div class="tab-content">
+
+                    <!--Shared Area-->
+
+                    <!--Unique Areas-->
+                    <!--BEGIN Basis Vector Area-->
+                    <div class="tab-pane active" id="maths">
+                        <h1>Hello World</h1>
+                        <math><mi>a</mi><mo>≠</mo><mn>0</mn></math>
+                        <p style="font-style: bold; font-size: large">
+                           $$\begin{bmatrix}m & 0\\0 & I\end{bmatrix} \begin{bmatrix} \ddot{r} \\ \ddot{&theta;} \end{bmatrix}
+                           + \begin{bmatrix}c & 0\\0 & 0\end{bmatrix} \begin{bmatrix} \dot{r} \\ \dot{&theta;} \end{bmatrix}
+                           + \begin{bmatrix}k & -kl\\-kl & k_&theta;+kl^2\end{bmatrix} \begin{bmatrix}r\\&theta;\end{bmatrix}
+                           = \begin{bmatrix}R\\&Theta;\end{bmatrix}
+                           $$
+                       </p>
+                        <p style="font-style: bold; font-size:large">
+                            <!--Basics of Fourier Transform-->
+                            <h5>Exponential Form:</h5>
+                            $$ C_n=\frac{1}{2L}\int_{-L}^{+L}f(x)e^{-in\pi x/L}dx $$
+                            $$ f(x)=\sum_{n=-\infty}^{n=\infty} C_ne^{in\pi x/L} $$
+                            <h5>Trigonometric Form: </h5>
+                            $$ f(x)=\frac{a_0}{2}+\sum_{n=1}^{\infty}a_n cos(\frac{n\pi x}{L})+b_n sin(\frac{n \pi x}{L}) $$
+                            $$ a_n=\frac{1}{L}\int_{-L}^{+L}f(x)cos(\frac{n\pi x}{L})dx $$
+                            $$ b_n=\frac{1}{L}\int_{-L}^{+L}f(x)sin(\frac{n\pi x}{L})dx $$
+
+                            <!--Derivation of Triangular-->
+                            <h5>Triangular Fourier Series Derivation</h5>
+
+                            <!--Derivation of Square-->
+                            <h5>Square Function Fourier Series Derivation</h5>
+                            $$
+                            f(x)=\left\{
+                                    \begin{array}{ll}
+                                    -A \quad (-L < x < 0) \\
+                                    A \quad  (0< x < L)
+                                    \end{array}
+                                  \right.
+                            $$
+                            $$ a_n=\frac{1}{L}\int_{-L}^0 -A\cdot cos(\frac{n\pi x}{L})dx + \frac{1}{L}\int_0^L A \cdot cos(\frac{n \pi x}{L})dx $$
+                            $$ a_n=\frac{A}{L}\frac{L}{n\pi} sin(\frac{n\pi x}{L})|_0^L=0 $$
+                            $$ \because  \text{the  function  is  odd} $$
+                            $$ \therefore a_n=0 $$
+                            $$ b_n=\frac{1}{L}\int_{-L}^0 -A\cdot sin(\frac{n\pi x}{L})dx + \frac{1}{L}\int_0^L A \cdot sin(\frac{n \pi x}{L})dx $$
+                            $$ b_n=\frac{2A}{L}\frac{L}{n\pi} cos(\frac{n\pi x}{L})|_0^L $$
+                            $$ b_n = \frac{2A}{n\pi}[1-cos(n\pi)] $$
+                            $$ \because cos(nx)=(-1)^n $$
+                            $$ \therefore b_n=\frac{2A}{n\pi}(1-(-1)^n) $$
+                            $$ \mathcal{F}(x)=\sum_{n=1}^N \frac{2A}{n\pi}(1-(-1)^n)sin(\frac{n\pi x}{L}) $$
+
+                            <!--Derivation of Sawtooth-->
+                            <h5>Sawtooth Fourier Series Derivation</h5>
+                            $$ f(x)=Ax \quad (-L < x < L) $$
+                            $$ a_n=\frac{1}{L}\int_{-L}^{L}Ax \cdot cos(\frac{n\pi x}{L})dx $$
+                            $$ \because a_n \text{ is odd} $$
+                            $$ \therefore a_n=0 $$
+                            $$ b_n=\frac{1}{L}\int_{-L}^{L} Ax \cdot sin(\frac{n\pi x}{L})dx $$
+                            $$ \because b_n \text{ is even} $$
+                            $$ \therefore b_n=\frac{2A}{L}\int_{0}^{L} x \cdot sin(\frac{n\pi x}{L})dx $$
+                            $$ \text{Using integration by part gives that} $$
+                            $$ u=x \qquad dv=sin(\frac{n\pi x}{L})dx $$
+                            $$ du=dx \qquad v=\frac{-L}{n\pi}cos(\frac{n\pi x}{L}) $$
+                            $$ b_n=\frac{2A}{L} [\frac{-Lx}{n\pi}cos(\frac{n\pi x}{L})-\int_0^L\frac{-L}{n\pi}cos(\frac{n\pi x}{L})dx] $$
+                            $$ b_n=-\frac{2A}{n\pi}cos(n\pi)=-\frac{2A}{n\pi}(-1)^n $$
+                            $$ b_n=\frac{2A}{n\pi}(-1)^{n+1} $$
+                            $$ \mathcal{F}=\sum_{n=1}^\infty \frac{2A}{n\pi}(-1)^{n+1}sin(\frac{n\pi x}{L}) $$
+
+                            <!--Derivation of Dirac-Delta-->
+                            <h5>Dirac-Delta Fourier Series Derivation</h5>
+                            $$
+                            \delta(x)=\left\{
+                                    \begin{array}{ll}
+                                    +\infty \quad (x=0) \\
+                                    0 \qquad  (x \neq 0)
+                                    \end{array}
+                                  \right.
+                            $$
+                            $$ b_n=\frac{1}{L}\int_{-L}^{+L}\delta(x)\cdot sin(\frac{n\pi x}{L})dx $$
+                            $$ \because b_n \text{ is an odd function } $$
+                            $$ \therefore b_n=0 $$
+                            $$ a_n=\frac{1}{L}\int_{-L}^{+L} \delta (x) \cdot cos(\frac{n\pi x}{L})dx $$
+                            $$ a_n=\frac{1}{L} $$
+                            $$ \mathcal{F}(x)=\sum_{n=0}^\infty \frac{1}{L}cos(\frac{n\pi x}{L}) $$
+
+                            <!--Derivation of parabola-->
+                            <h5>Quadratic Fourier Series Derivation</h5>
+                            $$ f(x)=Ax^2 $$
+                            $$ b_n = \frac{1}{L}\int_{-L}^{+L} Ax^2 \cdot sin(\frac{n \pi x}{L})dx $$
+                            $$ \because \text{the function is odd around 0} $$
+                            $$ \therefore b_n=0 $$
+                            $$ a_n= \frac{1}{L}\int_{-L}^{+L} Ax^2 \cdot cos(\frac{n \pi x}{L})dx $$
+                            $$ \because \text{the function is even around 0} $$
+                            $$ \therefore a_n=\frac{2}{L}\int_{0}^{+L} Ax^2 \cdot cos(\frac{n \pi x}{L})dx $$
+                            $$ \text{ at } n=0 \text{ :} $$
+                            $$ a_0 = \frac{2}{L} \int _{0}^{+L} Ax^2 dx $$
+                            $$ a_0 = \frac{2AL^2}{3} $$
+                            $$ \text{ at } n\neq 0 \text{ :} $$
+                            $$ a_n = \frac{2A}{L}\int_0^L x^2\cdot cos(\frac{n\pi x}{L})dx $$
+                            $$ u=x^2 \qquad dv=cos(\frac{n \pi x}{L})dx $$
+                            $$ du = 2x\cdot dx \qquad v=\frac{L}{n\pi} \cdot sin(\frac{n\pi x}{L}) $$
+                            $$ a_n = \frac{2A}{L} \cdot [\frac{Lx^2}{n\pi}\cdot sin(\frac{n\pi x}{L})|_0^L-\int_0^L\frac{2xL}{n\pi}\cdot sin(\frac{n \pi x}{L})dx] $$
+                            $$ a_n = \frac{2A}{L} \cdot [0-\int_0^L\frac{2xL}{n\pi}\cdot sin(\frac{n \pi x}{L})dx] $$
+                            $$ a_n = -\frac{4A}{n\pi}\int_0^L x\cdot sin(\frac{n \pi x}{L})dx $$
+                            $$ u = x \qquad dv = sin(\frac{n\pi x}{L}) dx$$
+                            $$ du = dx \qquad v = -\frac{L}{n\pi} \cdot cos(\frac{n\pi x}{L})dx $$
+                            $$ a_n = \frac{4A}{n\pi} [\frac{xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_0^L + \int_0^L\frac{xL}{n\pi} \cdot cos(\frac{n\pi x}{L})dx ] $$
+                            $$ a_n =  \frac{4A}{n\pi} \frac{xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_0^L $$
+                            $$ a_n = \frac{4AL^2}{n^2\pi^2}(-1)^n $$
+                            $$ \mathcal{F}(x) = \sum_{n=0}^\infty \frac{4AL^2}{n^2\pi^2}(-1)^n\cdot cos(\frac{n\pi x}{L}) $$
+
+                            <!--Derivation of linear equation-->
+                            <h5>Linear Equation Fourier Series Derivation</h5>
+                            $$ f(x) = Ax $$
+                            $$ a_n = \frac{1}{L}\int_{-L}^{+L} Ax \cdot cos(\frac{n \pi x}{L})dx $$
+                            $$ \because a_n \text{ part is an odd function} $$
+                            $$ \therefore a_n=0 $$
+                            $$ b_n = \frac{1}{L}\int_{-L}^{+L}Ax \cdot sin (\frac{n\pi x}{L}) dx $$
+                            $$ b_n = \frac{A}{L}\int_{-L}^{+L}x \cdot sin (\frac{n\pi x}{L}) dx $$
+                            $$ u=x \qquad dv = sin(\frac{n\pi x}{L})dx $$
+                            $$ du=dx \qquad v = -\frac{L}{n\pi}\cdot cos(\frac{n\pi x}{L}) $$
+                            $$ b_n = -\frac{A}{L}[\frac{xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_{-L}^{+L} + \int_{-L}^{+L}\frac{L}{n\pi}\cdot cos(\frac{n\pi x}{L}) dx] $$
+                            $$ b_n = \frac{2A}{L}\cdot [-\frac{xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_{0}^{+L} + \int_{0}^{+L}\frac{L}{n\pi}\cdot cos(\frac{n\pi x}{L}) dx] $$
+                            $$ b_n = -\frac{2AL}{n\pi}cos(n\pi) $$
+                            $$ b_n = -\frac{2AL}{n\pi}(-1)^n $$
+                            $$ b_n = \frac{2AL}{n\pi}(-1)^{n+1} $$
+                            $$ \mathcal{F}(x) = \sum_{n=0}^\infty \frac{2AL}{n\pi}(-1)^{n+1} \cdot sin(\frac{n\pi x}{L}) $$
+
+                            <!--Derivation of mode x-->
+                            <h5>Mode x Fourier Series Derivation</h5>
+                            $$ f(x)=A|x| $$
+                            $$ b_n = \frac{1}{L}\int_{-L}^{+L} A|x| \cdot sin \frac{n\pi x}{L} dx $$
+                            $$ \because \text{the function is odd around 0} $$
+                            $$ \therefore a_n=0 $$
+                            $$ a_n = \frac{1}{L}\int_{-L}^{+L} A|x| \cdot cos(\frac{n \pi x}{L})dx $$
+                            $$ \because \text{the function is even around 0} $$
+                            $$ \therefore a_n = \frac{2}{L}\int_{0}^{+L} Ax \cdot cos(\frac{n \pi x}{L})dx $$
+                            $$ \text{ at } n=0 \text{ :} $$
+                            $$ a_0 = \frac{2A}{L}\int_0^L x dx $$
+                            $$ a_0 = \frac{2A}{L}\frac{x^2}{2}|_0^L $$
+                            $$ a_0 = AL $$
+                            $$ \text{ at } n \neq 0 \text{ :} $$
+                            $$ a_n = \frac{2A}{L}\int_{0}^{+L} x \cdot cos(\frac{n \pi x}{L})dx $$
+                            $$ u=x \qquad dv=cos(\frac{n\pi x}{L})dx $$
+                            $$ du=dx \qquad v=\frac{L}{n\pi}\cdot sin(\frac{n\pi x}{L}) $$
+                            $$ a_n = \frac{2A}{L}[\frac{Lx}{n\pi}\cdot sin(\frac{n\pi x}{L})|_0^L-\int_0^{+L}\frac{L}{n\pi}\cdot sin(\frac{n\pi x}{L})dx ]$$
+                            $$ a_n = \frac{2A}{L}[0-\int_0^{+L}\frac{L}{n\pi}\cdot sin(\frac{n\pi x}{L})dx ]$$
+                            $$ a_n = \frac{2A}{L}\frac{L^2}{(n\pi)^2}\cdot cos(\frac{n\pi x}{L})|_0^L $$
+                            $$ a_n = \frac{2A}{L}\frac{L^2}{(n\pi)^2}\cdot [(-1)^n-1] $$
+                            $$ a_n = \frac{2AL}{(n\pi)^2}[(-1)^n-1] $$
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        </p>
+
+                    </div> <!--NB: Also need 'active' here-->
+                    <!--END Basis-->
+
+                    <!--BEGIN Slider-->
+                    <!--These Sliders are shared among all tabs-->
+                        <h5 style="border-left: solid 5px rgb(225,0,0); padding-left: 8px;">Amplitude:</h5><!--Just Text-->
+
+                    <!--Slider Display-->
+                        <label class="sliderTitle">A:<!--rho-->
+                            <span id="AControllerDisplay" data-unit="">1</span> <!--default: 0-->
+                        </label>
+
+                    <!--Slider-->
+                    <!--NB: Be careful with classes and types-->
+                        <label class="slider">
+                            <input id="AController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
+                            <span class="sliderMin">-5</span><span class="sliderMax">5</span></label>
+                    <!--END Slider-->
+
+                    <!--BEGIN Slider-->
+                        <h5 style="border-left: solid 5px rgb(0,225,0); padding-left: 8px;">Number of terms:</h5>
+                        <label class="sliderTitle">N:
+                            <span id="NControllerDisplay" data-unit="">1</span>
+                        </label>
+                        <label class="slider">
+                            <input id="NController" class="inputs" type="range" value="1" min="0" max="50" step="1"/>
+                            <span class="sliderMin">0</span><span class="sliderMax">50</span>
+                        </label>
+                    <!--END Slider-->
+
+                    <!--BEGIN Slider-->
+                        <h5 style="border-left: solid 5px rgb(0,0,225); padding-left: 8px;">Period:</h5>
+                        <label class="sliderTitle">L:
+                            <span id="LControllerDisplay" data-unit="">1</span>
+                        </label>
+                        <label class="slider">
+                            <input id="LController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
+                            <span class="sliderMin">-5</span><span class="sliderMax">5</span>
+                        </label>
+                    <!--END Slider-->
+
+                    <!--BEGIN Area Element Area-->
+                    <div class="tab-pane" id="plot">
+
+
+                    </div>
+                    <!--END Area-->
+
+                    <div class="tab-pane" id="component">
+
+
+
+
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="rightnav">▶</div>
+
+    <!--THE BRAINS-->
+    <script src=script/Fourier_Function.js></script>
+    <!--
+    <script src=script/jacksonobjects.js></script>
+    -->
+</body>
+
+</html>
