@@ -29,6 +29,7 @@ function plotData() {
     $("#aControllerDisplay").text(initialA);
     var a = parseFloat(document.getElementById('aController').value);
     Plotly.newPlot("graph", initCube(a), layout);
+
     return;
     }
 function initCube(a){
