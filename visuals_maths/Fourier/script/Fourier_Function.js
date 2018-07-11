@@ -12,9 +12,10 @@ const layout = {
 var currentPoint = initialPoint;
 var initX = 0, initY = 0;
 var z = numeric.linspace(0,2*Math.PI,1000);
-// 0 is triangular, 1 is square, 2 is sawtooth, 3 is delta's,
-var shape = 2;
+// 0 is triangular, 1 is square, 2 is sawtooth, 3 is delta's, 4 is parabola, 5 is x, 6 is |x|,
+var shape = 6;
 var decay = 0.9;
+var decay2 = 0.6;
 
 
 //Plot
@@ -47,6 +48,7 @@ it changes the range of the y-axis according to the amplitude and number of ther
 function setLayout(){
     var N = parseFloat(document.getElementById('NController').value);
     var A = parseFloat(document.getElementById('AController').value);
+    var L = parseFloat(document.getElementById('LController').value);
 
     const new_layout = {
     width: 450, "height": 500,
@@ -78,6 +80,20 @@ function selection(n,A,L,x,type){
         formula = 2*A*(-1)**(n+1) /(n*Math.PI) * Math.sin(n *Math.PI* x/L);
     } else if (type===3){
         formula = 1/L * Math.cos(n*Math.PI*x/L);
+    } else if (type===4){
+        if (n===0){
+            formula=(2*L**2)/3;
+        } else {
+            formula=A*((4*L**2)/(n*Math.PI)**2)*(-1)**n*Math.cos(n*Math.PI*x/L);
+        }
+    } else if (type===5){
+        formula = A*(2*L/(n*Math.PI)*(-1)**(n+1)*Math.sin(n*Math.PI*x/L));
+    } else if (type===6){
+        if (n===0){
+            formula=A*L;
+        } else {
+            formula=(2*A*L/(n*Math.PI)**2)*((-1)**(n) -1)*Math.cos(n*Math.PI*x/L);
+        }
     }
     return formula;
 }
@@ -131,15 +147,36 @@ function computePlot(x){
 
 }
 
-function selection2(n,A,type){
+function odd_selection2(n,A,L,type){
     if (type===0){
         amplitude = (A*(-1)**n)*(decay)**n; // (8*A*1/((2*(n)-1) *np.pi)**2)*((-1)**(n))
     } else if (type===1){
         amplitude = (A*(1-(-1)**n))*(decay)**n; // A/(n*np.pi) *(1-(-1)**n)
     } else if (type===2){
         amplitude = (A*(-1)**(n+1))*(decay)**n;  //  2*A*(-1)**(n+1) /(n*np.pi)
+    } else if (type===3){
+        amplitude = 1/L;
+    } else if (type===4){
+        amplitude = A*((-1)**n)*decay**n;  // (((4*L**2)/(n*Math.PI)**2)*(-1)**n)
+    } else if (type===5){
+        amplitude = 0.5*A*(2*(-1)**(n+1)*decay**n); //A*(2*L/(n*Math.PI)*(-1)**(n+1)
+    } else if (type===6){
+        amplitude = 0;
     }
     return amplitude;
+}
+
+function even_selection2(n,A,L,type){
+    if (0<=type<=5){
+        amplitude2 = 0;
+    } else if (type===6){
+        if (n===0){
+            amplitude2= A*L;
+        } else {
+            amplitude2 = 2*A*L*((-1)**(n)-1);
+               }
+    }
+    return amplitude2;
 }
 
 function plotSines(n,x,shape){
@@ -150,11 +187,12 @@ function plotSines(n,x,shape){
 
     var x_n = [];
     var y_n = [];
-    spacing = 2*A;
+    var spacing=2*A;
+
 
     for (var i = 0; i < x.length ; ++i){
         x_n.push(x[i]);
-        y_n.push((selection2(n,A,shape))*Math.sin(n*Math.PI*x[i]/L)+spacing*n);
+        y_n.push(((odd_selection2(n,A,L,shape))*Math.sin(n*Math.PI*x[i]/L)+(even_selection2(n,A,L,shape))*Math.cos(n*Math.PI*x[i]/L))+spacing*n);
     }
 
     var data=
