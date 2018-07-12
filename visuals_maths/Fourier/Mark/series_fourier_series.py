@@ -15,7 +15,7 @@ Titles = ["f(x) = Triangle", "f(x) = Square", "f(x) = Sawtooth", "f(x) = ?", "f(
 
 A = 5
 L = 1.03
-N = 100
+N = 10
 histogram_accuracy = 1000 #Suggest 1000
 shape = 8
 axis_length = 5 #Number of periods visualized
@@ -49,7 +49,10 @@ def amplitude(n,number,x):
         amplitude = (2*A*L/(n*np.pi)**2)*((-1)**n - 1)*np.cos(n*np.pi*x/L) 
             
     elif number ==8:
-        amplitude = A*(2*L/(n*np.pi)**1 *(-1)**(n+1))*np.sin(n*np.pi*x/L) + (2*A*L/(n*np.pi)**2)*((-1)**n - 1)*np.cos(n*np.pi*x/L)
+        if n == 0 :
+            amplitude  = L
+        else:
+            amplitude = A*(2*L/(n*np.pi)**1 *(-1)**(n+1))*np.sin(n*np.pi*x/L) + (2*A*L/(n*np.pi)**2)*((-1)**n - 1)*np.cos(n*np.pi*x/L)
             
     return amplitude
 
@@ -169,87 +172,187 @@ def plot2(N,x,shape):
 plot2 = plot2(N,x,shape)
 
 
-
-
-
-
-
-
-def amplitude3(number, n):
-    if number == 0:
-        amplitude = (8*A*1/((2*(n)-1) *np.pi)**2)*((-1)**(n))
-    elif number == 1:
-        amplitude = A/(n*np.pi) *(1-(-1)**n) 
-    elif number ==2:
-        amplitude = 2*A*(-1)**(n+1) /(n*np.pi) 
-    elif number ==3:
-        amplitude =8/(n*np.pi) * (-1)**(n+1) + 2/(n*np.pi) * ((-1)**n -1)
-    elif number ==4:
-        amplitude = 2/(n*np.pi)**2 *(1-(-1)**n)
-    elif number ==5: #Missed out L**2 terms here
+def an(shape, n):
+    if shape ==0:
+        amplitude = 0
+    elif shape ==1:
+        amplitude =0
+    elif shape ==2:
+        amplitude = 0
+    elif shape ==3:
         if n == 0 :
-            amplitude = 2/3  
+            amplitude = 6 #NOT CORRECT
+        else:    
+            amplitude = 2/(n*np.pi) * ((-1)**n -1)#8/n*np.pi *(-1)**(n+1)
+    elif shape ==4:
+        if n ==0:
+            amplitude = 12 #NOT CORRECT
+        else:    
+            amplitude = 2L/(n*np.pi)**2 *(1-(-1)**n) # Missed *L
+    elif shape ==5:
+        if n == 0 :
+            amplitude = 2*(L**2)/3  
         else:
-            amplitude = 4/(n*np.pi)**2 *(-1)**n 
-    elif number ==6:
-        amplitude = A*(2/(n*np.pi)**1 *(-1)**(n+1))
-    elif number ==7:
-        amplitude = (2*A/(n*np.pi)**2)*((-1)**n - 1)
-            
-    elif number ==8:
-        amplitude = A*(2/(n*np.pi)**1 *(-1)**(n+1)) + (2*A/(n*np.pi)**2)*((-1)**n - 1)
-            
+            amplitude =4*L**2/(n*np.pi)**2 *(-1)**n # Left out an L^2 dependence for ease of visualization
+    elif shape ==6:
+        amplitude =0
+    elif shape ==7:
+        if n == 0 :
+            amplitude = L
+        else:
+            amplitude = (2*A*L/(n*np.pi)**2)*((-1)**n - 1)#Missed *L
+    elif shape ==8:
+        if n == 0:
+            amplitude  =L
+        else:
+            amplitude = (2*A*L/(n*np.pi)**2)*((-1)**n - 1)#Missed *L
     return amplitude
 
+def bn(shape, n):
+    if n == 0:
+        amplitude = 0
+    else:
+        if shape == 0:
+            amplitude = (8*A*1/((2*(n)-1) *np.pi)**2)*((-1)**(n))# (8*A*1/((2*(n)-1) *np.pi)**2)*((-1)**(n))
+        elif shape == 1:
+            amplitude =  A/(n*np.pi) *(1-(-1)**n) #A/(n*np.pi) *(1-(-1)**n)
+        elif shape ==2:
+            amplitude = 2*A*(-1)**(n+1) /(n*np.pi) #2*A*(-1)**(n+1) /(n*np.pi) 
+        elif shape ==3:
+            amplitude = 8/(n*np.pi) * (-1)**(n+1)
+        elif shape ==4:
+            amplitude = 0
+        elif shape ==5:
+            amplitude =0    
+        elif shape ==6:
+            amplitude = A*(2*L/(n*np.pi)**1 *(-1)**(n+1))#Missed *L
+        elif shape ==7:
+            amplitude = 0
+        elif shape ==8:
+            amplitude = A*(2*L/(n*np.pi)**1 *(-1)**(n+1))#Missed *L
+    return amplitude
     
-def set_of_coefficients():
-    k = [] # k = n pi/L
-    Ik = []
-    Ik_negative = []
-    term = []
-    for n in range(1, N+1):
-        k.append(n*np.pi/L)
-        term.append(n)
-        Ik.append((amplitude3(shape, n)))
-        Ik_negative.append(-(amplitude3(shape, n)))
 
-    return k, Ik, Ik_negative, term
-k,Ik,Ik_negative, terms = set_of_coefficients()
-
-
-
-def Count_amplitude(terms,Ik):
-    z = []
-    Ik_large = []
-    Ik_large_rounded = []
-    z = []
-    for i in Ik:
-        Ik_large.append(i*histogram_accuracy)
-    for i in Ik_large:
-        Ik_large_rounded.append(round(i,0))
-    for i in range(1,len(terms)+1):
-        for j in range(0, int(Ik_large_rounded[i-1])):
-            z.append(terms[i-1])
-    return (z)
+def coefficients():
+    n = []
+    a_n = []
+    b_n = []
+    alpha_n = []
+    theta_n = []
+    for i in range(0, N):
+        n.append(i)
+        a_n.append(an(shape,i))
+        b_n.append(bn(shape,i))
+        alpha_n.append(np.sqrt((an(shape, i))**2 + (bn(shape, i))**2))
+        if an(shape, i) ==0 :
+            theta_n.append(np.pi /2) 
+            """NEED HELP ON THE ABOVE LINE"""
+        else:
+            theta_n.append(np.arctan(bn(shape,i)/an(shape,i)))
+    return n, a_n, b_n, alpha_n, theta_n
 
 
+n, an_set, bn_set, alpha_n_set, theta_n_set = coefficients()
 
-k_mag_scaled = Count_amplitude(k,Ik)
-k_mag = []
-for i in k_mag_scaled:
-    k_mag.append(i*L/np.pi)
+
+def sign_split(data):
+    positive_terms = []
+    negative_terms = []
+    for i in data:
+        if i>0:
+            positive_terms.append(i)
+            negative_terms.append(0)
+        else:
+            positive_terms.append(0)
+            negative_terms.append(i)
+    return positive_terms, negative_terms
     
-k_mag_scaled_negative = Count_amplitude(k, Ik_negative)
-k_mag_negative = []
-for i in k_mag_scaled_negative:
-    k_mag_negative.append(i*L/np.pi)
+
+        
+    
+a_n,a__n = sign_split(an_set)
+b_n, b__n = sign_split(bn_set)
+
+if (a_n[N-2])**2 + (a__n[N-2]) +(a_n[N-1])**2 + (a__n[N-1])**2 != 0:
+    fig_3 = plt.figure(3)
+    fig_3.set_size_inches(7,3)
+    plt.bar(n, a_n, width=1, color='r', label = "Positive contributions")
+    plt.bar(n, a__n, width=1, color='b', label = "Negative contributions")
+    plt.title("a_n as a function of n", fontsize = 20)
+    plt.axhline(y = 0, color = 'K', linestyle = '--')
+    plt.legend(loc = 1, fontsize = 10)
+    
+    
+    
+if (b_n[N-2])**2 + (b_n[N-2])**2 + (b_n[N-1])**2 + (b__n[N-1])**2 != 0:
+    fig_4 = plt.figure(4)
+    fig_4.set_size_inches(7,3)
+    plt.bar(n, b_n, width=1, color='r', label = "Positive contributions")
+    plt.bar(n, b__n, width=1, color='b', label = "Negative contributions")
+    plt.title("b_n as a function of n", fontsize = 20)
+    plt.axhline(y = 0, color = 'k', linestyle = '--')
+    plt.legend(loc = 1, fontsize = 10)
+    
+fig_5 = plt.figure(5)
+fig_5.set_size_inches(7,3)
+plt.bar(n, alpha_n_set, width = 1, color = 'r' )
+plt.title("Alpha_n as a function of n", fontsize = 20)
 
 
 
-fig_3 = plt.figure(3)
-fig_3.set_size_inches(7,2)
-numb_bins = len(k)
-n, bins, patches = plt.hist(k_mag, numb_bins, facecolor='blue', alpha=1.0, label = "Positive contributions", normed = 1)
-n, bins, patches = plt.hist(k_mag_negative, numb_bins, facecolor = 'red', alpha = 1.0, label = "Negative contributions", normed = 1)
-plt.legend(loc = 1)
-plt.show()
+
+check = []
+for i in bn_set:
+    if i != 0:
+        check.append(i)
+if len(check) != 0:
+    fig_6 = plt.figure(6)
+    fig_6.set_size_inches(7,3)
+    plt.bar(n, theta_n_set, width = 1, color = 'b')
+    plt.title("Power spectrum phase terms", fontsize = 20)
+    plt.axhline(y = 0, color = 'k', linestyle = '--')
+else:
+    print("Function is even, so no phase terms in power spectrum")
+    """SHOULD PROBABLY PUT AN EVEN/ODD CHECK FURTHER UP"""
+
+
+def term_parity(n):
+    even_n = []
+    odd_n = []
+    for i in n:
+        if int(i%2) == 0:
+            even_n.append(i)
+            odd_n.append(0)
+        else:
+            even_n.append(0)
+            odd_n.append(i)
+    return even_n, odd_n
+
+even_n, odd_n = term_parity(n)
+
+
+"""
+if (an_set[N-2])**2 + (an_set[N-2]) + (an_set[N-1])**2 + (an_set[N-1])!= 0:
+    fig_7 = plt.figure(7)
+    fig_7.set_size_inches(7,3)
+    plt.bar(even_n, an_set, width = 1, color = 'r', label = "Even n")
+    plt.bar(odd_n, an_set, width = 1, color = 'b', label = "Odd n")
+    plt.title("Plot of $a_n$ terms for odd and even n", fontsize = 20)
+    plt.axhline(y = 0, color = 'k', linestyle = '--')
+    plt.legend(loc = 1)
+
+if (bn_set[N-2])**2 + (bn_set[N-2]) +(bn_set[N-1])**2 + (bn_set[N-1]) != 0:
+    fig_8 = plt.figure(8)
+    fig_8.set_size_inches(7,3)
+    plt.bar(even_n, bn_set, width = 1, color = 'r', label = "Even n")
+    plt.bar(odd_n, bn_set, width = 1, color = 'b', label = "Odd n")
+    plt.title("Plot of $b_n$ terms for odd and even n", fontsize = 20)
+    plt.axhline(y = 0, color = 'k', linestyle = '--')
+    plt.legend(loc = 1)
+    
+"""
+"""PROBLEMS:
+plot of bn and an for even and odd n have an annoying extra term at n = 0, need to remove.
+Not sure what the power spectrum phase should be for odd functions, need to do more maths!
+Need to plot alpha for n>1 only"""
+    
