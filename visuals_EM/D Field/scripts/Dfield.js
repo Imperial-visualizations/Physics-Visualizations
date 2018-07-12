@@ -1,11 +1,11 @@
 $(window).on('load', function() {//main
     const
-    dom = {
+    dom = {//assigning switches and slider
         mSwitch:    $("#material-switch input"),
         fSwitch:    $("#field-switch input"),
         vSlider:    $("input#voltage")
     },
-    plt = {
+    plt = {//layout of graph
         layout : {
             showlegend: false,
             showscale: false,
@@ -17,47 +17,44 @@ $(window).on('load', function() {//main
                 xaxis: {range: [-1, 1]},
                 yaxis: {range: [-1, 1]},
                 zaxis: {range: [-1, 1]},
-                camera: { eye: {
+                camera: { eye: {//adjust eye so that more of the capacitor is seen
                     x: 1.5,
                     y: 1.5,
-                    z: 0.7,}
+                    z: 0.65,}
                 }
             },
         }
     };
 
-    let old_arrow_number = Math.round(parseFloat($("input#voltage").val())/10);
-    let old_material = $("input[name = 'material-switch']:checked").val();
-    let old_field = $("input[name = 'field-switch']:checked").val();
+    let c_material   = $("input[name = 'material-switch']:checked").val();
+    let c_field      = $("input[name = 'field-switch']:checked").val();
+    let voltage     = parseFloat($("input#voltage").val());
 
-    $.when().then(function() {//main
-        initial();
-    });
+    let old_arrow_number = Math.round(parseFloat($("input#voltage").val())/10);//track the value of the number of field lines before change
+    let old_material = $("input[name = 'material-switch']:checked").val();//track the value of the material before change
+    let old_field = $("input[name = 'field-switch']:checked").val();//track the value of the field before change
 
-    function computeData(){
 
-        $("#voltage-display").html($("input#voltage").val().toString()+"V");
+    function computeData(){//produces the data for the animation
 
-        let c_material   = $("input[name = 'material-switch']:checked").val(),
-            c_field      = $("input[name = 'field-switch']:checked").val(),
-            voltage     = parseFloat($("input#voltage").val());
+        $("#voltage-display").html($("input#voltage").val().toString()+"V");//update value of slider in html
 
-        let number_of_arrows    = Math.round(voltage/10);
-        extra_spacing = (1 / number_of_arrows);
+        let number_of_arrows    = Math.round(voltage/10);// convert the voltage selected to a discrete value of field lines
+        extra_spacing = (1 / number_of_arrows);//value used to position field lines in center of the capacitor
 
         var data = [
-                {//upper
+                {//upper capacitor plate
                     color: '#9D9D9D',
                     type: "mesh3d",
                     name: "capacitor",
                     x: [-1, -1, 1, 1, -1, -1, 1, 1],
                     y: [-1, 1, 1, -1, -1, 1, 1, -1],
                     z: [0.9, 0.9, 0.9, 0.9, 1, 1, 1, 1],
-                    i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
+                    i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],//order of corners of the 3dmesh, read as column vector
                     j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
                     k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
                 },
-                {//lower
+                {//lower capacitor plate
                     color: '#9D9D9D',
                     type: "mesh3d",
                     name: "capacitor",
@@ -70,7 +67,7 @@ $(window).on('load', function() {//main
                 },
             ];
 
-        if (c_material === "dielectric") {
+        if (c_material === "dielectric") {//dielectric only created when required
             data.push(
                 {//dielectric
                     opacity: 0.2,
@@ -88,10 +85,11 @@ $(window).on('load', function() {//main
         }
 
 
-        let number_x, number_y, x, y, z, u, v, w;
+        let number_x, number_y;
 
         let colour, linewidth = 10, top_of_arrow = 0.9, bottom_of_arrow = -0.75;
-        if (c_field == "e-field") {
+
+        if (c_field == "e-field") {//colour represents the field type selected
             colour = "#0F8291"
         } else if (c_field == "p-field") {
             colour = "#D24000"
@@ -100,11 +98,11 @@ $(window).on('load', function() {//main
         }
 
         if ((c_material === "vacuum" && c_field === "e-field") || (c_material === "vacuum" && c_field === "d-field") || (c_material === "dielectric" && c_field === "d-field")) {
-            for (let i = 0; i < number_of_arrows; i++) {
+            for (let i = 0; i < number_of_arrows; i++) {//used to create grid of field lines hence only square numbers possible
                 for (let q = 0; q < number_of_arrows; q++) {
                     number_x = ((2 * (i / number_of_arrows)) - 1) + extra_spacing;
                     number_y = ((2 * (q / number_of_arrows)) - 1) + extra_spacing;
-                    data.push({
+                    data.push({//add trace for line of field line
                         type: "scatter3d",
                         mode: "lines",
                         name: "field line",
@@ -114,7 +112,7 @@ $(window).on('load', function() {//main
                         z: [top_of_arrow, bottom_of_arrow]
                     });
                     let [x, y, z, u, v, w] = make_arrows([number_x, number_x], [number_y, number_y], [top_of_arrow, bottom_of_arrow])
-                    data.push({
+                    data.push({//add trace for arrow tip
                         type: "cone",
                         colorscale: [[0, colour], [1, colour]],
                         name: "arrow",
@@ -131,7 +129,7 @@ $(window).on('load', function() {//main
                 }
             }
         }
-        else if (c_material === "dielectric" && c_field === "p-field") {
+        else if (c_material === "dielectric" && c_field === "p-field") {//various if statements due to position of the field lines within the capacitor
             mid_top_of_arrow = 0.5;
             mid_bottom_of_arrow = -0.3;
             for (let i = 0; i < number_of_arrows; i++) {
@@ -227,8 +225,8 @@ $(window).on('load', function() {//main
             }
         }
 
-        if (data.length < 103) {
-            var extensionSize = data.length;
+        if (data.length < 103) {//animate function requires data sets of the same length hence those unused in situation must be filled with empty traces
+            var extensionSize = data.length;// 103 represents the maximum traces necessary 2(top and lower capacitor)+1(dielectric)+25(top field line lines)+25(top field line arrows)+25(bottom field line lines)+25(bottom field line arrows)
             for (var i = 0; i < (103 - extensionSize); ++i) {
                 data.push(
                     {
@@ -244,37 +242,45 @@ $(window).on('load', function() {//main
         return data;
     };
 
-    function initial() {
-        //showslider
-        const maxVolt   = 50,//use max voltage to set the number of empty traces required
-            maxArrows   = (maxVolt/10)**2;
+    function initial() {//produces initial plot seen on load
+
         Plotly.purge("graph")
         Plotly.newPlot('graph', computeData(), plt.layout);
+<<<<<<< Updated upstream
         //Hide the slider
         console.log("initialising");
         $('#spinner').fadeOut(500);
         $('.container').fadeIn(500);
 
         dom.mSwitch.on("change", update_graph);
+=======
+
+        $('.container').show();//show container after loading finishes
+
+        $('#spinner').hide();
+
+        dom.mSwitch.on("change", update_graph);//on any change the graph will update
+>>>>>>> Stashed changes
         dom.fSwitch.on("change", update_graph);
         dom.vSlider.on("input", update_graph);
     }
 
     function update_graph() {
+
         let new_trace = []
 
-        let new_V = parseFloat($("input#voltage").val());
-        let new_material = $("input[name = 'material-switch']:checked").val();
-        let new_field = $("input[name = 'field-switch']:checked").val();
+        c_material   = $("input[name = 'material-switch']:checked").val(),//update value of the material selected
+        c_field      = $("input[name = 'field-switch']:checked").val(),//update value of the field selected
+        voltage     = parseFloat($("input#voltage").val());//update value of the voltage slider
 
-        new_number_of_arrows  = Math.round(new_V/10);
+        new_number_of_arrows  = Math.round(voltage/10);
 
-        if ((Math.abs(new_number_of_arrows-old_arrow_number) >= 1) || (new_material != old_material) ||(new_field != old_material)) {
+        if ((Math.abs(new_number_of_arrows-old_arrow_number) >= 1) || (c_material != old_material) ||(c_field != old_material)) {//will only calculate new graph if the conditions actually change, as discrete field lines only specific voltages produce different number of field lines
             new_trace = computeData()
         };
 
         Plotly.animate("graph",
-            {data: new_trace},
+            {data: new_trace},//updated data
             {
                 fromcurrent: true,
                 transition: {duration: 0,},
@@ -283,13 +289,13 @@ $(window).on('load', function() {//main
             }
         );
 
-        old_arrow_number = Math.round(parseFloat($("input#voltage").val())/10);
+        old_arrow_number = Math.round(parseFloat($("input#voltage").val())/10);//update old data to new condition before another new change is implemented
         old_material = $("input[name = 'material-switch']:checked").val();
         old_field = $("input[name = 'field-switch']:checked").val();
 
     };
 
-    function make_arrows(pointsx, pointsy, pointsz) {
+    function make_arrows(pointsx, pointsy, pointsz) {//return data required to construct field line arrows
         /** Returns an arrowhead based on an inputted line */
         var x = pointsx[1],
             y = pointsy[1],
@@ -299,4 +305,7 @@ $(window).on('load', function() {//main
             w = 0.1 * (pointsz[1] - pointsz[0]);
         return [x, y, z, u, v, w]
     };
+
+    initial();//run the initial loading
+
 });
