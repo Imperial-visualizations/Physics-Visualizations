@@ -56,8 +56,8 @@ function setLayout(){
     margin: {l:30, r:30, t:30, b:30},
     hovermode: "closest",
     showlegend: false,
-    xaxis: {range: [0, 7], zeroline: true, title: "x"},
-    yaxis: {range: [0, A*N*6], zeroline: true, title: "y"},
+    xaxis: {range: [], zeroline: true, title: "x"},
+    yaxis: {range: [], zeroline: true, title: "y"},
     aspectratio: {x:1, y:1}
 };
     return new_layout;
