@@ -246,21 +246,12 @@ $(window).on('load', function() {//main
 
         Plotly.purge("graph")
         Plotly.newPlot('graph', computeData(), plt.layout);
-<<<<<<< Updated upstream
-        //Hide the slider
-        console.log("initialising");
-        $('#spinner').fadeOut(500);
-        $('.container').fadeIn(500);
-
-        dom.mSwitch.on("change", update_graph);
-=======
 
         $('.container').show();//show container after loading finishes
 
         $('#spinner').hide();
 
         dom.mSwitch.on("change", update_graph);//on any change the graph will update
->>>>>>> Stashed changes
         dom.fSwitch.on("change", update_graph);
         dom.vSlider.on("input", update_graph);
     }
