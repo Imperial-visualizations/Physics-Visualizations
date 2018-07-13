@@ -1,48 +1,101 @@
 "use strict";
 //Global Initial Parameters:
 var currentHref = window.location.href;
-var initialPoint = [2., 2., 2.];
+var maxArrowNum = 7;
 var layout = {
-    width: 450, height: 500,
-    margin: {l:0, r:0, t:0, b:0},
+    width: 400, height: 400,
+    margin: {l:50, r:50, t:50, b:50},
     hovermode: "closest",
     showlegend: false,
-    scene: {
-        camera: createView([1,1,1]),
-        xaxis: {range: [-6, 6], zeroline: true, autorange: false,},
-        yaxis: {range: [-6, 6], zeroline: true, autorange: false,},
-        zaxis: {range: [-6, 6], zeroline: true, autorange: false,},
-        aspectratio: {x:1, y:1, z:1},
-    }
+    xaxis: {label: 'x', range: [-0.5,5]},
+    yaxis: {lavel: 'y', range: [-0.5,5]},
+    aspectratio: {x:1, y:1}
 };
-var currentPoint = initialPoint;
-var initialRho = 0, initialPhi = 0, initialR = 0, initialTheta = 0;
 
-//Plots
-function initPlot(coor) {
-    Plotly.purge("graph");
-    if (coor === "#carte") {
+function arrowRect(vertices, numberOfArrows, color1, color2) {
+    var rectLength = Math.abs(vertices[1][0] - vertices[0][0]);
+    var arrowLength = rectLength/numberOfArrows;
+    var rectX = numeric.linspace(vertices[0][0], vertices[1][0], numberOfArrows+1),
+        rectY = numeric.linspace(vertices[1][1], vertices[2][1], numberOfArrows+1);
+    var data = [];
 
-    } else if (coor === "#cylin"){
+    var injection = rectLength/(9*numberOfArrows);
 
+    var rectX2 = rectX.slice(),
+        rectY2 = rectY.slice();
+    rectX2.reverse();
+    rectY2.reverse();
+
+    addArrowsX(data, numberOfArrows, rectX, rectY[0]+injection, color1, 1);
+    addArrowsY(data, numberOfArrows, rectX[0]+injection, rectY2, color1, -1);
+    addArrowsX(data, numberOfArrows, rectX2, rectY[numberOfArrows]-injection, color1, -1);
+    addArrowsY(data, numberOfArrows, rectX[numberOfArrows]-injection, rectY, color1, 1);
+
+    for (var i=1; i<numberOfArrows; ++i){
+        addArrowsX(data, numberOfArrows, rectX, rectY[i]+injection, color2, 1);
+        addArrowsY(data, numberOfArrows, rectX[i]+injection, rectY2, color2, -1);
+
+        addArrowsX(data, numberOfArrows, rectX2, rectY[i]-injection, color2, -1);
+        addArrowsY(data, numberOfArrows, rectX[i]-injection, rectY, color2, 1);
     }
 
+    addEmptyObjects(data, maxArrowNum*56 - data.length);
+    return data;
+}
+
+function addArrowsX(data, numberOfArrows, rectX, fixedY, color, direction=1){
+    var arrowTemp;
+
+    var arrowReduction = 0.15*Math.abs(rectX[1] - rectX[0]);
+    for (var i=0; i < numberOfArrows; ++i){
+        arrowTemp = new Line2d([[rectX[i]+arrowReduction*direction, fixedY], [rectX[i+1]-arrowReduction*direction, fixedY]]);
+        data.push(
+            arrowTemp.gObject(color, 2),
+            arrowTemp.arrowHead(color, 2)
+        );
+    }
     return;
 }
-//Plot for basis for corresponding coordinate systems:
-function computeCartesian(x, y, z) {
+function addArrowsY(data, numberOfArrows, fixedX, rectY, color, direction=1){
+    var arrowTemp;
+    var arrowReduction = 0.15*Math.abs(rectY[1] - rectY[0]);
+    for (var i=0; i < numberOfArrows; ++i){
+        arrowTemp = new Line2d([[fixedX, rectY[i]+arrowReduction*direction], [fixedX, rectY[i+1]-arrowReduction*direction]]);
+        data.push(
+            arrowTemp.gObject(color, 2),
+            arrowTemp.arrowHead(color, 2)
+        );
+    }
+    return;
+}
 
-    return data;
+function addEmptyObjects(data, numberObj){
+    for (var i=0; i < numberObj; ++i){
+        data.push({
+            type: "scatter",
+            mode: "lines",
+            line: {width: 0}
+        });
+    }
+    return;
+}
+
+//Plots
+function initPlot() {
+    Plotly.purge("graph");
+
+    Plotly.newPlot("graph", arrowRect([[0,0],[4,0],[4,4],[0,4]], 2, green, magenta), layout);
+
+    return;
 }
 
 function updatePlot() {
     var data = [];
-    var href = $('ul.tab-nav li a.active.button').attr('href'); // active href
+    var numberOfArrows = parseFloat(document.getElementById('curlSlider').value);
 
-    /*
     Plotly.animate(
         'graph',
-        {data: data},
+        {data: arrowRect([[0,0],[4,0],[4,4],[0,4]], numberOfArrows, green, magenta)},
         {
             fromcurrent: true,
             transition: {duration: 0,},
@@ -50,12 +103,10 @@ function updatePlot() {
             mode: "afterall"
         }
     );
-    */
 }
 
 function main() {
     $("input[type=range]").each(function () {
-        var displayEl;
         $(this).on('input', function(){
             $("#"+$(this).attr("id") + "Display").text( $(this).val() + $("#"+$(this).attr("id") + "Display").attr("data-unit") );
             updatePlot();
@@ -86,19 +137,6 @@ function main() {
         $(".leftnav").css({"color":"#330766","font-size":"50px"})
     });
 
-
-    $(function() {
-        $('ul.tab-nav li a.button').click(function() {
-            var href = $(this).attr('href');
-            $('li a.active.button', $(this).parent().parent()).removeClass('active');
-            $(this).addClass('active');
-            $('.tab-pane.active', $(href).parent()).removeClass('active');
-            $(href).addClass('active');
-
-            initPlot(href);
-            return false;
-        });
-    });
-    initPlot("#carte");
+    initPlot();
 }
 $(document).ready(main);

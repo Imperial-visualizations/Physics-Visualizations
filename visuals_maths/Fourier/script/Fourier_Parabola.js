@@ -6,7 +6,7 @@ const layout = {
     hovermode: "closest",
     showlegend: false,
     xaxis: {range: [-7, 7], zeroline: true, title: "x"},
-    yaxis: {range: [-6, 6], zeroline: true, title: "y"},
+    yaxis: {range: [-1, 10], zeroline: true, title: "y"},
     aspectratio: {x:1, y:1}
 };
 var currentPoint = initialPoint;
@@ -14,7 +14,7 @@ var defaultHref = window.location.href;
 var initX = 0, initY = 0;
 var z = numeric.linspace(-2*Math.PI,2*Math.PI,1000);
 // 0 is triangular, 1 is square, 2 is sawtooth, 3 is delta's, 4 is parabola, 5 is x, 6 is |x|,
-var shape = 0;
+var shape = 4;
 var decay = 0.9;
 var decay2 = 0.6;
 

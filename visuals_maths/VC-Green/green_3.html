@@ -22,12 +22,40 @@
             <!-- Graph -->
             <div class="five columns">
                 <div id='graph' style="width:450px; height:450px;"></div>
+                <label class="sliderTitle">tab1:&nbsp;
+                    <span id="curlSliderDisplay" data-unit="">2</span>
+                </label>
+                <label class="slider">
+                    <input id="curlSlider" class="inputs" type="range" value="2" min="2" max="7" step="1"/>
+                    <span class="sliderMin">2</span><span class="sliderMax">7</span>
+                </label>
             </div>
 
             <!--Bottons-->
             <div class="seven columns">
                 <div id="green">
+                    <p>
+                        From the diagram, we can see that every arrows inside the grid is paired with an arrow with opposite
+                        direction. In other words, all the <span style="color:#FF00FF"><b>magenta</b></span> arrows will
+                        cancel each other and we are left with <span style="color:#008000"><b>green</b></span> arrows
+                    </p>
+                    <p>The relationship between macroscopic and microscopic circulation becomes apparent after the
+                        cancellation. This link is named <b>Green's Theorem</b>:
+                        \[
+                            \oint_C \mathbf{A} \cdot \, d\mathbf{r}
+                            = \iint_D (\nabla \times \mathbf{A}) \cdot \mathbf{\hat{k}} \, dS.
+                        \]
+                        where \(\mathbf{A}\) is the vector field defined for the area inside the closed curve, \(D\).
 
+                        <br><br>
+
+                        For \(\mathbf{A} = (P,Q,R) \), Green's Theorem is reduced to,
+                        \[
+                            \oint_C \,P(x,y(x))\,dx + Q(x,x(y))\,dy
+                            =   \iint_D \left[ \frac{\partial Q}{\partial x}(x,\,y)
+                                - \frac{\partial P}{\partial y}(x,\,y) \right] \,dx\,dy
+                        \]
+                    </p>
                 </div>
             </div>
         </div>

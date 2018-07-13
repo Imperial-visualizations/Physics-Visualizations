@@ -1,7 +1,7 @@
 //Global Initial Parameters:
 var initialPoint = [1.5, 1.5];
 var layout = {
-    width: 450, "height": 500,
+    width: 450, height: 500,
     margin: {l:30, r:30, t:30, b:30},
     hovermode: "closest",
     showlegend: false,
