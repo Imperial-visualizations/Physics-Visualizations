@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+		<script src="./intersections.js"></script>
+		<script src="./selector.js"></script>
+		<link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css">
+		<script>
+		function combine(objlist) {
+			var ans=[];
+			function plane_from_three_points(pt1,pt2,pt3) {
+				var normal = pt3.pos.add(pt1.pos.mul(-1)).cross(pt2.pos.add(pt1.pos.mul(-1)))
+				return new Plane(normal,pt1.pos);
+			}
+			if(objlist.length==1) {
+				window.alert("Select more objects to combine!")
+			}
+			else if(objlist.length==2) {
+				if(objlist[0] instanceof Plane && objlist[1] instanceof Plane) {
+					//plane, plane
+					window.alert("Two Planes don't easily combine.") //maybe line of shortest distance
+				}
+				else if(objlist[0] instanceof Point && objlist[1] instanceof Plane) {
+					//plane, point
+					ans.push(new Line(objlist[1].normal,objlist[0].pos));
+				}
+				else if(objlist[0] instanceof Plane && objlist[1] instanceof Point) {
+					//plane, point (again)
+					ans.push(new Line(objlist[0].normal,objlist[1].pos))
+				}
+				else if(objlist[0] instanceof Point && objlist[1] instanceof Line) {
+					//point,line
+					try {
+						intersect(objlist[0],objlist[1])
+						window.alert("Nothing cool results from point overlapping with a line...")
+					}
+					catch(err) {
+						if (err instanceof NoIntersectionError) {
+							var pt = objlist[0]
+							var line = objlist[1]
+							ans.push(plane_from_three_points(pt,new Point(line.off), new Point(line.off.add(line.dir) )));
+						}
+					}
+				}
+				else if(objlist[1] instanceof Point && objlist[0] instanceof Line) {
+					try {
+						intersect(objlist[0],objlist[1])
+						window.alert("Nothing cool results from point overlapping with a line...")
+					}
+					catch(err) {
+						if (err instanceof NoIntersectionError) {
+							var pt = objlist[1]
+							var line = objlist[0]
+							ans.push(plane_from_three_points(pt,new Point(line.off), new Point(line.off.add(line.dir) )));
+						}
+					}
+				}
+				else if((objlist[0] instanceof Point && objlist[1] instanceof Point) || (objlist[1] instanceof Point && objlist[0] instanceof Point)) {
+					//point,point
+					//points must not coincide
+					var pt1 = objlist[0]
+					var pt2 = objlist[1]
+					try {
+						intersect(pt1,pt2)
+						window.alert("Nothing cool results from two overlapping points...")
+					}
+					catch(err) {
+						if (err instanceof NoIntersectionError) {
+							ans.push(new Line(pt2.pos.add(pt1.pos.mul(-1), pt1.pos)));
+						}
+					}
+				}
+				else {
+					window.alert("Nothing cool results from these objects...")
+				}
+				}
+			else if(objlist.length==3) {
+				if(objlist[0] instanceof Point && objlist[1] instanceof Point && objlist[2] instanceof Point) {
+					ans.push(plane_from_three_points(objlist[0],objlist[1],objlist[2]));
+				}
+				}
+			else {
+					window.alert("Nothing cool results from these objects...")
+				}
+			return ans;
+		}
+		</script>
+	</head>
+	<body>
+		<!-- Globals-->
+		<script type="text/javascript">
+		var selector = new Selector('dropdown');
+		</script>
+		<div class="container">
+			<div class="row">
+				<div class="three columns">
+					<div id="dropdown" style="overflow-y: auto; height:250px"> </div>
+					<div style="text-align:center">
+					<button type="button" id="plotter" onclick="plot(selector.retrieveById(selector.checked()))" style="width:200px;"> Plot elements </button>
+					<button type="button" id="intersector" onclick="selector.add(intersectList(selector.retrieveById(selector.checked())))" style="width:200px;"> Intersect elements </button>
+					<button type="button" id="combinator" onclick="selector.add(combine(selector.retrieveById(selector.checked())))" style="width:200px;"> Combine elements! </button>
+					<button type="button" id="descriptor" onclick="describe()" style="width:200px;"> Describe elements </button>
+					<script>
+					function describe() {
+						check = selector.checked()
+						for(var idx=0; idx<check.length;idx++) {
+							window.alert(selector.retrieveById([check[idx]])[0].describe())
+						}
+					}
+					</script>
+					<button type="button" id="renamer" onclick="selector.rename(selector.checked())" style="width:200px;"> Rename elements </button>
+					<button type="button" id="remover" onclick="selector.remove(selector.checked())" style="width:200px;"> Remove elements </button></br>
+					</div>
+				</div>
+				<div class="nine columns">
+					<div id="plot" style=""></div>
+				</div>
+			</div>
+			<div class="row">
+				<div id="points" class="four columns">
+					<h1>Points</h1>
+					<p>Position vector</p>
+					<label> X: <input id="pix" type="number" value="0.3"/></label>
+					<label> Y: <input id="piy" type="number" value="0.5"/></label>
+					<label> Z: <input id="piz" type="number" value="-1.0"/></label><br>
+					<label> Name (optional):<br> <input id="piname" type="text" value="New Point"/></label><br>
+					<button type="button" id="generate_point" onclick="pushPoint()">Generate point</button></br>
+					<script type="text/javascript">
+					function pushPoint() {
+						var ix = Number(document.getElementById("pix").value);
+						var iy = Number(document.getElementById("piy").value);
+						var iz = Number(document.getElementById("piz").value);
+						var point = new Point(new Vector(ix,iy,iz));
+						point.name = String(document.getElementById("piname").value);
+						selector.add([point]);
+					}
+					</script>
+				</div>
+				<div id="lines" class="four columns">
+					<h1>Lines</h1>
+					<p>Direction vector</p>
+					<label> X: <input id="lix" type="number" value="3.0"/></label>
+					<label> Y: <input id="liy" type="number" value="2.0"/></label>
+					<label> Z: <input id="liz" type="number" value="-1.0"/></label><br>
+					<p>Offset vector</p>
+					<label> X: <input id="lnx" type="number" value="0.5" /></label>
+					<label> Y: <input id="lny" type="number" value="-1.0"/></label>
+					<label> Z: <input id="lnz" type="number" value="0.2"/></label><br>
+					<label> Name (optional):<br> <input id="lnname" type="text" value="New Line"/></label><br>
+					<button type="button" id="generate_line" onclick="pushLine()">Generate Line</button></br>
+					<script type="text/javascript">
+					function pushLine() {
+						var ix = Number(document.getElementById("lix").value);
+						var iy = Number(document.getElementById("liy").value);
+						var iz = Number(document.getElementById("liz").value);
+						var nx = Number(document.getElementById("lnx").value);
+						var ny = Number(document.getElementById("lny").value);
+						var nz = Number(document.getElementById("lnz").value);
+						var line = new Line(new Vector(ix,iy,iz), new Vector(nx,ny,nz));
+						line.name = String(document.getElementById("lnname").value);
+						selector.add([line]);
+					}
+					</script>
+				</div>
+				<div id="planes" class="four columns">
+					<h1>Planes</h1>
+					<p>Normal vector</p>
+					<label> X: <input id="plix" type="number" value="2.0"/></label>
+					<label> Y: <input id="pliy" type="number" value="-1.0"/> </label>
+					<label> Z: <input id="pliz" type="number" value="1.0"/> </label>
+					<br>
+					<p>Offset vector</p>
+					<label> X: <input id="plnx" type="number" value="0.2" /></label>
+					<label> Y: <input id="plny" type="number" value="0.0"/></label>
+					<label> Z: <input id="plnz" type="number" value="0.4"/></label><br>
+					<label> Name (optional):<br> <input id="plname" type="text" value="New Plane"/></label><br>
+					<button type="button" id="generate_plane" onclick="pushPlane()">Generate Plane</button></br>
+					<script type="text/javascript">
+					function pushPlane() {
+						var ix = Number(document.getElementById("plix").value);
+						var iy = Number(document.getElementById("pliy").value);
+						var iz = Number(document.getElementById("pliz").value);
+						var nx = Number(document.getElementById("plnx").value);
+						var ny = Number(document.getElementById("plny").value);
+						var nz = Number(document.getElementById("plnz").value);
+						var plane = new Plane(new Vector(ix,iy,iz), new Vector(nx,ny,nz));
+						plane.name = String(document.getElementById("plname").value);
+						selector.add([plane]);
+					}
+					</script>
+				</div>
+		</div>
+	</div>
+		<script type="text/javascript">
+		"use strict";
+		plot();
+		function plot(objs) {
+			console.log("plot() called: list to render: ",objs)
+			var goified =[];
+			var plotarea = document.getElementById('plot');
+			var layout = {
+				width: 600,
+				height: 600,
+				scene: {
+					xaxis:
+					{
+						range: [-10,10]
+					},
+					yaxis:
+					{
+						range: [-10,10]
+					},
+					zaxis:
+					{
+						range: [-10,10]
+					},
+					camera:
+					{
+						up: {
+							x: 0,
+							y: 0,
+							z: 1
+						},
+						eye: {
+							x: -1.7428,
+							y: 1.0707,
+							z: 0.7100
+						}
+					},
+					aspectratio: {x: 1, y: 1, z: 1},
+				},
+				margin: {l:0,r:0,b:0,t:0}};
+			for(var obj in objs) {
+				console.log(obj, objs[obj]);
+				goified.push(objs[obj].goify(layout));
+			}
+			var data = goified;
+			Plotly.newPlot(plotarea, data, layout);
+		}
+		</script>
+		<div style="height: 100px;"></div>
+	</body>
+</html>
