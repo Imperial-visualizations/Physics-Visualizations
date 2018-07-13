@@ -245,8 +245,10 @@ def coefficients():
         b_n.append(bn(shape,i))
         alpha_n.append(np.sqrt((an(shape, i))**2 + (bn(shape, i))**2))
         if an(shape, i) ==0 :
-            theta_n.append(np.pi /2) 
-            """NEED HELP ON THE ABOVE LINE"""
+            if bn(shape, i) >0:
+                theta_n.append(np.pi /2) 
+            else:
+                theta_n.append(-np.pi/2)
         else:
             theta_n.append(np.arctan(bn(shape,i)/an(shape,i)))
     return n, a_n, b_n, alpha_n, theta_n
@@ -273,14 +275,30 @@ def sign_split(data):
 a_n,a__n = sign_split(an_set)
 b_n, b__n = sign_split(bn_set)
 
+
+def bar_breaks(n):
+    breaks = np.linspace(-0.5, max(n)+0.5,len(n)+1)
+    return breaks
+
+
+
+
+
 if (a_n[N-2])**2 + (a__n[N-2]) +(a_n[N-1])**2 + (a__n[N-1])**2 != 0:
     fig_3 = plt.figure(3)
     fig_3.set_size_inches(7,3)
     plt.bar(n, a_n, width=1, color='r', label = "Positive contributions")
     plt.bar(n, a__n, width=1, color='b', label = "Negative contributions")
-    plt.title("a_n as a function of n", fontsize = 20)
+    plt.title(r'$a_n$' +"a_n as a function of n", fontsize = 20)
     plt.axhline(y = 0, color = 'K', linestyle = '--')
     plt.legend(loc = 1, fontsize = 10)
+    bar_breaks_an = bar_breaks(n)
+    for position in bar_breaks_an:
+        plt.axvline(x = position , color = 'k', linestyle = ':')
+    plt.xlim(-0.5, len(n)+0.5)
+    plt.xticks(np.arange(0, len(n), step=1))
+    plt.xlabel(r'$n$', fontsize = 20)
+    plt.ylabel(r'$a_n$', fontsize = 20)
     
     
     
@@ -289,14 +307,26 @@ if (b_n[N-2])**2 + (b_n[N-2])**2 + (b_n[N-1])**2 + (b__n[N-1])**2 != 0:
     fig_4.set_size_inches(7,3)
     plt.bar(n, b_n, width=1, color='r', label = "Positive contributions")
     plt.bar(n, b__n, width=1, color='b', label = "Negative contributions")
-    plt.title("b_n as a function of n", fontsize = 20)
+    plt.title(r'$b_n$' +"as a function of n", fontsize = 20)
     plt.axhline(y = 0, color = 'k', linestyle = '--')
     plt.legend(loc = 1, fontsize = 10)
+    for position in bar_breaks_an:
+        plt.axvline(x = position , color = 'k', linestyle = ':')
+    plt.xlim(0.5, len(n)-0.5)
+    plt.xticks(np.arange(0, len(n), step=1))
+    plt.xlabel(r'$n$', fontsize = 20)
+    plt.ylabel(r'$b_n$', fontsize = 20)
     
 fig_5 = plt.figure(5)
 fig_5.set_size_inches(7,3)
 plt.bar(n, alpha_n_set, width = 1, color = 'r' )
-plt.title("Alpha_n as a function of n", fontsize = 20)
+plt.title(r'$\alpha_{n}$' +"as a function of n", fontsize = 20)
+for position in bar_breaks_an:
+    plt.axvline(x = position , color = 'k', linestyle = ':')
+    plt.xlim(-0.5, len(n)-0.5)
+plt.xticks(np.arange(0, len(n), step=1))
+plt.xlabel(r'$n$', fontsize = 20)
+plt.ylabel(r'$\alpha_n$', fontsize = 20)
 
 
 
@@ -311,6 +341,14 @@ if len(check) != 0:
     plt.bar(n, theta_n_set, width = 1, color = 'b')
     plt.title("Power spectrum phase terms", fontsize = 20)
     plt.axhline(y = 0, color = 'k', linestyle = '--')
+    for position in bar_breaks_an:
+        plt.axvline(x = position , color = 'k', linestyle = ':')
+        plt.xlim(0.5, len(n)-0.5)
+    plt.xticks(np.arange(0, len(n), step=1))
+    plt.ylabel(r'$\theta_{n}$', fontsize = 20)
+    plt.xlabel(r'$n$', fontsize = 20)
+    plt.xlim(0.5, len(n) +0.5)
+    
 else:
     print("Function is even, so no phase terms in power spectrum")
     """SHOULD PROBABLY PUT AN EVEN/ODD CHECK FURTHER UP"""
@@ -331,6 +369,11 @@ def term_parity(n):
 even_n, odd_n = term_parity(n)
 
 
+
+def bar_breaks_parity(n):
+    breaks = np.linspace(0.5, max(n)+0.5,len(n))
+    return breaks
+
 """
 if (an_set[N-2])**2 + (an_set[N-2]) + (an_set[N-1])**2 + (an_set[N-1])!= 0:
     fig_7 = plt.figure(7)
@@ -340,6 +383,10 @@ if (an_set[N-2])**2 + (an_set[N-2]) + (an_set[N-1])**2 + (an_set[N-1])!= 0:
     plt.title("Plot of $a_n$ terms for odd and even n", fontsize = 20)
     plt.axhline(y = 0, color = 'k', linestyle = '--')
     plt.legend(loc = 1)
+    plt.xlim(1, len(n))
+    plt.xticks(np.arange(0, len(n), step=1))
+    for position in bar_breaks_an:
+        plt.axvline(x = position , color = 'k', linestyle = ':')
 
 if (bn_set[N-2])**2 + (bn_set[N-2]) +(bn_set[N-1])**2 + (bn_set[N-1]) != 0:
     fig_8 = plt.figure(8)
@@ -349,10 +396,9 @@ if (bn_set[N-2])**2 + (bn_set[N-2]) +(bn_set[N-1])**2 + (bn_set[N-1]) != 0:
     plt.title("Plot of $b_n$ terms for odd and even n", fontsize = 20)
     plt.axhline(y = 0, color = 'k', linestyle = '--')
     plt.legend(loc = 1)
-    
+    plt.xlim(1, len(n))
+    plt.xticks(np.arange(0, len(n), step=1))
+    bar_breaks_an_parity = bar_breaks_parity(n)
+    for position in bar_breaks_an_parity:
+        plt.axvline(x = position , color = 'k', linestyle = ':')
 """
-"""PROBLEMS:
-plot of bn and an for even and odd n have an annoying extra term at n = 0, need to remove.
-Not sure what the power spectrum phase should be for odd functions, need to do more maths!
-Need to plot alpha for n>1 only"""
-    
