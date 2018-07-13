@@ -1,128 +1,151 @@
-$(window).on('load', function() {
-    let max_range=10,N=16,N2=800,max_points=3,max_lines=20,activepoints=[],charges=[],chargebutton=1,opacity=[];
-    //creates a NXN array of equally spaced points
-    function create_mesh() {
-        var x=[], y=[];
-        for (let i = 0; i <= N; i++) {
-            for (let j = 0; j <= N; j++) {
-            x.push(i*max_range/N);
-            y.push(j*max_range/N);
-        }
-        };
-        return([x,y])
+//set global variables
+let width = $('#sketch-holder').width(), height = $('#sketch-holder').height(),activepoints = [],activenegpoints = [],
+activepospoints = [];
+const n_lines = 7,Nvertices=200,max_range=800, R=16, square_size=100,padding = 20;
+
+$("input#pos").on('click',handleposbutton)
+
+$("input#neg").on('click',handlenegbutton)
+
+function handleposbutton(){
+    if (activepoints.length<=6) {
+        let q = new charge(1, random(width), random(height))
+        activepospoints.push(q)
+        activepoints.push(q)
     };
+}
 
-    function initial_fieldpoints(Qposition,R,number_of_lines){
-        let x0=[],y0=[];
-        for (let i = 0; i < number_of_lines; i++) {
-            let theta = 2*i*(Math.PI/number_of_lines);
-            x0.push(Qposition[0]+R*Math.cos(theta));
-            y0.push(Qposition[1]+R*Math.sin(theta));
-        };
-        return([x0,y0])
-    }
+function handlenegbutton(){
+    if(activepoints.length<=6) {
+        let q = new charge(-1, random(width), random(height))
+        activenegpoints.push(q)
+        activepoints.push(q)
+    };
+}
 
-    function draw_fieldlines(initialx,initialy,streamlines){
-            let x_field = [], y_field = [];
-            x_field.push(initialx);
-            y_field.push(initialy);
-            for (let i = 0; i <= N2; i++) {
-                let Fx = 0, Fy = 0, Ftotal = 0, currentx = x_field[x_field.length - 1],
-                    currenty = y_field[y_field.length - 1];
-                for (let k = 0; k < activepoints.length; k++) {
-                    let r = Math.sqrt(((currentx - x[activepoints[k]]) ** 2 + (currenty - y[activepoints[k]]) ** 2));
-                    Fx += (currentx - x[activepoints[k]]) / (r ** 3);
-                    Fy += (currenty - y[activepoints[k]]) / (r ** 3);
-                }
-                Ftotal = Math.sqrt(Fx ** 2 + Fy ** 2)
-                let dx = (max_range / N2) * (Fx / Ftotal),
-                    dy = (max_range / N2) * (Fy / Ftotal);
-                x_field.push(currentx + dx);
-                y_field.push(currenty + dy);
-            }
-                streamlines.push({x:x_field,y:y_field,visible: true});
+//draw canvas in which everything p5.js happens
+function setup() {
+  let canvas = createCanvas(width,height);
+    canvas.parent('sketch-holder');
+};
 
-    }
+//main function that repeats as soon as the last line is called
+function draw() {
+    clear();
+    background('#ffffff');
+    let thisFrameMouseX = mouseX;
+    let thisFrameMouseY = mouseY;
 
-    function handle_opacity(){
-        let opacity=[];
-        for (let i = 0; i < x.length; i++) {
-            opacity.push(0);
+    noStroke();
+    fill("#02893B");
+    rect(width/2, height/2, square_size, square_size);
+
+    for (let i = 0; i < activepoints.length; i++) {
+        if(activepoints[i].clicked==true){
+            activepoints[i].dragposition(thisFrameMouseX,thisFrameMouseY)
         }
+    }
+
+    for (let i = 0; i <activepospoints.length; i++) {
+
+        stroke(1);
+        fill(color(activepospoints[i].color));
+        ellipse(activepospoints[i].x,activepospoints[i].y,R*2);
+
+            let [x0,y0]=initial_fieldpoints([activepospoints[i].x,activepospoints[i].y],activepospoints[i].r,n_lines);
+            for (let j = 0; j < x0.length; j++) {
+                draw_fieldlines(x0[j],y0[j])
+            }
+    }
+        for (let i = 0; i <activenegpoints.length; i++) {
+        stroke(1);
+        fill(color(activenegpoints[i].color));
+        ellipse(activenegpoints[i].x,activenegpoints[i].y,R*2);
+
+    }
+
+
+};
+
+//functions that 'move' a charge when it is clicked
+function mousePressed() {
+    for (let i = 0; i < activepoints.length; i++) {
+        activepoints[i].pressed()
+    }
+};
+
+function mouseReleased() {
+    for (let i = 0; i < activepoints.length; i++) {
+        activepoints[i].clicked=false;
+    }
+};
+
+
+class charge {
+    constructor(q,x,y){
+        this.q = q
+        this.x = x
+        this.y=y
+        this.r = R
+        this.clicked = false
+    if (q>0){
+        this.color = "#DD2501"
+    }
+    else{ this.color = "#006EAF"}
+}
+
+    pressed(){
+        if (dist(mouseX,mouseY,this.x,this.y)<this.r){
+            this.clicked = true
+        };
+    }
+    dragposition(mx,my){
+        let pointsnearmouse = 0
         for (let i = 0; i < activepoints.length; i++) {
-            opacity[activepoints[i]]=1
+            if(activepoints[i]!=this){
+                if (parseFloat(dist(this.x,this.y,activepoints[i].x,activepoints[i].y))<=R*2.2 && parseFloat(dist(mx,my,activepoints[i].x,activepoints[i].y))<=R*2){
+                    pointsnearmouse=1
+            }
+            }
         }
-        return opacity;
-    }
+            if(pointsnearmouse==0){
+                this.x=mx
+                this.y=my
+        }
 
-    var myPlot = document.getElementById("graph"),
-        x=create_mesh()[0],
-        y=create_mesh()[1];
-    //initialise the field lines with 0 0 0
-    let Data=[]
-    for (let i = 0; i < max_lines*max_points; i++) {
-        Data.push({type: "scatter", mode: "line",line:{color: "#1A40B1"},x:[0],y:[0],hoverinfo:"none"})
+}};
+
+
+function initial_fieldpoints(Qposition,R,number_of_lines){
+    let x0=[],y0=[];
+    for (let i = 0; i < number_of_lines; i++) {
+        let theta = 2*i*(Math.PI/number_of_lines);
+        x0.push(Qposition[0]+R*Math.cos(theta));
+        y0.push(Qposition[1]+R*Math.sin(theta));
     };
-        Data.push({ x:x, y:y, type:"scatter", mode:"markers", marker:{size:18,opacity:handle_opacity(),color: "#D81C1C"},hoverinfo: "none" });
-    layout = {
-        margin: {
-                    l: 10, r: 0, b: 0, t: 1, pad: 5
-                },
-        showlegend: false,
-        hovermode: "closest",
-        xaxis: {range: [0,max_range],scaleanchor: "x",scaleratio: 1,fixedrange: true,visible: false},
-        yaxis: {range: [0,max_range],scaleanchor: "y",scaleratio: 1,fixedrange: true,visible: false},
-     };
+    return([x0,y0])
+    };
 
-    Plotly.newPlot("graph", Data,layout,{displayModeBar: false});
-
-    //the function that is carried out when a data point is clicked
-    myPlot.on("plotly_click", function(data) {
-        let streamlines=[],traces=[];
-        if (data.points[0].curveNumber==max_lines*max_points){
-        if (activepoints.includes(data.points[0].pointNumber)){
-            for (let i = 0; i < activepoints.length; i++) {
-                if (activepoints[i]==data.points[0].pointNumber){activepoints.splice(i,1)}
+function draw_fieldlines(initialx,initialy){
+    let xfield0 = initialx, yfield0 = initialy, xfield1=0,yfield1=0;
+    for (let i = 0;i<1000;i++) {
+        if(xfield0>width+padding || xfield0<0-padding||yfield0>height+padding||yfield0<0-padding){return};
+        let Fx = 0, Fy = 0, Ftotal;
+        for (let k = 0; k < activepoints.length; k++) {
+            let r = Math.sqrt(((xfield0- activepoints[k].x) ** 2 + (yfield0 -activepoints[k].y) ** 2));
+            if(r<1){
+                return;
             }
-        }else if(activepoints.length>=max_points){
-            activepoints.shift();
-            charges.shift();
-            activepoints.push(data.points[0].pointNumber);
-            charges.push(chargebutton);
-
-        }else{
-            activepoints.push(data.points[0].pointNumber);
-            charges.push(chargebutton)
-        };
-        opacity = handle_opacity();
-        let streamlines=[],traces=[],x0=[],y0=[];
-
-
-            for (let i = 0; i < activepoints.length; i++) {
-                let first_points= initial_fieldpoints([x[activepoints[i]],y[activepoints[i]]], 0.1, max_lines)
-                for (let j = 0; j < first_points[0].length; j++) {
-                    x0.push(first_points[0][j])
-                    y0.push(first_points[1][j])
-                }
-            }
-
-            for (let i = 0; i < max_points*max_lines; i++) {
-                if (typeof x0[i] != 'undefined'){
-                draw_fieldlines(x0[i],y0[i],streamlines)
-                }else{streamlines.push({visible: false})};
-                traces.push(i);
-            }
-        streamlines.push({marker: {opacity:opacity,}});
-        traces.push(max_lines*max_points);
-        Plotly.animate(div="graph", {
-            data: streamlines,
-            traces: traces,
-            layout: {}
-        },{
-            transition: {duration: 0},
-            frame: {duration: 0, redraw: true}
-        });
-        };
-
-    });
-});
+            Fx += (activepoints[k].q)*(xfield0 - activepoints[k].x) / (Math.pow(r,3));
+            Fy += (activepoints[k].q)*(yfield0 - activepoints[k].y) / (Math.pow(r,3));
+            };
+        Ftotal = Math.sqrt(Fx ** 2 + Fy ** 2)
+        let dx = (max_range / Nvertices) * (Fx / Ftotal),
+            dy = (max_range / Nvertices) * (Fy / Ftotal);
+        xfield1=xfield0 + dx;
+        yfield1=yfield0+dy;
+        line(xfield0, yfield0, xfield1, yfield1)
+        xfield0 = parseFloat(xfield1)
+        yfield0=parseFloat(yfield1)
+        }
+    };
