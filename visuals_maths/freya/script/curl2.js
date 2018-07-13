@@ -14,9 +14,9 @@ var blackTextType = "lines";
 
 
 
+function initArcArrow(){
 
 
-function initarcArrow(){
     var xTemp = [], yTemp = [];
     Curve = [];
     phi = numeric.linspace(0, 0.20*Math.PI, 20);
@@ -33,55 +33,51 @@ function initarcArrow(){
         };
     } ;
     Curve.push(arc)
+
     arr = new Line2d([[xTemp[0],yTemp[0]],[xTemp[19],yTemp[19]]]);
     Curve.push(arr.arrowHead(magenta,3));
-    Plotly.newPlot("graph", initarcArrow(), layout);
+    Plotly.purge("graph");
+    Plotly.newPlot("graph", Curve, layout);
 }
 
-function arcArrowMove(){
-    step = numeric.linspace(0,2*Math.PI,30);
-    for (var a=0; a<30; ++a){
-        newCurve = [];
-        var xTemp = [], yTemp = [];
+
+function frames(){
+    var step = numeric.linspace(0,2*Math.PI,10);
+    var frames = [], data;
+    var xTemp1, yTemp1;
+
+    for (var a=0; a<10; ++a){
+        xTemp1 = [], yTemp1 = [];
         phi = numeric.linspace(step[a], step[a]+0.20*Math.PI, 20);
-        for (var i = 0; i < 20; ++i){
-            xTemp.push(2*Math.cos(phi[i]));
-            yTemp.push(2*Math.sin(phi[i]));
+        for (var i=0; i<20; ++i){
+            data = [];
+            xTemp1.push(2*Math.cos(phi[i]));
+            yTemp1.push(2*Math.sin(phi[i]));
 
             var arc={
                 type: "scatter",
                 mode: "lines",
-                x: xTemp,
-                y: yTemp,
+                x: xTemp1,
+                y: yTemp1,
                 line: {color: black, width: 3}
             };
-        } ;
-        arr = new Line2d([[xTemp[0],yTemp[0]],[xTemp[19],yTemp[19]]]);
-        newCurve.push(arc)
+            data.push(arc);
+            arr = new Line2d([[xTemp1[0],yTemp1[0]],[xTemp1[19],yTemp1[19]]]);
+            data.push(arr.arrowHead(magenta,3));
+        };
+        frames.push({data: data});
+    };
 
-        newCurve.push(arr.arrowHead(magenta,3));
-    }
-    Plotly.animate("graph",arcArrowMove(), {
-    transition: {
-        duration: 25,
-        easing: 'linear'
-    },
-    frame: {
-        duration: 25,
-        redraw: false
-
-    },
-    mode: 'immediate'
-    }
-
-    )
-    return;
+    initAnimation("animate", frames, [], layout, 100, [0, 19], true)
 }
 
 
 function main() {
-   initarcArrow();
-   arcArrowMove();
+   frames();
+   $("input[type=submit]").click(function () {
+        startAnimation();
+        console.log("animating");
+    });
 }
 
 $(document).ready(main); //Load main when document is ready.
