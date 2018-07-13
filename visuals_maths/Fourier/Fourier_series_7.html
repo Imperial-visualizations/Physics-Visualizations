@@ -50,22 +50,22 @@
                     <div class="tab-pane active" id="maths">
                         <p style="font-style: bold; font-size:large">
 
-                            <!--Derivation of Dirac-Delta-->
-                            <h5>Dirac-Delta Fourier Series Derivation</h5>
-                            $$
-                            \delta(x)=\left\{
-                                    \begin{array}{ll}
-                                    +\infty \quad (x=0) \\
-                                    0 \qquad  (x \neq 0)
-                                    \end{array}
-                                  \right.
-                            $$
-                            $$ b_n=\frac{1}{L}\int_{-L}^{+L}\delta(x)\cdot sin(\frac{n\pi x}{L})dx $$
-                            $$ \because b_n \text{ is an odd function } $$
-                            $$ \therefore b_n=0 $$
-                            $$ a_n=\frac{1}{L}\int_{-L}^{+L} \delta (x) \cdot cos(\frac{n\pi x}{L})dx $$
-                            $$ a_n=\frac{1}{L} $$
-                            $$ \mathcal{F}(x)=\sum_{n=0}^\infty \frac{1}{L}cos(\frac{n\pi x}{L}) $$
+                            <!--Derivation of linear equation-->
+                            <h5>Linear Equation Fourier Series Derivation</h5>
+                            $$ f(x) = Ax $$
+                            $$ a_n = \frac{1}{L}\int_{-L}^{+L} Ax \cdot cos(\frac{n \pi x}{L})dx $$
+                            $$ \because a_n \text{ part is an odd function} $$
+                            $$ \therefore a_n=0 $$
+                            $$ b_n = \frac{1}{L}\int_{-L}^{+L}Ax \cdot sin (\frac{n\pi x}{L}) dx $$
+                            $$ b_n = \frac{A}{L}\int_{-L}^{+L}x \cdot sin (\frac{n\pi x}{L}) dx $$
+                            $$ u=x \qquad dv = sin(\frac{n\pi x}{L})dx $$
+                            $$ du=dx \qquad v = -\frac{L}{n\pi}\cdot cos(\frac{n\pi x}{L}) $$
+                            $$ b_n = -\frac{A}{L}[\frac{xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_{-L}^{+L} + \int_{-L}^{+L}\frac{L}{n\pi}\cdot cos(\frac{n\pi x}{L}) dx] $$
+                            $$ b_n = \frac{2A}{L}\cdot [-\frac{xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_{0}^{+L} + \int_{0}^{+L}\frac{L}{n\pi}\cdot cos(\frac{n\pi x}{L}) dx] $$
+                            $$ b_n = -\frac{2AL}{n\pi}cos(n\pi) $$
+                            $$ b_n = -\frac{2AL}{n\pi}(-1)^n $$
+                            $$ b_n = \frac{2AL}{n\pi}(-1)^{n+1} $$
+                            $$ \mathcal{F}(x) = \sum_{n=0}^\infty \frac{2AL}{n\pi}(-1)^{n+1} \cdot sin(\frac{n\pi x}{L}) $$
 
                         </p>
 

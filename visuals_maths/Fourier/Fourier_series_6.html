@@ -50,22 +50,31 @@
                     <div class="tab-pane active" id="maths">
                         <p style="font-style: bold; font-size:large">
 
-                            <!--Derivation of Dirac-Delta-->
-                            <h5>Dirac-Delta Fourier Series Derivation</h5>
-                            $$
-                            \delta(x)=\left\{
-                                    \begin{array}{ll}
-                                    +\infty \quad (x=0) \\
-                                    0 \qquad  (x \neq 0)
-                                    \end{array}
-                                  \right.
-                            $$
-                            $$ b_n=\frac{1}{L}\int_{-L}^{+L}\delta(x)\cdot sin(\frac{n\pi x}{L})dx $$
-                            $$ \because b_n \text{ is an odd function } $$
+                            <!--Derivation of parabola-->
+                            <h5>Quadratic Fourier Series Derivation</h5>
+                            $$ f(x)=Ax^2 $$
+                            $$ b_n = \frac{1}{L}\int_{-L}^{+L} Ax^2 \cdot sin(\frac{n \pi x}{L})dx $$
+                            $$ \because \text{the function is odd around 0} $$
                             $$ \therefore b_n=0 $$
-                            $$ a_n=\frac{1}{L}\int_{-L}^{+L} \delta (x) \cdot cos(\frac{n\pi x}{L})dx $$
-                            $$ a_n=\frac{1}{L} $$
-                            $$ \mathcal{F}(x)=\sum_{n=0}^\infty \frac{1}{L}cos(\frac{n\pi x}{L}) $$
+                            $$ a_n= \frac{1}{L}\int_{-L}^{+L} Ax^2 \cdot cos(\frac{n \pi x}{L})dx $$
+                            $$ \because \text{the function is even around 0} $$
+                            $$ \therefore a_n=\frac{2}{L}\int_{0}^{+L} Ax^2 \cdot cos(\frac{n \pi x}{L})dx $$
+                            $$ \text{ at } n=0 \text{ :} $$
+                            $$ a_0 = \frac{2}{L} \int _{0}^{+L} Ax^2 dx $$
+                            $$ a_0 = \frac{2AL^2}{3} $$
+                            $$ \text{ at } n\neq 0 \text{ :} $$
+                            $$ a_n = \frac{2A}{L}\int_0^L x^2\cdot cos(\frac{n\pi x}{L})dx $$
+                            $$ u=x^2 \qquad dv=cos(\frac{n \pi x}{L})dx $$
+                            $$ du = 2x\cdot dx \qquad v=\frac{L}{n\pi} \cdot sin(\frac{n\pi x}{L}) $$
+                            $$ a_n = \frac{2A}{L} \cdot [\frac{Lx^2}{n\pi}\cdot sin(\frac{n\pi x}{L})|_0^L-\int_0^L\frac{2xL}{n\pi}\cdot sin(\frac{n \pi x}{L})dx] $$
+                            $$ a_n = \frac{2A}{L} \cdot [0-\int_0^L\frac{2xL}{n\pi}\cdot sin(\frac{n \pi x}{L})dx] $$
+                            $$ a_n = -\frac{4A}{n\pi}\int_0^L x\cdot sin(\frac{n \pi x}{L})dx $$
+                            $$ u = x \qquad dv = sin(\frac{n\pi x}{L}) dx$$
+                            $$ du = dx \qquad v = -\frac{L}{n\pi} \cdot cos(\frac{n\pi x}{L})dx $$
+                            $$ a_n = \frac{4A}{n\pi} [\frac{xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_0^L + \int_0^L\frac{xL}{n\pi} \cdot cos(\frac{n\pi x}{L})dx ] $$
+                            $$ a_n =  \frac{4A}{n\pi} \frac{xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_0^L $$
+                            $$ a_n = \frac{4AL^2}{n^2\pi^2}(-1)^n $$
+                            $$ \mathcal{F}(x) = \sum_{n=0}^\infty \frac{4AL^2}{n^2\pi^2}(-1)^n\cdot cos(\frac{n\pi x}{L}) $$
 
                         </p>
 

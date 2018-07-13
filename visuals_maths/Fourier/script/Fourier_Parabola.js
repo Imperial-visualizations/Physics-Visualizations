@@ -6,7 +6,7 @@ const layout = {
     hovermode: "closest",
     showlegend: false,
     xaxis: {range: [-7, 7], zeroline: true, title: "x"},
-    yaxis: {range: [-6, 6], zeroline: true, title: "y"},
+    yaxis: {range: [-1, 10], zeroline: true, title: "y"},
     aspectratio: {x:1, y:1}
 };
 var currentPoint = initialPoint;

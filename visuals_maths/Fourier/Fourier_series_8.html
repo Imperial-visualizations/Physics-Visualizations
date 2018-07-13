@@ -50,22 +50,28 @@
                     <div class="tab-pane active" id="maths">
                         <p style="font-style: bold; font-size:large">
 
-                            <!--Derivation of Dirac-Delta-->
-                            <h5>Dirac-Delta Fourier Series Derivation</h5>
-                            $$
-                            \delta(x)=\left\{
-                                    \begin{array}{ll}
-                                    +\infty \quad (x=0) \\
-                                    0 \qquad  (x \neq 0)
-                                    \end{array}
-                                  \right.
-                            $$
-                            $$ b_n=\frac{1}{L}\int_{-L}^{+L}\delta(x)\cdot sin(\frac{n\pi x}{L})dx $$
-                            $$ \because b_n \text{ is an odd function } $$
-                            $$ \therefore b_n=0 $$
-                            $$ a_n=\frac{1}{L}\int_{-L}^{+L} \delta (x) \cdot cos(\frac{n\pi x}{L})dx $$
-                            $$ a_n=\frac{1}{L} $$
-                            $$ \mathcal{F}(x)=\sum_{n=0}^\infty \frac{1}{L}cos(\frac{n\pi x}{L}) $$
+                            <!--Derivation of mode x-->
+                            <h5>Mode x Fourier Series Derivation</h5>
+                            $$ f(x)=A|x| $$
+                            $$ b_n = \frac{1}{L}\int_{-L}^{+L} A|x| \cdot sin \frac{n\pi x}{L} dx $$
+                            $$ \because \text{the function is odd around 0} $$
+                            $$ \therefore a_n=0 $$
+                            $$ a_n = \frac{1}{L}\int_{-L}^{+L} A|x| \cdot cos(\frac{n \pi x}{L})dx $$
+                            $$ \because \text{the function is even around 0} $$
+                            $$ \therefore a_n = \frac{2}{L}\int_{0}^{+L} Ax \cdot cos(\frac{n \pi x}{L})dx $$
+                            $$ \text{ at } n=0 \text{ :} $$
+                            $$ a_0 = \frac{2A}{L}\int_0^L x dx $$
+                            $$ a_0 = \frac{2A}{L}\frac{x^2}{2}|_0^L $$
+                            $$ a_0 = AL $$
+                            $$ \text{ at } n \neq 0 \text{ :} $$
+                            $$ a_n = \frac{2A}{L}\int_{0}^{+L} x \cdot cos(\frac{n \pi x}{L})dx $$
+                            $$ u=x \qquad dv=cos(\frac{n\pi x}{L})dx $$
+                            $$ du=dx \qquad v=\frac{L}{n\pi}\cdot sin(\frac{n\pi x}{L}) $$
+                            $$ a_n = \frac{2A}{L}[\frac{Lx}{n\pi}\cdot sin(\frac{n\pi x}{L})|_0^L-\int_0^{+L}\frac{L}{n\pi}\cdot sin(\frac{n\pi x}{L})dx ]$$
+                            $$ a_n = \frac{2A}{L}[0-\int_0^{+L}\frac{L}{n\pi}\cdot sin(\frac{n\pi x}{L})dx ]$$
+                            $$ a_n = \frac{2A}{L}\frac{L^2}{(n\pi)^2}\cdot cos(\frac{n\pi x}{L})|_0^L $$
+                            $$ a_n = \frac{2A}{L}\frac{L^2}{(n\pi)^2}\cdot [(-1)^n-1] $$
+                            $$ a_n = \frac{2AL}{(n\pi)^2}[(-1)^n-1] $$
 
                         </p>
 
