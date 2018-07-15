@@ -236,6 +236,7 @@ const visualisation = function (p) {
     }
 
     function updatePotentials() {
+        L = momentOfInertia * omega;
         PE = potential.calcV(r);
         effPE = potential.calcCorrV(r, L, reducedMass);
     }
