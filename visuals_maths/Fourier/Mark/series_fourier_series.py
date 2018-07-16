@@ -14,12 +14,12 @@ Titles = ["f(x) = Triangle", "f(x) = Square", "f(x) = Sawtooth", "f(x) = ?", "f(
 
 
 A = 5
-L = 1.03
+L = 12.03
 N = 10
 histogram_accuracy = 1000 #Suggest 1000
 shape = 8
 axis_length = 5 #Number of periods visualized
-resolution = 10**3
+resolution = 10**4
 x = np.linspace(-L*axis_length,L*axis_length,resolution)
 decay = 0.9
 
@@ -402,3 +402,113 @@ if (bn_set[N-2])**2 + (bn_set[N-2]) +(bn_set[N-1])**2 + (bn_set[N-1]) != 0:
     for position in bar_breaks_an_parity:
         plt.axvline(x = position , color = 'k', linestyle = ':')
 """
+
+
+def sine_n(x_triangle, n):
+    x = x_triangle
+    sin = []
+    for x in x_triangle:
+        sin.append(np.sin(n*np.pi*x/L))
+    return sin
+    
+
+
+
+x_triangle = np.linspace(0,L,resolution)
+x_first_branch = []
+y_first_branch = []
+y_second_branch = []
+x_second_branch = []
+
+for i in range(0, len(x_triangle)/2):
+    y_first_branch.append(2*A/L*x_triangle[i])
+    x_first_branch.append(x_triangle[i])#L*i/len(x_triangle))
+    
+for i in range(1+len(x_triangle)/2,len(x_triangle) ):
+    y_second_branch.append(-2*A/L*(x_triangle[i]-L))
+    x_second_branch.append(x_triangle[i])#L*i/len(x_triangle))
+
+
+#lowercase_n = 53
+
+"""
+for i in range(1,11,2):
+    lowercase_n = i        
+    fig_9 = plt.figure(9)
+    fig_9.set_size_inches(7,2)
+    plt.plot(x_first_branch,y_first_branch, 'b-')    
+    plt.plot(x_second_branch, y_second_branch, 'b')
+    plt.axvline(x = x_second_branch[0], color = 'k', linestyle = ':')
+    triangle_sine = sine_n(x_triangle, lowercase_n)
+    plt.plot(x_triangle, triangle_sine)#, color = 'r')
+    plt.axhline(y = 0, color = 'k', linestyle = ':')
+    plt.title("Odd n")
+
+
+for i in range(2,12,2):
+    lowercase_n = i        
+    fig_10 = plt.figure(10)
+    fig_10.set_size_inches(7,2)
+    plt.plot(x_first_branch,y_first_branch, 'b-')    
+    plt.plot(x_second_branch, y_second_branch, 'b')
+    plt.axvline(x = x_second_branch[0], color = 'k', linestyle = ':')
+    triangle_sine = sine_n(x_triangle, lowercase_n)
+    plt.plot(x_triangle, triangle_sine)#, color = 'r')
+    plt.axhline(y = 0, color = 'k', linestyle = ':')
+    plt.title("Even n")
+#Could also plot the multiplication of the two elements so the idea of
+#the integration is more easily seen
+"""
+
+
+x_all = np.concatenate((x_first_branch, x_second_branch), axis = 0)
+y_all = np.concatenate((y_first_branch, y_second_branch), axis = 0)
+
+
+
+def combination(triangle, y):
+    combination = []
+    for i in range(0, len(triangle)):
+        combination.append(triangle[i] * y[i])
+    return combination
+
+
+lowercase_n = 8
+triangle_combination = combination(y_all,sine_n(x_triangle, lowercase_n))
+triangle_combination_first_branch = combination(y_first_branch, sine_n(x_first_branch, lowercase_n))
+triangle_combination_second_branch = combination(y_second_branch, sine_n(x_second_branch, lowercase_n))
+
+fig_11 = plt.figure(11)
+fig_11.set_size_inches(7,2)
+plt.plot(x_first_branch,y_first_branch, 'b-')    
+plt.plot(x_second_branch, y_second_branch, 'b')
+plt.axvline(x = x_second_branch[0], color = 'k', linestyle = ':')
+triangle_sine = sine_n(x_triangle, lowercase_n)
+plt.plot(x_triangle, triangle_sine)#, color = 'r')
+plt.axhline(y = 0, color = 'k', linestyle = ':')
+
+
+
+
+fig_12 = plt.figure(12)
+fig_12.set_size_inches(7,2)
+plt.plot(x_all,triangle_combination, 'b-')   
+plt.axhline(y = 0, color = 'k', linestyle = ':')
+plt.axvline(x = x_all[-1]/2,color = 'k', linestyle = ':' )
+plt.title(r'$ \sin(\frac{n \pi x}{L}) f(x)$', fontsize = 10)
+if lowercase_n % 2 ==0:
+    plt.fill(x_first_branch, triangle_combination_first_branch, color = 'r')
+    plt.fill(x_second_branch, triangle_combination_second_branch, color = 'g')
+else:  
+    plt.fill(x_all, triangle_combination, color = 'r')
+
+
+# Important points: that there is a change of sign at L/2 for even n, and so the combination
+#function is odd about L/2. This is made more obvious by proving that for even n,
+#the function has a zero for x = L/2. This is because of sin(npix/L).
+#Note then that the opposite is true for odd n, how sin(n pi x/L) is never zero at L/2. 
+#infact a maximum of the function exists here, and so the combination is even about this
+#point. And so the integration is finite.
+#Note then that the area under the graph between 0 and L/2 and the area between L/2 ad L
+#are equal, this means we only have to consider the area between 0 and L/2 (the simplest equation)
+#and then just multiply by two. And so we have made our job insanely easier.
