@@ -131,18 +131,18 @@ const visualisation = function (p) {
 
     let atoms = [new Atom(p.createVector(width / 5, 0), RED, 1), new Atom(p.createVector(-width / 5, 0), IMPERIAL_BLUE, 1)];
     let potential = new LJPotential(2, 10, 2, 10);
-    let momentOfInertia = 0.5 * atoms[0].mass * (width / 5) ** 2 + 0.5 * atoms[1].mass * (width / 5) ** 2;
     let reducedMass = atoms[0].mass * atoms[1].mass / (atoms[0].mass + atoms[1].mass);
+    let momentOfInertia = reducedMass * Math.pow(potential.getR_0(), 2);
     let r = 2 / 5 * width;
     let rDot = 0;
     let omega = 0;
     let omegaDot = 0;
     let L = 0;
 
-    function init_pos_r(resolution) {
+    function init_pos_r(resolution, L, mu) {
         let min = [0, Number.MAX_VALUE];
         for (let i = Math.floor(0.75 * potential.getR_0() / resolution); i < Math.ceil(1.25 * potential.getR_0() / resolution); i++) {
-            let potVal = potential.calcV(i * resolution) + (2 * momentOfInertia * init_RotKE) / ((i * resolution) ** 2 * (2 * reducedMass));
+            let potVal = potential.calcV(i * resolution) + Math.pow(L / (i * resolution), 2) / (2 * mu);
             if (min[1] > potVal) min = [i * resolution, potVal];
         }
         return min[0];
@@ -152,22 +152,26 @@ const visualisation = function (p) {
     let totalE, PE, effPE, scatterEP, scatterLJ;
 
     function reset() {
-        r = init_pos_r(0.001);
-        console.log(potential.getR_0());
-        console.log(r);
-        atoms[0].position = p.createVector(60 * (atoms[0].mass / reducedMass) * r / 2, 0);
-        atoms[1].position = p.createVector(-60 * (atoms[1].mass / reducedMass) * r / 2, 0);
-        momentOfInertia = 0.5 * atoms[0].mass * (r / 2) ** 2 + 0.5 * atoms[1].mass * (r / 2) ** 2;
+
+
+        momentOfInertia = reducedMass * Math.pow(potential.getR_0(), 2);
+        L = Math.sqrt(2 * momentOfInertia * init_RotKE);
         omega = 0;
         omegaDot = (2 * init_RotKE / momentOfInertia) ** 0.5;
-        rDot = -1 * (2 * init_VibKE / reducedMass) ** 0.5;
+
+        r = init_pos_r(0.001, L, reducedMass);
+        atoms[0].position = p.createVector(60 * (atoms[0].mass / reducedMass) * r / 2, 0);
+        atoms[1].position = p.createVector(-60 * (atoms[1].mass / reducedMass) * r / 2, 0);
+
+        console.log(r);
+        rDot = (2 * init_VibKE / reducedMass) ** 0.5;
         PE = potential.calcV(r);
-        L = Math.sqrt(2 * momentOfInertia * init_RotKE);
-        effPE = potential.calcCorrV(r, Math.sqrt(L), reducedMass);
+
+        effPE = potential.calcCorrV(r, L, reducedMass);
         totalE = init_VibKE + effPE;
 
         scatterLJ = potential.plotLJ(30);
-        scatterEP = potential.plotCorrLJ(30, Math.sqrt(L), reducedMass);
+        scatterEP = potential.plotCorrLJ(30, L, reducedMass);
         console.log(scatterEP);
         plotLJ(scatterLJ, scatterEP);
     }
@@ -230,13 +234,12 @@ const visualisation = function (p) {
     };
 
     function update_atoms(r, omega) {
-        momentOfInertia = 0.5 * atoms[0].mass * (r / 2) ** 2 + 0.5 * atoms[1].mass * (r / 2) ** 2;
+
         atoms[0].position = p.createVector(60 * r * (atoms[0].mass / reducedMass) / 2 * Math.cos(omega), 60 * r * (atoms[0].mass / reducedMass) / 2 * Math.sin(omega));
         atoms[1].position = p.createVector(-60 * r * (atoms[1].mass / reducedMass) / 2 * Math.cos(omega), -60 * r * (atoms[1].mass / reducedMass) / 2 * Math.sin(omega));
     }
 
     function updatePotentials() {
-        L = momentOfInertia * omega;
         PE = potential.calcV(r);
         effPE = potential.calcCorrV(r, L, reducedMass);
     }
@@ -247,11 +250,16 @@ const visualisation = function (p) {
         p.background(255);
         if (running) {
             //Calc r
-
-            rDot += (potential.calcF(r) / (reducedMass) - omega ** 2 * r) / 60;
-            r += rDot / 60;
+            momentOfInertia = reducedMass * Math.pow(r, 2);
+            omegaDot = L / momentOfInertia;
             omega += omegaDot / 60;
             omega = (omega > 2 * p.PI) ? omega - 2 * p.PI : omega;
+
+            console.log(potential.calcF(r) / reducedMass + " ," + r * Math.pow(omegaDot, 2));
+            let a = (potential.calcF(r) / (reducedMass) + Math.pow(omegaDot, 2) * r);
+            rDot += a / 60;
+            r += rDot / 60;
+
             update_atoms(r, omega);
 
             //Update Graphs
