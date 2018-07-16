@@ -5,8 +5,11 @@ const marT = 30, marB = 23, marR = 5, marL = 35;
 const RED = '#DD2501';
 const IMPERIAL_BLUE = '#003E74';
 const CHERRY = "#E40043";
+const zoom = 60;
 let init_VibKE = 0;
 let init_RotKE = 0;
+
+let KE_V_T, KE_V_slider, KE_R_T, KE_R_slider, PE_T, layoutE;
 
 const options = {
     scrollZoom: false, // lets us scroll to zoom in and out - works
@@ -128,16 +131,12 @@ const visualisation = function (p) {
     }
 
     let totEPlot, EP_to_LJ, currLJ, currEP;
-
+    //TODO:Tidy these decelerations up - move to dictionary?
     let atoms = [new Atom(p.createVector(width / 5, 0), RED, 1), new Atom(p.createVector(-width / 5, 0), IMPERIAL_BLUE, 1)];
     let potential = new LJPotential(2, 10, 2, 10);
-    let reducedMass = atoms[0].mass * atoms[1].mass / (atoms[0].mass + atoms[1].mass);
-    let momentOfInertia = reducedMass * Math.pow(potential.getR_0(), 2);
-    let r = 2 / 5 * width;
-    let rDot = 0;
-    let omega = 0;
-    let omegaDot = 0;
-    let L = 0;
+    let reducedMass, momentOfInertia, r, rDot, omega, omegaDot, L;
+    let arrTime, arrRotKE, arrVibKE, arrPE;
+    let arrVibKESlider, arrRotKESlider;
 
     function init_pos_r(resolution, L, mu) {
         let min = [0, Number.MAX_VALUE];
@@ -151,9 +150,13 @@ const visualisation = function (p) {
 
     let totalE, PE, effPE, scatterEP, scatterLJ;
 
+
     function reset() {
-
-
+        arrTime = [0];
+        arrRotKE = [init_RotKE];
+        arrVibKE = [init_VibKE];
+        arrPE = [-potential.e];
+        reducedMass = atoms[0].mass * atoms[1].mass / (atoms[0].mass + atoms[1].mass);
         momentOfInertia = reducedMass * Math.pow(potential.getR_0(), 2);
         L = Math.sqrt(2 * momentOfInertia * init_RotKE);
         omega = 0;
@@ -163,7 +166,6 @@ const visualisation = function (p) {
         atoms[0].position = p.createVector(60 * (atoms[0].mass / reducedMass) * r / 2, 0);
         atoms[1].position = p.createVector(-60 * (atoms[1].mass / reducedMass) * r / 2, 0);
 
-        console.log(r);
         rDot = (2 * init_VibKE / reducedMass) ** 0.5;
         PE = potential.calcV(r);
 
@@ -172,8 +174,12 @@ const visualisation = function (p) {
 
         scatterLJ = potential.plotLJ(30);
         scatterEP = potential.plotCorrLJ(30, L, reducedMass);
-        console.log(scatterEP);
+
+        arrVibKESlider = [init_VibKE, init_VibKE];
+        arrRotKESlider = [init_RotKE, init_RotKE];
+
         plotLJ(scatterLJ, scatterEP);
+        plotE();
     }
 
     function plotLJ(scatterLJ, scatterEP) {
@@ -224,6 +230,34 @@ const visualisation = function (p) {
         Plotly.newPlot("potentialGraph", data, LJ_layout, options);
     }
 
+    function plotE() {
+        layoutE = {
+            yaxis: {
+                title: "Energy / eV", titlefont: {size: 20},
+                range: [-1.1 * potential.e, Math.max(init_VibKE, init_RotKE) / 0.55], nticks: 20
+            },
+            titlefont: {size: 20}, margin: {l: marL, r: marR, b: marB + 5, t: marT},
+            xaxis: {title: "t / s", titlefont: {size: 10}, range: [0, 5], nticks: 20},
+            title: "KE and PE against Time",
+            legend: {x: 0.67, y: 1, orientation: "h"},
+            showlegend: true
+        };
+
+        KE_V_T = {x: arrTime, y: arrVibKE, mode: "lines", line: {width: 2, color: "#FFDD00"}, name: "KE" + "vib".sub()};
+        KE_V_slider = {
+            x: [-1, 5 + 2], y: arrVibKESlider,
+            line: {width: 1, color: "#ac8e00", dash: "2px, 2px"}, name: "KE" + "vib, slider".sub(), showlegend: false
+        };
+        KE_R_T = {x: arrTime, y: arrRotKE, mode: "lines", line: {width: 2, color: "#66A40A"}, name: "KE" + "rot".sub()};
+        KE_R_slider = {
+            x: [-1, 5 + 2], y: arrRotKESlider,
+            line: {width: 1, color: "#49830a", dash: "2px, 2px"}, name: "KE" + "rot, slider".sub(), showlegend: false
+        };
+        PE_T = {x: arrTime, y: arrPE, mode: "lines", line: {width: 2, color: "#003E74"}, name: "U" + "LJ".sub()};
+
+        Plotly.newPlot("energyGraph", [KE_V_T, KE_V_slider, KE_R_T, KE_R_slider, PE_T], layoutE, options);
+    }
+
     //Function called once on page load
     p.setup = function () {
         let canvas = p.createCanvas(500, 500);
@@ -234,9 +268,8 @@ const visualisation = function (p) {
     };
 
     function update_atoms(r, omega) {
-
-        atoms[0].position = p.createVector(60 * r * (atoms[0].mass / reducedMass) / 2 * Math.cos(omega), 60 * r * (atoms[0].mass / reducedMass) / 2 * Math.sin(omega));
-        atoms[1].position = p.createVector(-60 * r * (atoms[1].mass / reducedMass) / 2 * Math.cos(omega), -60 * r * (atoms[1].mass / reducedMass) / 2 * Math.sin(omega));
+        atoms[0].position = p.createVector(zoom * r * (atoms[0].mass / reducedMass) / 2 * Math.cos(omega), zoom * r * (atoms[0].mass / reducedMass) / 2 * Math.sin(omega));
+        atoms[1].position = p.createVector(-zoom * r * (atoms[1].mass / reducedMass) / 2 * Math.cos(omega), -zoom * r * (atoms[1].mass / reducedMass) / 2 * Math.sin(omega));
     }
 
     function updatePotentials() {
@@ -250,12 +283,15 @@ const visualisation = function (p) {
         p.background(255);
         if (running) {
             //Calc r
+
+            arrTime.push(arrTime[arrTime.length - 1] + 1 / 60);
+
+
             momentOfInertia = reducedMass * Math.pow(r, 2);
             omegaDot = L / momentOfInertia;
             omega += omegaDot / 60;
             omega = (omega > 2 * p.PI) ? omega - 2 * p.PI : omega;
 
-            console.log(potential.calcF(r) / reducedMass + " ," + r * Math.pow(omegaDot, 2));
             let a = (potential.calcF(r) / (reducedMass) + Math.pow(omegaDot, 2) * r);
             rDot += a / 60;
             r += rDot / 60;
@@ -267,6 +303,10 @@ const visualisation = function (p) {
 
             updatePotentials();
 
+            arrRotKE.push(0.5 * momentOfInertia * Math.pow(omegaDot, 2));
+            arrVibKE.push(0.5 * reducedMass * Math.pow(rDot, 2));
+            arrPE.push(potential.calcV(r));
+
             currLJ.x = [r];
             currLJ.y = [PE];
             currEP.x = [r];
@@ -275,6 +315,22 @@ const visualisation = function (p) {
             EP_to_LJ.x = [r, r];
             EP_to_LJ.y = [PE, Math.max(0, effPE)];
 
+            layoutE.xaxis.range[0] = arrTime[0];
+            layoutE.xaxis.range[1] = Math.max(arrTime[arrTime.length - 1] + 0.5, 5);
+
+            if (arrRotKE.length > Math.ceil(5 * 60)) {
+                arrRotKE.shift();
+                arrTime.shift();
+                arrVibKE.shift();
+                arrPE.shift();
+            }
+
+            if (arrTime[-1] > 4) layoutE.showlegend = false;
+
+            // Moving along the slider level line, innit
+            KE_R_slider.x[0] = KE_V_slider.x[0] = layoutE.xaxis.range[0] - 1;
+            KE_R_slider.x[1] = KE_V_slider.x[1] = layoutE.xaxis.range[1] + 1;
+
             // Plotting the LJ and stuff.
             Plotly.animate("potentialGraph",
                 {
@@ -282,6 +338,13 @@ const visualisation = function (p) {
                     traces: [0, 1, 2, 3, 4, 5]
                 },
                 {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
+            Plotly.animate("energyGraph",
+                {
+                    data: [KE_V_T, KE_V_slider, KE_R_T, KE_R_slider, PE_T],
+                    traces: [0, 1, 2, 3, 4]
+                }
+                , {frame: {redraw: false, duration: 1 / 60}, transition: {duration: 1 / 60}});
+
         }
         drawBond(atoms[0], atoms[1]);
         for (let i = 0; i < atoms.length; i++) {
