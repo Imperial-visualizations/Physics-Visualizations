@@ -40,20 +40,6 @@ $(window).on('load',function() {
     $("input#rotate").on('input', handle_slider);
     let r = 12.5;
 
-    $("#playPauseButton").on('click', function(){
-
-        //change the slider input and polar angle so we have a genuine rotating gyroscope
-        function handleplaybutton(){
-        function nexttimestep(){
-            let R = parseFloat(dom.animationInput.val())
-            if(R==10){
-                dr= 0; //used to be -0.4
-            }else if (R==1){
-                dr=0.4;
-            };
-            R = dr + R;
-            dom.animationInput.val(R)
-    });*/
 
     function calc(){<!--- creates a function which is later called-->
 
@@ -123,7 +109,6 @@ function handle_slider(){
               }
           }
         )
-
 }
 
 
