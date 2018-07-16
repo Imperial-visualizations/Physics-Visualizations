@@ -17,7 +17,11 @@ var layout = {
 var currentPoint = initialPoint;
 var initialRho = 0, initialPhi = 0, initialR = 0, initialTheta = 0;
 
-//Plots
+//Plot
+/**
+ * Resets and plots initial basis vectors.
+ * @param {string} coor - type of coordinate systems.
+ */
 function initPlot(coor) {
     Plotly.purge("graph");
     if (coor === "#carte") {
@@ -77,19 +81,37 @@ function initPlot(coor) {
     }
     return;
 }
-//Plot for basis for corresponding coordinate systems:
+/**
+ * Computes the basis vectors of the cartesian coordinate system.
+ * @param {float} x - x value.
+ * @param {float} y - y value.
+ * @param {float} z - z value.
+ */
 function computeCartesian(x, y, z) {
     currentPoint = [Math.round(x*10)/10, Math.round(y*10)/10, Math.round(z*10)/10];
 
+    var xHat = new Line([[x, y, z], [x + 1, y, z]]),
+        yHat = new Line([[x, y, z], [x, y + 1, z]]),
+        zHat = new Line([[x, y, z], [x, y, z + 1]]);
+
     var data = [
         new Cuboid(x, y, z).gObject(impBlue),
-        new Line([[x, y, z], [x + 1, y, z]]).gObject(orange),
-        new Line([[x, y, z], [x, y + 1, z]]).gObject(lilac),
-        new Line([[x, y, z], [x, y, z + 1]]).gObject(cyan)
+        xHat.gObject(orange, 5),
+        xHat.arrowHead(orange, 5, 0.25),
+        yHat.gObject(lilac, 5),
+        yHat.arrowHead(lilac, 5, 0.25),
+        zHat.gObject(cyan, 5),
+        zHat.arrowHead(cyan, 5, 0.25)
     ];
 
     return data;
 }
+/**
+ * Computes the basis vectors of the cylindrical coordinate system.
+ * @param {float} rho - rho value.
+ * @param {float} phi - phi value.
+ * @param {float} z - z value.
+ */
 function computeCylindrical(rho, phi, z) {
     var cylinder = new Cylinder(rho, z);
     var x = rho*Math.cos(phi);
@@ -107,13 +129,20 @@ function computeCylindrical(rho, phi, z) {
         zTrace[i] = z;
     }
 
+    var rhoHat = new Line([[x, y, z], [x + Math.cos(phi), y + Math.sin(phi), z]]),
+        phiHat = new Line([[x, y, z], [x - Math.sin(phi), y + Math.cos(phi), z]]),
+        zHat = new Line([[x, y, z], [x, y, z + 1]]);
+
     var data = [
         cylinder.gObjectCurve(impBlue, white),
         cylinder.gObjectTop("rgb(0,62,116)"),
         cylinder.gObjectBottom("rgb(0,62,116)"),
-        new Line([[x, y, z], [x + Math.cos(phi), y + Math.sin(phi), z]]).gObject(orange),
-        new Line([[x, y, z], [x - Math.sin(phi), y + Math.cos(phi), z]]).gObject(lilac),
-        new Line([[x, y, z], [x, y, z + 1]]).gObject(cyan),
+        rhoHat.gObject(orange, 5),
+        rhoHat.arrowHead(orange, 5, 0.25),
+        phiHat.gObject(lilac, 5),
+        phiHat.arrowHead(lilac, 5, 0.25),
+        zHat.gObject(cyan, 5),
+        zHat.arrowHead(cyan, 5, 0.25),
         {
             type: "scatter3d", mode: "lines",
             x: xTrace, y: yTrace, z: zTrace,
@@ -123,6 +152,12 @@ function computeCylindrical(rho, phi, z) {
 
     return data;
 }
+/**
+ * Computes the basis vectors of the spherical coordinate system.
+ * @param {float} r - rho value.
+ * @param {float} theta - theta value.
+ * @param {float} phi - phi value.
+ */
 function computeSpherical(r, theta, phi) {
     var sphere = new Sphere(r);
     var x = r*Math.cos(phi)*Math.sin(theta);
@@ -130,11 +165,17 @@ function computeSpherical(r, theta, phi) {
     var z = r*Math.cos(theta);
     currentPoint = [Math.round(x*10)/10, Math.round(y*10)/10, Math.round(z*10)/10];
 
+    var rHat = new Line([[x, y, z], [x + Math.cos(phi)*Math.sin(theta), y + Math.sin(phi)*Math.sin(theta), z + Math.cos(theta)]]),
+        thetaHat = new Line([[x, y, z], [x + Math.cos(phi)*Math.cos(theta), y + Math.sin(phi)*Math.cos(theta), z - Math.sin(theta)]]),
+        phiHat = new Line([[x, y, z], [x - Math.sin(phi), y + Math.cos(phi), z]]);
     var data = [
         sphere.gObject(impBlue, white),
-        new Line([[x, y, z], [x + Math.cos(phi)*Math.sin(theta), y + Math.sin(phi)*Math.sin(theta), z + Math.cos(theta)]]).gObject(cyan),
-        new Line([[x, y, z], [x - Math.sin(phi), y + Math.cos(phi), z]]).gObject(lilac),
-        new Line([[x, y, z], [x + Math.cos(phi)*Math.cos(theta), y + Math.sin(phi)*Math.cos(theta), z - Math.sin(theta)]]).gObject(orange)
+        rHat.gObject(cyan, 5),
+        rHat.arrowHead(cyan, 5, 0.25),
+        thetaHat.gObject(orange, 5),
+        thetaHat.arrowHead(orange, 5, 0.25),
+        phiHat.gObject(lilac, 5),
+        phiHat.arrowHead(lilac, 5, 0.25)
     ];
 
     var meshSize, t;
@@ -181,6 +222,7 @@ function computeSpherical(r, theta, phi) {
     return data;
 }
 
+/** updates the plot according to the slider controls. */
 function updatePlot() {
     var data = [];
     var href = $('ul.tab-nav li a.active.button').attr('href'); // active href
