@@ -187,9 +187,10 @@ const visualisation = function (p) {
             title: "Lennard-Jones Potential", titlefont: {size: 12},
             margin: {l: marL, r: marR, b: marB + 10, t: marT}, legend: {x: 0.46, y: 1, "orientation": "h"},
             showlegend: true,
+            width: parseFloat($('.graphSlider').css('width').slice(0,-2)) - parseFloat($('.showhide').css('marginLeft').slice(0,-2))*2,
             yaxis: {
                 range: [-1.1 * potential.e, 0.7 * potential.e],
-                nticks: 20, title: "U / eV", titlefont: {size: 10}
+                nticks      : 20, title: "U / eV", titlefont: {size: 10}
             },
             xaxis: {
                 range: [0.9 * potential.s, 3 * potential.s],
@@ -236,6 +237,7 @@ const visualisation = function (p) {
                 title: "Energy / eV", titlefont: {size: 20},
                 range: [-1.1 * potential.e, Math.max(init_VibKE, init_RotKE) / 0.55], nticks: 20
             },
+            width: parseFloat($('.graphSlider').css('width').slice(0,-2)) - parseFloat($('.showhide').css('marginLeft').slice(0,-2))*2,
             titlefont: {size: 20}, margin: {l: marL, r: marR, b: marB + 5, t: marT},
             xaxis: {title: "t / s", titlefont: {size: 10}, range: [0, 5], nticks: 20},
             title: "KE and PE against Time",
@@ -335,7 +337,8 @@ const visualisation = function (p) {
             Plotly.animate("potentialGraph",
                 {
                     data: [scatterLJ, scatterEP, currLJ, currEP, totEPlot, EP_to_LJ],
-                    traces: [0, 1, 2, 3, 4, 5]
+                    traces: [0, 1, 2, 3, 4, 5],
+
                 },
                 {frame: {redraw: false, duration: 0}, transition: {duration: 0}});
             Plotly.animate("energyGraph",

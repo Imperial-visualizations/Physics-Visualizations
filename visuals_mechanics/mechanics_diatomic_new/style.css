@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans');
+*{
+    font-family:"Fira Sans",sans-serif;
+}
+html,body{
+    margin:0;
+}
+
+nav{
+    font-size: 35pt;
+    color:white;
+    background-color: #003E74;
+    padding: 0.5vw 1vh;
+    margin-bottom:2vh;
+}
+nav>h1{
+    margin:0;
+
+}
+.container{
+    width: 96vw;
+    margin: 0 2vw 0 2vw;
+}
+.column{
+    float:left;
+    width:50%;
+}
+.slider_card{
+    width:auto;
+    box-shadow: 0 0 10px 2px darkgrey;
+    padding-bottom: 1em;
+}
+.slider_card > h2{
+    color:white;
+    margin: 0;
+    box-sizing: border-box;
+    padding: 0.5em;
+    width: 100%;
+    margin: 0.5em 0;
+    background-color: #0091D4;
+}
+
+.graphSlider{
+    width: 40vw;
+    font-size: 25pt;
+    background-color: white;
+    text-align: right;
+    color:black;;
+    padding: 0.25em;
+    float:right;
+    margin: 0.5em;
+    box-shadow: 0 0px 10px 2px darkgrey;
+    transition: background-color 0.3s;
+}
+.showhide{
+    text-align: center;
+    background-color: inherit;
+    width:calc(100% - 40px);
+    height:400%;
+    margin: 20px;
+
+}
+button{
+    border-radius: 3px;
+    border: 0.1em solid #003E74;
+    list-style: none;
+    text-decoration: none;
+    background-color: white;
+    fill:currentColor;
+    stroke-width:0;
+    color:black;
+    font-family: fira sans;
+    font-size: 18pt;
+    font-weight: 100;
+    width: auto;
+    text-align: center;
+    padding: 0.1em 0.5em;
+    margin: 0 0.4em;
+    float: left;
+    transition: background-color 0.2s ease-out;
+    cursor: pointer;
+}
+button:hover{
+    background-color: #003E74;
+    color:white;
+    transition: background-color 0.2s ease-out;
+
+}
+.graphSlider:hover{
+    background-color: black;
+    color:white;
+    fill:currentColor;
+    transition: background-color 0.3s;
+}
+.graphSlider svg{
+    display: inline;
+    margin:0.125em 0 0.125em 0.25em;
+    float:left;
+    transition: transform 0.5s;
+    -webkit-transition: transform 0.5s;
+    -moz-transition: transform 0.5s;
+    -o-transition: transform 0.5s;
+}
+x`/* XXX:  */

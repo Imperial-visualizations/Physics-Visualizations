@@ -6,20 +6,53 @@
     <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-<h1>Diatomic Molecule</h1>
-<div id='animation_anchor'></div>
-<button id="playPauseButton">Play</button>
-<button id="resetButton">Reset</button>
-<input type="range" id="KE_slider" min="0" max="10" step="1" value="0"/>Kinetic
-Energy
+<nav><h1>Diatomic Molecule</h1></nav>
 
-<input type="range" id="RE_slider" min="0" max="10" step="1" value="0"/> Rotational Energy
+<div class='container'>
+    <div class="column">
+        <div id='animation_anchor'></div>
+        <button id="playPauseButton">Play</button>
+        <button id="resetButton">Reset</button>
+    </div>
+    <div class="column">
+        <div class="slider_card">
+        <h2>Settings</h2>
+        <input type="range" id="KE_slider" min="0" max="10" step="1" value="0"/>Kinetic
+        Energy <br>
+        <input type="range" id="RE_slider" min="0" max="10" step="1" value="0"/> Rotational Energy
+    </div>
+    <div class="graphSlider">
+        <svg width="38" height="32">
+            <polygon points="0,0 38,0 18,32" ></polygon>
+        </svg>
+        <span>Show</span>
+        <div class="showhide" id="potentialGraph"></div>
+    </div>
 
-<div id="potentialGraph"></div>
-<div id="energyGraph"></div>
+    <div class="graphSlider"><span>Show</span>
+        <svg width="38" height="32">
+            <polygon points="0,0 38,0 18,32" ></polygon>
+        </svg>
+        <div class = "showhide" id="energyGraph"></div>
+    </div>
+    </div>
+</div>
+
+<!--<div class="container">-->
+<!--<div class="item1">1</div>-->
+<!--<div class="item2">2</div>-->
+<!--<div class="item3">3</div>-->
+<!--<div class="item4">4</div>-->
+<!--<div class="item5">5</div>-->
+<!--</div>-->
+
+
 <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
+<script type = "text/javascript" src="./scripts/navigation.js"></script>
 <script type="text/javascript" src="./scripts/graphics.js"></script>
+
+
 </body>
 </html>
