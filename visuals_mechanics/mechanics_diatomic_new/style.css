@@ -61,8 +61,9 @@ nav>h1{
 
 }
 button{
-    border-radius: 3px;
-    border: 0.1em solid #003E74;
+    border-radius: 2px;
+    border: 0.125em solid #003E74;
+    color: #0091D4;
     list-style: none;
     text-decoration: none;
     background-color: white;
@@ -70,27 +71,30 @@ button{
     stroke-width:0;
     color:black;
     font-family: fira sans;
-    font-size: 18pt;
-    font-weight: 100;
-    width: auto;
+    font-weight: bold;
+    font-size:14pt;
+    width: 8em;
     text-align: center;
-    padding: 0.1em 0.5em;
+    padding: 0.3em 2em;
     margin: 0 0.4em;
     float: left;
     transition: background-color 0.2s ease-out;
     cursor: pointer;
+    box-shadow: 0px 2.5px 5px 0.6px #d0d0d0;
 }
 button:hover{
-    background-color: #003E74;
+    background-color:#0091D4;
     color:white;
-    transition: background-color 0.2s ease-out;
-
+    transition: background-color 0.35s ease-out;
+}
+button:active{
+    background-color: #003E74;
 }
 .graphSlider:hover{
     background-color: black;
     color:white;
     fill:currentColor;
-    transition: background-color 0.3s;
+    transition: background-color 0.35s;
 }
 .graphSlider svg{
     display: inline;
