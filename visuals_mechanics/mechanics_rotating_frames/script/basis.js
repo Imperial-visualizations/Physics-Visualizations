@@ -2,7 +2,8 @@
 //Global Initial Parameters:
 var initialPoint = [2., 2., 2.];
 var layout = {
-    width: 450, height: 500,
+    /*width: 450, height: 500,*/
+    autosize: true,
     margin: {l:0, r:0, t:0, b:0},
     hovermode: "closest",
     showlegend: false,
@@ -11,6 +12,7 @@ var layout = {
         xaxis: {range: [-10, 10], zeroline: true, autorange: false,},
         yaxis: {range: [-10, 10], zeroline: true, autorange: false,},
         zaxis: {range: [-10, 10], zeroline: true, autorange: false,},
+
         aspectratio: {x:1, y:1, z:1},
     }
 };
@@ -28,10 +30,7 @@ function findValues() {
 
     let R = [r*Math.cos(phi)*Math.cos(theta), r*Math.sin(phi)*Math.cos(theta), r*Math.sin(theta)];
     let Omegamatrix = [0, 0, omega];
-    console.log(Omegamatrix.type);
-    console.log(R);
     let B = math.cross(Omegamatrix, R);
-    console.log(B.type);
     var Fcent = math.cross(Omegamatrix, B);
 
     let V = [2*v*Math.cos(phi)*Math.sin(theta), 2*v*Math.sin(phi)*Math.sin(theta),(-2)*v*Math.cos(theta)];
@@ -81,6 +80,7 @@ function computeSpherical(r, theta, phi, v) {
 
     var [[Vx, Vy, Vz], [Fcentx, Fcenty, Fcentz], [Fcorx, Fcory, Fcorz]] = findValues();
 
+
     currentPoint = [Math.round(x*10)/10, Math.round(y*10)/10, Math.round(z*10)/10];
 
     var data = [
@@ -128,6 +128,7 @@ function updatePlot() {
 
     Plotly.animate(
         'graph',
+
         {data: data},
         {
             fromcurrent: true,
