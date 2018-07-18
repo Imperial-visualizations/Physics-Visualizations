@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans');
+*{
+    font-family:"Fira Sans",sans-serif;
+}
+html,body{
+    margin:0;
+}
+
+nav{
+    font-size: 35pt;
+    color:white;
+    background-color: #003E74;
+    padding: 0.5vw 1vh;
+    margin-bottom:2vh;
+}
+nav>h1{
+    margin:0;
+
+}
+.container{
+    width: 96vw;
+    margin: 0 2vw 0 2vw;
+}
+.column{
+    float:left;
+    width:50%;
+}
+.slider_card{
+    width:auto;
+    box-shadow: 0 0 10px 2px darkgrey;
+    padding-bottom: 1em;
+}
+.slider_card > h2{
+    color:white;
+    margin: 0;
+    box-sizing: border-box;
+    padding: 0.5em;
+    width: 100%;
+    margin: 0.5em 0;
+    background-color: #0091D4;
+}
+
+.graphSlider{
+    width: 40vw;
+    font-size: 25pt;
+    background-color: white;
+    text-align: right;
+    color:black;;
+    padding: 0.25em;
+    float:right;
+    margin: 0.5em;
+    box-shadow: 0 0px 10px 2px darkgrey;
+    transition: background-color 0.3s;
+}
+.showhide{
+    text-align: center;
+    background-color: inherit;
+    width:calc(100% - 40px);
+    height:400%;
+    margin: 20px;
+
+}
+button{
+    border-radius: 2px;
+    border: 0.125em solid #003E74;
+    color: #0091D4;
+    list-style: none;
+    text-decoration: none;
+    background-color: white;
+    fill:currentColor;
+    stroke-width:0;
+    color:black;
+    font-family: fira sans;
+    font-weight: bold;
+    font-size:14pt;
+    width: 8em;
+    text-align: center;
+    padding: 0.3em 2em;
+    margin: 0 0.4em;
+    float: left;
+    transition: background-color 0.2s ease-out;
+    cursor: pointer;
+    box-shadow: 0px 2.5px 5px 0.6px #d0d0d0;
+}
+button:hover{
+    background-color:#0091D4;
+    color:white;
+    transition: background-color 0.35s ease-out;
+}
+button:active{
+    background-color: #003E74;
+}
+.graphSlider:hover{
+    background-color: black;
+    color:white;
+    fill:currentColor;
+    transition: background-color 0.35s;
+}
+.graphSlider svg{
+    display: inline;
+    margin:0.125em 0 0.125em 0.25em;
+    float:left;
+    transition: transform 0.5s;
+    -webkit-transition: transform 0.5s;
+    -moz-transition: transform 0.5s;
+    -o-transition: transform 0.5s;
+}
+x`/* XXX:  */
