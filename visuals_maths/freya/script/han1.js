@@ -390,3 +390,24 @@ function Line2d(points) {
         return wings;
     }
 }
+function Cube(x, y, z){
+    this.width = x,
+    this.length = y,
+    this.height = z,
+    this.gObject = function(color) {
+        var cuboid = {
+            type: "mesh3d",
+            x: [x-0.5, x-0.5, x+0.5, x+0.5, x-0.5, x-0.5, x+0.5, x+0.5],
+            y: [y-0.5, y+0.5, y+0.5, y-0.5, y-0.5, y+0.5, y+0.5, y-0.5],
+            z: [z-0.5, z-0.5, z-0.5, z-0.5, z+0.5, z+0.5, z+0.5, z+0.5],
+            i : [0, 0, 3, 4, 4, 4, 4, 4, 5, 6, 6, 7],
+            j : [2, 3, 4, 3, 6, 7, 1, 5, 2, 2, 7, 3],
+            k : [1, 2, 0, 7, 5, 6, 0, 1, 1, 5, 2, 2],
+            opacity: 0.5,
+            colorscale: [['0', color], ['1', "rgb(255,255,255)"]],
+            intensity: [0, 0.1, 0.3, 0.5, 0.7, 0.8, 0.9, 1],
+            showscale: false
+        }
+        return cuboid
+    }
+}

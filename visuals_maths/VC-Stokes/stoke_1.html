@@ -2,72 +2,47 @@
 <html>
 
 <head>
-    <title>Maths: Template</title>
+    <!--Page Info-->
+    <title>Stoke2</title>
+    <!--css link-->
     <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
-    <link rel="stylesheet" href="../util/navigation.css">
+    <!--Required JS resources--> <!--NB: better to have resources before the main body but still works even if they are not-->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
-    <script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
 <body>
+
     <div class="container">
         <div class="row">
             <!-- Graph -->
             <div class="six columns">
-                <h1>Dom's Page1:</h1>
+                <h1>Green Theorem</h1>
                 <div id='graph' style="width:450px; height:450px;"></div>
-            </div>
 
-            <!--Bottons-->
+            </div>
             <div class="six columns">
-                <ul class="tab-nav">
-                    <li><a class="button active" href="#tab1">Tab1</a></li>
-                    <li><a class="button" href="#tab2">Tab2</a></li>
-                </ul>
+                <h5 style="border-left: solid 5px rgb(219,209,0); padding-left: 8px;">a:</h5><!--Just Text-->
 
-                <h5 style="border-left: solid 5px rgb(0,255,0); padding-left: 8px;">Global Slider:</h5>
-                <label class="sliderTitle">global:&nbsp;
-                    <span id="gSliderDisplay" data-unit="">1</span>
+                    <!--Slider Display--> <!--Linked with the slider below-->
+                    <!--Linked with a slider and shows the live values of its corresponding slider-->
+                <label class="sliderTitle">a:&nbsp;<!--rho-->
+                    <span id="xControllerDisplay" data-unit="">1</span> <!--default: 0-->
                 </label>
+
+                    <!--Slider-->
+                    <!--NB: Be careful with classes and types-->
                 <label class="slider">
-                    <input id="gSlider" class="inputs" type="range" value="1" min="-3" max="3" step="0.2"/>
-                    <span class="sliderMin">-3</span><span class="sliderMax">3</span>
-                </label>
-
-                <div class="tab-content">
-                    <div class="tab-pane active" id="tab1">
-                        <h5 style="border-left: solid 5px rgb(255,0,0); padding-left: 8px;">Tab1 Slider:</h5>
-                        <label class="sliderTitle">tab1:&nbsp;
-                            <span id="t1SliderDisplay" data-unit="">1</span>
-                        </label>
-                        <label class="slider">
-                            <input id="t1Slider" class="inputs" type="range" value="1" min="-3" max="3" step="0.2"/>
-                            <span class="sliderMin">-3</span><span class="sliderMax">3</span>
-                        </label>
-                    </div>
-
-                    <div class="tab-pane" id="tab2">
-                        <h5 style="border-left: solid 5px rgb(0,0,255); padding-left: 8px;">Tab2 Slider:</h5>
-                        <label class="sliderTitle">tab2:&nbsp;
-                            <span id="t2SliderDisplay" data-unit="">1</span>
-                        </label>
-                        <label class="slider">
-                            <input id="t2Slider" class="inputs" type="range" value="1" min="-3" max="3" step="0.2"/>
-                            <span class="sliderMin">-3</span><span class="sliderMax">3</span>
-                        </label>
-                    </div>
-                </div>
+                    <input id="xController" class="inputs" type="range" value="1" min="0" max="1" step="0.1"/>
+                    <span class="sliderMin">0</span><span class="sliderMax">1</span></label>
+                    <!--END Slider-->
             </div>
-            <img src=asset/RHR.png width=150 height=150>
         </div>
     </div>
-    <div class="rightnav">▶</div>
-    <script src=../util/objects.js></script>
+
+    <!--THE BRAINS-->
     <script src=script/stokesObj.js></script>
     <script src=script/page.js></script>
 </body>

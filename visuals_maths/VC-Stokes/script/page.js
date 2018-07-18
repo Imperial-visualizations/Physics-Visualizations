@@ -1,41 +1,49 @@
-"use strict";
-//Global Initial Parameters:
-var defaultHref = window.location.href;
 var layout = {
     width: 450, height: 500,
     margin: {l:0, r:0, t:0, b:0},
     hovermode: "closest",
     showlegend: false,
     scene: {
-        camera: createView([1,1,1]),
+        camera: createView([1,1,0.5]),
         xaxis: {range: [-6, 6], zeroline: true, autorange: false,},
         yaxis: {range: [-6, 6], zeroline: true, autorange: false,},
         zaxis: {range: [-6, 6], zeroline: true, autorange: false,},
         aspectratio: {x:1, y:1, z:1},
     }
 };
+var initialX = 1;
+var isBlackText = false;
+var blackTextType = "lines";
 
 //Plots
 function initPlot() {
     Plotly.purge("graph");
 
+    $("#xController").val(initialX);
+    $("#xControllerDisplay").text(initialX);
+    var x = parseFloat(document.getElementById('xController').value);
+
     var data = [];
+
     var pringles = new Pringles(4, [1,1,1]);
+    var square = new Square(6);
+    data.push(square.gObject())
+    data.push(pringles.gObject(black, 7, "solid",x));
+    console.log(square)
 
-    data.push(pringles.gObject(lilac, 7, "solid", 1.5));
-
-    console.log(data);
 
     Plotly.newPlot("graph", data, layout);
     return;
 }
-
 function updatePlot() {
     var data = [];
-    var href = $('ul.tab-nav li a.active.button').attr('href'); // active href
-    var factor;
+    var href = $('ul.tab-nav li a.active.button').attr('href'); // finds out which tab is active
+    var x = parseFloat(document.getElementById('xController').value);
+    var square = new Square(6);
+    data.push(square.gObject())
+    var pringles = new Pringles(4, [1,1,1]);
 
-    console.log("updating!")
+    data.push(pringles.gObject(black, 7, "solid", x));
 
     Plotly.animate(
         'graph',
@@ -47,56 +55,24 @@ function updatePlot() {
             mode: "afterall"
         }
     );
-    return;
 }
 
 function main() {
+    /*Jquery*/ //NB: Put Jquery stuff in the main not in HTML
     $("input[type=range]").each(function () {
         var displayEl;
+        /*Allows for live update for display values*/
         $(this).on('input', function(){
+            //Displays: (FLT Value) + (Corresponding Unit(if defined))
             $("#"+$(this).attr("id") + "Display").text( $(this).val() + $("#"+$(this).attr("id") + "Display").attr("data-unit") );
-            updatePlot();
+
+            updatePlot(); //Updating the plot is linked with display (Just My preference)
         });
-    });
 
-    $(".rightnav").on('click',function(){
-        window.location.href =
-            defaultHref.slice(0,-6)
-            +(parseInt(defaultHref.slice(-6,-5))+1) + ".html";
-    });
-
-    $(".rightnav").on("mouseenter", function() {
-        $(".rightnav").css({"color":"#1a0433","font-size":"55px"});
-    }).on('mouseleave', function(){
-        $(".rightnav").css({"color":"#330766","font-size":"50px"});
-    });
-
-    $(".leftnav").on('click',function(){
-        window.location.href =
-            defaultHref.slice(0,-6)
-            +(parseInt(defaultHref.slice(-6,-5))-1) + ".html";
-    });
-
-    $(".leftnav").on("mouseenter", function() {
-        $(".leftnav").css({"color":"#1a0433","font-size":"55px"})
-    }).on('mouseleave', function(){
-        $(".leftnav").css({"color":"#330766","font-size":"50px"})
     });
 
 
-    $(function() {
-        $('ul.tab-nav li a.button').click(function() {
-            var href = $(this).attr('href');
-            $('li a.active.button', $(this).parent().parent()).removeClass('active');
-            $(this).addClass('active');
-            $('.tab-pane.active', $(href).parent()).removeClass('active');
-            $(href).addClass('active');
+    initPlot();
 
-            initPlot(href);
-            return false;
-        });
-    });
-    initPlot("#tab1");
-    return;
 }
-$(document).ready(main);
+$(document).ready(main); //Load main when document is ready.

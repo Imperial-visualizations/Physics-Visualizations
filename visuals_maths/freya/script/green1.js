@@ -65,19 +65,19 @@ function initArbitraryShape1() {
         y: yTemp1,
         line: {color: black, width: 2},
         fill: 'toself',
-        fillcolor: orange,
-        opacity: 1
+        fillcolor: lilac,
+        opacity: 0.7
         },
-    arr1.arrowHead(black,3),
-    arr2.arrowHead(black,3),
-    arr3.arrowHead(black,3),
-    arr4.arrowHead(black,3),
-    arr5.arrowHead(black,3),
-    arr6.arrowHead(black,3),
-    arr7.arrowHead(black,3),
-    arr8.arrowHead(black,3),
-    arr9.arrowHead(black,3),
-    arr10.arrowHead(black,3)
+    arr1.arrowHead(magenta,3),
+    arr2.arrowHead(magenta,3),
+    arr3.arrowHead(magenta,3),
+    arr4.arrowHead(magenta,3),
+    arr5.arrowHead(magenta,3),
+    arr6.arrowHead(magenta,3),
+    arr7.arrowHead(magenta,3),
+    arr8.arrowHead(magenta,3),
+    arr9.arrowHead(magenta,3),
+    arr10.arrowHead(magenta,3)
     ]
     return curve;
 }
@@ -103,14 +103,7 @@ function initArbitraryShape2(){
     xTemp1.push(xTemp1[0]);
     yTemp1 = yTemp1.concat(yTemp2);
     yTemp1.push(yTemp1[0]);
-    arr1 = new Line2d([[xTemp1[2],yTemp1[2]],[xTemp1[6],yTemp1[6]]]);
-    arr2 = new Line2d([[xTemp1[14],yTemp1[14]],[xTemp1[18],yTemp1[18]]]);
-    arr3 = new Line2d([[xTemp1[27],yTemp1[27]],[xTemp1[31],yTemp1[31]]]);
-    arr4 = new Line2d([[xTemp1[39],yTemp1[39]],[xTemp1[43],yTemp1[43]]]);
-    arr5 = new Line2d([[xTemp1[50],yTemp1[50]],[xTemp1[56],yTemp1[56]]]);
-    arr6 = new Line2d([[xTemp1[61],yTemp1[61]],[xTemp1[68],yTemp1[68]]]);
-    arr7 = new Line2d([[xTemp1[74],yTemp1[74]],[xTemp1[80],yTemp1[80]]]);
-    arr8 = new Line2d([[xTemp1[87],yTemp1[87]],[xTemp1[93],yTemp1[93]]]);
+
     var curve = [{
         type: "scatter",
         mode: "lines",
@@ -119,23 +112,17 @@ function initArbitraryShape2(){
         line: {color: black, width: 2},
         fill: 'toself',
         fillcolor: orange,
-        opacity: 1
+        opacity: 0.7
         },
         {
         type: "scatter",
         mode: "lines",
         x: [3.975,2.02],
         y: [0,0],
-        line: {color: orange, width: 3}
-        },
-        arr1.arrowHead(black,3),
-        arr2.arrowHead(black,3),
-        arr3.arrowHead(black,3),
-        arr4.arrowHead(black,3),
-        arr5.arrowHead(black,3),
-        arr6.arrowHead(black,3),
-        arr7.arrowHead(black,3),
-        arr8.arrowHead(black,3)
+        line: {color: orange, width: 3},
+        opacity: 0.9
+        }
+
     ];
 
     return curve;
