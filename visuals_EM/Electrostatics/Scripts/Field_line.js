@@ -1,11 +1,9 @@
 //set global variables
 let width = $('#sketch-holder').width(), height = $('#sketch-holder').height(),activepoints = [],activenegpoints = [],
-activepospoints = [];
-const n_lines = 7,Nvertices=200,max_range=800, R=16, square_size=100,padding = 20;
+activepospoints = [],maxpoints=6;
+const n_lines = 8,Nvertices=1700,max_range=1500, R=16, square_size=100,padding = 50,rect_height = height/8,
+arrow_size=5;
 
-$("input#pos").on('click',handleposbutton)
-
-$("input#neg").on('click',handlenegbutton)
 
 function handleposbutton(){
     if (activepoints.length<=6) {
@@ -27,28 +25,26 @@ function handlenegbutton(){
 function setup() {
   let canvas = createCanvas(width,height);
     canvas.parent('sketch-holder');
+    frameRate(60);
 };
 
 //main function that repeats as soon as the last line is called
 function draw() {
     clear();
     background('#ffffff');
-    let thisFrameMouseX = mouseX;
-    let thisFrameMouseY = mouseY;
 
-    noStroke();
-    fill("#02893B");
-    rect(width/2, height/2, square_size, square_size);
+    textSize(40);
+
+    text('Helvetica', 12, 60);
 
     for (let i = 0; i < activepoints.length; i++) {
-        if(activepoints[i].clicked==true){
-            activepoints[i].dragposition(thisFrameMouseX,thisFrameMouseY)
+        if(activepoints[i].clicked==true&&activepoints[i].intersect()==false){
+            activepoints[i].dragposition()
         }
     }
-
     for (let i = 0; i <activepospoints.length; i++) {
 
-        stroke(1);
+        noStroke(1);
         fill(color(activepospoints[i].color));
         ellipse(activepospoints[i].x,activepospoints[i].y,R*2);
 
@@ -58,12 +54,28 @@ function draw() {
             }
     }
         for (let i = 0; i <activenegpoints.length; i++) {
-        stroke(1);
+        noStroke(1);
         fill(color(activenegpoints[i].color));
         ellipse(activenegpoints[i].x,activenegpoints[i].y,R*2);
 
     }
+    noStroke();
+    fill(247, 252, 251);
+    rect(0, 0, width,rect_height);
 
+    stroke(72, 99, 95);
+    line(0,rect_height,width,rect_height);
+
+    if (activepoints.length<maxpoints){
+        noStroke();
+        fill(color(selpos.color));
+        ellipse(selpos.x,selpos.y,R*2);
+
+        noStroke();
+        fill(color(selneg.color));
+        ellipse(selneg.x,selneg.y,R*2);
+
+    };
 
 };
 
@@ -72,12 +84,34 @@ function mousePressed() {
     for (let i = 0; i < activepoints.length; i++) {
         activepoints[i].pressed()
     }
+    selpos.pressed()
+    selneg.pressed()
 };
 
 function mouseReleased() {
+
     for (let i = 0; i < activepoints.length; i++) {
+        if(activepoints[i].y<rect_height){
+            activepoints.splice(i,1);
+        }else{
         activepoints[i].clicked=false;
+        }
     }
+        for (let i = 0; i < activenegpoints.length; i++) {
+        if(activenegpoints[i].y<rect_height){
+            activenegpoints.splice(i,1);
+        }else{
+        activepoints[i].clicked=false;
+        }
+    }
+        for (let i = 0; i < activepospoints.length; i++) {
+        if(activepospoints[i].y<rect_height){
+            activepospoints.splice(i,1);
+        }else{
+        activepospoints[i].clicked=false;
+        }
+    }
+
 };
 
 
@@ -89,9 +123,9 @@ class charge {
         this.r = R
         this.clicked = false
     if (q>0){
-        this.color = "#DD2501"
+        this.color = "#FF8900"
     }
-    else{ this.color = "#006EAF"}
+    else{ this.color = "#0091D4"}
 }
 
     pressed(){
@@ -100,22 +134,55 @@ class charge {
         };
     }
     dragposition(mx,my){
-        let pointsnearmouse = 0
+        let pointsnearmouse = 0, thisFrameMouseX = mouseX, thisFrameMouseY = mouseY;
+
+                this.x=thisFrameMouseX
+                this.y=thisFrameMouseY
+
+}
+
+    intersect(){
+        let areintersecting = false;
         for (let i = 0; i < activepoints.length; i++) {
             if(activepoints[i]!=this){
-                if (parseFloat(dist(this.x,this.y,activepoints[i].x,activepoints[i].y))<=R*2.2 && parseFloat(dist(mx,my,activepoints[i].x,activepoints[i].y))<=R*2){
-                    pointsnearmouse=1
+                if (parseFloat(dist(mouseX,mouseY,activepoints[i].x,activepoints[i].y))<=R*2){
+                    areintersecting=true
             }
             }
         }
-            if(pointsnearmouse==0){
-                this.x=mx
-                this.y=my
-        }
+        return areintersecting;
+    }
+};
 
-}};
+class charge_selector{
+        constructor(q,x,y){
+        this.q = q
+        this.x = x
+        this.y=y
+        this.r = R
+        this.clicked = false
+    if (q>0){
+        this.color = "#FF8900"
+    }
+    else{ this.color = "#0091D4"}
+}
 
+    pressed(){
+        if (dist(mouseX,mouseY,this.x,this.y)<this.r){
+            let q = new charge(this.q,this.x,this.y)
+            q.pressed()
+            activepoints.push(q)
+            if (q.q>0){
+                activepospoints.push(q)
+            }else{activenegpoints.push(q)}
 
+        };
+    }
+
+}
+
+selpos = new charge_selector(1,width/3,rect_height/2)
+selneg = new charge_selector(-1,width/2,rect_height/2)
 function initial_fieldpoints(Qposition,R,number_of_lines){
     let x0=[],y0=[];
     for (let i = 0; i < number_of_lines; i++) {
@@ -128,7 +195,7 @@ function initial_fieldpoints(Qposition,R,number_of_lines){
 
 function draw_fieldlines(initialx,initialy){
     let xfield0 = initialx, yfield0 = initialy, xfield1=0,yfield1=0;
-    for (let i = 0;i<1000;i++) {
+    for (let i = 0;i<Nvertices;i++) {
         if(xfield0>width+padding || xfield0<0-padding||yfield0>height+padding||yfield0<0-padding){return};
         let Fx = 0, Fy = 0, Ftotal;
         for (let k = 0; k < activepoints.length; k++) {
@@ -144,7 +211,12 @@ function draw_fieldlines(initialx,initialy){
             dy = (max_range / Nvertices) * (Fy / Ftotal);
         xfield1=xfield0 + dx;
         yfield1=yfield0+dy;
+        stroke("rgb(150, 150, 150)");
         line(xfield0, yfield0, xfield1, yfield1)
+        if (i==Math.round(Nvertices/12)) {
+            line(xfield0-dy*arrow_size , yfield0 +dx*arrow_size, xfield0+arrow_size*dx, yfield0+arrow_size*dy)
+            line(xfield0+ dy*arrow_size, yfield0 -dx*arrow_size, xfield0+arrow_size*dx, yfield0+arrow_size*dy)
+        }
         xfield0 = parseFloat(xfield1)
         yfield0=parseFloat(yfield1)
         }
