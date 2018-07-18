@@ -35,6 +35,18 @@
                 </ul>
 
                 <div class="tab-content">
+                    <label>a:
+                        <input id = "aInput" type="box" value = "9">
+                        <p id= "aInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>b:
+                        <input id = "bInput" type="box" value = "9">
+                        <p id= "bInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>c:
+                        <input id = "cInput" type="box" value = "9">
+                        <p id= "cInputError" style="color:#ff0000" hidden></p>
+                    </label>
                     <div class="tab-pane active" id="XYZ">
                         <div  id = "innerXYZ" style="display:block">
                             The mass of the tetrahedron is given by:
@@ -178,6 +190,7 @@
                             This corresponds to building the tetrahedron with the slices.
                         </div>
                     </div>
+                    <br>
                     <input id="animateButton" class="button-primary" type="submit" value="Play">
                     <input id="resetButton" type="button" value="Reset">
                 </div>
@@ -186,6 +199,7 @@
     </div>
     <script src="../util/objects.js"></script>
     <script src="../util/animate.js"></script>
+    <script src="script/integrateObj.js"></script>
     <script src="script/integrate.js"></script>
 </body>
 </html>

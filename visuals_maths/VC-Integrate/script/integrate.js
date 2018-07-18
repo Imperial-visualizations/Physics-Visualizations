@@ -1,19 +1,4 @@
-var tetrahedron = {
-    type: "mesh3d",
-    x: [0, 0, 0, 4],
-    y: [0, 0, 4, 0],
-    z: [0, 4, 0, 0],
-    i: [0, 0, 0, 1],
-    j: [1, 2, 3, 2],
-    k: [2, 3, 1, 3],
-    intensity: [0, 0.33, 0.66, 1],
-    colorscale: [
-      [0, 'rgb(255,255,255)'],
-      [1, 'rgb(255,255,255)']
-    ],
-    opacity: 0.5,
-    showscale : false
-  };
+var tetrahedron;
 
 var axes = createAxes(4);
 var layout = {
@@ -28,9 +13,9 @@ var layout = {
             center: {x: 0, y: 0, z: -0.15}
         },
         aspectratio: {x:1, y:1, z:1},
-        xaxis: {range: [0, 5], autorange: false, zeroline: true,},
-        yaxis: {range: [0, 5], autorange: false, zeroline: true,},
-        zaxis: {range: [0, 5], autorange: false, zeroline: true,},
+        xaxis: {range: [0, 10], autorange: false, zeroline: true,},
+        yaxis: {range: [0, 10], autorange: false, zeroline: true,},
+        zaxis: {range: [0, 10], autorange: false, zeroline: true,},
     }
 }
 
@@ -274,44 +259,59 @@ function ZYXintegrator() {
     return frames
 }
 
-function computeFrames(){
+function computeFrames(frames, extra){
+    var a = parseFloat($("#aInput").val()),
+        b = parseFloat($("#bInput").val()),
+        c = parseFloat($("#cInput").val());
 
+    extra.push({ //Tetrahedron
+        type: "mesh3d",
+        x: [0, 0, 0, a],
+        y: [0, 0, b, 0],
+        z: [0, c, 0, 0],
+        i: [0, 0, 0, 1],
+        j: [1, 2, 3, 2],
+        k: [2, 3, 1, 3],
+        intensity: [0, 0.33, 0.66, 1],
+        colorscale: [ [0, 'rgb(255,255,255)'], [1, 'rgb(255,255,255)'] ],
+        opacity: 0.5,
+        showscale : false
+    });
+
+    //$("#frame").attr("max", "30");
+
+    // volume elements
+    var data = [];
+    var x1 = a/3-0.25, y1 = b/3-0.25, z1 = c/3-0.25;
+    var interval = 0.5;
+    var x2 = x1 + interval, y2 = y1 + interval, z2 = z1 + interval;
+
+    var test = x1;
+    while (test > 0.5) {
+        test -= interval;
+        console.log(test);
+    }
+
+    var initX = [x1, x1, x2, x2, x1, x1, x2, x2],
+        initY = [y1, y2, y2, y1, y1, y2, y2, y1],
+        initZ = [z1, z1, z1, z1, z2, z2, z2, z2];
+
+    extra.push(new VolumeElement(initX, initY, initZ).gObject());
+
+    frames.push({data: data});
+    return;
 }
 
 function initPlot(){
     Plotly.purge("graph");
-    var data = [{
-        type:"scatter3d",
-        mode:"lines",
-        x: [0,1],
-        y: [0,1],
-        z: [0,1],
-        line: {color: black, width: 2, dash:"solid"}
-    }];
+    var frames = [],
+        extra = [];
 
-    data = data.concat(axes);
-    data.push(tetrahedron);
+    computeFrames(frames, extra);
 
-    var newcube = {
-        type: "mesh3d",
-        x: [0.3, 0.3, 0.4, 0.4, 0.3, 0.3, 0.4, 0.4],
-        y: [0.2, 0.3, 0.3, 0.2, 0.2, 0.3, 0.3, 0.2],
-        z: [0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5],
-        i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
-        j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
-        k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
-        opacity: 1.0,
-        colorscale: [
-          [0, 'rgb(0,0,0)'],
-          [1, 'rgb(0,0,0)'] ],
-        intensity: [0, 0.1, 0.2, 0.3, 0.5, 0.6, 0.8, 1],
-        showscale: false
-    }
-
-    data.push(newcube);
-
-    Plotly.newPlot("graph", data, layout);
+    Plotly.newPlot("graph", extra.concat(axes), layout);
     //initAnimation("animateButton", frames, extra, layout, 10, [0, 38], true);
+    return;
 }
 
 function main() {
@@ -329,6 +329,27 @@ function main() {
             $('.tab-pane.active', $(href).parent()).removeClass('active');
             $(href).addClass('active');
             return false;
+        });
+    });
+
+    $("input[type=box]").each(function () {
+        $(this).on('keyup',function () {
+            if(event.keyCode == 13) {
+                let n = $(this).val();
+                if( n.match(/^-?\d*(\.\d+)?$/) && !isNaN(parseFloat(n)) ){
+                    $("#"+$(this).attr("id") + "Error").hide();
+                    if( parseFloat(n) > 2 && parseFloat(n) < 11){
+                        initPlot();
+                    } else{
+                        $("#"+$(this).attr("id") + "Error").text("Invalid input: min = 3, max = 10");
+                        $("#"+$(this).attr("id") + "Error").show();
+                    }
+                }
+                else{
+                    $("#"+$(this).attr("id") + "Error").text("Invalid input: the input needs to be a number");
+                    $("#"+$(this).attr("id") + "Error").show();
+                }
+            }
         });
     });
 
