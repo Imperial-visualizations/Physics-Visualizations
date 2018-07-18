@@ -15,7 +15,7 @@ var initX = 0, initY = 0;
 var resolution = 2000;
 var z = numeric.linspace(-2*Math.PI,2*Math.PI,resolution);
 // 0 is triangular, 1 is square, 2 is sawtooth, 3 is delta's, 4 is parabola, 5 is x, 6 is |x|,
-var shape = 1;
+var shape = 0;
 var decay = 0.9;
 var decay2 = 0.6;
 
@@ -36,7 +36,6 @@ function initCarte(type) {
 
     if (type === "#maths"){
         Plotly.newPlot("graph", computePlot(z), layout);
-
     } else if (type === "#plot"){
         Plotly.newPlot("graph", computePlot(z), layout);
     } else if (type ==="#component"){
@@ -46,8 +45,8 @@ function initCarte(type) {
         Plotly.newPlot("graph2",plot_combination(),layout);
     } else if (type==="#derivation2"){
         Plotly.newPlot("graph", computePlot(z),layout);
-    } else if (type==="#power"){
-        Plotly.newPlot('graph', plot_barCharts(),layout);
+    } else if (type==="#spectrum"){
+        Plotly.newPlot("graph", plot_barCharts(),setLayout());
     }
     return;
 }
@@ -329,9 +328,6 @@ function plot_combination(){
     var leftSide_y = y_combine.splice(0, y_combine.length/2);
     var leftSide_x = x.splice(0, x.length/2);
 
-    console.log(Math.atan2(1,2));
-    console.log(x);
-
     var positive_color = "rgb(100,150,200)";
     var negative_color = "rgb(100,150,200)";
 
@@ -375,7 +371,7 @@ function plot_combination(){
 function a_n (shape, n){
     var L = parseFloat(document.getElementById('LController').value);
     var amplitude;
-    if (shape === 1){
+    if (shape === 0){
         if (n===0){
             amplitude = 2*L**2/3;
         } else {
@@ -417,19 +413,24 @@ function coefficient (N){
             theta_n.push(Math.atan2(b_n(shape,i),a_n(shape,i)));
         }
     }
+    console.log(11111);
     return [n, an, bn, alpha_n, theta_n];
 }
 
 function plot_barCharts(){
     var N = parseFloat(document.getElementById('NController').value);
     [n, an, bn, alpha_n, theta_n] = coefficient(N);
+    console.log("n is "+n);
+    console.log("an is "+an);
     var data =
     [{
+            type:"bar",
             x: n,
             y: an,
-            type:"bar",
+
     },
     ];
+    console.log("data is "+data);
     return data
 }
 
@@ -438,7 +439,7 @@ function plot_barCharts(){
 
 /** updates the plot according to the slider controls. */
 function updatePlot() {
-    var data = [];
+    var data;
     // NB: updates according to the active tab
     var href = $('ul.tab-nav li a.active.button').attr('href'); // finds out which tab is active
 
@@ -454,13 +455,13 @@ function updatePlot() {
     if (href==="#plot"){
         initCarte(href);
         data = computePlot(z);
+    } else if (href==="#spectrum"){
+        initCarte(href);
+        data = plot_barCharts();
     } else if (href==="#component"){
         initCarte(href);
         data = computeComponents(z);
-    } else if (href==="#power"){
-        initCarte(href);
     } else if (href==="#derivation"){
-        initCarte(href);
         data = plot_triangle_sine();
         data2 = plot_combination();
         Plotly.animate(
