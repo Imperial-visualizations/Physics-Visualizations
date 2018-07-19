@@ -59,7 +59,7 @@ const visualisation = function (p) {
             this.position = position;
             this.mass = mass;
             this.color = color;
-            this.radius = 25 * mass ** 0.5;
+            this.radius = 50 * mass ** 0.5;
         }
 
         draw() {
@@ -122,14 +122,7 @@ const visualisation = function (p) {
         }
 
     }
-
-    function drawBond(a, b) {
-        p.strokeWeight(5);
-        p.stroke(0);
-        p.line(a.position.x + width / 2, a.position.y + height / 2, b.position.x + width / 2, b.position.y + height / 2);
-        p.strokeWeight(0);
-    }
-
+    let totalE, PE, effPE, scatterEP, scatterLJ;
     let totEPlot, EP_to_LJ, currLJ, currEP;
     //TODO:Tidy these decelerations up - move to dictionary?
     let atoms = [new Atom(p.createVector(width / 5, 0), RED, 1), new Atom(p.createVector(-width / 5, 0), IMPERIAL_BLUE, 1)];
@@ -137,6 +130,15 @@ const visualisation = function (p) {
     let reducedMass, momentOfInertia, r, rDot, omega, omegaDot, L;
     let arrTime, arrRotKE, arrVibKE, arrPE;
     let arrVibKESlider, arrRotKESlider;
+
+    function drawBond(a, b) {
+        let weight = -6* effPE/potential.e;
+        let alpha = - 255*PE/potential.e;
+        p.strokeWeight(weight);
+        p.stroke(0,0,0,alpha);
+        p.line(a.position.x + width / 2, a.position.y + height / 2, b.position.x + width / 2, b.position.y + height / 2);
+        p.strokeWeight(0);
+    }
 
     function init_pos_r(resolution, L, mu) {
         let min = [0, Number.MAX_VALUE];
@@ -146,10 +148,6 @@ const visualisation = function (p) {
         }
         return min[0];
     }
-
-
-    let totalE, PE, effPE, scatterEP, scatterLJ;
-
 
     function reset() {
         arrTime = [0];
