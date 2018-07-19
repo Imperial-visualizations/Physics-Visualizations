@@ -1,5 +1,4 @@
 //Global Initial Parameters:
-const initialPoint = [1, 1];
 const layout = {
     width: 450, "height": 500,
     margin: {l:30, r:30, t:30, b:30},
@@ -9,29 +8,22 @@ const layout = {
     yaxis: {range: [], zeroline: true, title: "y"},
     aspectratio: {x:1, y:1}
 };
-var currentPoint = initialPoint;
 var defaultHref = window.location.href;
 var initX = 0, initY = 0;
 var resolution = 2000;
+// set the step of the x axis from -2pi to 2pi
 var z = numeric.linspace(-2*Math.PI,2*Math.PI,resolution);
 // 0 is triangular, 1 is square, 2 is sawtooth, 3 is delta's, 4 is parabola, 5 is x, 6 is |x|,
 var shape = 0;
+// decay and decay2 is to optimize the visualization of the amplitude of the component plots.
 var decay = 0.9;
 var decay2 = 0.6;
 
 
-//Plot
-/**
- * Resets and plots initial area element or basis vectors of 2D Cartesian.
- * @param {string} type - basis vectors or area element
- */
+// initialize the Cartesian coordinates for the plots and the functions
 function initCarte(type) {
     Plotly.purge("graph");
     Plotly.purge("graph2");
-
-    var N = parseFloat(document.getElementById('NController').value);
-    var L = parseFloat(document.getElementById('LController').value);
-    var A = parseFloat(document.getElementById('AController').value);
 
 
     if (type === "#maths"){
@@ -46,7 +38,7 @@ function initCarte(type) {
     } else if (type==="#derivation2"){
         Plotly.newPlot("graph", computePlot(z),layout);
     } else if (type==="#spectrum"){
-        Plotly.newPlot("graph", plot_barCharts(),setLayout());
+        Plotly.newPlot("graph", plot_barCharts(),layout);
     }
     return;
 }
@@ -56,9 +48,6 @@ function initCarte(type) {
 it changes the range of the y-axis according to the amplitude and number of therms
 */
 function setLayout(){
-    var N = parseFloat(document.getElementById('NController').value);
-    var A = parseFloat(document.getElementById('AController').value);
-    var L = parseFloat(document.getElementById('LController').value);
 
     const new_layout = {
     width: 450, "height": 500,
@@ -72,6 +61,7 @@ function setLayout(){
     return new_layout;
 }
 
+// sum up all the number in the array
 function adding(array){
     var result = 0
     for(var i =0; i<array.length; ++i){
@@ -80,6 +70,11 @@ function adding(array){
     return result;
 }
 
+
+//----------------------------------------------------------------------------------------------------------------------
+// Start. Functions to plot the Fourier Series
+
+// select the kind of Fourier Series you want
 function selection(n,A,L,x,type){
     if (type===0){
         formula = (8*A*1/((2*(n)-1) *Math.PI)**2)*(-1)**(n) * Math.sin(x*(2*n -1) *Math.PI /L);
@@ -107,6 +102,8 @@ function selection(n,A,L,x,type){
     return formula;
 }
 
+// sum up all the terms in the Fourier Series
+// so at x, we have terms n=0, n=1, n=2..., we sum up all the amplitudes y=y0+y1+y2+... y0 at n=0, y1 at n=1, y2 at n=2...
 function summation(x) {
 
     var N = parseFloat(document.getElementById('NController').value);
@@ -128,6 +125,9 @@ function summation(x) {
     return sum;
 }
 
+// plot the Fourier series
+// y_values_cheat is to set the each of the value equals its midpoint value plus the y_value
+// so all the y_value_cheat starts at the midpoint of the y_value (equivalently, it's the average value)
 function computePlot(x){
 
     var N = parseFloat(document.getElementById('NController').value);
@@ -159,7 +159,18 @@ function computePlot(x){
 
 
 }
+// End. Functions to plot the Fourier Series.
+//----------------------------------------------------------------------------------------------------------------------
 
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Start. Functions to plot all the Fourier Series' components.
+
+// a_n
+// a_n part is to multiply the function f(x) by sin, and sin is an odd function
+// after the if statement, each function has been optimized for better visualization
+// comment behind each if statement is the original a_n of each function without optimization
 function odd_selection2(n,A,L,type){
     if (type===0){
         amplitude = (A*(-1)**n)*(decay)**n; // (8*A*1/((2*(n)-1) *np.pi)**2)*((-1)**(n))
@@ -179,6 +190,8 @@ function odd_selection2(n,A,L,type){
     return amplitude;
 }
 
+// b_n
+// b_n part is to multiply the function f(x) by cos, and cos is and even function
 function even_selection2(n,A,L,type){
     if (type === 6){
         if (n===0){
@@ -192,6 +205,7 @@ function even_selection2(n,A,L,type){
     return amplitude2;
 }
 
+// return the data that stores one component of the Fourier Series
 function plotSines(n,x,shape){
 
     var N = parseFloat(document.getElementById('NController').value);
@@ -221,6 +235,7 @@ function plotSines(n,x,shape){
 
 }
 
+// get each single component by recalling plotSines, and plot out all the components of the Fourier Series
 function computeComponents(x){
 
     var N = parseFloat(document.getElementById('NController').value);
@@ -237,6 +252,15 @@ function computeComponents(x){
 
 }
 
+// End. Functions for to plot all the Fourier Series' components.
+//----------------------------------------------------------------------------------------------------------------------
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Start. Functions to illustrate the math derivation part of triangular function.
+
+// return the y values of the sine plot in the first graph
 function sine_n (x,n,L){
     sin = [];
 
@@ -247,6 +271,7 @@ function sine_n (x,n,L){
     return sin;
 }
 
+// return both the x and y values of the triangular plot in the first graph
 function triangle_function (x,L,A){
     var x_first = [];
     var x_second = [];
@@ -268,6 +293,10 @@ function triangle_function (x,L,A){
     return [x_all, y_all];
 }
 
+
+// when you do the integration, you need to multiply the triangular function with the sine function
+// so this function is to
+// return the product of the triangular function and the sine function
 function combination (y_triangle, y_sine){
     var combination = [];
     for (var i = 0; i<y_triangle.length; ++i){
@@ -276,6 +305,7 @@ function combination (y_triangle, y_sine){
     return combination
 }
 
+// By recalling the sine_n function and the triangular_function, plot out but functions in the first graph
 function plot_triangle_sine (){
     var L = parseFloat(document.getElementById('LController').value);
     var A = parseFloat(document.getElementById('AController').value);
@@ -314,6 +344,10 @@ function plot_triangle_sine (){
     return data;
 }
 
+// separate the functions into two part
+// if the function is odd around L/2, then the integration is even around L/2, so two areas are equal, total size just double the area.
+// if the function is even around L.2, then the integration is odd around L/2, so just cancel out.
+// plot out the product of triangular function and the sine function.
 function plot_combination(){
     var L = parseFloat(document.getElementById('LController').value);
     var A = parseFloat(document.getElementById('AController').value);
@@ -367,7 +401,15 @@ function plot_combination(){
     ]
     return data;
 }
+// End. Function of the math derivation of the triangular functions.
+//----------------------------------------------------------------------------------------------------------------------
 
+//----------------------------------------------------------------------------------------------------------------------
+// Start. To plot out the amplitude of each term in the Fourier Series.
+// It will plot out the amplitude of a_n and b_n of each term in the Fourier Series.
+// It also includes the plot of alpha_n and theta_n of each term if the Fourier Series is converted into the Power Spectrum
+
+// return the amplitude of a_n of the Fourier Series
 function a_n (shape, n){
     var L = parseFloat(document.getElementById('LController').value);
     var amplitude;
@@ -381,21 +423,22 @@ function a_n (shape, n){
     return amplitude;
 }
 
+// return the amplitude of b_n of the Fourier Series
 function b_n(shape,n){
     var amplitude;
-    if (shape === 1){
+    if (shape === 0){
         amplitude=0;
     }
     return amplitude;
 }
 
+// return the amplitude/magnitude of a_n, b_n, alpha_n, theta_n
 function coefficient (N){
     var n = [];
     var an = [];
     var bn = [];
     var alpha_n = [];
     var theta_n = [];
-
 
 
     for (var i = 0; i < N; ++i){
@@ -413,15 +456,16 @@ function coefficient (N){
             theta_n.push(Math.atan2(b_n(shape,i),a_n(shape,i)));
         }
     }
-    console.log(11111);
+
     return [n, an, bn, alpha_n, theta_n];
 }
 
-function plot_barCharts(){
+// plot the bar charts to visualize the amplitude of a_n
+function plot_an(){
     var N = parseFloat(document.getElementById('NController').value);
+
     [n, an, bn, alpha_n, theta_n] = coefficient(N);
-    console.log("n is "+n);
-    console.log("an is "+an);
+
     var data =
     [{
             type:"bar",
@@ -430,37 +474,81 @@ function plot_barCharts(){
 
     },
     ];
-    console.log("data is "+data);
-    return data
+    return data;
 }
 
+// plot the bar charts to visualize the amplitude of b_n
+function plot_bn(){
+    var N = parseFloat(document.getElementById('NController').value);
+
+    [n, an, bn, alpha_n, theta_n] = coefficient(N);
+
+    var data =
+    [{
+            type:"bar",
+            x: n,
+            y: bn,
+
+    },
+    ];
+    return data;
+}
+
+// plot the bar charts to visualize the amplitude of alpha_n
+function plot_alpha(){
+    var N = parseFloat(document.getElementById('NController').value);
+
+    [n, an, bn, alpha_n, theta_n] = coefficient(N);
+
+    var data =
+    [{
+            type:"bar",
+            x: n,
+            y: alpha_n,
+
+    },
+    ];
+    return data;
+}
+
+
+// plot the bar charts to visualize the amplitude of theta_n
+function plot_theta(){
+    var N = parseFloat(document.getElementById('NController').value);
+
+    [n, an, bn, alpha_n, theta_n] = coefficient(N);
+
+    var data =
+    [{
+            type:"bar",
+            x: n,
+            y: theta_n,
+
+    },
+    ];
+    return data;
+}
+
+// End. To plot out the amplitude of each term in the Fourier Series.
+//----------------------------------------------------------------------------------------------------------------------
 
 
 
 /** updates the plot according to the slider controls. */
+// Plotly.animate does not support bar charts, so need to reinitialize the Cartesian every time.
 function updatePlot() {
     var data;
     // NB: updates according to the active tab
     var href = $('ul.tab-nav li a.active.button').attr('href'); // finds out which tab is active
-
-    /* ~Jquery
-    5.  Declare and store the floating values from x/y- sliders.
-        Hint: Same is task 2.
-    */
-    /*
-    var N = parseFloat(document.getElementById('NController').value);
-    var A = parseFloat(document.getElementById('AController').value);
-    var L = parseFloat(document.getElementById('LController').value);
-    */
+    if (href==="#spectrum"){
+        initCarte(href);
+    }
+    else {
     if (href==="#plot"){
-        initCarte(href);
         data = computePlot(z);
-    } else if (href==="#spectrum"){
-        initCarte(href);
-        data = plot_barCharts();
-    } else if (href==="#component"){
-        initCarte(href);
+    }  else if (href==="#component"){
         data = computeComponents(z);
+        initCarte(href);
     } else if (href==="#derivation"){
         data = plot_triangle_sine();
         data2 = plot_combination();
@@ -478,6 +566,7 @@ function updatePlot() {
         data = computePlot(z);
     }
 
+    console.log(data);
 
     //This is animation bit.
     Plotly.animate(
@@ -489,7 +578,7 @@ function updatePlot() {
             frame: {duration: 0, redraw: false,},
             mode: "afterall"
         }
-    );
+    );}
 }
 
 function main() {
