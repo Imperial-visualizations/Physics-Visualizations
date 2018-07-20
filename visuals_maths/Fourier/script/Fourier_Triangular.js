@@ -4,8 +4,8 @@ const layout = {
     margin: {l:30, r:30, t:30, b:30},
     hovermode: "closest",
     showlegend: false,
-    xaxis: {range: [], zeroline: true, title: "x"},
-    yaxis: {range: [], zeroline: true, title: "y"},
+    xaxis: {range: [-5,5], zeroline: true, title: "x"},
+    yaxis: {range: [-5,5], zeroline: true, title: "y"},
     aspectratio: {x:1, y:1}
 };
 var defaultHref = window.location.href;
@@ -38,7 +38,7 @@ function initCarte(type) {
     } else if (type==="#derivation2"){
         Plotly.newPlot("graph", computePlot(z),layout);
     } else if (type==="#spectrum"){
-        Plotly.newPlot("graph", plot_barCharts(),layout);
+        Plotly.newPlot("graph", plot_an(),layout);
     }
     return;
 }
