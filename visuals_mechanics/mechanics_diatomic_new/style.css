@@ -1,108 +1,132 @@
 @import url('https://fonts.googleapis.com/css?family=Fira+Sans');
-*{
+html,body{
     font-family:"Fira Sans",sans-serif;
 }
-html,body{
-    margin:0;
-}
 
-nav{
-    font-size: 35pt;
-    color:white;
-    background-color: #003E74;
-    padding: 0.5vw 1vh;
-    margin-bottom:2vh;
-}
-nav>h1{
-    margin:0;
-
-}
 .container{
-    width: 96vw;
-    margin: 0 2vw 0 2vw;
-}
-.column{
-    float:left;
-    width:50%;
-}
-.slider_card{
-    width:auto;
-    box-shadow: 0 0 10px 2px darkgrey;
-    padding-bottom: 1em;
-}
-.slider_card > h2{
-    color:white;
-    margin: 0;
-    box-sizing: border-box;
-    padding: 0.5em;
-    width: 100%;
-    margin: 0.5em 0;
-    background-color: #0091D4;
+    max-width: none;
+    max-height: 100vh;
+    width:90%;
 }
 
+canvas{
+    box-shadow: 0px 2px 10px 0.5px lightgray;
+}
+#animation_anchor{
+    width:100%;
+    height:50vh;
+}
 .graphSlider{
-    width: 40vw;
-    font-size: 25pt;
-    background-color: white;
+    border-radius:3px;
+    margin:2vh 0.5vw;
+    background-color: #006EAF;
+    padding: 0.5rem;
     text-align: right;
-    color:black;;
-    padding: 0.25em;
-    float:right;
-    margin: 0.5em;
-    box-shadow: 0 0px 10px 2px darkgrey;
-    transition: background-color 0.3s;
-}
-.showhide{
-    text-align: center;
-    background-color: inherit;
-    width:calc(100% - 40px);
-    height:400%;
-    margin: 20px;
-
-}
-button{
-    border-radius: 2px;
-    border: 0.125em solid #003E74;
-    color: #0091D4;
-    list-style: none;
-    text-decoration: none;
-    background-color: white;
-    fill:currentColor;
-    stroke-width:0;
-    color:black;
-    font-family: fira sans;
-    font-weight: bold;
-    font-size:14pt;
-    width: 8em;
-    text-align: center;
-    padding: 0.3em 2em;
-    margin: 0 0.4em;
-    float: left;
-    transition: background-color 0.2s ease-out;
-    cursor: pointer;
-    box-shadow: 0px 2.5px 5px 0.6px #d0d0d0;
-}
-button:hover{
-    background-color:#0091D4;
+    padding: 0.5em;
+    font-size: 15pt;
+    font-weight: bolder;
     color:white;
-    transition: background-color 0.35s ease-out;
-}
-button:active{
-    background-color: #003E74;
-}
-.graphSlider:hover{
-    background-color: black;
-    color:white;
-    fill:currentColor;
-    transition: background-color 0.35s;
+    box-shadow: 0px 2px 5px 0.7px lightgray;
 }
 .graphSlider svg{
-    display: inline;
-    margin:0.125em 0 0.125em 0.25em;
     float:left;
-    transition: transform 0.5s;
-    -webkit-transition: transform 0.5s;
-    -moz-transition: transform 0.5s;
-    -o-transition: transform 0.5s;
+    fill:white;
 }
-x`/* XXX:  */
+.graphSlider div{
+    margin-top: 1em;
+}
+h2{
+    border-left: 8px solid #000000;
+    padding-left: 0.25em;
+}
+input[type=range]{
+    margin:0;
+    -moz-appearance:none;
+    width:50%;
+    background: transparent;
+}
+
+a,a:focus,a:active,button,button:focus,button:active,input[type=range],input[type=range]:focus,input[type=range]:active{
+     outline:none;
+}
+.sliderContainer{
+    padding-top: 0.5em;
+    padding-left: 2em;
+    margin:0;
+    position: relative;
+}
+.marker{
+    position: relative;
+    top: -5px;
+    width: auto;
+    display: inline-block;
+    padding: 0.3em;
+    height:auto;
+    background-color: #006EAF;
+    color:white;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 15pt;
+    line-height: 15pt;
+    font-weight: bolder;
+    border-radius: 3px;
+    box-shadow: 0 5px 10px 0.5px lightgray;
+    transition: left 0.05s, top 0.2s;
+    z-index: 10;
+
+}
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 14px;
+    cursor: pointer;
+    box-shadow: 1px 1px 1px #50555C;
+    background: #50555C;
+    border-radius: 14px;
+    border: 0px solid #000000;
+}
+#buttonHolder{
+    margin: 2em 0;
+}
+input[type=range]::-moz-range-thumb{
+    background-color: #006EAF;
+    border:0;
+    width:22px;
+    border-radius: 1000px;
+    height:22px;
+}
+input[type=range]::-moz-range-track{
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+
+    background: #0091D4;
+    border-radius: 6px;
+    border: 0px solid #000000;
+}
+
+.sliderMin{
+    position:absolute;
+    left:2em;
+    font-weight: bold;
+    font-size: 12pt;
+    z-index: 0;
+}
+.sliderMax{
+    position: absolute;
+    left:50%;
+    font-weight: bold;
+    font-size: 12pt;
+    z-index: 0;
+}
+.cabinet{
+    border-left: 8px solid #0091D4;
+    font-size:20pt;
+    padding-left: 0.5em;
+    margin: 0.5em 0;
+}
+#KE{
+    border-color: #66A40A;
+}
+#KE .marker,#KE input[type=range]::-moz-range-thumb,#KE input[type=range]::-moz-range-track{
+    background-color: #66A40A;
+}

@@ -1,58 +1,83 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
 <head>
-    <meta charset="utf-8">
-    <title>Diatomic Molecule</title>
-    <link rel="stylesheet" href="style.css"/>
+	<meta charset="utf-8">
+	<title>Diatomic Molecule</title>
+	<link rel="stylesheet" href="skeleton.css" />
+	<link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-<nav><h1>Diatomic Molecule</h1></nav>
+	<nav>
+		<h1>Diatomic Molecule</h1></nav>
 
-<div class='container'>
-    <div class="column">
-        <div id='animation_anchor'></div>
-        <button id="playPauseButton">PLAY</button>
-        <button id="resetButton">RESET</button>
-    </div>
-    <div class="column">
-        <div class="slider_card">
-        <h2>Settings</h2>
-        <input type="range" id="KE_slider" min="0" max="10" step="1" value="0"/>Kinetic
-        Energy <br>
-        <input type="range" id="RE_slider" min="0" max="10" step="1" value="0"/> Rotational Energy
-    </div>
-    <div class="graphSlider">
-        <svg width="38" height="32">
-            <polygon points="0,0 38,0 18,32" ></polygon>
-        </svg>
-        <span>Show</span>
-        <div class="showhide" id="potentialGraph"></div>
-    </div>
+	<div class='container'>
+		<div class="row" >
+			<div class="six columns">
 
-    <div class="graphSlider"><span>Show</span>
-        <svg width="38" height="32">
-            <polygon points="0,0 38,0 18,32" ></polygon>
-        </svg>
-        <div class = "showhide" id="energyGraph"></div>
-    </div>
-    </div>
-</div>
+				<div id='animation_anchor'></div>
+			<div class="row" id="buttonHolder">
+				<div class="four columns">
+				<button id="playPauseButton">PLAY</button>
+			</div><div class ="eight columns">
+				<button id="resetButton">RESET</button>
+							</div>
 
-<!--<div class="container">-->
-<!--<div class="item1">1</div>-->
-<!--<div class="item2">2</div>-->
-<!--<div class="item3">3</div>-->
-<!--<div class="item4">4</div>-->
-<!--<div class="item5">5</div>-->
-<!--</div>-->
+			</div>
+			</div>
+			<div class="six columns" id="settingContainer">
+				<div class="row slider_card">
+					<h2>Settings</h2>
+					<div class="cabinet" id="KE">Kinetic Energy
+					<div class="sliderContainer">
+						<input type="range" id="KE_slider" min="0" max="10" step="0.01" value="0"/></br>
+						<div class="marker"></div>
+						<span class="sliderMin">0.00</span><span class="sliderMax">15.00</span>
+					</div>
+				</div>
+					<div class="cabinet" id="RE">Rotational Energy
+					<div class="sliderContainer">
+						<input type="range" id="RE_slider" min="0" max="10" step="0.01" value="0" /></br>
+						<div class="marker"></div>
+						<span class="sliderMin">0.00</span><span class="sliderMax">15.00</span>
+					</div>
+					</div>
+				</div>
+    				<div class="graphSlider row">
+    					<svg width="38" height="32">
+                            <polygon points="0,0 38,0 18,32" ></polygon>
+                        </svg>
+    					<span>Show</span>
+    					<div class="showhide" id="potentialGraph"></div>
+                    </div>
+
+    				<div class="graphSlider row"><span>Show</span>
+    					<svg width="38" height="32">
+                            <polygon points="0,0 38,0 18,32" ></polygon>
+                        </svg>
+    					<div class="showhide" id="energyGraph"></div>
+    				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--<div class="container">-->
+	<!--<div class="item1">1</div>-->
+	<!--<div class="item2">2</div>-->
+	<!--<div class="item3">3</div>-->
+	<!--<div class="item4">4</div>-->
+	<!--<div class="item5">5</div>-->
+	<!--</div>-->
 
 
-<script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
-<script type = "text/javascript" src="./scripts/navigation.js"></script>
-<script type="text/javascript" src="./scripts/graphics.js"></script>
+	<script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
+	<script type="text/javascript" src="./scripts/navigation.js"></script>
+	<script type="text/javascript" src="./scripts/graphics.js"></script>
 
 
 </body>
+
 </html>

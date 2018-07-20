@@ -1,6 +1,7 @@
 //Initial contant declerations
-const width = 500;
-const height = 500;
+const width = parseFloat($('#animation_anchor').css('width').slice(0,-2));
+const height = parseFloat($('#animation_anchor').css('height').slice(0,-2));
+
 const marT = 30, marB = 23, marR = 5, marL = 35;
 const RED = '#DD2501';
 const IMPERIAL_BLUE = '#003E74';
@@ -32,11 +33,11 @@ const visualisation = function (p) {
     let running = false;
 
     $('#KE_slider').on('change', function () {
-        init_VibKE = parseFloat($('#KE_slider').val());
+        init_VibKE = Math.floor(parseFloat($('#KE_slider').val()));
         reset();
     });
     $('#RE_slider').on('change', function () {
-        init_RotKE = parseFloat($('#RE_slider').val());
+        init_RotKE = Math.floor(parseFloat($('#RE_slider').val()));
         reset();
     });
 
@@ -260,7 +261,7 @@ const visualisation = function (p) {
 
     //Function called once on page load
     p.setup = function () {
-        let canvas = p.createCanvas(500, 500);
+        let canvas = p.createCanvas(width,height    );
         p.frameRate(60);
         canvas.parent('animation_anchor');
         p.strokeWeight(0);
