@@ -202,13 +202,13 @@ function computeFrames(transformation, start, end, startVec, frameSize, addTrace
  * @param {string} color1 - color of first rotation.
  * @param {string} color2 - color of second rotation.
  */
-function computeCompositeRotations(rotation1, rotation2, angle1, angle2, initialVec, frameSize, arrowColor, color1, color2) {
+function computeCompositeRotations(frames, rotation1, rotation2, angle1, angle2, initialVec, frameSize, arrowColor, color1, color2, point=[0,0,0]) {
     var intermediate1 = numeric.linspace(0.0, angle1, frameSize);
     var intermediate2 = numeric.linspace(0.0, angle2, frameSize);
     var trace1 = [initialVec];
-    var frames = [];
     var firstTrace;
     var newLine;
+    var afterImage = new Line([[0,0,0], point]);
 
     var newVec, newVec2;
     for (var i = 0, n = intermediate1.length; i < n; ++i) {
@@ -218,6 +218,8 @@ function computeCompositeRotations(rotation1, rotation2, angle1, angle2, initial
         firstTrace = new Line(trace1);
         frames.push({
             data:[
+                afterImage.gObject(white),
+                afterImage.arrowHead(white),
                 newLine.gObject(arrowColor),
                 newLine.arrowHead(arrowColor),
                 firstTrace.gObject(color1),
@@ -233,6 +235,8 @@ function computeCompositeRotations(rotation1, rotation2, angle1, angle2, initial
         newLine = new Line([[0,0,0], newVec2]);
         frames.push({
             data:[
+                afterImage.gObject(white),
+                afterImage.arrowHead(white),
                 newLine.gObject(arrowColor),
                 newLine.arrowHead(arrowColor),
                 new Line(trace2).gObject(color2),
@@ -241,7 +245,7 @@ function computeCompositeRotations(rotation1, rotation2, angle1, angle2, initial
         });
     }
 
-    return frames;
+    return newVec2;
 }
 /**
  * Fuses two frames produced by @computeCompositeRotations.
@@ -252,29 +256,22 @@ function computeCompositeRotations(rotation1, rotation2, angle1, angle2, initial
  * @param {int} frameSize - size of the frames.
  */
 function computeCommute(rotation1, rotation2, angle1, angle2, frameSize) {
-    var frameList1 = computeCompositeRotations(
+    var frames = [];
+    var newVec = computeCompositeRotations(frames,
         rotation1, rotation2,
         angle1, angle2,
         initialVec, frameSize,
         white, lilac, orange
     );
 
-    var frameList2 = computeCompositeRotations(
+    computeCompositeRotations(frames,
         rotation2, rotation1,
         angle2, angle1,
         initialVec, frameSize,
-        black, orange, lilac
+        black, orange, lilac,
+        newVec
     );
 
-    var frames = [], data;
-    for (var i=0, n=frameList1.length; i < n; ++i) {
-        data = [];
-        for (var j=0, m=frameList1[i].data.length; j < m; ++j) {
-            data.push(frameList1[i].data[j]);
-            data.push(frameList2[i].data[j]);
-        }
-        frames.push({data: data});
-    }
     return frames;
 }
 
@@ -381,12 +378,14 @@ function initPlot() {
 function histPlot(index) {
     Plotly.purge("graph");
     var data = [];
+
     var initVec = new Line([[0,0,0], historyVectors[index]]);
     data.push(initVec.gObject(black));
     data.push(initVec.arrowHead(black));
     data.push({type:"scatter3d"}); // trace line
     data.push(sphere);
     data = data.concat(axes);
+
     data.push({type:"scatter3d"}); // Plane surfaces
 
     Plotly.newPlot(
@@ -521,10 +520,10 @@ function commutePlot() {
     var frameSize = 20;
 
     var frames = computeCommute(rotationX, rotationY, angle1, angle2, frameSize);
-    var extra = axes;
+    var extra = axes.slice();
     extra.push(sphere);
 
-    initAnimation("commuteAnimate", frames, extra, layout, 10, [0, 19], true);
+    initAnimation("commuteAnimate", frames, extra, layout, 10, [0, 38], true);
 }
 
 /** undos performed transformation */

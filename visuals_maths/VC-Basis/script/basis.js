@@ -177,7 +177,6 @@ function computeSpherical(r, theta, phi) {
         phiHat.gObject(lilac, 5),
         phiHat.arrowHead(lilac, 5, 0.25)
     ];
-
     var meshSize, t;
     var xTrace = [], yTrace = [], zTrace = [];
 

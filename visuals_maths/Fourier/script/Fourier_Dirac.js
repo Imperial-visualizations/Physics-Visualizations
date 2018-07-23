@@ -12,9 +12,9 @@ const layout = {
 var currentPoint = initialPoint;
 var defaultHref = window.location.href;
 var initX = 0, initY = 0;
-var z = numeric.linspace(-2*Math.PI,2*Math.PI,1000);
+var z = numeric.linspace(-2*Math.PI,2*Math.PI,2000);
 // 0 is triangular, 1 is square, 2 is sawtooth, 3 is delta's, 4 is parabola, 5 is x, 6 is |x|,
-var shape = 0;
+var shape = 3;
 var decay = 0.9;
 var decay2 = 0.6;
 
@@ -58,6 +58,9 @@ function setLayout(){
     showlegend: false,
     xaxis: {range: [], zeroline: true, title: "x"},
     yaxis: {range: [], zeroline: true, title: "y"},
+
+    //xaxis: {range: [0, 7], zeroline: true, title: "x"},
+    //yaxis: {range: [0, Math.abs(A*N*2.5/L)+1], zeroline: true, title: "y"},
     aspectratio: {x:1, y:1}
 };
     return new_layout;
@@ -127,14 +130,10 @@ function computePlot(x){
 
     var x_values = [];
     var y_values = [];
-    var y_values_cheat = [];
 
     for (var i = 0; i < x.length ; ++i){
         y_values.push(summation(x[i]));
         x_values.push(x[i]);
-    }
-    for (var i = 0; i< y_values.length; ++i){
-        y_values_cheat.push(-y_values[y_values.length/2]+y_values[i]);
     }
 
     var data=[
@@ -142,7 +141,7 @@ function computePlot(x){
             type:"scatter",
             mode:"lines",
             x: x_values,
-            y: y_values_cheat,
+            y: y_values,
             line:{color:"rgb(0,225,0)", width:3, dash: "dashed"},
         },
     ];
@@ -159,7 +158,7 @@ function odd_selection2(n,A,L,type){
     } else if (type===2){
         amplitude = (A*(-1)**(n+1))*(decay)**n;  //  2*A*(-1)**(n+1) /(n*np.pi)
     } else if (type===3){
-        amplitude = 1/L;
+        amplitude = A/L;
     } else if (type===4){
         amplitude = A*((-1)**n)*decay**n;  // (((4*L**2)/(n*Math.PI)**2)*(-1)**n)
     } else if (type===5){
@@ -191,12 +190,13 @@ function plotSines(n,x,shape){
 
     var x_n = [];
     var y_n = [];
-    var spacing=A;
+    var spacing;//=3*A;
 
 
     for (var i = 0; i < x.length ; ++i){
         x_n.push(x[i]);
-        y_n.push(((odd_selection2(n,A,L,shape))*Math.sin(n*Math.PI*x[i]/L)+(even_selection2(n,A,L,shape))*Math.cos(n*Math.PI*x[i]/L))+2*spacing*(n));
+        spacing = Math.sqrt((odd_selection2(n,A,L,shape))**2+(even_selection2(n,A,L,shape)));
+        y_n.push(((odd_selection2(n,A,L,shape))*Math.sin(n*Math.PI*x[i]/L)+(even_selection2(n,A,L,shape))*Math.cos(n*Math.PI*x[i]/L))+spacing*(n)*2);
     }
 
     var data=

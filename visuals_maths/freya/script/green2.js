@@ -158,18 +158,18 @@ function initArbitraryShape() {
     Curve.push(side2);
     Curve.push(side3);
     Curve.push(side4);
-    Curve.push(grid11.arrowHead(magenta))
-    Curve.push(grid12.arrowHead(magenta))
-    Curve.push(grid13.arrowHead(magenta))
-    Curve.push(grid14.arrowHead(magenta))
-    Curve.push(grid21.arrowHead(magenta))
-    Curve.push(grid22.arrowHead(magenta))
-    Curve.push(grid23.arrowHead(magenta))
-    Curve.push(grid24.arrowHead(magenta))
-    Curve.push(arr1.arrowHead(black))
-    Curve.push(arr2.arrowHead(black))
-    Curve.push(arr3.arrowHead(black))
-    Curve.push(arr4.arrowHead(black))
+    Curve.push(grid11.arrowHead(magenta,3))
+    Curve.push(grid12.arrowHead(magenta,3))
+    Curve.push(grid13.arrowHead(magenta,3))
+    Curve.push(grid14.arrowHead(magenta,3))
+    Curve.push(grid21.arrowHead(magenta,3))
+    Curve.push(grid22.arrowHead(magenta,3))
+    Curve.push(grid23.arrowHead(magenta,3))
+    Curve.push(grid24.arrowHead(magenta,3))
+    Curve.push(arr1.arrowHead(black,3))
+    Curve.push(arr2.arrowHead(black,3))
+    Curve.push(arr3.arrowHead(black,3))
+    Curve.push(arr4.arrowHead(black,3))
     return Curve
 
 }
