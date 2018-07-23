@@ -1,6 +1,6 @@
 //Initial contant declerations
-const width = parseFloat($('#animation_anchor').css('width').slice(0,-2));
-const height = parseFloat($('#animation_anchor').css('height').slice(0,-2));
+let width = parseFloat($('#animation_anchor').css('width').slice(0,-2));
+let height = parseFloat($('#animation_anchor').css('height').slice(0,-2));
 
 const marT = 30, marB = 23, marR = 5, marL = 35;
 const RED = '#DD2501';
@@ -27,10 +27,21 @@ $(document).ready(function () {
     $('#KE_slider').val("0");
     $('#RE_slider').val("0");
     let p5js = new p5(visualisation);
+
+    height = parseFloat($('#animation_anchor').css('height').slice(0,-2));
 });
 
 const visualisation = function (p) {
     let running = false;
+
+    $(window).on('resize',function(){
+        $('.flexyHold').each(function() {
+    		$($(this).children('.flexy')).css('height', parseFloat($(this).css('height').slice(0, -2)) - $(this).attr('data-elemHeight'));
+    	});
+        width = parseFloat($('#animation_anchor').css('width').slice(0,-2));
+        height = parseFloat($('#animation_anchor').css('height').slice(0,-2));
+        p.resizeCanvas(width,height);
+    });
 
     $('#KE_slider').on('change', function () {
         init_VibKE = Math.floor(parseFloat($('#KE_slider').val()));
@@ -266,6 +277,9 @@ const visualisation = function (p) {
         canvas.parent('animation_anchor');
         p.strokeWeight(0);
         reset();
+        $('#spinner').fadeOut(200);
+        $('.container').attr('style','')
+
     };
 
     function update_atoms(r, omega) {

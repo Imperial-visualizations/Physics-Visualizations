@@ -1,8 +1,405 @@
+/*
+
+                                                                           `.`
+        `--------                                                          ods                    :hhhh:
+        :yyhddhys`      `   `         ``          ``              ``       .:.          ```        .-dd:
+           +dh`    shhshdhshhh+ :hhyohhhhs:   `/shhhhy+.   shhy-+yddh-  `shhhy`      +yhhyhho`      `dd:
+           +dh`    .hdo`sdy`:dh` :dds-`./ddo .ydo.``.odh.  `:ddy+..//`   `.+dh`      ::-..-hd+      `dd:
+           +dh`    `yd/ ods -dh. .dd:    hdy`:ddysssssss-   -dd-           /dh`     :ydyo+oddo      `dd:
+        `--odh:-.  -hdo`ody.-dh: .ddh/-:sdd/ `ydy:.`.:+s`  -/dd/--.     .--odh:--`  hdh-``:hds.  `--:dd+--.
+        :hhhhhhhy` shhy:+hh+-yhy`.ddosyhs+.   `:shhhhys:  .yhhhhhhs    `ohhhhhhhy:  -shhhyo+yho  :yhhhhhhhs
+                                .:dd/.`
+                               `shhhhho
+
+                          `.`                                                             `.                                                 `.`
+        `----.  .---.    `ydo                                             .yhhho         `hd/                                 -+-           `yd/
+        /hddh+ `sddhs     -:.         ```  `                    ```        ..sds          -:`         ```  `       ```        sds            -:`          ``            ``
+         `yds   .hd-   `yhhhs      `ohhsyhhh-  +hhy` /hhh.   :yhhyhhy-       ods       .hhhh+      .shysyhhh.   -yhhyhhy:  `/ohdhooo+`    .yhhho      .+yhhhhy+.  +hhyohhdh/
+          -dd/ `sd+     ..sdy      +dd/...:/`  `+dh` `/dd.   ./:...sdh       ods        ..hdo      sdd:...//`   ./:-..odh   :/hdy///:`     ..yds     -hdy-``-sdd: `+dd+.`+dd.
+           +dh./dy`       ody      `+yhdddhy:   /dh`  -dd.  `ohhs+oydd       ods          ydo      .+yhdddhs-  `ohds+oydd     sds            sds     +dd:    .dds  /dh.  .dd.
+            ydhdh.     .--sdh---`  /y+` `-ydh   :dd/.-sdd/` +dd/``-sdd-   .--sdy---    ---hds---   +y/` `-hds  /dd+``.odd-    sdh..-/+-   ---ydy---  -hdh:..:ydd: `+dh:``/dd/`
+            .shy:     `shhhhhhhy-  +hyhyyyyo.    /yhhy+yhy: `+hhhys+yhy. `shhhhhhhy.  .yhhhhhhhy.  ohyhysyy+`  `+yhhys+shy.   .ohhhhyo.  .yhhhhhhhy.  `/shhhhy+.  /hhhy-:yhhy:
+
+        2017 © Imperial College London
+
+*/
+
+/*
+
+Basic Styles
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+*/
+
+
 @import url('https://fonts.googleapis.com/css?family=Fira+Sans');
 html,body{
     font-family:"Fira Sans",sans-serif;
+    margin:0;
 }
 
+body.no-nav::after{
+  content: "";
+  display: none;
+}
+/*
+
+UI Styles
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+*/
+
+/*
+Slider Styles
+*/
+
+.sliderContainer{
+    margin:0;
+    width:100%;
+}
+
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 80%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+  min-height: 24px;
+  margin: 0;
+  padding: 10px 0;
+}
+input[type=range]:disabled{
+  opacity: 0.2;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  overflow: visible;
+  display: block;
+  height: 20px;
+  width: 20px;
+  margin-top: -10px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  background: #ffffff;
+  border: 3px solid #003E74;
+  border-radius: 50%;
+  box-shadow: 0px 2px 3px #cccccc;
+  cursor: pointer;
+  z-index: 1000;
+}
+input[type=range]::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 3px solid #003E74;
+  border-radius: 50%;
+  box-shadow: 0px 2px 3px #cccccc;
+  cursor: pointer;
+  z-index: 1000;
+}
+input[type=range]::-ms-thumb {
+  height: 20px;
+  width: 20px;
+  margin-top: 0;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 3px solid #003E74;
+  border-radius: 50%;
+  box-shadow: 0 2px 3px #cccccc;
+  cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: #006EAF;
+  border-radius: 1px;
+}
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: #006EAF;
+  border-radius: 1px;
+}
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+  background: #006EAF;
+  border-radius: 1px;
+  box-sizing: border-box;
+}
+
+input[type=range]:active::-webkit-slider-runnable-track {
+  box-shadow: 0px 0px 5px 1px #449ECF;
+}
+input[type=range]:active::-moz-range-track {
+  box-shadow: 0px 0px 5px 1px #449ECF;
+}
+input[type=range]:active::-ms-track {
+  box-shadow: 0px 0px 5px 1px #449ECF;
+}
+input[type=range]::-ms-fill-lower {
+  background: #006EAF;
+}
+
+span.sliderMin{
+    font-size: 15pt;
+    font-weight: lighter;
+    position: relative;
+    top:-15px;
+}
+span.sliderMax{
+    font-size: 15pt;
+    font-weight: lighter;
+    position:relative;
+    top: -15px;
+}
+
+
+label.sliderTitle{
+    margin: 0 0;
+    margin-bottom: -1.0rem;
+}
+label.slider{
+    margin: 0 0;
+}
+
+
+
+/*
+Dropdown Menu Styles
+*/
+
+.dropdown:after{
+    content:"▾";
+    color: #003E74;
+    position: relative;
+    right:0;
+    top: 0;
+    margin-left: -1.2em;
+}
+.dropdown>li {
+    position: relative;
+  display: inline-block;
+  height: 38px;
+  line-height: 38px;
+  padding: 0 30px;
+  color: #003E74;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 32px;
+  letter-spacing: .04rem;
+  text-decoration: none;
+  white-space: nowrap;
+  text-transform: capitalize;
+  background-color: transparent;
+  border-radius: 4px;
+  border: 2px solid #003E74;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.dropdown>li>span {
+    display: inline-block ;
+    color: #003E74;
+    text-decoration: none;
+    font-weight: 700;
+    line-height: 20px;
+    cursor: pointer;
+}
+.dropdown>li>ul {
+    display: none;
+    position: absolute;
+    top: 1.0em;
+    left:0;
+}
+.dropdown>li:hover>ul {
+    display: inline-block;
+}
+.dropdown>li>ul>li {
+    display: block;
+    width: 100%;
+    background: #003E74;
+    border: #fff solid 1px;
+    color: #fff;
+    margin-bottom: 0;
+    padding-left: 10px;
+
+}
+.dropdown>li a {
+    display: inline-block ;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 400;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+
+
+/*
+Tab Menu Styles
+*/
+
+
+ul.tab-nav {
+    list-style: none;
+    border-bottom: 1px solid #bbb;
+    padding-left: 5px;
+}
+
+ul.tab-nav li {
+    display: inline;
+}
+
+ul.tab-nav li a.button {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-bottom: -1px;
+    border-bottom: none;
+}
+ul.tab-nav li a.button:hover {
+    box-shadow: 0 -2px 2px #aaa;
+}
+
+ul.tab-nav li a.active.button {
+    border-bottom: 1px solid #fff;
+}
+ul.tab-nav li a.active.button:hover {
+    box-shadow: 0 -2px 2px #aaa;
+}
+ul.tab-nav li a.button:focus {
+  box-shadow: 0px -2px 5px 1px #aaa;
+  text-shadow: 0px 1px 1px #aaa;
+}
+ul.tab-nav li a.active.button:focus {
+  box-shadow: 0px -2px 5px 1px #aaa;
+  text-shadow: 0px 1px 1px #aaa;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-content .tab-pane.active {
+    display: block;
+}
+.tab-content{
+  display: block;
+    border-bottom: 1px solid #bbb;
+}
+
+
+
+@media (min-width: 1500px) {
+  .container {
+    max-width: 1500px;
+  }
+  html {
+  }
+  body{
+  }
+
+    h1 { font-size: 6rem; }
+    h2 { font-size: 5.04rem; }
+    h3 { font-size: 4.32rem; }
+    h4 { font-size: 3.6rem; }
+    h5 { font-size: 2.88rem; }
+    h6 { font-size: 2.40rem; }
+}
+
+.rightnav{
+    right: 2vh;
+    top: 45vh;
+    font-size: 50px;
+    color:#330766;
+    text-align: center;
+    position: absolute;
+    cursor: pointer;
+}
+
+
+.leftnav{
+    left: 2vh;
+    top: 45vh;
+    font-size: 50px;
+    color: #330766;
+    text-align: center;
+    cursor: pointer;
+    position: absolute;
+}
+
+#spinner {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background: #FFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 50;
+}
+
+.loading-message {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+#spinner-bar {
+  display: inline-block;
+  position: relative;
+  width: 40px;
+  height: 10px;
+  background: #321E6D;
+  animation-name: loading-spinner;
+  animation-duration: 0.8s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-timing-function: ease-in-out;
+}
+.spinner-mask {
+  display: inline-block;
+  position: relative;
+  width: 100px;
+  height: 10px;
+  background: #FFF;
+  z-index: 100;
+}
+
+@keyframes loading-spinner {
+  0% {transform: translateX(32px);}
+  100% {transform: translateX(-32px);}
+}
+nav{
+    font-size: 5rem;
+    font-weight: bolder;
+    margin:0;
+    padding:1.5rem 1.2rem;
+    line-height: 5rem;
+}
+.flexyHold{
+    height:calc(100vh - 5rem - 3rem);
+    position: sticky;
+    top:50px;
+}
 .container{
     max-width: none;
     max-height: 100vh;
@@ -12,10 +409,7 @@ html,body{
 canvas{
     box-shadow: 0px 2px 10px 0.5px lightgray;
 }
-#animation_anchor{
-    width:100%;
-    height:50vh;
-}
+
 .graphSlider{
     border-radius:3px;
     margin:2vh 0.5vw;
@@ -35,98 +429,47 @@ canvas{
 .graphSlider div{
     margin-top: 1em;
 }
-h2{
-    border-left: 8px solid #000000;
-    padding-left: 0.25em;
-}
-input[type=range]{
-    margin:0;
-    -moz-appearance:none;
-    width:50%;
-    background: transparent;
-}
 
 a,a:focus,a:active,button,button:focus,button:active,input[type=range],input[type=range]:focus,input[type=range]:active{
      outline:none;
 }
-.sliderContainer{
-    padding-top: 0.5em;
-    padding-left: 2em;
-    margin:0;
-    position: relative;
-}
-.marker{
-    position: relative;
-    top: -5px;
-    width: auto;
-    display: inline-block;
-    padding: 0.3em;
-    height:auto;
-    background-color: #006EAF;
-    color:white;
-    text-align: center;
-    vertical-align: middle;
-    font-size: 15pt;
-    line-height: 15pt;
-    font-weight: bolder;
-    border-radius: 3px;
-    box-shadow: 0 5px 10px 0.5px lightgray;
-    transition: left 0.05s, top 0.2s;
-    z-index: 10;
 
-}
-input[type=range]::-webkit-slider-runnable-track {
-    width: 100%;
-    height: 14px;
-    cursor: pointer;
-    box-shadow: 1px 1px 1px #50555C;
-    background: #50555C;
-    border-radius: 14px;
-    border: 0px solid #000000;
-}
-#buttonHolder{
-    margin: 2em 0;
-}
-input[type=range]::-moz-range-thumb{
-    background-color: #006EAF;
-    border:0;
-    width:22px;
-    border-radius: 1000px;
-    height:22px;
-}
-input[type=range]::-moz-range-track{
-    width: 100%;
-    height: 5px;
-    cursor: pointer;
-
-    background: #0091D4;
-    border-radius: 6px;
-    border: 0px solid #000000;
-}
-
-.sliderMin{
-    position:absolute;
-    left:2em;
-    font-weight: bold;
-    font-size: 12pt;
-    z-index: 0;
-}
-.sliderMax{
-    position: absolute;
-    left:50%;
-    font-weight: bold;
-    font-size: 12pt;
-    z-index: 0;
-}
 .cabinet{
+    font-weight: bolder;
     border-left: 8px solid #0091D4;
     font-size:20pt;
     padding-left: 0.5em;
     margin: 0.5em 0;
 }
+#buttonHolder{
+    margin: 2em 0;
+}
+
+#animation_anchor{
+    width:100%;
+
+    flex-grow: 2;
+}
+
 #KE{
     border-color: #66A40A;
 }
-#KE .marker,#KE input[type=range]::-moz-range-thumb,#KE input[type=range]::-moz-range-track{
+#KE .marker{
     background-color: #66A40A;
+}
+#KE input[type=range]::-moz-range-track{
+    background-color: #66A40A;
+    box-shadow:
+}
+#KE input[type=range]::-moz-range-thumb{
+    border-color:#02893B;
+}
+#KE input[type=range]:active::-webkit-slider-runnable-track {
+  box-shadow: 0px 0px 5px 1px #66A40A;
+}
+#KE input[type=range]:active::-moz-range-track {
+  box-shadow: 0px 0px 5px 1px #66A40A;
+}
+#KE input[type=range]:active::-ms-track {
+  box-shadow: 0px 0px 5px 1px #66A40A;
 }

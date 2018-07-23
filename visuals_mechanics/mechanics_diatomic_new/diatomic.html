@@ -10,67 +10,65 @@
 
 <body>
 	<nav>
-		<h1>Diatomic Molecule</h1></nav>
+Diatomic Molecule
+</nav>
+<div id='spinner'>
+      <span class="loading-message">Loading</span>
+      <div>
+          <div class="spinner-mask"></div>
+          <div id="spinner-bar"></div>
+          <div class="spinner-mask"></div>
+      </div>
+</div>
+	<div class='container' style="visibility:hidden">
+		<div class="row">
+			<div class="six columns flexyHold">
+				<div id='animation_anchor' class="flexy"></div>
+				<div class="row" id="buttonHolder">
+					<div class="four columns">
+						<button id="playPauseButton">PLAY</button>
+					</div>
+					<div class="eight columns">
+						<button id="resetButton">RESET</button>
+					</div>
+				</div>
+					<div class="row slider_card">
+						<div class="cabinet" id="KE">Kinetic Energy
 
-	<div class='container'>
-		<div class="row" >
-			<div class="six columns">
-
-				<div id='animation_anchor'></div>
-			<div class="row" id="buttonHolder">
-				<div class="four columns">
-				<button id="playPauseButton">PLAY</button>
-			</div><div class ="eight columns">
-				<button id="resetButton">RESET</button>
+							<div class="sliderContainer">
+								<span class="sliderMin">0.00</span>
+								<input type="range" id="KE_slider" min="0" max="10" step="0.01" value="0" />
+								<span class="sliderMax">15.00</span>
 							</div>
+						</div>
+						<div class="cabinet" id="RE">Rotational Energy
+							<div class="sliderContainer">
+								<span class="sliderMin">0.00</span>
+								<input type="range" id="RE_slider" min="0" max="10" step="0.01" value="0" />
+								<span class="sliderMax">15.00</span>
+							</div>
+						</div>
+					</div>
+				</div>
 
-			</div>
-			</div>
 			<div class="six columns" id="settingContainer">
-				<div class="row slider_card">
-					<h2>Settings</h2>
-					<div class="cabinet" id="KE">Kinetic Energy
-					<div class="sliderContainer">
-						<input type="range" id="KE_slider" min="0" max="10" step="0.01" value="0"/></br>
-						<div class="marker"></div>
-						<span class="sliderMin">0.00</span><span class="sliderMax">15.00</span>
-					</div>
-				</div>
-					<div class="cabinet" id="RE">Rotational Energy
-					<div class="sliderContainer">
-						<input type="range" id="RE_slider" min="0" max="10" step="0.01" value="0" /></br>
-						<div class="marker"></div>
-						<span class="sliderMin">0.00</span><span class="sliderMax">15.00</span>
-					</div>
-					</div>
-				</div>
-    				<div class="graphSlider row">
-    					<svg width="38" height="32">
+				<div class="graphSlider row">
+					<svg width="38" height="32">
                             <polygon points="0,0 38,0 18,32" ></polygon>
                         </svg>
-    					<span>Show</span>
-    					<div class="showhide" id="potentialGraph"></div>
-                    </div>
+					<span>Show</span>
+					<div class="showhide" id="potentialGraph" label="Lennard Jones Potential"></div>
+				</div>
 
-    				<div class="graphSlider row"><span>Show</span>
-    					<svg width="38" height="32">
+				<div class="graphSlider row"><span>Show</span>
+					<svg width="38" height="32">
                             <polygon points="0,0 38,0 18,32" ></polygon>
                         </svg>
-    					<div class="showhide" id="energyGraph"></div>
-    				</div>
+					<div class="showhide" id="energyGraph" label= "Energy Graph"></div>
+				</div>
 			</div>
 		</div>
 	</div>
-
-	<!--<div class="container">-->
-	<!--<div class="item1">1</div>-->
-	<!--<div class="item2">2</div>-->
-	<!--<div class="item3">3</div>-->
-	<!--<div class="item4">4</div>-->
-	<!--<div class="item5">5</div>-->
-	<!--</div>-->
-
-
 	<script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 	<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
