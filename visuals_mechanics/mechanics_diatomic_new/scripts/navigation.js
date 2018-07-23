@@ -29,5 +29,4 @@ $(document).ready(function() {
 		$($(this).children('.sliderMin')).html($(this).children('input').attr('min') + "eV");
 		$($(this).children('.sliderMax')).html($(this).children('input').attr('max') + "eV ");
 	});
-
 });

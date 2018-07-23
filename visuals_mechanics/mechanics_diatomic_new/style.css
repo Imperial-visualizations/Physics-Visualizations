@@ -395,6 +395,8 @@ nav{
     padding:1.5rem 1.2rem;
     line-height: 5rem;
 }
+
+
 .flexyHold{
     height:calc(100vh - 5rem - 3rem);
     position: sticky;
@@ -459,17 +461,26 @@ a,a:focus,a:active,button,button:focus,button:active,input[type=range],input[typ
 }
 #KE input[type=range]::-moz-range-track{
     background-color: #66A40A;
-    box-shadow:
 }
 #KE input[type=range]::-moz-range-thumb{
     border-color:#02893B;
 }
-#KE input[type=range]:active::-webkit-slider-runnable-track {
-  box-shadow: 0px 0px 5px 1px #66A40A;
-}
 #KE input[type=range]:active::-moz-range-track {
   box-shadow: 0px 0px 5px 1px #66A40A;
 }
+#KE input[type=range]::-webkit-slider-runnable-track{
+    background-color: #66A40A;
+}
+#KE input[type=range]:active::-webkit-slider-runnable-track{
+      box-shadow: 0px 0px 5px 1px #66A40A;
+}
+#KE input[type=range]::-webkit-slider-thumb{
+    border-color:#02893B;
+}
 #KE input[type=range]:active::-ms-track {
   box-shadow: 0px 0px 5px 1px #66A40A;
+  background-color: #66A40A;
+}
+#KE input[type=range]::-ms-thumb{
+    border-color:#02893B;
 }
