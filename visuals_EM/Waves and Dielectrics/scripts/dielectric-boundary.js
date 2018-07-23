@@ -9,6 +9,7 @@ $(window).on('load', function() {
             angleInput: $("input#angle"),
             angleDisplay: $("#angle-display")
         },
+
         //define original layout of the plotly plot
         plt = {
             MaxTraceNo: 12,
@@ -35,6 +36,7 @@ $(window).on('load', function() {
                     size: 14
                 }
             },
+
             layoutFres: {
                 autosize: true,
                 xaxis: {

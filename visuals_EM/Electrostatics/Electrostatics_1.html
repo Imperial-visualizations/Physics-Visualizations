@@ -6,7 +6,7 @@
     <title>Biot Savart Law</title>
     <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
     <link rel="stylesheet" href="https://rawgit.com/cydcowley/public-test-data/master/Style2.css">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script type="text/javascript" async
             src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
@@ -14,26 +14,23 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 </head>
 <body>
-<div class="rightnav">▶</div>
-
+<div class="rightnav">▶ </div>
 <div class="container">
-        <h1>Gauss' Law</h1>
+    <h1>Gauss's Law</h1>
     <div class="row">
-        <div class="five columns">
+        <div class="four columns">
             <p>
         The majority of classic electromagnetism is governed by only four equations, and the majority of static electromagnetism is governed by only two.
         These two equations are Gauss' law and Ampere's law, given by:
-        $$ \nabla \cdot \mathbf{E} = \frac{dQ}{\epsilon_{0}}$$
-    </p>
+        $$ \nabla \cdot \mathbf{E} = \frac{\rho}{\epsilon_{0}}$$
+            </p>
 
         </div>
-        <div class="seven columns">
-            <div id="graph"></div>
-        </div>
-
+                <div class="eight columns">
+    <div id="sketch-holder" style="position: absolute; right: 0vh; width: 65%; height: 80vh">
     </div>
-
-
+                </div>
+        </div>
 </div>
     <script src="scripts/Field_line.js"></script>
     <script src="https://rawgit.com/cydcowley/public-test-data/master/navigation.js"></script>
