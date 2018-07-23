@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Rotating Frames</title>
+    <link rel="stylesheet" href="Style3.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script src="http://api.mathjs.org"></script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <!-- Graph -->
+            <div class="four columns">
+                <h1>Earth as a Rotating Frame</h1>
+                <div id='graph'></div>
+            </div>
+
+            <div class = "eight columns" id = "right">
+                <div class = "row" id="art">
+                </div>
+                <div class = "row">
+                    <!--Buttons-->
+                    <div class="six columns">
+                        <!--Main Options-->
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="spher">
+                                <label class="sliderTitle">Speed (relative):&nbsp;
+                                    <span id="vControllerDisplay" data-unit="">0</span>
+                                </label>
+                                <label class="slider">
+                                    <input id="vController" class="inputs" type="range" value="0.5" min="0" max="1" step="0.1"/>
+                                    <span class="sliderMin">0</span><span class="sliderMax">1</span>
+                                </label>
+                                <label class="sliderTitle">Velocity - Orientation:&nbsp;
+                                    <span id="vHatControllerDisplayA1" data-unit="π rad">0π rad</span>&nbsp;or&nbsp;
+                                    <span id="vHatControllerDisplayA2" data-unit="º">0º</span>
+                                </label>
+                                <label class="slider">
+                                    <input id="vHatController" class="inputs" type="range" value="0" min="0" max="2" step="0.125"/>
+                                    <span class="sliderMin">0</span><span class="sliderMax">2π</span>
+                                </label>
+                                <label class="sliderTitle">Lattitude:&nbsp;
+                                    <span id="thetaControllerDisplayA1" data-unit="π rad">0π rad</span>&nbsp;or&nbsp;
+                                    <span id="thetaControllerDisplayA2" data-unit="º">0º</span>
+                                </label>
+                                <label class="slider">
+                                    <input id="thetaController" class="inputs" type="range" value="0" min="-0.5" max="0.5" step="0.0625"/>
+                                    <span class="sliderMin">-π/2</span><span class="sliderMax">π/2</span>
+                                </label>
+                                <label class="sliderTitle">Longitude:&nbsp;
+                                    <span id="phi1ControllerDisplayA1" data-unit="π rad">0π rad</span>&nbsp;or&nbsp;
+                                    <span id="phi1ControllerDisplayA2" data-unit="º">0º</span>
+                                </label>
+                                <label class="slider">
+                                    <input id="phi1Controller" class="inputs" type="range" value="0" min="0" max="2" step="0.125"/>
+                                    <span class="sliderMin">0</span><span class="sliderMax">2π</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class = "six columns">
+                        <ul class="tab-nav">
+                            <li><a class = "button active" href = "#cent">Centrifugal</a></li>
+                            <li><a class = "button" href = "#cori">Coriolis</a></li>
+                        </ul>
+
+                        <div class = "tab-content">
+                            <div class="tab-pane active" id="cent">
+                                <h5>Centrifugal Force</h5>
+                                <p>Red vector on vis.</p>
+                            </div>
+                            <div class = "tab-pane" id="cori">
+                                <h5>Coriolis Force</h5>
+                                <p>Orange vector on vis.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src=script/p5.js></script>
+    <script src=script/objects.js></script>
+    <script src=script/basis.js></script>
+    <script src=script/artillery.js></script>
+</body>
+
+</html>

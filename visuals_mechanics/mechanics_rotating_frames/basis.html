@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Rotating Frames</title>
+    <link rel="stylesheet" href="https://ghcpuman902.github.io/styles/styles.css?v=2">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script src="http://api.mathjs.org"></script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <!-- Graph -->
+            <div class="seven columns">
+                <h1>Earth as a Rotating Frame</h1>
+                <div id='graph' style="width:450px; height:450px;"></div>
+            </div>
+
+            <!--Bottons-->
+            <div class="five columns">
+                <!--Main Options-->
+                <ul class="tab-nav">
+                    <li><a class="button active" href="#spher">Vis</a></li>
+                    <li><a class = "button" href = "#cent">Centrifugal</a></li>
+                    <li><a class = "button" href = "#cori">Coriolis</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="spher">
+                        <h5 style="border-left: solid 5px rgb(0,128,0); padding-left: 8px;">Speed (relative):</h5>
+                        <label class="sliderTitle">v:&nbsp;
+                            <span id="vControllerDisplay" data-unit="">0</span>
+                        </label>
+                        <label class="slider">
+                            <input id="vController" class="inputs" type="range" value="0.5" min="0" max="1" step="0.1"/>
+                            <span class="sliderMin">0</span><span class="sliderMax">1</span>
+                        </label>
+                        <h5 style="border-left: solid 5px rgb(219,209,0); padding-left: 8px;">Lattitude:</h5>
+                        <label class="sliderTitle">θ:&nbsp;
+                            <span id="thetaControllerDisplayA1" data-unit="π rad">0π rad</span>&nbsp;or&nbsp;
+                            <span id="thetaControllerDisplayA2" data-unit="º">0º</span>
+                        </label>
+                        <label class="slider">
+                            <input id="thetaController" class="inputs" type="range" value="0" min="-0.5" max="0.5" step="0.0625"/>
+                            <span class="sliderMin">-π/2</span><span class="sliderMax">π/2</span>
+                        </label>
+                        <h5 style="border-left: solid 5px rgb(182,109,255); padding-left: 8px;">Longitude:</h5>
+                        <label class="sliderTitle">φ:&nbsp;
+                            <span id="phi1ControllerDisplayA1" data-unit="π rad">0π rad</span>&nbsp;or&nbsp;
+                            <span id="phi1ControllerDisplayA2" data-unit="º">0º</span>
+                        </label>
+                        <label class="slider">
+                            <input id="phi1Controller" class="inputs" type="range" value="0" min="0" max="2" step="0.125"/>
+                            <span class="sliderMin">0</span><span class="sliderMax">2π</span>
+                        </label>
+                    </div>
+
+                    <div class="tab-pane" id="cent">
+                        <h5>Centrifugal Force</h5>
+                        <p>Red vector on vis.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src=script/objects.js></script>
+    <script src=script/basis.js></script>
+</body>
+
+</html>

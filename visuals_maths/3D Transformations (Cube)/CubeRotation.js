@@ -35,7 +35,6 @@ function roZaxis(point, theta) {
     return pointRot;
     }
 
-
 //This defines the skew matrices (also are called shear matrices) about the axes, takes in a point and an angle, and return a transformed point
 function skewXaxis(point, theta) {
     var pointVec = point;
@@ -64,7 +63,6 @@ function skewZaxis(point, theta) {
     var pointRot = math.multiply(M,pointVec);
     return pointRot;
     }
-
 
 //This defines the scale matrices (also are called shear matrices) about the axes, takes in a point and an scale, and return a transformed point
 function scaleallaxis(point, scale) {
