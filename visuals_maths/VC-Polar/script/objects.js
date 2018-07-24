@@ -374,7 +374,6 @@ function Line2d(points) {
         var wingLength = Math.sqrt(Math.pow(frac*sin45,2) + d*d);
         var wingAngle = Math.acos(d/wingLength);
 
-        console.log(offset);
         var wings_xyz = [
             math.add(p2c(wingLength, phi + wingAngle), offset),
             math.add(p2c(wingLength, phi - wingAngle), offset)
