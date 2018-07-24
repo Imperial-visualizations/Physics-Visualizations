@@ -2,6 +2,13 @@ function initCarte(type){
     return;
 }
 
+function converting(string){
+    f = eval(string);
+    return f;
+}
+x=2
+console.log(converting("x**3"));
+
 function main() {
     /*Jquery*/ //NB: Put Jquery stuff in the main not in HTML
     $("input[type=range]").each(function () {
