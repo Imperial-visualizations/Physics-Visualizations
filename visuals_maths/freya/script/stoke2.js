@@ -55,7 +55,7 @@ function updatePlot() {
     var pringles = new Pringles(4, [1,1,1]);
     var circle = new Circle(4);
     data.push(circle.gObject(orange))
-    data.push(pringles.gObject(black, 7, "solid", 1x));
+    data.push(pringles.gObject(black, 7, "solid", x));
     var arr1 = new Line([[1,5,0],[-3,1,0]])
     data.push(arr1.arrowHead(magenta,5))
     var arr2 = new Line([[1,-3,0],[5,1,0]])
