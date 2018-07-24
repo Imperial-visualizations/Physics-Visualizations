@@ -27,10 +27,10 @@ function initPlot() {
     var pringles = new Pringles(4, [1,1,1]);
     var square = new Square(6);
     var circle = new Circle(4);
-    var cirface = new Sphere(4)
+    var cirface = new Sphere2(4)
 
     data.push(cirface.gObject(blue, white, 7,"solid", x))
-    data.push(square.gObject(lilac,black))
+    data.push(square.gObject(lilac,lilac))
     data.push(pringles.gObject(black, 7, "solid",x));
     data.push(circle.gObject(orange))
 
@@ -51,7 +51,7 @@ function updatePlot() {
     var cirface = new Sphere(4)
     data.push(cirface.gObject(blue, blue, 7,"solid", x))
     var square = new Square(6);
-    data.push(square.gObject())
+    data.push(square.gObject(lilac,lilac))
     var pringles = new Pringles(4, [1,1,1]);
     var circle = new Circle(4);
     data.push(circle.gObject(orange))
