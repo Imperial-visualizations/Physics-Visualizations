@@ -102,14 +102,13 @@ function Sphere(radius) {
         for(var i = 0; i < meshSize; ++i) {
             this.x[i] = [], this.y[i] = [], this.z[i] = [];
             for(var j = 0; j < meshSize; ++j) {
-                if (height*(this.radius*Math.cos(theta[j])+height*(height*Math.sin(beta[i]) + 1)+height) > height*Math.sin(beta[i])){
+
+                this.x[i].push(this.radius*Math.cos(phi[i])*Math.sin(theta[j])+1);
 
 
-                    this.x[i].push(this.radius*Math.cos(phi[i])*Math.sin(theta[j])+1);
-                    this.y[i].push(this.radius*Math.sin(phi[i])*Math.sin(theta[j])+1);
+                this.y[i].push(this.radius*Math.sin(phi[i])*Math.sin(theta[j])+1);
+                this.z[i].push(height*(size*this.radius*Math.cos(theta[j])+height*(height*Math.sin(theta[j])*(Math.sin(beta[i])+ 1)+height)));
 
-                    this.z[i].push(height*(this.radius*Math.cos(theta[j])+height*(height*Math.sin(beta[i]) + 1)+height));
-                }
             }
         }
         var sphere = {
@@ -125,53 +124,6 @@ function Sphere(radius) {
     }
 }
 
-function Sphere2(radius) {
-    this.radius = radius;
-    this.gObject = function(color1,color2, width=7, dash="solid", height=1, wave=4) {
-        var meshSize = 40;
-        var phi = numeric.linspace(0, 2*Math.PI, meshSize);
-        var theta= numeric.linspace(0, 0.5*Math.PI, meshSize);
-        var beta = numeric.linspace(0,wave*Math.PI, meshSize);
-
-        this.x = [], this.y = [];
-
-        var xTemp = [], yTemp = [];
-        for(var i = 0; i < meshSize; ++i) {
-            for (var j = 0; j< meshSize; ++j){
-
-                xTemp.push(this.radius*Math.cos(phi[i])*Math.sin(theta[i])+1);
-                yTemp.push(this.radius*Math.sin(phi[i])*Math.sin(theta[i])+1);
-            }
-        }
-
-        var z1 = [], z2 = [];
-        for(var i = 0; i < 20; ++i) {
-
-
-            z1.push(numeric.rep([meshSize], height*(this.radius*Math.cos(theta[i])+height*(height*Math.sin(beta[i]) + 1)+height)));
-
-        }
-        for(var i = 0; i < 20; ++i) {
-
-
-            z2.push(numeric.rep([meshSize], height*(this.radius*Math.cos(theta[i])+height*(height*Math.sin(beta[i]) + 1)+height)));
-
-        }
-        z1 = z1.concat(z2.reverse())
-        console.log(z1)
-        console.log(this.x)
-        var sphere = {
-            type: "surface",
-            x: this.x,
-            y: this.y,
-            z: z1,
-            showscale: false,
-            opacity: 0.6,
-            colorscale: [[0.0, color1], [1.0, color2]]
-        }
-        return sphere;
-    }
-}
 
 
 
