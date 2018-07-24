@@ -43,12 +43,12 @@ const visualisation = function (p) {
         p.resizeCanvas(width,height);
     });
 
-    $('#KE_slider').on('change', function () {
-        init_VibKE = Math.floor(parseFloat($('#KE_slider').val()));
+    $('#KE_slider').on('input', function () {
+        init_VibKE = parseFloat($('#KE_slider').val());
         reset();
     });
-    $('#RE_slider').on('change', function () {
-        init_RotKE = Math.floor(parseFloat($('#RE_slider').val()));
+    $('#RE_slider').on('input', function () {
+        init_RotKE = parseFloat($('#RE_slider').val());
         reset();
     });
 
@@ -279,7 +279,6 @@ const visualisation = function (p) {
         reset();
         $('#spinner').fadeOut(200);
         $('.container').attr('style','')
-
     };
 
     function update_atoms(r, omega) {

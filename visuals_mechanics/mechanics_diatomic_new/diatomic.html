@@ -4,8 +4,9 @@
 <head>
 	<meta charset="utf-8">
 	<title>Diatomic Molecule</title>
-	<link rel="stylesheet" href="skeleton.css" />
-	<link rel="stylesheet" href="style.css" />
+	<link rel="stylesheet" href="css/skeleton.css" />
+	<link rel="stylesheet" href="css/visualisation.css" />
+	<link rel="stylesheet" href="css/diatomic.css" />
 </head>
 
 <body>
@@ -33,19 +34,21 @@ Diatomic Molecule
 					</div>
 				</div>
 					<div class="row slider_card">
-						<div class="cabinet" id="KE">Kinetic Energy
+						<div class="cabinet green" id="KE">Kinetic Energy
 
 							<div class="sliderContainer">
 								<span class="sliderMin">0.00</span>
-								<input type="range" id="KE_slider" min="0" max="10" step="0.01" value="0" />
+								<input type="range" data-unit="eV" id="KE_slider" min="0" max="10" step="0.01" value="0" />
 								<span class="sliderMax">15.00</span>
+								<button class="toggle">Text</button>
 							</div>
 						</div>
 						<div class="cabinet" id="RE">Rotational Energy
 							<div class="sliderContainer">
 								<span class="sliderMin">0.00</span>
-								<input type="range" id="RE_slider" min="0" max="10" step="0.01" value="0" />
+								<input type="range" data-unit="eV" id="RE_slider" min="0" max="10" step="0.01" value="0" />
 								<span class="sliderMax">15.00</span>
+								<button class="toggle">Text</button>
 							</div>
 						</div>
 					</div>

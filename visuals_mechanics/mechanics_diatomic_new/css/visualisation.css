@@ -155,6 +155,12 @@ input[type=range]::-ms-fill-lower {
   background: #006EAF;
 }
 
+span{
+    font-size: 15pt;
+    font-weight: lighter;
+}
+
+
 span.sliderMin{
     font-size: 15pt;
     font-weight: lighter;
@@ -443,44 +449,95 @@ a,a:focus,a:active,button,button:focus,button:active,input[type=range],input[typ
     padding-left: 0.5em;
     margin: 0.5em 0;
 }
-#buttonHolder{
-    margin: 2em 0;
+
+button{
+    border-radius: 2px;
+    color:#0091D4;
+    border: 2px solid #0091D4;
+    box-shadow: 0px 2px 10px 0.5px #6cb3d4;
+    transition: background-color 0.3s;
 }
 
-#animation_anchor{
-    width:100%;
-
-    flex-grow: 2;
+button:hover{
+    color:white;
+    border-color: #0091D4;
+    background-color:#0091D4;
 }
 
-#KE{
+.green{
     border-color: #66A40A;
 }
-#KE .marker{
+.green button{
+    color:#66A40A;
+    border-color:#66A40A;
+    background-color: white;
+    transition: background-color 0.3s;
+}
+.green button:hover{
+    color:white;
     background-color: #66A40A;
 }
-#KE input[type=range]::-moz-range-track{
+.green input[type=range]::-moz-range-track{
     background-color: #66A40A;
 }
-#KE input[type=range]::-moz-range-thumb{
+.green input[type=range]::-moz-range-thumb{
     border-color:#02893B;
 }
-#KE input[type=range]:active::-moz-range-track {
+.green input[type=range]:active::-moz-range-track {
   box-shadow: 0px 0px 5px 1px #66A40A;
 }
-#KE input[type=range]::-webkit-slider-runnable-track{
+.green input[type=range]::-webkit-slider-runnable-track{
     background-color: #66A40A;
 }
-#KE input[type=range]:active::-webkit-slider-runnable-track{
-      box-shadow: 0px 0px 5px 1px #66A40A;
+.green input[type=range]:active::-webkit-slider-runnable-track{
+  box-shadow: 0px 0px 5px 1px #66A40A;
 }
-#KE input[type=range]::-webkit-slider-thumb{
+.green input[type=range]::-webkit-slider-thumb{
     border-color:#02893B;
 }
-#KE input[type=range]:active::-ms-track {
+.green input[type=range]:active::-ms-track {
   box-shadow: 0px 0px 5px 1px #66A40A;
   background-color: #66A40A;
 }
-#KE input[type=range]::-ms-thumb{
+.green input[type=range]::-ms-thumb{
     border-color:#02893B;
+}
+
+.red{
+    border-color: #DD2501;
+}
+.red button{
+    color: #DD2501;
+    border-color:#DD2501;
+    background-color: white;
+    transition: background-color 0.3s;
+}
+.red button:hover{
+    color:white;
+    background-color: #DD2501;
+}
+.red input[type=range]::-moz-range-track{
+    background-color: #DD2501;
+}
+.red input[type=range]::-moz-range-thumb{
+    border-color:#A51900;
+}
+.red input[type=range]:active::-moz-range-track {
+  box-shadow: 0px 0px 5px 1px #DD2501;
+}
+.red input[type=range]::-webkit-slider-runnable-track{
+    background-color: #DD2501;
+}
+.red input[type=range]:active::-webkit-slider-runnable-track{
+  box-shadow: 0px 0px 5px 1px #DD2501;
+}
+.red input[type=range]::-webkit-slider-thumb{
+    border-color:#A51900;
+}
+.red input[type=range]:active::-ms-track {
+  box-shadow: 0px 0px 5px 1px #DD2501;
+  background-color: #DD2501;
+}
+.red input[type=range]::-ms-thumb{
+    border-color:#A51900;
 }
