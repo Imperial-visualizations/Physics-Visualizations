@@ -12,11 +12,11 @@ var layout = {
 
         camera: createView([1,1,1]),
 
-        xaxis: {range: [-4, 4], zeroline: true, autorange: false,},
+        xaxis: {range: [-6, 6], zeroline: true, autorange: false,},
 
-        yaxis: {range: [-4, 4], zeroline: true, autorange: false,},
+        yaxis: {range: [-6, 6], zeroline: true, autorange: false,},
 
-        zaxis: {range: [-4, 4], zeroline: true, autorange: false,},
+        zaxis: {range: [-6, 6], zeroline: true, autorange: false,},
 
         aspectratio: {x:1, y:1, z:1},
 
@@ -69,9 +69,9 @@ function getGrids(){
 
                 z=a[i];
 
-                cube = new Cube(x,y,z);
+                cube = new Cube(x,y,z,0.5);
 
-                Cubes.push(cube.gObject());
+                Cubes.push(cube.gObject(green,cyan,1));
 
 
 
@@ -89,9 +89,9 @@ function getGrids(){
 
                 arr22 = new Line([[x-0.5,y,z],[x+1,y,z]]);
 
-                Cubes.push(arr2.gObject(magenta, 3));
+                Cubes.push(arr2.gObject(black, 3));
 
-                Cubes.push(arr22.arrowHead(magenta,3));
+                Cubes.push(arr22.arrowHead(black,3));
 
 
                 arr3 = new Line([[x,y-0.5,z],[x,y-1,z]]);
@@ -107,9 +107,9 @@ function getGrids(){
 
                 arr44 = new Line([[x,y-0.5,z],[x,y+1,z]]);
 
-                Cubes.push(arr4.gObject(magenta, 3));
+                Cubes.push(arr4.gObject(black, 3));
 
-                Cubes.push(arr44.arrowHead(magenta,3));
+                Cubes.push(arr44.arrowHead(black,3));
 
 
                 arr5 = new Line([[x,y,z-0.5],[x,y,z-1]]);
@@ -125,14 +125,70 @@ function getGrids(){
 
                 arr66 = new Line([[x,y,z-0.5],[x,y,z+1]]);
 
-                Cubes.push(arr6.gObject(magenta, 3));
+                Cubes.push(arr6.gObject(black, 3));
 
-                Cubes.push(arr66.arrowHead(magenta,3));
+                Cubes.push(arr66.arrowHead(black,3));
 
              }
 
         }
     }
+    bigcube = new Cube(0,0,0,2.1);
+    Cubes.push(bigcube.gObject(orange,white,0.3))
+
+    ar1 = new Line([[-2.1,0,0],[-4.1,0,0]]);
+
+    ar11 = new Line([[2.1,0,0],[-4.1,0,0]]);
+
+    Cubes.push(ar1.gObject(magenta, 7));
+
+    Cubes.push(ar11.arrowHead(magenta,7));
+
+
+
+    ar2 = new Line([[2.1,0,0],[4.1,0,0]]);
+
+    ar22 = new Line([[-2.1,0,0],[4.1,0,0]]);
+
+    Cubes.push(ar2.gObject(magenta, 7));
+
+    Cubes.push(ar22.arrowHead(magenta,7));
+
+
+    ar3 = new Line([[0,-2.1,0],[0,-4.1,0]]);
+
+    ar33 = new Line([[0,2.1,z],[0,-4.1,0]]);
+
+    Cubes.push(ar3.gObject(magenta, 7));
+
+    Cubes.push(ar33.arrowHead(magenta,7));
+
+
+    ar4 = new Line([[0,2.1,0],[0,4.1,0]]);
+
+    ar44 = new Line([[0,-2.1,0],[0,4.1,0]]);
+
+    Cubes.push(ar4.gObject(magenta, 7));
+
+    Cubes.push(ar44.arrowHead(magenta,7));
+
+
+    ar5 = new Line([[0,0,-2.1],[0,0,-4.1]]);
+
+    ar55 = new Line([[0,0,2.1],[0,0,-4.1]]);
+
+    Cubes.push(ar5.gObject(magenta, 7));
+
+    Cubes.push(ar55.arrowHead(magenta,7));
+
+
+    ar6 = new Line([[0,0,2.1],[0,0,4.1]]);
+
+    ar66 = new Line([[0,0,-2.1],[0,0,4.1]]);
+
+    Cubes.push(ar6.gObject(magenta, 7));
+
+    Cubes.push(ar66.arrowHead(magenta,7));
 
     return Cubes
 }

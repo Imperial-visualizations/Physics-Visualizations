@@ -8,8 +8,9 @@ var magenta = "#FF00FF",
     white = "rgb(255,255,255)",
     cyan = "rgb(0,146,146)", //1
     lilac = "rgb(182,109,255)", //2
-    orange = "rgb(219,209,0)"; //3
-
+    orange = "rgb(219,209,0)", //3
+    red = "rgb(160, 0, 0)",
+    realOrange = "rgb(227,104, 0)";
 // Plot Utilities:
 /**
  * sets camera options in layout.
@@ -390,24 +391,42 @@ function Line2d(points) {
         return wings;
     }
 }
-function Cube(x, y, z){
+function Cube(x, y, z, a){
     this.width = x,
     this.length = y,
     this.height = z,
-    this.gObject = function(color) {
+    this.gObject = function(color1,color2, opacity) {
         var cuboid = {
             type: "mesh3d",
-            x: [x-0.5, x-0.5, x+0.5, x+0.5, x-0.5, x-0.5, x+0.5, x+0.5],
-            y: [y-0.5, y+0.5, y+0.5, y-0.5, y-0.5, y+0.5, y+0.5, y-0.5],
-            z: [z-0.5, z-0.5, z-0.5, z-0.5, z+0.5, z+0.5, z+0.5, z+0.5],
+            x: [x-a, x-a, x+a, x+a, x-a, x-a, x+a, x+a],
+            y: [y-a, y+a, y+a, y-a, y-a, y+a, y+a, y-a],
+            z: [z-a, z-a, z-a, z-a, z+a, z+a, z+a, z+a],
             i : [0, 0, 3, 4, 4, 4, 4, 4, 5, 6, 6, 7],
             j : [2, 3, 4, 3, 6, 7, 1, 5, 2, 2, 7, 3],
             k : [1, 2, 0, 7, 5, 6, 0, 1, 1, 5, 2, 2],
             opacity: 0.5,
-            colorscale: [['0', color], ['1', "rgb(255,255,255)"]],
+            colorscale: [['0', color1], ['1', color2]],
             intensity: [0, 0.1, 0.3, 0.5, 0.7, 0.8, 0.9, 1],
-            showscale: false
+            showscale: false,
+            opacity: opacity
         }
         return cuboid
+    }
+}
+function Square(a) {
+    this.a = a;
+
+    this.gObject = function(color1, color2) {
+        var square = {
+            x: [-a, a],
+            y: [-a, a],
+            z: [[0, 0],
+                [0, 0]],
+            colorscale: [[0.0, color1], [1.0, color2]],
+            opacity: 0.7,
+            showscale: false,
+            type: "surface"
+        }
+        return square;
     }
 }
