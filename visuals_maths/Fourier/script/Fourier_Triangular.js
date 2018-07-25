@@ -41,6 +41,7 @@ function initFourier(type) {
         Plotly.newPlot("graph", computePlot(z),layout);
     } else if (type==="#spectrum"){
         Plotly.newPlot("graph", plot_an(),setLayout());
+        Plotly.newPlot("graph2",plot_bn(),setLayout());
     } else if (type==="#combine"){
         Plotly.newPlot("graph3",computePlot(z),setLayoutSmall());
         Plotly.newPlot("graph4",computeComponents(z),setLayoutSmall());
@@ -454,12 +455,30 @@ function plot_combination(){
 // return the amplitude of a_n of the Fourier Series
 function a_n (shape, n){
     var L = parseFloat(document.getElementById('LController').value);
+    var A = parseFloat(document.getElementById('AController').value);
+
     var amplitude;
-    if (shape === 0){
+    if (shape === 0) {
+        amplitude = 0;
+    } else if (shape === 1){
+        amplitude = 0;
+    } else if (shape === 2){
+        amplitude = 0;
+    } else if (shape === 3){
+        amplitude = 1/L;
+    } else if (shape === 4){
         if (n===0){
             amplitude = 2*L**2/3;
         } else {
             amplitude = (4*L**2/(n*Math.PI)**2)*(-1)**n;
+        }
+    } else if (shape === 5){
+        amplitude = 0;
+    } else if (shape === 6){
+        if (n===0){
+            amplitude = L;
+        } else {
+            amplitude = (2*A*L/(n*Math.PI)**2)*((-1)**n - 1);
         }
     }
     return amplitude;
@@ -467,10 +486,30 @@ function a_n (shape, n){
 
 // return the amplitude of b_n of the Fourier Series
 function b_n(shape,n){
+    var L = parseFloat(document.getElementById('LController').value);
+    var A = parseFloat(document.getElementById('AController').value);
+
     var amplitude;
-    if (shape === 0){
-        amplitude=0;
+    if (n===0){
+        amplitude = 0;
+    } else {
+        if (shape === 0){
+            amplitude=(8*A*1/((2*(n)-1) *Math.PI)**2)*((-1)**(n));
+        } else if (shape ===1){
+            amplitude=(8*A*1/((2*(n)-1) *Math.PI)**2)*((-1)**(n));
+        } else if (shape ===2){
+            amplitude = 2*A*(-1)**(n+1) /(n*Math.PI)
+        } else if (shape ===3){
+            amplitude = 0;
+        } else if (shape ===4){
+            amplitude = 0;
+        } else if (shape ===5){
+            amplitude = A*(2*L/(n*Math.PI)**1 *(-1)**(n+1));
+        } else if (shape ===6){
+            amplitude = 0;
+        }
     }
+
     return amplitude;
 }
 
