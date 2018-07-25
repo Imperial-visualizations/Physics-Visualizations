@@ -17,15 +17,8 @@ var blackTextType = "lines";
 
 //Plots
 function initPlot() {
-    Plotly.purge("graph");
 
-    $("#xController").val(initialX);
-    $("#xControllerDisplay").text(initialX);
-    var x = parseFloat(document.getElementById('xController').value);
 
-    $("#yController").val(initialY);
-    $("#yControllerDisplay").text(initialY);
-    var y = parseFloat(document.getElementById('yController').value);
 
     var data = [];
 
@@ -39,80 +32,83 @@ function initPlot() {
     data.push(arr1.arrowHead(magenta,5))
     var arr2 = new Line([[5,-2,0],[5,1,0]])
     data.push(arr2.arrowHead(magenta,5))
-    if (x === 0){
-        var pringles = new Pringles(4, [1,1,1]);
-        data.push(pringles.gObject(black, 7, "solid", y))
 
-    }else{
-        var cirface = new Sphere(4)
-        data.push(cirface.gObject(blue, blue, 7,"solid", x))
-        var pringles = new Pringles(4, [1,1,1]);
-        data.push(pringles.gObject(black, 7, "solid", 1))
 
-    }
+    var pringles = new Pringles(4, [1,1,1]);
+    data.push(pringles.gObject(black, 7, "solid", 1))
 
+    var cirface = new Sphere(4)
+    data.push(cirface.gObject(blue, blue, 7,"solid", 2))
+
+    Plotly.purge("graph");
     Plotly.newPlot("graph", data, layout);
+
+
+
     return;
 }
 
 
 function updatePlot() {
-    var data = [];
-    var href = $('ul.tab-nav li a.active.button').attr('href'); // finds out which tab is active
-    var x = parseFloat(document.getElementById('xController').value);
-    var y = parseFloat(document.getElementById('yController').value);
+    var frames = [], data;
 
-    var square = new Square(6);
-    data.push(square.gObject(lilac,lilac))
-    var circle = new Circle(4);
-    data.push(circle.gObject(orange))
-<<<<<<< Updated upstream
-    data.push(pringles.gObject(black, 7, "solid", x));
-=======
->>>>>>> Stashed changes
-    var arr1 = new Line([[1,5,0],[-3,1,0]])
-    data.push(arr1.arrowHead(magenta,5))
-    var arr2 = new Line([[1,-3,0],[5,1,0]])
-    data.push(arr2.arrowHead(magenta,5))
-    if (x === 0){
-        var pringles = new Pringles(4, [1,1,1]);
-        data.push(pringles.gObject(black, 7, "solid", y))
+    var step1 = numeric.linspace(0, 2, 20)
+    H = step1.reverse()
 
-    }else{
+    var step2 = numeric.linspace(0, 1, 20)
+    h = step2.reverse()
+
+
+    for (i=0; i<20; ++i){
+        data = [];
+        var square = new Square(6);
+        data.push(square.gObject(lilac,lilac))
+        var circle = new Circle(4);
+        data.push(circle.gObject(orange))
+        var arr1 = new Line([[1,5,0],[-3,1,0]])
+        data.push(arr1.arrowHead(magenta,5))
+        var arr2 = new Line([[1,-3,0],[5,1,0]])
+        data.push(arr2.arrowHead(magenta,5))
         var cirface = new Sphere(4)
-        data.push(cirface.gObject(blue, blue, 7,"solid", x))
+        data.push(cirface.gObject(blue, blue, 7,"solid", H[i]))
         var pringles = new Pringles(4, [1,1,1]);
         data.push(pringles.gObject(black, 7, "solid", 1))
-
+        frames.push({data: data});
     }
-    Plotly.animate(
-        'graph',
-        {data: data},
-        {
-            fromcurrent: true,
-            transition: {duration: 0,},
-            frame: {duration: 0, redraw: false,},
-            mode: "afterall"
-        }
-    );
+    for (i=0; i<20; ++i){
+        data = [];
+        var square = new Square(6);
+        data.push(square.gObject(lilac,lilac))
+        var circle = new Circle(4);
+        data.push(circle.gObject(orange))
+        var arr1 = new Line([[1,5,0],[-3,1,0]])
+        data.push(arr1.arrowHead(magenta,5))
+        var arr2 = new Line([[1,-3,0],[5,1,0]])
+        data.push(arr2.arrowHead(magenta,5))
+        var pringles = new Pringles(4, [1,1,1]);
+        data.push(pringles.gObject(black, 7, "solid", h[i]))
+        data.push({
+            type: "scatter3d",
+            mode: "lines",
+            x:[0,0],
+            y:[0,0],
+            z:[0,0],
+            lines: {width:0}
+        });
+        frames.push({data: data});
+    }
+
+    initAnimation("animate", frames, [], layout, 10, [0], true)
 }
 
 function main() {
-    /*Jquery*/ //NB: Put Jquery stuff in the main not in HTML
-    $("input[type=range]").each(function () {
-        var displayEl;
-        /*Allows for live update for display values*/
-        $(this).on('input', function(){
-            //Displays: (FLT Value) + (Corresponding Unit(if defined))
-            $("#"+$(this).attr("id") + "Display").text( $(this).val() + $("#"+$(this).attr("id") + "Display").attr("data-unit") );
 
-            updatePlot(); //Updating the plot is linked with display (Just My preference)
-        });
+   updatePlot();
 
+   $("input[type=submit]").click(function () {
+        startAnimation();
+        console.log("animating");
     });
-
-
-    initPlot();
 
 }
 $(document).ready(main); //Load main when document is ready.
