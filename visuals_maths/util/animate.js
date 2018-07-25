@@ -101,7 +101,7 @@ function update() {
         requestAnimationFrame(update);
         updateSlider();
         //Add stopping functionality here!!!
-        if (animationIndex === stops[0] || animationIndex === stops[1]){
+        if (animationIndex === stops[0] || animationIndex === stops[1] || animationIndex === stops[2]){
             isPaused = !isPaused;
             animationIndex--;
             document.getElementById(playID).value = "Continue";
