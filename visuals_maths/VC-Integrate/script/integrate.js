@@ -140,19 +140,38 @@ function computeFrames(frames, extra){
     carteVolume1(data, [x1, x1, x3+1/9, x3+2/9, x1, x1, x3, x3+1/9], initY, initZ);
     carteVolume1(data, [x1, x1, x3+1/9, x3+2/9, x1, x1, x3, x3+1/9], initY, initZ, 'rgb(255,0,0)', 0.1);
     addEmptyObjects3d(data, 4);
-    frames.push({data: data}); // full
+    frames.push({data: data});
 
     stops.push(frames.length - 1);
+
+    //2nd Volume Elements
 
     data = [];
     carteVolume2(data,
         a, b, c,
-        [z1, z2],
-        "rgb(255,0,0)");
-    frames.push({data: data}); // full
+        [], [z1, z2],
+        "rgb(255,0,0,0.6)",
+        0.4);
+    frames.push({data: data});
 
-    //2nd Volume Elements
-    console.log(frames);
+    //testing here
+    data = [];
+    carteVolume2(data,
+        a, b, c,
+        [c/2], [z1, z2],
+        "rgb(0,0,0)");
+    frames.push({data: data});
+
+    stops.push(frames.length - 1);
+
+    //3rd VE
+    data = [];
+    carteVolume2(data,
+        a, b, c,
+        [], [z1, z2, z2+.5, z2+1, z2+1.5],
+        "rgb(0,0,0)");
+    frames.push({data: data});
+
     stops.push(frames.length - 1);
 
     return stops;

@@ -16,75 +16,12 @@ function carteVolume1(data, verticesX, verticesY, verticesZ, color="rgb(0,0,0)",
     return 1;
 }
 
-function carteVolume2(data, a, b, c, verticesZ, color="rgb(0,0,0)", opacity=1) {
-    var meshSize = 20;
-    var phi = numeric.linspace(0, 0.5*Math.PI, meshSize);
-    var x = [], y = [], z = [];
-    for(var j = 0, n = verticesZ.length; j < n; ++j) {
-        x[j] = [], y[j] = [], z[j] = [];
-        for(var i = 0; i < meshSize; ++i) {
-            theta = Math.acos(verticesZ[j]/c);
-            x[j].push(a*Math.cos(phi[i])*Math.sin(theta));
-            y[j].push(b*Math.sin(phi[i])*Math.sin(theta));
-            z[j].push(verticesZ[j]);
-        }
-    }
-    var sphere = {
-        type: "surface",
-        x: x,
-        y: y,
-        z: z,
-        showscale: false,
-        opacity: 0.4,
-        colorscale: [[0.0, color], [1.0, color]]
-    }
-    var yPlane = {
-        type: "scatter3d",
-        mode: "lines",
-        x: [0, 0, x[0][0], x[1][0], 0],
-        y: [0, 0, 0, 0, 0],
-        z: [verticesZ[1], verticesZ[0], verticesZ[0], verticesZ[1], verticesZ[1]],
-        line: {color: color.slice(0, -1) + ",0.2)", width: 1},
-        surfaceaxis: 1,
-        opacity: 0.8
-    }
-    var xPlane = {
-        type: "scatter3d",
-        mode: "lines",
-        x: [0, 0, 0, 0, 0],
-        y: [0, 0, y[0][19], y[1][19], 0],
-        z: [verticesZ[1], verticesZ[0], verticesZ[0], verticesZ[1], verticesZ[1]],
-        line: {color: color.slice(0, -1) + ",0.2)", width: 1},
-        surfaceaxis: 0,
-        opacity: 0.8
-    }
+function carteVolume3(data, a, b, c, verticesZ, color="rgb(0,0,0)", opacity=1) {
 
-    x1 = x[1].slice();
-    y1 = y[1].slice();
-    z1 = z[1].slice();
 
-    x1.push(0);
-    y1.push(0);
-    z1.push(z[1][0]);
-
-    var zPlane1 = {
-        type: "scatter3d",
-        mode: "lines",
-        x: x1,
-        y: y1,
-        z: z1,
-        line: {color: color.slice(0, -1) + ",0.2)", width: 1},
-        surfaceaxis: 2,
-        opacity: 0.8
-    }
-
-    x2 = x[0].slice();
-    y2 = y[0].slice();
-    z2 = z[0].slice();
-
-    x2.push(0);
-    y2.push(0);
-    z2.push(z[0][0]);
+    x2.push(0,0);
+    y2.push(y[0][meshSize - 1],0);
+    z2.push(z[0][0],z[0][0]);
 
     var zPlane2 = {
         type: "scatter3d",
@@ -92,36 +29,241 @@ function carteVolume2(data, a, b, c, verticesZ, color="rgb(0,0,0)", opacity=1) {
         x: x2,
         y: y2,
         z: z2,
-        line: {color: color.slice(0, -1) + ",0.2)", width: 1},
+        line: {color: color, width: 1},
         surfaceaxis: 2,
-        opacity: 0.8
+        opacity: opacity
+    }
+
+}
+
+function carteVolume2(data, a, b, c, verticesY = [], verticesZ = [], color="rgb(0,0,0)", opacity=1) {
+    var zLength = verticesZ.length;
+    var meshSize = 20;
+    var zeroes = [0];
+    var phi, phiTemp, sinTheta = 0;
+    if (verticesY.length === 0) {
+        phi = numeric.linspace(0, 0.5*Math.PI, meshSize);
+    } else {
+        phiTemp = Math.asin(verticesY[0]/(b*Math.sin(Math.acos(verticesZ[0]/c))));
+        meshSize = 20*Math.ceil(2*phiTemp/Math.PI);
+        phi = numeric.linspace(0, phiTemp, meshSize);
+    }
+    var x = [], y = [], z = [];
+    for(var j = 0, n = zLength; j < n; ++j) {
+        x[j] = [], y[j] = [], z[j] = [];
+        for(var i = 0; i < meshSize; ++i) {
+            sinTheta = Math.sin(Math.acos(verticesZ[j]/c));
+            x[j].push(a*Math.cos(phi[i])*sinTheta);
+            y[j].push(b*Math.sin(phi[i])*sinTheta);
+            z[j].push(verticesZ[j]);
+        }
+        x[j].push(0);
+        y[j].push(y[j][i-1]);
+        z[j].push(verticesZ[j]);
+        zeroes.push(0,0);
+    }
+
+    var sphere = {
+        type: "surface",
+        x: x,
+        y: y,
+        z: z,
+        showscale: false,
+        opacity: opacity,
+        colorscale: [[0.0, color], [1.0, color]]
+    }
+
+    var zTemp1 = verticesZ.slice(), zTemp2 = verticesZ.slice();
+    zTemp2.reverse();
+    var zTemp = zTemp2.concat(zTemp1);
+    zTemp.push(zTemp2[0]);
+    
+    var xTemp = zeroes.slice(), yTemp = zeroes.slice();
+    for (var i=0; i < zLength; ++i){
+        xTemp[i + zLength] = x[i][0];
+        yTemp[i + zLength] = y[i][meshSize - 1];
+    }
+    var xPlane = {
+        type: "scatter3d",
+        mode: "lines",
+        x: zeroes,
+        y: yTemp,
+        z: zTemp,
+        line: {color: color, width: 1},
+        surfaceaxis: 0,
+        opacity: opacity
+    }
+    var yPlane = {
+        type: "scatter3d",
+        mode: "lines",
+        x: xTemp,
+        y: zeroes,
+        z: zTemp,
+        line: {color: color, width: 1},
+        surfaceaxis: 1,
+        opacity: opacity
+    }
+
+    //TODO: functions for bottom and top
+
+    xTemp = x[0].slice();
+    yTemp = y[0].slice();
+    zTemp = z[0].slice();
+
+    xTemp.push(0, 0);
+    yTemp.push(verticesY[0], 0);
+    zTemp.push(verticesZ[0], verticesZ[0]);
+
+    var zBottom = {
+        type: "scatter3d",
+        mode: "lines",
+        x: xTemp,
+        y: yTemp,
+        z: zTemp,
+        line: {color: color, width: 1},
+        surfaceaxis: 2,
+        opacity: opacity
+    }
+
+    xTemp = x[zLength - 1].slice();
+    yTemp = y[zLength - 1].slice();
+    zTemp = z[zLength - 1].slice();
+
+    xTemp.push(0,0);
+    yTemp.push(verticesY[0], 0);
+    zTemp.push(verticesZ[zLength - 1], verticesZ[zLength - 1]);
+
+    var zTop = {
+        type: "scatter3d",
+        mode: "lines",
+        x: xTemp,
+        y: yTemp,
+        z: zTemp,
+        line: {color: color, width: 1},
+        surfaceaxis: 2,
+        opacity: opacity
     }
 
     data.push(sphere);
     data.push(yPlane);
     data.push(xPlane);
-    data.push(zPlane1);
-    data.push(zPlane2);
+    data.push(zTop);
+    data.push(zBottom);
     return 1;
 }
 
-function carteVolume3(data, verticesX, verticesY, verticesZ, color="rgb(0,0,0)", opacity=1) {
-    var volume = {
-        type: "mesh3d",
-        x: verticesX,
-        y: verticesY,
-        z: verticesZ,
-        i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
-        j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
-        k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
-        opacity: opacity,
-        colorscale: [['0', color], ['1', color]],
-        intensity: [0, 0.1, 0.2, 0.3, 0.5, 0.6, 0.8, 1],
-        showscale: false
+//might be useful for cylindrical
+function carteVolume3(data, a, b, c, verticesY = [], verticesZ = [], color="rgb(0,0,0)", opacity=1) {
+
+    var yLength = verticesY.length, zLength = verticesZ.length;
+    var meshSize = 20;
+    var zeroes = [0];
+    var phi, phiTemp, sinTheta = 0;
+    if (yLength === 0) {
+        phi = numeric.linspace(0, 0.5*Math.PI, meshSize);
+    } else {
+        phiTemp = Math.asin(verticesY[yLength - 1]/(b* Math.sin(Math.acos(verticesZ[0]/c))));
+        meshSize = 20*Math.ceil(yLength/b);
+        phi = numeric.linspace(0, phiTemp, meshSize);
     }
-    data.push(volume);
+    var x = [], y = [], z = [];
+    for(var j = 0, n = zLength; j < n; ++j) {
+        x[j] = [], y[j] = [], z[j] = [];
+        for(var i = 0; i < meshSize; ++i) {
+            sinTheta = Math.sin(Math.acos(verticesZ[j]/c));
+            x[j].push(a*Math.cos(phi[i])*sinTheta);
+            y[j].push(b*Math.sin(phi[i])*sinTheta);
+            z[j].push(verticesZ[j]);
+        }
+        zeroes.push(0,0);
+    }
+    var sphere = {
+        type: "surface",
+        x: x,
+        y: y,
+        z: z,
+        showscale: false,
+        opacity: opacity,
+        colorscale: [[0.0, color], [1.0, color]]
+    }
+
+    var zTemp1 = verticesZ.slice(), zTemp2 = verticesZ.slice();
+    zTemp2.reverse();
+    var zTemp = zTemp2.concat(zTemp1);
+    zTemp.push(zTemp2[0]);
+
+    var xTemp = zeroes.slice(), yTemp = zeroes.slice();
+    for (var i=0; i < zLength; ++i){
+        xTemp[i + zLength] = x[i][0];
+        yTemp[i + zLength] = y[i][meshSize - 1];
+    }
+    var xPlane = {
+        type: "scatter3d",
+        mode: "lines",
+        x: zeroes,
+        y: yTemp,
+        z: zTemp,
+        line: {color: color, width: 1},
+        surfaceaxis: 0,
+        opacity: opacity
+    }
+    var yPlane = {
+        type: "scatter3d",
+        mode: "lines",
+        x: xTemp,
+        y: zeroes,
+        z: zTemp,
+        line: {color: color, width: 1},
+        surfaceaxis: 1,
+        opacity: opacity
+    }
+
+    xTemp = x[0].slice();
+    yTemp = y[0].slice();
+    zTemp = z[0].slice();
+
+    xTemp.push(0);
+    yTemp.push(0);
+    zTemp.push(verticesZ[0]);
+
+    var zBottom = {
+        type: "scatter3d",
+        mode: "lines",
+        x: xTemp,
+        y: yTemp,
+        z: zTemp,
+        line: {color: color, width: 1},
+        surfaceaxis: 2,
+        opacity: opacity
+    }
+
+    xTemp = x[zLength - 1].slice();
+    yTemp = y[zLength - 1].slice();
+    zTemp = z[zLength - 1].slice();
+
+    xTemp.push(0);
+    yTemp.push(0);
+    zTemp.push(verticesZ[zLength - 1]);
+
+    var zTop = {
+        type: "scatter3d",
+        mode: "lines",
+        x: xTemp,
+        y: yTemp,
+        z: zTemp,
+        line: {color: color, width: 1},
+        surfaceaxis: 2,
+        opacity: opacity
+    }
+
+    data.push(sphere);
+    data.push(yPlane);
+    data.push(xPlane);
+    data.push(zTop);
+    data.push(zBottom);
     return 1;
 }
+
 
 function SphericalVE (x, y, z){
     this.verticesX = x,
