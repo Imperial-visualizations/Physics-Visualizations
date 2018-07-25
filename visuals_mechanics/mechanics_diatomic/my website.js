@@ -35,10 +35,32 @@ $(window).on('load',function() {
         };
 
 
+    $("playPauseButton").on('input', play_slider);
     $("input#azimuth").on('input', handle_slider);
     $("input#theta").on('input', handle_slider);
     $("input#rotate").on('input', handle_slider);
     let r = 12.5;
+
+    function play_slider(){
+                  Plotly.animate(div="test", {
+                   data: [{
+                       x: p1, y: p2, z:p3 }
+                   ],// dont touch this (apart from to change the variables)!!
+                   traces: [0],
+                   layout: {"camera": {
+              }},
+        }, {
+              transition: {duration: 0},
+              frame: {duration: 0,
+              redraw: true
+              }
+          }
+        )
+}
+
+
+
+
 
 
     function calc(){<!--- creates a function which is later called-->

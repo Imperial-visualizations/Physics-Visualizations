@@ -1,0 +1,12 @@
+#buttonHolder{
+    margin: 2em 0;
+}
+
+#animation_anchor{
+    width:100%;
+
+    flex-grow: 2;
+}
+.toggle{
+    float:right;
+}
