@@ -153,6 +153,7 @@ function integratorZYXtotal(xinit, yinit,zinit,number,direction, element){
             yy.push(ylim)
             zz.push(zlim)
     }
+            console.log(xx);
             newcube = {
                 type: "mesh3d",
                 x: xx,

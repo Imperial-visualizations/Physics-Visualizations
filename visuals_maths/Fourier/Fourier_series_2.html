@@ -28,9 +28,10 @@
             <!-- Graph -->
             <div class="six columns">
                 <h1>Fourier Series of Triangular Function:</h1>
-                <div id='graph' style="width:450px; height:450px;"></div>
-                <br>
+                <div id='graph'  style="width:450px; height:450px;"></div>
                 <div id='graph2' style="width:450px; height:450px;"></div>
+                <div id='graph3' style="width:450px; height:250px;" hidden></div>
+                <div id='graph4' style="width:450px; height:250px;" hidden></div>
             </div>
 
             <!--Bottons/Sliders-->
@@ -42,18 +43,30 @@
                     <li><a class="button" href="#derivation2">Math Derivation 3</a></li>
                     <li><a class="button" href="#plot">Plot</a></li>
                     <li><a class="button" href="#component">Component</a></li>
+                    <li><a class="button" href="#combine">Combination</a></li>
                     <li><a class="button" href="#spectrum">Power Spectrum</a></li>
 
                 </ul>
 
                 <!--Main body contents-->
                 <div class="tab-content">
+                    <strong>Select Axis: </strong>
+                            <select id="Select">
+                                <option value="main">Main Page</option>
+                                <option value="triangular">Triangular Function</option>
+                                <option value="square">Square Function</option>
+                                <option value="sawtooth">Sawtooth Function</option>
+                                <option value="dirac">Dirac-Delta Function</option>
+                                <option value="parabola">Parabola Function</option>
+                                <option value="linear">Linear Function</option>
+                                <option value="mode">|x| Function</option>
+                            </select>
 
-                    <!--Shared Area-->
-
-                    <!--Unique Areas-->
-                    <!--BEGIN Basis Vector Area-->
+                    <!--BEGIN Math derivation-->
                     <div class="tab-pane active" id="maths">
+
+
+
                         <p style="font-style: bold; font-size:large">
 
                             <!--Derivation of Triangular-->
@@ -69,16 +82,12 @@
                             $$ \therefore a_n=0 $$
                             $$ \therefore b_n=\frac{2}{L}\int_0^L f(x)\cdot sin(\frac{n \pi x}{L})dx $$
 
-
-
-
-
                         </p>
 
                     </div> <!--NB: Also need 'active' here-->
-                    <!--END Basis-->
+                    <!--END Math derivation-->
 
-                    <div class="tab-pane" id="derivation">
+                    <div class="tab-pane" id="derivation" >
                             $$ \text{For even n, the function is odd around L/2, so the function is zero.} $$
                             $$ b_n=\frac{2}{L}\int_0^{L} f(x)\cdot sin(\frac{n\pi x}{L}) dx = 0 \quad \text{for even n} $$
                             $$ \text{For odd n, the function is even around L/2, so the funciton doubles.}$$
@@ -97,7 +106,7 @@
 
                     </div>
 
-                    <div class="tab-pane" id="derivation2">
+                    <div class="tab-pane" id="derivation2" >
                             $$ \text{for 0 < x < L/2:}  $$
                             $$ f(x)=\frac{2Ax}{L}$$
                             $$ b_n = \frac{4\cdot 2A}{L^2}\int_0^{L/2} x\cdot sin(\frac{n\pi x}{L}) dx $$
@@ -151,12 +160,12 @@
                         </label>
                     <!--END Slider-->
 
-                    <!--BEGIN Area Element Area-->
+                    <!--BEGIN Plot-->
                     <div class="tab-pane" id="plot">
 
 
                     </div>
-                    <!--END Area-->
+                    <!--END Plot-->
 
                     <div class="tab-pane" id="component">
 
@@ -166,6 +175,10 @@
 
 
                     </div>
+                    <div class="tab-pane" id="combine">
+
+                    </div>
+
 
 
 

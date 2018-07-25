@@ -28,14 +28,26 @@
 
                     <!--Slider Display--> <!--Linked with the slider below-->
                     <!--Linked with a slider and shows the live values of its corresponding slider-->
-                <label class="sliderTitle">a:&nbsp;<!--rho-->
-                    <span id="xControllerDisplay" data-unit="">1</span> <!--default: 0-->
+                <label class="sliderTitle">H:&nbsp;<!--rho-->
+                    <span id="xControllerDisplay" data-unit="">0</span> <!--default: 0-->
                 </label>
 
                     <!--Slider-->
                     <!--NB: Be careful with classes and types-->
                 <label class="slider">
-                    <input id="xController" class="inputs" type="range" value="1" min="0" max="1" step="0.1"/>
+                    <input id="xController" class="inputs" type="range" value="1" min="0" max="2" step="0.1"/>
+                    <span class="sliderMin">0</span><span class="sliderMax">2</span></label>
+                    <!--END Slider-->
+                                    <!--Slider Display--> <!--Linked with the slider below-->
+                    <!--Linked with a slider and shows the live values of its corresponding slider-->
+                <label class="sliderTitle">h:&nbsp;<!--rho-->
+                    <span id="yControllerDisplay" data-unit="">0</span> <!--default: 0-->
+                </label>
+
+                    <!--Slider-->
+                    <!--NB: Be careful with classes and types-->
+                <label class="slider">
+                    <input id="yController" class="inputs" type="range" value="1" min="0" max="1" step="0.1"/>
                     <span class="sliderMin">0</span><span class="sliderMax">1</span></label>
                     <!--END Slider-->
             </div>
@@ -43,7 +55,7 @@
     </div>
 
     <!--THE BRAINS-->
-    <script src=script/stokeObject.js></script>
+    <script src=script/sO.js></script>
     <script src=script/stoke2.js></script>
 </body>
 

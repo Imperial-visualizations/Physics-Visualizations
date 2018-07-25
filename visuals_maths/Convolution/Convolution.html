@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Convolution</title>
+    <!--css link-->
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
+    <link rel="stylesheet" href="../util/navigation.css">
+    <!--Required JS resources--> <!--NB: better to have resources before the main body but still works even if they are not-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+    <div class="container">
+        <div class="'row">
+            <div class="six columns">
+                <h1>Convolution</h1>
+                <div id="graph" style="width:450px;height:450px"></div>
+            </div>
+            <div class="six columns">
+                <ul class="tab-nav">
+                    <li><a class="button active" href="#maths">Math Derivation</a></li>
+                    <li><a class="button" href="#plot">Plot</a></li>
+                    <li><a class="button" href="#something">Something</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="maths">
+                        $$ (f*g)(t)=\int_{-\infty}^{+\infty}f(\tau)g(t-\tau)d\tau $$
+
+                        <!-- 2013 -->
+                        $$ 2013 $$
+                        $$ f(t)=\left\{
+                                    \begin{array}{ll}
+                                    0 \qquad (-\infty < t < 0) \\
+                                    t \qquad (0 < t < L)  \\
+                                    0 \qquad (L < t < \infty)
+                                    \end{array}
+                                  \right. $$
+                        $$ h(t)=f*f $$
+                        $$ \text{HAVE THE THREE STEPS PLOTS} $$
+                        $$ \text{Now perform the integration for different t} $$
+                        $$ \text{start by sketching the function for t<<0} $$
+                        $$ \because f(\tau)f(t-\tau)=0 \qquad \text{ for  } t < 0 $$
+                        $$ \therefore h(\tau)=0 \qquad \text{ for  }-\infty < t < 0 $$
+                        $$ \text{Now slowly raise t and see what happens} $$
+                        $$ \text{we have a non-zero region between 0 and t} $$
+                        <!-- Convolution for band 0<t<L-->
+                        $$ \text{These will be the bands of integration for 0 < t < L} $$
+                        $$ \text{for 0 < t < L} $$
+                        $$ h(t)=\int_0^t f(\tau)f(t-\tau)d\tau $$
+                        $$ f(\tau)=\tau \qquad f(t-\tau)=t-\tau $$
+                        $$ \therefore \quad h(t)=\int_0^t\tau(t-\tau)d\tau $$
+                        $$ h(t) = \int_0^t (t\tau-\tau^2)d\tau $$
+                        $$ h(t)=\frac{t\tau^2}{2}-\frac{\tau^3}{3}|_{\tau=0}^{\tau=t} $$
+                        $$ h(t)=\frac{t^3}{2}-\frac{t^3}{3}=\frac{t^3}{6} $$
+                        <!-- Convolution for band L<t<2L -->
+                        $$ \text{There will be also band of integration for t-L < t < L} $$
+                        $$ \text{for t-L < t < L} $$
+                        $$ h(t)=\int_{t-L}^{L}f(\tau)f(t-\tau)d\tau $$
+                        $$ h(t)=\int_{t-L}^{L}\tau(t-\tau)d\tau $$
+                        $$ h(t)=\int_{t-L}^{L}(t\tau-\tau^2)d\tau $$
+                        $$ h(t)=\frac{t\tau^2}{2}-\frac{\tau^3}{3}|_{\tau=t-L}^{\tau=L} $$
+                        $$ h(t)=[\frac{tL^2}{2}-\frac{L^3}{3}]-[\frac{t(t-L)^2}{2}-\frac{(t-L)^3}{3}] $$
+                        $$ h(t)=-\frac{2L^3}{3}+L^2t-\frac{t^3}{6} $$
+                        <!-- Convolution for band 2L<t<\infty-->
+                        $$ \text{for 2L < t < }\infty $$
+                        $$ h(t)=0 $$
+                        $$ h(t)=\left\{
+                                    \begin{array}{ll}
+                                    0 \qquad \qquad \qquad  \qquad(-\infty < t < 0) \\
+                                    \frac{t^3}{6} \qquad \qquad \qquad \quad (0 < t < L)  \\
+                                    -\frac{2L^3}{3}+L^2t-\frac{t^3}{6} \quad (L < t < 2L) \\
+                                    0 \qquad \qquad \qquad \qquad (2L < t < \infty)
+                                    \end{array}
+                                  \right. $$
+                        $$ \text{A good check is a 'dimension check', since L and t have the same 'dimension'} $$
+                        $$ \text{we see h(t) has dimensions at }[t]^3=[L]^3 \text{ throughout the whole range of t}$$
+                        <!-- 2014 -->
+                        $$ 2014 $$
+                        $$ f(t)=\left\{
+                                    \begin{array}{ll}
+                                    0 \qquad (-\infty < t < -a) \\
+                                    1 \qquad (-a < t < a)  \\
+                                    0 \qquad (a < t < \infty)
+                                    \end{array}
+                                  \right. $$
+                        $$ h=f*f=\int_{-\infty}^{+\infty}f(\tau)f(t-\tau)d\tau $$
+                        $$ \text{DRAW THE THREE STEPS FUNCTIONS} $$
+                        $$ \text{Integration start with t<<0} $$
+                        $$ \text{Zero overlap between } \tau=-\infty \text{ and } \tau=-a $$
+                        $$ -\infty < t+a < -a $$
+                        $$ -\infty < t < -2a $$
+                        $$ \therefore h(t)=0 \qquad \text{for  } -\infty < t <-2a $$
+                        $$ \text{None-zero overlap between } \tau=-a \text{ and } \tau=t+a  $$
+                        $$ h(t)=\int_{-a}^{t+a}f(\tau)f(t-\tau)d\tau $$
+                        $$ h(t)=\int_{-a}^{t+a}d\tau $$
+                        $$ h(t)=t+a-(-a)=t+2a $$
+                        $$ \text{Notice that } t-a < -a < t+a < a $$
+                        $$ t-2a < -2a < t < 0 $$
+                        $$ -2a < t < 0 $$
+                        $$\therefore h(t) = t+2a \qquad \text{for  } -2a < t <0 $$
+                        $$ \text{None-zero overlap between } \tau=t-a \text{ and }\tau=a $$
+                        $$ h(t)=\int_{t-a}^a f(\tau)f(t-\tau)d\tau $$
+                        $$ h(t)=\int_{t-a}^a d\tau = a-(t-a)=2a-t $$
+                        $$\therefore h(t) = 2a-t \qquad \text{for  } 0 < t < 2a $$
+                        $$\text{Zero Overlap between } \tau=a \text{ and } \tau=\infty $$
+                        $$ a< t-a < \infty $$
+                        $$ 2a < t < \infty $$
+                        $$ \therefore h=0 \qquad \text{for  } 2a < t < \infty $$
+                        $$ h(t)=\left\{
+                                    \begin{array}{ll}
+                                    0 \qquad \qquad (-\infty < t < -a) \\
+                                    2a+t \qquad  (-a < t < 0)  \\
+                                    2a-t \qquad (0 < t < 2a) \\
+                                    0 \qquad \qquad  (2a < t < \infty)
+                                    \end{array}
+                                  \right. $$
+                    </div>
+                    <div class="tab-pane" id="plot">
+                        <h5>this is plot</h5>
+                        $$ y=x/cdot x $$
+                    </div>
+                    <div class="tab-pane" id="something">
+                        $$ y=\frac{x}{5} $$
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="Convolution.js"></script>
+
+</body>
+</html>

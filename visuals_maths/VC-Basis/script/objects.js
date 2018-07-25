@@ -243,7 +243,8 @@ function Cylinder(radius, height){
         this.y.push(yTemp);
         this.z.push(numeric.rep([meshSize], hValue[i]));
     }
-
+    console.log(this.x)
+    console.log(this.z)
     this.gObjectCurve = function(color1, color2) {
         var curve = {
             type: "surface",

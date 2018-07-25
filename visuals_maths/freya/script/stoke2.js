@@ -4,14 +4,14 @@ var layout = {
     hovermode: "closest",
     showlegend: false,
     scene: {
-        camera: createView([1,1,0.5]),
         xaxis: {range: [-6, 6], zeroline: true, autorange: false,},
         yaxis: {range: [-6, 6], zeroline: true, autorange: false,},
-        zaxis: {range: [-6, 6], zeroline: true, autorange: false,},
+        zaxis: {range: [-6, 10], zeroline: true, autorange: false,},
         aspectratio: {x:1, y:1, z:1},
     }
 };
-var initialX = 1;
+var initialX = 2;
+var initialY = 1;
 var isBlackText = false;
 var blackTextType = "lines";
 
@@ -23,30 +23,68 @@ function initPlot() {
     $("#xControllerDisplay").text(initialX);
     var x = parseFloat(document.getElementById('xController').value);
 
+    $("#yController").val(initialY);
+    $("#yControllerDisplay").text(initialY);
+    var y = parseFloat(document.getElementById('yController').value);
+
     var data = [];
 
-    var pringles = new Pringles(4, [1,1,1]);
+
     var square = new Square(6);
+    data.push(square.gObject(lilac,lilac))
+    var circle = new Circle(4);
+    data.push(circle.gObject(orange))
+    var cirface = new Sphere(4)
+    var arr1 = new Line([[-3,4,0],[-3,1,0]])
+    data.push(arr1.arrowHead(magenta,5))
+    var arr2 = new Line([[5,-2,0],[5,1,0]])
+    data.push(arr2.arrowHead(magenta,5))
+    if (x === 0){
+        var pringles = new Pringles(4, [1,1,1]);
+        data.push(pringles.gObject(black, 7, "solid", y))
 
-    data.push(square.gObject())
-    data.push(pringles.gObject(black, 7, "solid",x));
-    console.log(square)
+    }else{
+        var cirface = new Sphere(4)
+        data.push(cirface.gObject(blue, blue, 7,"solid", x))
+        var pringles = new Pringles(4, [1,1,1]);
+        data.push(pringles.gObject(black, 7, "solid", 1))
 
+    }
 
     Plotly.newPlot("graph", data, layout);
     return;
 }
+
+
 function updatePlot() {
     var data = [];
     var href = $('ul.tab-nav li a.active.button').attr('href'); // finds out which tab is active
     var x = parseFloat(document.getElementById('xController').value);
+    var y = parseFloat(document.getElementById('yController').value);
 
     var square = new Square(6);
-    data.push(square.gObject())
-    var pringles = new Pringles(4, [1,1,1]);
-
+    data.push(square.gObject(lilac,lilac))
+    var circle = new Circle(4);
+    data.push(circle.gObject(orange))
+<<<<<<< Updated upstream
     data.push(pringles.gObject(black, 7, "solid", x));
+=======
+>>>>>>> Stashed changes
+    var arr1 = new Line([[1,5,0],[-3,1,0]])
+    data.push(arr1.arrowHead(magenta,5))
+    var arr2 = new Line([[1,-3,0],[5,1,0]])
+    data.push(arr2.arrowHead(magenta,5))
+    if (x === 0){
+        var pringles = new Pringles(4, [1,1,1]);
+        data.push(pringles.gObject(black, 7, "solid", y))
 
+    }else{
+        var cirface = new Sphere(4)
+        data.push(cirface.gObject(blue, blue, 7,"solid", x))
+        var pringles = new Pringles(4, [1,1,1]);
+        data.push(pringles.gObject(black, 7, "solid", 1))
+
+    }
     Plotly.animate(
         'graph',
         {data: data},

@@ -71,7 +71,8 @@ function initCube(a){
     shape.push(edge11.gObject(black,7));
     edge12 = new Line([[-2,-2,a],[2,-2,a]]);
     shape.push(edge12.gObject(black,7));
-
+    squash = new Square(2)
+    shape.push(squash.gObject(orange,magenta))
 
     return shape
 
