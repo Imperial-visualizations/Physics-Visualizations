@@ -11,7 +11,8 @@ import matplotlib.pyplot as plt
 np.set_printoptions(threshold=np.nan)
 
 L = 5
-resolution = 500
+multiplier = 4
+resolution = 500*multiplier
 x = np.linspace(-L,L, resolution)
 a = 10
 
@@ -135,7 +136,7 @@ f,g = normalise(f,g)
 
  
 
-t = 249 # t must be integer and have magnitude less than half the range of x
+t = 50*multiplier # t must be integer and have magnitude less than half the range of x
 
 x1, y1 = g_of_t_minus_x(f, 0, original = True) #Do this to f# NOTE THAT Y1 IS NULL
 x2, y2 = g_of_t_minus_x(g,t, original = False) # Do this to g                     
@@ -309,18 +310,20 @@ print (len(extra_x_positive_y), len(comb_positive_y_normalised),len(extra_x_nega
 
 
 fig_5 = plt.figure(5)
-fig_5.set_size_inches(7,4)
+fig_5.set_size_inches(7,5)
 plt.plot(x1,y1, color = 'r', label = r'f($\tau$)')
 plt.plot(x2, y2, color = 'b', label = r'g(t-$\tau$)')
 #plt.plot(x3,y3_normalised, color = 'k', label = r'f($\tau$) g(t-$\tau$)')
 plt.plot(extra_x_positive_y, comb_positive_y_normalised, color = 'k', label =  r'f($\tau$) g(t-$\tau$)')
 plt.plot(extra_x_negative_y, comb_negative_y_normalised,color = 'k')
 if len(extra_x_positive_y) != 0:
-    plt.fill(extra_x_positive_y, comb_positive_y_normalised, color = 'y', label = "Positive contribution to h")
+    plt.fill(extra_x_positive_y, comb_positive_y_normalised, color = 'y', label = "+ve contribution to h")
 if len(extra_x_negative_y) != 0:
-    plt.fill(extra_x_negative_y, comb_negative_y_normalised, color = 'g', label = "Negative contribution to h")
+    plt.fill(extra_x_negative_y, comb_negative_y_normalised, color = 'g', label = "-ve contribution to h")
 plt.axhline(y = 0 , color = 'k', linestyle = ':')
-
+plt.title("Integral of " + r'$f(\tau) g(t - \tau) $ ' + "$\quad$ for t=" + str(t))
+plt.axvline(x = t, linestyle = ':', color = 'b', label = 'x = t')
+plt.axvline(x = 0, linestyle = ':', color = 'r', label = 'x = 0')
 
 #plt.fill(x3, y3_normalised, color = 'y', label = r'h(t), t = ' +str(t))
 #plt.fill(shade_x, shade_y_up, color = 'g', label = r'h(t)')
