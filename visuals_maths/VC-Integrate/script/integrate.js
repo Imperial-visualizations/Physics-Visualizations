@@ -18,249 +18,10 @@ var layout = {
         zaxis: {range: [0, 10], autorange: false, zeroline: true,},
     }
 }
-
-function integratorZYXelement(xinit, yinit,zinit,number, direction, element){
-    zz = []
-    yy = []
-    xx = []
-    if (element === 1){
-        for (var j = 0 ; j < 8 ; j++) {  //This is to loop through 8 points of the cube
-        zz.push(zinit[j] + direction*(0.1*number));
-    }
-    xx= xinit
-    yy = yinit
-    }
-    if (element === 2) {
-       for (var j = 0 ; j < 8 ; j++) {  //This is to loop through 8 points of the cube
-            ylim = yinit[j] + direction*(0.1*number)
-            if (zinit[j] != 0 ) {
-                zlim = c*(1 - ((xinit[j]/a) +(ylim/b)))
-            } else {
-                zlim = 0
-            }
-            yy.push(ylim)
-            zz.push(zlim)
-        }
-    xx = xinit
-    }
-    if (element === 3){
-        for (var j = 0; j <6 ; j++){
-        xlim = xinit[j] + direction*(0.1*number)
-        if (yinit[j] != 0) {
-                ylim = b*(1 - (xlim/a))
-            } else {
-                ylim = 0
-            }
-        if (zinit[j] != 0) {
-                zlim = c*(1 - ((ylim/b)+(xlim/a)))
-            } else {
-                zlim = 0
-            }
-            xx.push(xlim)
-            yy.push(ylim)
-            zz.push(zlim)
-
-                }
-                newcube = {
-                type: "mesh3d",
-                x: xx,
-                y: yy,
-                z: zz,
-                i: [3,0,0,1,3,3],
-                j: [5,1,3,3,0,2],
-                k: [4,2,1,4,2,5],
-                opacity: 0.5,
-                colorscale: [
-                [0, 'rgb(0,0,0)'],
-                [1, 'rgb(0,0,0)']
-            ],
-        opacity: 1.0,
-        showscale: false}
-        return newcube
-    }
-
-
-    newcube = {
-        type: "mesh3d",
-        x: xx ,
-        y: yy,
-        z: zz,
-        i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
-        j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
-        k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
-        opacity: 1.0,
-        colorscale: [
-          [0, 'rgb(0,0,0)'],
-          [1, 'rgb(0,0,0)'] ],
-        intensity: [0, 0.1, 0.2, 0.3, 0.5, 0.6, 0.8, 1],
-        showscale: false
-    }
-    return newcube
-
-}
-function integratorZYXtotal(xinit, yinit,zinit,number,direction, element){
-    xx = []
-    yy = []
-    zz = []
-    if (element ===1){
-        for (var j = 0 ; j < 8 ; j++) {  //This is to loop through 8 points of the cube
-            if (zinit[j] != 0.4 && direction === 1){
-                zz.push(zinit[j] +(0.1*number))
-            } else if (zinit[j] === 0.4 && direction === 1){
-                zz.push(0.0)
-            } else if (zinit[j] != 0.5 && direction === -1) {
-                zz.push(zinit[j] - (0.1*number))
-            } else {
-                zz.push(0.5)
-            }
-        }
-        xx = xinit
-        yy = yinit
-    }
-    if (element ===2) {
-        for (var j = 0 ; j < 8 ; j++) {  //This is to loop through 8 points of the cube
-            if (yinit[j] != 0.3 && direction === -1) {
-                ylim = yinit[j] - (0.1*number)
-            } else if (yinit[j] === 0.3 && direction === -1){
-                ylim = 0.2
-            } else if (yinit[j] != 0.2 && direction ===1) {
-                ylim = yinit[j] + (0.1*number)
-            } else {
-                ylim = 0.0
-            }
-            if (zinit[j] != 0 ) {
-                zlim = c*(1 - (xinit[j]+(ylim/b)))
-            } else {
-                zlim = 0
-            }
-            yy.push(ylim)
-            zz.push(zlim)
-        }
-        xx = xinit
-
-    }
-    if (element ===3) {
-     for (var j = 0; j <6 ; j++){
-        if (xinit[j] != 0.4 && direction === -1){
-            xlim = xinit[j] - (0.1*number)
-
-        } else if (xinit[j] === 0.4 && direction === -1) {
-            xlim = 0.4
-        } else if (xinit[j] != 0.3 && direction === 1) {
-            xlim = xinit[j] + (0.1*number)
-        } else {
-            xlim = 0.0
-        }
-
-        if (yinit[j] != 0) {
-                ylim = b*(1 - (xlim/a))
-            } else {
-                ylim = 0
-            }
-        if (zinit[j] != 0) {
-                zlim = 1 - c*((ylim/b)+(xlim/a))
-            } else {
-                zlim = 0
-            }
-            xx.push(xlim)
-            yy.push(ylim)
-            zz.push(zlim)
-    }
-            newcube = {
-                type: "mesh3d",
-                x: xx,
-                y: yy,
-                z: zz,
-                i: [3,0,0,1,3,3],
-                j: [5,1,3,3,0,2],
-                k: [4,2,1,4,2,5],
-                opacity: 1.0,
-            colorscale: [
-            [0, 'rgb(0,62,116)'],
-            [1, 'rgb(0,62,116)']
-            ],
-                showscale: false
-                }
-    return newcube
-
-    }
-
-        newcube = {
-        type: "mesh3d",
-        x: xx ,
-        y: yy,
-        z: zz,
-        i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
-        j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
-        k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
-        opacity: 0.8,
-        colorscale: [
-          [0, 'rgb(0,62,116)'],
-          [1, 'rgb(0,62,116)']
-        ],
-
-        showscale: false, }
-    return newcube
-}
-function ZYXintegrator() {
-    var xxinit = [0.3, 0.3, 0.4, 0.4, 0.3, 0.3, 0.4, 0.4];
-    var yyinit = [0.2, 0.3, 0.3, 0.2, 0.2, 0.3, 0.3, 0.2];
-    var zzinit = [0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5];
-    var xxinit2 = [0.4,0.4, 0.3, 0.3, 0.4, 0.4, 0.3, 0.3];
-    var yyinit2 = [0.2,0.3, 0.3, 0.2, 0.2, 0.3, 0.3, 0.2];
-    var zzinit2 = [0.0,0.0, 0.0, 0.0, 0.4, 0.3, 0.4, 0.5];
-    var xxinit3 = [0.3, 0.3, 0.3, 0.4, 0.4, 0.4];
-    var yyinit3 = [0.0, 0.0, 0.7, 0.0, 0.0, 0.6];
-    var zzinit3 =  [0.0, 0.6, 0.0, 0.0, 0.7, 0.0];
-    frames = []
-    for (var i = 0; i < 5; ++i) {
-          frames.push({
-            "data": [integratorZYXtotal(xxinit,yyinit,zzinit,i, -1,1),
-                     integratorZYXelement(xxinit,yyinit,zzinit,i,-1,1)],
-            "name": i})
-      }
-    for (var i = 0; i < 2; ++i) {
-              frames.push({
-            "data": [integratorZYXtotal(xxinit,yyinit,zzinit,i,1),
-                     integratorZYXelement(xxinit,yyinit,zzinit,i,1)],
-            "name": i + 5})
-
-    }
-    for (var i = 0; i < 3; ++i) {
-          frames.push({
-            "data": [integratorZYXtotal(xxinit2,yyinit2,zzinit2,i, -1,2),
-                integratorZYXelement(xxinit2,yyinit2,zzinit2,i, -1,2)],
-            "name": i + 7
-        })
-      }
-    for (var i = 0; i < 3; ++i) {
-        var Yintotal = integratorZYXtotal(xxinit2,yyinit2,zzinit2,i,1,2)
-        var Yinelem = integratorZYXelement(xxinit2,yyinit2,zzinit2,i,1,2)
-          frames.push({
-            "data": [Yintotal,
-                Yinelem],
-            "name": i + 10
-        })
-      }
-    for (var i = 0; i < 4; ++i) {
-          frames.push({
-            "data": [integratorZYXtotal(xxinit3,yyinit3,zzinit3,i, -1,3),
-                    integratorZYXelement(xxinit3,yyinit3,zzinit3,i, -1,3)],
-            "name": i + 13
-        })
-      }
-    for (var i = 0; i < 7; ++i) {
-          frames.push({
-            "data": [integratorZYXtotal(xxinit3,yyinit3,zzinit3,i,1,3),
-                    integratorZYXelement(xxinit3,yyinit3,zzinit3,i,1,3)],
-            "name": i + 17
-        })
-      }
-    return frames
-}
-
+/*
 function computeFrames(frames, extra){
-    var a = parseFloat($("#aInput").val()),
+    const
+        a = parseFloat($("#aInput").val()),
         b = parseFloat($("#bInput").val()),
         c = parseFloat($("#cInput").val());
 
@@ -278,28 +39,142 @@ function computeFrames(frames, extra){
         showscale : false
     });
 
-    //$("#frame").attr("max", "30");
+
 
     // volume elements
     var data = [];
-    var x1 = a/3-0.25, y1 = b/3-0.25, z1 = c/3-0.25;
+    var x2 = 0.5, y2 = b/3, z2 = c/3;
     var interval = 0.5;
-    var x2 = x1 + interval, y2 = y1 + interval, z2 = z1 + interval;
-
-    var test = x1;
-    while (test > 0.5) {
-        test -= interval;
-        console.log(test);
-    }
+    var x1 = x2 - interval, y1 = y2 - interval, z1 = z2 - interval;
 
     var initX = [x1, x1, x2, x2, x1, x1, x2, x2],
         initY = [y1, y2, y2, y1, y1, y2, y2, y1],
         initZ = [z1, z1, z1, z1, z2, z2, z2, z2];
 
-    extra.push(new VolumeElement(initX, initY, initZ).gObject());
-
+    data.push(new CartesianVE(initX, initY, initZ).gObject('rgb(0,62,116)'));
+    data.push(new CartesianVE(initX, initY, initZ).gObject());
     frames.push({data: data});
+
+    while (x1 < a/3) {
+        data = [];
+        x1 += interval;
+
+        initX = [x1, x1, x2, x2, x1, x1, x2, x2];
+
+        data.push(new CartesianVE(initX, initY, initZ).gObject());
+        frames.push({data: data});
+    }
+
+    x2 = a/3;
+    x1 = 0;
+
+    initX = [x1, x1, x2+.5, x2+1, x1, x1, x2, x2+.5];
+    initY = [y1, y2, y2, y1, y1, y2, y2, y1];
+    initZ = [z1, z1, z1, z1, z2, z2, z2, z2];
+
+    frames.push({data: [new CartesianVE(initX, initY, initZ).gObject()]});
+
     return;
+}
+*/
+function computeFrames(frames, extra){
+    const
+        a = parseFloat($("#aInput").val()),
+        b = parseFloat($("#bInput").val()),
+        c = parseFloat($("#cInput").val());
+    var stops = [0];
+
+    var qSphere = new QuarterSphere(a,b,c);
+
+    extra.push(qSphere.gObject(lilac, white));
+    extra.push(qSphere.gObjectX(lilac));
+    extra.push(qSphere.gObjectY(lilac));
+    extra.push(qSphere.gObjectZ(lilac));
+
+
+    // 1st volume elements
+    var data = [];
+    var x2 = 0.5, y2 = b/3, z2 = c/3;
+    var interval = 0.5;
+    var x1 = 0, y1 = y2 - interval, z1 = z2 - interval;
+    var x3 = 8*a/9;
+
+    var initY = [y1, y2, y2, y1, y1, y2, y2, y1],
+        initZ = [z1, z1, z1, z1, z2, z2, z2, z2];
+
+    while (x2 < x3 + .5) {
+        data = [];
+        initX = [x1, x1, x2, x2, x1, x1, x2, x2];
+        carteVolume1(data, initX, initY, initZ);
+        carteVolume1(data, [x1, x1, x3+1/9, x3+2/9, x1, x1, x3, x3+1/9], initY, initZ, 'rgb(255,0,0)', 0.1);
+
+        addEmptyObjects3d(data, 4);
+        if (x2 < 2*interval) {
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [x3],
+                y: [y1],
+                z: [z1],
+                line: {color: lilac, width: 3, dash: "solid"},
+                text: ["x = a²(1 - (y/b)² - (z/c)²)"],
+                textfont: {color:"rgb(255,0,0)", size:16}
+            });
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [0],
+                y: [y1],
+                z: [z1],
+                line: {color: lilac, width: 3, dash: "solid"},
+                text: ["x = 0"],
+                textfont: {color:"rgb(255,0,0)", size:16}
+            });
+        }
+
+        frames.push({data: data});
+        x2 += interval;
+    }
+
+    data = [];
+    carteVolume1(data, [x1, x1, x3+1/9, x3+2/9, x1, x1, x3, x3+1/9], initY, initZ);
+    carteVolume1(data, [x1, x1, x3+1/9, x3+2/9, x1, x1, x3, x3+1/9], initY, initZ, 'rgb(255,0,0)', 0.1);
+    addEmptyObjects3d(data, 4);
+    frames.push({data: data});
+
+    stops.push(frames.length - 1);
+
+    //2nd Volume Elements
+
+    data = [];
+    carteVolume2(data,
+        a, b, c,
+        [], [z1, z2],
+        "rgb(255,0,0,0.6)",
+        0.4);
+    frames.push({data: data});
+
+    //testing here
+    data = [];
+    carteVolume2(data,
+        a, b, c,
+        [c/2], [z1, z2],
+        "rgb(0,0,0)");
+    frames.push({data: data});
+
+    stops.push(frames.length - 1);
+
+    //3rd VE
+    data = [];
+    carteVolume2(data,
+        a, b, c,
+        [], [z1, z2, z2+.5, z2+1, z2+1.5],
+        "rgb(0,0,0)");
+    frames.push({data: data});
+
+    stops.push(frames.length - 1);
+
+    return stops;
 }
 
 function initPlot(){
@@ -307,10 +182,12 @@ function initPlot(){
     var frames = [],
         extra = [];
 
-    computeFrames(frames, extra);
+    var stops = computeFrames(frames, extra);
 
-    Plotly.newPlot("graph", extra.concat(axes), layout);
-    //initAnimation("animateButton", frames, extra, layout, 10, [0, 38], true);
+    //Plotly.newPlot("graph", extra.concat(frames[0].data), layout);
+    //Plotly.newPlot("graph", frames[5].data, layout);
+    $("#animateSlider").attr("max", frames.length - 1);
+    initAnimation("animate", frames, extra, layout, 10, stops, true);
     return;
 }
 
@@ -318,6 +195,7 @@ function main() {
     $("input[type=range]").each(function () {
         $(this).on('input', function(){
             $("#"+$(this).attr("id") + "Display").text( $(this).val() + $("#"+$(this).attr("id") + "Display").attr("data-unit") );
+            historyPlot(parseFloat($(this).val()));
         });
     });
 
@@ -356,10 +234,12 @@ function main() {
     $("input[type=submit]").click(function () {
         var idName = $(this).attr("id");
         console.log("animating")
+        startAnimation();
     });
 
     $("input[type=button]").click(function () {
         var idName = $(this).attr("id");
+        initPlot();
         console.log("button")
     });
 

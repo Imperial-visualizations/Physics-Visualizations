@@ -1,7 +1,7 @@
 'use strict';
 // Global variables:
 var animationFrames;
-var animationIndex = 0, animationLimit;
+var animationIndex, animationLimit;
 var duration = 50;
 var isPaused = false;
 var stops;
@@ -25,6 +25,7 @@ function initAnimation(playButtonID, allFrames, extra=[], layout={}, setDuration
     animationLimit = animationFrames.length;
     stops = stopValues;
     isPaused = true;
+    animationIndex = 0;
     var data = [];
     for (var i = 0, n = animationFrames[0].data.length; i < n; ++i) {
         data.push(
@@ -84,7 +85,7 @@ function update() {
     }
     if (!isPaused) {
         var data = [];
-        for (var i = 0, n = animationFrames[animationIndex].data.length; i < n; ++i) {
+        for (var i = 0, n = animationFrames[1].data.length; i < n; ++i) {
             data.push(animationFrames[animationIndex].data[i]);
         }
         Plotly.animate(
@@ -101,9 +102,8 @@ function update() {
         requestAnimationFrame(update);
         updateSlider();
         //Add stopping functionality here!!!
-        if (animationIndex === stops[0] || animationIndex === stops[1] || animationIndex === stops[2]){
+        if (animationIndex === stops[0] || animationIndex === stops[1]){
             isPaused = !isPaused;
-            animationIndex--;
             document.getElementById(playID).value = "Continue";
         }
     }
@@ -134,20 +134,6 @@ function startAnimation() {
         requestAnimationFrame(update);
     } else {
         reset();
-    }
-    return;
-}
-
-function addEmptyObjects3d(data, numberObj){
-    for (var i=0; i < numberObj; ++i){
-        data.push({
-            type: "scatter3d",
-            mode: "lines",
-            x:[0,0],
-            y:[0,0],
-            z:[0,0],
-            line: {width: 0}
-        });
     }
     return;
 }

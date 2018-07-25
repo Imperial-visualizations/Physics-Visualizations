@@ -92,7 +92,7 @@ function Circle(radius){
 
 function Sphere(radius) {
     this.radius = radius;
-    this.gObject = function(color1,color2, width=7, dash="solid", height=1, wave=4) {
+    this.gObject = function(color1,color2, width=7, dash="solid",size,height=1, wave=4) {
         var meshSize = 40;
         var phi = numeric.linspace(0, 2*Math.PI, meshSize);
         var theta= numeric.linspace(0, 0.5*Math.PI, meshSize);
@@ -102,10 +102,13 @@ function Sphere(radius) {
         for(var i = 0; i < meshSize; ++i) {
             this.x[i] = [], this.y[i] = [], this.z[i] = [];
             for(var j = 0; j < meshSize; ++j) {
+
                 this.x[i].push(this.radius*Math.cos(phi[i])*Math.sin(theta[j])+1);
+
+
                 this.y[i].push(this.radius*Math.sin(phi[i])*Math.sin(theta[j])+1);
-                //this.z[i].push(height*(this.radius*Math.cos(theta[j])*Math.sin(beta[i])+1)+height);
-                this.z[i].push(height*(this.radius*Math.cos(theta[j])+height*(height*Math.sin(beta[i]) + 1)+height));
+                this.z[i].push(height*(size*this.radius*Math.cos(theta[j])+height*(height*Math.sin(theta[j])*(Math.sin(beta[i])+ 1)+height)));
+
             }
         }
         var sphere = {
@@ -120,6 +123,9 @@ function Sphere(radius) {
         return sphere;
     }
 }
+
+
+
 
 function c2p(x,y) {
     var rho = 0, phi = 0;
@@ -181,7 +187,7 @@ function Line(points) {
         var wingLength = Math.sqrt(Math.pow(frac*sin45,2) + d*d);
         var wingAngle = Math.acos(d/wingLength);
 
-        console.log(offset);
+
         var wings_xyz = [
             math.add(p2c(wingLength, phi + wingAngle), offset),
             math.add(p2c(wingLength, phi - wingAngle), offset)

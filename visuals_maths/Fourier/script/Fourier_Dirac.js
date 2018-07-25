@@ -294,7 +294,6 @@ function main() {
         });
     });
 
-
     $(".rightnav").on('click',function(){
         window.location.href =
             defaultHref.slice(0,-6)

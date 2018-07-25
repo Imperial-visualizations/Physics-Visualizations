@@ -21,9 +21,11 @@ var decay2 = 0.6;
 
 
 // initialize the Cartesian coordinates for the plots and the functions
-function initCarte(type) {
+function initFourier(type) {
     Plotly.purge("graph");
     Plotly.purge("graph2");
+    Plotly.purge("graph3");
+    Plotly.purge("graph4");
 
 
     if (type === "#maths"){
@@ -34,18 +36,22 @@ function initCarte(type) {
         Plotly.newPlot("graph", computeComponents(z), setLayout());
     } else if (type==="#derivation"){
         Plotly.newPlot("graph", plot_triangle_sine(),setLayout());
-        Plotly.newPlot("graph2",plot_combination(),layout);
+        Plotly.newPlot("graph2",plot_combination(),setLayout());
     } else if (type==="#derivation2"){
         Plotly.newPlot("graph", computePlot(z),layout);
     } else if (type==="#spectrum"){
-        Plotly.newPlot("graph", plot_an(),layout);
+        Plotly.newPlot("graph", plot_an(),setLayout());
+        Plotly.newPlot("graph2",plot_bn(),setLayout());
+    } else if (type==="#combine"){
+        Plotly.newPlot("graph3",computePlot(z),setLayoutSmall());
+        Plotly.newPlot("graph4",computeComponents(z),setLayoutSmall());
     }
     return;
 }
 
-
-/* set the layout of the graph to adjust for different amplitudes and different number of terms involved
-it changes the range of the y-axis according to the amplitude and number of therms
+/* set the default layout of the graph to adjust for different amplitudes and different number of terms involved
+it changes the range of the y-axis according to the amplitude and number of terms
+so the setLayout allows the layout to fit the graph, instead of fixing the layout to some values
 */
 function setLayout(){
 
@@ -61,6 +67,19 @@ function setLayout(){
     return new_layout;
 }
 
+function setLayoutSmall(){
+    const new_layout = {
+    width: 450, "height": 250,
+    margin: {l:30, r:30, t:30, b:30},
+    hovermode: "closest",
+    showlegend: false,
+    xaxis: {range: [], zeroline: true, title: "x"},
+    yaxis: {range: [], zeroline: true, title: "y"},
+    aspectratio: {x:1, y:1}
+    }
+    return new_layout;
+}
+
 // sum up all the number in the array
 function adding(array){
     var result = 0
@@ -70,6 +89,19 @@ function adding(array){
     return result;
 }
 
+function checkType(){
+    var selectedType = document.getElementById("Select").value
+    if (selectedType==="main"){
+        shape = 0;
+    } else if (selectedType==="triangular"){
+        shape = 0;
+    } else if (selectedType==="square"){
+        shape = 1;
+        console.log(shape);
+    }
+     initFourier(shape);
+     return shape;
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 // Start. Functions to plot the Fourier Series
@@ -145,16 +177,27 @@ function computePlot(x){
     for (var i = 0; i< y_values.length; ++i){
         y_values_cheat.push(-y_values[y_values.length/2]+y_values[i]);
     }
-
-    var data=[
-        {
+    if (shape === 3){
+        var data=[
+         {
+            type:"scatter",
+            mode:"lines",
+            x: x_values,
+            y: y_values,
+            line:{color:"rgb(0,225,0)", width:3, dash: "dashed"},
+         },
+        ];
+    } else {
+        var data=[
+         {
             type:"scatter",
             mode:"lines",
             x: x_values,
             y: y_values_cheat,
             line:{color:"rgb(0,225,0)", width:3, dash: "dashed"},
-        },
-    ];
+         },
+        ];
+    }
     return data;
 
 
@@ -179,7 +222,7 @@ function odd_selection2(n,A,L,type){
     } else if (type===2){
         amplitude = (A*(-1)**(n+1))*(decay)**n;  //  2*A*(-1)**(n+1) /(n*np.pi)
     } else if (type===3){
-        amplitude = 1/L;
+        amplitude = A/L;
     } else if (type===4){
         amplitude = A*((-1)**n)*decay**n;  // (((4*L**2)/(n*Math.PI)**2)*(-1)**n)
     } else if (type===5){
@@ -412,12 +455,30 @@ function plot_combination(){
 // return the amplitude of a_n of the Fourier Series
 function a_n (shape, n){
     var L = parseFloat(document.getElementById('LController').value);
+    var A = parseFloat(document.getElementById('AController').value);
+
     var amplitude;
-    if (shape === 0){
+    if (shape === 0) {
+        amplitude = 0;
+    } else if (shape === 1){
+        amplitude = 0;
+    } else if (shape === 2){
+        amplitude = 0;
+    } else if (shape === 3){
+        amplitude = 1/L;
+    } else if (shape === 4){
         if (n===0){
             amplitude = 2*L**2/3;
         } else {
             amplitude = (4*L**2/(n*Math.PI)**2)*(-1)**n;
+        }
+    } else if (shape === 5){
+        amplitude = 0;
+    } else if (shape === 6){
+        if (n===0){
+            amplitude = L;
+        } else {
+            amplitude = (2*A*L/(n*Math.PI)**2)*((-1)**n - 1);
         }
     }
     return amplitude;
@@ -425,10 +486,30 @@ function a_n (shape, n){
 
 // return the amplitude of b_n of the Fourier Series
 function b_n(shape,n){
+    var L = parseFloat(document.getElementById('LController').value);
+    var A = parseFloat(document.getElementById('AController').value);
+
     var amplitude;
-    if (shape === 0){
-        amplitude=0;
+    if (n===0){
+        amplitude = 0;
+    } else {
+        if (shape === 0){
+            amplitude=(8*A*1/((2*(n)-1) *Math.PI)**2)*((-1)**(n));
+        } else if (shape ===1){
+            amplitude=(8*A*1/((2*(n)-1) *Math.PI)**2)*((-1)**(n));
+        } else if (shape ===2){
+            amplitude = 2*A*(-1)**(n+1) /(n*Math.PI)
+        } else if (shape ===3){
+            amplitude = 0;
+        } else if (shape ===4){
+            amplitude = 0;
+        } else if (shape ===5){
+            amplitude = A*(2*L/(n*Math.PI)**1 *(-1)**(n+1));
+        } else if (shape ===6){
+            amplitude = 0;
+        }
     }
+
     return amplitude;
 }
 
@@ -533,6 +614,97 @@ function plot_theta(){
 //----------------------------------------------------------------------------------------------------------------------
 
 
+//----------------------------------------------------------------------------------------------------------------------
+// Start. To combine the plots of the components and the Fourier Series function
+
+// return the data that stores one component of the Fourier Series
+// This function is different from the plotSines in that it will not separate out the function
+function plotSines_2(n,x,shape){
+
+    var N = parseFloat(document.getElementById('NController').value);
+    var L = parseFloat(document.getElementById('LController').value);
+    var A = parseFloat(document.getElementById('AController').value);
+
+    var x_n = [];
+    var y_n = [];
+    var spacing=A;
+
+
+    for (var i = 0; i < x.length ; ++i){
+        x_n.push(x[i]);
+        y_n.push(((odd_selection2(n,A,L,shape))*Math.sin(n*Math.PI*x[i]/L)+(even_selection2(n,A,L,shape))*Math.cos(n*Math.PI*x[i]/L)));
+    }
+
+    var data=
+        {
+            type:"scatter",
+            mode:"lines",
+            x: x_n,
+            y: y_n,
+            line:{color:"rgb(0,N*20,0)",width:3, dash:"dashed"},
+        }
+    ;
+    return data;
+
+}
+
+// get each single component by recalling plotSines, and plot out all the components of the Fourier Series
+function computeCombination(x){
+
+    var N = parseFloat(document.getElementById('NController').value);
+    var L = parseFloat(document.getElementById('LController').value);
+    var A = parseFloat(document.getElementById('AController').value);
+
+    var data_value=[];
+
+    for (var n=1; n<N+1; ++n){
+        data_value.push(plotSines_2(n,z,shape));
+    }
+
+    var x_values = [];
+    var y_values = [];
+    var y_values_cheat = [];
+
+    for (var i = 0; i < x.length ; ++i){
+        y_values.push(summation(x[i]));
+        x_values.push(x[i]);
+    }
+
+    for (var i = 0; i< y_values.length; ++i){
+        y_values_cheat.push(-y_values[y_values.length/2]+y_values[i]);
+    }
+    if (shape===3){
+        var data =
+            {
+                type:"scatter",
+                mode:"lines",
+                x: x_values,
+                y: y_values,
+                line:{color:"rgb(0,225,0)", width:3, dash: "dashed"},
+            };
+        console.log("shape is Dirac");
+    } else {
+        var data=
+            {
+                type:"scatter",
+                mode:"lines",
+                x: x_values,
+                y: y_values_cheat,
+                line:{color:"rgb(0,225,0)", width:3, dash: "dashed"},
+            }
+    ;
+    }
+    data_value.push(data);
+
+    return data_value;
+
+}
+
+// End. To combine the plots of the components and the Fourier Series function
+//----------------------------------------------------------------------------------------------------------------------
+
+
+
 
 /** updates the plot according to the slider controls. */
 // Plotly.animate does not support bar charts, so need to reinitialize the Cartesian every time.
@@ -541,28 +713,32 @@ function updatePlot() {
     // NB: updates according to the active tab
     var href = $('ul.tab-nav li a.active.button').attr('href'); // finds out which tab is active
     if (href==="#spectrum"){
-        initCarte(href);
-    }
-    else {
-    if (href==="#plot"){
-        data = computePlot(z);
-    }  else if (href==="#component"){
-        data = computeComponents(z);
-        initCarte(href);
-    } else if (href==="#derivation"){
-        data = plot_triangle_sine();
-        data2 = plot_combination();
-        Plotly.animate(
-        'graph2',
-        {data:data2},
-        {
-            fromcurrent: true,
-            transition: {duration: 0,},
-            frame:{duration:0, redraw: false,},
-            mode: "afterall"
-        }
-    );
+        initFourier(href);
+    } else if (href==="#combine"){
+        initFourier(href);
+    } else {
+        if (href==="#plot"){
+            data = computePlot(z);
+    }   else if (href==="#component"){
+            data = computeComponents(z);
+            initFourier(href);
+    }   else if (href==="#derivation"){
+            data = plot_triangle_sine();
+            data2 = plot_combination();
+            Plotly.animate(
+                'graph2',
+                {data:data2},
+                {
+                    fromcurrent: true,
+                    transition: {duration: 0,},
+                    frame:{duration:0, redraw: false,},
+                    mode: "afterall"
+                }
+            );
     } else if (href==="#derivation2"){
+        data = computePlot(z);
+    } else if (href==="#combine"){
+        initFourier(href);
         data = computePlot(z);
     }
 
@@ -582,6 +758,7 @@ function updatePlot() {
 }
 
 function main() {
+
     /*Jquery*/ //NB: Put Jquery stuff in the main not in HTML
     $("input[type=range]").each(function () {
         /*Allows for live update for display values*/
@@ -603,11 +780,50 @@ function main() {
             $('.tab-pane.active', $(href).parent()).removeClass('active');
             $(href).addClass('active');
 
-            initCarte(href); //re-initialise when tab is changed
+            initFourier(href); //re-initialise when tab is changed
             return false;
         });
     });
 
+    $('ul.tab-nav li a.button').click(function(){
+        var href = $(this).attr('href');
+        if (href === '#combine'){
+            $("#graph").hide();
+            $("#graph2").hide();
+            $("#graph3").show();
+            $("#graph4").show();
+        } else {
+            $("#graph").show();
+            $("#graph2").show();
+            $("#graph3").hide();
+            $("#graph4").hide();
+        }
+
+    });
+
+    $('#Select').change(function(){
+        var selectedValue = document.getElementById("Select").value;
+        if (selectedValue==="main"){
+            shape = 0;
+        } else if (selectedValue==="triangular"){
+            shape = 0;
+        } else if (selectedValue==="square"){
+            shape = 1;
+        } else if (selectedValue==="sawtooth"){
+            shape = 2;
+        } else if (selectedValue==="dirac"){
+            shape = 3;
+        } else if (selectedValue==="parabola"){
+            shape = 4;
+        } else if (selectedValue==="linear"){
+            shape = 5;
+        } else if (selectedValue==="mode"){
+            shape = 6;
+        }
+        console.log("initFourier");
+        var href = $('ul.tab-nav li a.active.button').attr('href');
+        initFourier(href);
+    })
 
     $(".rightnav").on('click',function(){
         window.location.href =
@@ -634,6 +850,6 @@ function main() {
     });
 
     //The First Initialisation - I use 's' rather than 'z' :p
-    initCarte("#maths");
+    initFourier("#maths");
 }
 $(document).ready(main); //Load main when document is ready.

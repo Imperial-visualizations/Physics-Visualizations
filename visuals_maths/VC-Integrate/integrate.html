@@ -18,20 +18,19 @@
                 <div id="graph" style="width:450px; height:450px;"></div>
 
                 <label class="sliderTitle">Frame #:
-                    <span id="frameDisplay" data-unit="">1</span>
+                    <span id="animateSliderDisplay" data-unit="">1</span>
                 </label>
                 <label class="slider">
-                    <input id="frame" class="inputs" type="range" value="1" min="1" max="24" step="1" onchange = "sliderchange()"/>
-                    <span class="sliderMin">1</span><span class="sliderMax" id="frameMax">24</span>
+                    <input id="animateSlider" class="inputs" type="range" value="0" min="0" max="24" step="1"/>
                 </label>
             </div>
 
             <div class = "six columns">
                 <br>
                 <ul class="tab-nav">
-                    <li><a class="button active" href="#XYZ">XYZ</a></li>
-                    <li><a class="button" href="#ZYX">ZYX</a></li>
-                    <li><a class="button" href="#YZX">YZX</a></li>
+                    <li><a class="button active" href="#carte">Cartesian</a></li>
+                    <li><a class="button" href="#cylin">Cylindrical</a></li>
+                    <li><a class="button" href="#spher">Spherical</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -191,8 +190,8 @@
                         </div>
                     </div>
                     <br>
-                    <input id="animateButton" class="button-primary" type="submit" value="Play">
-                    <input id="resetButton" type="button" value="Reset">
+                    <input id="animate" class="button-primary" type="submit" value="Play">
+                    <input id="reset" type="button" value="Reset">
                 </div>
             </div>
         </div>
