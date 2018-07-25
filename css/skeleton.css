@@ -33,7 +33,7 @@
   width: 100%;
   max-width: 960px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding-top: 10vh;
   box-sizing: border-box; }
 .column,
 .columns {

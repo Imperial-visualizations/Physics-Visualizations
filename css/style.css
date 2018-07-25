@@ -36,6 +36,10 @@ Basic Styles
 html,body{
     font-family:"Fira Sans",sans-serif;
     margin:0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 body.no-nav::after{
