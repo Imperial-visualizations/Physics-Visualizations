@@ -1,6 +1,6 @@
 //set global variables
 let width = $('#sketch-holder').width(), height = $('#sketch-holder').height(),activepoints = [],activenegpoints = [],
-activepospoints = [],maxpoints=6;
+activepospoints = [],maxpoints=10;
 const n_lines = 8,Nvertices=1700,max_range=1500, R=16, square_size=100,padding = 50,rect_height = height/8,
 arrow_size=5;
 
@@ -33,9 +33,7 @@ function draw() {
     clear();
     background('#ffffff');
 
-    textSize(40);
 
-    text('Helvetica', 12, 60);
 
     for (let i = 0; i < activepoints.length; i++) {
         if(activepoints[i].clicked==true&&activepoints[i].intersect()==false){
@@ -77,6 +75,11 @@ function draw() {
 
     };
 
+    textSize(25);
+    textFont("Fira Sans")
+    textAlign(CENTER)
+    fill(1)
+    text("Drag to add", width/2, rect_height/1.5);
 };
 
 //functions that 'move' a charge when it is clicked
@@ -182,7 +185,8 @@ class charge_selector{
 }
 
 selpos = new charge_selector(1,width/3,rect_height/2)
-selneg = new charge_selector(-1,width/2,rect_height/2)
+selneg = new charge_selector(-1,width*2/3,rect_height/2)
+
 function initial_fieldpoints(Qposition,R,number_of_lines){
     let x0=[],y0=[];
     for (let i = 0; i < number_of_lines; i++) {
