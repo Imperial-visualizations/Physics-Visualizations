@@ -405,9 +405,8 @@ nav{
     top:50px;
 }
 .container{
-    max-width: none;
-    max-height: 100vh;
-    width:90%;
+    padding-top: 10vh;
+    width: 100%;
 }
 
 canvas{
@@ -476,4 +475,69 @@ a,a:focus,a:active,button,button:focus,button:active,input[type=range],input[typ
 }
 #KE input[type=range]:active::-ms-track {
   box-shadow: 0px 0px 5px 1px #66A40A;
+}
+
+.navbar{
+    z-index: 2;
+    height: 8vh;
+    width: 100vw;
+
+    position: fixed;
+    left: 0;
+    top: 0vh;
+    background-color: #003E74;
+    opacity: 1;
+    overflow: visible;
+}
+
+.navicon{
+    z-index: 2;
+        transition-duration: 0.3s;
+        height: 5vh;
+    width: 5vw;
+    position: absolute;
+    bottom: 1.5vh;
+    left: 0.5vw;
+        cursor: pointer;
+}
+.dropdown{
+            transition-duration: 0.4s;
+    z-index: 1;
+    background-color: rgb(50,50,55);
+    height: 100vh;
+    width: 0vw;
+    left: 0vw;
+    top: 1.5vh;
+    position: absolute;
+    text-align: left;
+    overflow: hidden;
+    color: white;
+    font-size: 2vw;
+    opacity: 1;
+}
+
+.mousediv{
+    z-index: 3;
+    transition-duration: 0.005s;
+    height: 5vh;
+    width: 6vw;
+    position: absolute;
+    top: 1.5vh;
+    left: 0vw;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.pagetitle{
+    text-align: left;
+    padding-left: 2vw;
+    vertical-align: center;
+    position: absolute;
+    left: 0;
+    width: 0vw;
+    color: white;
+    overflow: hidden;
+    transition-delay: 0.1s;
+            transition-duration: 0.1s;
+    background-color: rgba(244, 75, 66, 0);
 }
