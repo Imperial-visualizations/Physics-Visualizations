@@ -6,10 +6,10 @@ let pagenames = [],
 navbar = $("<div class='navbar' id='navbar'></div>"),
 navtitle = $("<p>Gauss' Law</p>");
 navtitle.css({"color": "white", "font-size": "3.2vw", "text-align": "center"});
-let logo = $("<img src= 'logo.png' >");
+let logo = $("<img src= 'https://raw.githubusercontent.com/Imperial-visualizations/Physics-Visualizations/master/css/logo.png'>");
 logo.css({"right": "1vw", "top": "1vh", "position": "absolute","height": "6vh"});
 
-let navicon = $("<object type='image/svg+xml' data='navicon.svg' class='navicon' id='navicon'></object>");
+let navicon = $("<object type='image/svg+xml' data='https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navicon.svg' class='navicon' id='navicon'></object>");
 let mousediv=$("<div class='mousediv' id='mousediv'></div>");
 let dropdown=$("<div id='dropdown'' class='dropdown'> </div>");
 
