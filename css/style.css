@@ -325,26 +325,6 @@ ul.tab-nav li a.active.button:focus {
     h6 { font-size: 2.40rem; }
 }
 
-.rightnav{
-    right: 2vh;
-    top: 45vh;
-    font-size: 50px;
-    color:#330766;
-    text-align: center;
-    position: absolute;
-    cursor: pointer;
-}
-
-
-.leftnav{
-    left: 2vh;
-    top: 45vh;
-    font-size: 50px;
-    color: #330766;
-    text-align: center;
-    cursor: pointer;
-    position: absolute;
-}
 
 #spinner {
   height: 100%;
@@ -533,7 +513,6 @@ a,a:focus,a:active,button,button:focus,button:active,input[type=range],input[typ
 
 .pagetitle{
     text-align: left;
-    padding-left: 2vw;
     vertical-align: center;
     position: absolute;
     left: 0;
