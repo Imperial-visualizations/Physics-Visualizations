@@ -405,6 +405,9 @@ nav{
     top:50px;
 }
 .container{
+      padding-top: 10vh;
+  padding-left: 2vw;
+  padding-right: 2vw;
     padding-top: 10vh;
     width: 100%;
 }

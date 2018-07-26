@@ -32,9 +32,6 @@
   position: relative;
   width: 100%;
   margin: 0 auto;
-  padding-top: 10vh;
-  padding-left: 1vw;
-  padding-right: 1vw;
   box-sizing: border-box; }
 .column,
 .columns {
