@@ -488,7 +488,7 @@ a,a:focus,a:active,button,button:focus,button:active,input[type=range],input[typ
     position: fixed;
     left: 0;
     top: 0vh;
-    background-color: #003E74;
+    background-color: #002147;
     opacity: 1;
     overflow: visible;
 }
@@ -506,7 +506,7 @@ a,a:focus,a:active,button,button:focus,button:active,input[type=range],input[typ
 .dropdown{
             transition-duration: 0.4s;
     z-index: 1;
-    background-color: rgb(50,50,55);
+    background-color: #003E74;
     height: 100vh;
     width: 0vw;
     left: 0vw;

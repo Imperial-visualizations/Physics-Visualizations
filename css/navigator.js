@@ -1,10 +1,10 @@
 let hovercolor = "rgba(244, 75, 66, 1)"
 
-let pages = ["1Gauss'-Law.html","2Magnetic-Monopoles.html","3Faraday's-Law.html","4Ampere's-Law.html","4Ampere's-Law.html","4Ampere's-Law.html"]
+let pages = ["1First-Page.html","2Second-Page.html","3Third-Page.html","4Fourth-Page.html"]
 
 let pagenames = [],
 navbar = $("<div class='navbar' id='navbar'></div>"),
-navtitle = $("<p>Gauss' Law</p>");
+navtitle = $("<p>Title of your html</p>");
 navtitle.css({"color": "white", "font-size": "3.2vw", "text-align": "center"});
 let logo = $("<img src= 'https://raw.githubusercontent.com/Imperial-visualizations/Physics-Visualizations/master/css/logo.png'>");
 logo.css({"right": "1vw", "top": "1vh", "position": "absolute","height": "6vh"});
