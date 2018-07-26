@@ -50,7 +50,7 @@
 
                 <!--Main body contents-->
                 <div class="tab-content">
-                    <strong>Select Axis: </strong>
+                    <strong>Select Function: </strong>
                             <select id="Select">
                                 <option value="main">Main Page</option>
                                 <option value="triangular">Triangular Function</option>
@@ -62,7 +62,7 @@
                                 <option value="mode">|x| Function</option>
                             </select>
 
-                    <!--BEGIN Math derivation-->
+                    <!--BEGIN Math derivation Part_1-->
                     <div class="tab-pane active" id="maths">
 
 
@@ -85,27 +85,32 @@
                         </p>
 
                     </div> <!--NB: Also need 'active' here-->
-                    <!--END Math derivation-->
+                    <!--END Math derivation Part_1-->
 
+                    <!--BEGIN Math derivation Part_2-->
                     <div class="tab-pane" id="derivation" >
                             $$ \text{For even n, the function is odd around L/2, so the function is zero.} $$
                             $$ b_n=\frac{2}{L}\int_0^{L} f(x)\cdot sin(\frac{n\pi x}{L}) dx = 0 \quad \text{for even n} $$
                             $$ \text{For odd n, the function is even around L/2, so the funciton doubles.}$$
                             $$ b_n=2\cdot\frac{2}{L}\int_0^{L/2} f(x)\cdot sin(\frac{n\pi x}{L}) dx \quad \text{for odd n} $$
 
-                    <!--BEGIN Slider-->
+                    <!--BEGIN Slider n-->
                         <h5 style="border-left: solid 5px rgb(225,225,225); padding-left: 8px;">Term Number:</h5>
+                    <!--Slider Display n-->
                         <label class="sliderTitle">n:
                             <span id="N2ControllerDisplay" data-unit="">1</span>
                         </label>
+                    <!--Slider n-->
                         <label class="slider">
                             <input id="N2Controller" class="inputs" type="range" value="1" min="0" max="50" step="1"/>
                             <span class="sliderMin">0</span><span class="sliderMax">50</span>
                         </label>
-                    <!--END Slider-->
+                    <!--END Slider n-->
 
                     </div>
+                    <!--BEGIN Math derivation Part_2-->
 
+                    <!--BEGIN Math derivation Part_3-->
                     <div class="tab-pane" id="derivation2" >
                             $$ \text{for 0 < x < L/2:}  $$
                             $$ f(x)=\frac{2Ax}{L}$$
@@ -121,44 +126,7 @@
                             $$ f(x)=\sum_{n=1,2,3...}^\infty\frac{8A}{(2n-1)^2\pi^2}(-1)^n \cdot sin(\frac{(2n-1)\pi x}{L}) $$
 
                     </div>
-
-                    <!--BEGIN Slider-->
-                    <!--These Sliders are shared among all tabs-->
-                        <h5 style="border-left: solid 5px rgb(225,0,0); padding-left: 8px;">Amplitude:</h5><!--Just Text-->
-
-                    <!--Slider Display-->
-                        <label class="sliderTitle">A:<!--rho-->
-                            <span id="AControllerDisplay" data-unit="">1</span> <!--default: 0-->
-                        </label>
-
-                    <!--Slider-->
-                    <!--NB: Be careful with classes and types-->
-                        <label class="slider">
-                            <input id="AController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
-                            <span class="sliderMin">-5</span><span class="sliderMax">5</span></label>
-                    <!--END Slider-->
-
-                    <!--BEGIN Slider-->
-                        <h5 style="border-left: solid 5px rgb(0,225,0); padding-left: 8px;">Number of terms:</h5>
-                        <label class="sliderTitle">N:
-                            <span id="NControllerDisplay" data-unit="">1</span>
-                        </label>
-                        <label class="slider">
-                            <input id="NController" class="inputs" type="range" value="1" min="0" max="50" step="1"/>
-                            <span class="sliderMin">0</span><span class="sliderMax">50</span>
-                        </label>
-                    <!--END Slider-->
-
-                    <!--BEGIN Slider-->
-                        <h5 style="border-left: solid 5px rgb(0,0,225); padding-left: 8px;">Period:</h5>
-                        <label class="sliderTitle">L:
-                            <span id="LControllerDisplay" data-unit="">1</span>
-                        </label>
-                        <label class="slider">
-                            <input id="LController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
-                            <span class="sliderMin">-5</span><span class="sliderMax">5</span>
-                        </label>
-                    <!--END Slider-->
+                    <!--BEGIN Math derivation Part_3-->
 
                     <!--BEGIN Plot-->
                     <div class="tab-pane" id="plot">
@@ -167,19 +135,73 @@
                     </div>
                     <!--END Plot-->
 
+                    <!--BEGIN Component-->
                     <div class="tab-pane" id="component">
 
 
                     </div>
+                    <!--END Component-->
+
+                    <!--BEGIN Spectrum-->
                     <div class="tab-pane" id="spectrum">
+                        <div class="tab-content">
+                            <strong>Select Coefficient: </strong>
+                            <select id="Coefficient">
+                                <option value="an&bn">a and b</option>
+                                <option value="powerSpectrum">α and θ</option>
+                            </select>
 
-
+                        </div>
                     </div>
+                    <!--END Spectrum-->
+
+                    <!--BEGIN Combine-->
                     <div class="tab-pane" id="combine">
 
                     </div>
+                    <!--END Combine-->
 
+                <div class="allSliders" hidden>
+                    <!--These Sliders are shared among all tabs-->
+                    <!--NB: Be careful with classes and types-->
+                    <!--BEGIN Slider A-->
+                        <h5 style="border-left: solid 5px rgb(225,0,0); padding-left: 8px;">Amplitude:</h5><!--Just Text-->
+                    <!--Slider Display A-->
+                        <label class="sliderTitle"  >A:<!--Amplitude-->
+                            <span id="AControllerDisplay" data-unit="">1</span> <!--default: 1-->
+                        </label>
+                    <!--Slider A-->
+                        <label class="slider"  >
+                            <input id="AController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
+                            <span class="sliderMin">-5</span><span class="sliderMax">5</span></label>
+                    <!--END Slider A-->
 
+                    <!--BEGIN Slider N-->
+                        <h5 style="border-left: solid 5px rgb(0,225,0); padding-left: 8px;">Number of terms:</h5>
+                    <!--Slider Display N-->
+                        <label class="sliderTitle"  >N:
+                            <span id="NControllerDisplay" data-unit="">1</span>
+                        </label>
+                    <!--Slider N-->
+                        <label class="slider"  >
+                            <input id="NController" class="inputs" type="range" value="1" min="0" max="50" step="1"/>
+                            <span class="sliderMin">0</span><span class="sliderMax">50</span>
+                        </label>
+                    <!--END Slider N-->
+
+                    <!--BEGIN Slider L-->
+                        <h5 style="border-left: solid 5px rgb(0,0,225); padding-left: 8px;">Period:</h5>
+                    <!--Slider Display L-->
+                        <label class="sliderTitle"  >L:
+                            <span id="LControllerDisplay" data-unit="">1</span>
+                        </label>
+                    <!--Slider L-->
+                        <label class="slider"  >
+                            <input id="LController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
+                            <span class="sliderMin">-5</span><span class="sliderMax">5</span>
+                        </label>
+                    <!--END Slider L-->
+                </div>
 
 
 

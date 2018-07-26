@@ -8,6 +8,17 @@ const layout = {
     yaxis: {range: [-5,5], zeroline: true, title: "y"},
     aspectratio: {x:1, y:1}
 };
+
+const layout2 = {
+    width: 450, "height": 500,
+    margin: {l:30, r:30, t:30, b:30},
+    hovermode: "closest",
+    showlegend: false,
+    xaxis: {range: [-5,5], zeroline: true, title: "x"},
+    yaxis: {range: [-5,5], zeroline: true, title: "y"},
+    aspectratio: {x:1, y:1}
+}
+
 var defaultHref = window.location.href;
 var initX = 0, initY = 0;
 var resolution = 2000;
@@ -18,6 +29,9 @@ var shape = 0;
 // decay and decay2 is to optimize the visualization of the amplitude of the component plots.
 var decay = 0.9;
 var decay2 = 0.6;
+// coefficient determine the plot in power spectrum
+// if label === "a&b", a_n and b_n plot; if label === "alpha&theta", alpha_n and theta_n plot
+var label = "a&b";
 
 
 // initialize the Cartesian coordinates for the plots and the functions
@@ -40,8 +54,8 @@ function initFourier(type) {
     } else if (type==="#derivation2"){
         Plotly.newPlot("graph", computePlot(z),layout);
     } else if (type==="#spectrum"){
-        Plotly.newPlot("graph", plot_an(),setLayout());
-        Plotly.newPlot("graph2",plot_bn(),setLayout());
+        Plotly.newPlot("graph3", plot_decision1(label),setLayoutSmall());
+        Plotly.newPlot("graph4",plot_decision2(label),setLayoutSmall());
     } else if (type==="#combine"){
         Plotly.newPlot("graph3",computePlot(z),setLayoutSmall());
         Plotly.newPlot("graph4",computeComponents(z),setLayoutSmall());
@@ -495,17 +509,17 @@ function b_n(shape,n){
     } else {
         if (shape === 0){
             amplitude=(8*A*1/((2*(n)-1) *Math.PI)**2)*((-1)**(n));
-        } else if (shape ===1){
-            amplitude=(8*A*1/((2*(n)-1) *Math.PI)**2)*((-1)**(n));
-        } else if (shape ===2){
+        } else if (shape === 1){
+            amplitude=A/(n*Math.PI) *(1-(-1)**n);
+        } else if (shape === 2){
             amplitude = 2*A*(-1)**(n+1) /(n*Math.PI)
-        } else if (shape ===3){
+        } else if (shape === 3){
             amplitude = 0;
-        } else if (shape ===4){
+        } else if (shape === 4){
             amplitude = 0;
-        } else if (shape ===5){
+        } else if (shape === 5){
             amplitude = A*(2*L/(n*Math.PI)**1 *(-1)**(n+1));
-        } else if (shape ===6){
+        } else if (shape === 6){
             amplitude = 0;
         }
     }
@@ -521,17 +535,18 @@ function coefficient (N){
     var alpha_n = [];
     var theta_n = [];
 
-
     for (var i = 0; i < N; ++i){
         n.push(i);
         an.push(a_n(shape,i));
         bn.push(b_n(shape,i));
         alpha_n.push(Math.sqrt(a_n(shape,i)**2+b_n(shape,i)**2));
         if (a_n(shape,i)===0){
-            if (b_n(shape,i)>0){
+            if (b_n(shape,i)>0) {
                 theta_n.push(Math.PI/2);
-            } else {
+            } else if (b_n(shape,i)<0) {
                 theta_n.push(-Math.PI/2);
+            } else if (b_n(shape,i)===0){
+                theta_n.push(0);
             }
         } else {
             theta_n.push(Math.atan2(b_n(shape,i),a_n(shape,i)));
@@ -552,7 +567,11 @@ function plot_an(){
             type:"bar",
             x: n,
             y: an,
-
+            name: 'Secondary Product',
+            marker: {
+                color: 'rgb(180,120,60)',
+                opacity: 0.7
+            }
     },
     ];
     return data;
@@ -569,6 +588,10 @@ function plot_bn(){
             type:"bar",
             x: n,
             y: bn,
+            marker: {
+                color:'rgb(60,120,180)',
+                opacity: 0.7
+            },
 
     },
     ];
@@ -586,6 +609,10 @@ function plot_alpha(){
             type:"bar",
             x: n,
             y: alpha_n,
+            marker: {
+                color:'rgb(200,100,0)',
+                opacity: 0.7
+            },
 
     },
     ];
@@ -604,12 +631,33 @@ function plot_theta(){
             type:"bar",
             x: n,
             y: theta_n,
+            marker: {
+                color:'rgb(0,100,200)',
+                opacity: 0.7
+            },
 
     },
     ];
     return data;
 }
 
+function plot_decision1(label){
+    if (label==="a&b"){
+        data = plot_an();
+    } else {
+        data = plot_alpha();
+    }
+    return data;
+}
+
+function plot_decision2(coefficient){
+    if (label==="a&b"){
+        data = plot_bn();
+    } else {
+        data = plot_theta();
+    }
+    return data;
+}
 // End. To plot out the amplitude of each term in the Fourier Series.
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -787,19 +835,46 @@ function main() {
 
     $('ul.tab-nav li a.button').click(function(){
         var href = $(this).attr('href');
-        if (href === '#combine'){
+        if (href === "#maths" || href ==="#derivation" || href === "#derivation2"){
+            $('.allSliders').hide();
+            //document.getElementsByClassName('allSliders')[0].style.visibility='hidden';
+        } else {
+            $('.allSliders').show();
+            //document.getElementsByClassName('allSliders')[0].style.visibility='visible';
+        }
+    })
+
+    $('ul.tab-nav li a.button').click(function(){
+        var href = $(this).attr('href');
+        if (href === '#combine' || href=== '#spectrum'){
             $("#graph").hide();
             $("#graph2").hide();
             $("#graph3").show();
             $("#graph4").show();
+
         } else {
             $("#graph").show();
             $("#graph2").show();
             $("#graph3").hide();
             $("#graph4").hide();
+
+            //document.getElementsByClassName('I-define')[0].style.visibility = 'shown';
         }
 
     });
+
+    $('#Coefficient').change(function(){
+        var selectedValue = document.getElementById("Coefficient").value;
+        if (selectedValue==="an&bn"){
+            label = "a&b";
+            console.log("selected an and bn");
+        } else if (selectedValue==="powerSpectrum"){
+            label = "alpha&theta";
+            console.log("selected alpha and theta");
+        }
+        var href = $('ul.tab-nav li a.active.button').attr('href');
+        initFourier(href);
+    })
 
     $('#Select').change(function(){
         var selectedValue = document.getElementById("Select").value;
@@ -820,7 +895,6 @@ function main() {
         } else if (selectedValue==="mode"){
             shape = 6;
         }
-        console.log("initFourier");
         var href = $('ul.tab-nav li a.active.button').attr('href');
         initFourier(href);
     })
