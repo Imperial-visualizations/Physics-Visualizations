@@ -271,7 +271,8 @@ function plotSines(n,x,shape){
 
     var x_n = [];
     var y_n = [];
-    var spacing=A;
+    var spacing=3*A;
+    var spacing2 = Math.sqrt((odd_selection2(n,A,L,shape))**2+(even_selection2(n,A,L,shape)))+1;
 
 
     for (var i = 0; i < x.length ; ++i){
@@ -833,6 +834,7 @@ function main() {
         });
     });
 
+    // hide the sliders in Math part
     $('ul.tab-nav li a.button').click(function(){
         var href = $(this).attr('href');
         if (href === "#maths" || href ==="#derivation" || href === "#derivation2"){
@@ -844,6 +846,8 @@ function main() {
         }
     })
 
+    // graph3 and graph4 have smaller sizes than graph and graph2
+    // graph3 and graph4 are adjusted so that users can visualize both without the need to scroll down
     $('ul.tab-nav li a.button').click(function(){
         var href = $(this).attr('href');
         if (href === '#combine' || href=== '#spectrum'){
@@ -863,6 +867,7 @@ function main() {
 
     });
 
+    // to select either a_n and b_n or alpha_n and theta_n in the power spectrum tab
     $('#Coefficient').change(function(){
         var selectedValue = document.getElementById("Coefficient").value;
         if (selectedValue==="an&bn"){
@@ -876,6 +881,9 @@ function main() {
         initFourier(href);
     })
 
+    // as you select the functions you want from the scroll down
+    // change the shape and the plots
+    // change the titles and the math derivations
     $('#Select').change(function(){
         var selectedValue = document.getElementById("Select").value;
         if (selectedValue==="main"){
@@ -895,10 +903,20 @@ function main() {
         } else if (selectedValue==="mode"){
             shape = 6;
         }
+
+        $(".derivation").hide();
+        $("#"+selectedValue).show();
+        $(".title").hide();
+        $("#"+selectedValue+"Title").show();
+
+        // we have three math tabs in the triangular Math tabs
+        // so we have to clear all the active pane everytime we select a new functions from scroll down
+        $('.tab-pane.active').removeClass('active');
         var href = $('ul.tab-nav li a.active.button').attr('href');
+        $(href).addClass('active');
         initFourier(href);
     })
-
+/*
     $(".rightnav").on('click',function(){
         window.location.href =
             defaultHref.slice(0,-6)
@@ -922,7 +940,7 @@ function main() {
     }).on('mouseleave', function(){
         $(".leftnav").css({"color":"#330766","font-size":"50px"})
     });
-
+*/
     //The First Initialisation - I use 's' rather than 'z' :p
     initFourier("#maths");
 }
