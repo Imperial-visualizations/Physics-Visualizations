@@ -2,25 +2,48 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Spinning Earth</title>
+    <title>Centrifugal Force</title>
     <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
-    <link rel="stylesheet" href="https://rawgit.com/cydcowley/public-test-data/master/Style2.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
     <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
-    <style> body {padding: 0; margin: 0;} </style>
+    <style> body {padding: 5px; margin: 5px;} </style>
 
 
   </head>
   <body>
-  <h1>Centrifugal Force</h1>
-  <div class="seven columns" id="spin"></div>
-  <div class="five columns">
-    <p>This is some example text to check if it works </p>
+  <div>
+    <h1 style="padding-top:50px">Centrifugal Force</h1>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="seven columns" style="position:sticky;top: 50px;" id="animation">
+        <div id="spin"><script src="sketch.js"></script></div>
+      </div>
+      <div class="five columns">
+        <p>The Centrifugal Force (given by \(-m\boldsymbol{\omega} \times \boldsymbol{\omega} \times \mathbf{r}\)) is one of the three inertial forces that arise from a rotating frame.
+           This force <span style="color:red;font-size:medium">always points out away from the Earth </span> and so acts against gravity. In fact it acts as a small correction to it, changing both the magnitude and the direction.
+        </p>
+        <p>
+          The Earth's rotation distorts it to an oblate spheroid (like a squashed orange). This causes a plumb-line to appear as if it hangs vertically because the normal to the Earth's surface does not point <span style="font-style:italic;font-size:medium">exactly</span> to the centre of the Earth. As a result, the centrifugal term does not lead
+          to any deviations in the plane of the Earth's surface. Therefore, the centrifugal term <span style="color:red;font-size: medium"> is negligible </span> for many experiments on Earth.
+        </p>
+        <p>
+          However, it is important to know how it can have a meaningful impact. In our case, the rotation speed only leads to a difference in diameter of \(22km\) between the poles and the equator.
+          How would increasing the speed affect the shape?
+        </p>
+        <p>
+          <span style="font-weight:bold">Slider</span>: This controls \(\omega\) and visualises the flattening as the speed increases.
+          <span style="font-weight:bold">Show Original</span>: Hover your mouse over this button to show the sphere that would be there if there was no rotation.
+        </p>
+      </div>
+    </div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
   <script language = 'javascript' type = 'text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.sound.min.js"></script>
-  <script src="sketch.js"></script>
+  <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
   </body>
 </html>
