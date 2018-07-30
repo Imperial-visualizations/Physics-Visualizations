@@ -18,9 +18,11 @@ np.set_printoptions(threshold=np.nan)
 
 L = 5
 multiplier = 4
-resolution = 500
+resolution = 1000
 x = np.linspace(-L,L, resolution)
-a = 10
+a = 10 
+
+
 
 def Mark(x):
     y_values= []
@@ -62,14 +64,54 @@ def Omar(x):
         else:
             y_values.append(1)
     return y_values
+"""THESE bois ARE THE GOOD FUNCTIONS"""
+
+
 
 
 def Dom(x):
+    """(x)e^(-x^2)"""
     y_values = []
     for i in range(0, len(x)):
-        y_values.append(L*x[i]*np.exp(-(0.1*x[i])**2))
-    
+        y_values.append(x[i]*np.exp(-(0.1*x[i])**2))
     return y_values
+
+
+
+def Dan(x):
+    """sin(x)e^(-x^2)"""
+    y_values = []
+    for i in range(0, len(x)):
+        y_values.append(np.sin(x[i])*np.exp(-(0.1*x[i])**2))
+    return y_values
+
+def Rob(x):
+    """e^(-|x|)"""
+    y_values = []
+    for i in range(0, len(x)):
+        y_values.append(np.exp(-0.5*abs(x[i])))
+    return y_values
+
+def Shahbaz(x):
+    """cos(x)e^(-|x|sin(X))"""
+    y_values = []
+    for i in range(0, len(x)):
+        y_values.append(np.cos(x[i])*np.exp(-abs(np.sin(x[i]*x[i]))))
+    return y_values
+
+def Zhen(x):
+    """e^(-|x|)/(x^2 + 1)"""
+    y_values = []
+    for i in range(0, len(x)):
+        if x[i] ==0:
+            y_values.append(0)
+        else:
+            y_values.append(np.exp(-abs(x[i]))/((x[i])**2 + 1))
+    return y_values
+
+
+
+
 
 
 
@@ -125,6 +167,8 @@ def g_of_t_minus_x(function, t, original):
 def normalise_1(f,g):
     f_output = []
     g_output = []
+    
+    
     for i in range(0, len(f)):
         f_output.append(f[i]/abs(max(f)))
         g_output.append(g[i]/abs(max(g)))
@@ -199,10 +243,10 @@ def combination(f_x, g_t_minus_x):
             z = extra_f[i]*extra_g[t-i]
             if z < 0:
                 extra_x_negative_y.append(i+leftmost-t)
-                comb_negative_y.append(-z)
+                comb_negative_y.append(z)
             if z>0:
                 extra_x_positive_y.append(i+leftmost-t)
-                comb_positive_y.append(-z)
+                comb_positive_y.append(z)
     else:
         for i in range(0, len(extra_f)):
             comb.append(extra_f[i]*extra_g[i])
@@ -251,10 +295,10 @@ xlim = 100
 x_range = np.linspace(-xlim,xlim,resolution)
 
 f = Dom(x_range)
-g = Omar(x_range)
+g = Zhen(x_range)
 f,g = normalise_1(f,g)
 
-t = 0                     # t must be integer 
+t = 0                   # t must be integer 
 
 x1, y1 = g_of_t_minus_x(f, 0, original = True) #Do this to f# NOTE THAT Y1 IS NULL
 x2, y2 = g_of_t_minus_x(g,t, original = False) # Do this to g                     
@@ -296,10 +340,10 @@ def plot_2():
             
     fig_2 = plt.figure(2)
     fig_2.set_size_inches(7,2)
-    plt.plot(time,h)#, label = r'h(t)')
+    plt.plot(time,h, label = str(h[entry+1]))
     plt.axvline(x = t,  color = 'g', linestyle = ':', label = "t = "+str(t))
     if t<max(time) and t>min(time):    
-        plt.axhline(y = h[entry], color = 'g', linestyle = ':')
+        plt.axhline(y = h[entry+1], color = 'g', linestyle = ':')
     plt.xlabel("t", fontsize = 15)
     plt.ylabel("h(t)", fontsize = 15)
     plt.title("h(t) = f * g", fontsize = 20)
@@ -308,11 +352,12 @@ def plot_2():
 
 
 
-def plot_3():
+def plot_3(original):
     fig_3 = plt.figure(3)
     fig_3.set_size_inches(7,5)
-    plt.plot(x1,y1, color = 'r', label = r'f($\tau$)')
-    plt.plot(x2, y2, color = 'b', label = r'g(t-$\tau$)')
+    if original == True:    
+        plt.plot(x1,y1, color = 'r', label = r'f($\tau$)')
+        plt.plot(x2, y2, color = 'b', label = r'g(t-$\tau$)')
     #plt.plot(x3,y3_normalised, color = 'k', label = r'f($\tau$) g(t-$\tau$)')
     plt.plot(extra_x_positive_y, comb_positive_y_normalised, color = 'k', label =  r'f($\tau$) g(t-$\tau$)')
     plt.plot(extra_x_negative_y, comb_negative_y_normalised,color = 'k')
@@ -328,9 +373,13 @@ def plot_3():
     #plt.axvline(x = 0, linestyle = ':', color = 'r', label = 'x = 0')
     plt.legend()
 
-#plot_1()
+
+
+
+plot_1()
 plot_2()
-plot_3()
+original = True
+plot_3(original)
 
 
 
