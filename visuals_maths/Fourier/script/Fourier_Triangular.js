@@ -9,30 +9,24 @@ const layout = {
     aspectratio: {x:1, y:1}
 };
 
-const layout2 = {
-    width: 450, "height": 500,
-    margin: {l:30, r:30, t:30, b:30},
-    hovermode: "closest",
-    showlegend: false,
-    xaxis: {range: [-5,5], zeroline: true, title: "x"},
-    yaxis: {range: [-5,5], zeroline: true, title: "y"},
-    aspectratio: {x:1, y:1}
-}
-
 var defaultHref = window.location.href;
 var initX = 0, initY = 0;
 var resolution = 2000;
 // set the step of the x axis from -2pi to 2pi
 var z = numeric.linspace(-2*Math.PI,2*Math.PI,resolution);
+//----------------------------------------------------------------------------------------------------------------------
+//VERY IMPORTANT!!!
 // 0 is triangular, 1 is square, 2 is sawtooth, 3 is delta's, 4 is parabola, 5 is x, 6 is |x|,
 var shape = 0;
+//----------------------------------------------------------------------------------------------------------------------
 // decay and decay2 is to optimize the visualization of the amplitude of the component plots.
 var decay = 0.9;
 var decay2 = 0.6;
 // coefficient determine the plot in power spectrum
 // if label === "a&b", a_n and b_n plot; if label === "alpha&theta", alpha_n and theta_n plot
 var label = "a&b";
-
+title1 = "Amplitude of a_n";
+title2 = "Amplitude of b_n"
 
 // initialize the Cartesian coordinates for the plots and the functions
 function initFourier(type) {
@@ -49,18 +43,21 @@ function initFourier(type) {
     } else if (type ==="#component"){
         Plotly.newPlot("graph", computeComponents(z), setLayout());
     } else if (type==="#derivation"){
-        Plotly.newPlot("graph", plot_triangle_sine(),setLayout());
-        Plotly.newPlot("graph2",plot_combination(),setLayout());
+        Plotly.newPlot("graph3", plot_triangle_sine(),setLayoutSmall("Sines Function and Triangle Function"));
+        Plotly.newPlot("graph4",plot_combination(),setLayoutSmall("Multiplication of the two Functions"));
+        console.log("graph 3 and graph 4");
     } else if (type==="#derivation2"){
         Plotly.newPlot("graph", computePlot(z),layout);
     } else if (type==="#spectrum"){
-        Plotly.newPlot("graph3", plot_decision1(label),setLayoutSmall());
-        Plotly.newPlot("graph4",plot_decision2(label),setLayoutSmall());
+        Plotly.newPlot("graph3", plot_decision1(label),setLayoutSmall(title1));
+        Plotly.newPlot("graph4",plot_decision2(label),setLayoutSmall(title2));
     } else if (type==="#combine"){
-        Plotly.newPlot("graph3",computePlot(z),setLayoutSmall());
-        Plotly.newPlot("graph4",computeComponents(z),setLayoutSmall());
+        Plotly.newPlot("graph3",computePlot(z),setLayoutSmall("Fourier Series Plot"));
+        Plotly.newPlot("graph4",computeComponents(z),setLayoutSmall("Fourier Component Plot"));
     }
+    console.log(type);
     return;
+
 }
 
 /* set the default layout of the graph to adjust for different amplitudes and different number of terms involved
@@ -81,7 +78,8 @@ function setLayout(){
     return new_layout;
 }
 
-function setLayoutSmall(){
+// set a smaller layout with smaller height
+function setLayoutSmall(someTitles){
     const new_layout = {
     width: 450, "height": 250,
     margin: {l:30, r:30, t:30, b:30},
@@ -89,7 +87,8 @@ function setLayoutSmall(){
     showlegend: false,
     xaxis: {range: [], zeroline: true, title: "x"},
     yaxis: {range: [], zeroline: true, title: "y"},
-    aspectratio: {x:1, y:1}
+    aspectratio: {x:1, y:1},
+    title: someTitles
     }
     return new_layout;
 }
@@ -103,6 +102,8 @@ function adding(array){
     return result;
 }
 
+/*
+// check which types of functions is selected
 function checkType(){
     var selectedType = document.getElementById("Select").value
     if (selectedType==="main"){
@@ -116,7 +117,7 @@ function checkType(){
      initFourier(shape);
      return shape;
 }
-
+*/
 //----------------------------------------------------------------------------------------------------------------------
 // Start. Functions to plot the Fourier Series
 
@@ -457,6 +458,7 @@ function plot_combination(){
             line: {color: "rgb(225,125,25)", width: 2, dash:"dot"}
     },
     ]
+    console.log("Something");
     return data;
 }
 // End. Function of the math derivation of the triangular functions.
@@ -761,21 +763,28 @@ function updatePlot() {
     var data;
     // NB: updates according to the active tab
     var href = $('ul.tab-nav li a.active.button').attr('href'); // finds out which tab is active
+    var selectedValue = document.getElementById("Select").value; // finds out which function is active
     if (href==="#spectrum"){
         initFourier(href);
     } else if (href==="#combine"){
         initFourier(href);
-    } else {
-        if (href==="#plot"){
-            data = computePlot(z);
-    }   else if (href==="#component"){
-            data = computeComponents(z);
-            initFourier(href);
-    }   else if (href==="#derivation"){
+    }  else if (href==="#maths" && selectedValue==="triangular"){
+    // in this case, only the triangular math part2 would have displayed the graph
+    // because there's no sliders for other functions
             data = plot_triangle_sine();
             data2 = plot_combination();
             Plotly.animate(
-                'graph2',
+                'graph3',
+                {data:data},
+                {
+                    fromcurrent:true,
+                    transition: {duration:0,},
+                    frame: {duration:0, redraw: false},
+                    mode:"afterall"
+                }
+            );
+            Plotly.animate(
+                'graph4',
                 {data:data2},
                 {
                     fromcurrent: true,
@@ -784,7 +793,13 @@ function updatePlot() {
                     mode: "afterall"
                 }
             );
-    } else if (href==="#derivation2"){
+    } else {
+        if (href==="#plot"){
+            data = computePlot(z);
+    } else if (href==="#component"){
+            data = computeComponents(z);
+            initFourier(href);
+    }else if (href==="#derivation2"){
         data = computePlot(z);
     } else if (href==="#combine"){
         initFourier(href);
@@ -792,6 +807,7 @@ function updatePlot() {
     }
 
     console.log(data);
+    console.log(href);
 
     //This is animation bit.
     Plotly.animate(
@@ -837,7 +853,7 @@ function main() {
     // hide the sliders in Math part
     $('ul.tab-nav li a.button').click(function(){
         var href = $(this).attr('href');
-        if (href === "#maths" || href ==="#derivation" || href === "#derivation2"){
+        if (href === "#maths" || href === "#derivation2"){
             $('.allSliders').hide();
             //document.getElementsByClassName('allSliders')[0].style.visibility='hidden';
         } else {
@@ -850,12 +866,15 @@ function main() {
     // graph3 and graph4 are adjusted so that users can visualize both without the need to scroll down
     $('ul.tab-nav li a.button').click(function(){
         var href = $(this).attr('href');
-        if (href === '#combine' || href=== '#spectrum'){
+        var selectedValue = document.getElementById("Select").value; // finds out which function is active
+        // graph3 and graph4 are smaller graphs
+        // so users are able to visualize two graphs at the same time without scrolling down
+        if (href === '#combine' || href=== '#spectrum' || href==="#derivation"){
             $("#graph").hide();
             $("#graph2").hide();
             $("#graph3").show();
             $("#graph4").show();
-
+            console.log("showing graphs");
         } else {
             $("#graph").show();
             $("#graph2").show();
@@ -872,10 +891,14 @@ function main() {
         var selectedValue = document.getElementById("Coefficient").value;
         if (selectedValue==="an&bn"){
             label = "a&b";
+            title1="Amplitude of a_n";
+            title2="Amplitude of b_n"
             console.log("selected an and bn");
         } else if (selectedValue==="powerSpectrum"){
             label = "alpha&theta";
             console.log("selected alpha and theta");
+            title1="Amplitude of α_n";
+            title2="Amplitude of θ_n"
         }
         var href = $('ul.tab-nav li a.active.button').attr('href');
         initFourier(href);
@@ -914,6 +937,13 @@ function main() {
         $('.tab-pane.active').removeClass('active');
         var href = $('ul.tab-nav li a.active.button').attr('href');
         $(href).addClass('active');
+
+
+        // make sure that when you change the function from the scroll down
+        // the sliders vanished in the math part
+        if (selectedValue!="triangular" && href==="#maths"){
+            $(".allSliders").hide();
+        }
         initFourier(href);
     })
 /*
