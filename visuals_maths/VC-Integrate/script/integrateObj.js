@@ -315,7 +315,7 @@ function QuarterSphere(a,b,c) {
     this.c = c;
     this.meshSize = 20;
 
-    this.gObject = function(color1, color2) {
+    this.gObject = function(color1, color2, opacity=0.6) {
         var theta = numeric.linspace(0, 0.5*Math.PI, this.meshSize);
         var phi = numeric.linspace(0, 0.5*Math.PI, this.meshSize);
         var x = [], y = [], z = [];
@@ -333,12 +333,12 @@ function QuarterSphere(a,b,c) {
             y: y,
             z: z,
             showscale: false,
-            opacity: 0.6,
+            opacity: opacity,
             colorscale: [[0.0, color1], [1.0, color2]]
         }
         return sphere;
     }
-    this.gObjectX = function(color) {
+    this.gObjectX = function(color, opacity=0.8) {
         var theta = numeric.linspace(0, 0.5*Math.PI, this.meshSize);
         var x=[0,0], y=[0], z=[0];
         for(var i=0; i<this.meshSize; ++i){
@@ -357,11 +357,11 @@ function QuarterSphere(a,b,c) {
             z: z,
             line: {color: color.slice(0, -1) + ",0.2)", width: 1},
             surfaceaxis: 0,
-            opacity: 0.8
+            opacity: opacity
         }
         return xPlane;
     }
-    this.gObjectY = function(color) {
+    this.gObjectY = function(color, opacity=0.8) {
         var theta = numeric.linspace(0, 0.5*Math.PI, this.meshSize);
         var x=[0], y=[0,0], z=[0];
         for(var i=0; i<this.meshSize; ++i){
@@ -380,11 +380,11 @@ function QuarterSphere(a,b,c) {
             z: z,
             line: {color: color.slice(0, -1) + ",0.2)", width: 1},
             surfaceaxis: 1,
-            opacity: 0.8
+            opacity: opacity
         }
         return yPlane;
     }
-    this.gObjectZ = function(color) {
+    this.gObjectZ = function(color, opacity=0.8) {
         var phi = numeric.linspace(0, 0.5*Math.PI, this.meshSize);
         var x=[0], y=[0], z=[0,0];
         for(var i=0; i<this.meshSize; ++i){
@@ -403,7 +403,7 @@ function QuarterSphere(a,b,c) {
             z: z,
             line: {color: color.slice(0, -1) + ",0.2)", width: 1},
             surfaceaxis: 2,
-            opacity: 0.8
+            opacity: opacity
         }
         return zPlane;
     }
