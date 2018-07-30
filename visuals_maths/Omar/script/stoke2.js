@@ -11,6 +11,7 @@ var layout = {
     }
 };
 var initialX = 1;
+var initialY = 1;
 var isBlackText = false;
 var blackTextType = "lines";
 
@@ -21,6 +22,11 @@ function initPlot() {
     $("#xController").val(initialX);
     $("#xControllerDisplay").text(initialX);
     var x = parseFloat(document.getElementById('xController').value);
+    
+    $("#yontroller").val(initialY);
+    $("#yControllerDisplay").text(initialY);
+    var y = parseFloat(document.getElementById('yController').value);
+    console.log(y)
 
     var data = [];
 
@@ -48,14 +54,15 @@ function updatePlot() {
     var data = [];
     var href = $('ul.tab-nav li a.active.button').attr('href'); // finds out which tab is active
     var x = parseFloat(document.getElementById('xController').value);
+    var y = parseFloat(document.getElementById('yController').value);
     var cirface = new Sphere(4)
-    data.push(cirface.gObject(blue, blue, 7,"solid", x))
+    data.push(cirface.gObject(blue, blue, 7,"solid", x,1,y))
     var square = new Square(6);
     data.push(square.gObject())
     var pringles = new Pringles(4, [1,1,1]);
     var circle = new Circle(4);
     data.push(circle.gObject(orange))
-    data.push(pringles.gObject(black, 7, "solid", 1));
+    data.push(pringles.gObject(black, 7, "solid", 1,y));
     var arr1 = new Line([[1,5,0],[-3,1,0]])
     data.push(arr1.arrowHead(magenta,5))
     var arr2 = new Line([[1,-3,0],[5,1,0]])

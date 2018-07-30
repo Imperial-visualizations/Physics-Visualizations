@@ -106,7 +106,7 @@ function Sphere(radius) {
                 this.y[i].push(this.radius*Math.sin(phi[i])*Math.sin(theta[j])+1);
                 //this.z[i].push(height*(this.radius*Math.cos(theta[j])*Math.sin(beta[i])+1)+height);
                 
-                this.z[i].push((size* this.radius*Math.cos(theta[j])+height*(height*Math.sin(beta[i]) + 1)*(Math.sin(theta[j]))+height));
+                this.z[i].push((size* this.radius*Math.cos(theta[j])+height*(Math.sin(theta[j])*Math.sin(theta[j])*Math.sin(theta[j]))*(height*Math.sin(beta[i]) + 1)*(Math.sin(theta[j]))+height));
             }
         }
         var sphere = {
