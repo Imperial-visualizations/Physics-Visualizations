@@ -54,25 +54,24 @@ $(window).on('load', function() {//main
 let polarisation_value = $("input[name = polarisation-switch]:checked").val();
 let angle_of_incidence = parseFloat($("input#angle").val());
 let refractive_ratio   = parseFloat($("input#refractive-index-ratio").val());
+
 let amplitude   = 0.1;//parseFloat($("input#amplitude").val());
-let angular_frequency   = 4;//parseFloat($("input#angular_frequency").val());
+let angular_frequency  = 4;//parseFloat($("input#angular_frequency").val());
 
 let c = 3e8; // Speed of light
 let w_conversion = 6.92e5; // Factor to make plot wavelength reasonable
-let size = 500;//give number of points
+let size = 1000;//give number of points
 
-class Wave{
-        constructor(theta, E_0, polarisation, w , n1, width, color,reflect){
-
+class Wave{///DOES THE K NEED TO CHANGE IN SECOND MEDIUM
+        constructor(theta, E_0, polarisation, w , n1, width){
         this.theta = theta;
         this.n1 = n1;
         this.E_0 = E_0;
         this.true_w = w;
         this.w = this.true_w / w_conversion;
         this.k = (n1 * this.w)/ c;
-        this.B_0 = this.n1 * E_0;
+        this.B_0 = E_0;//do i need to ignore c due to scaling?
         this.polarisation = polarisation;
-        this.x_reflect = reflect;
         //need to find a way to make arrows
         this.sinusoids = this.create_sinusoids(this.n2);
     };
@@ -96,14 +95,14 @@ class Wave{
         if (this.polarisation === "s-polarisation") {
             E_sine = [zero, math.multiply(this.E_0, k_z_sine), z_range];
             B_sine = [math.multiply(this.B_0,k_z_sine), zero, z_range];
-            rot_E_sine = this.rotate_sinusoid(E_sine, this.theta, this.x_reflect);
-            rot_B_sine = this.rotate_sinusoid(B_sine, this.theta, this.x_reflect);
+            rot_E_sine = this.rotate_sinusoid(E_sine, this.theta);
+            rot_B_sine = this.rotate_sinusoid(B_sine, this.theta);
             }
         else{
             E_sine = [math.multiply(this.E_0, k_z_sine), zero, z_range];
             B_sine = [zero, math.multiply(this.B_0, k_z_sine), z_range];
-            rot_E_sine = this.rotate_sinusoid(E_sine, this.theta, this.x_reflect);
-            rot_B_sine = this.rotate_sinusoid(B_sine, this.theta, this.x_reflect);
+            rot_E_sine = this.rotate_sinusoid(E_sine, this.theta);
+            rot_B_sine = this.rotate_sinusoid(B_sine, this.theta);
             }
 
         let E_trace = [];
@@ -162,9 +161,9 @@ class Wave{
             } else {
                 E_t0 = this.E_0 * (2. * this.n1 * Math.cos(theta_i)) / (this.n1 * Math.cos(theta_t) + this.n2 * Math.cos(theta_i))
             }
-            return new Wave(plot_theta_t, E_t0, this.polarisation, this.true_w, this.n2, 2, "#EC7300", true)
+            return new Wave(plot_theta_t, E_t0, this.polarisation, this.true_w, this.n2, 2)
         }
-       };//(theta, E_0, polarisation, w , n1, width, color,reflect)
+       };//(theta, E_0, polarisation, w , n1, width)
 
     reflect(n2)
     {
@@ -191,32 +190,17 @@ class Wave{
                 E_r0 = this.E_0 * (this.n1 * Math.cos(theta_t) - this.n2 * Math.cos(theta_i)) / (this.n1 * Math.cos(theta_t) + this.n2 * Math.cos(theta_i))
             }
 
-            return new Wave(plot_theta_r, E_r0, this.polarisation, this.true_w, this.n1, 2, "#EC7300", true)
+            return new Wave(plot_theta_r, E_r0, this.polarisation, this.true_w, this.n1, 2)
         }
-    };//(theta, E_0, polarisation, w , n1, width, color,reflect)
+    };//(theta, E_0, polarisation, w , n1, width)
 
-    rotate_sinusoid(sinusoid, theta, x_reflect)
+    rotate_sinusoid(sinusoid, theta)
     {
         let rotation_matrix = [[Math.cos(theta), 0, Math.sin(theta)], [0, 1, 0], [-Math.sin(theta), 0, Math.cos(theta)]];
-
         let copy = math.transpose(sinusoid);
 
-        if (x_reflect === false) {
-            for (let i = 0;i<size;i++){
-                copy[i] = math.multiply(copy[i],rotation_matrix);//is this doing it correctly???
-            }
-        }
-
-        else if(x_reflect === true) {
-            let x_reflect_matrix = [[1, 0, 0],
-                [0, -1, 0],
-                [0, 0, 1]];
-
-            let transf_matrix = math.multiply(x_reflect_matrix, rotation_matrix);
-
-            for (let i = 0;i<size;i++){
-                copy[i] = math.multiply(copy[i],transf_matrix);
-            }
+        for (let i = 0;i<size;i++){
+            copy[i] = math.multiply(copy[i],rotation_matrix);//is this doing it correctly???
         }
 
         let rotated = math.transpose(copy);
@@ -239,7 +223,8 @@ function computeData() {
     //angular_frequency = parseFloat($("input#angular_frequency").val());
 
     let rad_angle = Math.PI * (angle_of_incidence / 180);
-    let Incident = new Wave(rad_angle, amplitude, polarisation_value, angular_frequency*1e15, refractive_ratio/refractive_ratio, 2, "#EC7300", true);//(theta, E_0, polarisation, w , n1, width, color,reflect)
+
+    let Incident = new Wave(rad_angle, amplitude, polarisation_value, angular_frequency*1e15, refractive_ratio/refractive_ratio, 2);//(theta, E_0, polarisation, w , n1, width, color)
     let Reflected = Incident.reflect(refractive_ratio);
     let Transmitted = Incident.transmit(refractive_ratio);
 
@@ -502,13 +487,11 @@ function initial(){
     Plotly.newPlot('graph', computeData(), plt.layout);
 
     Plotly.purge("graph_fresnel");
-
     Plotly.newPlot("graph_fresnel", compute_fresnel(),plt.layoutFres);
 
     $('#spinner').hide();
     $('.container').show();//show container after loading finishes
     $('.rightnav').show();
-    $('.leftnav').show();
 
 
     dom.pswitch.on("change", update_graph);//on any change the graph will update
@@ -518,9 +501,6 @@ function initial(){
 
     dom.nSlider.on("input", update_graph);
     dom.nSlider.on("input", update_graph_fresnel);
-
-    //dom.ampSlider.on("input", update_graph);
-    //dom.wSlider.on("input",update_graph);
 
     }
 
