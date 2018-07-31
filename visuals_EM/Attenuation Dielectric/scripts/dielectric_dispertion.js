@@ -1,5 +1,5 @@
 $(window).on('load', function() {
-        const dom = {//assigning switches and slider
+        const dom = {//assigning switches and sliders
             pswitch: $("#polarisation-switch input"),
             wSlider:$("input#angular_frequency")
         }
@@ -24,7 +24,7 @@ $(window).on('load', function() {
                 }
             },
         },
-        layout_real:{
+        layout_real:{//layout of real refractive index
                 autosize: true,
                 xaxis: {
                     range: [0, 2],
@@ -46,7 +46,7 @@ $(window).on('load', function() {
                    size: 16
                }
         },
-        layout_img:{
+        layout_img:{//layout of imaginary refactive index
                 autosize: true,
                 xaxis: {
                     range: [0, 2],
@@ -71,16 +71,16 @@ $(window).on('load', function() {
     };
 
 let w_conversion = 7e5; // Factor to make plot wavelength reasonable
-let w_0 = 1e10;
+let w_0 = 1e10;//gives properties of material
 
-let polarisation_value = $("input[name = polarisation-switch]:checked").val();
-let angular_frequency_ratio   = parseFloat($("input#angular_frequency").val())* w_0;
+let polarisation_value = $("input[name = polarisation-switch]:checked").val();//set variables based on value of polarisation
+let angular_frequency_ratio   = parseFloat($("input#angular_frequency").val())* w_0;//set variable based on angular frequency input
 
-let n1 = 1;
-let amplitude = 0.8;//parseFloat($("input#amplitude").val());
+let n1 = 1;//material before input dielectric
+let amplitude = 0.8;//amplitude of em wave
 let c = 3e8; // Speed of light
 
-function zero_array(size){
+function zero_array(size){//create array of zeros
     let zero =[];
     for (let i = 0;i<size;i++){
         zero.push(0);
@@ -91,31 +91,31 @@ let size = 10000;//give number of points
 let zero = zero_array(size);
 
 
-class Wave{
+class Wave{//wave object used to produce em wave
     constructor(E_0, polarisation, w) {
             this.E_0 = E_0;
             this.true_w = w;
             //this.w = this.true_w / w_conversion;
             this.k = (this.true_w) / c;
-            this.B_0 = E_0;
+            this.B_0 = E_0;//for convenience of visualisation B and E field are same amplitude
             this.polarisation = polarisation;
             this.sinusoids = this.create_sinusoids_incident();
         }
-    element_cos(matrix,size){
+    element_cos(matrix,size){//takes cos of element in matrix
         for (let i = 0; i < size ;i++){
             matrix[i] = math.cos(matrix[i]);
         }
     return matrix
     }
 
-    element_exponential(matrix,size){
+    element_exponential(matrix,size){//take exponential of element in matrix
         for (let i = 0;i < size;i++){
             matrix[i] = math.exp(matrix[i]);
         }
     return matrix
     }
 
-    create_sinusoids_incident()//fix the math  np stuff
+    create_sinusoids_incident()//create incident waves
     {
         let z_range = numeric.linspace(-1, 0, size);
 
@@ -123,7 +123,7 @@ class Wave{
         let E_cos,B_cos;
 
         if (this.polarisation === "s-polarisation") {
-            E_cos = [zero, math.multiply(this.E_0, k_z_cos), z_range];
+            E_cos = [zero, math.multiply(this.E_0, k_z_cos), z_range];//polarisation determines axis of oscillation
             B_cos = [math.multiply(this.B_0,k_z_cos), zero, z_range];
             }
         else{
@@ -133,12 +133,11 @@ class Wave{
 
         let E_trace = [];
 
-        E_trace.push(
-            {//add trace for line of field line
+        E_trace.push(//Electric field trace
+            {
             type: "scatter3d",
             mode: "lines",
             name: "e field incident",
-            //line: {color: "#02893B"},
             x: E_cos[0],
             y: E_cos[1],
             z: E_cos[2],
@@ -151,12 +150,11 @@ class Wave{
         );
 
         let B_trace = [];
-        B_trace.push(
-            {//add trace for line of field line
+        B_trace.push(//Magnetic field trace
+            {
             type: "scatter3d",
             mode: "lines",
             name: "b field incident",
-            //line: {color: "#A51900"},
             x: B_cos[0],
             y: B_cos[1],
             z: B_cos[2],
@@ -171,39 +169,33 @@ class Wave{
     };
 
 
-    attenuation(w_input){//ωd = 0.5ω0 and γ = 0.2ω0
+    attenuation(w_input){
 
-    //console.log("hey");
     let w = w_input;
-    //console.log(w);
     let gamma = 0.1*w_0;
     let wd = 0.5*w_0;
-    let w_d_squared = wd**2;// (N*(q**2))/(2*e0*m);
+    let w_d_squared = wd**2;
 
     let z_range = numeric.linspace(0, 1, size);
-
+    //calculate real refractive index
     let n_real = 1 - (w_d_squared*(Math.pow(w,2)-Math.pow(w_0,2))/(Math.pow((Math.pow(w,2)-Math.pow(w_0,2)),2) + Math.pow(w,2)*Math.pow(gamma,2)));
-
+    //calculate imaginary refractive index
     let n_im = (w_d_squared*w*gamma)/(Math.pow((Math.pow(w,2) - Math.pow(w_0,2)),2)+Math.pow(w,2)*Math.pow(gamma,2));
 
     let k_real = (w*n_real)/c;
 
-    let k_im = (w*n_im)/(c*5e6);
-    console.log(k_real);
-    console.log(k_im);
+    let k_im = (w*n_im)/(c);
 
-    let exp_E = this.element_exponential(math.multiply(-k_im,z_range),size);
+    let exp_E = this.element_exponential(math.multiply(-k_im,z_range),size);//exponential decay of amplitude
 
     let k_z_cos = this.element_cos(math.multiply(k_real,z_range),size);
-    //console.log(k_z_cos);
 
     let decayed_cos = math.dotMultiply(exp_E,k_z_cos);
-    //console.log(decayed_cos);
 
-    let E_end_amp = this.E_0*exp_E.slice(-1);
+    let E_end_amp = this.E_0*exp_E.slice(-1);//find final value of amplitude
     let B_end_amp = this.B_0*exp_E.slice(-1);
 
-    let shift = k_real*1;
+    let shift = k_real*1;//phase shift of wave for transmitted wave
 
 
     let E_cos_atten,B_cos_atten;
@@ -220,11 +212,10 @@ class Wave{
     let E_trace_atten = [];
 
     E_trace_atten.push(
-        {//add trace for line of field line
+        {
         type: "scatter3d",
         mode: "lines",
         name: "e field attenuated",
-        //line: {color: "#02893B"},
         x: E_cos_atten[0],
         y: E_cos_atten[1],
         z: E_cos_atten[2],
@@ -239,11 +230,10 @@ class Wave{
     let B_trace_atten = [];
 
     B_trace_atten.push(
-        {//add trace for line of field line
+        {
         type: "scatter3d",
         mode: "lines",
         name: "b field attenuated",
-        //line: {color: "#A51900"},
         x: B_cos_atten[0],
         y: B_cos_atten[1],
         z: B_cos_atten[2],
@@ -258,12 +248,13 @@ class Wave{
     };
 
 
-    create_sinusoids_transmitted(E_end_amp,B_end_amp,shift)//fix the math  np stuff
+    create_sinusoids_transmitted(E_end_amp,B_end_amp,shift)
     {
         let z_range = numeric.linspace(1, 2, size);
         let z_range_shift = math.add(-1,z_range);
+
         let o_cos = math.multiply(this.k,z_range_shift);
-        let c_input = math.add(shift,o_cos);
+        let c_input = math.add(shift,o_cos);//add shift to transmitted wave
 
         let k_z_cos = this.element_cos(c_input,size);
 
@@ -281,11 +272,10 @@ class Wave{
         let E_trace = [];
 
         E_trace.push(
-            {//add trace for line of field line
+            {
             type: "scatter3d",
             mode: "lines",
             name: "e field transmitted",
-            //line: {color: "#02893B"},
             x: E_cos[0],
             y: E_cos[1],
             z: E_cos[2],
@@ -299,11 +289,10 @@ class Wave{
 
         let B_trace = [];
         B_trace.push(
-            {//add trace for line of field line
+            {
             type: "scatter3d",
             mode: "lines",
             name: "b field transmitted",
-            //line: {color: "#A51900"},
             x: B_cos[0],
             y: B_cos[1],
             z: B_cos[2],
@@ -314,26 +303,26 @@ class Wave{
                 reversescale: false}
             }
         );
-        return [E_trace, B_trace]
+        return [E_trace, B_trace]//return traces
     };
 };
 
 function computeData() {
 
-    $("#angular_frequency-display").html($("input#angular_frequency").val().toString());
+    $("#angular_frequency-display").html($("input#angular_frequency").val().toString());//update value of display
 
-    angular_frequency_ratio = parseFloat($("input#angular_frequency").val())*(w_0);
+    angular_frequency_ratio = parseFloat($("input#angular_frequency").val())*(w_0);//update variable values
     polarisation_value = $("input[name = polarisation-switch]:checked").val();
 
-    let Incident = new Wave(amplitude,polarisation_value,angular_frequency_ratio,n1);//(E_0, polarisation, w , n1)
+    let Incident = new Wave(amplitude,polarisation_value,angular_frequency_ratio,n1);//create wave
 
-    let dielectric_bit = Incident.attenuation(angular_frequency_ratio);//w,w_0
-    let Transmitted = Incident.create_sinusoids_transmitted(dielectric_bit[2],dielectric_bit[3],dielectric_bit[4]);
-    let refectrive_index = dielectric_bit[5]/4;
+    let dielectric_bit = Incident.attenuation(angular_frequency_ratio);//create attenuated wave
+    let Transmitted = Incident.create_sinusoids_transmitted(dielectric_bit[2],dielectric_bit[3],dielectric_bit[4]);//create transmitted wave
+    let refectrive_index = dielectric_bit[5]/4;//use refractive index to change opacity of dielectric
 
     let material_1 = [];
     material_1.push(
-        {//material_1
+        {//dielectric
             opacity: refectrive_index,
             color: '#379F9F',
             type: "mesh3d",
@@ -347,11 +336,11 @@ function computeData() {
         }
         );
     let data = Incident.sinusoids[0].concat(Incident.sinusoids[1], dielectric_bit[0],dielectric_bit[1],Transmitted[0],Transmitted[1],material_1);
-    //console.log(data);
+    //add all traces to one variable
 return data
 };
 
-function compute_data_rn() {
+function compute_data_rn() {//produces data for real refractive index graph
 
     let x = numeric.linspace(0, 2, size);
 
@@ -359,7 +348,7 @@ function compute_data_rn() {
     let w;
     let gamma = 0.1*w_0;
     let wd = 0.5*w_0;
-    let w_d_squared = wd**2;// (N*(q**2))/(2*e0*m);
+    let w_d_squared = wd**2;
 
     for( let i = 0; i < size; i++){
         w = (x[i])*w_0;
@@ -389,7 +378,7 @@ function compute_data_rn() {
     return [r_rn,marker]
 }
 
-function compute_data_in() {
+function compute_data_in() {//produces data for imaginary refractive index graph
 
     let x = numeric.linspace(0, 2, size);
     let y = [];
@@ -427,7 +416,7 @@ function compute_data_in() {
     return [r_in,marker]
 }
 
-function update_graph_n(){
+function update_graph_n(){//update refractive index graph
 
     Plotly.animate("graph_rn",
         {data: compute_data_rn()},//updated data
@@ -451,7 +440,7 @@ function update_graph_n(){
 
 }
 
-function update_graph(){
+function update_graph(){//update animation
     Plotly.animate("graph",
         {data: computeData()},//updated data
         {
@@ -466,22 +455,22 @@ function update_graph(){
 
 function initial(){
     Plotly.purge("graph");
-    Plotly.newPlot('graph', computeData(),plt.layout);
+    Plotly.newPlot('graph', computeData(),plt.layout);//create animation plot
 
     Plotly.purge("graph_rn");
-    Plotly.newPlot('graph_rn', compute_data_rn(),plt.layout_real);
+    Plotly.newPlot('graph_rn', compute_data_rn(),plt.layout_real);//create real refractive index graph
 
     Plotly.purge("graph_in");
-    Plotly.newPlot('graph_in', compute_data_in(),plt.layout_img);
+    Plotly.newPlot('graph_in', compute_data_in(),plt.layout_img);//create imaginary refractive index graph
 
     $('.container').show();//show container after loading finishes
 
-    $('#spinner').hide();
+    $('#spinner').hide();//hide loading spinner
 
-    dom.pswitch.on("change", update_graph);
-
+    dom.pswitch.on("change", update_graph);//update graph animation
     dom.wSlider.on("input",update_graph);
-    dom.wSlider.on("input",update_graph_n);
+
+    dom.wSlider.on("input",update_graph_n);//update refractive index graph
 }
 
 initial();//run the initial loading
