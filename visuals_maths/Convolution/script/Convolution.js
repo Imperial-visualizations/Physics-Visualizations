@@ -1,13 +1,22 @@
+var resolution=1000;
+var L = 5;
+var x=numeric.linspace(-L,L,resolution);
+
+var s =[0,1,2,3,4,5];
+alert(s.reverse());
+
 function initCarte(type){
     return;
 }
 
+
+
+// convert string to numbers
 function converting(string){
     f = eval(string);
     return f;
 }
-x=2
-console.log(converting("x**3"));
+
 
 function main() {
     /*Jquery*/ //NB: Put Jquery stuff in the main not in HTML
