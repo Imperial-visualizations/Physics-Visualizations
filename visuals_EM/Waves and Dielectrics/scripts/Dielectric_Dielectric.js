@@ -1,11 +1,10 @@
 $(window).on('load', function() {//main
     const dom = {//assigning switches and slider
 
-            pswitch: $("#polarisation-switch input"),
-            aSlider: $("input#angle"),
-            nSlider: $("input#refractive-index-ratio"),
-            //ampSlider:$("input#amplitude"),
-            //wSlider:$("input#angular_frequency")
+            pswitch: $("#polarisation-switch input"),//polarisation switch
+            aSlider: $("input#angle"),//angle slider
+            nSlider: $("input#refractive-index-ratio"),//refractive index slider
+
         };
     let plt = {//layout of graph
         layout : {
@@ -28,7 +27,7 @@ $(window).on('load', function() {//main
             },
         },
 
-        layoutFres: {
+        layoutFres: {//layout of fresnel graph
                 autosize: true,
                 xaxis: {
                     range: [0, 90],
@@ -51,51 +50,51 @@ $(window).on('load', function() {//main
             }
     };
 
-let polarisation_value = $("input[name = polarisation-switch]:checked").val();
+let polarisation_value = $("input[name = polarisation-switch]:checked").val();//create variables corresponding to sliders and switches
 let angle_of_incidence = parseFloat($("input#angle").val());
 let refractive_ratio   = parseFloat($("input#refractive-index-ratio").val());
 
-let amplitude   = 0.1;//parseFloat($("input#amplitude").val());
-let angular_frequency  = 4;//parseFloat($("input#angular_frequency").val());
+let amplitude   = 0.1;//set amplitude of EM wave
+let angular_frequency  = 4;
 
 let c = 3e8; // Speed of light
 let w_conversion = 6.92e5; // Factor to make plot wavelength reasonable
 let size = 1000;//give number of points
 
-class Wave{///DOES THE K NEED TO CHANGE IN SECOND MEDIUM
-        constructor(theta, E_0, polarisation, w , n1, width){
+class Wave{
+        constructor(theta, E_0, polarisation, w , n1){
         this.theta = theta;
         this.n1 = n1;
         this.E_0 = E_0;
         this.true_w = w;
         this.w = this.true_w / w_conversion;
         this.k = (n1 * this.w)/ c;
-        this.B_0 = E_0;//do i need to ignore c due to scaling?
+        this.B_0 = E_0;// for simplicity B and E field are the same magnitude
         this.polarisation = polarisation;
-        //need to find a way to make arrows
         this.sinusoids = this.create_sinusoids(this.n2);
     };
 
-    element_sine(matrix,size){
+    element_sine(matrix,size){//take element sine in matrix (cosine and sine interchangeable)
         for (let i = 0;i < size;i++){
             matrix[i] = math.sin(matrix[i]);
         }
         return matrix
     }
 
-    create_sinusoids()//fix the math  np stuff
+    create_sinusoids()//crate waves
     {
         let z_range = numeric.linspace(0, 1, size);
         let zero = math.zeros(size);
-        let k_z_sine = math.multiply(-1,this.element_sine(math.multiply(this.k,z_range),size));
+        let k_z_sine = math.multiply(-1,this.element_sine(math.multiply(this.k,z_range),size));//make sine matrix
         let E_sine,B_sine;
         let rot_E_sine;
         let rot_B_sine;
 
-        if (this.polarisation === "s-polarisation") {
+        if (this.polarisation === "s-polarisation") {//polarisation determines plane of oscillation
             E_sine = [zero, math.multiply(this.E_0, k_z_sine), z_range];
             B_sine = [math.multiply(this.B_0,k_z_sine), zero, z_range];
-            rot_E_sine = this.rotate_sinusoid(E_sine, this.theta);
+
+            rot_E_sine = this.rotate_sinusoid(E_sine, this.theta);//rotate waves to appropriate angle
             rot_B_sine = this.rotate_sinusoid(B_sine, this.theta);
             }
         else{
@@ -108,11 +107,10 @@ class Wave{///DOES THE K NEED TO CHANGE IN SECOND MEDIUM
         let E_trace = [];
 
         E_trace.push(
-            {//add trace for line of field line
+            {//electric field trace
             type: "scatter3d",
             mode: "lines",
             name: "e field",
-            //line: {color: "#02893B"},
             x: rot_E_sine[0],
             y: rot_E_sine[1],
             z: rot_E_sine[2],
@@ -126,11 +124,10 @@ class Wave{///DOES THE K NEED TO CHANGE IN SECOND MEDIUM
 
         let B_trace = [];
         B_trace.push(
-            {//add trace for line of field line
+            {//magnetic field trace
             type: "scatter3d",
             mode: "lines",
             name: "b field",
-            //line: {color: "#A51900"},
             x: rot_B_sine[0],
             y: rot_B_sine[1],
             z: rot_B_sine[2],
@@ -141,7 +138,8 @@ class Wave{///DOES THE K NEED TO CHANGE IN SECOND MEDIUM
                 reversescale: false}
             }
         );
-        return [E_trace, B_trace]
+
+        return [E_trace, B_trace] //return traces
     };
 
     transmit(n2){
@@ -152,24 +150,24 @@ class Wave{///DOES THE K NEED TO CHANGE IN SECOND MEDIUM
         let plot_theta_t = Math.PI + theta_t;
         let E_t0;
 
-        if (isNaN(theta_t) === true){
+        if (isNaN(theta_t) === true){//if snells law return not a number this means total internal refection is occurring hence no transmitted wave
                 return false
         }
         else {
-            if (this.polarisation === "s-polarisation") {
+            if (this.polarisation === "s-polarisation") {//change amplitude
                 E_t0 = this.E_0 * (2. * this.n1 * Math.cos(theta_i)) / (this.n1 * Math.cos(theta_i) + this.n2 * Math.cos(theta_t))
             } else {
                 E_t0 = this.E_0 * (2. * this.n1 * Math.cos(theta_i)) / (this.n1 * Math.cos(theta_t) + this.n2 * Math.cos(theta_i))
             }
-            return new Wave(plot_theta_t, E_t0, this.polarisation, this.true_w, this.n2, 2)
+            return new Wave(plot_theta_t, E_t0, this.polarisation, this.true_w, this.n2, 2)//create transmitted wave
         }
-       };//(theta, E_0, polarisation, w , n1, width)
+       };
 
     reflect(n2)
     {
         this.n2 = n2;
 
-        if (this.n1 === this.n2) {
+        if (this.n1 === this.n2) {//if both materials have same refractive index then there is no reflection
             return false
         }
         else {
@@ -190,17 +188,17 @@ class Wave{///DOES THE K NEED TO CHANGE IN SECOND MEDIUM
                 E_r0 = this.E_0 * (this.n1 * Math.cos(theta_t) - this.n2 * Math.cos(theta_i)) / (this.n1 * Math.cos(theta_t) + this.n2 * Math.cos(theta_i))
             }
 
-            return new Wave(plot_theta_r, E_r0, this.polarisation, this.true_w, this.n1, 2)
+            return new Wave(plot_theta_r, E_r0, this.polarisation, this.true_w, this.n1, 2)//create reflected wave
         }
-    };//(theta, E_0, polarisation, w , n1, width)
+    };
 
-    rotate_sinusoid(sinusoid, theta)
+    rotate_sinusoid(sinusoid, theta)//rotate the sine waves
     {
-        let rotation_matrix = [[Math.cos(theta), 0, Math.sin(theta)], [0, 1, 0], [-Math.sin(theta), 0, Math.cos(theta)]];
+        let rotation_matrix = [[Math.cos(theta), 0, Math.sin(theta)], [0, 1, 0], [-Math.sin(theta), 0, Math.cos(theta)]];//create rotation matrix
         let copy = math.transpose(sinusoid);
 
         for (let i = 0;i<size;i++){
-            copy[i] = math.multiply(copy[i],rotation_matrix);//is this doing it correctly???
+            copy[i] = math.multiply(copy[i],rotation_matrix);//multiply row of position by rotation matrix
         }
 
         let rotated = math.transpose(copy);
@@ -211,27 +209,23 @@ class Wave{///DOES THE K NEED TO CHANGE IN SECOND MEDIUM
 
 function computeData() {
 
-    $("#angle-display").html($("input#angle").val().toString()+"°");
+    $("#angle-display").html($("input#angle").val().toString()+"°");//update display
     $("#refractive-index-ratio-display").html($("input#refractive-index-ratio").val().toString());
-    //$("#amplitude-display").html($("input#amplitude").val().toString());
-    //$("#angular_frequency-display").html($("input#angular_frequency").val().toString());
 
-    polarisation_value = $("input[name = polarisation-switch]:checked").val();
+    polarisation_value = $("input[name = polarisation-switch]:checked").val();//update variables
     angle_of_incidence = parseFloat($("input#angle").val());
     refractive_ratio   = parseFloat($("input#refractive-index-ratio").val());
-    //amplitude   = parseFloat($("input#amplitude").val());
-    //angular_frequency = parseFloat($("input#angular_frequency").val());
 
     let rad_angle = Math.PI * (angle_of_incidence / 180);
 
-    let Incident = new Wave(rad_angle, amplitude, polarisation_value, angular_frequency*1e15, refractive_ratio/refractive_ratio, 2);//(theta, E_0, polarisation, w , n1, width, color)
-    let Reflected = Incident.reflect(refractive_ratio);
-    let Transmitted = Incident.transmit(refractive_ratio);
+    let Incident = new Wave(rad_angle, amplitude, polarisation_value, angular_frequency*1e15, refractive_ratio/refractive_ratio, 2);//create incident wave
+    let Reflected = Incident.reflect(refractive_ratio);//create reflected wave
+    let Transmitted = Incident.transmit(refractive_ratio);//create transmitted wave
 
     let opacity_1;
     let opacity_2;
 
-    if((1 < refractive_ratio) && (refractive_ratio <= 2)){
+    if((1 < refractive_ratio) && (refractive_ratio <= 2)){//decide opacity dependant on refractive index
         opacity_1 = 0;
         opacity_2 = refractive_ratio/5
     }
@@ -246,7 +240,7 @@ function computeData() {
 
     let material_1 = [];
     material_1.push(
-        {//material_1
+        {//material_1 trace
             opacity: opacity_1,
             color: '#379F9F',
             type: "mesh3d",
@@ -262,7 +256,7 @@ function computeData() {
 
     let material_2 = [];
     material_2.push(
-        {//material_2
+        {//material_2 trace
             opacity: opacity_2,
             color: '#379F9F',
             type: "mesh3d",
@@ -278,14 +272,14 @@ function computeData() {
 
     let plot_data;
 
-    if (Reflected === false) {
+    if (Reflected === false) {//both materials have same refractive index
         plot_data =  Incident.sinusoids[0].concat(Incident.sinusoids[1],Transmitted.sinusoids[0],Transmitted.sinusoids[1],material_1,material_2);
     }
-    else if (Transmitted === false){
+    else if (Transmitted === false){//total internal reflection
         plot_data =  Incident.sinusoids[0].concat(Incident.sinusoids[1],Reflected.sinusoids[0],Reflected.sinusoids[1],material_1,material_2);
     }
 
-    else {
+    else {//incident wave is reflected and refracted
         plot_data = Incident.sinusoids[0].concat(Incident.sinusoids[1],Transmitted.sinusoids[0],Transmitted.sinusoids[1],Reflected.sinusoids[0],Reflected.sinusoids[1],material_1,material_2);
     }
 
@@ -307,11 +301,11 @@ function computeData() {
     return plot_data
 }
 
-function snell(n1, n2, theta_i){
+function snell(n1, n2, theta_i){//snells law
     return Math.asin((n1 / n2) * Math.sin(theta_i))
 };
 
-function compute_fresnel(){
+function compute_fresnel(){//produce data for fresnel curves
 
         let theta_i = Math.PI * (angle_of_incidence / 180);
         let theta_t = snell(refractive_ratio/refractive_ratio,refractive_ratio,theta_i);
@@ -323,7 +317,7 @@ function compute_fresnel(){
         let crit_angle = (180*Math.asin(refractive_ratio))/Math.PI;
         let angle_max = parseFloat($("#angle").attr("max"));
 
-        if (polarisation_value === "s-polarisation"){
+        if (polarisation_value === "s-polarisation"){//depending on condition of wave different coefficients produced
             if (refractive_ratio <1) {
                 if (angle_of_incidence<crit_angle){
                     t_marker = (2 * Math.cos(theta_i)) / (Math.cos(theta_i) + (ratio * Math.cos(theta_t)));
@@ -425,7 +419,7 @@ function compute_fresnel(){
           name: 'Transmission coefficient',
         };
 
-        let marker_transmission = {
+        let marker_transmission = {//marker follows current value of angle
             x: [angle_of_incidence],
             y: [t_marker],
             showlegend: false,
@@ -456,7 +450,7 @@ function compute_fresnel(){
     return fresnel_data
 };
 
-function update_graph(){
+function update_graph(){//update animation
 
         Plotly.animate("graph",
             {data: computeData()},//updated data
@@ -469,7 +463,7 @@ function update_graph(){
         );
     }
 
-function update_graph_fresnel(){
+function update_graph_fresnel(){//update fresnel graph
     Plotly.animate("graph_fresnel",
         {data: compute_fresnel()},//updated data
         {
@@ -484,10 +478,10 @@ function update_graph_fresnel(){
 function initial(){
 
     Plotly.purge("graph");
-    Plotly.newPlot('graph', computeData(), plt.layout);
+    Plotly.newPlot('graph', computeData(), plt.layout);//create animation
 
     Plotly.purge("graph_fresnel");
-    Plotly.newPlot("graph_fresnel", compute_fresnel(),plt.layoutFres);
+    Plotly.newPlot("graph_fresnel", compute_fresnel(),plt.layoutFres);//create fresnel curves
 
     $('#spinner').hide();
     $('.container').show();//show container after loading finishes
@@ -495,11 +489,10 @@ function initial(){
 
 
     dom.pswitch.on("change", update_graph);//on any change the graph will update
-
     dom.aSlider.on("input", update_graph);
-    dom.aSlider.on("input", update_graph_fresnel);
-
     dom.nSlider.on("input", update_graph);
+
+    dom.aSlider.on("input", update_graph_fresnel);//update fresnel graph
     dom.nSlider.on("input", update_graph_fresnel);
 
     }
