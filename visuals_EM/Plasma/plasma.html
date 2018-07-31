@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dielectric Boundary - Imperial Visualisations</title>
+    <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+    <!-- Import stylesheets -->
+   <link rel="stylesheet" href="https://rawgit.com/cydcowley/public-test-data/master/Style2.css">
+    <!-- Import js files -->
+
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <script src="http://api.mathjs.org"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+</head>
+
+<body>
+<!-- Navigation elements -->
+<div class="rightnav">▶ </div>
+<div class="leftnav">◀ </div>
+
+    <!--<div id="loading-spinner">-->
+        <!--<span class="loading-message">Loading</span>-->
+        <!--<div>-->
+            <!--<div class="spinner-mask"></div>-->
+            <!--<div id="spinner-bar"></div>-->
+            <!--<div class="spinner-mask"></div>-->
+        <!--</div>-->
+    <!--</div>-->
+<div class="container">
+    <h1>5. Waves in Plasmas</h1>
+    <div class="row">
+        <!-- Div containing writing and sliders -->
+        <div class="five columns"> <!-- change for page design-->
+            <ul>
+                <li> only free charges = not subject to Polarisation.</li>
+                <li> Is subject to magnetisation, however not considered in the course.</li>
+                <li> Collisions can be neglected in most plasmas. $$ \omega \tau_{c} >> 1$$ </li>
+                <li> Collisionless plasma = no energy dissipation. Energy goes back and forth between field and electrons. </li>
+            </ul>
+            <p>
+
+                 <!--Check it out for yourself at
+            <a>Jupyternotebookhere.com</a> -->
+            </p>
+
+            <div id="angle-slider">
+                <label for="angle" class="sliderTitle">Angular frequency of EM wave:
+                    <span id="angle-display">45&deg;</span>
+                </label>
+                <input type="range" id="angle" name="angle" min="0" max="85" value="45">
+                <span class="sliderMin">0&deg;</span><span class="sliderMax">85&deg;</span>
+            </div>
+            <div id="refractive-index-slider">
+                <label for="refractive-index" class="sliderTitle">Refractive Index Ratio (n1/n2):
+                    <span id="refractive-index-display">1.5</span>
+                </label>
+                <input type="range" id="refractive-index" name="refractive-index" min="0.5" max="2" step="0.02" value="1.5">
+                <span class="sliderMin">0.5</span><span class="sliderMax">2</span>
+            </div>
+
+        </div>
+        <!-- Div containing graph-->
+        <div class="seven columns">
+            <div id="graph" style="height: 75vh"></div>
+            <div id="Bfield" style="height: 75vh"></div>
+
+
+        </div>
+    </div>
+</div>
+<script src="plasma.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</body>
+
+</html>
