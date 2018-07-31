@@ -1,9 +1,9 @@
 $(window).on('load', function() {
         const dom = {//assigning switches and sliders
             pswitch: $("#polarisation-switch input"),
-            wSlider:$("input#angular_frequency")
+            wSlider:$("input#angular_frequency"),
         }
-
+    let isShown = false;
     let plt = {//layout of graph
         layout : {
             showlegend: false,
@@ -31,7 +31,6 @@ $(window).on('load', function() {
                     title: "Angular frequency ratio"
                 },
                 yaxis: {
-                   range: [-2, 4],
                     title:"Real n"
                 },
                 margin: {
@@ -53,8 +52,7 @@ $(window).on('load', function() {
                     title: "Angular frequency ratio"
                 },
                 yaxis: {
-                   range: [0, 3],
-                    title: "Imaginary n"
+                    title:"Imaginary n"
                 },
                 margin: {
                    l: 50, r: 10, b: 50, t: 50, pad: 5
@@ -71,7 +69,10 @@ $(window).on('load', function() {
     };
 
 let w_conversion = 7e5; // Factor to make plot wavelength reasonable
-let w_0 = 1e10;//gives properties of material
+let w_0 = 2e10;//gives properties of material
+let gamma = 0.1*w_0;
+let wd = 0.1*w_0;
+let w_d_squared = wd**2;
 
 let polarisation_value = $("input[name = polarisation-switch]:checked").val();//set variables based on value of polarisation
 let angular_frequency_ratio   = parseFloat($("input#angular_frequency").val())* w_0;//set variable based on angular frequency input
@@ -172,9 +173,6 @@ class Wave{//wave object used to produce em wave
     attenuation(w_input){
 
     let w = w_input;
-    let gamma = 0.1*w_0;
-    let wd = 0.5*w_0;
-    let w_d_squared = wd**2;
 
     let z_range = numeric.linspace(0, 1, size);
     //calculate real refractive index
@@ -318,7 +316,10 @@ function computeData() {
 
     let dielectric_bit = Incident.attenuation(angular_frequency_ratio);//create attenuated wave
     let Transmitted = Incident.create_sinusoids_transmitted(dielectric_bit[2],dielectric_bit[3],dielectric_bit[4]);//create transmitted wave
-    let refectrive_index = dielectric_bit[5]/4;//use refractive index to change opacity of dielectric
+
+    let n_im_max = (w_d_squared*w_0*gamma)/(Math.pow((Math.pow(w_0,2) - Math.pow(w_0,2)),2)+Math.pow(w_0,2)*Math.pow(gamma,2));
+
+    let refectrive_index = dielectric_bit[5]/(1.2*n_im_max);//use refractive index to change opacity of dielectric
 
     let material_1 = [];
     material_1.push(
@@ -346,9 +347,6 @@ function compute_data_rn() {//produces data for real refractive index graph
 
     let y = [];
     let w;
-    let gamma = 0.1*w_0;
-    let wd = 0.5*w_0;
-    let w_d_squared = wd**2;
 
     for( let i = 0; i < size; i++){
         w = (x[i])*w_0;
@@ -383,9 +381,6 @@ function compute_data_in() {//produces data for imaginary refractive index graph
     let x = numeric.linspace(0, 2, size);
     let y = [];
     let w;
-    let gamma = 1*w_0;
-    let wd = 10*w_0;
-    let w_d_squared = wd**2;// (N*(q**2))/(2*e0*m);
 
     for(let i = 0; i< size; i++){
         w = x[i]*w_0;
@@ -393,7 +388,6 @@ function compute_data_in() {//produces data for imaginary refractive index graph
     }
 
     let img_n = (w_d_squared*angular_frequency_ratio*gamma)/(Math.pow((Math.pow(angular_frequency_ratio,2) - Math.pow(w_0,2)),2)+Math.pow(angular_frequency_ratio,2)*Math.pow(gamma,2))
-
     data = [x,y];
 
     let r_in = {
@@ -457,12 +451,6 @@ function initial(){
     Plotly.purge("graph");
     Plotly.newPlot('graph', computeData(),plt.layout);//create animation plot
 
-    Plotly.purge("graph_rn");
-    Plotly.newPlot('graph_rn', compute_data_rn(),plt.layout_real);//create real refractive index graph
-
-    Plotly.purge("graph_in");
-    Plotly.newPlot('graph_in', compute_data_in(),plt.layout_img);//create imaginary refractive index graph
-
     $('.container').show();//show container after loading finishes
 
     $('#spinner').hide();//hide loading spinner
@@ -470,8 +458,21 @@ function initial(){
     dom.pswitch.on("change", update_graph);//update graph animation
     dom.wSlider.on("input",update_graph);
 
-    dom.wSlider.on("input",update_graph_n);//update refractive index graph
-}
+    $('#graphButton').on('click', function() {
+         $('#graph_container').toggle('show');
 
+            Plotly.purge("graph_rn");
+            Plotly.newPlot('graph_rn', compute_data_rn(),plt.layout_real);//create real refractive index graph
+
+            Plotly.purge("graph_in");
+            Plotly.newPlot('graph_in', compute_data_in(),plt.layout_img);//create imaginary refractive index graph
+
+            dom.wSlider.on("input",update_graph_n);//update refractive index graph
+
+        document.getElementById("graphButton").value = (isShown) ? "Show Graphs":"Hide Graphs";
+        console.log(isShown);
+        isShown = !isShown;
+    });
+}
 initial();//run the initial loading
 });
