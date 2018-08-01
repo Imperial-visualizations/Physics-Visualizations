@@ -11,6 +11,20 @@ var layout = {
     }
 };
 
+function addEmptyObjects3d(data, numberObj){
+    for (var i=0; i < numberObj; ++i){
+        data.push({
+            type: "scatter3d",
+            mode: "lines",
+            x:[0,0],
+            y:[0,0],
+            z:[0,0],
+            line: {width: 0}
+        });
+    }
+    return;
+}
+
 function addPlane(data, a, b, c, d, color) {
     var x, y, z;
 
@@ -63,29 +77,21 @@ function addLine(data, a1, b1, c1, d1, a2, b2, c2, d2, color1, color2){
         return 1;
     }
 
-    var u1 = [a1, b1]; u2 = [a2, b2],
-        v1 = [a1, c1]; v2 = [a2, c2],
-        w1 = [b1, c1]; w2 = [b2, c2];
-
-    u1 = math.multiply(u1, 1/math.norm(u1)); u2 = math.multiply(u2, 1/math.norm(u2));
-    v1 = math.multiply(v1, 1/math.norm(v1)); v2 = math.multiply(v2, 1/math.norm(v2));
-    w1 = math.multiply(w1, 1/math.norm(w1)); w2 = math.multiply(w2, 1/math.norm(w2));
-
     var x, point = [];
-    if (u1 != u2 && u1 != -u2) {
+    if (a1*b2 - b1*a2 != 0) {
         // z = 0
         x = math.lusolve([[a1, b1], [a2, b2]], [-d1, -d2]);
         for (var i=0; i<2; ++i){
             point.push(x[i][0]);
         }
         point.push(0);
-    } else if (v1 != v2 && v1 != -v2) {
+    } else if (a1*c2 - c1*a2 != 0) {
         // y = 0
         x = math.lusolve([[a1, c1], [a2, c2]], [-d1, -d2]);
         point.push(x[0][0]);
         point.push(0);
         point.push(x[1][0]);
-    } else if (w1 != w2 && w1 != -w2) {
+    } else if (b1*c2 - c1*b2 != 0) {
         // x = 0
         x = math.lusolve([[b1, c1], [b2, c2]], [-d1, -d2]);
         point.push(0);
@@ -93,12 +99,13 @@ function addLine(data, a1, b1, c1, d1, a2, b2, c2, d2, color1, color2){
             point.push(x[i][0]);
         }
     } else {
+        addEmptyObjects3d(data, 1);
         return 1;
     }
 
-    var xPoints = [point[0] - 50*normal[0], point[0] + 50*normal[0]];
-    var yPoints = [point[1] - 50*normal[1], point[1] + 50*normal[1]];
-    var zPoints = [point[2] - 50*normal[2], point[2] + 50*normal[2]];
+    var xPoints = [point[0] - 50*normal[0], point[0] + 50*normal[0]],
+        yPoints = [point[1] - 50*normal[1], point[1] + 50*normal[1]],
+        zPoints = [point[2] - 50*normal[2], point[2] + 50*normal[2]];
 
     var line = {
         type: "scatter3d",
@@ -138,8 +145,8 @@ function compute(data) {
     addPlane(data, a3, b3, c3, d3, lilac);
 
     addLine(data, a1, b1, c1, d1, a2, b2, c2, d2, black, white);
-    //addLine(data, a2, b2, c2, d2, a3, b3, c3, d3, "rgb(255,0,0)", white);
-    //addLine(data, a1, b1, c1, d1, a3, b3, c3, d3, "rgb(0,0,255)", white);
+    addLine(data, a2, b2, c2, d2, a3, b3, c3, d3, "rgb(255,0,0)", white);
+    addLine(data, a1, b1, c1, d1, a3, b3, c3, d3, "rgb(0,0,255)", white);
 
     return 0;
 }

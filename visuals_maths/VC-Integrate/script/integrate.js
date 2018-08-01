@@ -18,65 +18,6 @@ var layout = {
         zaxis: {range: [0, 10], autorange: false, zeroline: true,},
     }
 }
-/*
-function computeFrames(frames, extra){
-    const
-        a = parseFloat($("#aInput").val()),
-        b = parseFloat($("#bInput").val()),
-        c = parseFloat($("#cInput").val());
-
-    extra.push({ //Tetrahedron
-        type: "mesh3d",
-        x: [0, 0, 0, a],
-        y: [0, 0, b, 0],
-        z: [0, c, 0, 0],
-        i: [0, 0, 0, 1],
-        j: [1, 2, 3, 2],
-        k: [2, 3, 1, 3],
-        intensity: [0, 0.33, 0.66, 1],
-        colorscale: [ [0, 'rgb(255,255,255)'], [1, 'rgb(255,255,255)'] ],
-        opacity: 0.5,
-        showscale : false
-    });
-
-
-
-    // volume elements
-    var data = [];
-    var x2 = 0.5, y2 = b/3, z2 = c/3;
-    var interval = 0.5;
-    var x1 = x2 - interval, y1 = y2 - interval, z1 = z2 - interval;
-
-    var initX = [x1, x1, x2, x2, x1, x1, x2, x2],
-        initY = [y1, y2, y2, y1, y1, y2, y2, y1],
-        initZ = [z1, z1, z1, z1, z2, z2, z2, z2];
-
-    data.push(new CartesianVE(initX, initY, initZ).gObject('rgb(0,62,116)'));
-    data.push(new CartesianVE(initX, initY, initZ).gObject());
-    frames.push({data: data});
-
-    while (x1 < a/3) {
-        data = [];
-        x1 += interval;
-
-        initX = [x1, x1, x2, x2, x1, x1, x2, x2];
-
-        data.push(new CartesianVE(initX, initY, initZ).gObject());
-        frames.push({data: data});
-    }
-
-    x2 = a/3;
-    x1 = 0;
-
-    initX = [x1, x1, x2+.5, x2+1, x1, x1, x2, x2+.5];
-    initY = [y1, y2, y2, y1, y1, y2, y2, y1];
-    initZ = [z1, z1, z1, z1, z2, z2, z2, z2];
-
-    frames.push({data: [new CartesianVE(initX, initY, initZ).gObject()]});
-
-    return;
-}
-*/
 function computeFrames(frames, extra){
     const
         a = parseFloat($("#aInput").val()),
@@ -92,105 +33,452 @@ function computeFrames(frames, extra){
     extra.push(qSphere.gObjectY(lilac));
     extra.push(qSphere.gObjectZ(lilac));
 
-
-    // 1st volume elements
-    var data = [];
-    var x2 = 0.5, y2 = b/3, z2 = c/3;
+    var data;
+    var x1, x2, x3, y1, y2, y3, z1, z2, z3;
     var interval = 0.5;
-    var x1 = 0, y1 = y2 - interval, z1 = z2 - interval;
-    var x3 = 8*a/9;
+    var initX, initY, initZ;
+    var activeTab = $('.tab-pane.active').attr('id');
+    if (activeTab === 'carte') {
+        maxDataSize = 12;
+        // 1st volume elements
+        x2 = 0.5; y2 = b/3; z2 = c/3;
+        x1 = 0; y1 = y2 - interval; z1 = z2 - interval;
+        x3 = 8*a/9;
 
-    var initY = [y1, y2, y2, y1, y1, y2, y2, y1],
+        initY = [y1, y2, y2, y1, y1, y2, y2, y1];
         initZ = [z1, z1, z1, z1, z2, z2, z2, z2];
 
-    while (x2 < x3) {
+        while (x2 < x3) {
+            data = [];
+            initX = [x1, x1, x2, x2, x1, x1, x2, x2];
+            carteVolume1(data, initX, initY, initZ, cyan, 0.8);
+            carteVolume1(data, [x1, x1, x3+1/9, x3+2/9, x1, x1, x3, x3+1/9], initY, initZ, cyan, 0.2);
+
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [x3],
+                y: [y1],
+                z: [z1],
+                line: {color: lilac, width: 3, dash: "solid"},
+                text: ["x = a(1 - (y/b)² - (z/c)²)^0.5"],
+                textfont: {color:black, size:16},
+                opacity: 1
+            });
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [x1],
+                y: [y1],
+                z: [z1],
+                line: {color: lilac, width: 3, dash: "solid"},
+                text: ["x = 0"],
+                textfont: {color:black, size:16},
+                opacity: 1
+            });
+
+            addEmptyObjects3d(data, maxDataSize - data.length);
+            frames.push({data: data});
+            x2 += interval;
+        }
+
         data = [];
-        initX = [x1, x1, x2, x2, x1, x1, x2, x2];
-        carteVolume1(data, initX, initY, initZ);
-        carteVolume1(data, [x1, x1, x3+1/9, x3+2/9, x1, x1, x3, x3+1/9], initY, initZ, 'rgb(255,0,0)', 0.2);
-
-        data.push({
-            type: "scatter3d",
-            mode: "lines+text",
-            x: [x3],
-            y: [y1],
-            z: [z1],
-            line: {color: lilac, width: 3, dash: "solid"},
-            text: ["x = a²(1 - (y/b)² - (z/c)²)"],
-            textfont: {color:"rgb(0,0,0)", size:16},
-            opacity: 1
-        });
-        data.push({
-            type: "scatter3d",
-            mode: "lines+text",
-            x: [0],
-            y: [y1],
-            z: [z1],
-            line: {color: lilac, width: 3, dash: "solid"},
-            text: ["x = 0"],
-            textfont: {color:"rgb(0,0,0)", size:16},
-            opacity: 1
-        });
-
+        carteVolume1(data, [x1, x1, x3+1/9, x3+2/9, x1, x1, x3, x3+1/9], initY, initZ, cyan, 0.8);
         addEmptyObjects3d(data, maxDataSize - data.length);
         frames.push({data: data});
-        x2 += interval;
-    }
 
-    data = [];
-    carteVolume1(data, [x1, x1, x3+1/9, x3+2/9, x1, x1, x3, x3+1/9], initY, initZ);
-    addEmptyObjects3d(data, maxDataSize - data.length);
-    frames.push({data: data});
-
-
-    //2nd Volume Elements
-    data = [];
-    carteVolume1(data, [x1, x1, x3+1/9, x3+2/9, x1, x1, x3, x3+1/9], initY, initZ);
-    carteVolume2(data, a, b, c, [], [z1, z2], "rgb(255,0,0,0.6)", 0.2);
-    addEmptyObjects3d(data, maxDataSize - data.length);
-    frames.push({data: data});
-
-    stops.push(frames.length - 1);
-
-    var y3 = b*Math.sin(Math.acos(z2/c));
-    y2 = 0.5;
-    while(y2 < y3){
+        //2nd Volume Elements
         data = [];
-        carteVolume2(data, a, b, c, [], [z1, z2], "rgb(255,0,0,0.6)", 0.2);
-        carteVolume2(data, a, b, c, [y2], [z1, z2]);
+        carteVolume1(data, [x1, x1, x3+1/9, x3+2/9, x1, x1, x3, x3+1/9], initY, initZ, cyan);
+        carteVolume2(data, a, b, c, [], [z1, z2], cyan, 0.2);
         addEmptyObjects3d(data, maxDataSize - data.length);
         frames.push({data: data});
-        y2 += interval;
-    }
 
-    data = [];
-    carteVolume2(data, a, b, c, [], [z1, z2]);
-    addEmptyObjects3d(data, maxDataSize - data.length);
-    frames.push({data: data});
+        stops.push(frames.length - 1);
 
-    stops.push(frames.length - 1);
+        var y3 = b*Math.sin(Math.acos(z2/c));
+        y2 = 0.5;
+        while(y2 < y3){
+            data = [];
+            carteVolume2(data, a, b, c, [], [z1, z2], cyan, 0.2);
+            carteVolume2(data, a, b, c, [y2], [z1, z2], cyan);
 
-    //3rd VE
-    var zPoints = [0];
-    var z3 = 0.5;
-    while (z3 < c) {
-        zPoints.push(z3);
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [a/2],
+                y: [b],
+                z: [c/3],
+                line: {color: black, width: 3, dash: "solid"},
+                text: ["y = b(1 - (z/c)²)^0.5"],
+                textfont: {color:black, size:16},
+                opacity: 1
+            });
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [a/2],
+                y: [0],
+                z: [c/3],
+                line: {color: black, width: 3, dash: "solid"},
+                text: ["y = 0"],
+                textfont: {color:black, size:16},
+                opacity: 1
+            });
+
+            addEmptyObjects3d(data, maxDataSize - data.length);
+            frames.push({data: data});
+            y2 += interval;
+        }
+
         data = [];
-        carteVolume2(data, a, b, c, [], zPoints);
+        carteVolume2(data, a, b, c, [], [z1, z2], cyan);
         addEmptyObjects3d(data, maxDataSize - data.length);
         frames.push({data: data});
-        z3 += interval;
+
+        stops.push(frames.length - 1);
+
+        //3rd VE
+        var zPoints = [0];
+        var z3 = 0.5;
+        while (z3 < c) {
+            zPoints.push(z3);
+            data = [];
+            carteVolume2(data, a, b, c, [], zPoints, cyan);
+
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [a/2],
+                y: [b/2],
+                z: [c],
+                line: {color: black, width: 3, dash: "solid"},
+                text: ["z = c"],
+                textfont: {color:black, size:16},
+                opacity: 1
+            });
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [a/2],
+                y: [b/2],
+                z: [0],
+                line: {color: black, width: 3, dash: "solid"},
+                text: ["z = 0"],
+                textfont: {color:black, size:16},
+                textposition: "bottom",
+                opacity: 1
+            });
+
+            addEmptyObjects3d(data, maxDataSize - data.length);
+            frames.push({data: data});
+            z3 += interval;
+        }
+
+        data = [];
+        data.push(qSphere.gObject(cyan, white, 1));
+        data.push(qSphere.gObjectX(cyan, 1));
+        data.push(qSphere.gObjectY(cyan, 1));
+        data.push(qSphere.gObjectZ(cyan, 1));
+        addEmptyObjects3d(data, maxDataSize - data.length);
+        frames.push({data: data});
+
+        stops.push(frames.length - 1);
+    } else if(activeTab === 'cylin') {
+        maxDataSize = 12;
+        // 1st volume elements
+        x2 = 0.5; y2 = 0.5; z2 = c/3;
+        x1 = 0; y1 = 0; z1 = z2 - interval;
+        x3 = 8*a/9;
+
+        initZ = [z1, z1, z1, z1, z2, z2, z2, z2];
+
+        while (x2 < x3) {
+            data = [];
+            initX = [x1, x1, x2, x2, x1, x1, x2, x2];
+            initY = [y1, y2, y2, y1, y1, y2, y2, y1];
+            carteVolume1(data, initX, initY, initZ, cyan, 0.8);
+            carteVolume1(data, [x1, x1, x3+1/9, x3+2/9, x1, x1, x3, x3+1/9], initY, initZ, cyan, 0.2);
+
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [x3],
+                y: [y1],
+                z: [z1],
+                line: {color: lilac, width: 3, dash: "solid"},
+                text: ["x = a(1 - (y/b)² - (z/c)²)^0.5"],
+                textfont: {color:black, size:16},
+                opacity: 1
+            });
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [x1],
+                y: [y1],
+                z: [z1],
+                line: {color: lilac, width: 3, dash: "solid"},
+                text: ["x = 0"],
+                textfont: {color:black, size:16},
+                opacity: 1
+            });
+
+            addEmptyObjects3d(data, maxDataSize - data.length);
+            frames.push({data: data});
+            x2 += 0.25*Math.sqrt(2);
+            y2 += 0.25*Math.sqrt(2);
+        }
+
+        data = [];
+        carteVolume1(data, [x1, x1, x3+1/9, x3+2/9, x1, x1, x3, x3+1/9], initY, initZ, cyan, 0.8);
+        addEmptyObjects3d(data, maxDataSize - data.length);
+        frames.push({data: data});
+
+        //2nd Volume Elements
+        data = [];
+        carteVolume1(data, [x1, x1, x3+1/9, x3+2/9, x1, x1, x3, x3+1/9], initY, initZ, cyan);
+        carteVolume2(data, a, b, c, [], [z1, z2], cyan, 0.2);
+        addEmptyObjects3d(data, maxDataSize - data.length);
+        frames.push({data: data});
+
+        stops.push(frames.length - 1);
+
+        var y3 = b*Math.sin(Math.acos(z2/c));
+        y2 = 0.5;
+        while(y2 < y3){
+            data = [];
+            carteVolume2(data, a, b, c, [], [z1, z2], cyan, 0.2);
+            carteVolume2(data, a, b, c, [y2], [z1, z2], cyan);
+
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [a/2],
+                y: [b],
+                z: [c/3],
+                line: {color: black, width: 3, dash: "solid"},
+                text: ["y = b(1 - (z/c)²)^0.5"],
+                textfont: {color:black, size:16},
+                opacity: 1
+            });
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [a/2],
+                y: [0],
+                z: [c/3],
+                line: {color: black, width: 3, dash: "solid"},
+                text: ["y = 0"],
+                textfont: {color:black, size:16},
+                opacity: 1
+            });
+
+            addEmptyObjects3d(data, maxDataSize - data.length);
+            frames.push({data: data});
+            y2 += interval;
+        }
+
+        data = [];
+        carteVolume2(data, a, b, c, [], [z1, z2], cyan);
+        addEmptyObjects3d(data, maxDataSize - data.length);
+        frames.push({data: data});
+
+        stops.push(frames.length - 1);
+
+        //3rd VE
+        var zPoints = [0];
+        var z3 = 0.5;
+        while (z3 < c) {
+            zPoints.push(z3);
+            data = [];
+            carteVolume2(data, a, b, c, [], zPoints, cyan);
+
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [a/2],
+                y: [b/2],
+                z: [c],
+                line: {color: black, width: 3, dash: "solid"},
+                text: ["z = c"],
+                textfont: {color:black, size:16},
+                opacity: 1
+            });
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [a/2],
+                y: [b/2],
+                z: [0],
+                line: {color: black, width: 3, dash: "solid"},
+                text: ["z = 0"],
+                textfont: {color:black, size:16},
+                textposition: "bottom",
+                opacity: 1
+            });
+
+            addEmptyObjects3d(data, maxDataSize - data.length);
+            frames.push({data: data});
+            z3 += interval;
+        }
+
+        data = [];
+        data.push(qSphere.gObject(cyan, white, 1));
+        data.push(qSphere.gObjectX(cyan, 1));
+        data.push(qSphere.gObjectY(cyan, 1));
+        data.push(qSphere.gObjectZ(cyan, 1));
+        addEmptyObjects3d(data, maxDataSize - data.length);
+        frames.push({data: data});
+
+        stops.push(frames.length - 1);
+    } else if(activeTab === 'spher') {
+        maxDataSize = 12;
+        // 1st volume elements
+        data = [];
+        x2 = 0.5; y2 = b/3; z2 = c/3;
+        x1 = 0; y1 = y2 - interval; z1 = z2 - interval;
+        x3 = 8*a/9;
+
+        initY = [y1, y2, y2, y1, y1, y2, y2, y1];
+        initZ = [z1, z1, z1, z1, z2, z2, z2, z2];
+
+        while (x2 < x3) {
+            data = [];
+            initX = [x1, x1, x2, x2, x1, x1, x2, x2];
+            carteVolume1(data, initX, initY, initZ, cyan, 0.8);
+            carteVolume1(data, [x1, x1, x3+1/9, x3+2/9, x1, x1, x3, x3+1/9], initY, initZ, cyan, 0.2);
+
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [x3],
+                y: [y1],
+                z: [z1],
+                line: {color: lilac, width: 3, dash: "solid"},
+                text: ["x = a(1 - (y/b)² - (z/c)²)^0.5"],
+                textfont: {color:black, size:16},
+                opacity: 1
+            });
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [x1],
+                y: [y1],
+                z: [z1],
+                line: {color: lilac, width: 3, dash: "solid"},
+                text: ["x = 0"],
+                textfont: {color:black, size:16},
+                opacity: 1
+            });
+
+            addEmptyObjects3d(data, maxDataSize - data.length);
+            frames.push({data: data});
+            x2 += interval;
+        }
+
+        data = [];
+        carteVolume1(data, [x1, x1, x3+1/9, x3+2/9, x1, x1, x3, x3+1/9], initY, initZ, cyan, 0.8);
+        addEmptyObjects3d(data, maxDataSize - data.length);
+        frames.push({data: data});
+
+        //2nd Volume Elements
+        data = [];
+        carteVolume1(data, [x1, x1, x3+1/9, x3+2/9, x1, x1, x3, x3+1/9], initY, initZ, cyan);
+        carteVolume2(data, a, b, c, [], [z1, z2], cyan, 0.2);
+        addEmptyObjects3d(data, maxDataSize - data.length);
+        frames.push({data: data});
+
+        stops.push(frames.length - 1);
+
+        var y3 = b*Math.sin(Math.acos(z2/c));
+        y2 = 0.5;
+        while(y2 < y3){
+            data = [];
+            carteVolume2(data, a, b, c, [], [z1, z2], cyan, 0.2);
+            carteVolume2(data, a, b, c, [y2], [z1, z2], cyan);
+
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [a/2],
+                y: [b],
+                z: [c/3],
+                line: {color: black, width: 3, dash: "solid"},
+                text: ["y = b(1 - (z/c)²)^0.5"],
+                textfont: {color:black, size:16},
+                opacity: 1
+            });
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [a/2],
+                y: [0],
+                z: [c/3],
+                line: {color: black, width: 3, dash: "solid"},
+                text: ["y = 0"],
+                textfont: {color:black, size:16},
+                opacity: 1
+            });
+
+            addEmptyObjects3d(data, maxDataSize - data.length);
+            frames.push({data: data});
+            y2 += interval;
+        }
+
+        data = [];
+        carteVolume2(data, a, b, c, [], [z1, z2], cyan);
+        addEmptyObjects3d(data, maxDataSize - data.length);
+        frames.push({data: data});
+
+        stops.push(frames.length - 1);
+
+        //3rd VE
+        var zPoints = [0];
+        var z3 = 0.5;
+        while (z3 < c) {
+            zPoints.push(z3);
+            data = [];
+            carteVolume2(data, a, b, c, [], zPoints, cyan);
+
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [a/2],
+                y: [b/2],
+                z: [c],
+                line: {color: black, width: 3, dash: "solid"},
+                text: ["z = c"],
+                textfont: {color:black, size:16},
+                opacity: 1
+            });
+            data.push({
+                type: "scatter3d",
+                mode: "lines+text",
+                x: [a/2],
+                y: [b/2],
+                z: [0],
+                line: {color: black, width: 3, dash: "solid"},
+                text: ["z = 0"],
+                textfont: {color:black, size:16},
+                textposition: "bottom",
+                opacity: 1
+            });
+
+            addEmptyObjects3d(data, maxDataSize - data.length);
+            frames.push({data: data});
+            z3 += interval;
+        }
+
+        data = [];
+        data.push(qSphere.gObject(cyan, white, 1));
+        data.push(qSphere.gObjectX(cyan, 1));
+        data.push(qSphere.gObjectY(cyan, 1));
+        data.push(qSphere.gObjectZ(cyan, 1));
+        addEmptyObjects3d(data, maxDataSize - data.length);
+        frames.push({data: data});
+
+        stops.push(frames.length - 1);
     }
-
-    data = [];
-    data.push(qSphere.gObject(black, white, 1));
-    data.push(qSphere.gObjectX(black, 1));
-    data.push(qSphere.gObjectY(black, 1));
-    data.push(qSphere.gObjectZ(black, 1));
-    addEmptyObjects3d(data, maxDataSize - data.length);
-    frames.push({data: data});
-
-    stops.push(frames.length - 1);
 
     return stops;
 }
@@ -222,6 +510,7 @@ function main() {
             $(this).addClass('active');
             $('.tab-pane.active', $(href).parent()).removeClass('active');
             $(href).addClass('active');
+            initPlot();
             return false;
         });
     });
