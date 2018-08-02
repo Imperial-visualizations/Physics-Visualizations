@@ -12,9 +12,9 @@ var layout = {
             center: {x: 0, y: 0, z: -0.15}
         },
         aspectratio: {x:1, y:1, z:1},
-        xaxis: {range: [-3, 3], autorange: false, zeroline: true,},
-        yaxis: {range: [-3, 3], autorange: false, zeroline: true,},
-        zaxis: {range: [-3, 3], autorange: false, zeroline: true,},
+        xaxis: {range: [-9, 9], autorange: false, zeroline: true,},
+        yaxis: {range: [-9, 9], autorange: false, zeroline: true,},
+        zaxis: {range: [-9, 9], autorange: false, zeroline: true,},
     }
 }
 var isBlackText = false;
@@ -42,6 +42,14 @@ function computeFrames(frames){
         Z3 = parseFloat($("#Z3Input").val());
     var stops = [0];
     data = [];
+    blank = {
+            type: "scatter3d",
+            mode: "lines",
+            x:[0,0],
+            y:[0,0],
+            z:[0,0],
+            lines: {width:0}
+        }
     var vec1 = new Line([[0,0,0],[x1,y1,z1]]);
     var vec2 = new Line([[0,0,0],[x2,y2,z2]]);
     var vec3 = new Line([[0,0,0],[x3,y3,z3]]);
@@ -51,6 +59,7 @@ function computeFrames(frames){
     data.push(vec2.arrowHead(magenta,5));
     data.push(vec3.gObject(magenta,5));
     data.push(vec3.arrowHead(magenta,5));
+    data.push(blank)
     frames.push({data: data});
     stops.push(frames.length - 1);
 
@@ -69,19 +78,13 @@ function computeFrames(frames){
         showscale: false
     })
 
-    blank = {
-            type: "scatter3d",
-            mode: "lines",
-            x:[0,0],
-            y:[0,0],
-            z:[0,0],
-            lines: {width:0}
-        }
-    data.push(blank);
-    data.push(blank);
-    data.push(blank);
-    data.push(blank);
-    data.push(blank);
+
+    data.push(vec1.gObject(magenta,5));
+    data.push(vec1.arrowHead(magenta,5));
+    data.push(vec2.gObject(magenta,5));
+    data.push(vec2.arrowHead(magenta,5));
+    data.push(vec3.gObject(magenta,5));
+    data.push(vec3.arrowHead(magenta,5));
     frames.push({data: data});
     stops.push(frames.length - 1);
 
@@ -113,6 +116,7 @@ function computeFrames(frames){
     data.push(new_vec2.arrowHead(green,5))
     data.push(new_vec3.gObject(green,5))
     data.push(new_vec3.arrowHead(green,5))
+    data.push(blank)
     frames.push({data: data});
     stops.push(frames.length - 1);
 
@@ -126,15 +130,20 @@ function computeFrames(frames){
         j : [2, 3, 4, 3, 6, 7, 1, 5, 2, 2, 7, 3],
         k : [1, 2, 0, 7, 5, 6, 0, 1, 1, 5, 2, 2],
         opacity: 0.5,
-        colorscale: [['0', lilac], ['1', "rgb(255,255,255)"]],
+        colorscale: [
+     [0, 'rgb(255, 0, 0)'],
+     [0.5, 'rgb(0, 255, 125)'],
+     [1, 'rgb(0, 0, 255)']
+   ],
         intensity: [0, 0.1, 0.3, 0.5, 0.7, 0.8, 0.9, 1],
         showscale: false
     })
-    data.push(blank);
-    data.push(blank);
-    data.push(blank);
-    data.push(blank);
-    data.push(blank);
+    data.push(new_vec1.gObject(green,5))
+    data.push(new_vec1.arrowHead(green,5))
+    data.push(new_vec2.gObject(green,5))
+    data.push(new_vec2.arrowHead(green,5))
+    data.push(new_vec3.gObject(green,5))
+    data.push(new_vec3.arrowHead(green,5))
     frames.push({data: data});
 
 

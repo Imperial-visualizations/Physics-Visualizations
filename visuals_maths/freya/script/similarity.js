@@ -12,9 +12,9 @@ var layout = {
             center: {x: 0, y: 0, z: -0.15}
         },
         aspectratio: {x:1, y:1, z:1},
-        xaxis: {range: [-7, 7], autorange: false, zeroline: true,},
-        yaxis: {range: [-7, 7], autorange: false, zeroline: true,},
-        zaxis: {range: [-7, 7], autorange: false, zeroline: true,},
+        xaxis: {range: [-20, 20], autorange: false, zeroline: true,},
+        yaxis: {range: [-20, 20], autorange: false, zeroline: true,},
+        zaxis: {range: [-20, 20], autorange: false, zeroline: true,},
     }
 }
 var isBlackText = false;
