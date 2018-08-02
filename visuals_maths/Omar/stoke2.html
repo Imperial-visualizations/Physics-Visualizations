@@ -10,7 +10,7 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
 
 
@@ -25,8 +25,7 @@
                 <h1>Stoke Theorem</h1>
                 <div id='graph' style="width:450px; height:450px;"></div>
 
-            </div>
-            <div class="six columns">
+
                 <h5 style="border-left: solid 5px rgb(219,209,0); padding-left: 8px;">a:</h5><!--Just Text-->
 
                     <!--Slider Display--> <!--Linked with the slider below-->
@@ -41,8 +40,7 @@
                     <input id="xController" class="inputs" type="range" value="5" min="1" max="5" step="0.1"/>
                     <span class="sliderMin">0</span><span class="sliderMax">1</span></label>
                     <!--END Slider-->
-            </div>
-                        <div class="six columns">
+
                 <h5 style="border-left: solid 5px rgb(219,209,0); padding-left: 8px;">a:</h5><!--Just Text-->
 
                     <!--Slider Display--> <!--Linked with the slider below-->
@@ -56,13 +54,13 @@
                 <label class="slider">
                     <input id="yController" class="inputs" type="range" value="5" min="2" max="10" step="1"/>
                     <span class="sliderMin">0</span><span class="sliderMax">1</span></label>
-                    <!--END Slider-->
-                            
+                    <!--END Slider--> </div>
+                <div class = 'six columns'>
                             <h5> Stoke's Theorem:</h5>
                             <p>Stoke's theorem relates the integral of the curl of a vector field, <strong>V</strong>, over an open surface <strong>S</strong> to the path integral of the vector field around a loop <strong>C</strong> defining the surface. </p>
                             <p>Mathematically, this can be written as
                             $$ \iint_{S} \nabla \times \vec{V} \cdot \vec{dS} = \int_c \vec{V} \cdot \vec{dr}$$
-                            Where dS is the surface normal vector and dr is the path tangent vector.                           
+                            Where dS is the surface normal vector and dr is the path tangent vector.
                             </p>
 
             </div>
