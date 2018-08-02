@@ -102,9 +102,10 @@ function update() {
         requestAnimationFrame(update);
         updateSlider();
         //Add stopping functionality here!!!
-        if (animationIndex === stops[0] || animationIndex === stops[1]){
+        if (animationIndex === stops[0] || animationIndex === stops[1] || animationIndex === stops[2] || animationIndex === stops[3]|| animationIndex === stops[4]|| animationIndex === stops[5]|| animationIndex === stops[6]|| animationIndex === stops[7]){
             isPaused = !isPaused;
             document.getElementById(playID).value = "Continue";
+            animationIndex--;
         }
     }
     return;
