@@ -154,13 +154,10 @@ input[type=range]:active::-ms-track {
 input[type=range]::-ms-fill-lower {
   background: #006EAF;
 }
-
-span{
+span.label{
     font-size: 15pt;
     font-weight: lighter;
 }
-
-
 span.sliderMin{
     font-size: 15pt;
     font-weight: lighter;
@@ -414,7 +411,7 @@ nav{
     width:90%;
 }
 
-canvas{
+.shadow{
     box-shadow: 0px 2px 10px 0.5px lightgray;
 }
 
