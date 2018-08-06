@@ -1,11 +1,11 @@
 let hovercolor = "rgba(244, 75, 66, 1)"
 
+
 let title = $("title").html()
 let pagenames = [],
 navbar = $("<div class='navbar' id='navbar'></div>"),
 navtitle = $(`<p>${title}</p>`);
 navtitle.css({"color": "white", "font-size": "3.2vw", "text-align": "center"});
-let logo = $("<img src= 'https://raw.githubusercontent.com/Imperial-visualizations/Physics-Visualizations/master/css/logo.png'>");
 logo.css({"right": "1vw", "top": "1vh", "position": "absolute","height": "6vh"});
 
 let navicon = $("<object type='image/svg+xml' data='https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navicon.svg' class='navicon' id='navicon'></object>");
