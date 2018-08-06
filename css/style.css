@@ -465,7 +465,7 @@ button:hover{
     z-index: 2;
     height: 8vh;
     width: 100vw;
-
+    padding-bottom: 1.5rem;
     position: fixed;
     left: 0;
     top: 0vh;
