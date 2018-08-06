@@ -1,10 +1,9 @@
 let hovercolor = "rgba(244, 75, 66, 1)"
 
-let pages = ["1First-Page.html","2Second-Page.html","3Third-Page.html","4Fourth-Page.html"]
-
+let title = $("title").html()
 let pagenames = [],
 navbar = $("<div class='navbar' id='navbar'></div>"),
-navtitle = $("<p>Title of your html</p>");
+navtitle = $(`<p>${title}</p>`);
 navtitle.css({"color": "white", "font-size": "3.2vw", "text-align": "center"});
 let logo = $("<img src= 'https://raw.githubusercontent.com/Imperial-visualizations/Physics-Visualizations/master/css/logo.png'>");
 logo.css({"right": "1vw", "top": "1vh", "position": "absolute","height": "6vh"});
@@ -30,7 +29,7 @@ for (let i = 0; i < pages.length; i++) {
     pagenames[i]=get_pagename(pages[i])
 }
 
-let newelement = $("<div class='pagetitle' id='Dropdowntitle'>Electrostatics</div>");
+let newelement = $(`<div class='pagetitle' id='Dropdowntitle'>${title}</div>`);
 newelement.css({"height": (60/pages.length).toString()+"vh" , "top": (8).toString()+"vh","font-size": 2.5+"vw","text-align":"center"})
 $("#mousediv").append(newelement);
 
