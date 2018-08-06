@@ -6,7 +6,7 @@ let pagenames = [],
 navbar = $("<div class='navbar' id='navbar'></div>"),
 navtitle = $(`<p>${title}</p>`);
 navtitle.css({"color": "white", "font-size": "3.2vw", "text-align": "center"});
-logo.css({"right": "1vw", "top": "1vh", "position": "absolute","height": "6vh"});
+
 
 let navicon = $("<object type='image/svg+xml' data='https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navicon.svg' class='navicon' id='navicon'></object>");
 let mousediv=$("<div class='mousediv' id='mousediv'></div>");
@@ -14,7 +14,7 @@ let dropdown=$("<div id='dropdown'' class='dropdown'> </div>");
 
 $("body").append(navbar);
 $("#navbar").append(navtitle);
-$("#navbar").append(logo);
+
 $("#navbar").append(navicon);
 $("body").append(mousediv);
 $("body").append(dropdown);
