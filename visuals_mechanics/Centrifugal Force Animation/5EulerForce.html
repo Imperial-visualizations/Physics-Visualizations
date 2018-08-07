@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Euler Force</title>
+    <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+    <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+    <style> body {padding: 5px; margin: 5px;} </style>
+    <link rel="stylesheet" href="rotating-stylesheet.css">
+
+
+  </head>
+
+  <body>
+  <div class="container" style="padding-top: 75px;">
+    <div class="row">
+        <div class="five columns" style="padding-top:100px">
+            <div class="diagram-container" style="position:sticky;top: 50px;" id="animation">
+                <img src="Euler_force.png" class="euler-diagram" />
+                <div class="hide-button button-text">Force Diagram</div>
+            </div>
+        </div>
+      <div class="seven columns" style="position:relative;top: 50px;">
+        <p>The Euler Force (given by \(-m\mathbf{\dot{\omega}} \times \mathbf{r}\)) is the final inertial force. It is rather unique because it <span class="emphasis"> depends on the angular acceleration rather than speed </span>.
+            \(\mathbf{\dot{\omega}}\) doesn't change much for the Earth (the length of a day can be considered constant) and so for us the Euler force is not important. In fact, it turns out that for most
+            cases the <span class="emphasis">Euler force can be neglected </span>and the other two forces will dominate.
+        </p>
+            It is still important to recognise it exists and its relation to the other forces. Looking back at the expressions for the forces
+            <br/>
+            <span style="font-weight: bold">Centrifugal Force:</span> \(-m\boldsymbol{\omega} \times (\boldsymbol{\omega} \times \mathbf{r}\))
+            <br/>
+            <span style="font-weight: bold">Coriolis Force:</span> \(-2m\boldsymbol{\omega} \times \mathbf{v}\)
+            <br/>
+            <span style="font-weight: bold">Euler Force:</span> \(-m\boldsymbol{\dot{\omega}} \times \mathbf{r}\)
+          tells us that Centrifugal and Euler force will always be perpendicular to each other (since \(\boldsymbol{\dot{\omega}}\) and \(\boldsymbol{\omega}\) are parallel) and the Coriolis force is dependent on direction of motion.
+        </p>
+        <p>
+            The diagram to the left has the three different forces labelled with the correct direction. Determine the directions of each force and <span class="emphasis">click on the box to see the correct directions.</span>
+        </p>
+         <p>
+            <span class="warning">Note:</span>
+            <ul class="hint" style="list-style-type: disc">
+                <li>\(\mathbf{v}\) is in the same direction as \(\mathbf{r}\)</li>
+                <li>The rotating frame is <span class="emphasis">decelerating</span></li>
+                <li>Use the right-hand rule to determine direction of \(\boldsymbol{\omega}\)</li>
+                <li>Remember how the negative sign affects the direction of forces</li>
+
+            </ul>
+        </p>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
+  <script language = 'javascript' type = 'text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.min.js"></script>
+  <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+  <script>
+      $(".hide-button").click(function() {
+          $(this).addClass('-hidden');
+      })
+  </script>
+  </body>
+</html>

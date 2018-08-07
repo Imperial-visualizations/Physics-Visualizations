@@ -1,0 +1,40 @@
+.euler-diagram {
+    position: absolute;
+}
+
+.hide-button {
+    width:175px;
+    height: 125px;
+    top: 225px;
+    left: 50px;
+    background-color: #003E74;
+    position: relative;
+    float: left;
+    font-size: x-large;
+    padding-left: 20px;
+    padding-top: 20px;
+    transition: all 0.7s;
+}
+
+.hide-button.-hidden {
+    opacity: 0;
+}
+
+.button-text {
+    font-weight:bolder;
+    color: red;
+}
+
+.warning {
+    font-weight:bold;
+    font-size: large;
+}
+
+.hint {
+    font-style: italic;
+}
+
+.emphasis {
+    color:red;
+    font-size:medium;
+}
