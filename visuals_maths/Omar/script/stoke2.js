@@ -31,14 +31,10 @@ function initPlot() {
     var data = [];
 
     var pringles = new Pringles(4, [1,1,1]);
-    var square = new Square(6);
-    var circle = new Circle(4);
     var cirface = new Sphere(4)
 
     data.push(cirface.gObject(blue, white, 7,"solid", x))
-    data.push(square.gObject(lilac,black))
     data.push(pringles.gObject(black, 7, "solid",x));
-    data.push(circle.gObject(orange))
 
     var arr1 = new Line([[-3,4,0],[-3,1,0]])
     data.push(arr1.arrowHead(magenta,5))
@@ -57,16 +53,8 @@ function updatePlot() {
     var y = parseFloat(document.getElementById('yController').value);
     var cirface = new Sphere(4)
     data.push(cirface.gObject(blue, blue, 7,"solid", x,1,y))
-    var square = new Square(6);
-    data.push(square.gObject())
     var pringles = new Pringles(4, [1,1,1]);
-    var circle = new Circle(4);
-    data.push(circle.gObject(orange))
     data.push(pringles.gObject(black, 7, "solid", 1,y));
-    var arr1 = new Line([[1,5,0],[-3,1,0]])
-    data.push(arr1.arrowHead(magenta,5))
-    var arr2 = new Line([[1,-3,0],[5,1,0]])
-    data.push(arr2.arrowHead(magenta,5))
     Plotly.animate(
         'graph',
         {data: data},

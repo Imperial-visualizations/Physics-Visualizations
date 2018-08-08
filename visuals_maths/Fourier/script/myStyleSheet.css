@@ -1,0 +1,229 @@
+/* ------------------------------------ Slides CSS --------------------------------------- */
+* {box-sizing:border-box}
+
+/* Slideshow container */
+.slideshow-container {
+    max-width: 700px;
+    position: relative;
+    margin: auto;
+    margin-top: -11px;
+}
+
+/* Hide the images by default */
+.mySlides {
+    display: none;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 310px;
+    width: auto;
+    margin-top: -20px;
+    padding: 16px;
+    font-weight: bold;
+    color:white;
+    font-size: 40px;
+    transition: 0.8s ease;
+    border-radius: 0 3px 3px 0;
+}
+
+/* Position the "next button" to the right */
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+/* Caption text */
+.text {
+    color: #f2f2f2;
+    font-size: 15px;
+    padding: 8px 12px;
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+    color: #f2f2f2;
+    font-size: 12px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+    cursor: pointer;
+    height: 10px;
+    width: 10px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+/*
+.active, .dot:hover {
+    background-color: #717171;
+}
+*/
+/* Fading animation */
+.fade {
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+    from {opacity: .4}
+    to {opacity: 1}
+}
+
+@keyframes fade {
+    from {opacity: .4}
+    to {opacity: 1}
+}
+
+
+
+/* ------------------------------------ Modal CSS --------------------------------------- */
+.modal{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modalHeader{
+    padding: 11px;
+    background-color: #003E74;
+    color: white;
+}
+
+.modalHeader h5{
+    margin:0;
+}
+
+.modalBody{
+    padding: 10px 20px;
+}
+
+.modalContent{
+    background-color: #f4f4f4;
+    width: 30%;
+    padding: 15px 10px 10px 10px;
+    box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2), 0 7px 20px 0 rgba(0,0,0,0.17);
+    animation-name: modalOpen;
+    animation-duration: 1s;
+}
+
+.modalContentH{
+    padding: 0px;
+}
+
+#modal_1{
+    margin: 10% auto;
+}
+
+#modal_2{
+    position: relative;
+    top: 42px;
+    left: 600px;
+}
+
+#modal_3{
+    position: relative;
+    top: 42px;
+    left: 725px;
+}
+
+#modal_4{
+    position: relative;
+    top: 42px;
+    left: 850px;
+}
+
+#modal_5{
+    position: relative;
+    top: 84px;
+    left: 580px;
+}
+
+#modal_6{
+    position: relative;
+    top: 84px;
+    left: 725px;
+}
+
+#modal_7{
+    margin: 20% auto;
+}
+
+.closeBtn{
+    margin-top: -15px;
+    color: #ccc;
+    float: right;
+    font-size: 30px;
+}
+
+.closeBtnH{
+    margin-top: -5px;
+}
+
+.closeBtn:hover, .closeBtn:focus{
+    color: #000;
+    text-decoration: none;
+    cursor:pointer;
+}
+
+.closeBtnH:hover, .closeBtnH:focus{
+    color: #fff;
+}
+
+.nextBtn{
+    height: 34px;
+    width: 110px;
+    padding: 0px;
+    position:relative;
+    right: -220px;
+}
+
+@keyframes modalOpen {
+    from{opacity: 0}
+    to{opacity: 1}
+}
+
+/* ------------------------------------ Side nav bar--------------------------------------- */
+.sideNav {
+    width: 164px;
+    height: 50px;
+    position: fixed;
+    z-index: 1;
+    top: 300px;
+    left: 5px;
+    background-color: #003E74;
+    color: white;
+    overflow-x: hidden;
+    padding: 6px 10px;
+    border-radius: 8px 8px;
+}
+
+.sideNav:hover, .sideNav:focus{
+    cursor:pointer;
+    background-color: #006EAF;
+}
+
+.verticalText {
+	transform: rotate(90deg);
+	transform-origin: left top 0;
+}

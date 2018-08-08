@@ -975,4 +975,93 @@ function main() {
     //The First Initialisation - I use 's' rather than 'z' :p
     initFourier("#maths");
 }
+
+/** --------------------------- Function for modal ---------------------------- **/
+/*//Get modal element
+let modal = document.getElementById("guideModal");
+//Get open modal button
+let modalBtn = document.getElementById("modalBtn");
+//Get close modal button
+let closeBtn = document.getElementsByClassName("closeBtn");
+//Get next page button
+let nextBtn = document.getElementsByClassName("nextBtn");
+//Get modals
+let modal_1 = document.getElementById("modal_1");
+let modal_2 = document.getElementById("modal_2");
+
+
+// Listen for open click
+modalBtn.addEventListener("click", openModal);
+//Listen for close click
+closeBtn.addEventListener("click", closeModal);
+//Listen for outside click
+window.addEventListener("click", outsideClick);
+//Listen for next page click
+nextBtn.addEventListener("click", nextModal);*/
+
+//Get modal element
+let modal = document.getElementById("guideModal");
+let modalContent = document.getElementsByClassName("modalContent");
+
+//Listen for outside click
+window.addEventListener("click", outsideClick);
+
+//Function to open modal
+function openModal(){
+    modal.style.display = "block";
+    modalContent[0].style.display = "block";
+    modalContent[1].style.display = "none";
+    modalContent[2].style.display = "none";
+    modalContent[3].style.display = "none";
+    modalContent[4].style.display = "none";
+    modalContent[5].style.display = "none";
+    modalContent[6].style.display = "none";
+}
+
+function scrollToTop(){
+    //Scroll to top
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
+
+function scrollToBottom(){
+    //Scroll to top
+    document.body.scrollTop = 1000; // For Safari
+    document.documentElement.scrollTop = 1000; // For Chrome, Firefox, IE and Opera
+}
+
+//Function to close modal
+function closeModal(){
+    modal.style.display = "none";
+}
+
+//Function to close modal if outside click
+function outsideClick(e){
+    if(e.target === modal){
+        modal.style.display = "none";
+    }
+}
+
+//Function to close current modal and open next modal
+function nextModal(n){
+    modalContent[n].style.display = "none";
+    modalContent[n+1].style.display = "block";
+}
+
+/** --------------------------- Function for hiding after few seconds---------------------------- **/
+/* Function to make fade out instruction tab after window load */
+//Display nav bar
+function navShow(){document.getElementById("instructions").style.left = "30px";}
+navShow();
+
+//Hide nav bar
+function navHide(){document.getElementById("instructions").style.left = "5px";
+    document.getElementById("instructions").style.transitionDuration = "1s";}
+
+
+//Set timeout in milliseconds
+setTimeout(function() {
+    navHide();
+}, 3000);
+
 $(document).ready(main); //Load main when document is ready.

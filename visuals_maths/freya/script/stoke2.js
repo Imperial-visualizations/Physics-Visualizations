@@ -98,7 +98,7 @@ function updatePlot() {
         frames.push({data: data});
     }
 
-    initAnimation("animate", frames, [], layout, 10, [0], true)
+    initAnimation("animate", frames, [], layout, 10, [0,20], true)
 }
 
 function main() {
@@ -107,7 +107,6 @@ function main() {
 
    $("input[type=submit]").click(function () {
         startAnimation();
-        console.log("animating");
     });
 
 }

@@ -5,7 +5,7 @@ var x=numeric.linspace(-L,L,resolution);
 var s =[0,1,2,3,4,5];
 alert(s.reverse());
 
-function initCarte(type){
+function initConvolution(type){
     return;
 }
 

@@ -4,9 +4,9 @@ var layout = {
     hovermode: "closest",
     showlegend: false,
     scene: {
-        xaxis: {range: [-6, 6], zeroline: true, autorange: false,},
-        yaxis: {range: [-6, 6], zeroline: true, autorange: false,},
-        zaxis: {range: [-6, 10], zeroline: true, autorange: false,},
+        xaxis: {range: [-6, 6], zeroline: true, autorange: true,},
+        yaxis: {range: [-6, 6], zeroline: true, autorange: true,},
+        zaxis: {range: [-6, 10], zeroline: true, autorange: true,},
         aspectratio: {x:1, y:1, z:1},
     }
   }
@@ -15,14 +15,9 @@ var layout = {
       Plotly.purge("graph");
 
       var data = [];
-      var a = new Line2d([[1,2],[4,3]]);
+      var a = new Line2d([[2,2],[4,3]]);
       data.push(a.arrowHead(red,3));
       data.push(a)
-      var testObject = {
-        type: 'scatter',
-        x: [1,1],
-        y: [1,4]
-      }
       Plotly.newPlot("graph", data, layout);
       return;
   }

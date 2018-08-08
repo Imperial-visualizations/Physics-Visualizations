@@ -193,6 +193,7 @@ function Point(position) {
  * @param {float} radius - radius of the sphere.
  */
 function Sphere(radius) {
+    var sphere = []
     this.radius = radius;
     var meshSize = 20;
     var theta = numeric.linspace(0, Math.PI, meshSize);
@@ -206,18 +207,40 @@ function Sphere(radius) {
             this.z[i].push(radius*Math.cos(theta[j]));
         }
     }
-    this.gObject = function(color1, color2) {
-        var sphere = {
-            type: "surface",
-            x: this.x,
-            y: this.y,
-            z: this.z,
-            showscale: false,
-            opacity: 0.6,
-            colorscale: [[0.0, color1], [1.0, color2]]
-        }
-        return sphere;
-    }
+    sphere.push({
+        type: "surface",
+        x: this.x,
+        y: this.y,
+        z: this.z,
+        showscale: false,
+        opacity: 0.4,
+        colorscale: [[0.0, orange], [1.0, white]]
+    })
+    var arr1 = new Line([[radius,0,0],[radius+1.5,0,0]])
+    var arr11 = new Line([[radius-1,0,0],[radius+1.5,0,0]])
+    var arr2 = new Line([[-radius,0,0],[-radius-1.5,0,0]])
+    var arr22 = new Line([[-radius+1,0,0],[-radius-1.5,0,0]])
+    var arr3 = new Line([[0,radius,0],[0,radius+1.5,0]])
+    var arr33 = new Line([[0,radius-1,0],[0,radius+1.5,0]])
+    var arr4 = new Line([[0,-radius,0],[0,-radius-1.5,0]])
+    var arr44 = new Line([[0,-radius+1,0],[0,-radius-1.5,0]])
+    var arr5 = new Line([[0,0,radius],[0,0,radius+1.5]])
+    var arr55 = new Line([[0,0,radius-1],[0,0,radius+1.5]])
+    var arr6 = new Line([[0,0,-radius],[0,0,-radius-1.5]])
+    var arr66 = new Line([[0,0,-radius+1],[0,0,-radius-1.5]])
+    sphere.push(arr1.gObject(magenta,7))
+    sphere.push(arr11.arrowHead(magenta,7))
+    sphere.push(arr2.gObject(magenta,7))
+    sphere.push(arr22.arrowHead(magenta,7))
+    sphere.push(arr3.gObject(magenta,7))
+    sphere.push(arr33.arrowHead(magenta,7))
+    sphere.push(arr4.gObject(magenta,7))
+    sphere.push(arr44.arrowHead(magenta,7))
+    sphere.push(arr5.gObject(magenta,7))
+    sphere.push(arr55.arrowHead(magenta,7))
+    sphere.push(arr6.gObject(magenta,7))
+    sphere.push(arr66.arrowHead(magenta,7))
+    return sphere
 }
 /**
  * Represents a cylinder.
