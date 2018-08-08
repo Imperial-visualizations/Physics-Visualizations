@@ -15,22 +15,39 @@
   </head>
 
   <body>
-  <div>
-    <h1 style="padding-top:60px">Coriolis Force</h1>
+  <div id='spinner'>
+    <span class="loading-message">Loading</span>
+    <div>
+        <div class="spinner-mask"></div>
+        <div id="spinner-bar"></div>
+        <div class="spinner-mask"></div>
+    </div>
   </div>
-  <div class="container">
+
+  <div class="container" style="padding-top: 100px;">
     <div class="row">
-      <div class="seven columns" style="position:sticky;top: 50px;" id="animation">
+      <div class="seven columns" style="position:sticky;top: 100px;" id="animation">
         <div id="spin"></div>
       </div>
       <div class="five columns">
-        <p>The Coriolis Force (given by \(-2m\boldsymbol{\omega} \times \mathbf{v}\)) is one of the three inertial forces that arise from a rotating frame.
+        <p>The Coriolis Force (given by \(-2m\boldsymbol{\omega} \times \mathbf{v}\)) is the second of the inertial forces
         </p>
       </div>
     </div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
   <script language = 'javascript' type = 'text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.min.js"></script>
+  <script>
+      let pages = ["1CentrifugalForce.html", "2CoriolisForce.html", "3EulerForce.html"]
+  </script>
   <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+  <script>
+      $('.container').hide();
+
+      $(window).on('load', function() {
+          $('#spinner').hide();
+          $('.container').show();//show container after loading finishes
+      })
+  </script>
   </body>
 </html>

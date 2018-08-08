@@ -16,11 +16,21 @@
   </head>
 
   <body>
+
+  <div id='spinner'>
+    <span class="loading-message">Loading</span>
+    <div>
+        <div class="spinner-mask"></div>
+        <div id="spinner-bar"></div>
+        <div class="spinner-mask"></div>
+    </div>
+  </div>
+
   <div class="container" style="padding-top: 75px;">
     <div class="row">
         <div class="five columns" style="padding-top:100px">
             <div class="diagram-container" style="position:sticky;top: 50px;" id="animation">
-                <img src="Euler_force.png" class="euler-diagram" />
+                <img src="Euler_force.svg" class="euler-diagram"/>
                 <div class="hide-button button-text">Force Diagram</div>
             </div>
         </div>
@@ -56,10 +66,20 @@
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
   <script language = 'javascript' type = 'text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.min.js"></script>
+  <script>
+      let pages = ["1CentrifugalForce.html", "2CoriolisForce.html", "3EulerForce.html"]
+  </script>
   <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
   <script>
       $(".hide-button").click(function() {
           $(this).addClass('-hidden');
+      })
+
+      $('.container').hide();
+
+      $(window).on('load', function() {
+          $('#spinner').hide();
+          $('.container').show();//show container after loading finishes
       })
   </script>
   </body>

@@ -9,26 +9,33 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
     <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+    <link rel="stylesheet" href="rotating-stylesheet.css">
     <style> body {padding: 5px; margin: 5px;} </style>
 
 
   </head>
-  <body>
   <div>
-    <h1 style="padding-top:50px">Centrifugal Force</h1>
+    <div id='spinner'>
+    <span class="loading-message">Loading</span>
+    <div>
+        <div class="spinner-mask"></div>
+        <div id="spinner-bar"></div>
+        <div class="spinner-mask"></div>
+    </div>
   </div>
-  <div class="container">
+
+  <div class="container" style="padding-top: 100px;>
     <div class="row">
       <div class="seven columns" style="position:sticky;top: 50px;" id="animation">
         <div id="spin"></div>
       </div>
       <div class="five columns">
         <p>The Centrifugal Force (given by \(-m\boldsymbol{\omega} \times (\boldsymbol{\omega} \times \mathbf{r}\))) is one of the three inertial forces that arise from a rotating frame.
-           This force <span style="color:red;font-size:medium">always points out away from the Earth </span> and so acts against gravity. In fact it acts as a small correction to it, changing both the magnitude and the direction.
+           This force <span class="emphasis">always points out away from the Earth </span> and so acts against gravity. In fact it acts as a small correction to it, changing both the magnitude and the direction.
         </p>
         <p>
           The Earth's rotation distorts it to an oblate spheroid (like a squashed orange). This causes a plumb-line to appear as if it hangs vertically because the normal to the Earth's surface does not point <span style="font-style:italic;font-size:medium">exactly</span> to the centre of the Earth. As a result, the centrifugal term does not lead
-          to any deviations in the plane of the Earth's surface. Therefore, the centrifugal term <span style="color:red;font-size: medium"> is negligible </span> for many experiments on Earth.
+          to any deviations in the plane of the Earth's surface. Therefore, the centrifugal term <span class="emphasis"> is negligible </span> for many experiments on Earth.
         </p>
         <p>
           However, it is important to know how it can have a meaningful impact. In our case, the rotation speed only leads to a difference in diameter of \(22km\) between the poles and the equator.
@@ -43,7 +50,18 @@
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
   <script language = 'javascript' type = 'text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.min.js"></script>
+  <script>
+      let pages = ["1CentrifugalForce.html", "2CoriolisForce.html", "3EulerForce.html"]
+  </script>
   <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
   <script src="EarthFlattening.js"></script>
+  <script>
+    $('.container').hide();
+
+    $(window).on('load', setTimeout(function() {
+        $('#spinner').hide();
+        $('.container').show();
+    }, 1500))
+  </script>
   </body>
 </html>

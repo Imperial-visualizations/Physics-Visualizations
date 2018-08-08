@@ -62,7 +62,7 @@ function draw() {
 
     background(25);
     if (orbit) {
-        orbitControl();
+        //orbitControl();
     }
     rotateY((2*omega)*millis()/1000);
     if (show) {
