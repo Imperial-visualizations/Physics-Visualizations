@@ -8,7 +8,8 @@ var magenta = "#FF00FF",
     white = "rgb(255,255,255)",
     cyan = "rgb(0,146,146)", //1
     lilac = "rgb(182,109,255)", //2
-    orange = "rgb(219,209,0)"; //3
+    orange = "rgb(219,209,0)", //3
+    orange2 = "rgb(240,150,0)"; //3
 
 // Plot Utilities:
 /**
@@ -109,6 +110,36 @@ function c2p(x,y) {
     return [rho, phi];
 }
 
+
+function addText(data, textPosition=[0,0,0], text="", color="rgb(0,0,0)", size=16){
+    if (textPosition.length === 3) {
+        data.push({
+            type: "scatter3d",
+            mode: "lines+text",
+            x: [textPosition[0]],
+            y: [textPosition[1]],
+            z: [textPosition[2]],
+            line: {width: 0},
+            text: [text],
+            textfont: {color:color, size:size},
+            opacity: 1
+        });
+    } else if (textPosition.length === 2) {
+        data.push({
+            type: "scatter",
+            mode: "lines+text",
+            x: [textPosition[0]],
+            y: [textPosition[1]],
+            line: {width: 0},
+            text: [text],
+            textfont: {color:color, size:size},
+            opacity: 1
+        });
+    } else {
+        return 1;
+    }
+    return 0;
+}
 
 ///Shape Objects:
 //3D Objects:
