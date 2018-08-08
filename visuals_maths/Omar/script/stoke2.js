@@ -36,10 +36,6 @@ function initPlot() {
     data.push(cirface.gObject(blue, white, 7,"solid", x))
     data.push(pringles.gObject(black, 7, "solid",x));
 
-    var arr1 = new Line([[-3,4,0],[-3,1,0]])
-    data.push(arr1.arrowHead(magenta,5))
-    var arr2 = new Line([[5,-2,0],[5,1,0]])
-    data.push(arr2.arrowHead(magenta,5))
 
     Plotly.newPlot("graph", data, layout);
     return;
