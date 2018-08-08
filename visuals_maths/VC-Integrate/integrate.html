@@ -2,15 +2,40 @@
 <html>
 <head>
     <title>3D Integration</title>
-    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="../styles/guidance.css">
+    <script src="../lib/plotly-latest.min.js"></script>
+    <script src="../lib/jquery-3.3.1.min.js"></script>
+    <script src="../lib/numeric-1.2.6.min.js"></script>
+    <script src="../lib/math.min.js"></script>
+    <script src="../lib/MathJax.js"></script>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
 <body>
+    <div class="guide">
+        Instructions for use
+    </div>
+
+    <div class="guideModal">
+        <div class="modalContent">
+            <span class="closeBtn">&times;</span>
+            <h5 id="guideHeader">Visualisation Guidance</h5>
+            <p id="modal_0">
+                This is the guidance for the #name visualisation.
+            </p>
+            <p id="modal_1" hidden>
+                This is modal 1.
+            </p>
+            <p id="modal_2" hidden>
+                This is modal 2.
+            </p>
+            <p id="modal_3" hidden>
+                Have fun!
+            </p>
+            <button class="nextBtn">Continue</button>
+        </div>
+    </div>
+
     <div class="container">
         <div class="row">
             <div class="six columns">
@@ -65,6 +90,7 @@
             </div>
         </div>
     </div>
+    <script src="../util/guidance.js"></script>
     <script src="../util/objects.js"></script>
     <script src="../util/animate.js"></script>
     <script src="script/integrateObj.js"></script>
