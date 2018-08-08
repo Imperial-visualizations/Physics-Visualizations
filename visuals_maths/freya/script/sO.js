@@ -120,6 +120,7 @@ function Sphere(radius) {
             opacity: 0.6,
             colorscale: [[0.0, color1], [1.0, color2]]
         }
+        console.log(sphere)
         return sphere;
     }
 }

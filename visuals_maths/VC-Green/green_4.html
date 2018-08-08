@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>VC: Green's Theorem 2</title>
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
+    <link rel="stylesheet" href="../util/navigation.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+    <div class="leftnav">◀</div>
+    <div class="container">
+        <h1>Curl</h1>
+        <div class="row">
+            <!-- Graph -->
+            <div class="five columns">
+                <div id='graph' style="width:450px; height:450px;"></div>
+                <br>
+                <input id="animate" class="button-primary" type="submit" value="Play">
+            </div>
+
+            <!--Bottons-->
+            <div class="seven columns">
+                <div id="curl">
+                    <p>
+                        The curl of a vector field, \(\mathbf{A}\) is:
+                        \[
+                            \text{curl}\,\mathbf{A} = \nabla \times \mathbf{A}
+                        \]
+                        <b>N.B.</b> The curl can be thought of as a measure of "spinning per unit area".
+
+                        <br><br>
+
+                        For \(\mathbf{A} = (P,Q,R) \), we have the following definition:
+                        \[
+                            \iint_D (\nabla \times \mathbf{A}) \cdot \mathbf{\hat{k}} \, dS = \iint_D \Big( \frac{\partial Q}{\partial x}
+                                (x,\,y)-\frac{\partial P}{\partial y}(x,\,y) \Big) \, dxdy
+                        \]
+                        This is known as <b>microscopic circulation</b>.
+                    </p>
+                    <p>
+                        <b>N.B.</b> Within the integrand, \( \mathbf{\hat{k}}\) is the normal vector for the vector field
+                        and its direction is determined by the orientation of the closed curve, \(C\).
+                        Commonly known as the <b>right hand rule</b>. A pictoral representation is shown below:
+                    </p>
+                </div>
+                <center><img src=asset/rhr_thumb.png width=250 height=230></center>
+            </div>
+        </div>
+    </div>
+    <script src=script/anima.js></script>
+    <script src=../util/objects.js></script>
+    <script src=script/green5.js></script>
+</body>
+
+</html>

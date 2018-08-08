@@ -135,17 +135,25 @@ function blank(data1, number){
 
 function getCubes(frames){
 
+    //var sep = numeric.linspace(0,0.5,20)
+
+
     var stops = [0]
     var Cube1 = new cubeAndArrow(0,0,0,black)
     var data = new blank(Cube1, 91)
     frames.push({data: data});
     stops.push(frames.length - 1);
 
-    var Cube2 = new cubeAndArrow(1.5,0,0,red)
+
+    //for (var i =0; i<20; ++i){
+
+    var Cube2 = new cubeAndArrow(1.5-sep[i],0,0,red)
     var Cube2 = Cube1.concat(Cube2)
     var data = new blank(Cube2, 78)
     frames.push({data: data});
     stops.push(frames.length - 1);
+
+
 
 
 
