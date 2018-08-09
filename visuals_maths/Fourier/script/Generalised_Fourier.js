@@ -7,14 +7,14 @@ var layout = {
     yaxis: {range: [-2,2], zeroline: true, title: "y"},
     aspectratio: {x:1, y:1}
 };
-//resolution
+//resolution, number of points on the graph shown
 var resolution=10000;
 // slider for N
 // slider for L
 var L = parseFloat(document.getElementById('LController').value);
 var xOriginal = numeric.linspace(-L,L,resolution);
 
-// how well the integration will be
+// kMax is an integer, the larger it is the better the numerical integration
 var kMax=100;
 var h=5.0/kMax;
 
@@ -36,16 +36,16 @@ function y_values(x_range){
     for (var i in x_range){
         x=x_range[i];
         y.push(eval(equation));
-        //y.push((x_range[i])**3);
+        //eval turns the string specified by the user into a command
     }
-    //console.log('y should be '+y);
-    //console.log(eval(equation));
     return y;
 }
 
 var yOriginal = y_values(xOriginal);
+//Computes and stores the y values of the specified function
 
 function integration_simps(x,y){
+    //Integration by Simpson's rule
     var a = x[0];
     var b = x[x.length-1];
     var N = x.length;
@@ -64,6 +64,7 @@ function integration_simps(x,y){
 }
 
 function integration_ultra(x,y,h,kMax){
+    //Numerical integration by tanh-sinh quadrature, at the moment only calculates integrals from -1 to +1, needs changing
     var omega_k = [];
     var x_k = [];
     for (var i = -kMax; i<kMax; ++i){
@@ -71,25 +72,22 @@ function integration_ultra(x,y,h,kMax){
         omega_k.push(0.5*h*Math.PI*Math.cosh(i*h)/(cosh(0.5*Math.PI*Math.sinh(i*h)))**2);
     }
     var f_of_xk = y_values(x_k);
-    var A = [];
+    var A = 0;
     for (var i = 0; i<x_k.length; ++i){
-        A.push(omega_k[i]*f_of_xk[i]);
+        A += (omega_k[i]*f_of_xk[i]);
     }
-    A=adding(A);
+    console.log(A)
     return A;
 }
 
 function integration(x,y){
+    //Integration by Riemann sum
     var A=0;
     for (var i =0; i<x.length-1; i++){
         A+=(x[i+1]-x[i])*(y[i+1]+y[i])/2;
     }
-    //console.log('x is '+ x +' and y is '+y);
-    //console.log('A is '+A);
     return A;
 }
-
-
 
 function initFourier(){
     Plotly.purge("graph");
@@ -104,26 +102,21 @@ function initFourier(){
 
 
 function a_n(input_function_values, n, x){
-    //console.log("input function is "+input_function_values);
-
-    var N = parseFloat(document.getElementById('NController').value);
     var L = parseFloat(document.getElementById('LController').value);
-
+    //Updates L so that we can calculate a_n for all necessary n
 
     var integrand = [];
     for (var i = 0; i<input_function_values.length; ++i){
-        //console.log('n is '+n);
         integrand.push(input_function_values[i]*Math.cos(n*Math.PI*x[i]/L));
+        //For a given n, making a list of values to be integrated
     }
     an=integration_simps(x, integrand)/L;
-    //console.log("integrand is"+integrand);
-    //console.log('an is '+an +'for n = '+ n);
+    //Integrating those values and divide by L by how we've defined a_n
     return an;
 }
 
 function b_n(input_function_values, n, x){
-
-    var N = parseFloat(document.getElementById('NController').value);
+    //Same as in an but for bn (sin as opposed to cos)
     var L = parseFloat(document.getElementById('LController').value);
 
     var integrand = [];
@@ -136,19 +129,19 @@ function b_n(input_function_values, n, x){
 }
 
 function Fourier_coefficient(input_function_values, x){
+    //For all n from 0 to N, calculates a_n and b_n
     var N = parseFloat(document.getElementById('NController').value);
-    var L = parseFloat(document.getElementById('LController').value);
 
-    var an= [];
+    var an= [];//List of all terms that will be generated
     var bn= [];
     var alphan = [];
     var thetan = [];
     for (var i = 0; i < N ; i++){
-        var a= a_n(input_function_values, i, x);
-        console.log('iiiiiiiii is '+i);
+        var a = a_n(input_function_values, i, x);
         var b = b_n(input_function_values, i, x);
         an.push(a);
         bn.push(b);
+        //Alpha and theta are a different way of constructing the function, can use these instead
         alphan.push(Math.sqrt(a**2+b**2));
         if (a===0){
             if (b>=0){
@@ -162,35 +155,38 @@ function Fourier_coefficient(input_function_values, x){
     }
     return [an, bn, alphan, thetan];
 }
+//Above code was for calculating components, below is for reconstructing the function for given N.
 
 function Trig_summation_x (an, bn, x_value){
-
+    //For a certain x_value in the function domain, uses the values of a_n and b_n
+     //up to a given N, to reconstruct the function at that particular x point
     var N = parseFloat(document.getElementById('NController').value);
     var L = parseFloat(document.getElementById('LController').value);
 
-    var single_y = [an[0]/2];
-    for (var i = 1; i < N; i++){
-        single_y.push(an[i]*Math.cos(i*Math.PI*x_value/L)+bn[i]*Math.sin(i*Math.PI*x_value/L));
+    var single_y = [an[0]/2];//Average function value term
+    for (var n = 1; n < N; n++){
+        single_y.push(an[n]*Math.cos(n*Math.PI*x_value/L)+bn[n]*Math.sin(n*Math.PI*x_value/L));//
     }
-
     return adding(single_y);
 }
 
-function Trig_summation_n (an, bn, x, N){
+function Trig_summation_n (an, bn, x){
+    //Calls up trig_summation_x for every x value, so we reconstruct the function
+    //at every point in the domain, returns the y values in order
     var set_y = [];
     for (var i = 0; i < x.length; ++i){
-        set_y.push(Trig_summation_x(an, bn, x[i], N));
+        set_y.push(Trig_summation_x(an, bn, x[i]));
     }
     return set_y;
 }
+//The above was to reconstruct the function, below is to actually plot
 
 function computePlot(x,y){
-
-    var N = parseFloat(document.getElementById('NController').value);
-    var L = parseFloat(document.getElementById('LController').value);
-
+    //Retrieves an,bn, then uses those to find the reconstructed function y values
+    //then plots this
     [an, bn, alphan, thetan] = Fourier_coefficient(y,x);
-    y2 = Trig_summation_n (an, bn, x, N);
+    y2 = Trig_summation_n (an, bn, x);
+
     var data=[
          {
             type:"scatter",
@@ -200,17 +196,13 @@ function computePlot(x,y){
             line:{color:"rgb(0,225,0)", width:3, dash: "dashed"},
          },
     ];
-
     return data;
 }
 
 function computePlot2 (x,y){
-
-    var N = parseFloat(document.getElementById('NController').value);
-    var L = parseFloat(document.getElementById('LController').value);
-
+    //Finds the Fourier coefficients and then plots them as a function of n
     [an, bn, alphan, thetan] = Fourier_coefficient(y, x);
-    var n=[];
+    var n = [];
     for (var i = 0; i<N ; ++i){
         n.push(i);
     }
@@ -223,26 +215,26 @@ function computePlot2 (x,y){
             line:{color:"rgb(0,225,0)", width:3, dash: "dashed"},
          },
     ];
-
     return data;
 }
 
 function updateFunction(){
+    //Looks at equation the user typed in and retrieves this
     equation = document.getElementById("aInput").value;
     return equation;
 }
 
-// convert string to numbers
 function converting(string){
+    //Turns the equation written by the user from a string into a command
     f = eval(string);
     return f;
 }
 
-/** updates the plot according to the slider controls. */
+/* updates the plot according to the slider controls. */
 // Plotly.animate does not support bar charts, so need to reinitialize the Cartesian every time.
+
 function updatePlot() {
     var data;
-
     var L = parseFloat(document.getElementById('LController').value);
     var xOriginal = numeric.linspace(-L,L,resolution);
     // NB: updates according to the active tab
