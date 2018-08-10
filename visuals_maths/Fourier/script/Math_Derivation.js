@@ -278,5 +278,6 @@ function main() {
         }
 
     })
+    initGuidance([[30, 30],[15, 19], [38, 10], [30,30]]);
 }
 $(document).ready(main); //Load main when document is ready.

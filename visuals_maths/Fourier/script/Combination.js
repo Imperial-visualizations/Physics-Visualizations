@@ -438,5 +438,9 @@ function main() {
 */
     //The First Initialisation - I use 's' rather than 'z' :p
     initFourier();
+    initGuidance([[30, 30],[48, 7],[51,62],[30,30]]);
 }
+
+//——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
 $(document).ready(main); //Load main when document is ready.
