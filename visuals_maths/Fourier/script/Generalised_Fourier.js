@@ -17,7 +17,7 @@ var xOriginal = numeric.linspace(-L,L,resolution);
 // kMax is an integer, the larger it is the better the numerical integration
 var kMax=1000;
 var h=5.0/kMax;
-<<<<<<< Updated upstream
+//<<<<<<< Updated upstream
 //Common functions:
 sin = Math.sin;
 cos = Math.cos;
@@ -31,18 +31,18 @@ arcsin = Math.arcsin;
 arccos = Math.arccos;
 arctan = Math.arctan;
 arcsinh = Math.arcsinh;
-accosh = Math.arccosh
+//accosh = Math.arccosh
 
 
 
 
-=======
+//=======
 var sin=Math.sin;
 var cos=Math.cos;
 var tan=Math.tan;
 var arctan=Math.atan;
 var log=Math.log;
->>>>>>> Stashed changes
+//>>>>>>> Stashed changes
 
 x=2;
 var equation="x**2";
@@ -149,13 +149,13 @@ function integration(x,y){
     return A;
 }
 
-<<<<<<< Updated upstream
-=======
+//<<<<<<< Updated upstream
+//=======
 function sin(x){
     return Math.sin(x);
 }
 
->>>>>>> Stashed changes
+//>>>>>>> Stashed changes
 function initFourier(){
     Plotly.purge("graph");
     //Plotly.purge("graph2");
@@ -358,5 +358,6 @@ function main() {
 
     //The First Initialisation - I use 's' rather than 'z' :p
     initFourier();
+    initGuidance([[30, 30],[48, 7],[51,42],[50,70],[30,30]]);
 }
 $(document).ready(main); //Load main when document is ready.
