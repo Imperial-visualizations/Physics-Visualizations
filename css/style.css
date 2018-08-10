@@ -52,7 +52,9 @@ UI Styles
 /*
 Slider Styles
 */
-
+.container{
+    padding-top: 65px;
+}
 .sliderContainer{
     margin:0;
     width:100%;
