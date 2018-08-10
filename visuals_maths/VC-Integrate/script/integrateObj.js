@@ -14,7 +14,6 @@ function carteVolume1(data, verticesX, verticesY, verticesZ, color="rgb(0,0,0)",
     });
     return 1;
 }
-
 function carteVolume2(
     data,
     a, b, c, verticesY=[], verticesZ=[],
@@ -310,6 +309,122 @@ function spherVolume(
         surfaceaxis: 2,
         opacity: opacity
     });
+    return 1;
+}
+function spherVolume2(
+    data,
+    a, b, c, verticesY=[], verticesZ=[],
+    color="rgb(0,0,0)", opacity=1,
+    colorY=color.slice(), opacityY=opacity,
+    colorS=color.slice(), opacityS=opacity,
+    colorX=color.slice(), opacityX=opacity) {
+    var zLength = verticesZ.length;
+    var meshSize = 20;
+    var zeroes = [];
+    var phi, phiTemp, sinTheta = 0;
+    var x = [], y = [], z = [];
+    if (verticesY.length === 0) {
+        phi = numeric.linspace(0, 0.5*Math.PI, meshSize);
+    } else {
+        phiTemp = Math.asin(verticesY[0]/(b*Math.sin(Math.acos(verticesZ[0]/c))));
+        meshSize = 20*Math.ceil(2*phiTemp/Math.PI);
+        phi = numeric.linspace(0, phiTemp, meshSize);
+    }
+
+    for(var j = 0, n = zLength; j < n; ++j) {
+        x[j] = [], y[j] = [], z[j] = [];
+        for(var i = 0; i < meshSize; ++i) {
+            sinTheta = Math.sin(Math.acos(verticesZ[j]/c));
+            x[j].push(a*Math.cos(phi[i])*sinTheta);
+            y[j].push(b*Math.sin(phi[i])*sinTheta);
+            z[j].push(verticesZ[j]);
+        }
+        x[j].push(0);
+        y[j].push(0);
+        z[j].push(0);
+        zeroes.push(0, 0);
+    }
+
+    var zTemp1 = verticesZ.slice(), zTemp2 = verticesZ.slice();
+    zTemp2.reverse();
+    var zTemp = zTemp2.concat(zTemp1);
+    var xTemp = zeroes.slice(), yTemp = zeroes.slice();
+    console.log(x, y);
+    for (var i=0; i < zLength; ++i){
+        xTemp[i + 1] = x[i][0];
+        yTemp[i + 1] = y[i][meshSize - 1];
+    }
+    console.log(zLength, zTemp, yTemp);
+    data.push({// x = 0 plane
+        type: "scatter3d",
+        mode: "lines",
+        x: zeroes,
+        y: yTemp,
+        z: zTemp,
+        line: {color: colorX, width: 1},
+        surfaceaxis: 0,
+        opacity: opacityX
+    });
+    data.push({ // y = 0 plane
+        type: "scatter3d",
+        mode: "lines",
+        x: xTemp,
+        y: zeroes,
+        z: zTemp,
+        line: {color: colorY, width: 1},
+        surfaceaxis: 1,
+        opacity: opacityY
+    });
+    data.push({//Curved surface
+        type: "surface",
+        x: x,
+        y: y,
+        z: z,
+        showscale: false,
+        opacity: opacityS,
+        colorscale: [[0.0, colorS], [1.0, colorS]]
+    });
+
+    //TODO: functions for bottom and top
+
+    xTemp = x[0].slice();
+    yTemp = y[0].slice();
+    zTemp = z[0].slice();
+
+    xTemp.push(0, 0);
+    yTemp.push(verticesY[0], 0);
+    zTemp.push(verticesZ[0], verticesZ[0]);
+
+    data.push({//Bottom lid
+        type: "scatter3d",
+        mode: "lines",
+        x: xTemp,
+        y: yTemp,
+        z: zTemp,
+        line: {color: color, width: 1},
+        surfaceaxis: 2,
+        opacity: opacity
+    });
+
+    xTemp = x[zLength - 1].slice();
+    yTemp = y[zLength - 1].slice();
+    zTemp = z[zLength - 1].slice();
+
+    xTemp.push(0,0);
+    yTemp.push(verticesY[0], 0);
+    zTemp.push(verticesZ[zLength - 1], verticesZ[zLength - 1]);
+
+    data.push({//Top lid
+        type: "scatter3d",
+        mode: "lines",
+        x: xTemp,
+        y: yTemp,
+        z: zTemp,
+        line: {color: color, width: 1},
+        surfaceaxis: 2,
+        opacity: opacity
+    });
+
     return 1;
 }
 

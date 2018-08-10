@@ -427,7 +427,7 @@ function computeFrames(frames, extra){
         while(y2 < y3){
             data = [];
             spherVolume(data, a, b, c, [y2], [z1, z2], cyan);
-            carteVolume2(data, a, b, c, [], [z1, z2], cyan, 0.2, orange, 1, cyan, 0.2, orange2, 1);
+            spherVolume2(data, a, b, c, [], [z1, z2], cyan, 0.2, orange, 1, cyan, 0.2, orange2, 1);
             limitSurface3(data, a, b, c, y2, [z1, z2])
 
             addText(data, [a, 0, z1], "φ = 0", orange);
