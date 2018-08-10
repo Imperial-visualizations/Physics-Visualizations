@@ -31,7 +31,7 @@ arcsin = Math.arcsin;
 arccos = Math.arccos;
 arctan = Math.arctan;
 arcsinh = Math.arcsinh;
-//accosh = Math.arccosh
+//arccosh = Math.arccosh
 
 
 
@@ -100,7 +100,7 @@ function integration_simps(x,y){
     var N = x.length;
     var h = (b-a)/N;
     var A=0;
-    for (var i=1; i<x.length-1; ++i){
+    for (var i=1; i<x.length; ++i){
         if (i%2===0){
             A+=2*y[i];
         } else {
