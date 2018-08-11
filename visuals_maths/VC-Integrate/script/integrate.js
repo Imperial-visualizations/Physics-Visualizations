@@ -550,6 +550,6 @@ function main() {
     });
 
     initPlot();
-    initGuidance([[30, 30],[10, 10], [20, 20], [40,40]]);
+    initGuidance();
 }
 $(document).ready(main);
