@@ -17,6 +17,8 @@ function scrollToBottom(){
 function openModal(){
     modal.style.display = "block";
     modalContent.style.display = "block";
+    $(".nextBtn").html("Next");
+    $(".backBtn").prop("disabled",true);
 }
 function closeModal(){
     modal.style.display = "none";
@@ -29,18 +31,41 @@ function closeModal(){
 }
 
 function nextModal(){
+    if (currentSlideNumber < maxSlideNumber){
+        $("#guideHeader").hide();
+        $(".backBtn").prop("disabled",false);
+
+        $( "#modal_" +  currentSlideNumber).hide();
+        $( "#modal_" +  (++currentSlideNumber) ).show();
+        setPosition();
+
+        modalContent.style.animation = 'none';
+        modalContent.offsetHeight; /* trigger reanimation */
+        modalContent.style.animation = null;
+
+        if (currentSlideNumber == maxSlideNumber){
+            $(".nextBtn").html("Close");
+        }
+    } else {
+        closeModal();
+    }
+
+}
+
+function backModal(){
     $("#guideHeader").hide();
+    $(".nextBtn").html("Next");
 
     $( "#modal_" +  currentSlideNumber).hide();
-    $( "#modal_" +  (++currentSlideNumber) ).show();
+    $( "#modal_" +  (--currentSlideNumber) ).show();
     setPosition();
 
     modalContent.style.animation = 'none';
     modalContent.offsetHeight; /* trigger reanimation */
     modalContent.style.animation = null;
 
-    if (currentSlideNumber + 1 == maxSlideNumber){
-        $( ".nextBtn").hide();
+    if (currentSlideNumber == 0){
+        $(".backBtn").prop("disabled",true);
     }
 }
 
@@ -55,7 +80,7 @@ function setPosition() {
 /*Initialisation*/
 function initGuidance(positions=[[30, 30]]) {
     slidePositions = positions;
-    maxSlideNumber = positions.length;
+    maxSlideNumber = positions.length - 1;
     setPosition();
 
     $(".guide").each(function () {
@@ -63,8 +88,11 @@ function initGuidance(positions=[[30, 30]]) {
         $(this).mouseleave(function () {guidanceHide();});
         $(this).click(function() {openModal(); scrollToTop();});
     });
+
     $(".closeBtn").click(function () {closeModal();});
+
     $(".nextBtn").click(function () {nextModal();});
+    $(".backBtn").click(function () {backModal();});
 
     window.addEventListener("click", function (e) {if(e.target === modal){closeModal();}});
 

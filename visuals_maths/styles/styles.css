@@ -40,7 +40,6 @@ EDITED
 .container {
   position: relative;
   width: 100%;
-  max-width: 960px;
   margin: 0 auto;
   padding: 0 20px;
   box-sizing: border-box; }
@@ -1193,8 +1192,6 @@ ul.tab-nav li a.active.button:focus {
   display: block;
     border-bottom: 1px solid #bbb;
 }
-
-
 
 @media (min-width: 1500px) {
   .container {

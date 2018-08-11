@@ -1,23 +1,5 @@
 * {box-sizing:border-box}
 
-/* Fading animation */
-.fade {
-    -webkit-animation-name: fade;
-    -webkit-animation-duration: 1.5s;
-    animation-name: fade;
-    animation-duration: 1.5s;
-}
-
-@-webkit-keyframes fade {
-    from {opacity: .4}
-    to {opacity: 1}
-}
-
-@keyframes fade {
-    from {opacity: .4}
-    to {opacity: 1}
-}
-
 .guideModal{
     display: none;
     position: fixed;
@@ -28,6 +10,15 @@
     width: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
+}
+
+.guideTest{
+    background-color: #f4f4f4;
+    opacity: 0.8;
+    left: 0;
+    top: 0;
+    height: 400px;
+    width: 400px;
 }
 
 .modalContent{
@@ -41,25 +32,20 @@
     top: 30vh;
 }
 
-.closeBtn{
-    margin-top: -15px;
-    color: #ccc;
-    float: right;
-    font-size: 30px;
-}
-
-.closeBtn:hover, .closeBtn:focus{
-    color: #000;
-    text-decoration: none;
-    cursor:pointer;
-}
-
 .nextBtn{
-    height: 34px;
-    width: 110px;
-    padding: 0px;
+    background-color: #f4f4f4;
+    width: 100px;
     position:relative;
-    right: -220px;
+    left: 81vw;
+    top: 80vh;
+}
+
+.backBtn{
+    background-color: #f4f4f4;
+    width: 100px;
+    position:relative;
+    left: 80vw;
+    top: 80vh;
 }
 
 @keyframes modalOpen {
