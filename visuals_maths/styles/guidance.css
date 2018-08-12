@@ -12,8 +12,9 @@
     background-color: transparent;
 }
 
-.shade{
-    opacity: 0.2;
+.whitened{
+    animation: hideFeature 1s;
+    opacity: 0.1;
 }
 
 .guideTest{
@@ -40,16 +41,18 @@
 
 .nextBtn{
     background-color: #f4f4f4;
-    width: 100px;
+    width: 110px;
     position:relative;
+    animation: modalOpen 1s;
     left: 81vw;
     top: 80vh;
 }
 
 .backBtn{
     background-color: #f4f4f4;
-    width: 100px;
+    width: 110px;
     position:relative;
+    animation: modalOpen 1s;
     left: 80vw;
     top: 80vh;
 }
@@ -57,6 +60,11 @@
 @keyframes modalOpen {
     from{opacity: 0}
     to{opacity: 1}
+}
+
+@keyframes hideFeature {
+    from{opacity: 1}
+    to{opacity: 0.1}
 }
 
 /* Guidance */

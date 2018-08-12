@@ -8,13 +8,11 @@ const maxSlideNumber = 3;
 function openModal(){
     modal.style.display = "block";
     modalContent.style.display = "block";
-    $(".nextBtn").html("Next");
+    $(".nextBtn").html("Next  ▶");
     $(".backBtn").prop("disabled",true);
     $(".guide").hide();
 
-    $("#animate").addClass("shade");
-    $("#graph").addClass("shade");
-    $(".tab-nav").addClass("shade");
+    $("#graph, ul, h1, input, label").addClass("whitened"); //make sure you don't add whiten to div's and containers
     return 0;
 }
 
@@ -22,11 +20,10 @@ function closeModal(){
     modal.style.display = "none";
     $( "#modal_" +  (currentSlideNumber) ).hide();
     $( "#modal_0" ).show();
-    $( ".nextBtn").show();
     currentSlideNumber = 0;
     $(".guide").show();
 
-    $(".tab-nav").removeClass("shade");
+    $("div, ul, h1, input, label").removeClass("whitened");
     return 0;
 }
 
@@ -38,7 +35,7 @@ function triggerAnimation() {
 }
 
 function nextModal(){
-    $("#animate").removeClass("shade");
+    $("#animate").removeClass("whitened");
     if (currentSlideNumber < maxSlideNumber){
         $(".backBtn").prop("disabled",false);
 
@@ -46,7 +43,7 @@ function nextModal(){
         $( "#modal_" +  (++currentSlideNumber) ).show();
 
         if (currentSlideNumber == maxSlideNumber){
-            $(".nextBtn").html("Close");
+            $(".nextBtn").html("Close ×");
         }
     } else {
         closeModal();
@@ -55,7 +52,7 @@ function nextModal(){
 }
 
 function backModal(){
-    $(".nextBtn").html("Next");
+    $(".nextBtn").html("Next  ▶");
 
     $( "#modal_" +  currentSlideNumber).hide();
     $( "#modal_" +  (--currentSlideNumber) ).show();
