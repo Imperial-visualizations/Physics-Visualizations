@@ -10,14 +10,23 @@ function openModal(){
     modalContent.style.display = "block";
     $(".nextBtn").html("Next");
     $(".backBtn").prop("disabled",true);
+    $(".guide").hide();
+
+    $("#animate").addClass("shade");
+    $("#graph").addClass("shade");
+    $(".tab-nav").addClass("shade");
     return 0;
 }
+
 function closeModal(){
     modal.style.display = "none";
     $( "#modal_" +  (currentSlideNumber) ).hide();
     $( "#modal_0" ).show();
     $( ".nextBtn").show();
     currentSlideNumber = 0;
+    $(".guide").show();
+
+    $(".tab-nav").removeClass("shade");
     return 0;
 }
 
@@ -29,6 +38,7 @@ function triggerAnimation() {
 }
 
 function nextModal(){
+    $("#animate").removeClass("shade");
     if (currentSlideNumber < maxSlideNumber){
         $(".backBtn").prop("disabled",false);
 
@@ -66,8 +76,6 @@ function initGuidance() {
         $(this).mouseleave(function () {guidanceHide();});
         $(this).click(function() {openModal();});
     });
-
-    $(".closeBtn").click(function () {closeModal();});
 
     $(".nextBtn").click(function () {nextModal();});
     $(".backBtn").click(function () {backModal();});

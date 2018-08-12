@@ -9,16 +9,22 @@
     height: 100%;
     width: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    background-color: transparent;
+}
+
+.shade{
+    opacity: 0.2;
 }
 
 .guideTest{
-    background-color: #f4f4f4;
+    background-color: rgb(255,0,0);
+    overflow: auto;
+    display: none;
     opacity: 0.8;
     left: 0;
     top: 0;
-    height: 400px;
-    width: 400px;
+    height: 100%;
+    width: 100%;
 }
 
 .modalContent{
@@ -28,8 +34,8 @@
     box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2), 0 7px 20px 0 rgba(0,0,0,0.17);
     animation: modalOpen 1s;
     position: relative;
-    left: 30vw;
-    top: 30vh;
+    left: 20vw;
+    top: 25vh;
 }
 
 .nextBtn{
