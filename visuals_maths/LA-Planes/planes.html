@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>VC: Volume elements</title>
+    <title>LA: Plane Intersection</title>
     <link rel="stylesheet" href="../styles/styles.css">
     <script src="../lib/plotly-latest.min.js"></script>
     <script src="../lib/jquery-3.3.1.min.js"></script>
@@ -16,69 +16,90 @@
     <div class="container">
         <div class="row">
             <!-- Graph -->
-            <div class="seven columns">
+            <div class="six columns">
                 <div id='graph' style="width:500px; height:500px;"></div>
             </div>
 
             <!--Bottons-->
-            <div class="five columns">
-                <div>
-                    <h5 style="border-left: solid 5px rgb(0,146,146); padding-left: 8px;">Plane 1:</h5>
-                    <label>a1:
-                        <input id = "a1Input" type="box" value = "1">
-                        <p id= "a1InputError" style="color:#ff0000" hidden></p>
-                        b1:
-                        <input id = "b1Input" type="box" value = "0">
-                        <p id= "b1InputError" style="color:#ff0000" hidden></p>
-                    </label>
-                    <label>c1:
-                        <input id = "c1Input" type="box" value = "0">
-                        <p id= "c1InputError" style="color:#ff0000" hidden></p>
-                        d1:
-                        <input id = "d1Input" type="box" value = "3">
+            <div class="six columns" style="padding-top: 0px;">
+                <div id="addButtons">
+                    <input id="addPlane" type="button" value="Add Plane">
+                    <input id="addLine" type="button" value="Add Line">
+                    <input id="addPoint" type="button" value="Add Point">
+                    <p id="addButtonsError" style="color:#ff0000" hidden></p>
+                </div>
+                <div id="equations">
+                    <div id="plane1">
+                        <label style="border-left: solid 20px rgb(0,146,146); padding-left: 1px;">Plane 1:</label>
+                        <input id="a1Input" type="number" value="1" style="width: 70px"> x +
+                        <input id="b1Input" type="number" value="0" style="width: 70px"> y +
+                        <input id="c1Input" type="number" value="0" style="width: 70px"> z =
+                        <input id="d1Input" type="number" value="3" style="width: 70px">
+                        <p id= "inputError1" style="color:#ff0000" hidden></p>
+                    </div>
+                    <div id="plane2">
+                        <label style="border-left: solid 20px rgb(219,209,0); padding-left: 1px;">Plane 2:</label>
+                        <input id="a2Input" type="number" value="0" style="width: 70px"> x +
+                        <input id="b2Input" type="number" value="1" style="width: 70px"> y +
+                        <input id="c2Input" type="number" value="0" style="width: 70px"> z =
+                        <input id="d2Input" type="number" value="3" style="width: 70px">
+                        <p id= "inputError2" style="color:#ff0000" hidden></p>
+                    </div>
+                    <div id="plane3">
+                        <label style="border-left: solid 20px rgb(182,109,255); padding-left: 1px;">Plane 3:</label>
+                        <input id="a3Input" type="number" value="0" style="width: 70px"> x +
+                        <input id="b3Input" type="number" value="0" style="width: 70px"> y +
+                        <input id="c3Input" type="number" value="1" style="width: 70px"> z =
+                        <input id="d3Input" type="number" value="3" style="width: 70px">
+                        <p id= "inputError3" style="color:#ff0000" hidden></p>
+                    </div>
+
+                    <div id="line1">
+                        <label style="border-left: solid 4px rgb(0,0,0); padding-left: 17px;">Line 1:</label>
+                        <table class='matrixWrapper'><tbody>
+                            <td>
+                            <div class="fraction">
+                                x - <input id="c1Input" type="number" value="0" style="width: 70px; line-height: 0;">
+                                /
+                                <input id="c1Input" type="number" value="0" style="width: 70px">
+                            </div>
+                            </td>
+                            <td> &nbsp = &nbsp </td>
+                        </tbody></table>
                         <p id= "d1InputError" style="color:#ff0000" hidden></p>
-                    </label>
+                    </div>
+                    <div id="line2">
+                        <label style="border-left: solid 4px rgb(255,0,0); padding-left: 17px;">Line 1:</label>
+                        <div class="fraction">
+                            x - <input id="c1Input" type="number" value="0" style="width: 70px">
+                            /
+                            <input id="c1Input" type="number" value="0" style="width: 70px">
+                        </div> =
+                        <span class="fraction">
+                            y - <input id="c1Input" type="number" value="0" style="width: 70px">
+                            /
+                            <input id="c1Input" type="number" value="0" style="width: 70px">
+                        </span> =
+                        <span class="fraction">
+                            z - <input id="c1Input" type="number" value="0" style="width: 70px">
+                            /
+                            <input id="c1Input" type="number" value="0" style="width: 70px">
+                        </span>
+                        <p id= "d1InputError" style="color:#ff0000" hidden></p>
+                    </div>
+                    <div id="point">
+                        <label>• &nbsp Point 1:</label>
+                        (
+                        <input id="c1Input" type="number" value="0" style="width: 70px"> ,&nbsp
+                        <input id="c1Input" type="number" value="0" style="width: 70px"> ,&nbsp
+                        <input id="c1Input" type="number" value="0" style="width: 70px">
+                        )
+                    </div>
                 </div>
-                <br>
-                <div>
-                    <h5 style="border-left: solid 5px rgb(219,209,0); padding-left: 8px;">Plane 2:</h5>
-                    <label>a2:
-                        <input id = "a2Input" type="box" value = "0">
-                        <p id= "a2InputError" style="color:#ff0000" hidden></p>
-                        b2:
-                        <input id = "b2Input" type="box" value = "1">
-                        <p id= "b2InputError" style="color:#ff0000" hidden></p>
-                    </label>
-                    <label>c2:
-                        <input id = "c2Input" type="box" value = "0">
-                        <p id= "c2InputError" style="color:#ff0000" hidden></p>
-                        d2:
-                        <input id = "d2Input" type="box" value = "3">
-                        <p id= "d2InputError" style="color:#ff0000" hidden></p>
-                    </label>
-                </div>
-                <br>
-                <div>
-                    <h5 style="border-left: solid 5px rgb(182,109,255); padding-left: 8px;">Plane 3:</h5>
-                    <label>a3:
-                        <input id = "a3Input" type="box" value = "0">
-                        <p id= "a3InputError" style="color:#ff0000" hidden></p>
-                        b3:
-                        <input id = "b3Input" type="box" value = "0">
-                        <p id= "b3InputError" style="color:#ff0000" hidden></p>
-                    </label>
-                    <label>c3:
-                        <input id = "c3Input" type="box" value = "1">
-                        <p id= "c3InputError" style="color:#ff0000" hidden></p>
-                        d3:
-                        <input id = "d3Input" type="box" value = "3">
-                        <p id= "d3InputError" style="color:#ff0000" hidden></p>
-                    </label>
-                </div>
-                a x + b y + c z + d = 0
             </div>
         </div>
     </div>
+    <link rel="stylesheet" href="script/plane.css">
     <script src=../util/objects.js></script>
     <script src=script/planes.js></script>
 </body>

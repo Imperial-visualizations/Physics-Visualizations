@@ -40,6 +40,7 @@ EDITED
 .container {
   position: relative;
   width: 100%;
+  max-width: 960px;
   margin: 0 auto;
   padding: 0 20px;
   box-sizing: border-box; }
@@ -741,12 +742,12 @@ dd{
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 button,
 .button {
-  margin-bottom: 1rem; }
+  margin-bottom: .5rem; }
 input,
 textarea,
 select,
 fieldset {
-  margin-bottom: 1.5rem;
+  margin-bottom: .5rem;
   background: #fff;}
 pre,
 blockquote,
@@ -757,7 +758,7 @@ p,
 ul,
 ol,
 form {
-  margin-bottom: 2.5rem; }
+  margin-bottom: .5rem; }
 
 
 /* Utilities
@@ -1192,6 +1193,8 @@ ul.tab-nav li a.active.button:focus {
   display: block;
     border-bottom: 1px solid #bbb;
 }
+
+
 
 @media (min-width: 1500px) {
   .container {

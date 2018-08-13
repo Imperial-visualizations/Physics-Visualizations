@@ -4,6 +4,10 @@ var layout = {
     hovermode: "closest",
     showlegend: false,
     scene: {
+        camera: {
+            eye: {x: 1.2, y: 1.2, z: 1.2},
+            center: {x: 0, y: 0, z: -0.15}
+        },
         xaxis: {range:[-50, 50], zeroline: true, scaleratio: 1},
         yaxis: {range:[-50, 50], zeroline: true, scaleratio: 1},
         zaxis: {range:[-50, 50], zeroline: true, scaleratio: 1},
@@ -68,14 +72,6 @@ function addPlane(data, a, b, c, d, color) {
 
 function addLine(data, a1, b1, c1, d1, a2, b2, c2, d2, color1, color2){
     var normal = [b1*c2 - b2*c1, a2*c1 - a1*c2, a1*b2 - a2*b1];
-    var n1 = [a1, b1, c1];
-    var n2 = [a2, b2, c2];
-    n1 = n1/math.norm(n1);
-    n2 = n2/math.norm(n2);
-
-    if (n1 === n2 || n1 === -n2){
-        return 1;
-    }
 
     var x, point = [];
     if (a1*b2 - b1*a2 != 0) {
@@ -144,7 +140,7 @@ function compute(data) {
     addPlane(data, a2, b2, c2, d2, orange);
     addPlane(data, a3, b3, c3, d3, lilac);
 
-    addLine(data, a1, b1, c1, d1, a2, b2, c2, d2, black, white);
+    addLine(data, a1, b1, c1, d1, a2, b2, c2, d2, "rgb(0,255,0)", white);
     addLine(data, a2, b2, c2, d2, a3, b3, c3, d3, "rgb(255,0,0)", white);
     addLine(data, a1, b1, c1, d1, a3, b3, c3, d3, "rgb(0,0,255)", white);
 
@@ -157,7 +153,7 @@ function update() {
 }
 
 function main() {
-    $("input[type=box]").each(function () {
+    $("input[type=number]").each(function () {
         $(this).on('keyup',function () {
             if(event.keyCode == 13) {
                 let n = $(this).val();
@@ -176,6 +172,16 @@ function main() {
             }
         });
     });
+
+    $('.fraction').each(function(key, value) {
+        $this = $(this)
+        var split = $this.html().split("/")
+        if( split.length == 2 ){
+            $this.html('<span class="top">'+split[0]+'</span><span class="bottom">'+split[1]+'</span>')
+        }
+    });
+
+
 
     init();
 }
