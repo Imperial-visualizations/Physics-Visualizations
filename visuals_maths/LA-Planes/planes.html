@@ -17,7 +17,7 @@
         <div class="row">
             <!-- Graph -->
             <div class="six columns">
-                <div id='graph' style="width:500px; height:500px;"></div>
+                <div id='graph' style="width:450px; height:500px;"></div>
             </div>
 
             <!--Bottons-->
@@ -27,6 +27,7 @@
                     <input id="addLine" type="button" value="Add Line">
                     <input id="addPoint" type="button" value="Add Point">
                     <p id="addButtonsError" style="color:#ff0000" hidden></p>
+                    <p id= "inputError" style="color:#ff0000" hidden></p>
                 </div>
                 <div id="equations">
                     <div id="plane1">
@@ -35,65 +36,90 @@
                         <input id="b1Input" type="number" value="0" style="width: 70px"> y +
                         <input id="c1Input" type="number" value="0" style="width: 70px"> z =
                         <input id="d1Input" type="number" value="3" style="width: 70px">
-                        <p id= "inputError1" style="color:#ff0000" hidden></p>
                     </div>
-                    <div id="plane2">
+                    <div id="plane2" hidden>
                         <label style="border-left: solid 20px rgb(219,209,0); padding-left: 1px;">Plane 2:</label>
                         <input id="a2Input" type="number" value="0" style="width: 70px"> x +
                         <input id="b2Input" type="number" value="1" style="width: 70px"> y +
                         <input id="c2Input" type="number" value="0" style="width: 70px"> z =
                         <input id="d2Input" type="number" value="3" style="width: 70px">
-                        <p id= "inputError2" style="color:#ff0000" hidden></p>
+                        <span id="plane2Close" class="closeBtn closeBtnH">×</span>
                     </div>
-                    <div id="plane3">
+                    <div id="plane3" hidden>
                         <label style="border-left: solid 20px rgb(182,109,255); padding-left: 1px;">Plane 3:</label>
                         <input id="a3Input" type="number" value="0" style="width: 70px"> x +
                         <input id="b3Input" type="number" value="0" style="width: 70px"> y +
                         <input id="c3Input" type="number" value="1" style="width: 70px"> z =
                         <input id="d3Input" type="number" value="3" style="width: 70px">
-                        <p id= "inputError3" style="color:#ff0000" hidden></p>
+                        <span id="plane3Close" class="closeBtn closeBtnH">×</span>
                     </div>
 
-                    <div id="line1">
+                    <div id="line01" hidden>
                         <label style="border-left: solid 4px rgb(0,0,0); padding-left: 17px;">Line 1:</label>
                         <table class='matrixWrapper'><tbody>
                             <td>
-                            <div class="fraction">
-                                x - <input id="c1Input" type="number" value="0" style="width: 70px; line-height: 0;">
-                                /
-                                <input id="c1Input" type="number" value="0" style="width: 70px">
-                            </div>
+                                <div class="fraction">
+                                    x - <input id="e1Input" type="number" value="0" style="width: 70px; line-height: 0;">
+                                    /
+                                    <input id="i1Input" type="number" value="0" style="width: 70px">
+                                </div>
                             </td>
                             <td> &nbsp = &nbsp </td>
+                            <td>
+                                <div class="fraction">
+                                    y - <input id="f1Input" type="number" value="0" style="width: 70px; line-height: 0;">
+                                    /
+                                    <input id="j1Input" type="number" value="0" style="width: 70px">
+                                </div>
+                            </td>
+                            <td> &nbsp = &nbsp </td>
+                            <td>
+                                <div class="fraction">
+                                    z - <input id="g1Input" type="number" value="0" style="width: 70px; line-height: 0;">
+                                    /
+                                    <input id="k1Input" type="number" value="0" style="width: 70px">
+                                </div>
+                            </td>
                         </tbody></table>
-                        <p id= "d1InputError" style="color:#ff0000" hidden></p>
+                        <span id="line01Close" class="closeBtn closeBtnH" style="margin-top: -90px;">×</span>
                     </div>
-                    <div id="line2">
-                        <label style="border-left: solid 4px rgb(255,0,0); padding-left: 17px;">Line 1:</label>
-                        <div class="fraction">
-                            x - <input id="c1Input" type="number" value="0" style="width: 70px">
-                            /
-                            <input id="c1Input" type="number" value="0" style="width: 70px">
-                        </div> =
-                        <span class="fraction">
-                            y - <input id="c1Input" type="number" value="0" style="width: 70px">
-                            /
-                            <input id="c1Input" type="number" value="0" style="width: 70px">
-                        </span> =
-                        <span class="fraction">
-                            z - <input id="c1Input" type="number" value="0" style="width: 70px">
-                            /
-                            <input id="c1Input" type="number" value="0" style="width: 70px">
-                        </span>
-                        <p id= "d1InputError" style="color:#ff0000" hidden></p>
+                    <div id="line02" hidden>
+                        <label style="border-left: solid 4px rgb(255,0,0); padding-left: 17px;">Line 2:</label>
+                        <table class='matrixWrapper'><tbody>
+                            <td>
+                                <div class="fraction">
+                                    x - <input id="e2Input" type="number" value="0" style="width: 70px; line-height: 0;">
+                                    /
+                                    <input id="i2Input" type="number" value="0" style="width: 70px">
+                                </div>
+                            </td>
+                            <td> &nbsp = &nbsp </td>
+                            <td>
+                                <div class="fraction">
+                                    y - <input id="f2Input" type="number" value="0" style="width: 70px; line-height: 0;">
+                                    /
+                                    <input id="j2Input" type="number" value="0" style="width: 70px">
+                                </div>
+                            </td>
+                            <td> &nbsp = &nbsp </td>
+                            <td>
+                                <div class="fraction">
+                                    z - <input id="g2Input" type="number" value="0" style="width: 70px; line-height: 0;">
+                                    /
+                                    <input id="k2Input" type="number" value="0" style="width: 70px">
+                                </div>
+                            </td>
+                        </tbody></table>
+                        <span id="line02Close" class="closeBtn closeBtnH" style="margin-top: -90px;">×</span>
                     </div>
-                    <div id="point">
+                    <div id="point1" hidden>
                         <label>• &nbsp Point 1:</label>
                         (
-                        <input id="c1Input" type="number" value="0" style="width: 70px"> ,&nbsp
-                        <input id="c1Input" type="number" value="0" style="width: 70px"> ,&nbsp
-                        <input id="c1Input" type="number" value="0" style="width: 70px">
+                        <input id="xInput" type="number" value="0" style="width: 70px"> ,&nbsp
+                        <input id="yInput" type="number" value="0" style="width: 70px"> ,&nbsp
+                        <input id="zInput" type="number" value="0" style="width: 70px">
                         )
+                        <span id="point1Close" class="closeBtn closeBtnH">×</span>
                     </div>
                 </div>
             </div>

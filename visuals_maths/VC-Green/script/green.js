@@ -39,7 +39,7 @@ function arrowRect(vertices, numberOfArrows, color1, color2) {
         addArrowsY(data, numberOfArrows, rectX[i]-injection, rectY, color2, 1);
     }
 
-    addEmptyObjects(data, maxArrowNum*56 - data.length);
+    addEmptyObjects2d(data, maxArrowNum*56 - data.length);
     return data;
 }
 
@@ -69,7 +69,7 @@ function addArrowsY(data, numberOfArrows, fixedX, rectY, color, direction=1){
     return;
 }
 
-function addEmptyObjects(data, numberObj){
+function addEmptyObjects2d(data, numberObj){
     for (var i=0; i < numberObj; ++i){
         data.push({
             type: "scatter",
@@ -77,7 +77,7 @@ function addEmptyObjects(data, numberObj){
             line: {width: 0}
         });
     }
-    return;
+    return 0;
 }
 
 //Plots
