@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> Dielectric Boundary - Imperial Visualisations</title>
+    <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://rawgit.com/cydcowley/public-test-data/master/Style2.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+</head>
+
+<body>
+
+
+<div class="container">
+    <h1> 2D Plane Waves at a Dielectric Boundary</h1>
+
+    <div class="nine columns">
+            <div id="graph" style="width: 50vw; height: 80vh;"></div>
+    </div>
+
+    <div class="three columns">
+        <input type="button" id="playButton" value="Play">
+        <div id="wave-switch" name = "wave-switch" class="switch">
+            <label class="radioTitle">Wave</label>
+
+            <label for="incident" class="radio">
+              <input type="radio" id="incident" value="incident" name="wave-switch" checked="checked">
+              <span>Incident</span>
+            </label>
+            <br>
+            <label for="reflected" class="radio">
+              <input type="radio" id="reflected" value="reflected" name="wave-switch" >
+              <span>Reflected</span>
+            </label>
+            <br>
+            <label for="reflected and incident" class="radio">
+              <input type="radio" id="reflected and incident" value="reflected and incident" name="wave-switch">
+              <span>Reflected and Incident</span>
+            </label>
+            <br>
+            <label for="reflected plus incident" class="radio">
+              <input type="radio" id="reflected plus incident" value="reflected plus incident" name="wave-switch" >
+              <span>Combined</span>
+            </label>
+            <br>
+        </div>
+
+        <br>
+        <div id="angle-slider">
+            <label for="angle" class="sliderTitle">Angle of incidence:
+              <span id="angle-display">0&deg;</span>
+            </label>
+            <input type="range" id="angle" name="angle" min="0" max="85" value="0">
+            <span class="sliderMin">0&deg;</span><span class="sliderMax">85&deg;</span>
+        </div>
+
+        <div id="wavelength-slider">
+            <label for="wavelength" class="sliderTitle"> Wavelength
+              <span id="wavelength-display">0.5</span>
+            </label>
+            <input type="range" id="wavelength" name="wavelength" min="0" max="1"  step = "0.01" value="0.5">
+            <span class="sliderMin">0</span><span class="sliderMax">1</span>
+        </div>
+    </div>
+</div>
+
+<script src="scripts/2D_Dielectric_Dielectric.js"></script>
+
+</body>
+</html>
