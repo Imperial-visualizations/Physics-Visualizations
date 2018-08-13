@@ -106,8 +106,8 @@
                             <p style="font-style: bold; font-size:large">
                             <!--Basics of Fourier Transform-->
                             <h5>Exponential Form:</h5>
-                            $$ C_n=\frac{1}{2L}\int_{-L}^{+L}f(x)e^{-in\pi x/L}dx $$
-                            $$ f(x)=\sum_{n=-\infty}^{n=\infty} C_ne^{in\pi x/L} $$
+                            $$ c_n=\frac{1}{2L}\int_{-L}^{+L}f(x)e^{-in\pi x/L}dx $$
+                            $$ f(x)=\sum_{n=-\infty}^{n=\infty} c_ne^{in\pi x/L} $$
                             <h5>Trigonometric Form: </h5>
                             $$ f(x)=\frac{a_0}{2}+\sum_{n=1}^{\infty}a_n cos(\frac{n\pi x}{L})+b_n sin(\frac{n \pi x}{L}) $$
                             $$ a_n=\frac{1}{L}\int_{-L}^{+L}f(x)cos(\frac{n\pi x}{L})dx $$
@@ -119,22 +119,32 @@
                             <p style="font-style: bold; font-size:large">
 
                             <!--Derivation of Dirac-Delta-->
-                            <h5>Derivation of Trigonometric Fourier Series</h5>
-                            $$ f(x)=\sum_{n=-\infty}^{+\infty} c_ne^{in\pi x/L} $$
-                            $$ e^{-im\pi x/L} \cdot f(x)=\sum_{n=-\infty}^{+\infty} c_n \cdot e^{in\pi x/L} \cdot e^{-im\pi x/L} $$
-                            $$ f(x) \cdot e^{-im\pi x/L} = \sum_{n=-\infty}^{+\infty} c_n \cdot e^{(i\pi x/L)(n-m)} $$
-                            $$ \text{Integrate from -L to L} $$
-                            $$ \int_{-L}^L f(x) \cdot e^{-im\pi x/L}dx = \sum_{n=-\infty}^{+\infty} c_n \int_{-L}^L e^{(i\pi x/L)(n-m)} dx $$
-                            $$ \text{But due to orthonormality of complex exponentials:} $$
-                            $$ \int_{-L}^L f(x) \cdot e^{-im\pi x/L}dx =\left\{
-                                    \begin{array}{ll}
-                                    2L \qquad \text{(if n=m)} \\
-                                    0 \qquad \quad \text{(if n≠m)}
-                                    \end{array}
-                                  \right. $$
-                            $$ \therefore \int_{-L}^L e^{(i\pi x/L)(n-m)} dx =2L\cdot\delta_{nm} $$
-                            $$ \int_{-L}^L f(x)\cdot e^{-im\pi x/L}dx = 2L\cdot \sum_{n=-\infty}^{+\infty}c_n\cdot \delta_{mn}=2L\cdot c_m $$
-                            $$ c_m=\frac{1}{2L}\int_{-L}^{+L}f(x)\cdot e^{-im\pi x/L}dx $$
+                            <center><h5>Derivation of Trigonometric Fourier Series</h5></center>
+                            <div class="row">
+                                <div class="six columns">
+                                $$ f(x)=\sum_{n=-\infty}^{+\infty} c_ne^{in\pi x/L} $$
+                                $$ \text{Multiply by } e^{-im\pi x/L}$$
+                                $$ e^{-im\pi x/L} \cdot f(x)=\sum_{n=-\infty}^{+\infty} c_n \cdot e^{in\pi x/L} \cdot e^{-im\pi x/L} $$
+                                $$ f(x) \cdot e^{-im\pi x/L} = \sum_{n=-\infty}^{+\infty} c_n \cdot e^{(i\pi x/L)(n-m)} $$
+                                $$ \text{Integrate from -L to L} $$
+                                $$ \int_{-L}^L f(x) \cdot e^{-im\pi x/L}dx = \sum_{n=-\infty}^{+\infty} c_n \int_{-L}^L e^{(i\pi x/L)(n-m)} dx $$
+
+                                </div>
+
+                                <div class="six columns">
+                                $$ \text{But due to orthonormality of complex exponentials:} $$
+                                $$ \int_{-L}^L e^{(i\pi x/L)(n-m)}dx =\left\{
+                                        \begin{array}{ll}
+                                        2L \qquad \text{(if n=m)} \\
+                                        0 \qquad \quad \text{(if n≠m)}
+                                        \end{array}
+                                    \right \}   = 2L \cdot \delta_{nm}$$
+                                $$ \therefore \int_{-L}^L e^{(i\pi x/L)(n-m)} dx =2L\cdot\delta_{nm} $$
+                                $$\text{And so:}$$
+                                $$ \int_{-L}^L f(x)\cdot e^{-im\pi x/L}dx = 2L\cdot \sum_{n=-\infty}^{+\infty}c_n\cdot \delta_{mn}=2L\cdot c_m $$
+                                $$ c_m=\frac{1}{2L}\int_{-L}^{+L}f(x)\cdot e^{-im\pi x/L}dx $$
+                                </div>
+                            </div>
 
                             </p>
                         </div>
@@ -158,34 +168,42 @@
                                     \frac{-2A}{L}\cdot (x-L) \quad (L/2< x < L)
                                     \end{array}
                                   \right. $$
-                            $$  \text{f(x) is odd}$$
-                            $$ \therefore a_n=0 $$
-                            $$ \therefore b_n=\frac{2}{L}\int_0^L f(x)\cdot sin(\frac{n \pi x}{L})dx $$
+                            $$  \text{First notice that f(x) is odd,}$$
+                            $$ \therefore a_n=0 \text{ for all n,}$$
+                            $$ \text{also, since the } b_{n} \text{ integrand is even about 0, } $$
+                            $$ b_n=\frac{2}{L}\int_0^L f(x)\cdot sin(\frac{n \pi x}{L})dx $$
 
                         </p>
                         </div>
                         <div class="derivation" id="square" hidden >
                             <p style="font-style: bold; font-size:large">
                                 <!--Derivation of Square-->
-                            <h5>Square Function Fourier Series Derivation</h5>
-                            $$
-                            f(x)=\left\{
-                                    \begin{array}{ll}
-                                    -A \quad (-L < x < 0) \\
-                                    A \quad  (0< x < L)
-                                    \end{array}
-                                  \right.
-                            $$
-                            $$ a_n=\frac{1}{L}\int_{-L}^0 -A\cdot cos(\frac{n\pi x}{L})dx + \frac{1}{L}\int_0^L A \cdot cos(\frac{n \pi x}{L})dx $$
-                            $$ a_n=\frac{A}{L}\frac{L}{n\pi} sin(\frac{n\pi x}{L})|_0^L=0 $$
-                            $$ \because  \text{the  function  is  odd} $$
-                            $$ \therefore a_n=0 $$
-                            $$ b_n=\frac{1}{L}\int_{-L}^0 -A\cdot sin(\frac{n\pi x}{L})dx + \frac{1}{L}\int_0^L A \cdot sin(\frac{n \pi x}{L})dx $$
-                            $$ b_n=\frac{2A}{L}\frac{L}{n\pi} cos(\frac{n\pi x}{L})|_0^L $$
-                            $$ b_n = \frac{2A}{n\pi}[1-cos(n\pi)] $$
-                            $$ \because cos(nx)=(-1)^n $$
-                            $$ \therefore b_n=\frac{2A}{n\pi}(1-(-1)^n) $$
-                            $$ \mathcal{F}(x)=\sum_{n=1}^N \frac{2A}{n\pi}(1-(-1)^n)sin(\frac{n\pi x}{L}) $$
+                            <center><h5>Square Function Fourier Series Derivation</h5></center>
+                            <div class="row">
+                                <div class="six columns">
+                                $$
+                                f(x)=\left\{
+                                        \begin{array}{ll}
+                                        -A \quad (-L < x < 0) \\
+                                        A \quad  (0< x < L)
+                                        \end{array}
+                                    \right.
+                                $$
+                                $$ \text{Split the integration into two: From -L to 0 and from 0 to L}$$
+                                $$ a_n=\frac{1}{L}\int_{-L}^0 -A\cdot cos(\frac{n\pi x}{L})dx + \frac{1}{L}\int_0^L A \cdot cos(\frac{n \pi x}{L})dx $$
+                                $$ a_n=\frac{2A}{L}\frac{L}{n\pi} sin(\frac{n\pi x}{L})|_0^L=0 $$
+                                $$ \text{This can be found more quickly by simply noting that f(x) is odd} $$
+                                $$ \text{And so } a_n \text{ is 0 for all n.}$$
+                                </div>
+                                <div class="six columns">
+                                $$ b_n=\frac{1}{L}\int_{-L}^0 -A\cdot sin(\frac{n\pi x}{L})dx + \frac{1}{L}\int_0^L A \cdot sin(\frac{n \pi x}{L})dx $$
+                                $$ b_n=\frac{-2A}{L}\frac{L}{n\pi} cos(\frac{n\pi x}{L})|_0^L $$
+                                $$ b_n = \frac{2A}{n\pi}[1-cos(n\pi)] $$
+                                $$ \text{Note that } cos(n \pi)=(-1)^n $$
+                                $$ \therefore b_n=\frac{2A}{n\pi}(1-(-1)^n) $$
+                                $$ f(x)=\sum_{n=1}^{\infty} \frac{2A}{n\pi}(1-(-1)^n)sin(\frac{n\pi x}{L}) $$
+                                    </div>
+                            </div>
                         </p>
 
                         </div>
@@ -193,21 +211,29 @@
                             <p style="font-style: bold; font-size:large">
 
                             <!--Derivation of Sawtooth-->
-                            <h5>Sawtooth Fourier Series Derivation</h5>
-                            $$ f(x)=Ax \quad (-L < x < L) $$
-                            $$ a_n=\frac{1}{L}\int_{-L}^{L}Ax \cdot cos(\frac{n\pi x}{L})dx $$
-                            $$ \because a_n \text{ is odd} $$
-                            $$ \therefore a_n=0 $$
-                            $$ b_n=\frac{1}{L}\int_{-L}^{L} Ax \cdot sin(\frac{n\pi x}{L})dx $$
-                            $$ \because b_n \text{ is even} $$
-                            $$ \therefore b_n=\frac{2A}{L}\int_{0}^{L} x \cdot sin(\frac{n\pi x}{L})dx $$
-                            $$ \text{Using integration by part gives that} $$
-                            $$ u=x \qquad dv=sin(\frac{n\pi x}{L})dx $$
-                            $$ du=dx \qquad v=\frac{-L}{n\pi}cos(\frac{n\pi x}{L}) $$
-                            $$ b_n=\frac{2A}{L} [\frac{-Lx}{n\pi}cos(\frac{n\pi x}{L})-\int_0^L\frac{-L}{n\pi}cos(\frac{n\pi x}{L})dx] $$
-                            $$ b_n=-\frac{2A}{n\pi}cos(n\pi)=-\frac{2A}{n\pi}(-1)^n $$
-                            $$ b_n=\frac{2A}{n\pi}(-1)^{n+1} $$
-                            $$ \mathcal{F}=\sum_{n=1}^\infty \frac{2A}{n\pi}(-1)^{n+1}sin(\frac{n\pi x}{L}) $$
+                            <center><h5>Sawtooth Fourier Series Derivation</h5></center>
+                            <div class="row">
+                                <div class="six columns">
+                                $$ f(x)=Ax \quad (-L < x < L) $$
+                                $$ a_n=\frac{1}{L}\int_{-L}^{L}Ax \cdot cos(\frac{n\pi x}{L})dx $$
+                                $$ \text{f(x) is odd} $$
+                                $$ \therefore a_n=0 \text{ for all n}$$
+                                $$ b_n=\frac{1}{L}\int_{-L}^{L} Ax \cdot sin(\frac{n\pi x}{L})dx $$
+                                $$ \text{f(x) is odd} $$
+                                $$ \therefore b_n=\frac{2A}{L}\int_{0}^{L} x \cdot sin(\frac{n\pi x}{L})dx $$
+                                $$ \text{Use integration by parts} $$
+                                </div>
+                                <div class="six columns">
+
+                                $$ u=x \qquad dv=sin(\frac{n\pi x}{L})dx $$
+                                $$ du=dx \qquad v=\frac{-L}{n\pi}cos(\frac{n\pi x}{L}) $$
+                                $$ b_n=\frac{2A}{L} [\frac{-Lx}{n\pi}cos(\frac{n\pi x}{L})|_0^L-\int_0^L\frac{-L}{n\pi}cos(\frac{n\pi x}{L})dx] $$
+                                $$ \text{Note that the second integrand is zero as it is of cosine over a full period.}$$
+                                $$ b_n=-\frac{2A}{n\pi}cos(n\pi)=-\frac{2A}{n\pi}(-1)^n $$
+                                $$ b_n=\frac{2A}{n\pi}(-1)^{n+1} $$
+                                $$ f(x)=\sum_{n=1}^\infty \frac{2A}{n\pi}(-1)^{n+1}sin(\frac{n\pi x}{L}) $$
+                                </div>
+                            </div>
 
                             </p>
                         </div>
@@ -215,9 +241,9 @@
                             <p style="font-style: bold; font-size:large">
 
                             <!--Derivation of Dirac-Delta-->
-                            <h5>Dirac-Delta Fourier Series Derivation</h5>
+                            <center><h5>Dirac-Delta Fourier Series Derivation</h5></center>
                             $$
-                            \delta(x)=\left\{
+                            f(x) = \delta(x)=\left\{
                                     \begin{array}{ll}
                                     +\infty \quad (x=0) \\
                                     0 \qquad  (x \neq 0)
@@ -225,11 +251,11 @@
                                   \right.
                             $$
                             $$ b_n=\frac{1}{L}\int_{-L}^{+L}\delta(x)\cdot sin(\frac{n\pi x}{L})dx $$
-                            $$ \because b_n \text{ is an odd function } $$
+                            $$ \delta(x) \text{ is an even function } $$
                             $$ \therefore b_n=0 $$
                             $$ a_n=\frac{1}{L}\int_{-L}^{+L} \delta (x) \cdot cos(\frac{n\pi x}{L})dx $$
                             $$ a_n=\frac{1}{L} $$
-                            $$ \mathcal{F}(x)=\sum_{n=0}^\infty \frac{1}{L}cos(\frac{n\pi x}{L}) $$
+                            $$ f(x)=\sum_{n=0}^\infty \frac{1}{L}cos(\frac{n\pi x}{L}) $$
 
                             </p>
                         </div>
@@ -237,30 +263,43 @@
                             <p style="font-style: bold; font-size:large">
 
                             <!--Derivation of parabola-->
-                            <h5>Quadratic Fourier Series Derivation</h5>
-                            $$ f(x)=Ax^2 $$
-                            $$ b_n = \frac{1}{L}\int_{-L}^{+L} Ax^2 \cdot sin(\frac{n \pi x}{L})dx $$
-                            $$ \because \text{the function is odd around 0} $$
-                            $$ \therefore b_n=0 $$
-                            $$ a_n= \frac{1}{L}\int_{-L}^{+L} Ax^2 \cdot cos(\frac{n \pi x}{L})dx $$
-                            $$ \because \text{the function is even around 0} $$
-                            $$ \therefore a_n=\frac{2}{L}\int_{0}^{+L} Ax^2 \cdot cos(\frac{n \pi x}{L})dx $$
-                            $$ \text{ at } n=0 \text{ :} $$
-                            $$ a_0 = \frac{2}{L} \int _{0}^{+L} Ax^2 dx $$
-                            $$ a_0 = \frac{2AL^2}{3} $$
-                            $$ \text{ at } n\neq 0 \text{ :} $$
-                            $$ a_n = \frac{2A}{L}\int_0^L x^2\cdot cos(\frac{n\pi x}{L})dx $$
-                            $$ u=x^2 \qquad dv=cos(\frac{n \pi x}{L})dx $$
-                            $$ du = 2x\cdot dx \qquad v=\frac{L}{n\pi} \cdot sin(\frac{n\pi x}{L}) $$
-                            $$ a_n = \frac{2A}{L} \cdot [\frac{Lx^2}{n\pi}\cdot sin(\frac{n\pi x}{L})|_0^L-\int_0^L\frac{2xL}{n\pi}\cdot sin(\frac{n \pi x}{L})dx] $$
-                            $$ a_n = \frac{2A}{L} \cdot [0-\int_0^L\frac{2xL}{n\pi}\cdot sin(\frac{n \pi x}{L})dx] $$
-                            $$ a_n = -\frac{4A}{n\pi}\int_0^L x\cdot sin(\frac{n \pi x}{L})dx $$
-                            $$ u = x \qquad dv = sin(\frac{n\pi x}{L}) dx$$
-                            $$ du = dx \qquad v = -\frac{L}{n\pi} \cdot cos(\frac{n\pi x}{L})dx $$
-                            $$ a_n = \frac{4A}{n\pi} [\frac{xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_0^L + \int_0^L\frac{xL}{n\pi} \cdot cos(\frac{n\pi x}{L})dx ] $$
-                            $$ a_n =  \frac{4A}{n\pi} \frac{xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_0^L $$
-                            $$ a_n = \frac{4AL^2}{n^2\pi^2}(-1)^n $$
-                            $$ \mathcal{F}(x) = \sum_{n=0}^\infty \frac{4AL^2}{n^2\pi^2}(-1)^n\cdot cos(\frac{n\pi x}{L}) $$
+                            <center><h5>Quadratic Fourier Series Derivation</h5></center>
+                            <div class="row">
+                                <div class="four columns">
+                                $$ f(x)=Ax^2 $$
+                                $$ b_n = \frac{1}{L}\int_{-L}^{+L} Ax^2 \cdot sin(\frac{n \pi x}{L})dx $$
+                                $$ \text{The function is odd around 0} $$
+                                $$ \therefore b_n=0 \text{ for all n}$$
+                                $$ a_n= \frac{1}{L}\int_{-L}^{+L} Ax^2 \cdot cos(\frac{n \pi x}{L})dx $$
+                                $$ \text{f(x) is even about 0} $$
+                                $$ \therefore a_n=\frac{2}{L}\int_{0}^{+L} Ax^2 \cdot cos(\frac{n \pi x}{L})dx $$
+                                $$ \text{ for } n=0 \text{ :} $$
+                                $$ a_0 = \frac{2}{L} \int _{0}^{+L} Ax^2 dx $$
+                                $$ a_0 = \frac{2AL^2}{3} $$
+                                </div>
+
+                                <div class="four columns">
+                                $$ \text{ for } n\neq 0 \text{ :} $$
+                                $$ a_n = \frac{2A}{L}\int_0^L x^2\cdot cos(\frac{n\pi x}{L})dx $$
+                                $$ u=x^2 \qquad dv=cos(\frac{n \pi x}{L})dx $$
+                                $$ du = 2x\cdot dx \qquad v=\frac{L}{n\pi} \cdot sin(\frac{n\pi x}{L}) $$
+                                $$ a_n = \frac{2A}{L} \cdot [\frac{Lx^2}{n\pi}\cdot sin(\frac{n\pi x}{L})|_0^L$$
+                                $$ -\int_0^L\frac{2xL}{n\pi}\cdot sin(\frac{n \pi x}{L})dx] $$
+                                $$ a_n = \frac{2A}{L} \cdot [0-\int_0^L\frac{2xL}{n\pi}\cdot sin(\frac{n \pi x}{L})dx] $$
+
+                                </div>
+
+                                <div class="four columns">
+                                $$ a_n = -\frac{4A}{n\pi}\int_0^L x\cdot sin(\frac{n \pi x}{L})dx $$
+                                $$ u = x \qquad dv = sin(\frac{n\pi x}{L}) dx$$
+                                $$ du = dx \qquad v = -\frac{L}{n\pi} \cdot cos(\frac{n\pi x}{L})dx $$
+                                $$ a_n = \frac{-4A}{n\pi} [-\frac{xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_0^L - \int_0^L\frac{-L}{n\pi} \cdot cos(\frac{n\pi x}{L})dx ] $$
+                                $$ a_n =  \frac{4A}{n\pi} \frac{xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_0^L $$
+                                $$ a_n = \frac{4AL^2}{n^2\pi^2}(-1)^n $$
+                                $$ f(x) = \sum_{n=0}^\infty \frac{4AL^2}{n^2\pi^2}(-1)^n\cdot cos(\frac{n\pi x}{L}) $$
+                                </div>
+
+                            </div>
 
                             </p>
                         </div>
@@ -268,21 +307,28 @@
                             <p style="font-style: bold; font-size:large">
 
                             <!--Derivation of linear equation-->
-                            <h5>Linear Equation Fourier Series Derivation</h5>
-                            $$ f(x) = Ax $$
-                            $$ a_n = \frac{1}{L}\int_{-L}^{+L} Ax \cdot cos(\frac{n \pi x}{L})dx $$
-                            $$ \because a_n \text{ part is an odd function} $$
-                            $$ \therefore a_n=0 $$
-                            $$ b_n = \frac{1}{L}\int_{-L}^{+L}Ax \cdot sin (\frac{n\pi x}{L}) dx $$
-                            $$ b_n = \frac{A}{L}\int_{-L}^{+L}x \cdot sin (\frac{n\pi x}{L}) dx $$
-                            $$ u=x \qquad dv = sin(\frac{n\pi x}{L})dx $$
-                            $$ du=dx \qquad v = -\frac{L}{n\pi}\cdot cos(\frac{n\pi x}{L}) $$
-                            $$ b_n = -\frac{A}{L}[\frac{xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_{-L}^{+L} + \int_{-L}^{+L}\frac{L}{n\pi}\cdot cos(\frac{n\pi x}{L}) dx] $$
-                            $$ b_n = \frac{2A}{L}\cdot [-\frac{xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_{0}^{+L} + \int_{0}^{+L}\frac{L}{n\pi}\cdot cos(\frac{n\pi x}{L}) dx] $$
-                            $$ b_n = -\frac{2AL}{n\pi}cos(n\pi) $$
-                            $$ b_n = -\frac{2AL}{n\pi}(-1)^n $$
-                            $$ b_n = \frac{2AL}{n\pi}(-1)^{n+1} $$
-                            $$ \mathcal{F}(x) = \sum_{n=0}^\infty \frac{2AL}{n\pi}(-1)^{n+1} \cdot sin(\frac{n\pi x}{L}) $$
+                            <center><h5>Linear Equation Fourier Series Derivation</h5></center>
+                            <div class="row">
+                                <div class="six columns">
+                                $$ f(x) = Ax $$
+                                $$ a_n = \frac{1}{L}\int_{-L}^{+L} Ax \cdot cos(\frac{n \pi x}{L})dx $$
+                                $$ Ax \text{  is an odd function} $$
+                                $$ \therefore a_n=0 $$
+                                $$ b_n = \frac{1}{L}\int_{-L}^{+L}Ax \cdot sin (\frac{n\pi x}{L}) dx $$
+                                $$ b_n = \frac{2A}{L}\int_{0}^{+L}x \cdot sin (\frac{n\pi x}{L}) dx $$
+                                $$ u=x \qquad dv = sin(\frac{n\pi x}{L})dx $$
+                                $$ du=dx \qquad v = -\frac{L}{n\pi}\cdot cos(\frac{n\pi x}{L}) $$
+                                </div>
+
+                                <div class="six columns">
+                                $$ b_n = \frac{2A}{L}[-\frac{xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_{0}^{+L} - \int_{-L}^{+L}\frac{-L}{n\pi}\cdot cos(\frac{n\pi x}{L}) dx] $$
+                                $$ b_n = \frac{2A}{L}\cdot [-\frac{xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_{0}^{+L} + \int_{0}^{+L}\frac{L}{n\pi}\cdot cos(\frac{n\pi x}{L}) dx] $$
+                                $$ b_n = -\frac{2AL}{n\pi}cos(n\pi) $$
+                                $$ b_n = -\frac{2AL}{n\pi}(-1)^n $$
+                                $$ b_n = \frac{2AL}{n\pi}(-1)^{n+1} $$
+                                $$ f(x) = \sum_{n=0}^\infty \frac{2AL}{n\pi}(-1)^{n+1} \cdot sin(\frac{n\pi x}{L}) $$
+                                </div>
+                            </div>
 
                             </p>
                         </div>
@@ -290,27 +336,38 @@
                             <p style="font-style: bold; font-size:large">
 
                             <!--Derivation of mode x-->
-                            <h5>Mode x Fourier Series Derivation</h5>
-                            $$ f(x)=A|x| $$
-                            $$ b_n = \frac{1}{L}\int_{-L}^{+L} A|x| \cdot sin \frac{n\pi x}{L} dx $$
-                            $$ \because \text{the function is odd around 0} $$
-                            $$ \therefore a_n=0 $$
-                            $$ a_n = \frac{1}{L}\int_{-L}^{+L} A|x| \cdot cos(\frac{n \pi x}{L})dx $$
-                            $$ \because \text{the function is even around 0} $$
-                            $$ \therefore a_n = \frac{2}{L}\int_{0}^{+L} Ax \cdot cos(\frac{n \pi x}{L})dx $$
-                            $$ \text{ at } n=0 \text{ :} $$
-                            $$ a_0 = \frac{2A}{L}\int_0^L x dx $$
-                            $$ a_0 = \frac{2A}{L}\frac{x^2}{2}|_0^L $$
-                            $$ a_0 = AL $$
-                            $$ \text{ at } n \neq 0 \text{ :} $$
-                            $$ a_n = \frac{2A}{L}\int_{0}^{+L} x \cdot cos(\frac{n \pi x}{L})dx $$
-                            $$ u=x \qquad dv=cos(\frac{n\pi x}{L})dx $$
-                            $$ du=dx \qquad v=\frac{L}{n\pi}\cdot sin(\frac{n\pi x}{L}) $$
-                            $$ a_n = \frac{2A}{L}[\frac{Lx}{n\pi}\cdot sin(\frac{n\pi x}{L})|_0^L-\int_0^{+L}\frac{L}{n\pi}\cdot sin(\frac{n\pi x}{L})dx ]$$
-                            $$ a_n = \frac{2A}{L}[0-\int_0^{+L}\frac{L}{n\pi}\cdot sin(\frac{n\pi x}{L})dx ]$$
-                            $$ a_n = \frac{2A}{L}\frac{L^2}{(n\pi)^2}\cdot cos(\frac{n\pi x}{L})|_0^L $$
-                            $$ a_n = \frac{2A}{L}\frac{L^2}{(n\pi)^2}\cdot [(-1)^n-1] $$
-                            $$ a_n = \frac{2AL}{(n\pi)^2}[(-1)^n-1] $$
+                            <center><h5>Mode x Fourier Series Derivation</h5></center>
+                            <div class="row">
+                                <div class="four columns">
+                                $$ f(x)=A|x| $$
+                                $$ b_n = \frac{1}{L}\int_{-L}^{+L} A|x| \cdot sin \frac{n\pi x}{L} dx $$
+                                $$ \text{f(x) is odd about 0} $$
+                                $$ \therefore b_n=0 $$
+                                $$ a_n = \frac{1}{L}\int_{-L}^{+L} A|x| \cdot cos(\frac{n \pi x}{L})dx $$
+                                $$  \text{The function is even about 0} $$
+                                $$ \therefore a_n = \frac{2}{L}\int_{0}^{+L} Ax \cdot cos(\frac{n \pi x}{L})dx $$
+
+                                </div>
+
+                                <div class="four columns">
+                                $$ \text{ for } n=0 \text{ :} $$
+                                $$ a_0 = \frac{2A}{L}\int_0^L x dx $$
+                                $$ a_0 = \frac{2A}{L}\frac{x^2}{2}|_0^L $$
+                                $$ a_0 = AL $$
+                                $$ \text{ for } n \neq 0 \text{ :} $$
+                                $$ a_n = \frac{2A}{L}\int_{0}^{+L} x \cdot cos(\frac{n \pi x}{L})dx $$
+                                $$ u=x \qquad dv=cos(\frac{n\pi x}{L})dx $$
+                                $$ du=dx \qquad v=\frac{L}{n\pi}\cdot sin(\frac{n\pi x}{L}) $$
+                                </div>
+                                <div class="four columns">
+                                $$ a_n = \frac{2A}{L}[\frac{Lx}{n\pi}\cdot sin(\frac{n\pi x}{L})|_0^L-\int_0^{+L}\frac{L}{n\pi}\cdot sin(\frac{n\pi x}{L})dx ]$$
+                                $$ a_n = \frac{2A}{L}[0-\int_0^{+L}\frac{L}{n\pi}\cdot sin(\frac{n\pi x}{L})dx ]$$
+                                $$ a_n = \frac{2A}{L}\frac{L^2}{(n\pi)^2}\cdot cos(\frac{n\pi x}{L})|_0^L $$
+                                $$ a_n = \frac{2A}{L}\frac{L^2}{(n\pi)^2}\cdot [(-1)^n-1] $$
+                                $$ a_n = \frac{2AL}{(n\pi)^2}[(-1)^n-1] $$
+                                $$ f(x)=\frac{AL}{2}+\sum_{n=0}^\infty \frac{2AL}{(n\pi)^2}[(-1)^n-1]\cdot cos(\frac{n\pi x}{L}) $$
+                                </div>
+                            </div>
 
                             </p>
                         </div>
@@ -326,10 +383,14 @@
                                 <li><a class="button" href="#derivation2">Math Part 3</a></li>
 
                         </ul>
-                            $$ \text{For even n, the function is odd around L/2, so the function is zero.} $$
+                            $$ \text{Notice that for n even, the } b_{n} \text{ integrand is odd about L/2.} $$
+                            $$ \text{This means that if n is even, the integral from 0 to L/2 is equal in magnitude but opposite in sign to the integral from L/2 to L} $$
+                            $$\text{This results in the } b_{n} \text{ integral being zero for all even n}$$
                             $$ b_n=\frac{2}{L}\int_0^{L} f(x)\cdot sin(\frac{n\pi x}{L}) dx = 0 \quad \text{for even n} $$
-                            $$ \text{For odd n, the function is even around L/2, so the funciton doubles.}$$
+                            $$ \text{For odd n, the function is even around L/2, so we only have to integrate from 0 to L/2 then multiply by 2}$$
+                            $$\text{This has made our job much easier}$$
                             $$ b_n=2\cdot\frac{2}{L}\int_0^{L/2} f(x)\cdot sin(\frac{n\pi x}{L}) dx \quad \text{for odd n} $$
+                            $$ \text{Convince yourself this is true using the sliders below} $$
 
                         <div class="six columns">
                             <h5></h5>
@@ -359,22 +420,9 @@
                             </label>
                         <!--Slider A-->
                             <label class="slider"  >
-                                <input id="AController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
-                                <span class="sliderMin">-5</span><span class="sliderMax">5</span></label>
+                                <input id="AController" class="inputs" type="range" value="1" min="-1" max="2" step="0.1"/>
+                                <span class="sliderMin">-1</span><span class="sliderMax">2</span></label>
                         <!--END Slider A-->
-
-                        <!--BEGIN Slider N-->
-                            <h5 style="border-left: solid 5px rgb(0,225,0); padding-left: 8px;">Number of terms:</h5>
-                        <!--Slider Display N-->
-                            <label class="sliderTitle"  >N:
-                                <span id="NControllerDisplay" data-unit="">1</span>
-                            </label>
-                        <!--Slider N-->
-                            <label class="slider"  >
-                                <input id="NController" class="inputs" type="range" value="1" min="0" max="50" step="1"/>
-                                <span class="sliderMin">0</span><span class="sliderMax">50</span>
-                            </label>
-                        <!--END Slider N-->
 
                         <!--BEGIN Slider L-->
                             <h5 style="border-left: solid 5px rgb(0,0,225); padding-left: 8px;">Period:</h5>
@@ -384,8 +432,8 @@
                             </label>
                         <!--Slider L-->
                             <label class="slider"  >
-                                <input id="LController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
-                                <span class="sliderMin">-5</span><span class="sliderMax">5</span>
+                                <input id="LController" class="inputs" type="range" value="1" min="0" max="2" step="0.05"/>
+                                <span class="sliderMin">0</span><span class="sliderMax">2</span>
                             </label>
                         <!--END Slider L-->
                         </div>
@@ -401,18 +449,35 @@
                                 <li><a class="button" href="#derivation2">Math Part 3</a></li>
 
                         </ul>
-                            $$ \text{for 0 < x < L/2:}  $$
-                            $$ f(x)=\frac{2Ax}{L}$$
-                            $$ b_n = \frac{4\cdot 2A}{L^2}\int_0^{L/2} x\cdot sin(\frac{n\pi x}{L}) dx $$
-                            $$ u=x \qquad dv=sin(\frac{n\pi x}{L})dx $$
-                            $$ du=dx \qquad v=\frac{-L}{n\pi}cos(\frac{n\pi x}{L}) $$
-                            $$ b_n=\frac{8A}{L^2}\cdot [\frac{-xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_0^{L/2}+\int_0^{L/2}\frac{L}{n\pi}\cdot cos(\frac{n\pi x}{L})dx] $$
-                            $$ b_n=\frac{8A}{L^2}\cdot [0+\int_0^{L/2}\frac{L}{n\pi}\cdot cos(\frac{n\pi x}{L})dx] $$
-                            $$ b_n=\frac{8A}{L^2}\cdot \frac{L}{(n\pi)^2} \cdot sin(\frac{n\pi x}{L})|_0^{L/2} $$
-                            $$ sin(\frac{n\pi}{2})=(-1)^{\frac{n-1}{2}} \qquad sin(\frac{n\pi \cdot 0}{L})=0 $$
-                            $$ b_n=\frac{8A}{n^2\pi^2}(-1)^{\frac{n-1}{2}} $$
-                            $$ f(x)=\sum_{n=1,3,5...}^\infty \frac{8A}{n^2\pi^2}(-1)^{\frac{n-1}{2}} \cdot sin(\frac{n\pi x}{L}) $$
-                            $$ f(x)=\sum_{n=1,2,3...}^\infty\frac{8A}{(2n-1)^2\pi^2}(-1)^n \cdot sin(\frac{(2n-1)\pi x}{L}) $$
+                        <div class="row">
+                            <div class="six columns">
+                                $$ \text{For 0 < x < L/2:} \quad f(x)=\frac{2Ax}{L} $$
+                                $$ \text{Remember for even n, } b_n=0 \text{, so only consider odd n } $$
+                                $$ b_n = \frac{4}{L} \cdot \frac{2A}{L}\int_0^{L/2} x\cdot sin(\frac{n\pi x}{L}) dx $$
+                                $$\text{Use integration by substitution:}$$
+                                $$ u=x \qquad dv=sin(\frac{n\pi x}{L})dx $$
+                                $$ du=dx \qquad v=\frac{-L}{n\pi}cos(\frac{n\pi x}{L}) $$
+                                $$ b_n=\frac{8A}{L^2}\cdot [\frac{-xL}{n\pi}\cdot cos(\frac{n\pi x}{L})|_0^{L/2}-\int_0^{L/2}\frac{-L}{n\pi}\cdot cos(\frac{n\pi x}{L})dx] $$
+                                $$ \text{ for odd n, } cos(\frac{n\pi}{2})=0 $$
+
+                            </div>
+                            <div class="six columns">
+                                $$ b_n=\frac{8A}{L^2}\cdot [0+\int_0^{L/2}\frac{L}{n\pi}\cdot cos(\frac{n\pi x}{L})dx] $$
+                                $$ b_n=\frac{8A}{L^2}\cdot \frac{L}{(n\pi)^2} \cdot sin(\frac{n\pi x}{L})|_0^{L/2} $$
+                                $$ \text{Note for n odd: } sin(\frac{n\pi}{2})=(-1)^{\frac{n-1}{2}} $$
+                                $$ b_n=\frac{8A}{n^2\pi^2}(-1)^{\frac{n-1}{2}} $$
+                                $$
+                                b_n=\left\{
+                                        \begin{array}{ll}
+                                        \frac{8A}{n^2\pi^2}(-1)^{\frac{n-1}{2}} \quad (n \quad odd) \\
+                                        0 \qquad \qquad \qquad (n \quad even)
+                                        \end{array}
+                                    \right \} \text{ Finally:}
+                                $$
+                                $$ f(x)=\sum_{n=1,3,5...}^\infty \frac{8A}{n^2\pi^2}(-1)^{\frac{n-1}{2}} \cdot sin(\frac{n\pi x}{L}) $$
+                                $$ f(x)=\sum_{n=1,2,3...}^\infty\frac{8A}{(2n-1)^2\pi^2}(-1)^n \cdot sin(\frac{(2n-1)\pi x}{L}) $$
+                            </div>
+                        </div>
 
                     </div>
                     <!--END Math derivation Triangular Part_3-->
