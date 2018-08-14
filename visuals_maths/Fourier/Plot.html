@@ -6,8 +6,6 @@
     <!--Page Info-->
     <title>Fourier Series Plot</title>
     <!--css link-->
-    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
-    <link rel="stylesheet" href="../util/navigation.css">
     <link rel="stylesheet" href="../styles/styles.css">
     <link rel="stylesheet" href="../styles/guidance.css">
     <!--Required JS resources--> <!--NB: better to have resources before the main body but still works even if they are not-->
@@ -15,19 +13,17 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
-
+    <script src="../lib/MathJax.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>
-
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
 <body>
+    <!--instruction guidance-->
     <div class="guide">
     Instructions for use
     </div>
 
+    <!--Modal-->
     <div class="guideModal">
        <div class="modalContent">
            <span class="closeBtn">&times;</span>
@@ -56,13 +52,19 @@
            <button class="nextBtn">Continue</button>
        </div>
    </div>
+
+    <!-- If you want to have navigator to change the page, check the commented code below-->
     <!-- chaging page
     <div class="leftnav">◀</div>
     -->
+
+    <!--Main content-->
     <div class="container">
         <div class="row">
-            <!-- Graph -->
+
+            <!--Title & Graph-->
             <div class="six columns">
+                <!--Title-->
                 <div class="title" id="mainTitle">
                     <h1>Main Page and Guidance:</h1>
                 </div>
@@ -87,76 +89,73 @@
                 <div class="title" id="modeTitle" hidden>
                     <h1>Fourier Series of |x| Function:</h1>
                 </div>
+
+                <!-- Graph -->
                 <div id='graph'  style="width:450px; height:450px;"></div>
             </div>
 
-            <!--Bottons/Sliders-->
+            <!--Scroll-down & Sliders-->
             <div class="six columns">
 
-                <!--Main body contents-->
+                <!--Scroll down to select the function-->
                 <div class="tab-content">
-                    <strong>Select Function: </strong>
-                            <select id="Select">
-                                <option value="main">Main Page</option>
-                                <option value="triangular">Triangular Function</option>
-                                <option value="square">Square Function</option>
-                                <option value="sawtooth">Sawtooth Function</option>
-                                <option value="dirac">Dirac-Delta Function</option>
-                                <option value="parabola">Parabola Function</option>
-                                <option value="linear">Linear Function</option>
-                                <option value="mode">|x| Function</option>
-                            </select>
-
-
-
-                    <!--BEGIN Plot-->
-                    <div class="tab-pane" id="plot">
-
-
+                    <!--Scroll down-->
+                    <div class="scroll_down">
+                        <strong>Select Function: </strong>
+                                <select id="Select">
+                                    <option value="main">Main Page</option>
+                                    <option value="triangular">Triangular Function</option>
+                                    <option value="square">Square Function</option>
+                                    <option value="sawtooth">Sawtooth Function</option>
+                                    <option value="dirac">Dirac-Delta Function</option>
+                                    <option value="parabola">Parabola Function</option>
+                                    <option value="linear">Linear Function</option>
+                                    <option value="mode">|x| Function</option>
+                                </select>
                     </div>
-                    <!--END Plot-->
 
-                <div class="allSliders" >
-                    <!--These Sliders are shared among all tabs-->
-                    <!--NB: Be careful with classes and types-->
-                    <!--BEGIN Slider A-->
-                        <h5 style="border-left: solid 5px rgb(225,0,0); padding-left: 8px;">Amplitude:</h5><!--Just Text-->
-                    <!--Slider Display A-->
-                        <label class="sliderTitle"  >A:<!--Amplitude-->
-                            <span id="AControllerDisplay" data-unit="">1</span> <!--default: 1-->
-                        </label>
-                    <!--Slider A-->
-                        <label class="slider"  >
-                            <input id="AController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
-                            <span class="sliderMin">-5</span><span class="sliderMax">5</span></label>
-                    <!--END Slider A-->
 
-                    <!--BEGIN Slider N-->
-                        <h5 style="border-left: solid 5px rgb(0,225,0); padding-left: 8px;">Number of terms:</h5>
-                    <!--Slider Display N-->
-                        <label class="sliderTitle"  >N:
-                            <span id="NControllerDisplay" data-unit="">1</span>
-                        </label>
-                    <!--Slider N-->
-                        <label class="slider"  >
-                            <input id="NController" class="inputs" type="range" value="1" min="0" max="20" step="1"/>
-                            <span class="sliderMin">0</span><span class="sliderMax">20</span>
-                        </label>
-                    <!--END Slider N-->
+                    <!--Slider-->
+                    <div class="allSliders" >
+                        <!--NB: Be careful with classes and types-->
+                        <!--BEGIN Slider A-->
+                            <h5 style="border-left: solid 5px rgb(225,0,0); padding-left: 8px;">Amplitude:</h5><!--Just Text-->
+                        <!--Slider Display A-->
+                            <label class="sliderTitle"  >A:<!--Amplitude-->
+                                <span id="AControllerDisplay" data-unit="">1</span> <!--default: 1-->
+                            </label>
+                        <!--Slider A-->
+                            <label class="slider"  >
+                                <input id="AController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
+                                <span class="sliderMin">-5</span><span class="sliderMax">5</span></label>
+                        <!--END Slider A-->
 
-                    <!--BEGIN Slider L-->
-                        <h5 style="border-left: solid 5px rgb(0,0,225); padding-left: 8px;">Period:</h5>
-                    <!--Slider Display L-->
-                        <label class="sliderTitle"  >L:
-                            <span id="LControllerDisplay" data-unit="">1</span>
-                        </label>
-                    <!--Slider L-->
-                        <label class="slider"  >
-                            <input id="LController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
-                            <span class="sliderMin">-5</span><span class="sliderMax">5</span>
-                        </label>
-                    <!--END Slider L-->
-                </div>
+                        <!--BEGIN Slider N-->
+                            <h5 style="border-left: solid 5px rgb(0,225,0); padding-left: 8px;">Number of terms:</h5>
+                        <!--Slider Display N-->
+                            <label class="sliderTitle"  >N:
+                                <span id="NControllerDisplay" data-unit="">1</span>
+                            </label>
+                        <!--Slider N-->
+                            <label class="slider"  >
+                                <input id="NController" class="inputs" type="range" value="1" min="0" max="20" step="1"/>
+                                <span class="sliderMin">0</span><span class="sliderMax">20</span>
+                            </label>
+                        <!--END Slider N-->
+
+                        <!--BEGIN Slider L-->
+                            <h5 style="border-left: solid 5px rgb(0,0,225); padding-left: 8px;">Period:</h5>
+                        <!--Slider Display L-->
+                            <label class="sliderTitle"  >L:
+                                <span id="LControllerDisplay" data-unit="">1</span>
+                            </label>
+                        <!--Slider L-->
+                            <label class="slider"  >
+                                <input id="LController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
+                                <span class="sliderMin">-5</span><span class="sliderMax">5</span>
+                            </label>
+                        <!--END Slider L-->
+                    </div>
 
 
 
@@ -164,6 +163,7 @@
             </div>
         </div>
     </div>
+    <!-- If you want to have navigator to change the page, check the commented code below-->
     <!-- changing page
     <div class="rightnav">▶</div>
     -->
@@ -171,9 +171,7 @@
     <!--THE BRAINS-->
     <script src=script/Plot.js></script>
     <script src="../util/guidance.js"></script>
-    <!--
-    <script src=script/jacksonobjects.js></script>
-    -->
+
 </body>
 
 </html>

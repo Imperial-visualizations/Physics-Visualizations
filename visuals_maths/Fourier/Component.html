@@ -14,13 +14,17 @@
     <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
     <script src="../lib/MathJax.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
 <body>
+
+    <!--instruction guidance-->
     <div class="guide">
     Instructions for use
     </div>
 
+    <!--Modal-->
     <div class="guideModal">
        <div class="modalContent">
            <span class="closeBtn">&times;</span>
@@ -41,69 +45,68 @@
            <button class="nextBtn">Continue</button>
        </div>
    </div>
+
+    <!-- If you want to have navigator to change the page, check the commented code below-->
     <!-- chaging page
     <div class="leftnav">◀</div>
     -->
+
+    <!--Main Body Content-->
     <div class="container">
         <div class="row">
-            <!-- Graph -->
+
+            <!--Title & Graph-->
             <div class="six columns">
-                <div class="title" id="mainTitle">
-                    <h1>Main Page and Guidance:</h1>
-                </div>
-                <div class="title" id="triangularTitle" hidden>
-                    <h1>Fourier Series of Triangular Function:</h1>
-                </div>
-                <div class="title" id="squareTitle" hidden>
-                    <h1>Fourier Series of Square Function:</h1>
-                </div>
-                <div class="title" id="sawtoothTitle" hidden>
-                    <h1>Fourier Series of Sawtooth Function:</h1>
-                </div>
-                <div class="title" id="diracTitle" hidden>
-                    <h1>Fourier Series of Dirac-Delta Function:</h1>
-                </div>
-                <div class="title" id="parabolaTitle" hidden>
-                    <h1>Fourier Series of Parabola Function:</h1>
-                </div>
-                <div class="title" id="linearTitle" hidden>
-                    <h1>Fourier Series of Linear Function:</h1>
-                </div>
-                <div class="title" id="modeTitle" hidden>
-                    <h1>Fourier Series of |x| Function:</h1>
-                </div>
+                <!-- Title -->
+                    <div class="title" id="mainTitle">
+                        <h1>Main Page and Guidance:</h1>
+                    </div>
+                    <div class="title" id="triangularTitle" hidden>
+                        <h1>Fourier Series of Triangular Function:</h1>
+                    </div>
+                    <div class="title" id="squareTitle" hidden>
+                        <h1>Fourier Series of Square Function:</h1>
+                    </div>
+                    <div class="title" id="sawtoothTitle" hidden>
+                        <h1>Fourier Series of Sawtooth Function:</h1>
+                    </div>
+                    <div class="title" id="diracTitle" hidden>
+                        <h1>Fourier Series of Dirac-Delta Function:</h1>
+                    </div>
+                    <div class="title" id="parabolaTitle" hidden>
+                        <h1>Fourier Series of Parabola Function:</h1>
+                    </div>
+                    <div class="title" id="linearTitle" hidden>
+                        <h1>Fourier Series of Linear Function:</h1>
+                    </div>
+                    <div class="title" id="modeTitle" hidden>
+                        <h1>Fourier Series of |x| Function:</h1>
+                    </div>
+
+                <!--Graph-->
                 <div id='graph'  style="width:450px; height:450px;"></div>
             </div>
 
-            <!--Bottons/Sliders-->
+            <!--Scroll-down & Sliders-->
             <div class="six columns">
-
-                <!--Main body contents-->
                 <div class="tab-content">
-                    <strong>Select Function: </strong>
-                            <select id="Select">
-                                <option value="main">Main Page</option>
-                                <option value="triangular">Triangular Function</option>
-                                <option value="square">Square Function</option>
-                                <option value="sawtooth">Sawtooth Function</option>
-                                <option value="dirac">Dirac-Delta Function</option>
-                                <option value="parabola">Parabola Function</option>
-                                <option value="linear">Linear Function</option>
-                                <option value="mode">|x| Function</option>
-                            </select>
-
-
-
-                    <!--BEGIN Plot-->
-                    <div class="tab-pane" id="component">
-
-
+                    <!--Scroll-down-->
+                    <div class="scroll-down">
+                        <strong>Select Function: </strong>
+                                <select id="Select">
+                                    <option value="main">Main Page</option>
+                                    <option value="triangular">Triangular Function</option>
+                                    <option value="square">Square Function</option>
+                                    <option value="sawtooth">Sawtooth Function</option>
+                                    <option value="dirac">Dirac-Delta Function</option>
+                                    <option value="parabola">Parabola Function</option>
+                                    <option value="linear">Linear Function</option>
+                                    <option value="mode">|x| Function</option>
+                                </select>
                     </div>
-                    <!--END Plot-->
 
+                    <!--Sliders-->
                     <div class="allSliders" >
-                    <!--These Sliders are shared among all tabs-->
-                    <!--NB: Be careful with classes and types-->
                     <!--BEGIN Slider A-->
                         <h5 style="border-left: solid 5px rgb(225,0,0); padding-left: 8px;">Amplitude:</h5><!--Just Text-->
                     <!--Slider Display A-->
@@ -149,6 +152,8 @@
             </div>
         </div>
     </div>
+
+    <!-- If you want to have navigator to change the page, check the commented code below-->
     <!-- changing page
     <div class="rightnav">▶</div>
     -->
@@ -156,9 +161,7 @@
     <!--THE BRAINS-->
     <script src="../util/guidance.js"></script>
     <script src=script/Component.js></script>
-    <!--
-    <script src=script/jacksonobjects.js></script>
-    -->
+
 </body>
 
 </html>

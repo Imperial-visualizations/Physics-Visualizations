@@ -4,7 +4,7 @@
 
 <head>
     <!--Page Info-->
-    <title>Fourier Series</title>
+    <title>Fourier Series Power Spectrum</title>
     <!--css link-->
     <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
     <link rel="stylesheet" href="../util/navigation.css">
@@ -23,11 +23,15 @@
 
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
+
 <body>
+
+    <!--instruction guidance-->
     <div class="guide">
     Instructions for use
     </div>
 
+    <!--Modal-->
     <div class="guideModal">
        <div class="modalContent">
            <span class="closeBtn">&times;</span>
@@ -52,13 +56,19 @@
            <button class="nextBtn">Continue</button>
        </div>
    </div>
+
+    <!-- If you want to have navigator to change the page, check the commented code below-->
     <!-- chaging page
     <div class="leftnav">◀</div>
     -->
+
+    <!--Main Body Content-->
     <div class="container">
         <div class="row">
-            <!-- Graph -->
+            <!-- Title & Graph -->
             <div class="six columns">
+
+                <!--Title-->
                 <div class="title" id="mainTitle">
                     <h3>Main Page and Guidance:</h3>
                 </div>
@@ -83,15 +93,17 @@
                 <div class="title" id="modeTitle" hidden>
                     <h3>Fourier Series of |x| Function:</h3>
                 </div>
+
+                <!--Graph-->
                 <div id='graph3' style="width:450px; height:250px;" ></div>
                 <div id='graph4' style="width:450px; height:250px;" ></div>
             </div>
 
-            <!--Bottons/Sliders-->
+            <!--Scroll-down and Sliders-->
             <div class="six columns">
 
-                <!--Main body contents-->
                 <div class="tab-content">
+                    <!--Scroll-down to select function-->
                     <strong>Select Function: </strong>
                             <select id="Select">
                                 <option value="main">Main Page</option>
@@ -104,7 +116,7 @@
                                 <option value="mode">|x| Function</option>
                             </select>
 
-                    <!--BEGIN Spectrum-->
+                    <!--Scroll-down to select between a_n b_n and alpha_n theta_n-->
                     <div class="tab-content">
                         <strong>Select Coefficient: </strong>
                         <select id="Coefficient">
@@ -113,16 +125,8 @@
                         </select>
 
                     </div>
-                    <!--END Spectrum-->
 
-
-                    <!--BEGIN Plot-->
-                    <div class="tab-pane" id="component">
-
-
-                    </div>
-                    <!--END Plot-->
-
+                    <!--Sliders-->
                     <div class="allSliders" >
                     <!--These Sliders are shared among all tabs-->
                     <!--NB: Be careful with classes and types-->
@@ -171,6 +175,8 @@
             </div>
         </div>
     </div>
+
+    <!-- If you want to have navigator to change the page, check the commented code below-->
     <!-- changing page
     <div class="rightnav">▶</div>
     -->
@@ -178,9 +184,7 @@
     <!--THE BRAINS-->
     <script src=script/Power_Spectrum.js></script>
     <script src="../util/guidance.js"></script>
-    <!--
-    <script src=script/jacksonobjects.js></script>
-    -->
+
 </body>
 
 </html>
