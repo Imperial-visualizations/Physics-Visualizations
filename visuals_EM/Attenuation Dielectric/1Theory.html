@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> Dielectric Dispersion - Imperial Visualisations</title>
+    <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+   <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+</head>
+
+<div class="container">
+    <h1>Dielectric Dispersion - Theory</h1>
+    <div class="twelve columns">
+        <p>
+            The relative permittivity of a material is dependant on the angular frequency, \(\omega\), of the incident wave, given by
+            $$\varepsilon_{r} = 1 - \frac{Nq^{2}}{\varepsilon_{0}m_{e}(\omega^{2}-\omega^{2}_{0}+i\omega\gamma)}$$
+            This can be related to the wavevecttor by \(k = n\omega/c\), this may be complex hence \(\mathbf{k}=(k_{R}+ik_I)\mathbf{\hat{z}}\) thus
+
+            $$ e^{i(\mathbf{k}\cdot\mathbf{r}-t\omega)} = e^{i(k_{R}z - \omega t)}e^{-k_{I}z}$$
+
+            assuming low density matter (e.g Gas) we can binomal expand to gve the real and imaginary refractive index:
+
+            $$ Re(n) = 1 - \frac{\omega^{2}_{d}(\omega^{2} - \omega^{2}_{0})}{(\omega^{2} - \omega^{2}_{0})^{2} + \omega^{2}\gamma^{2} }$$
+
+            $$ Im(n) = \frac{\omega^{2}_{d} \omega \gamma}{(\omega^{2} - \omega^{2}_{0})^{2} + \omega^{2}\gamma^{2}}$$
+
+            Note: The reflected wave is not included in the visualisation due to overlap with incident wave and the amplitude of the electric and magnetic fields are equal.
+
+        </p>
+    </div>
+</div>
+<script> let pages = ["1Theory.html", "2Single Wave.html", "3Plane Wave.html"]</script>
+<script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+
+</body>
+</html>

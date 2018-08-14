@@ -3,7 +3,6 @@ $(window).on('load', function() {
             pswitch: $("#polarisation-switch input"),
             wSlider:$("input#angular_frequency"),
         }
-    let isShown = false;
     let plt = {//layout of graph
         layout : {
             showlegend: false,
@@ -67,6 +66,8 @@ $(window).on('load', function() {
                }
         }
     };
+let isPlay = false;
+let w_t = 0;
 
 let w_conversion = 7e5; // Factor to make plot wavelength reasonable
 let w_0 = 2e10;//gives properties of material
@@ -96,7 +97,7 @@ class Wave{//wave object used to produce em wave
     constructor(E_0, polarisation, w) {
             this.E_0 = E_0;
             this.true_w = w;
-            //this.w = this.true_w / w_conversion;
+            this.w = this.true_w / w_conversion;
             this.k = (this.true_w) / c;
             this.B_0 = E_0;//for convenience of visualisation B and E field are same amplitude
             this.polarisation = polarisation;
@@ -120,7 +121,7 @@ class Wave{//wave object used to produce em wave
     {
         let z_range = numeric.linspace(-1, 0, size);
 
-        let k_z_cos = this.element_cos(math.multiply(this.k,z_range),size);
+        let k_z_cos = this.element_cos(math.add(-w_t,math.multiply(this.k,z_range)),size);
         let E_cos,B_cos;
 
         if (this.polarisation === "s-polarisation") {
@@ -186,7 +187,7 @@ class Wave{//wave object used to produce em wave
 
     let exp_E = this.element_exponential(math.multiply(-k_im,z_range),size);//exponential decay of amplitude
 
-    let k_z_cos = this.element_cos(math.multiply(k_real,z_range),size);
+    let k_z_cos = this.element_cos(math.add(-w_t,math.multiply(k_real,z_range)),size);
 
     let decayed_cos = math.dotMultiply(exp_E,k_z_cos);
 
@@ -254,7 +255,7 @@ class Wave{//wave object used to produce em wave
         let o_cos = math.multiply(this.k,z_range_shift);
         let c_input = math.add(shift,o_cos);//add shift to transmitted wave
 
-        let k_z_cos = this.element_cos(c_input,size);
+        let k_z_cos = this.element_cos(math.add(-w_t,c_input),size);
 
         let E_cos,B_cos;
 
@@ -446,10 +447,53 @@ function update_graph(){//update animation
     );
 };
 
+function play_loop(){
+    if(isPlay === true) {
+        w_t++;
+        Plotly.animate("graph",
+            {data: computeData()},
+            {
+                fromcurrent: true,
+                transition: {duration: 0,},
+                frame: {duration: 0, redraw: false,},
+                mode: "afterall"
+            });
+    Plotly.animate("graph_rn",
+        {data: compute_data_rn()},//updated data
+        {
+            fromcurrent: true,
+            transition: {duration: 0,},
+            frame: {duration: 0, redraw: false,},
+            mode: "afterall"
+        }
+    );
+    Plotly.animate("graph_in",
+        {data: compute_data_in()},//updated data
+        {
+            fromcurrent: true,
+            transition: {duration: 0,},
+            frame: {duration: 0, redraw: false,},
+            mode: "afterall"
+        }
+    );
+    requestAnimationFrame(play_loop);
+    }
+    return 0;
+};
+
+
+
+
 
 function initial(){
     Plotly.purge("graph");
     Plotly.newPlot('graph', computeData(),plt.layout);//create animation plot
+
+    Plotly.purge("graph_rn");
+    Plotly.newPlot('graph_rn', compute_data_rn(),plt.layout_real);//create real refractive index graph
+
+    Plotly.purge("graph_in");
+    Plotly.newPlot('graph_in', compute_data_in(),plt.layout_img);//create imaginary refractive index graph
 
     $('.container').show();//show container after loading finishes
 
@@ -457,22 +501,15 @@ function initial(){
 
     dom.pswitch.on("change", update_graph);//update graph animation
     dom.wSlider.on("input",update_graph);
+    dom.wSlider.on("input",update_graph_n);//update refractive index graph
 
-    $('#graphButton').on('click', function() {
-         $('#graph_container').toggle('show');
-
-            Plotly.purge("graph_rn");
-            Plotly.newPlot('graph_rn', compute_data_rn(),plt.layout_real);//create real refractive index graph
-
-            Plotly.purge("graph_in");
-            Plotly.newPlot('graph_in', compute_data_in(),plt.layout_img);//create imaginary refractive index graph
-
-            dom.wSlider.on("input",update_graph_n);//update refractive index graph
-
-        document.getElementById("graphButton").value = (isShown) ? "Show Graphs":"Hide Graphs";
-        console.log(isShown);
-        isShown = !isShown;
+    $('#playButton').on('click', function() {
+        document.getElementById("playButton").value = (isPlay) ? "Play" : "Stop";
+        isPlay = !isPlay;
+        w_t = 0;
+        requestAnimationFrame(play_loop);
     });
-}
+
+    };
 initial();//run the initial loading
 });

@@ -24,7 +24,7 @@ $(window).on('load', function() {//main
     let E_0 = 1;
     let w_0 = 6e9;//gives properties of material
     let gamma = 0.1*w_0;
-    let wd = 0.1*w_0;
+    let wd = 0.2*w_0;
     let w_d_squared = wd**2;
     let n1 = 1;//material before input dielectric
     let c = 3e8; // Speed of light
@@ -157,9 +157,7 @@ $(window).on('load', function() {//main
         n2 = properties[0];
         k = properties[1];
 
-        console.log("hi");
         console.log(n2);
-        console.log(k);
 
         let x_data = numeric.linspace(2, 0, size);
         let y_data = numeric.linspace(-2, 2, size);
@@ -290,7 +288,7 @@ $(window).on('load', function() {//main
                 );
             }
     }
-    console.log(data);
+
     return data
     }
 
