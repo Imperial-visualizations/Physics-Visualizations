@@ -8,7 +8,7 @@ const layout = {
     yaxis: {range: [-5,5], zeroline: true, title: "y"},
     aspectratio: {x:1, y:1}
 };
-
+//CODE IS JUST THE SAME AS PLOT AND COMPONENT, JUST BOTH IN ONE PLACE
 var defaultHref = window.location.href;
 var initX = 0, initY = 0;
 var resolution = 2000;

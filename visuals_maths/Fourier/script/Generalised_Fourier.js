@@ -2,7 +2,7 @@ var layout = {
     width: 450, "height": 500,
     margin: {l:30, r:30, t:30, b:30},
     hovermode: "closest",
-    showlegend: false,
+    showlegend: true,
     xaxis: {range: [-5,5], zeroline: true, title: "x"},
     yaxis: {range: [-2,2], zeroline: true, title: "y"},
     aspectratio: {x:1, y:1}
@@ -31,7 +31,7 @@ arccos = Math.arccos;
 arctan = Math.arctan;
 arcsinh = Math.arcsinh;
 //arccosh = Math.arccosh
-
+sqrt = Math.sqrt
 
 
 
@@ -240,6 +240,7 @@ function computePlot(x,y){
             x: x,
             y: y2,
             line:{color:"rgb(0,225,0)", width:3, dash: "dashed"},
+            name: "f(x) Fourier approximation"
          },
     ];
     return data;

@@ -132,6 +132,7 @@ function b_n(shape,n){
 }
 
 // return the amplitude/magnitude of a_n, b_n, alpha_n, theta_n
+//Is these four as a function of n
 function coefficient (N){
     var n = [];
     var an = [];
@@ -144,6 +145,7 @@ function coefficient (N){
         an.push(a_n(shape,i));
         bn.push(b_n(shape,i));
         alpha_n.push(Math.sqrt(a_n(shape,i)**2+b_n(shape,i)**2));
+        //Theta is defined strangely because javascript can't handle arctan( plus/minus infinity)
         if (a_n(shape,i)===0){
             if (b_n(shape,i)>0) {
                 theta_n.push(Math.PI/2);
@@ -156,16 +158,13 @@ function coefficient (N){
             theta_n.push(Math.atan2(b_n(shape,i),a_n(shape,i)));
         }
     }
-
     return [n, an, bn, alpha_n, theta_n];
 }
 
 // plot the bar charts to visualize the amplitude of a_n
 function plot_an(){
     var N = parseFloat(document.getElementById('NController').value);
-
     [n, an, bn, alpha_n, theta_n] = coefficient(N);
-
     var data =
     [{
             type:"bar",
@@ -184,9 +183,7 @@ function plot_an(){
 // plot the bar charts to visualize the amplitude of b_n
 function plot_bn(){
     var N = parseFloat(document.getElementById('NController').value);
-
     [n, an, bn, alpha_n, theta_n] = coefficient(N);
-
     var data =
     [{
             type:"bar",
@@ -205,7 +202,6 @@ function plot_bn(){
 // plot the bar charts to visualize the amplitude of alpha_n
 function plot_alpha(){
     var N = parseFloat(document.getElementById('NController').value);
-
     [n, an, bn, alpha_n, theta_n] = coefficient(N);
 
     var data =
