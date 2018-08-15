@@ -41,7 +41,7 @@
 
 .nextBtn{
     background-color: #f4f4f4;
-    width: 110px;
+    width: 12rem;
     position:relative;
     animation: modalOpen 1s;
     left: 81vw;
@@ -50,7 +50,7 @@
 
 .backBtn{
     background-color: #f4f4f4;
-    width: 110px;
+    width: 12rem;
     position:relative;
     animation: modalOpen 1s;
     left: 80vw;
@@ -69,8 +69,8 @@
 
 /* Guidance */
 .guide {
-    width: 164px;
-    height: 50px;
+    width: 16rem;
+    height: 10rem;
     position: fixed;
     z-index: 1;
     top: 50vh;
