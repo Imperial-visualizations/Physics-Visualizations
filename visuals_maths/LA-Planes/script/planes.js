@@ -15,6 +15,8 @@ var layout = {
     }
 };
 
+var isInterShown = false;
+
 function addEmptyObjects3d(data, numberObj){
     for (var i=0; i < numberObj; ++i){
         data.push({
@@ -70,7 +72,7 @@ function addPlane(data, a, b, c, d, color) {
     return 0;
 }
 
-function addIntersection(data, a1, b1, c1, d1, a2, b2, c2, d2, color1, color2){
+function addIntersection(data, a1, b1, c1, d1, a2, b2, c2, d2, color){
     var normal = [b1*c2 - b2*c1, a2*c1 - a1*c2, a1*b2 - a2*b1];
 
     var x, point = [];
@@ -99,69 +101,55 @@ function addIntersection(data, a1, b1, c1, d1, a2, b2, c2, d2, color1, color2){
         return 1;
     }
 
-    var xPoints = [point[0] - 50*normal[0], point[0] + 50*normal[0]],
-        yPoints = [point[1] - 50*normal[1], point[1] + 50*normal[1]],
-        zPoints = [point[2] - 50*normal[2], point[2] + 50*normal[2]];
-
+    increaseMag(normal, 100);
     var line = {
         type: "scatter3d",
         mode: "lines",
-        x: xPoints,
-        y: yPoints,
-        z: zPoints,
-        line: {color: color1, width: 8}
+        x: [point[0] - normal[0], point[0] + normal[0]],
+        y: [point[1] - normal[1], point[1] + normal[1]],
+        z: [point[2] - normal[2], point[2] + normal[2]],
+        line: {color: color, width: 8}
     };
 
     data.push(line);
     return 0;
 }
 
-function addLine(data, a1, b1, c1, d1, a2, b2, c2, d2, color1, color2){
-    var normal = [b1*c2 - b2*c1, a2*c1 - a1*c2, a1*b2 - a2*b1];
+function addLine(data, point, direction, color){
+    increaseMag(direction, 100);
+    data.push({
+        type: "scatter3d",
+        mode: "lines",
+        x: [point[0] - direction[0], point[0] + direction[0]],
+        y: [point[1] - direction[1], point[1] + direction[1]],
+        z: [point[2] - direction[2], point[2] + direction[2]],
+        line: {color: color, width: 8}
+    });
+    return 0;
+}
 
-    var x, point = [];
-    if (a1*b2 - b1*a2 != 0) {
-        // z = 0
-        x = math.lusolve([[a1, b1], [a2, b2]], [-d1, -d2]);
-        for (var i=0; i<2; ++i){
-            point.push(x[i][0]);
+function addPoint(data, point, color){
+    data.push({
+        type: "scatter3d",
+        mode: "markers",
+        x: [point[0]],
+        y: [point[1]],
+        z: [point[2]],
+        marker: {color: color, width: 8}
+    });
+    return 0;
+}
+
+function increaseMag(value, limit) {
+    for (var i=0; i<value.length; ++i){
+        if(value[i] !== 0){
+            while (Math.abs(value[i]) < limit){
+                value[i] *= 10;
+            }
         }
-        point.push(0);
-    } else if (a1*c2 - c1*a2 != 0) {
-        // y = 0
-        x = math.lusolve([[a1, c1], [a2, c2]], [-d1, -d2]);
-        point.push(x[0][0]);
-        point.push(0);
-        point.push(x[1][0]);
-    } else if (b1*c2 - c1*b2 != 0) {
-        // x = 0
-        x = math.lusolve([[b1, c1], [b2, c2]], [-d1, -d2]);
-        point.push(0);
-        for (var i=0; i<2; ++i){
-            point.push(x[i][0]);
-        }
-    } else {
-        addEmptyObjects3d(data, 1);
-        return 1;
     }
-
-    var xPoints = [point[0] - 50*normal[0], point[0] + 50*normal[0]],
-        yPoints = [point[1] - 50*normal[1], point[1] + 50*normal[1]],
-        zPoints = [point[2] - 50*normal[2], point[2] + 50*normal[2]];
-
-    var line = {
-        type: "scatter3d",
-        mode: "lines",
-        x: xPoints,
-        y: yPoints,
-        z: zPoints,
-        line: {color: color1, width: 8}
-    };
-
-    data.push(line);
     return 0;
 }
-
 
 function init() {
     Plotly.purge("graph");
@@ -183,21 +171,36 @@ function compute(data) {
         a2 = parseFloat($("#a2Input").val()), b2 = parseFloat($("#b2Input").val()),
         c2 = parseFloat($("#c2Input").val()), d2 = parseFloat($("#d2Input").val()),
         a3 = parseFloat($("#a3Input").val()), b3 = parseFloat($("#b3Input").val()),
-        c3 = parseFloat($("#c3Input").val()), d3 = parseFloat($("#d3Input").val());
+        c3 = parseFloat($("#c3Input").val()), d3 = parseFloat($("#d3Input").val()),
+
+        e1 = parseFloat($("#e1Input").val()), i1 = parseFloat($("#i1Input").val()),
+        f1 = parseFloat($("#f1Input").val()), j1 = parseFloat($("#j1Input").val()),
+        g1 = parseFloat($("#g1Input").val()), k1 = parseFloat($("#k1Input").val()),
+        e2 = parseFloat($("#e2Input").val()), i2 = parseFloat($("#i2Input").val()),
+        f2 = parseFloat($("#f2Input").val()), j2 = parseFloat($("#j2Input").val()),
+        g2 = parseFloat($("#g2Input").val()), k2 = parseFloat($("#k2Input").val()),
+
+        x = parseFloat($("#xInput").val()), y = parseFloat($("#yInput").val()), z = parseFloat($("#zInput").val());
 
     if(!$("#plane1").is(":hidden")){addPlane(data, a1, b1, c1, d1, cyan);};
     if(!$("#plane2").is(":hidden")){addPlane(data, a2, b2, c2, d2, orange);};
     if(!$("#plane3").is(":hidden")){addPlane(data, a3, b3, c3, d3, lilac);};
 
     if (!$("#plane1").is(":hidden") && !$("#plane2").is(":hidden")) {
-        addIntersection(data, a1, b1, c1, d1, a2, b2, c2, d2, "rgb(0,255,0)", white);
+        addIntersection(data, a1, b1, c1, d1, a2, b2, c2, d2, "rgb(0,255,0)");
     }
     if (!$("#plane2").is(":hidden") && !$("#plane3").is(":hidden")) {
-        addIntersection(data, a2, b2, c2, d2, a3, b3, c3, d3, "rgb(255,0,0)", white);
+        addIntersection(data, a2, b2, c2, d2, a3, b3, c3, d3, "rgb(255,0,0)");
     }
     if (!$("#plane1").is(":hidden") && !$("#plane3").is(":hidden")) {
-        addIntersection(data, a1, b1, c1, d1, a3, b3, c3, d3, "rgb(0,0,255)", white);
+        addIntersection(data, a1, b1, c1, d1, a3, b3, c3, d3, "rgb(0,0,255)");
     }
+
+    if(!$("#line01").is(":hidden")){addLine(data, [e1, f1, g1], [i1, j1, k1], black);};
+    if(!$("#line02").is(":hidden")){addLine(data, [e2, f2, g2], [i2, j2, k2], "#7ec0ee");};
+
+    if(!$("#point1").is(":hidden")){addPoint(data, [x, y, z], black);};
+
 
     return 0;
 }
@@ -207,9 +210,35 @@ function update() {
     var data = [];
     var error = compute(data);
 
-    console.log("updating", error);
-
+    updateIntersection();
     Plotly.newPlot("graph", data, layout);
+    return 0;
+}
+
+function updateIntersection() {
+    if(isInterShown){
+        hideIntersection();
+        if (!$("#plane1").is(":hidden") && !$("#plane2").is(":hidden")) {
+            $("#intersection1").show();
+        }
+        if (!$("#plane2").is(":hidden") && !$("#plane3").is(":hidden")) {
+            $("#intersection2").show();
+        }
+        if (!$("#plane1").is(":hidden") && !$("#plane3").is(":hidden")) {
+            $("#intersection3").show();
+        }
+    } else{
+        hideIntersection();
+    }
+
+
+    return 0;
+}
+
+function hideIntersection() {
+    $("#intersection1").hide();
+    $("#intersection2").hide();
+    $("#intersection3").hide();
     return 0;
 }
 
@@ -219,7 +248,7 @@ function main() {
             if(event.keyCode == 13) {
                 let n = $(this).val();
                 if( n.match(/^-?\d*(\.\d+)?$/) && !isNaN(parseFloat(n)) ){
-                    $("#"+$(this).attr("id") + "Error").hide();
+                    $("#inputError").hide();
                     if( parseFloat(n) > -51 && parseFloat(n) < 51){
                         update();
                     } else{
@@ -232,14 +261,6 @@ function main() {
                 }
             }
         });
-    });
-
-    $('.fraction').each(function(key, value) {
-        $this = $(this)
-        var split = $this.html().split("/")
-        if( split.length == 2 ){
-            $this.html('<span class="top">'+split[0]+'</span><span class="bottom">'+split[1]+'</span>')
-        }
     });
 
     $("input[type=button]").click(function () {
@@ -259,6 +280,15 @@ function main() {
             $("#point1").show();
         }
         update();
+    });
+
+    $("input[type=submit]").click(function () {
+        if ($(this).attr("id") === "showIntersection") {
+            isInterShown = !isInterShown;
+            updateIntersection();
+            document.getElementById("showIntersection").value = (isInterShown) ?
+            "Hide Equations of Intersection Lines":"Show Equations of Intersection Lines";
+        }
     });
 
     $(".closeBtn").click(function () {
