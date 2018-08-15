@@ -1,10 +1,7 @@
 let playing = true;
 let omega = 0;
-let buttonIncrease;
-let buttonDecrease;
+let buttonIncrease, buttonDecrease, img;
 let show = false;
-let img;
-let orbit = true;
 const radius = 160;
 let width = $("#spin").width(), height = 0.6 * $(window).height();
 
@@ -38,21 +35,15 @@ function setup() {
         playing = true
     }
     });
+
     slider = createSlider(0, 0.8, 0.025, 0);
     slider.position(25, 0)
     slider.parent(animation)
     slider.style('width', '150px');
 
-    $("input[type=range]").mousedown(function() {
-        orbit = false;
-    });
-    $("input[type=range]").mouseup(function() {
-            orbit = true;
-    });
-
-    $("button").click(function() {
-        orbit = !orbit
-    })
+    function windowResized() {
+        resizeCanvas($("#spin").width(), 0.6*windowHeight);
+    }
 }
 
 function draw() {
@@ -61,9 +52,7 @@ function draw() {
     let a = Math.sqrt(radius * radius / flatteningFactor);
 
     background(25);
-    if (orbit) {
-        //orbitControl();
-    }
+
     rotateY((2*omega)*millis()/1000);
     if (show) {
         noFill()
@@ -75,13 +64,11 @@ function draw() {
 
     let locX = mouseX - height/2;
     let locY = mouseY - width/2;
-
     pointLight(255, 255, 255, locX, locY, 500)
     pointLight(255, 255, 255, locX, locY, 500)
     pointLight(255, 255, 255, locX, locY, 500)
     pointLight(255, 255, 255, locX, locY, 500)
     pointLight(255, 255, 255, locX, locY, 500)
-
 
     ellipsoid(a, radius*flatteningFactor, a, 128);
 
