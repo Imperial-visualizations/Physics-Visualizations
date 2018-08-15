@@ -72,6 +72,9 @@
     width: 16rem;
     height: 10rem;
     position: fixed;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
     z-index: 1;
     top: 50vh;
     left: 97vw;
