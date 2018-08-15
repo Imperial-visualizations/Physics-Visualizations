@@ -45,6 +45,7 @@ function adding(array){
 
 // select the kind of Fourier Series you want
 function selection(n,A,L,x,type){
+    //Is summand of the particular function
     if (type===0){
         formula = (8*A*1/((2*(n)-1) *Math.PI)**2)*(-1)**(n) * Math.sin(x*(2*n -1) *Math.PI /L);
     } else if (type===1){
@@ -74,7 +75,7 @@ function selection(n,A,L,x,type){
 // sum up all the terms in the Fourier Series
 // so at x, we have terms n=0, n=1, n=2..., we sum up all the amplitudes y=y0+y1+y2+... y0 at n=0, y1 at n=1, y2 at n=2...
 function summation(x) {
-
+    //Goes through and sums up each component of the summand up to N
     var N = parseFloat(document.getElementById('NController').value);
     var L = parseFloat(document.getElementById('LController').value);
     var A = parseFloat(document.getElementById('AController').value);
@@ -98,7 +99,7 @@ function summation(x) {
 // y_values_cheat is to set the each of the value equals its midpoint value plus the y_value
 // so all the y_value_cheat starts at the midpoint of the y_value (equivalently, it's the average value)
 function computePlot(x){
-
+    //Just plots the sum approximation of the function
     var N = parseFloat(document.getElementById('NController').value);
     var L = parseFloat(document.getElementById('LController').value);
     var A = parseFloat(document.getElementById('AController').value);
@@ -231,5 +232,6 @@ function main() {
 */
     //The First Initialisation - I use 's' rather than 'z' :p
     initFourier();
+    initGuidance([[30, 30],[48, 7], [51, 25], [51,43],[51,62],[30,30]]);
 }
 $(document).ready(main); //Load main when document is ready.

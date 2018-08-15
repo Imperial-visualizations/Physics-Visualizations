@@ -195,27 +195,24 @@ function Point(position) {
 function Sphere(radius) {
     var sphere = []
     this.radius = radius;
-    var meshSize = 20;
-    var theta = numeric.linspace(0, Math.PI, meshSize);
-    var phi = numeric.linspace(0, 2*Math.PI, meshSize);
-    this.x = [], this.y = [], this.z = [];
-    for(var i = 0; i < meshSize; ++i) {
-        this.x[i] = [], this.y[i] = [], this.z[i] = [];
-        for(var j = 0; j < meshSize; ++j) {
-            this.x[i].push(radius*Math.cos(phi[i])*Math.sin(theta[j]));
-            this.y[i].push(radius*Math.sin(phi[i])*Math.sin(theta[j]));
-            this.z[i].push(radius*Math.cos(theta[j]));
-        }
-    }
     sphere.push({
-        type: "surface",
-        x: this.x,
-        y: this.y,
-        z: this.z,
-        showscale: false,
-        opacity: 0.4,
-        colorscale: [[0.0, orange], [1.0, white]]
-    })
+            type: "mesh3d",
+            x: [0, -radius, 0, radius, 0, -0],
+            y: [0, 0, radius, 0, -radius, 0],
+            z: [-radius, 0, 0, 0, 0, radius],
+            i : [0, 0, 0, 0, 5, 5, 5, 5],
+            j : [2, 3, 4, 1, 4, 1, 2, 3],
+            k : [1, 2, 3, 4, 1, 2, 3, 4],
+            opacity: 0.3,
+            colorscale: [
+            [0, 'rgb(255, 0, 0)'],
+            [0.5, 'rgb(0, 255, 125)'],
+            [1, 'rgb(0, 0, 255)']
+            ],
+            intensity: [0, 0.1, 0.3, 0.5, 0.7, 0.8, 0.9, 1],
+            showscale: false
+        }
+    )
     var arr1 = new Line([[radius,0,0],[radius+1.5,0,0]])
     var arr11 = new Line([[radius-1,0,0],[radius+1.5,0,0]])
     var arr2 = new Line([[-radius,0,0],[-radius-1.5,0,0]])

@@ -68,6 +68,7 @@ function adding(array){
 // after the if statement, each function has been optimized for better visualization
 // comment behind each if statement is the original a_n of each function without optimization
 function odd_selection2(n,A,L,type){
+    //Represents the bn part of the function summand
     if (type===0){
         amplitude = (A*(-1)**n)*(decay)**n; // (8*A*1/((2*(n)-1) *np.pi)**2)*((-1)**(n))
     } else if (type===1){
@@ -85,10 +86,12 @@ function odd_selection2(n,A,L,type){
     }
     return amplitude;
 }
-
+//Note with both the an and bn part, the amplitude isn't necessarily mathematially correct, if that was done the components just
+//get too small, so we use a decay power law, so that the components dont get too small too quickly
 // b_n
 // b_n part is to multiply the function f(x) by cos, and cos is and even function
 function even_selection2(n,A,L,type){
+    //Gives the an part of the function sum
     if (type === 6){
         if (n===0){
             amplitude2= A*L;
@@ -103,7 +106,7 @@ function even_selection2(n,A,L,type){
 
 // return the data that stores one component of the Fourier Series
 function plotSines(n,x,shape){
-
+    //Plots individual components that are being built up to the total function
     var N = parseFloat(document.getElementById('NController').value);
     var L = parseFloat(document.getElementById('LController').value);
     var A = parseFloat(document.getElementById('AController').value);
@@ -118,6 +121,7 @@ function plotSines(n,x,shape){
         x_n.push(x[i]);
         y_n.push(((odd_selection2(n,A,L,shape))*Math.sin(n*Math.PI*x[i]/L)+(even_selection2(n,A,L,shape))*Math.cos(n*Math.PI*x[i]/L))+2*spacing*(n));
     }
+    //y value gets shifted up so that the plots are distinctly different
 
     var data=
         {
@@ -243,5 +247,6 @@ function main() {
 */
     //The First Initialisation - I use 's' rather than 'z' :p
     initFourier();
+    initGuidance([[30, 30],[48, 7], [51,62],[30,30]]);
 }
 $(document).ready(main); //Load main when document is ready.
