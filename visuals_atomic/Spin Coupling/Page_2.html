@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Spin Coupling - Imperial Visualisations</title>
+    <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://rawgit.com/cydcowley/public-test-data/master/Style2.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+    <style>
+      #spinner{
+        text-align: center;
+        position: absolute;
+        top:50%;
+        width:100%;
+      }
+    </style>
+</head>
+
+<body>
+    <div class="leftnav">◀ </div>  
+
+    <div id='spinner'>
+      <span class="loading-message">Loading</span>
+      <div>
+          <div class="spinner-mask"></div>
+          <div id="spinner-bar"></div>
+          <div class="spinner-mask"></div>
+      </div>
+    </div>
+
+<div class="container">
+
+    <h1>Spin Coupling</h1>
+    <div class="row">
+        <div class="six columns">
+            <p>
+              The electron's spin gives rise to a magnetic moment \( \mathbf{\mu}_s=-\mu_B\mathbf{\hat{s}} \). Now the electron is moving in the electric field of the nucleus, so it experiences a magnetic field in its moving frame hich interacts with \( \mathbf{\mu}_s \). Also, since there is no external torque on the atom, a coupling between \( \mathbf{l} \) and \( \mathbf{s} \) must result in a constant total angular momentum \( \mathbf{j} \). The individual angular momenta \( \mathbf{l} \) and \( \mathbf{s} \) must be precessing around \( \mathbf{j} \) because the interaction \( -\mathbf{\mu}_s\cdot\mathbf{B} \) gives rise to a torque acting on each of them.
+            </p>
+
+            <!--dropdown menu to select different spin quantum numbers-->
+            <select id="spin_number">
+              <option value="1">1</option>
+              <option value="0.5" selected>1/2</option>
+              <option value="-0.5">-1/2</option>
+            </select>
+
+            <select id="magnetic_number">
+              <option value="0">0</option>
+              <option value="1" selected>1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+
+            <!--
+            <select id='azimuthal_number'>
+              <option value="0">0</option>
+              <option value="1" selected>1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+            -->
+
+            <div>
+              <button id="startAnimation">Start</button>
+              <button id="stopAnimation">Stop</button>
+            </div>
+        </div>
+
+        <!--put animation of capacitor here-->
+        <div class="six columns">
+            <div id = "graph_container">
+            <div id = "graph" style="width: 45vw; height: 63vh;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+  $('.container').hide();
+</script>
+<script src="scripts/SpinCoupling.js"></script>
+<!-- Navigation script that allows movement between pages-->
+<script src="scripts/navigation.js"></script>
+</body>
+</html>

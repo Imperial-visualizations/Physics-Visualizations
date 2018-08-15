@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Spin Coupling - Imperial Visualisations</title>
+    <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://rawgit.com/cydcowley/public-test-data/master/Style2.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+    <style>
+      #spinner{
+        text-align: center;
+        position: absolute;
+        top:50%;
+        width:100%;
+      }
+    </style>
+</head>
+
+<body>
+  <div class="rightnav"> ▶ </div>
+  
+  <div id='spinner'>
+      <span class="loading-message">Loading</span>
+      <div>
+          <div class="spinner-mask"></div>
+          <div id="spinner-bar"></div>
+          <div class="spinner-mask"></div>
+      </div>
+  </div>
+
+<div class="container">
+    <h1>Spin-orbit interaction</h1>
+    <div class="row">
+        <div class="six columns">
+            <p>
+                For an electron in an atom, its angular momentum \( \mathbf{l} \) and spin \( \mathbf{s} \) couple to form a constant total angular momentum \( \mathbf{j} \). Before we apply the spin-orbit interaction, all the states described by the quantum numbers \( m_l \) and \( m_s \) are degenerate. However, in the presence of the pertubation, the energy levels now depend on the relative orientation of \( \mathbf{l} \) and \( \mathbf{s} \), so \( m_l \) and \( m_s \) are no longer good quantum numbers. Instead, the operator \( \mathbf{\hat{j}} \) gives a new quantum number \( j \),  which takes values between \( l+s \) and \( |l-s| \) in steps of 1. Similarly, the operator \( \mathbf{\hat{j}}_z \) gives rise to a new quantum number \( m_j \). Hence, we obtain a set of operators
+                $$\mathbf{s}^2\mathbf{\Psi}=\hbar^2 s(s+1)\mathbf{\Psi} \qquad \mathbf{s}_z\mathbf{\Psi}=\hbar m_s\mathbf{\Psi}$$
+                $$\mathbf{l}^2\mathbf{\Psi}=\hbar^2 l(l+1)\mathbf{\Psi} \qquad \mathbf{l}_z\mathbf{\Psi}=\hbar m_l\mathbf{\Psi}$$
+                $$\mathbf{j}^2\mathbf{\Psi}=\hbar^2 j(j+1)\mathbf{\Psi} \qquad \mathbf{j}_z\mathbf{\Psi}=\hbar m_j\mathbf{\Psi}$$
+                where <br>
+                $$ m_s = -s,\dots ,s,$$
+                $$ m_l = -l,\dots ,l,$$
+                $$ m_j = -j,\dots ,j \text{ or } |l-s|,\dots ,|l+s| $$
+            </p>
+        </div>
+
+        <!--put animation of capacitor here-->
+        <div class="six columns">
+            <p align="center">
+              \( s =\ \)
+              <select id="s">
+                <option value="1" id="s1">1</option>
+                <option value="0.5" id="s1/2" selected>1/2</option>
+              </select>
+              \( \qquad l =\ \)
+              <select id="l">
+                <option value="0" id="l0">0</option>
+                <option value="1" id="l1" selected>1</option>
+                <option value="2" id="l2">2</option>
+                <option value="3" id="l3">3</option>
+              </select>
+              \( \qquad j = \) <span id="j_variable_text"></span>
+              <br>
+              \( m_s =\ \)
+              <select id="ms">
+                <option value="1" id="ms1" disabled>1</option>
+                <option value="0.5" id="ms0.5" selected>1/2</option>
+                <option value="0" id="ms0" disabled>0</option>
+                <option value="-0.5" id="ms-0.5">-1/2</option>
+                <option value="-1" id="ms-1" disabled>-1</option>
+              </select>
+              \( \qquad m_l =\ \)
+              <select id="ml">
+                <option value="3" id="ml3" disabled>3</option>
+                <option value="2" id="ml2" disabled>2</option>
+                <option value="1" id="ml1" selected>1</option>
+                <option value="0" id="ml0">0</option>
+                <option value="-1" id="ml-1">-1</option>
+                <option value="-2" id="ml-2" disabled>-2</option>
+                <option value="-3" id="ml-3" disabled>-3</option>
+              </select>
+              \( \quad m_j = \) <span id="mj_variable_text"></span>
+            </p>
+
+            <div id = "graph_container">
+            <div id = "graph" style="width: 45vw; height: 63vh;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+  $('.container').hide();
+</script>
+<script src="scripts/SpinInteraction.js"></script>
+<!-- Navigation script that allows movement between pages-->
+<script src="scripts/navigation.js"></script>
+</body>
+</html>
