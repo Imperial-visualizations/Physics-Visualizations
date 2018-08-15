@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> Conductors - Imperial Visualisations</title>
+    <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+</head>
+
+<body>
+
+
+<div class="container">
+    <h1>Good Conductor - Theory</h1>
+    <div class="twelve columns">
+           <p>
+               For a Good Conductor \(\varepsilon \rightarrow \varepsilon_{0}\) and \(\omega\varepsilon_{0}/\sigma\lt\lt 1\).
+               The dispersion relation of the conductor is given by $$k^{2} = \mu_{0}\varepsilon\omega^{2}(1 + \frac{i\sigma}{\varepsilon\omega}) \simeq i\mu_{0}\sigma\omega$$
+               The wave vector \(\mathbf{k}\) is complex, \(\mathbf{k} = \mathbf{k}_{R} +i\mathbf{k}_{I}\), thus $$ k^{2} = (\mathbf{k}_{R} +i\mathbf{k}_{I})\cdot(\mathbf{k}_{R} +i\mathbf{k}_{I}) = \mathbf{k}^{2}_{R} - \mathbf{k}^{2}_{I} + i2\mathbf{k}_{R}\cdot\mathbf{k}_{I}$$
+               $$Re(k^{2}) = 0 \rightarrow k_{R} = k_{I},\quad Im(k^{2}) = \mu_{0}\sigma\omega$$ and assuming the real and imaginary components are parallel then $$k_{R} = k_{I} = \frac{1}{\delta}\quad where\quad \delta = \sqrt{\frac{2}{\mu_{0}\sigma\omega}}$$
+               Therefore the phase velocity is greatly reduced as $$ v_{phase} = \sqrt{\frac{2\omega\varepsilon_{0}}{\sigma}}c \lt\lt c $$ moreover the wave is strongly attenuated as $$\lambda = \frac{2\pi}{k_{R}} = 2\pi\delta$$
+               with \(B_{0}\) lagging behind \(E_{0}\) by \(\pi/4\) as $$tan(\phi) = \frac{Z_{I}}{Z_{R}} = \frac{-k_{I}}{k_{R}} = -1$$ The wave propagates but is strongly attenuated over a distance \(\delta\).
+           </p>
+    </div>
+</div>
+<script src="scripts/2D_Dielectric_Dielectric_attenuation.js"></script>
+<script> let pages = ["1Theory.html", "2Single Wave.html", "3Plane Wave.html"]</script>
+<script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+
+</body>
+</html>
