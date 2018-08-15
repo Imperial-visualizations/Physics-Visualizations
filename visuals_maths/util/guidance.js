@@ -2,8 +2,9 @@ let modal = document.getElementsByClassName("guideModal")[0],
     guide = document.getElementsByClassName("guide")[0],
     modalContent = document.getElementsByClassName("modalContent")[0];
 
-let currentSlideNumber = 0;
-const maxSlideNumber = 3;
+let currentSlideNumber = 0,
+    maxSlideNumber = 4,
+    slideIDs;
 
 function openModal(){
     modal.style.display = "block";
@@ -12,7 +13,9 @@ function openModal(){
     $(".backBtn").prop("disabled",true);
     $(".guide").hide();
 
-    $("#graph, ul, h1, input, label").addClass("whitened"); //make sure you don't add whiten to div's and containers
+    for (var i=0; i < slideIDs.length; ++i){
+        $("#" + slideIDs[i]).addClass("whitened");
+    }
     return 0;
 }
 
@@ -35,7 +38,8 @@ function triggerAnimation() {
 }
 
 function nextModal(){
-    $("#animate").removeClass("whitened");
+    $("#" + slideIDs[currentSlideNumber - 1]).addClass("whitened");
+    $("#" + slideIDs[currentSlideNumber]).removeClass("whitened");
     if (currentSlideNumber < maxSlideNumber){
         $(".backBtn").prop("disabled",false);
 
@@ -67,7 +71,9 @@ function guidanceShow() {guide.style.left = "97vw";};
 function guidanceHide() {guide.style.left = "98vw"; guide.style.transitionDuration = "1s";};
 
 /*Initialisation*/
-function initGuidance() {
+function initGuidance(ids=[]) {
+    slideIDs = ids;
+    maxSlideNumber = slideIDs.length + 1;
     $(".guide").each(function () {
         $(this).mouseenter(function () {guidanceShow();});
         $(this).mouseleave(function () {guidanceHide();});

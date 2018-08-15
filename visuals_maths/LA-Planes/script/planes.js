@@ -72,10 +72,12 @@ function addPlane(data, a, b, c, d, color) {
     return 0;
 }
 
-function addIntersection(data, a1, b1, c1, d1, a2, b2, c2, d2, color){
-    var normal = [b1*c2 - b2*c1, a2*c1 - a1*c2, a1*b2 - a2*b1];
+function addIntersection(data, point, normal, a1, b1, c1, d1, a2, b2, c2, d2, color){
+    normal[0] = b1*c2 - b2*c1;
+    normal[1] = a2*c1 - a1*c2;
+    normal[2] = a1*b2 - a2*b1;
 
-    var x, point = [];
+    var x;
     if (a1*b2 - b1*a2 != 0) {
         // z = 0
         x = math.lusolve([[a1, b1], [a2, b2]], [-d1, -d2]);
@@ -102,16 +104,19 @@ function addIntersection(data, a1, b1, c1, d1, a2, b2, c2, d2, color){
     }
 
     increaseMag(normal, 100);
-    var line = {
+    data.push({
         type: "scatter3d",
         mode: "lines",
         x: [point[0] - normal[0], point[0] + normal[0]],
         y: [point[1] - normal[1], point[1] + normal[1]],
         z: [point[2] - normal[2], point[2] + normal[2]],
         line: {color: color, width: 8}
-    };
+    });
 
-    data.push(line);
+    normalise(normal);
+    sig2(normal);
+    sig2(point);
+
     return 0;
 }
 
@@ -151,6 +156,23 @@ function increaseMag(value, limit) {
     return 0;
 }
 
+function normalise(value) {
+    var mag = math.norm(value);
+    if (mag !== 0){
+        for (var i=0; i<value.length; ++i){
+            value[i] = value[i]/mag;
+        }
+    }
+    return 0;
+}
+
+function sig2(value) {
+    for (var i=0; i<value.length; ++i){
+        value[i] = Math.round(value[i]*100)/100;
+    }
+    return 0;
+}
+
 function init() {
     Plotly.purge("graph");
 
@@ -182,18 +204,25 @@ function compute(data) {
 
         x = parseFloat($("#xInput").val()), y = parseFloat($("#yInput").val()), z = parseFloat($("#zInput").val());
 
+    var point, direction;
     if(!$("#plane1").is(":hidden")){addPlane(data, a1, b1, c1, d1, cyan);};
     if(!$("#plane2").is(":hidden")){addPlane(data, a2, b2, c2, d2, orange);};
     if(!$("#plane3").is(":hidden")){addPlane(data, a3, b3, c3, d3, lilac);};
 
     if (!$("#plane1").is(":hidden") && !$("#plane2").is(":hidden")) {
-        addIntersection(data, a1, b1, c1, d1, a2, b2, c2, d2, "rgb(0,255,0)");
+        point = []; direction = [];
+        addIntersection(data, point, direction, a1, b1, c1, d1, a2, b2, c2, d2, "rgb(0,255,0)");
+        $("#intersection1").text("Plane 1 & Plane 2: " + "Point: " + point + " " + "Direction: " + direction);
     }
     if (!$("#plane2").is(":hidden") && !$("#plane3").is(":hidden")) {
-        addIntersection(data, a2, b2, c2, d2, a3, b3, c3, d3, "rgb(255,0,0)");
+        point = []; direction = [];
+        addIntersection(data, point, direction, a2, b2, c2, d2, a3, b3, c3, d3, "rgb(255,0,0)");
+        $("#intersection2").text("Plane 2 & Plane 3: " + "Point: " + point + " " + "Direction: " + direction);
     }
     if (!$("#plane1").is(":hidden") && !$("#plane3").is(":hidden")) {
-        addIntersection(data, a1, b1, c1, d1, a3, b3, c3, d3, "rgb(0,0,255)");
+        point = []; direction = [];
+        addIntersection(data, point, direction, a1, b1, c1, d1, a3, b3, c3, d3, "rgb(0,0,255)");
+        $("#intersection3").text("Plane 1 & Plane 3: " + "Point: " + point + " " + "Direction: " + direction);
     }
 
     if(!$("#line01").is(":hidden")){addLine(data, [e1, f1, g1], [i1, j1, k1], black);};
@@ -297,5 +326,6 @@ function main() {
     });
 
     init();
+    initGuidance(["graph", "addButtons", "equations", "showIntersection"]);
 }
 $(document).ready(main);

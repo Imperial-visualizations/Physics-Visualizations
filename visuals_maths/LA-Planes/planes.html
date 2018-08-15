@@ -4,6 +4,7 @@
 <head>
     <title>LA: Plane Intersection</title>
     <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="../styles/guidance.css">
     <script src="../lib/plotly-latest.min.js"></script>
     <script src="../lib/jquery-3.3.1.min.js"></script>
     <script src="../lib/numeric-1.2.6.min.js"></script>
@@ -12,6 +13,34 @@
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
 <body>
+    <div class="guide">
+        Instructions for use
+    </div>
+
+    <div class="guideModal">
+        <div class="guideTest"></div>
+        <button class="backBtn">◀ Back</button> <button class="nextBtn">Next ▶</button>
+        <div class="modalContent">
+            <p id="modal_0">
+                This is the guidance for the Plane Intersection visualisation.
+            </p>
+            <p id="modal_1" hidden>
+                This is the graph that plots all the planes.
+            </p>
+            <p id="modal_2" hidden>
+                You can add plane, lines and points with these buttons.
+            </p>
+            <p id="modal_3" hidden>
+                This display shows the equation of the planes, lines and points and you can change the values.
+            </p>
+            <p id="modal_4" hidden>
+                This shows the equations of the intersections lines.
+            </p>
+            <p id="modal_5" hidden>
+                Have fun!
+            </p>
+        </div>
+    </div>
 
     <div class="container">
         <div class="row">
@@ -29,9 +58,9 @@
                     <input id="addLine" type="button" value="Add Line">
                     <input id="addPoint" type="button" value="Add Point">
                     <p id="inputError" style="color:#ff0000" hidden></p>
-                    <p id="intersection1" style="color:#000000" hidden>Mark Sucks!</p>
-                    <p id="intersection2" style="color:#000000" hidden>Yes He does</p>
-                    <p id="intersection3" style="color:#000000" hidden>Yup</p>
+                    <p id="intersection1" style="color:rgb(0,255,0)" hidden>Mark Sucks!</p>
+                    <p id="intersection2" style="color:rgb(255,0,0)" hidden>Yes He does</p>
+                    <p id="intersection3" style="color:rgb(0,0,255)" hidden>Yup</p>
                 </div>
                 <div id="equations">
                     <div id="plane1">
@@ -137,6 +166,7 @@
         </div>
     </div>
     <link rel="stylesheet" href="script/plane.css">
+    <script src="../util/guidance.js"></script>
     <script src=../util/objects.js></script>
     <script src=script/planes.js></script>
 </body>
