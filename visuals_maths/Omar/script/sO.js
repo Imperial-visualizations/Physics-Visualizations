@@ -92,7 +92,7 @@ function Circle(radius){
 
 function Sphere(radius) {
     this.radius = radius;
-    this.gObject = function(color1,color2, width=7, dash="solid",size,height=1, wave=4) {
+    this.gObject = function(color1,color2, width=7, dash="solid",size, height=1, wave=4) {
         var meshSize = 40;
         var phi = numeric.linspace(0, 2*Math.PI, meshSize);
         var theta= numeric.linspace(0, 0.5*Math.PI, meshSize);
