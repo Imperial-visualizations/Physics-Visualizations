@@ -1,3 +1,4 @@
+var currentHref = window.location.href;
 var arr1 = [];
 var arr2 = [];
 function setup(){
@@ -79,8 +80,31 @@ function star(x,y,radius1, radius2, npoints) {
   endShape(CLOSE);
 }
 
+function main() {
+    draw()
+    $(".rightnav").on('click',function(){
+        window.location.href =
+            currentHref.slice(0,-6)
+            +(parseInt(currentHref.slice(-6,-5))+1) + ".html";
+    });
 
+    $(".rightnav").on("mouseenter", function() {
+        $(".rightnav").css({"color":"#1a0433","font-size":"55px"});
+    }).on('mouseleave', function(){
+        $(".rightnav").css({"color":"#330766","font-size":"50px"});
+    });
 
+    $(".leftnav").on('click',function(){
+        window.location.href =
+            currentHref.slice(0,-6)
+            +(parseInt(currentHref.slice(-6,-5))-1) + ".html";
+    });
 
+    $(".leftnav").on("mouseenter", function() {
+        $(".leftnav").css({"color":"#1a0433","font-size":"55px"})
+    }).on('mouseleave', function(){
+        $(".leftnav").css({"color":"#330766","font-size":"50px"})
+    });
 
-
+}
+$(document).ready(main);
