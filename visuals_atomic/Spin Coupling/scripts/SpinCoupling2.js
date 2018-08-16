@@ -1,3 +1,4 @@
+
 $(window).on('load', function() {//main
     const
     dom = {//assigning switches and slider
@@ -14,16 +15,15 @@ $(window).on('load', function() {//main
                 aspectmode: "cube",
                 xaxis: {range: [-2, 2]},
                 yaxis: {range: [-2, 2]},
-                zaxis: {range: [-2, 2]},
+                zaxis: {range: [0,4]},
                 camera: { eye: {//adjust eye so that more of the capacitor is seen
                     x: 1.5,
                     y: 1.5,
                     z: 0.65,}
                 }
             },
-
         }
-    }
+    };
 
     var playAnimation = true;
     var startButton = $("#startAnimation")
@@ -46,7 +46,8 @@ $(window).on('load', function() {//main
 
     var t = 0;
 
-    function get_rot_matrix(angle, x, y, z){
+    function get_rot_matrix(angle, vector){
+    	let [x,y,z] = vector.unit().toArray()
     	let c = Math.cos(angle);
     	let s = Math.sin(angle);
     	let C = 1-c;
@@ -55,29 +56,27 @@ $(window).on('load', function() {//main
     	return Q;
     };
 
-    function get_rot_vector(angle){
-    	let z = 0.5;
-    	let r = 1;
-    	
-    	let Z = 0.8;
-    	let R = 0.5;
+    function get_rot_vector(R, r, d, theta, t){
+    	// j vector
+    	let j = new Vector((R+r)*Math.sin(theta)*Math.cos(t), (R+r)*Math.sin(theta)*Math.sin(t), (R+r)*Math.cos(theta));
 
-    	length = Math.sqrt(Math.pow(r,2)+Math.pow(z,2));
-    	r /= length;
-    	z /= length;
+    	// j component of angular momentum
+    	let Lj = j.unit().multiply(R);
 
-    	return [R*Math.cos(angle), R*Math.sin(angle), Z,
-    			r*Math.cos(angle), r*Math.sin(angle), z];
+    	// angular momentum vector (horizontally rotated)
+    	let Lhor = Lj.horNormal().multiply(d).add(Lj);
+
+    	return [j,Lj,Lhor];
     };
 
     function get_data() {
-    	let [X,Y,Z,u,v,w] = get_rot_vector(t/50);
-        let Q = get_rot_matrix(t/30, u, v, w);
+        let [j,Lj,Lhor] = get_rot_vector(2, 1, 0.5, Math.PI/8, t/100);
+        
+        let [jx,jy,jz] = j.toArray(3);
+        let [Ljx, Ljy, Ljz] = Lj.toArray(3);
 
-        let point = math.matrix([[0],[0],[1]]);
-        var x = math.multiply(Q, point)["_data"][0][0];
-        var y = math.multiply(Q, point)["_data"][1][0];
-        var z = math.multiply(Q, point)["_data"][2][0];
+        let Q = get_rot_matrix(t/20, j);
+        let [Lx,Ly,Lz] = Lhor.linearTransform(Q);
 
         let data = [
             {//Spin angular momentum vector
@@ -85,12 +84,27 @@ $(window).on('load', function() {//main
                 type: 'scatter3d',
                 mode: 'lines',
                 line: {width: 10, color: 'rgb(0,0,0)', dash: 'solid'},
-                x: [0, x],
-                y: [0, y],
-                z: [0, z],
+                x: [0, Lx],
+                y: [0, Ly],
+                z: [0, Lz],
             },
+            {//j vector
+            	type: 'scatter3d',
+            	mode: 'lines',
+            	line: {width: 10, color: 'rgb(150,0,0)', dash: 'solid'},
+            	x: [0, jx],
+            	y: [0, jy],
+            	z: [0, jz],
+            },
+            {//Orbital angular momentum vector
+            	type: 'scatter3d',
+            	mode: 'lines',
+            	line: {width: 10, color: 'rgb(0,0,0)', dash: 'dash'},
+            	x: [Lx, jx],
+            	y: [Ly, jy],
+            	z: [Lz, jz],
+            },            
         ];
-
         return data;
     };
 
@@ -103,9 +117,9 @@ $(window).on('load', function() {//main
     };
 
     function update_graph() {
-        Plotly.animate("graph",
-            {data: get_data()},
-            {
+        Plotly.restyle('graph', 
+        	{data: get_data()},
+        	{
                 fromcurrent: true,
                 frame: {duration: 0, redraw: true,},
                 transition: {duration: 0, easing: 'cubic-in-out'},
