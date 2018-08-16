@@ -170,7 +170,9 @@ function initArbitraryShape() {
     Curve.push(arr2.arrowHead(black,3))
     Curve.push(arr3.arrowHead(black,3))
     Curve.push(arr4.arrowHead(black,3))
+    console.log(Curve)
     return Curve
+
 
 }
 

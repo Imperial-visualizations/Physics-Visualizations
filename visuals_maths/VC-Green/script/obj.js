@@ -204,8 +204,12 @@ function Sphere(x,y,z,a) {
             j : [2, 3, 4, 3, 6, 7, 1, 5, 2, 2, 7, 3],
             k : [1, 2, 0, 7, 5, 6, 0, 1, 1, 5, 2, 2],
             opacity: 0.3,
-            colorscale: [['0', white], ['1', white]],
-            intensity: [0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2],
+            colorscale: [
+            [0, 'rgb(255, 0, 0)'],
+            [0.5, 'rgb(0, 255, 125)'],
+            [1, 'rgb(0, 0, 255)']
+            ],
+            intensity: [0, 0.1, 0.3, 0.5, 0.7, 0.8, 0.9, 1],
             showscale: false
         }
     )
@@ -402,12 +406,13 @@ function Line2d(points) {
             x: [wings_xyz[0][0], this.x[lastElm], wings_xyz[1][0]],
             y: [wings_xyz[0][1], this.y[lastElm], wings_xyz[1][1]],
             line: {color: color, width: width}
+            opacity: 0.9
         }
 
         return wings;
     }
 }
-function Cube(x, y, z, a, b, c){
+function Cube(x, y, z, a){
     this.width = x,
     this.length = y,
     this.height = z,
@@ -415,8 +420,8 @@ function Cube(x, y, z, a, b, c){
         var cuboid = {
             type: "mesh3d",
             x: [x-a, x-a, x+a, x+a, x-a, x-a, x+a, x+a],
-            y: [y-b, y+b, y+b, y-b, y-b, y+b, y+b, y-b],
-            z: [z-c, z-c, z-c, z-c, z+c, z+c, z+c, z+c],
+            y: [y-a, y+a, y+a, y-a, y-a, y+a, y+a, y-a],
+            z: [z-a, z-a, z-a, z-a, z+a, z+a, z+a, z+a],
             i : [0, 0, 3, 4, 4, 4, 4, 4, 5, 6, 6, 7],
             j : [2, 3, 4, 3, 6, 7, 1, 5, 2, 2, 7, 3],
             k : [1, 2, 0, 7, 5, 6, 0, 1, 1, 5, 2, 2],
@@ -446,6 +451,3 @@ function Square(a) {
         return square;
     }
 }
-
-
-

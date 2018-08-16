@@ -138,6 +138,12 @@ function initArbitraryShape(sep_x,sep_y) {
          fillcolor: orange,
          opacity: 0.9
     };
+    Curve.push(side1);
+    Curve.push(side2);
+    Curve.push(side3);
+    Curve.push(side4);
+
+
 
     var grid11 =new Line2d([[sep_x,sep_y],[sep_x+1.35,sep_y]]);
     var grid12 =new Line2d([[-2.7-sep_x,sep_y],[-sep_x-1.35,sep_y]]);
@@ -151,10 +157,7 @@ function initArbitraryShape(sep_x,sep_y) {
     var arr2 = new Line2d([[-sep_x,sep_y+1.3],[xTemp2[10],yTemp2[10]]])
     var arr3 = new Line2d([[-sep_x-2.7,-sep_y],[xTemp3[10],yTemp3[10]]])
     var arr4 = new Line2d([[sep_x,-sep_y-1.3],[xTemp4[10],yTemp4[10]]])
-    Curve.push(side1);
-    Curve.push(side2);
-    Curve.push(side3);
-    Curve.push(side4);
+
     Curve.push(grid11.arrowHead(magenta,3))
     Curve.push(grid12.arrowHead(magenta,3))
     Curve.push(grid13.arrowHead(magenta,3))
