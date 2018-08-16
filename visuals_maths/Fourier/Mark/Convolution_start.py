@@ -298,7 +298,7 @@ f = Dom(x_range)
 g = Zhen(x_range)
 f,g = normalise_1(f,g)
 
-t = 0                   # t must be integer 
+t = -40                   # t must be integer 
 
 x1, y1 = g_of_t_minus_x(f, 0, original = True) #Do this to f# NOTE THAT Y1 IS NULL
 x2, y2 = g_of_t_minus_x(g,t, original = False) # Do this to g                     
