@@ -92,7 +92,6 @@ $('.graphSlider').on('click', function() {
 });
 $(document).ready(function() {
 	flexAdjust();
-	$(".container").hide();
 	$('.graphSlider').each(function() {
 		$($(this).children('.showhide')[0]).hide();
 		$($(this).children('span')).html("Show " + $($(this).children('.showhide')).attr('label'));
