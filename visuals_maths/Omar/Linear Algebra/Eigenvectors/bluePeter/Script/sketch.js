@@ -2,7 +2,7 @@ var distances = [];
 var maxDistance;
 var spacer;
 
-var matrix = math.matrix([[2/4,5/6], [3 /6, 1/4]]);
+var matrix = math.matrix([[2/15,1/7], [2 /6, 1/8]]);
 
 var rotate90 = math.matrix([
   [Math.cos(Math.PI / 2), -Math.sin(Math.PI / 2)],

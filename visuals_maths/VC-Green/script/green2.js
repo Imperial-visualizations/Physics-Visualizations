@@ -2,8 +2,10 @@ var currentHref = window.location.href;
 var arr1 = [];
 var arr2 = [];
 function setup(){
-    var graph = createCanvas(400,400);
-    graph.parent("graph")
+    var graph1 = createCanvas(400,400);
+    graph1.parent("graph")
+    var graph2 = createCanvas(400,100)
+    graph2.parent("graph2")
     for (var i=1; i<10; ++i){
         for (var j=1; j<20; ++j){
             arr1.push(new Arrow(20*i,20*j,j**0.25));
@@ -29,10 +31,10 @@ function draw(){
     push();
     translate(mouseX, mouseY);
     if (mouseX<200.5){
-        rotate(frameCount*mouseY / 2000.0);
+        rotate(-frameCount*mouseY / 2000.0);
         fill(200,10,255)
     }else if (mouseX>200.5){
-        rotate(-frameCount*mouseY / 2000.0);
+        rotate(frameCount*mouseY / 2000.0);
         fill(200,255,10)
     }
     star(0, 0, 5, 20, 4);
