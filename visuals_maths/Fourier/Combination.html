@@ -121,38 +121,41 @@
                     <!--BEGIN Slider A-->
                         <h5 style="border-left: solid 5px rgb(225,0,0); padding-left: 8px;">Amplitude:</h5><!--Just Text-->
                     <!--Slider Display A-->
-                        <label class="sliderTitle"  >A:<!--Amplitude-->
+                        <label class="sliderTitle"  style="padding-bottom:20px;">A:<!--Amplitude-->
                             <span id="AControllerDisplay" data-unit="">1</span> <!--default: 1-->
                         </label>
                     <!--Slider A-->
                         <label class="slider"  >
+                            <span class="sliderMin">-5</span>
                             <input id="AController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
-                            <span class="sliderMin">-5</span><span class="sliderMax">5</span></label>
+                            <span class="sliderMax">5</span></label>
                     <!--END Slider A-->
 
                     <!--BEGIN Slider N-->
                         <h5 style="border-left: solid 5px rgb(0,225,0); padding-left: 8px;">Number of terms:</h5>
                     <!--Slider Display N-->
-                        <label class="sliderTitle"  >N:
+                        <label class="sliderTitle"  style="padding-bottom:20px;">N:
                             <span id="NControllerDisplay" data-unit="">1</span>
                         </label>
                     <!--Slider N-->
                         <label class="slider"  >
+                            <span class="sliderMin">0</span>
                             <input id="NController" class="inputs" type="range" value="1" min="0" max="20" step="1"/>
-                            <span class="sliderMin">0</span><span class="sliderMax">20</span>
+                            <span class="sliderMax">20</span>
                         </label>
                     <!--END Slider N-->
 
                     <!--BEGIN Slider L-->
                         <h5 style="border-left: solid 5px rgb(0,0,225); padding-left: 8px;">Period:</h5>
                     <!--Slider Display L-->
-                        <label class="sliderTitle"  >L:
+                        <label class="sliderTitle" style="padding-bottom:20px;" >L:
                             <span id="LControllerDisplay" data-unit="">1</span>
                         </label>
                     <!--Slider L-->
                         <label class="slider"  >
+                            <span class="sliderMin">-5</span>
                             <input id="LController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
-                            <span class="sliderMin">-5</span><span class="sliderMax">5</span>
+                            <span class="sliderMax">5</span>
                         </label>
                     <!--END Slider L-->
                     </div>
@@ -166,7 +169,7 @@
 
     <!--THE BRAINS-->
     <script>
-        let pages=[" Math_Derivation.html"," Plot.html"," Component.html", " Combination.html", " Power_Spectrum.html"];
+        let pages=[" Math_Derivation.html"," Plot.html"," Component.html", " Combination.html", " Power_Spectrum.html", " Generalised_Fourier.html"];
     </script>
     <script src="../util/guidance.js"></script>
     <script src=script/Combination.js></script>
