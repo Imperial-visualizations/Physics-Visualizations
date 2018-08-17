@@ -7,6 +7,8 @@ $(window).on('load', function() {//main
 
     let layout = {
             showlegend: false,
+            autosize: true,
+            margin: {},
             scene: {
                 aspectmode: "cube",
                 xaxis: {range: [-2, 2]},
@@ -46,7 +48,7 @@ $(window).on('load', function() {//main
     return matrix
     }
 
-    function getData_wave_incident(x_data,y_data,theta,E_0){
+    function getData_wave_incident(x_data,y_data,theta,E_0){//produce daa of incident wave
 
         let z,z_square = [];
         let k_x = Math.cos(theta)*k;
@@ -63,7 +65,7 @@ $(window).on('load', function() {//main
         return z_square
     }
 
-    function getData_wave_reflected(x_data,y_data,theta,E_0){
+    function getData_wave_reflected(x_data,y_data,theta,E_0){//produce data of reflected
 
         let z,z_square = [];
         let k_x = Math.cos(theta)*k;
@@ -80,7 +82,7 @@ $(window).on('load', function() {//main
         return z_square
     }
 
-    function getData_wave_transmitted(x_data,y_data,theta,E_0,decay){
+    function getData_wave_transmitted(x_data,y_data,theta,E_0,decay){//produce data of transmitted. NEED TO CHECK PHYSICS FOR OVER CRITICAL ANGLE
         let z,z_square = [];
         let k_x = Math.cos(theta)*k;
         let k_y = Math.sin(theta)*k;
@@ -91,12 +93,12 @@ $(window).on('load', function() {//main
                 z = E_0* Math.sin(k_x* x_data[i]+k_y*y_data[v]+w_t);
                 z_row.push(z);
             }
-            z_square.push(math.dotMultiply(decay,z_row));//THIS IS NOT CORRECT PHSICALLY ONLY DECAYS IN X NOT Y!!!!
+            z_square.push(math.dotMultiply(decay,z_row));//Not entirelly sure the physics is correct need to review
         }
         return z_square
     }
 
-    function transmit(theta){
+    function transmit(theta){//NEED TO KNOW HOW TO HANDLE AFTER CRITICAL ANGLE
         let theta_i = theta;
         let theta_t = snell(theta_i);
         let E_t0;
@@ -128,7 +130,7 @@ $(window).on('load', function() {//main
         }
     };
 
-    function find_conditions() {
+    function find_conditions() {//produces the conditions of the wave given the input angular frequency
             let z_range = numeric.linspace(0, -2, size)
             let w = angular_frequency_ratio;
             //calculate real refractive index
@@ -144,12 +146,12 @@ $(window).on('load', function() {//main
         return [n_real,k_real,exp_E]
     }
 
-    function plot_data() {
+    function plot_data() {//plot traces
 
         $("#angle-display").html($("input#angle").val().toString()+"°");//update display
         $("#angular_frequency-display").html($("input#angular_frequency").val().toString());
 
-        condition =  $("input[name = wave-switch]:checked").val();
+        condition =  $("input[name = wave-switch]:checked").val();//update value of constants
         angle_of_incidence = parseFloat($("input#angle").val());
         angular_frequency_ratio = parseFloat($("input#angular_frequency").val())* w_0;
 
@@ -157,7 +159,7 @@ $(window).on('load', function() {//main
         n2 = properties[0];
         k = properties[1];
 
-        console.log(n2);
+        $("#refractive_index_ratio-display").html(n2.toFixed(2));//update value of refractive index
 
         let x_data = numeric.linspace(2, 0, size);
         let y_data = numeric.linspace(-2, 2, size);
@@ -218,7 +220,7 @@ $(window).on('load', function() {//main
             data.push(incident_plus_reflected_wave);
         }
 
-        let transmitted_wave = { //multiple traces
+        let transmitted_wave = {
             opacity: 1,
             x: math.add(-2,x_data),
             y: y_data,
@@ -227,9 +229,8 @@ $(window).on('load', function() {//main
             name:"Transmitted"
         };
 
-        let opacity_1;
+        let opacity_1;//opacity is based off the refractive index gives qualatative representation
         let opacity_2;
-
         if((1 < n2) && (n2 <= 15)){//decide opacity dependant on refractive index
             opacity_1 = 0;
             opacity_2 = n2/5
@@ -242,7 +243,8 @@ $(window).on('load', function() {//main
             opacity_1 = 0;
             opacity_2 = 0;
         }
-        let material_1 =
+
+        let material_1 =//first dielectric material
             {
                 opacity: opacity_1,
                 color: '#379F9F',
@@ -255,7 +257,7 @@ $(window).on('load', function() {//main
                 j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
                 k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
             };
-        let material_2 =
+        let material_2 =//second dielectric material
             {
                 opacity: opacity_2,
                 color: '#379F9F',
@@ -270,9 +272,7 @@ $(window).on('load', function() {//main
             };
 
 
-        data.push(material_1);
-        data.push(material_2);
-        data.push(transmitted_wave);
+        data.push(transmitted_wave,material_1,material_2);
 
         if (data.length < 5) {//animate function requires data sets of the same length hence those unused in situation must be filled with empty traces
             let extensionSize = data.length;
@@ -315,7 +315,7 @@ $(window).on('load', function() {//main
                     frame: {duration: 0, redraw: false,},
                     mode: "afterall"
                 });
-            requestAnimationFrame(play_loop);
+            requestAnimationFrame(play_loop);//loads next frame
         }
         return 0;
     };
@@ -329,9 +329,9 @@ $(window).on('load', function() {//main
         dom.afSlider.on("input", update_graph);
 
         $('#playButton').on('click', function() {
-            document.getElementById("playButton").value = (isPlay) ? "Play" : "Stop";
+            document.getElementById("playButton").value = (isPlay) ? "Play" : "Stop";//change play/stop label
             isPlay = !isPlay;
-            w_t = 0;
+            w_t = 0;//reset time
             requestAnimationFrame(play_loop);
         });
     };

@@ -15,28 +15,9 @@
         src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-
-    <style>
-    #spinner{
-      text-align: center;
-      position: absolute;
-      top:50%;
-      width:100%;
-    }
-    </style>
-
 </head>
 
 <body>
-  <div id='spinner'>
-      <span class="loading-message">Loading</span>
-      <div>
-          <div class="spinner-mask"></div>
-          <div id="spinner-bar"></div>
-          <div class="spinner-mask"></div>
-      </div>
- </div>
-
 <div class="container">
     <h1>Dielectric Dispersion - Single Wave</h1>
     <div class="six columns">
@@ -55,6 +36,7 @@
               <span>p</span>
             </label>
         </div>
+        <p>Note: The reflected wave is not included in the visualisation due to overlap with incident wave and the amplitudes of the electric, and magnetic fields are set to be equal.</p>
     </div>
    <div class="six columns">
 
@@ -70,10 +52,7 @@
        </div>
    </div>
 </div>
-<script>
-  $('.container').hide();
 
-</script>
 <script src="scripts/dielectric_dispertion.js"></script>
 <script> let pages = ["1Theory.html", "2Single Wave.html", "3Plane Wave.html"]</script>
 <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>

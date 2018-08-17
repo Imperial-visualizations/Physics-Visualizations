@@ -34,14 +34,21 @@ $(window).on('load', function() {//main
     let relative_p = parseFloat($("input#relative_permitivity").val());
     let dielectric_h = parseFloat($("input#dielectric_height").val());
 
-
-    //let old_arrow_number = Math.round(parseFloat($("input#voltage").val())/10);//track the value of the number of field lines before change
     let old_material = $("input[name = 'material-switch']:checked").val();//track the value of the material before change
     let old_field = $("input[name = 'field-switch']:checked").val();//track the value of the field before change
     let old_relative_p = parseFloat($("input#relative_permitivity").val());
     let old_dielectric_h = parseFloat($("input#dielectric_height").val());
 
-    //let e_0 = 8.85e-12;
+    function make_arrows(pointsx, pointsy, pointsz) {//return data required to construct field line arrows
+        /** Returns an arrowhead based on an inputted line */
+        var x = pointsx[1],
+            y = pointsy[1],
+            z = pointsz[[1]],
+            u = 0.1 * (pointsx[1] - pointsx[0]),
+            v = 0.1 * (pointsy[1] - pointsy[0]),
+            w = 0.1 * (pointsz[1] - pointsz[0]);
+        return [x, y, z, u, v, w]
+    };
 
     function computeData(){//produces the data for the animation
 
@@ -93,18 +100,9 @@ $(window).on('load', function() {//main
 
         let number_x, number_y;
         let colour,number_of_arrows, linewidth = 10, top_of_arrow = 0.9, bottom_of_arrow = -0.75;
-        console.log("relative_p");
-        console.log(relative_p);
         let E = Math.round(voltage/10);
-        console.log("E");
-        console.log(E);
         let D = Math.round(((relative_p)/2)*(Math.pow(E,0.5)));//ignore e_0
-        console.log("D");
-        console.log(Math.round(Math.pow(E,0.5)));
-        console.log(D);
         let P = Math.round(((relative_p - 1)/2)*(Math.pow(E,0.5)));
-        console.log("P");
-        console.log(P);
 
         if (c_material === "vacuum"){
             number_of_arrows = E ;
@@ -131,8 +129,6 @@ $(window).on('load', function() {//main
                 colour = "#9F004E"
             }
         }
-        console.log("number_of_arrows")
-        console.log(number_of_arrows);
 
         extra_spacing = (1 / number_of_arrows);//value used to position field lines in center of the capacitor
 
@@ -173,8 +169,8 @@ $(window).on('load', function() {//main
             mid_bottom_of_arrow = -dielectric_h+0.2;
             for (let i = 0; i < number_of_arrows; i++) {
                 for (let q = 0; q < number_of_arrows; q++) {
-                    number_x = ((2 * (i / number_of_arrows)) - 1) + extra_spacing
-                    number_y = ((2 * (q / number_of_arrows)) - 1) + extra_spacing
+                    number_x = ((2 * (i / number_of_arrows)) - 1) + extra_spacing;
+                    number_y = ((2 * (q / number_of_arrows)) - 1) + extra_spacing;
                     data.push({
                         type: "scatter3d",
                         mode: "lines",
@@ -184,7 +180,7 @@ $(window).on('load', function() {//main
                         y: [number_y, number_y],
                         z: [mid_top_of_arrow, mid_bottom_of_arrow]
                     })
-                    let [x, y, z, u, v, w] = make_arrows([number_x, number_x], [number_y, number_y], [mid_top_of_arrow, mid_bottom_of_arrow])
+                    let [x, y, z, u, v, w] = make_arrows([number_x, number_x], [number_y, number_y], [mid_top_of_arrow, mid_bottom_of_arrow]);
                     data.push({
                         type: "cone",
                         colorscale: [[0, colour], [1, colour]],
@@ -224,7 +220,7 @@ $(window).on('load', function() {//main
                         y: [number_y, number_y],
                         z: [mid_top_of_arrow, mid_bottom_of_arrow]
                     })
-                    let [x, y, z, u, v, w] = make_arrows([number_x, number_x], [number_y, number_y], [mid_top_of_arrow, mid_bottom_of_arrow])
+                    let [x, y, z, u, v, w] = make_arrows([number_x, number_x], [number_y, number_y], [mid_top_of_arrow, mid_bottom_of_arrow]);
                     data.push({
                         type: "cone",
                         colorscale: [[0, colour], [1, colour]],
@@ -255,7 +251,7 @@ $(window).on('load', function() {//main
                         y: [number_y, number_y],
                         z: [top_of_arrow_above, bottom_of_arrow_above]
                     })
-                    let [x_1, y_1, z_1, u_1, v_1, w_1] = make_arrows([number_x, number_x], [number_y, number_y], [top_of_arrow_above, bottom_of_arrow_above])
+                    let [x_1, y_1, z_1, u_1, v_1, w_1] = make_arrows([number_x, number_x], [number_y, number_y], [top_of_arrow_above, bottom_of_arrow_above]);
                     data.push({
                         type: "cone",
                         colorscale: [[0, colour], [1, colour]],
@@ -279,7 +275,7 @@ $(window).on('load', function() {//main
                         y: [number_y, number_y],
                         z: [top_of_arrow_below, bottom_of_arrow_below]
                     })
-                    let [x_2, y_2, z_2, u_2, v_2, w_2] = make_arrows([number_x, number_x], [number_y, number_y], [top_of_arrow_below, bottom_of_arrow_below])
+                    let [x_2, y_2, z_2, u_2, v_2, w_2] = make_arrows([number_x, number_x], [number_y, number_y], [top_of_arrow_below, bottom_of_arrow_below]);
                     data.push({
                         type: "cone",
                         colorscale: [[0, colour], [1, colour]],
@@ -315,25 +311,7 @@ $(window).on('load', function() {//main
         return data;
     };
 
-    function initial() {//produces initial plot seen on load
-
-        Plotly.purge("graph")
-        Plotly.newPlot('graph', computeData(), plt.layout);
-
-        $('.container').show();//show container after loading finishes
-
-        $('#spinner').hide();
-
-        dom.mSwitch.on("change", update_graph);//on any change the graph will update
-        dom.fSwitch.on("change", update_graph);
-        dom.vSlider.on("input", update_graph);
-        dom.rSlider.on("input", update_graph);
-        dom.hSlider.on("input", update_graph);
-    }
-
     function update_graph() {
-
-        let new_trace = [];
 
         c_material   = $("input[name = 'material-switch']:checked").val();
         c_field      = $("input[name = 'field-switch']:checked").val();
@@ -342,7 +320,7 @@ $(window).on('load', function() {//main
         dielectric_h = parseFloat($("input#dielectric_height").val());
 
         //if ((Math.abs(new_number_of_arrows - old_arrow_number) >= 1) || (c_material != old_material) ||(c_field != old_material)) {//will only calculate new graph if the conditions actually change, as discrete field lines only specific voltages produce different number of field lines
-        new_trace = computeData();
+        let new_trace = computeData();
 
         Plotly.animate("graph",
             {data: new_trace},//updated data
@@ -362,17 +340,17 @@ $(window).on('load', function() {//main
 
     };
 
-    function make_arrows(pointsx, pointsy, pointsz) {//return data required to construct field line arrows
-        /** Returns an arrowhead based on an inputted line */
-        var x = pointsx[1],
-            y = pointsy[1],
-            z = pointsz[[1]],
-            u = 0.1 * (pointsx[1] - pointsx[0]),
-            v = 0.1 * (pointsy[1] - pointsy[0]),
-            w = 0.1 * (pointsz[1] - pointsz[0]);
-        return [x, y, z, u, v, w]
-    };
+    function initial() {//produces initial plot seen on load
 
+        Plotly.purge("graph")
+        Plotly.newPlot('graph', computeData(), plt.layout);
+
+        dom.mSwitch.on("change", update_graph);//on any change the graph will update
+        dom.fSwitch.on("change", update_graph);
+        dom.vSlider.on("input", update_graph);
+        dom.rSlider.on("input", update_graph);
+        dom.hSlider.on("input", update_graph);
+    }
     initial();//run the initial loading
 
 });

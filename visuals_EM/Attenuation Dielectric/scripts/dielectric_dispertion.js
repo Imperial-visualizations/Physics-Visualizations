@@ -89,6 +89,7 @@ function zero_array(size){//create array of zeros
     }
     return zero
 }
+
 let size = 10000;//give number of points
 let zero = zero_array(size);
 
@@ -247,7 +248,7 @@ class Wave{//wave object used to produce em wave
     };
 
 
-    create_sinusoids_transmitted(E_end_amp,B_end_amp,shift)
+    create_sinusoids_transmitted(E_end_amp,B_end_amp,shift)//create transmitted wave
     {
         let z_range = numeric.linspace(1, 2, size);
         let z_range_shift = math.add(-1,z_range);
@@ -305,211 +306,203 @@ class Wave{//wave object used to produce em wave
         return [E_trace, B_trace]//return traces
     };
 };
-
-function computeData() {
-
-    $("#angular_frequency-display").html($("input#angular_frequency").val().toString());//update value of display
-
-    angular_frequency_ratio = parseFloat($("input#angular_frequency").val())*(w_0);//update variable values
-    polarisation_value = $("input[name = polarisation-switch]:checked").val();
-
-    let Incident = new Wave(amplitude,polarisation_value,angular_frequency_ratio,n1);//create wave
-
-    let dielectric_bit = Incident.attenuation(angular_frequency_ratio);//create attenuated wave
-    let Transmitted = Incident.create_sinusoids_transmitted(dielectric_bit[2],dielectric_bit[3],dielectric_bit[4]);//create transmitted wave
-
-    let n_im_max = (w_d_squared*w_0*gamma)/(Math.pow((Math.pow(w_0,2) - Math.pow(w_0,2)),2)+Math.pow(w_0,2)*Math.pow(gamma,2));
-
-    let refectrive_index = dielectric_bit[5]/(1.2*n_im_max);//use refractive index to change opacity of dielectric
-
-    let material_1 = [];
-    material_1.push(
-        {//dielectric
-            opacity: refectrive_index,
-            color: '#379F9F',
-            type: "mesh3d",
-            name: "material_1",
-            x: [-1, -1, 1, 1, -1, -1, 1, 1],
-            y: [-1, 1, 1, -1, -1, 1, 1, -1],
-            z: [ 1, 1, 1, 1, 0, 0, 0, 0],
-            i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
-            j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
-            k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
+    
+    function computeData() {
+    
+        $("#angular_frequency-display").html($("input#angular_frequency").val().toString());//update value of display
+    
+        angular_frequency_ratio = parseFloat($("input#angular_frequency").val())*(w_0);//update variable values
+        polarisation_value = $("input[name = polarisation-switch]:checked").val();
+    
+        let Incident = new Wave(amplitude,polarisation_value,angular_frequency_ratio,n1);//create wave
+    
+        let dielectric_bit = Incident.attenuation(angular_frequency_ratio);//create attenuated wave
+        let Transmitted = Incident.create_sinusoids_transmitted(dielectric_bit[2],dielectric_bit[3],dielectric_bit[4]);//create transmitted wave
+    
+        let n_im_max = (w_d_squared*w_0*gamma)/(Math.pow((Math.pow(w_0,2) - Math.pow(w_0,2)),2)+Math.pow(w_0,2)*Math.pow(gamma,2));
+    
+        let refectrive_index = dielectric_bit[5]/(1.2*n_im_max);//use refractive index to change opacity of dielectric
+    
+        let material_1 = [];
+        material_1.push(
+            {//dielectric
+                opacity: refectrive_index,
+                color: '#379F9F',
+                type: "mesh3d",
+                name: "material_1",
+                x: [-1, -1, 1, 1, -1, -1, 1, 1],
+                y: [-1, 1, 1, -1, -1, 1, 1, -1],
+                z: [ 1, 1, 1, 1, 0, 0, 0, 0],
+                i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
+                j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
+                k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
+            }
+            );
+        let data = Incident.sinusoids[0].concat(Incident.sinusoids[1], dielectric_bit[0],dielectric_bit[1],Transmitted[0],Transmitted[1],material_1);
+        //add all traces to one variable
+    return data
+    };
+    
+    function compute_data_rn() {//produces data for real refractive index graph
+    
+        let x = numeric.linspace(0, 2, size);
+    
+        let y = [];
+        let w;
+    
+        for( let i = 0; i < size; i++){
+            w = (x[i])*w_0;
+            y.push(1 - (w_d_squared*(Math.pow(w,2)-Math.pow(w_0,2))/(Math.pow((Math.pow(w,2)-Math.pow(w_0,2)),2) + Math.pow(w,2)*Math.pow(gamma,2))));
         }
-        );
-    let data = Incident.sinusoids[0].concat(Incident.sinusoids[1], dielectric_bit[0],dielectric_bit[1],Transmitted[0],Transmitted[1],material_1);
-    //add all traces to one variable
-return data
-};
-
-function compute_data_rn() {//produces data for real refractive index graph
-
-    let x = numeric.linspace(0, 2, size);
-
-    let y = [];
-    let w;
-
-    for( let i = 0; i < size; i++){
-        w = (x[i])*w_0;
-        y.push(1 - (w_d_squared*(Math.pow(w,2)-Math.pow(w_0,2))/(Math.pow((Math.pow(w,2)-Math.pow(w_0,2)),2) + Math.pow(w,2)*Math.pow(gamma,2))));
+        let real_n = (1 - (w_d_squared*(Math.pow(angular_frequency_ratio,2)-Math.pow(w_0,2))/(Math.pow((Math.pow(angular_frequency_ratio,2)-Math.pow(w_0,2)),2) + Math.pow(angular_frequency_ratio,2)*Math.pow(gamma,2))));
+    
+        data = [x,y];
+    
+        let r_rn = {
+              x: data[0],
+              y: data[1],
+              type: 'scatter',
+              name: 'Real n',
+        };
+    
+        let marker = {
+                x: [parseFloat($("input#angular_frequency").val())],
+                y: [real_n],
+                showlegend: false,
+                type: "scatter",
+                mode:"markers",
+                name: 'Real n',
+                marker: {color: "#002147", size: 12}
+        };
+    
+        return [r_rn,marker]
     }
-    let real_n = (1 - (w_d_squared*(Math.pow(angular_frequency_ratio,2)-Math.pow(w_0,2))/(Math.pow((Math.pow(angular_frequency_ratio,2)-Math.pow(w_0,2)),2) + Math.pow(angular_frequency_ratio,2)*Math.pow(gamma,2))));
-
-    data = [x,y];
-
-    let r_rn = {
-          x: data[0],
-          y: data[1],
-          type: 'scatter',
-          name: 'Real n',
-    };
-
-    let marker = {
-            x: [parseFloat($("input#angular_frequency").val())],
-            y: [real_n],
-            showlegend: false,
-            type: "scatter",
-            mode:"markers",
-            name: 'Real n',
-            marker: {color: "#002147", size: 12}
-    };
-
-    return [r_rn,marker]
-}
-
-function compute_data_in() {//produces data for imaginary refractive index graph
-
-    let x = numeric.linspace(0, 2, size);
-    let y = [];
-    let w;
-
-    for(let i = 0; i< size; i++){
-        w = x[i]*w_0;
-        y.push((w_d_squared*w*gamma)/(Math.pow((Math.pow(w,2) - Math.pow(w_0,2)),2)+Math.pow(w,2)*Math.pow(gamma,2)));
+    
+    function compute_data_in() {//produces data for imaginary refractive index graph
+    
+        let x = numeric.linspace(0, 2, size);
+        let y = [];
+        let w;
+    
+        for(let i = 0; i< size; i++){
+            w = x[i]*w_0;
+            y.push((w_d_squared*w*gamma)/(Math.pow((Math.pow(w,2) - Math.pow(w_0,2)),2)+Math.pow(w,2)*Math.pow(gamma,2)));
+        }
+    
+        let img_n = (w_d_squared*angular_frequency_ratio*gamma)/(Math.pow((Math.pow(angular_frequency_ratio,2) - Math.pow(w_0,2)),2)+Math.pow(angular_frequency_ratio,2)*Math.pow(gamma,2))
+        data = [x,y];
+    
+        let r_in = {
+              x: data[0],
+              y: data[1],
+              type: 'scatter',
+              name: 'Imaginary n',
+        };
+    
+        let marker = {
+                x: [parseFloat($("input#angular_frequency").val())],
+                y: [img_n],
+                showlegend: false,
+                type: "scatter",
+                mode:"markers",
+                name: 'Imaginary n',
+                marker: {color: "#002147", size: 12}
+        };
+    
+        return [r_in,marker]
     }
-
-    let img_n = (w_d_squared*angular_frequency_ratio*gamma)/(Math.pow((Math.pow(angular_frequency_ratio,2) - Math.pow(w_0,2)),2)+Math.pow(angular_frequency_ratio,2)*Math.pow(gamma,2))
-    data = [x,y];
-
-    let r_in = {
-          x: data[0],
-          y: data[1],
-          type: 'scatter',
-          name: 'Imaginary n',
-    };
-
-    let marker = {
-            x: [parseFloat($("input#angular_frequency").val())],
-            y: [img_n],
-            showlegend: false,
-            type: "scatter",
-            mode:"markers",
-            name: 'Imaginary n',
-            marker: {color: "#002147", size: 12}
-    };
-
-    return [r_in,marker]
-}
-
-function update_graph_n(){//update refractive index graph
-
-    Plotly.animate("graph_rn",
-        {data: compute_data_rn()},//updated data
-        {
-            fromcurrent: true,
-            transition: {duration: 0,},
-            frame: {duration: 0, redraw: false,},
-            mode: "afterall"
-        }
-    );
-
-    Plotly.animate("graph_in",
-        {data: compute_data_in()},//updated data
-        {
-            fromcurrent: true,
-            transition: {duration: 0,},
-            frame: {duration: 0, redraw: false,},
-            mode: "afterall"
-        }
-    );
-
-}
-
-function update_graph(){//update animation
-    Plotly.animate("graph",
-        {data: computeData()},//updated data
-        {
-            fromcurrent: true,
-            transition: {duration: 0,},
-            frame: {duration: 0, redraw: false,},
-            mode: "afterall"
-        }
-    );
-};
-
-function play_loop(){
-    if(isPlay === true) {
-        w_t++;
-        Plotly.animate("graph",
-            {data: computeData()},
+    
+    function update_graph_n(){//update refractive index graph
+    
+        Plotly.animate("graph_rn",
+            {data: compute_data_rn()},//updated data
             {
                 fromcurrent: true,
                 transition: {duration: 0,},
                 frame: {duration: 0, redraw: false,},
                 mode: "afterall"
-            });
-    Plotly.animate("graph_rn",
-        {data: compute_data_rn()},//updated data
-        {
-            fromcurrent: true,
-            transition: {duration: 0,},
-            frame: {duration: 0, redraw: false,},
-            mode: "afterall"
-        }
-    );
-    Plotly.animate("graph_in",
-        {data: compute_data_in()},//updated data
-        {
-            fromcurrent: true,
-            transition: {duration: 0,},
-            frame: {duration: 0, redraw: false,},
-            mode: "afterall"
-        }
-    );
-    requestAnimationFrame(play_loop);
+            }
+        );
+    
+        Plotly.animate("graph_in",
+            {data: compute_data_in()},//updated data
+            {
+                fromcurrent: true,
+                transition: {duration: 0,},
+                frame: {duration: 0, redraw: false,},
+                mode: "afterall"
+            }
+        );
+    
     }
-    return 0;
-};
-
-
-
-
-
-function initial(){
-    Plotly.purge("graph");
-    Plotly.newPlot('graph', computeData(),plt.layout);//create animation plot
-
-    Plotly.purge("graph_rn");
-    Plotly.newPlot('graph_rn', compute_data_rn(),plt.layout_real);//create real refractive index graph
-
-    Plotly.purge("graph_in");
-    Plotly.newPlot('graph_in', compute_data_in(),plt.layout_img);//create imaginary refractive index graph
-
-    $('.container').show();//show container after loading finishes
-
-    $('#spinner').hide();//hide loading spinner
-
-    dom.pswitch.on("change", update_graph);//update graph animation
-    dom.wSlider.on("input",update_graph);
-    dom.wSlider.on("input",update_graph_n);//update refractive index graph
-
-    $('#playButton').on('click', function() {
-        document.getElementById("playButton").value = (isPlay) ? "Play" : "Stop";
-        isPlay = !isPlay;
-        w_t = 0;
+    
+    function update_graph(){//update animation
+        Plotly.animate("graph",
+            {data: computeData()},//updated data
+            {
+                fromcurrent: true,
+                transition: {duration: 0,},
+                frame: {duration: 0, redraw: false,},
+                mode: "afterall"
+            }
+        );
+    };
+    
+    function play_loop(){
+        if(isPlay === true) {
+            w_t++;
+            Plotly.animate("graph",
+                {data: computeData()},
+                {
+                    fromcurrent: true,
+                    transition: {duration: 0,},
+                    frame: {duration: 0, redraw: false,},
+                    mode: "afterall"
+                });
+        Plotly.animate("graph_rn",
+            {data: compute_data_rn()},//updated data
+            {
+                fromcurrent: true,
+                transition: {duration: 0,},
+                frame: {duration: 0, redraw: false,},
+                mode: "afterall"
+            }
+        );
+        Plotly.animate("graph_in",
+            {data: compute_data_in()},//updated data
+            {
+                fromcurrent: true,
+                transition: {duration: 0,},
+                frame: {duration: 0, redraw: false,},
+                mode: "afterall"
+            }
+        );
         requestAnimationFrame(play_loop);
-    });
-
+        }
+        return 0;
+    };
+    
+    function initial(){
+        Plotly.purge("graph");
+        Plotly.newPlot('graph', computeData(),plt.layout);//create animation plot
+    
+        Plotly.purge("graph_rn");
+        Plotly.newPlot('graph_rn', compute_data_rn(),plt.layout_real);//create real refractive index graph
+    
+        Plotly.purge("graph_in");
+        Plotly.newPlot('graph_in', compute_data_in(),plt.layout_img);//create imaginary refractive index graph
+    
+        dom.pswitch.on("change", update_graph);//update graph animation
+        dom.wSlider.on("input",update_graph);
+        dom.wSlider.on("input",update_graph_n);//update refractive index graph
+    
+        $('#playButton').on('click', function() {
+            document.getElementById("playButton").value = (isPlay) ? "Play" : "Stop";
+            isPlay = !isPlay;
+            w_t = 0;
+            requestAnimationFrame(play_loop);
+        });
+    
     };
 initial();//run the initial loading
 });

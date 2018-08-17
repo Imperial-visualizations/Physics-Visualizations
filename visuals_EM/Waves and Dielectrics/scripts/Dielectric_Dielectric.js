@@ -64,8 +64,9 @@ let angular_frequency  = 4;
 let c = 3e8; // Speed of light
 let w_conversion = 6.92e5; // Factor to make plot wavelength reasonable
 let size = 100;//give number of points
+let z_range = numeric.linspace(0, 1, size);
 
-class Wave{
+class Wave{//class handles the creation of waves
         constructor(theta, E_0, polarisation, w , n1){
         this.theta = theta;
         this.n1 = n1;
@@ -88,7 +89,6 @@ class Wave{
 
     create_sinusoids()//crate waves
     {
-        let z_range = numeric.linspace(0, 1, size);
         let zero = math.zeros(size);
         let k_z_sine = math.multiply(-1,this.element_sine(math.multiply(this.k,z_range),size));//make sine matrix
         let E_sine,B_sine;
@@ -147,9 +147,8 @@ class Wave{
         return [E_trace, B_trace] //return traces
     };
 
-    create_sinusoids_time()//crate waves
+    create_sinusoids_time()//create waves
     {
-        let z_range = numeric.linspace(0, 1, size);
         let zero = math.zeros(size);
         let k_z_sine = math.multiply(-1,this.element_sine(math.add(w_t,math.multiply(this.k,z_range)),size));//make sine matrix
         let E_sine,B_sine;
@@ -273,350 +272,362 @@ class Wave{
 }
 
 
-function computeData() {
+    function computeData() {
 
-    $("#angle-display").html($("input#angle").val().toString()+"°");//update display
-    $("#refractive-index-ratio-display").html($("input#refractive-index-ratio").val().toString());
+        $("#angle-display").html($("input#angle").val().toString()+"°");//update display
+        $("#refractive-index-ratio-display").html($("input#refractive-index-ratio").val().toString());
 
-    polarisation_value = $("input[name = polarisation-switch]:checked").val();//update variables
-    angle_of_incidence = parseFloat($("input#angle").val());
-    refractive_ratio   = parseFloat($("input#refractive-index-ratio").val());
+        polarisation_value = $("input[name = polarisation-switch]:checked").val();//update variables
+        angle_of_incidence = parseFloat($("input#angle").val());
+        refractive_ratio   = parseFloat($("input#refractive-index-ratio").val());
 
-    let rad_angle = Math.PI * (angle_of_incidence / 180);
+        let rad_angle = Math.PI * (angle_of_incidence / 180);
 
-    let Incident = new Wave(rad_angle, amplitude, polarisation_value, angular_frequency*1e15, refractive_ratio/refractive_ratio, 2);//create incident wave
-    let Reflected = Incident.reflect(refractive_ratio);//create reflected wave
-    let Transmitted = Incident.transmit(refractive_ratio);//create transmitted wave
+        let Incident = new Wave(rad_angle, amplitude, polarisation_value, angular_frequency*1e15, refractive_ratio/refractive_ratio, 2);//create incident wave
+        let Reflected = Incident.reflect(refractive_ratio);//create reflected wave
+        let Transmitted = Incident.transmit(refractive_ratio);//create transmitted wave
 
-    let opacity_1;
-    let opacity_2;
+        let opacity_1;
+        let opacity_2;
 
-    if((1 < refractive_ratio) && (refractive_ratio <= 2)){//decide opacity dependant on refractive index
-        opacity_1 = 0;
-        opacity_2 = refractive_ratio/5
-    }
-    else if((0.5 <= refractive_ratio) && (refractive_ratio< 1)){
-        opacity_1 = 0.2/refractive_ratio;
-        opacity_2 = 0;
-    }
-    else{
-        opacity_1 = 0;
-        opacity_2 = 0;
-    }
-
-    let material_1 = [];
-    material_1.push(
-        {//material_1 trace
-            opacity: opacity_1,
-            color: '#379F9F',
-            type: "mesh3d",
-            name: "material_1",
-            x: [-1, -1, 1, 1, -1, -1, 1, 1],
-            y: [-1, 1, 1, -1, -1, 1, 1, -1],
-            z: [ 1, 1, 1, 1, 0, 0, 0, 0,],
-            i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
-            j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
-            k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
+        if((1 < refractive_ratio) && (refractive_ratio <= 2)){//decide opacity dependant on refractive index
+            opacity_1 = 0;
+            opacity_2 = refractive_ratio/5
         }
-    );
-
-    let material_2 = [];
-    material_2.push(
-        {//material_2 trace
-            opacity: opacity_2,
-            color: '#379F9F',
-            type: "mesh3d",
-            name: "material_2",
-            x: [-1, -1, 1, 1, -1, -1, 1, 1],
-            y: [-1, 1, 1, -1, -1, 1, 1, -1],
-            z: [0, 0, 0, 0, -1, -1, -1, -1],
-            i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
-            j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
-            k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
+        else if((0.5 <= refractive_ratio) && (refractive_ratio< 1)){
+            opacity_1 = 0.2/refractive_ratio;
+            opacity_2 = 0;
         }
-    );
-
-    let plot_data;
-
-    if (Reflected === false) {//both materials have same refractive index
-        plot_data =  Incident.sinusoids[0].concat(Incident.sinusoids[1],Transmitted.sinusoids[0],Transmitted.sinusoids[1],material_1,material_2);
-    }
-    else if (Transmitted === false){//total internal reflection
-        plot_data =  Incident.sinusoids[0].concat(Incident.sinusoids[1],Reflected.sinusoids[0],Reflected.sinusoids[1],material_1,material_2);
-    }
-
-    else {//incident wave is reflected and refracted
-        plot_data = Incident.sinusoids[0].concat(Incident.sinusoids[1],Transmitted.sinusoids[0],Transmitted.sinusoids[1],Reflected.sinusoids[0],Reflected.sinusoids[1],material_1,material_2);
-    }
-
-    if (plot_data.length < 8) {//animate function requires data sets of the same length hence those unused in situation must be filled with empty traces
-        var extensionSize = plot_data.length;
-        for (let i = 0; i < (8 - extensionSize); ++i){
-            plot_data.push(
-                {
-                    type: "scatter3d",
-                    mode: "lines",
-                    x: [0],
-                    y: [0],
-                    z: [0]
-                }
-            );
+        else{
+            opacity_1 = 0;
+            opacity_2 = 0;
         }
-    }
 
-    return plot_data
-}
+        let material_1 = [];
+        material_1.push(
+            {//material_1 trace
+                opacity: opacity_1,
+                color: '#379F9F',
+                type: "mesh3d",
+                name: "material_1",
+                x: [-1, -1, 1, 1, -1, -1, 1, 1],
+                y: [-1, 1, 1, -1, -1, 1, 1, -1],
+                z: [ 1, 1, 1, 1, 0, 0, 0, 0,],
+                i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
+                j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
+                k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
+            }
+        );
 
-function computeData_time() {
+        let material_2 = [];
+        material_2.push(
+            {//material_2 trace
+                opacity: opacity_2,
+                color: '#379F9F',
+                type: "mesh3d",
+                name: "material_2",
+                x: [-1, -1, 1, 1, -1, -1, 1, 1],
+                y: [-1, 1, 1, -1, -1, 1, 1, -1],
+                z: [0, 0, 0, 0, -1, -1, -1, -1],
+                i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
+                j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
+                k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
+            }
+        );
 
-    $("#angle-display").html($("input#angle").val().toString()+"°");//update display
-    $("#refractive-index-ratio-display").html($("input#refractive-index-ratio").val().toString());
+        let plot_data;
 
-    polarisation_value = $("input[name = polarisation-switch]:checked").val();//update variables
-    angle_of_incidence = parseFloat($("input#angle").val());
-    refractive_ratio   = parseFloat($("input#refractive-index-ratio").val());
-
-    let rad_angle = Math.PI * (angle_of_incidence / 180);
-
-    let Incident = new Wave(rad_angle, amplitude, polarisation_value, angular_frequency*1e15, refractive_ratio/refractive_ratio);//create incident wave
-    let Reflected = Incident.reflect(refractive_ratio);//create reflected wave
-    let Transmitted = Incident.transmit(refractive_ratio);//create transmitted wave
-
-    let opacity_1;
-    let opacity_2;
-
-    if((1 < refractive_ratio) && (refractive_ratio <= 2)){//decide opacity dependant on refractive index
-        opacity_1 = 0;
-        opacity_2 = refractive_ratio/5
-    }
-    else if((0.5 <= refractive_ratio) && (refractive_ratio< 1)){
-        opacity_1 = 0.2/refractive_ratio;
-        opacity_2 = 0;
-    }
-    else{
-        opacity_1 = 0;
-        opacity_2 = 0;
-    }
-
-    let material_1 = [];
-    material_1.push(
-        {//material_1 trace
-            opacity: opacity_1,
-            color: '#379F9F',
-            type: "mesh3d",
-            name: "material_1",
-            x: [-1, -1, 1, 1, -1, -1, 1, 1],
-            y: [-1, 1, 1, -1, -1, 1, 1, -1],
-            z: [ 1, 1, 1, 1, 0, 0, 0, 0,],
-            i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
-            j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
-            k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
+        if (Reflected === false) {//both materials have same refractive index
+            plot_data =  Incident.sinusoids[0].concat(Incident.sinusoids[1],Transmitted.sinusoids[0],Transmitted.sinusoids[1],material_1,material_2);
         }
-    );
-
-    let material_2 = [];
-    material_2.push(
-        {//material_2 trace
-            opacity: opacity_2,
-            color: '#379F9F',
-            type: "mesh3d",
-            name: "material_2",
-            x: [-1, -1, 1, 1, -1, -1, 1, 1],
-            y: [-1, 1, 1, -1, -1, 1, 1, -1],
-            z: [0, 0, 0, 0, -1, -1, -1, -1],
-            i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
-            j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
-            k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
+        else if (Transmitted === false){//total internal reflection
+            plot_data =  Incident.sinusoids[0].concat(Incident.sinusoids[1],Reflected.sinusoids[0],Reflected.sinusoids[1],material_1,material_2);
         }
-    );
 
-    let plot_data;
-
-    if (Reflected === false) {//both materials have same refractive index
-        plot_data =  Incident.time_sinusoids[0].concat(Incident.time_sinusoids[1],Transmitted.time_sinusoids[0],Transmitted.time_sinusoids[1],material_1,material_2);
-    }
-    else if (Transmitted === false){//total internal reflection
-        plot_data =  Incident.time_sinusoids[0].concat(Incident.time_sinusoids[1],Reflected.time_sinusoids[0],Reflected.time_sinusoids[1],material_1,material_2);
-    }
-
-    else {//incident wave is reflected and refracted
-        plot_data = Incident.time_sinusoids[0].concat(Incident.time_sinusoids[1],Transmitted.time_sinusoids[0],Transmitted.time_sinusoids[1],Reflected.time_sinusoids[0],Reflected.time_sinusoids[1],material_1,material_2);
-    }
-
-    if (plot_data.length < 8) {//animate function requires data sets of the same length hence those unused in situation must be filled with empty traces
-        var extensionSize = plot_data.length;
-        for (let i = 0; i < (8 - extensionSize); ++i){
-            plot_data.push(
-                {
-                    type: "scatter3d",
-                    mode: "lines",
-                    x: [0],
-                    y: [0],
-                    z: [0]
-                }
-            );
+        else {//incident wave is reflected and refracted
+            plot_data = Incident.sinusoids[0].concat(Incident.sinusoids[1],Transmitted.sinusoids[0],Transmitted.sinusoids[1],Reflected.sinusoids[0],Reflected.sinusoids[1],material_1,material_2);
         }
+
+        if (plot_data.length < 8) {//animate function requires data sets of the same length hence those unused in situation must be filled with empty traces
+            var extensionSize = plot_data.length;
+            for (let i = 0; i < (8 - extensionSize); ++i){
+                plot_data.push(
+                    {
+                        type: "scatter3d",
+                        mode: "lines",
+                        x: [0],
+                        y: [0],
+                        z: [0]
+                    }
+                );
+            }
+        }
+
+        return plot_data
     }
 
-    return plot_data
-}
+    function computeData_time() {
+
+        $("#angle-display").html($("input#angle").val().toString()+"°");//update display
+        $("#refractive-index-ratio-display").html($("input#refractive-index-ratio").val().toString());
+
+        polarisation_value = $("input[name = polarisation-switch]:checked").val();//update variables
+        angle_of_incidence = parseFloat($("input#angle").val());
+        refractive_ratio   = parseFloat($("input#refractive-index-ratio").val());
+
+        let rad_angle = Math.PI * (angle_of_incidence / 180);
+
+        let Incident = new Wave(rad_angle, amplitude, polarisation_value, angular_frequency*1e15, refractive_ratio/refractive_ratio);//create incident wave
+        let Reflected = Incident.reflect(refractive_ratio);//create reflected wave
+        let Transmitted = Incident.transmit(refractive_ratio);//create transmitted wave
+
+        let opacity_1;
+        let opacity_2;
+
+        if((1 < refractive_ratio) && (refractive_ratio <= 2)){//decide opacity dependant on refractive index
+            opacity_1 = 0;
+            opacity_2 = refractive_ratio/5
+        }
+        else if((0.5 <= refractive_ratio) && (refractive_ratio< 1)){
+            opacity_1 = 0.2/refractive_ratio;
+            opacity_2 = 0;
+        }
+        else{
+            opacity_1 = 0;
+            opacity_2 = 0;
+        }
+
+        let material_1 = [];
+        material_1.push(
+            {//material_1 trace
+                opacity: opacity_1,
+                color: '#379F9F',
+                type: "mesh3d",
+                name: "material_1",
+                x: [-1, -1, 1, 1, -1, -1, 1, 1],
+                y: [-1, 1, 1, -1, -1, 1, 1, -1],
+                z: [ 1, 1, 1, 1, 0, 0, 0, 0,],
+                i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
+                j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
+                k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
+            }
+        );
+
+        let material_2 = [];
+        material_2.push(
+            {//material_2 trace
+                opacity: opacity_2,
+                color: '#379F9F',
+                type: "mesh3d",
+                name: "material_2",
+                x: [-1, -1, 1, 1, -1, -1, 1, 1],
+                y: [-1, 1, 1, -1, -1, 1, 1, -1],
+                z: [0, 0, 0, 0, -1, -1, -1, -1],
+                i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
+                j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
+                k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
+            }
+        );
+
+        let plot_data;
+
+        if (Reflected === false) {//both materials have same refractive index
+            plot_data =  Incident.time_sinusoids[0].concat(Incident.time_sinusoids[1],Transmitted.time_sinusoids[0],Transmitted.time_sinusoids[1],material_1,material_2);
+        }
+        else if (Transmitted === false){//total internal reflection
+            plot_data =  Incident.time_sinusoids[0].concat(Incident.time_sinusoids[1],Reflected.time_sinusoids[0],Reflected.time_sinusoids[1],material_1,material_2);
+        }
+
+        else {//incident wave is reflected and refracted
+            plot_data = Incident.time_sinusoids[0].concat(Incident.time_sinusoids[1],Transmitted.time_sinusoids[0],Transmitted.time_sinusoids[1],Reflected.time_sinusoids[0],Reflected.time_sinusoids[1],material_1,material_2);
+        }
+
+        if (plot_data.length < 8) {//animate function requires data sets of the same length hence those unused in situation must be filled with empty traces
+            var extensionSize = plot_data.length;
+            for (let i = 0; i < (8 - extensionSize); ++i){
+                plot_data.push(
+                    {
+                        type: "scatter3d",
+                        mode: "lines",
+                        x: [0],
+                        y: [0],
+                        z: [0]
+                    }
+                );
+            }
+        }
+
+        return plot_data
+    }
 
 
 
 
-function snell(n1, n2, theta_i){//snells law
-    return Math.asin((n1 / n2) * Math.sin(theta_i))
-};
+    function snell(n1, n2, theta_i){//snells law
+        return Math.asin((n1 / n2) * Math.sin(theta_i))
+    };
 
-function compute_fresnel(){//produce data for fresnel curves
+    function compute_fresnel(){//produce data for fresnel curves
 
-        let theta_i = Math.PI * (angle_of_incidence / 180);
-        let theta_t = snell(refractive_ratio/refractive_ratio,refractive_ratio,theta_i);
+            let theta_i = Math.PI * (angle_of_incidence / 180);
+            let theta_t = snell(refractive_ratio/refractive_ratio,refractive_ratio,theta_i);
 
-        let t,r,t_marker,r_marker;
-        let ratio = refractive_ratio;
+            let t,r,t_marker,r_marker;
+            let ratio = refractive_ratio;
 
-        let data = [[],[],[]];
-        let crit_angle = (180*Math.asin(refractive_ratio))/Math.PI;
-        let angle_max = parseFloat($("#angle").attr("max"));
+            let data = [[],[],[]];
+            let crit_angle = (180*Math.asin(refractive_ratio))/Math.PI;
+            let angle_max = parseFloat($("#angle").attr("max"));
 
-        if (polarisation_value === "s-polarisation"){//depending on condition of wave different coefficients produced
-            if (refractive_ratio <1) {
-                if (angle_of_incidence<crit_angle){
-                    t_marker = (2 * Math.cos(theta_i)) / (Math.cos(theta_i) + (ratio * Math.cos(theta_t)));
-                    r_marker = (Math.cos(theta_i) - ratio * Math.cos(theta_t)) / (Math.cos(theta_i) + ratio * Math.cos(theta_t));
+            if (polarisation_value === "s-polarisation"){//depending on condition of wave different coefficients produced
+                if (refractive_ratio <1) {
+                    if (angle_of_incidence<crit_angle){
+                        t_marker = (2 * Math.cos(theta_i)) / (Math.cos(theta_i) + (ratio * Math.cos(theta_t)));
+                        r_marker = (Math.cos(theta_i) - ratio * Math.cos(theta_t)) / (Math.cos(theta_i) + ratio * Math.cos(theta_t));
+                    }
+                    else{
+                        t_marker = 0;
+                        r_marker = 1;
+                    }
                 }
                 else{
-                    t_marker = 0;
-                    r_marker = 1;
+                        t_marker = (2 * Math.cos(theta_i)) / (Math.cos(theta_i) + (ratio * Math.cos(theta_t)));
+                        r_marker = (Math.cos(theta_i) - ratio * Math.cos(theta_t)) / (Math.cos(theta_i) + ratio * Math.cos(theta_t));
                 }
-            }
-            else{
-                    t_marker = (2 * Math.cos(theta_i)) / (Math.cos(theta_i) + (ratio * Math.cos(theta_t)));
-                    r_marker = (Math.cos(theta_i) - ratio * Math.cos(theta_t)) / (Math.cos(theta_i) + ratio * Math.cos(theta_t));
-            }
-        }else{
-            if (refractive_ratio <1) {
-                if (angle_of_incidence<crit_angle){
+            }else{
+                if (refractive_ratio <1) {
+                    if (angle_of_incidence<crit_angle){
+                        t_marker = 2 * Math.cos(theta_i) / (Math.cos(theta_t) + (ratio * Math.cos(theta_i)));
+                        r_marker = (Math.cos(theta_t) - ratio * Math.cos(theta_i)) / (Math.cos(theta_t) + ratio * Math.cos(theta_i));
+                    }
+                    else{
+                        t_marker =0;
+                        r_marker =1;
+                    }
+                }
+                else{
                     t_marker = 2 * Math.cos(theta_i) / (Math.cos(theta_t) + (ratio * Math.cos(theta_i)));
                     r_marker = (Math.cos(theta_t) - ratio * Math.cos(theta_i)) / (Math.cos(theta_t) + ratio * Math.cos(theta_i));
                 }
+            };
+
+
+            if (polarisation_value === "s-polarisation"){
+                if (refractive_ratio <1) {
+                    for (let i = 0; i < crit_angle; i++) {
+                        let i_rad =  Math.PI * (i / 180);
+                        let t_angle = snell(refractive_ratio/refractive_ratio,refractive_ratio,i_rad);
+                        t = (2 * Math.cos(i_rad)) / (Math.cos(i_rad) + (ratio * Math.cos(t_angle)));
+                        r = (Math.cos(i_rad) - ratio * Math.cos(t_angle)) / (Math.cos(i_rad) + ratio * Math.cos(t_angle));
+                        data[0].push(i);
+                        data[1].push(t);
+                        data[2].push(r);
+                    }
+                    for (let i = crit_angle; i < angle_max; i++) {
+                        t = 0;
+                        r = 1;
+                        data[0].push(i);
+                        data[1].push(t);
+                        data[2].push(r);
+                    }
+                }
                 else{
-                    t_marker =0;
-                    r_marker =1;
+                    for (let i = 0; i < angle_max; i++) {
+                        let i_rad =  Math.PI * (i / 180);
+                        let t_angle = snell(refractive_ratio/refractive_ratio,refractive_ratio,i_rad);
+                        t = (2 * Math.cos(i_rad)) / (Math.cos(i_rad) + (ratio * Math.cos(t_angle)));
+                        r = (Math.cos(i_rad) - ratio * Math.cos(t_angle)) / (Math.cos(i_rad) + ratio * Math.cos(t_angle));
+                        data[0].push(i);
+                        data[1].push(t);
+                        data[2].push(r);
+                    }
                 }
-            }
-            else{
-                t_marker = 2 * Math.cos(theta_i) / (Math.cos(theta_t) + (ratio * Math.cos(theta_i)));
-                r_marker = (Math.cos(theta_t) - ratio * Math.cos(theta_i)) / (Math.cos(theta_t) + ratio * Math.cos(theta_i));
-            }
-        };
-
-
-        if (polarisation_value === "s-polarisation"){
-            if (refractive_ratio <1) {
-                for (let i = 0; i < crit_angle; i++) {
-                    let i_rad =  Math.PI * (i / 180);
-                    let t_angle = snell(refractive_ratio/refractive_ratio,refractive_ratio,i_rad);
-                    t = (2 * Math.cos(i_rad)) / (Math.cos(i_rad) + (ratio * Math.cos(t_angle)));
-                    r = (Math.cos(i_rad) - ratio * Math.cos(t_angle)) / (Math.cos(i_rad) + ratio * Math.cos(t_angle));
-                    data[0].push(i);
-                    data[1].push(t);
-                    data[2].push(r);
+            }else{
+                if (refractive_ratio<1) {
+                    for (let i = 0; i < crit_angle; i++) {
+                        let i_rad =  Math.PI * (i / 180);
+                        let t_angle = snell(refractive_ratio/refractive_ratio,refractive_ratio,i_rad);
+                        t = 2 * Math.cos(i_rad) / (Math.cos(t_angle) + (ratio * Math.cos(i_rad)));
+                        r = (Math.cos(t_angle) - ratio * Math.cos(i_rad)) / (Math.cos(t_angle) + ratio * Math.cos(i_rad));
+                        data[0].push(i);
+                        data[1].push(t);
+                        data[2].push(r);
+                    }
+                    for (let i = crit_angle; i < angle_max; i++) {
+                        t = 0;
+                        r = 1;
+                        data[0].push(i);
+                        data[1].push(t);
+                        data[2].push(r);
+                    }
                 }
-                for (let i = crit_angle; i < angle_max; i++) {
-                    t = 0;
-                    r = 1;
-                    data[0].push(i);
-                    data[1].push(t);
-                    data[2].push(r);
+                else{
+                    for (let i = 0; i < angle_max; i++) {
+                        let i_rad =  Math.PI * (i / 180);
+                        let t_angle = snell(refractive_ratio/refractive_ratio,refractive_ratio,i_rad);
+                        t = 2 * Math.cos(i_rad) / (Math.cos(t_angle) + (ratio * Math.cos(i_rad)));
+                        r = (Math.cos(t_angle) - ratio * Math.cos(i_rad)) / (Math.cos(t_angle) + ratio * Math.cos(i_rad));
+                        data[0].push(i);
+                        data[1].push(t);
+                        data[2].push(r);
+                    }
                 }
-            }
-            else{
-                for (let i = 0; i < angle_max; i++) {
-                    let i_rad =  Math.PI * (i / 180);
-                    let t_angle = snell(refractive_ratio/refractive_ratio,refractive_ratio,i_rad);
-                    t = (2 * Math.cos(i_rad)) / (Math.cos(i_rad) + (ratio * Math.cos(t_angle)));
-                    r = (Math.cos(i_rad) - ratio * Math.cos(t_angle)) / (Math.cos(i_rad) + ratio * Math.cos(t_angle));
-                    data[0].push(i);
-                    data[1].push(t);
-                    data[2].push(r);
+            };
+
+            let Transmission = {
+              x: data[0],
+              y: data[1],
+              type: 'scatter',
+              name: 'Transmission coefficient',
+            };
+
+            let marker_transmission = {//marker follows current value of angle
+                x: [angle_of_incidence],
+                y: [t_marker],
+                showlegend: false,
+                type: "scatter",
+                mode:"markers",
+                name: 'Transmission coefficient',
+                marker: {color: "#002147", size: 12}
+            };
+
+            let Reflection = {
+              x: data[0],
+              y: data[2],
+              type: 'scatter',
+              name: 'Reflection coefficient',
+            };
+
+            let marker_reflection = {
+                x: [angle_of_incidence],
+                y: [r_marker],
+                showlegend: false,
+                type: "scatter",
+                mode: "markers",
+                name: 'Reflection coefficient',
+                marker: {color: "#002147", size: 12}
+            };
+        let fresnel_data = [Transmission,marker_transmission,Reflection,marker_reflection]
+
+        return fresnel_data
+    };
+
+    function update_graph(){//update animation
+
+            Plotly.animate("graph",
+                {data: computeData()},//updated data
+                {
+                    fromcurrent: true,
+                    transition: {duration: 0,},
+                    frame: {duration: 0, redraw: false,},
+                    mode: "afterall"
                 }
-            }
-        }else{
-            if (refractive_ratio<1) {
-                for (let i = 0; i < crit_angle; i++) {
-                    let i_rad =  Math.PI * (i / 180);
-                    let t_angle = snell(refractive_ratio/refractive_ratio,refractive_ratio,i_rad);
-                    t = 2 * Math.cos(i_rad) / (Math.cos(t_angle) + (ratio * Math.cos(i_rad)));
-                    r = (Math.cos(t_angle) - ratio * Math.cos(i_rad)) / (Math.cos(t_angle) + ratio * Math.cos(i_rad));
-                    data[0].push(i);
-                    data[1].push(t);
-                    data[2].push(r);
-                }
-                for (let i = crit_angle; i < angle_max; i++) {
-                    t = 0;
-                    r = 1;
-                    data[0].push(i);
-                    data[1].push(t);
-                    data[2].push(r);
-                }
-            }
-            else{
-                for (let i = 0; i < angle_max; i++) {
-                    let i_rad =  Math.PI * (i / 180);
-                    let t_angle = snell(refractive_ratio/refractive_ratio,refractive_ratio,i_rad);
-                    t = 2 * Math.cos(i_rad) / (Math.cos(t_angle) + (ratio * Math.cos(i_rad)));
-                    r = (Math.cos(t_angle) - ratio * Math.cos(i_rad)) / (Math.cos(t_angle) + ratio * Math.cos(i_rad));
-                    data[0].push(i);
-                    data[1].push(t);
-                    data[2].push(r);
-                }
-            }
-        };
+            );
+        }
 
-        let Transmission = {
-          x: data[0],
-          y: data[1],
-          type: 'scatter',
-          name: 'Transmission coefficient',
-        };
-
-        let marker_transmission = {//marker follows current value of angle
-            x: [angle_of_incidence],
-            y: [t_marker],
-            showlegend: false,
-            type: "scatter",
-            mode:"markers",
-            name: 'Transmission coefficient',
-            marker: {color: "#002147", size: 12}
-        };
-
-        let Reflection = {
-          x: data[0],
-          y: data[2],
-          type: 'scatter',
-          name: 'Reflection coefficient',
-        };
-
-        let marker_reflection = {
-            x: [angle_of_incidence],
-            y: [r_marker],
-            showlegend: false,
-            type: "scatter",
-            mode: "markers",
-            name: 'Reflection coefficient',
-            marker: {color: "#002147", size: 12}
-        };
-    let fresnel_data = [Transmission,marker_transmission,Reflection,marker_reflection]
-
-    return fresnel_data
-};
-
-function update_graph(){//update animation
-
-        Plotly.animate("graph",
-            {data: computeData()},//updated data
+    function update_graph_fresnel(){//update fresnel graph
+        Plotly.animate("graph_fresnel",
+            {data: compute_fresnel()},//updated data
             {
                 fromcurrent: true,
                 transition: {duration: 0,},
@@ -626,60 +637,44 @@ function update_graph(){//update animation
         );
     }
 
-function update_graph_fresnel(){//update fresnel graph
-    Plotly.animate("graph_fresnel",
-        {data: compute_fresnel()},//updated data
-        {
-            fromcurrent: true,
-            transition: {duration: 0,},
-            frame: {duration: 0, redraw: false,},
-            mode: "afterall"
+    function play_loop(){
+        if(isPlay === true) {
+            w_t++;
+            Plotly.animate("graph",
+                {data: computeData_time()},
+                {
+                    fromcurrent: true,
+                    transition: {duration: 0,},
+                    frame: {duration: 0, redraw: false,},
+                    mode: "afterall"
+                });
+            requestAnimationFrame(play_loop);
         }
-    );
-}
+        return 0;
+    };
 
-function play_loop(){
-    if(isPlay === true) {
-        w_t++;
-        Plotly.animate("graph",
-            {data: computeData_time()},
-            {
-                fromcurrent: true,
-                transition: {duration: 0,},
-                frame: {duration: 0, redraw: false,},
-                mode: "afterall"
-            });
-        requestAnimationFrame(play_loop);
+    function initial(){
+
+        Plotly.purge("graph");
+        Plotly.newPlot('graph', computeData(), plt.layout);//create animation
+
+        Plotly.purge("graph_fresnel");
+        Plotly.newPlot("graph_fresnel", compute_fresnel(),plt.layoutFres);//create fresnel curves
+
+        dom.pswitch.on("change", update_graph);//on any change the graph will update
+        dom.aSlider.on("input", update_graph);
+        dom.nSlider.on("input", update_graph);
+
+        dom.aSlider.on("input", update_graph_fresnel);//update fresnel graph
+        dom.nSlider.on("input", update_graph_fresnel);
+
+        $('#playButton').on('click', function() {
+            document.getElementById("playButton").value = (isPlay) ? "Play" : "Stop";
+            isPlay = !isPlay;
+            requestAnimationFrame(play_loop);
+        });
+
     }
-    return 0;
-};
-
-function initial(){
-
-    Plotly.purge("graph");
-    Plotly.newPlot('graph', computeData(), plt.layout);//create animation
-
-    Plotly.purge("graph_fresnel");
-    Plotly.newPlot("graph_fresnel", compute_fresnel(),plt.layoutFres);//create fresnel curves
-
-    $('#spinner').hide();
-    $('.container').show();//show container after loading finishes
-
-    dom.pswitch.on("change", update_graph);//on any change the graph will update
-    dom.aSlider.on("input", update_graph);
-    dom.nSlider.on("input", update_graph);
-
-    dom.aSlider.on("input", update_graph_fresnel);//update fresnel graph
-    dom.nSlider.on("input", update_graph_fresnel);
-
-    $('#playButton').on('click', function() {
-        document.getElementById("playButton").value = (isPlay) ? "Play" : "Stop";
-        isPlay = !isPlay;
-        requestAnimationFrame(play_loop);
-    });
-
-}
-
 initial();//run the initial loading
 
 });

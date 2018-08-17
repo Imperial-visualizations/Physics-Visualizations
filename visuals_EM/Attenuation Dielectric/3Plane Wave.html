@@ -11,24 +11,20 @@
     <script src="http://www.numericjs.com/lib/numeric-1.2.6.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
-    <script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-
 </head>
 
 <body>
-
-
 <div class="container">
     <h1> Dielectric Dispersion - 2D Plane Waves</h1>
 
-    <div class="nine columns">
-            <div id="graph" style="width: 55vw; height: 75vh;"></div>
+    <div class="six columns">
+            <div id="graph"></div>
+            Refractive index ratio:<span id="refractive_index_ratio-display">1</span>
     </div>
 
-    <div class="three columns">
+    <div class="six columns">
         <input type="button" id="playButton" value="Play">
         <div id="wave-switch" name = "wave-switch" class="switch">
             <label class="radioTitle">Wave</label>
@@ -37,17 +33,17 @@
               <input type="radio" id="incident" value="incident" name="wave-switch" checked="checked">
               <span>Incident</span>
             </label>
-            <br>
+
             <label for="reflected" class="radio">
               <input type="radio" id="reflected" value="reflected" name="wave-switch" >
               <span>Reflected</span>
             </label>
-            <br>
+
             <label for="reflected and incident" class="radio">
               <input type="radio" id="reflected and incident" value="reflected and incident" name="wave-switch">
               <span>Reflected and Incident</span>
             </label>
-            <br>
+
             <label for="reflected plus incident" class="radio">
               <input type="radio" id="reflected plus incident" value="reflected plus incident" name="wave-switch" >
               <span>Combined</span>
@@ -55,7 +51,6 @@
             <br>
         </div>
 
-        <br>
         <div id="angle-slider">
             <label for="angle" class="sliderTitle">Angle of incidence:
               <span id="angle-display">0&deg;</span>
