@@ -23,17 +23,6 @@ function initPlot() {
     var data = [];
 
 
-    var square = new Square(6);
-    data.push(square.gObject(lilac,lilac))
-    var circle = new Circle(4);
-    data.push(circle.gObject(orange))
-    var cirface = new Sphere(4)
-    var arr1 = new Line([[-3,4,0],[-3,1,0]])
-    data.push(arr1.arrowHead(magenta,5))
-    var arr2 = new Line([[5,-2,0],[5,1,0]])
-    data.push(arr2.arrowHead(magenta,5))
-
-
     var pringles = new Pringles(4, [1,1,1]);
     data.push(pringles.gObject(black, 7, "solid", 1))
 
