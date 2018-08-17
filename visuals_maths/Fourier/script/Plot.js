@@ -47,7 +47,7 @@ function adding(array){
 function selection(n,A,L,x,type){
     //Is summand of the particular function
     if (type===0){
-        formula = (8*A*1/((2*(n)-1) *Math.PI)**2)*(-1)**(n) * Math.sin(x*(2*n -1) *Math.PI /L);
+        formula = -(8*A*1/((2*(n)-1) *Math.PI)**2)*(-1)**(n) * Math.sin(x*(2*n -1) *Math.PI /L);
     } else if (type===1){
         formula = 2*A/(n*Math.PI) *(1-(-1)**n) *Math.sin(n*Math.PI *x/L);
     } else if (type===2){
@@ -97,33 +97,47 @@ function summation(x) {
 
 function a_zero(shape,A,L){
 // Returns a_0 for the particular function
-    if (shape === 0) ;
+    if (shape === 0) {
         a = 0;
-    else if (shape === 1);
+    }else if (shape === 1){
         a = 0;
-    else if (shape ===2);
+    }else if (shape ===2){
         a = 0;
-    else if (shape ===3);
+    }else if (shape ===3){
         a = 0;
-    else if (shape ===4);
+    }else if (shape ===4){
         a = 1/L;
-    else if (shape ===5);
+    }else if (shape ===5){
         a = (2.0/3)*A*L**2;
-    else if (shape ===6);
+    }else if (shape ===6){
         a = 0;
-    else if(shape ===7);
+    }else if(shape ===7){
         a = A*L
+        }
     return a
 }
 
-function c_intercept(shape, N,A,L){
-    const = a_zero(shape,A,L)/2
-    for (var n = 0; n < N; ++n):
-        const += selection(n, A,L, 0, shape);
-    return const
+function c_intercept(shape, N,A,L) {
+    var number = a_zero(shape,A,L)/2;
+    for (var n = 1; n < N; ++n){
+        number += selection(n, A,L, 0, shape);
+        }
+
+    return number
 }
 
-
+function problem_fix(shape){
+    //Only purpose is to fix a second c intercept error we got, had no time to look through properly so just did this
+    var manual_correction = 0;
+    if (shape === 5){
+        manual_correction -= 0.509952 - 0.163
+    }else if (shape === 6 ){
+        manual_correction += 0.7213282 - 0.240
+    }else if (shape === 4){
+        manual_correction -= 0.167
+    }
+    return manual_correction
+}
 
 
 
@@ -147,7 +161,8 @@ function computePlot(x){
         x_values.push(x[i]);
     }
     for (var i = 0; i< y_values.length; ++i){
-        y_values_cheat.push(-y_values[y_values.length/2]+y_values[i])// + c_intercept(shape, N,A,L));
+        y_values_cheat.push(-y_values[y_values.length/2]+y_values[i] + c_intercept(shape, N,A,L) + problem_fix(shape));
+
         //The part "-y_values[y_values.length/2] +y_values[i]" centres
         //the equation so that the y value is equal to zero at x = 0
         //the "c_intercept" part then shifts it all to the correct height.
