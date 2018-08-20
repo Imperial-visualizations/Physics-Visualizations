@@ -76,9 +76,9 @@ function odd_selection2(n,A,L,type){
     } else if (type===2){
         amplitude = (A*(-1)**(n+1))*(decay)**n;  //  2*A*(-1)**(n+1) /(n*np.pi)
     } else if (type===3){
-        amplitude = 1/L;
+        amplitude = 0;
     } else if (type===4){
-        amplitude = A*((-1)**n)*decay**n;  // (((4*L**2)/(n*Math.PI)**2)*(-1)**n)
+        amplitude = 0 // (((4*L**2)/(n*Math.PI)**2)*(-1)**n)
     } else if (type===5){
         amplitude = 0.5*A*(2*(-1)**(n+1)*decay**n); //A*(2*L/(n*Math.PI)*(-1)**(n+1)
     } else if (type===6){
@@ -99,7 +99,21 @@ function even_selection2(n,A,L,type){
             amplitude2 = 2*A*((-1)**(n)-1);
                }
                }
-    else if (type === 0 || type === 1 || type === 2 || type === 3 || type === 4 || type === 5){
+    else if (type ===3){
+        if (n === 0 ){
+            amplitude2 = 1/(2*L);
+        }else{
+             amplitude2 = 1/L;
+             }
+             }
+    else if (type ===4){
+        if (n === 0 ){
+            amplitude2 = A*(L**2)/3;
+        } else{
+         amplitude2 =(4/Math.PI)*A*(L**2)*((-1)**n)*decay**n;
+            }
+            }
+    else if (type === 0 || type === 1 || type === 2 || type === 5){
         amplitude2= 0;}
     return amplitude2;
 }

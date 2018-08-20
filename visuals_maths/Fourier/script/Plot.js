@@ -61,7 +61,7 @@ function selection(n,A,L,x,type){
             formula=A*((4*L**2)/(n*Math.PI)**2)*(-1)**n*Math.cos(n*Math.PI*x/L);
         }
     } else if (type===5){
-        formula = A*(2*L/(n*Math.PI)*(-1)**(n+1)*Math.sin(n*Math.PI*x/L));
+        formula = 2*A*(-1)**(n+1) /(n*Math.PI) * Math.sin(n *Math.PI* x/L);
     } else if (type===6){
         if (n===0){
             formula=A*L;
@@ -104,11 +104,11 @@ function a_zero(shape,A,L){
     }else if (shape ===2){
         a = 0;
     }else if (shape ===3){
-        a = 0;
-    }else if (shape ===4){
         a = 1/L;
-    }else if (shape ===5){
+    }else if (shape ===4){
         a = (2.0/3)*A*L**2;
+    }else if (shape ===5){
+        a = 0;//(2.0/3)*A*L**2;
     }else if (shape ===6){
         a = 0;
     }else if(shape ===7){
@@ -127,12 +127,15 @@ function c_intercept(shape, N,A,L) {
 }
 
 function problem_fix(shape){
+    var L = parseFloat(document.getElementById('LController').value);
+    var A = parseFloat(document.getElementById('AController').value);
     //Only purpose is to fix a second c intercept error we got, had no time to look through properly so just did this
     var manual_correction = 0;
-    if (shape === 5){
-        manual_correction -= 0.509952 - 0.163
-    }else if (shape === 6 ){
-        manual_correction += 0.7213282 - 0.240
+    //if (shape === 5){
+    //    manual_correction -= 0.509952 - 0.163
+    //}
+    if (shape === 6 ){
+        manual_correction += 0.7213282 - 0.240 + 0.5 + A*L
     }else if (shape === 4){
         manual_correction -= 0.167
     }
