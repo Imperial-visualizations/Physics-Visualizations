@@ -68,8 +68,9 @@ function adding(array){
 
 // select the kind of Fourier Series you want
 function selection(n,A,L,x,type){
+    //Is summand of the particular function
     if (type===0){
-        formula = (8*A*1/((2*(n)-1) *Math.PI)**2)*(-1)**(n) * Math.sin(x*(2*n -1) *Math.PI /L);
+        formula = -(8*A*1/((2*(n)-1) *Math.PI)**2)*(-1)**(n) * Math.sin(x*(2*n -1) *Math.PI /L);
     } else if (type===1){
         formula = 2*A/(n*Math.PI) *(1-(-1)**n) *Math.sin(n*Math.PI *x/L);
     } else if (type===2){
@@ -128,16 +129,17 @@ function a_zero(shape,A,L){
     }else if (shape ===2){
         a = 0;
     }else if (shape ===3){
-        a = 1/L;
+        a = 1.0/L;
     }else if (shape ===4){
-        a = (2.0/3)*a*L**2;
+        a = (2.0/3)*A*L**2;
     }else if (shape ===5){
         a = 0;//(2.0/3)*A*L**2;
     }else if (shape ===6){
         a = A*L;
-        }
+    }
     return a
 }
+
 
 function c_intercept(shape, N,A,L) {
     var number = a_zero(shape,A,L)/2;
@@ -147,25 +149,6 @@ function c_intercept(shape, N,A,L) {
 
     return number
 }
-
-function problem_fix(shape){
-    //Only purpose is to fix a second c intercept error we got, had no time to look through properly so just did this
-    var manual_correction = 0;
-    //if (shape === 5){
-    //    manual_correction -= 0.509952 - 0.163
-    //}
-    if (shape === 6 ){
-        manual_correction += 0.7213282 - 0.240
-    }else if (shape === 4){
-        manual_correction -= 0.167
-    }
-    return manual_correction
-}
-
-
-
-
-
 
 // plot the Fourier series
 // y_values_cheat is to set the each of the value equals its midpoint value plus the y_value
@@ -185,7 +168,7 @@ function computePlot(x){
         x_values.push(x[i]);
     }
     for (var i = 0; i< y_values.length; ++i){
-        y_values_cheat.push(-y_values[y_values.length/2]+y_values[i] + c_intercept(shape, N,A,L) + problem_fix(shape));
+        y_values_cheat.push(-y_values[y_values.length/2]+y_values[i] + c_intercept(shape, N,A,L));
     }
     if (shape === 3){
         var data=[

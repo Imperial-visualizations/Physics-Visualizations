@@ -104,16 +104,14 @@ function a_zero(shape,A,L){
     }else if (shape ===2){
         a = 0;
     }else if (shape ===3){
-        a = 1/L;
+        a = 1.0/L;
     }else if (shape ===4){
         a = (2.0/3)*A*L**2;
     }else if (shape ===5){
         a = 0;//(2.0/3)*A*L**2;
     }else if (shape ===6){
-        a = 0;
-    }else if(shape ===7){
-        a = A*L
-        }
+        a = A*L;
+    }
     return a
 }
 
@@ -125,24 +123,6 @@ function c_intercept(shape, N,A,L) {
 
     return number
 }
-
-function problem_fix(shape){
-    var L = parseFloat(document.getElementById('LController').value);
-    var A = parseFloat(document.getElementById('AController').value);
-    //Only purpose is to fix a second c intercept error we got, had no time to look through properly so just did this
-    var manual_correction = 0;
-    //if (shape === 5){
-    //    manual_correction -= 0.509952 - 0.163
-    //}
-    if (shape === 6 ){
-        manual_correction += 0.7213282 - 0.240 + 0.5 + A*L
-    }else if (shape === 4){
-        manual_correction -= 0.167
-    }
-    return manual_correction
-}
-
-
 
 
 
@@ -164,7 +144,7 @@ function computePlot(x){
         x_values.push(x[i]);
     }
     for (var i = 0; i< y_values.length; ++i){
-        y_values_cheat.push(-y_values[y_values.length/2]+y_values[i] + c_intercept(shape, N,A,L) + problem_fix(shape));
+        y_values_cheat.push(-y_values[y_values.length/2]+y_values[i] + c_intercept(shape, N,A,L));
 
         //The part "-y_values[y_values.length/2] +y_values[i]" centres
         //the equation so that the y value is equal to zero at x = 0
