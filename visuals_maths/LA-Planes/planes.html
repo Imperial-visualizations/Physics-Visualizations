@@ -47,8 +47,11 @@
             <!-- Graph -->
             <div class="six columns">
                 <div id='graph' style="width:500px; height:500px;"></div>
-                <br>&nbsp&nbsp&nbsp
-                <input id="showIntersection" class="button-primary" type="submit" value="Show Equations of Intersection Lines">
+                <br>
+                <div style="padding-left:50px">
+                    <input id="showIntersection" class="button-primary" type="submit"
+                           value="Show Equations of Intersection Lines">
+                </div>
             </div>
 
             <!--Bottons-->
@@ -59,11 +62,9 @@
                     <input id="addPoint" type="button" value="Add Point">
                     <p id="inputError" style="color:#ff0000" hidden></p>
                 </div>
-                <div id="equationLines">
-                    <p id="intersection1" style="color:rgb(0,255,0)" hidden>Mark Sucks!</p>
-                    <p id="intersection2" style="color:rgb(255,0,0)" hidden>Yes He does</p>
-                    <p id="intersection3" style="color:rgb(0,0,255)" hidden>Yup</p>
-                </div>
+                <p id="intersection1" style="color:rgb(0,255,0)" hidden>Mark Sucks!</p>
+                <p id="intersection2" style="color:rgb(255,0,0)" hidden>Yes He does</p>
+                <p id="intersection3" style="color:rgb(0,0,255)" hidden>Yup</p>
                 <div id="equations">
                     <div id="plane1">
                         <label style="border-left: solid 20px rgb(0,146,146); padding-left: 1px;">Plane 1:</label>
@@ -92,64 +93,44 @@
                     <div id="line01" hidden>
                         <label style="border-left: solid 4px rgb(0,0,0); padding-left: 17px;">Line 1:</label>
                         <table class='matrixWrapper'><tbody>
-                            <td>
-                                <div class="top">
-                                    x - <input id="e1Input" type="number" value="0" style="width: 70px; line-height: 0;">
-                                </div>
-                                <div class="bottom">
-                                    <input id="i1Input" type="number" value="-1" style="width: 70px">
-                                </div>
-                            </td>
-                            <td> &nbsp = &nbsp </td>
-                            <td>
-                                <div class="top">
-                                    y - <input id="f1Input" type="number" value="0" style="width: 70px; line-height: 0;">
-                                </div>
-                                <div class="bottom">
-                                    <input id="j1Input" type="number" value="1" style="width: 70px">
-                                </div>
-                            </td>
-                            <td> &nbsp = &nbsp </td>
-                            <td>
-                                <div class="top">
-                                    z - <input id="g1Input" type="number" value="0" style="width: 70px; line-height: 0;">
-                                </div>
-                                <div class="bottom">
-                                    <input id="k1Input" type="number" value="1" style="width: 70px">
-                                </div>
-                            </td>
+                            <tr>
+                                <td>Point:&nbsp</td>
+                                <td>
+                                    (&nbsp<input id="e1Input" type="number" value="0" style="width: 70px; line-height: 0;">,&nbsp
+                                    <input id="f1Input" type="number" value="0" style="width: 70px; line-height: 0;">,&nbsp
+                                    <input id="g1Input" type="number" value="0" style="width: 70px; line-height: 0;">&nbsp)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Direction Vector:&nbsp</td>
+                                <td>
+                                    (&nbsp<input id="i1Input" type="number" value="-1" style="width: 70px">,&nbsp
+                                    <input id="j1Input" type="number" value="1" style="width: 70px">,&nbsp
+                                    <input id="k1Input" type="number" value="1" style="width: 70px">&nbsp)
+                                </td>
+                            </tr>
                         </tbody></table>
                         <span id="line01Close" class="closeBtn closeBtnH" style="margin-top: -90px;">×</span>
                     </div>
                     <div id="line02" hidden>
                         <label style="border-left: solid 4px #7ec0ee; padding-left: 17px;">Line 2:</label>
                         <table class='matrixWrapper'><tbody>
-                            <td>
-                                <div class="top">
-                                    x - <input id="e2Input" type="number" value="0" style="width: 70px; line-height: 0;">
-                                </div>
-                                <div class="bottom">
-                                    <input id="i2Input" type="number" value="1" style="width: 70px">
-                                </div>
-                            </td>
-                            <td> &nbsp = &nbsp </td>
-                            <td>
-                                <div class="top">
-                                    y - <input id="f2Input" type="number" value="0" style="width: 70px; line-height: 0;">
-                                </div>
-                                <div class="bottom">
-                                    <input id="j2Input" type="number" value="-1" style="width: 70px">
-                                </div>
-                            </td>
-                            <td> &nbsp = &nbsp </td>
-                            <td>
-                                <div class="top">
-                                    z - <input id="g2Input" type="number" value="0" style="width: 70px; line-height: 0;">
-                                </div>
-                                <div class="bottom">
-                                    <input id="k2Input" type="number" value="1" style="width: 70px">
-                                </div>
-                            </td>
+                            <tr>
+                                <td>Point:&nbsp</td>
+                                <td>
+                                    (&nbsp<input id="e2Input" type="number" value="0" style="width: 70px; line-height: 0;">,&nbsp
+                                    <input id="f2Input" type="number" value="0" style="width: 70px; line-height: 0;">,&nbsp
+                                    <input id="g2Input" type="number" value="0" style="width: 70px; line-height: 0;">&nbsp)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Direction Vector:&nbsp</td>
+                                <td>
+                                    (&nbsp<input id="i2Input" type="number" value="-1" style="width: 70px">,&nbsp
+                                    <input id="j2Input" type="number" value="1" style="width: 70px">,&nbsp
+                                    <input id="k2Input" type="number" value="1" style="width: 70px">&nbsp)
+                                </td>
+                            </tr>
                         </tbody></table>
                         <span id="line02Close" class="closeBtn closeBtnH" style="margin-top: -90px;">×</span>
                     </div>
@@ -167,6 +148,7 @@
             </div>
         </div>
     </div>
+    <link rel="stylesheet" href="script/plane.css">
     <script src="../util/guidance.js"></script>
     <script src=../util/objects.js></script>
     <script src=script/planes.js></script>

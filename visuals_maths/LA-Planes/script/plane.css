@@ -1,17 +1,7 @@
-.fraction, .top, .bottom {
-    padding: 5 0px;
-}
-
-.fraction {
-    display: inline-block;
-    text-align: center;
-}
-
 .top{
 }
 
 .bottom{
-    border-top: 3px solid #000;
     display: block;
     margin: 0 0 0 0;
 }

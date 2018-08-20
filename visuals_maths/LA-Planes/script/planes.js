@@ -16,6 +16,7 @@ var layout = {
 };
 
 var isInterShown = false;
+var planeCounter = 1, lineCounter = 0, pointCounter = 0;
 
 function addEmptyObjects3d(data, numberObj){
     for (var i=0; i < numberObj; ++i){
@@ -271,6 +272,22 @@ function hideIntersection() {
     return 0;
 }
 
+function updateButtons() {
+    $("#addPlane").prop("disabled",false);
+    $("#addLine").prop("disabled",false);
+    $("#addPoint").prop("disabled",false);
+    if (!$("#plane2").is(":hidden") && !$("#plane3").is(":hidden")){
+        $("#addPlane").prop("disabled",true);
+    }
+    if (!$("#line01").is(":hidden") && !$("#line02").is(":hidden")){
+        $("#addLine").prop("disabled",true);
+    }
+    if (!$("#point1").is(":hidden")){
+        $("#addPoint").prop("disabled",true);
+    }
+    return 0;
+}
+
 function main() {
     $("input[type=number]").each(function () {
         $(this).on('keyup',function () {
@@ -309,6 +326,7 @@ function main() {
             $("#point1").show();
         }
         update();
+        updateButtons();
     });
 
     $("input[type=submit]").click(function () {
@@ -323,6 +341,13 @@ function main() {
     $(".closeBtn").click(function () {
         $("#" + $(this).attr("id").slice(0,6)).hide();
         update();
+        updateButtons();
+    });
+
+    $(".guide").click(function () {
+        isInterShown = false;
+        hideIntersection();
+        document.getElementById("showIntersection").value = "Show Equations of Intersection Lines";
     });
 
     init();

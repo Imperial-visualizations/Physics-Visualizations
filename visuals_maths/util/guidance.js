@@ -26,7 +26,7 @@ function closeModal(){
     currentSlideNumber = 0;
     $(".guide").show();
 
-    $("div, ul, h1, input, label").removeClass("whitened");
+    $("div, ul, h1, input, label, canvas").removeClass("whitened");
     return 0;
 }
 
@@ -56,6 +56,8 @@ function nextModal(){
 }
 
 function backModal(){
+    $("#" + slideIDs[currentSlideNumber -1]).addClass("whitened");
+    $("#" + slideIDs[currentSlideNumber -2]).removeClass("whitened");
     $(".nextBtn").html("Next  ▶");
 
     $( "#modal_" +  currentSlideNumber).hide();
