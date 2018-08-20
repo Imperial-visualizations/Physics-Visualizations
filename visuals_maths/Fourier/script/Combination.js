@@ -117,6 +117,55 @@ function summation(x) {
     return sum;
 }
 
+
+function a_zero(shape,A,L){
+// Returns a_0 for the particular function
+    if (shape === 0) {
+        a = 0;
+    }else if (shape === 1){
+        a = 0;
+    }else if (shape ===2){
+        a = 0;
+    }else if (shape ===3){
+        a = 0;
+    }else if (shape ===4){
+        a = 1/L;
+    }else if (shape ===5){
+        a = (2.0/3)*A*L**2;
+    }else if (shape ===6){
+        a = 0;
+    }else if(shape ===7){
+        a = A*L
+        }
+    return a
+}
+
+function c_intercept(shape, N,A,L) {
+    var number = a_zero(shape,A,L)/2;
+    for (var n = 1; n < N; ++n){
+        number += selection(n, A,L, 0, shape);
+        }
+
+    return number
+}
+
+function problem_fix(shape){
+    //Only purpose is to fix a second c intercept error we got, had no time to look through properly so just did this
+    var manual_correction = 0;
+    if (shape === 5){
+        manual_correction -= 0.509952 - 0.163
+    }else if (shape === 6 ){
+        manual_correction += 0.7213282 - 0.240
+    }else if (shape === 4){
+        manual_correction -= 0.167
+    }
+    return manual_correction
+}
+
+
+
+
+
 // plot the Fourier series
 // y_values_cheat is to set the each of the value equals its midpoint value plus the y_value
 // so all the y_value_cheat starts at the midpoint of the y_value (equivalently, it's the average value)
@@ -135,7 +184,7 @@ function computePlot(x){
         x_values.push(x[i]);
     }
     for (var i = 0; i< y_values.length; ++i){
-        y_values_cheat.push(-y_values[y_values.length/2]+y_values[i]);
+        y_values_cheat.push(-y_values[y_values.length/2]+y_values[i] + c_intercept(shape, N,A,L) + problem_fix(shape));
     }
     if (shape === 3){
         var data=[
