@@ -369,6 +369,6 @@ function main() {
 */
     //The First Initialisation - I use 's' rather than 'z' :p
     initFourier();
-    initGuidance([[30, 30],[48, 7],[48,15],[51,70],[30,30]]);
+    initGuidance(["heading","scroll1","scroll2","graph","A", "N", "L"]);
 }
 $(document).ready(main); //Load main when document is ready.
