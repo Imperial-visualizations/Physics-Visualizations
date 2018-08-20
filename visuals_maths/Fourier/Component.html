@@ -26,30 +26,39 @@
 
     <!--instruction guidance-->
     <div class="guide">
-    Instructions for use
+        Instructions for use
     </div>
 
-    <!--Modal-->
     <div class="guideModal">
-       <div class="modalContent">
-           <span class="closeBtn">&times;</span>
-           <h5 id="guideHeader">Visualisation Guidance</h5>
-           <p id="modal_0">
-               This is the guidance for the Fourier visualisation <strong>Component Part</strong>.
-           </p>
-           <p id="modal_1" hidden>
-               You can change the function you want from the <strong>scroll down</strong>
-           </p>
-           <p id="modal_2" hidden>
-               <strong>Sliders</strong> allows you to change the parameters of the functions, including <strong>Amplitude</strong>,
-                <strong>Number of terms</strong>, and <strong>Period</strong>
-           </p>
-           <p id="modal_3" hidden>
-               Have fun!
-           </p>
-           <button class="nextBtn">Continue</button>
-       </div>
-   </div>
+        <div class="guideTest"></div>
+        <button class="backBtn">◀ Back</button> <button class="nextBtn">Next ▶</button>
+        <div class="modalContent">
+            <p id="modal_0">
+                Welcome to Imperial Fourier Visualization: Component Part.
+            </p>
+            <p id="modal_1" hidden>
+                This is the title and name of the Fourier Series Visualisation.
+            </p>
+            <p id="modal_2" hidden>
+                You can select the function you want to visualize from here.
+            </p>
+            <p id="modal_3" hidden>
+                Here, each of the Component in the Fourier Series will be plotted. Note: the amplitude of each term has been adjusted for easier visualisation. Please check Power Spectrum Part for actual relative amplitudes.
+            </p>
+            <p id="modal_4" hidden>
+                This is the Amplitude Slider that allows you to change the Amplitude.
+            </p>
+            <p id="modal_5" hidden>
+                This is the Number Slider that allows you to change the Number of Terms. When N=0, it displays a_0; when N=1, it displays a_1 and b_1
+            </p>
+            <p id="modal_6" hidden>
+                This is the Period Slider that allows you to change the Period.
+            </p>
+            <p id="modal_7" hidden>
+                Try play with it.
+            </p>
+        </div>
+    </div>
 
     <!-- If you want to have navigator to change the page, check the commented code below-->
     <!-- chaging page
@@ -63,6 +72,7 @@
             <!--Title & Graph-->
             <div class="six columns">
                 <!-- Title -->
+                <div id="heading">
                     <div class="title" id="mainTitle">
                         <h1>Main Page and Guidance:</h1>
                     </div>
@@ -87,6 +97,7 @@
                     <div class="title" id="modeTitle" hidden>
                         <h1>Fourier Series of |x| Function:</h1>
                     </div>
+                </div>
 
                 <!--Graph-->
                 <div id='graph'  style="width:450px; height:450px;"></div>
@@ -96,62 +107,70 @@
             <div class="six columns">
                 <div class="tab-content">
                     <!--Scroll-down-->
-                    <div class="scroll-down">
-                        <strong>Select Function: </strong>
-                                <select id="Select">
-                                    <option value="main">Main Page</option>
-                                    <option value="triangular">Triangular Function</option>
-                                    <option value="square">Square Function</option>
-                                    <option value="sawtooth">Sawtooth Function</option>
-                                    <option value="dirac">Dirac-Delta Function</option>
-                                    <option value="parabola">Parabola Function</option>
-                                    <option value="linear">Linear Function</option>
-                                    <option value="mode">|x| Function</option>
-                                </select>
+                    <div id="scroll">
+                        <div class="scroll-down">
+                            <strong>Select Function: </strong>
+                                    <select id="Select">
+                                        <option value="main">Main Page</option>
+                                        <option value="triangular">Triangular Function</option>
+                                        <option value="square">Square Function</option>
+                                        <option value="sawtooth">Sawtooth Function</option>
+                                        <option value="dirac">Dirac-Delta Function</option>
+                                        <option value="parabola">Parabola Function</option>
+                                        <option value="linear">Linear Function</option>
+                                        <option value="mode">|x| Function</option>
+                                    </select>
+                        </div>
                     </div>
 
                     <!--Sliders-->
                     <div class="allSliders" >
-                    <!--BEGIN Slider A-->
-                        <h5 style="border-left: solid 5px rgb(225,0,0); padding-left: 8px;">Amplitude:</h5><!--Just Text-->
-                    <!--Slider Display A-->
-                        <label class="sliderTitle" style="padding-bottom:20px;"  >A:<!--Amplitude-->
-                            <span id="AControllerDisplay" data-unit="">1</span> <!--default: 1-->
-                        </label>
-                    <!--Slider A-->
-                        <label class="slider"  >
-                            <span class="sliderMin">-5</span>
-                            <input id="AController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
-                            <span class="sliderMax">5</span></label>
-                    <!--END Slider A-->
+                        <!--BEGIN Slider A-->
+                        <div id="A">
+                            <h5 style="border-left: solid 5px rgb(225,0,0); padding-left: 8px;">Amplitude:</h5><!--Just Text-->
+                        <!--Slider Display A-->
+                            <label class="sliderTitle" style="padding-bottom:20px;"  >A:<!--Amplitude-->
+                                <span id="AControllerDisplay" data-unit="">1</span> <!--default: 1-->
+                            </label>
+                        <!--Slider A-->
+                            <label class="slider"  >
+                                <span class="sliderMin">-5</span>
+                                <input id="AController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
+                                <span class="sliderMax">5</span></label>
+                        </div>
+                        <!--END Slider A-->
 
-                    <!--BEGIN Slider N-->
-                        <h5 style="border-left: solid 5px rgb(0,225,0); padding-left: 8px;">Number of terms:</h5>
-                    <!--Slider Display N-->
-                        <label class="sliderTitle" style="padding-bottom:20px;"  >N:
-                            <span id="NControllerDisplay" data-unit="">1</span>
-                        </label>
-                    <!--Slider N-->
-                        <label class="slider"  >
-                            <span class="sliderMin">0</span>
-                            <input id="NController" class="inputs" type="range" value="1" min="0" max="20" step="1"/>
-                            <span class="sliderMax">20</span>
-                        </label>
-                    <!--END Slider N-->
+                        <!--BEGIN Slider N-->
+                        <div id="N">
+                            <h5 style="border-left: solid 5px rgb(0,225,0); padding-left: 8px;">Number of terms:</h5>
+                        <!--Slider Display N-->
+                            <label class="sliderTitle" style="padding-bottom:20px;"  >N:
+                                <span id="NControllerDisplay" data-unit="">1</span>
+                            </label>
+                        <!--Slider N-->
+                            <label class="slider"  >
+                                <span class="sliderMin">0</span>
+                                <input id="NController" class="inputs" type="range" value="1" min="0" max="20" step="1"/>
+                                <span class="sliderMax">20</span>
+                            </label>
+                        </div>
+                        <!--END Slider N-->
 
-                    <!--BEGIN Slider L-->
-                        <h5 style="border-left: solid 5px rgb(0,0,225); padding-left: 8px;">Period:</h5>
-                    <!--Slider Display L-->
-                        <label class="sliderTitle" style="padding-bottom:20px;"  >L:
-                            <span id="LControllerDisplay" data-unit="">1</span>
-                        </label>
-                    <!--Slider L-->
-                        <label class="slider"  >
-                            <span class="sliderMin">-5</span>
-                            <input id="LController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
-                            <span class="sliderMax">5</span>
-                        </label>
-                    <!--END Slider L-->
+                        <!--BEGIN Slider L-->
+                        <div id="L">
+                            <h5 style="border-left: solid 5px rgb(0,0,225); padding-left: 8px;">Period:</h5>
+                        <!--Slider Display L-->
+                            <label class="sliderTitle" style="padding-bottom:20px;"  >L:
+                                <span id="LControllerDisplay" data-unit="">1</span>
+                            </label>
+                        <!--Slider L-->
+                            <label class="slider"  >
+                                <span class="sliderMin">-5</span>
+                                <input id="LController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
+                                <span class="sliderMax">5</span>
+                            </label>
+                        </div>
+                        <!--END Slider L-->
                     </div>
 
 

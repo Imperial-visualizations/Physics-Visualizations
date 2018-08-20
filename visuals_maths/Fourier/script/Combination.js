@@ -487,7 +487,7 @@ function main() {
 */
     //The First Initialisation - I use 's' rather than 'z' :p
     initFourier();
-    initGuidance([[30, 30],[48, 7],[51,62],[30,30]]);
+    initGuidance(["heading","scroll","graph","A","N","L"]);
 }
 
 //——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
