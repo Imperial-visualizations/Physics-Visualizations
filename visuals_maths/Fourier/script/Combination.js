@@ -230,7 +230,7 @@ function odd_selection2(n,A,L,type){
     } else if (type===2){
         amplitude = (A*(-1)**(n+1))*(decay)**n;  //  2*A*(-1)**(n+1) /(n*np.pi)
     } else if (type===3){
-        amplitude = A/L;
+        amplitude = 1/L;
     } else if (type===4){
         amplitude = A*((-1)**n)*decay**n;  // (((4*L**2)/(n*Math.PI)**2)*(-1)**n)
     } else if (type===5){
