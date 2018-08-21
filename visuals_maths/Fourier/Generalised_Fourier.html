@@ -25,34 +25,39 @@
 
     <!--instruction guidance-->
     <div class="guide">
-    Instructions for use
+        Instructions for use
     </div>
 
-    <!--Modal-->
     <div class="guideModal">
-       <div class="modalContent">
-           <span class="closeBtn">&times;</span>
-           <h5 id="guideHeader">Visualisation Guidance</h5>
-           <p id="modal_0">
-               This is the guidance for the Fourier visualisation <strong>Generalised Part</strong>.
-               <br> You can visualize the Fourier Series Plot for any types of input function
-           </p>
-           <p id="modal_1" hidden>
-               You can type in the function in the <strong>box</strong> above.
-           </p>
-           <p id="modal_2" hidden>
-               Just in case anything goes wrong, check the <strong>Brief guidance</strong>.
-           </p>
-           <p id="modal_3" hidden>
-               <strong>Sliders</strong> allows you to change the parameters of the functions, including
-                <strong>Number of terms</strong> and <strong>Period</strong>
-           </p>
-           <p id="modal_4" hidden>
-                Have fun!
-           </p>
-           <button class="nextBtn">Continue</button>
-       </div>
-   </div>
+        <div class="guideTest"></div>
+        <button class="backBtn">◀ Back</button> <button class="nextBtn">Next ▶</button>
+        <div class="modalContent">
+            <p id="modal_0">
+                Welcome to Imperial Fourier Visualisation: Generalised Fourier Series Part. This part allows you to visualize any user-input function with set period.
+            </p>
+            <p id="modal_1" hidden>
+                Just the name.
+            </p>
+            <p id="modal_2" hidden>
+                You can input the function you want to visualize from here.
+            </p>
+            <p id="modal_3" hidden>
+                If you are not sure how the input box works, check the guidance here.
+            </p>
+            <p id="modal_4" hidden>
+                Here, the Fourier Series plot of your input function will be displayed.
+            </p>
+            <p id="modal_5" hidden>
+                This is the Number Slider that allows you to change the Number of Terms. When N=0, it displays a_0; when N=1, it displays a_1 and b_1
+            </p>
+            <p id="modal_6" hidden>
+                This is the Period Slider that allows you to change the Period.
+            </p>
+            <p id="modal_7" hidden>
+                Try play with it.
+            </p>
+        </div>
+    </div>
 
     <!-- If you want to have navigator to change the page, check the commented code below-->
     <!-- chaging page
@@ -67,8 +72,10 @@
             <div class="six columns">
 
                 <!--Title-->
-                <div class="title" id="mainTitle">
-                    <h1>Fourier Series:</h1>
+                <div id="heading">
+                    <div class="title" id="mainTitle">
+                        <h1>Generalised Fourier Series:</h1>
+                    </div>
                 </div>
 
                 <!--Graph-->
@@ -87,52 +94,55 @@
                     <!--NB: Be careful with classes and types-->
 
                         <!--BEGIN Input function box -->
-                        <label>Input Function: f(x)=
-                            <input id = "aInput" type="text" value = "x**2">
-                            <p id= "aInputError" style="color:#ff0000" hidden></p>
-                        </label>
+                        <div id="input">
+                            <label>Input Function: f(x)=
+                                <input id = "aInput" type="text" value = "x**2">
+                                <p id= "aInputError" style="color:#ff0000" hidden></p>
+                            </label>
+                        </div>
                         <!--END Input function box  -->
 
                         <div class="guidance" id="guidance">
                             <p style="font-style: bold; font-size:large">
                             <!--Basics of Fourier Transform-->
-                            <h5>Brief Guidance for Input Function</h5>
-                             Type in a function in the box. Beware of functions that may have singularities
-                             in the allowed values of x. If functions don't work, check Javascript
-                             manual for mathematical functions.
-                            Note: small deviations in the true functions that would be produced due to the
-                            imperfect nature of the numerical integration used to plot the graph.
-
-                            For a minus sign, write -1*
+                            <h5>Some tips:</h5>
+                             $$ \text{For } cos(sqrt(x)), \text{ type cos(x**0.5))}$$
+                             $$ \text{For } log(1 + x^2), \text{ type log(1 + x**2)}$$
+                             $$ \text{For } e^{arctanh(x)}, \text{ type exp(arctanh(x))}$$
+                             $$ \text{Make sure the function you are trying to plot is valid in the range -L to L} $$
                             </p>
                         </div>
 
                     <!--BEGIN Slider N-->
-                        <h5 style="border-left: solid 5px rgb(50,105,250); padding-left: 8px;">Number of terms:</h5>
-                    <!--Slider Display N-->
-                        <label class="sliderTitle" style="padding-bottom:20px;" >N:
-                            <span id="NControllerDisplay" data-unit="">1</span>
-                        </label>
-                    <!--Slider N-->
-                        <label class="slider">
-                            <span class="sliderMin">0</span>
-                            <input id="NController" class="inputs" type="range" value="1" min="0" max="50" step="1">
-                            <span class="sliderMax">50</span>
-                        </label>
+                        <div id="N">
+                            <h5 style="border-left: solid 5px rgb(50,105,250); padding-left: 8px;">Number of terms:</h5>
+                        <!--Slider Display N-->
+                            <label class="sliderTitle" style="padding-bottom:20px;" >N:
+                                <span id="NControllerDisplay" data-unit="">1</span>
+                            </label>
+                        <!--Slider N-->
+                            <label class="slider">
+                                <span class="sliderMin">0</span>
+                                <input id="NController" class="inputs" type="range" value="1" min="0" max="50" step="1">
+                                <span class="sliderMax">50</span>
+                            </label>
+                        </div>
                     <!--END Slider N-->
 
                     <!--BEGIN Slider L-->
-                        <h5 style="border-left: solid 5px rgb(250,100,25); padding-left: 8px;">Period:</h5>
-                    <!--Slider Display L-->
-                        <label class="sliderTitle" style="padding-bottom:20px;" >L:
-                            <span id="LControllerDisplay" data-unit="">1</span>
-                        </label>
-                    <!--Slider L-->
-                        <label class="slider">
-                            <span class="sliderMin">-20</span>
-                            <input id="LController" class="inputs" type="range" value="1" min="-20" max="20" step="0.5"/>
-                            <span class="sliderMax">20</span>
-                        </label>
+                        <div id="L">
+                            <h5 style="border-left: solid 5px rgb(250,100,25); padding-left: 8px;">Period:</h5>
+                        <!--Slider Display L-->
+                            <label class="sliderTitle" style="padding-bottom:20px;" >L:
+                                <span id="LControllerDisplay" data-unit="">1</span>
+                            </label>
+                        <!--Slider L-->
+                            <label class="slider">
+                                <span class="sliderMin">-20</span>
+                                <input id="LController" class="inputs" type="range" value="1" min="-20" max="20" step="0.5"/>
+                                <span class="sliderMax">20</span>
+                            </label>
+                        </div>
                     <!--END Slider L-->
                     </div>
 

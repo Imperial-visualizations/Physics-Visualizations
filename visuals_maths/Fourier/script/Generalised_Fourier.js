@@ -29,8 +29,9 @@ exp = Math.exp;
 arcsin = Math.arcsin;
 arccos = Math.arccos;
 arctan = Math.arctan;
-arcsinh = Math.arcsinh;
-//arccosh = Math.arccosh
+arcsinh = Math.asinh;
+arccosh = Math.acosh;
+arctanh = Math.atanh;
 sqrt = Math.sqrt
 
 
@@ -176,7 +177,7 @@ function b_n( n, x){
 
 function Fourier_coefficient(x){
     //For all n from 0 to N, calculates a_n and b_n
-    var N = parseFloat(document.getElementById('NController').value);
+    var N = parseFloat(document.getElementById('NController').value) +1;
 
     var an= [];//List of all terms that will be generated
     var bn= [];
@@ -206,7 +207,7 @@ function Fourier_coefficient(x){
 function Trig_summation_x (an, bn, x_value){
     //For a certain x_value in the function domain, uses the values of a_n and b_n
      //up to a given N, to reconstruct the function at that particular x point
-    var N = parseFloat(document.getElementById('NController').value);
+    var N = parseFloat(document.getElementById('NController').value) +1;
     var L = parseFloat(document.getElementById('LController').value);
 
     var single_y = [an[0]/2];//Average function value term
@@ -350,6 +351,6 @@ function main() {
 
     //The First Initialisation - I use 's' rather than 'z' :p
     initFourier();
-    initGuidance([[30, 30],[48, 7],[51,42],[50,70],[30,30]]);
+    initGuidance(["heading","input","guidance","graph", "N", "L"]);
 }
 $(document).ready(main); //Load main when document is ready.

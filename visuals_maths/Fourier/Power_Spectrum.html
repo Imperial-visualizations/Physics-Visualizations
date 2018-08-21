@@ -28,34 +28,42 @@
 
     <!--instruction guidance-->
     <div class="guide">
-    Instructions for use
+        Instructions for use
     </div>
 
-    <!--Modal-->
     <div class="guideModal">
-       <div class="modalContent">
-           <span class="closeBtn">&times;</span>
-           <h5 id="guideHeader">Visualisation Guidance</h5>
-           <p id="modal_0">
-               This is the guidance for the Fourier visualisation <strong>Power Spectrum</strong>.
-           </p>
-           <p id="modal_1" hidden>
-               You can change the function you want from the first <strong>scroll down</strong>
-           </p>
-           <p id="modal_2" hidden>
-               You can change between a<sub>n</sub> b<sub>n</sub> and α<sub>n</sub> θ<sub>n</sub> from the second
-               <strong>scroll down</strong>
-           </p>
-           <p id="modal_3" hidden>
-               <strong>Sliders</strong> allows you to change the parameters of the functions, including <strong>Amplitude</strong>,
-                <strong>Number of terms</strong>, and <strong>Period</strong>
-           </p>
-           <p id="modal_4" hidden>
-               Have fun!
-           </p>
-           <button class="nextBtn">Continue</button>
-       </div>
-   </div>
+        <div class="guideTest"></div>
+        <button class="backBtn">◀ Back</button> <button class="nextBtn">Next ▶</button>
+        <div class="modalContent">
+            <p id="modal_0">
+                Welcome to Imperial Fourier Visualisation: Power Spectrum Part.
+            </p>
+            <p id="modal_1" hidden>
+                This is the title and name of the Fourier Series Visualisation.
+            </p>
+            <p id="modal_2" hidden>
+                You can select the function you want to visualize from here.
+            </p>
+            <p id="modal_3" hidden>
+                You can select the coefficient you want to visualize from here. It is either a_n and b_n or alpha_n and theta_n.
+            </p>
+            <p id="modal_4" hidden>
+                Here, the power spectrum of either a_n b_n or alpha_n theta_n will be displayed.
+            </p>
+            <p id="modal_5" hidden>
+                This is the Amplitude Slider that allows you to change the Amplitude.
+            </p>
+            <p id="modal_6" hidden>
+                This is the Number Slider that allows you to change the Number of Terms. When N=0, it displays a_0; when N=1, it displays a_1 and b_1
+            </p>
+            <p id="modal_7" hidden>
+                This is the Period Slider that allows you to change the Period.
+            </p>
+            <p id="modal_8" hidden>
+                Have fun!
+            </p>
+        </div>
+    </div>
 
     <!-- If you want to have navigator to change the page, check the commented code below-->
     <!-- chaging page
@@ -69,34 +77,38 @@
             <div class="six columns">
 
                 <!--Title-->
-                <div class="title" id="mainTitle">
-                    <h3>Main Page and Guidance:</h3>
-                </div>
-                <div class="title" id="triangularTitle" hidden>
-                    <h3>Fourier Series of Triangular Function:</h3>
-                </div>
-                <div class="title" id="squareTitle" hidden>
-                    <h3>Fourier Series of Square Function:</h3>
-                </div>
-                <div class="title" id="sawtoothTitle" hidden>
-                    <h3>Fourier Series of Sawtooth Function:</h3>
-                </div>
-                <div class="title" id="diracTitle" hidden>
-                    <h3>Fourier Series of Dirac-Delta Function:</h3>
-                </div>
-                <div class="title" id="parabolaTitle" hidden>
-                    <h3>Fourier Series of Parabola Function:</h3>
-                </div>
-                <div class="title" id="linearTitle" hidden>
-                    <h3>Fourier Series of Linear Function:</h3>
-                </div>
-                <div class="title" id="modeTitle" hidden>
-                    <h3>Fourier Series of |x| Function:</h3>
+                <div id="heading">
+                    <div class="title" id="mainTitle">
+                        <h3>Main Page and Guidance:</h3>
+                    </div>
+                    <div class="title" id="triangularTitle" hidden>
+                        <h3>Fourier Series of Triangular Function:</h3>
+                    </div>
+                    <div class="title" id="squareTitle" hidden>
+                        <h3>Fourier Series of Square Function:</h3>
+                    </div>
+                    <div class="title" id="sawtoothTitle" hidden>
+                        <h3>Fourier Series of Sawtooth Function:</h3>
+                    </div>
+                    <div class="title" id="diracTitle" hidden>
+                        <h3>Fourier Series of Dirac-Delta Function:</h3>
+                    </div>
+                    <div class="title" id="parabolaTitle" hidden>
+                        <h3>Fourier Series of Parabola Function:</h3>
+                    </div>
+                    <div class="title" id="linearTitle" hidden>
+                        <h3>Fourier Series of Linear Function:</h3>
+                    </div>
+                    <div class="title" id="modeTitle" hidden>
+                        <h3>Fourier Series of |x| Function:</h3>
+                    </div>
                 </div>
 
                 <!--Graph-->
-                <div id='graph3' style="width:450px; height:250px;" ></div>
-                <div id='graph4' style="width:450px; height:250px;" ></div>
+                <div id="graph">
+                    <div id='graph3' style="width:450px; height:250px;" ></div>
+                    <div id='graph4' style="width:450px; height:250px;" ></div>
+                </div>
             </div>
 
             <!--Scroll-down and Sliders-->
@@ -104,25 +116,30 @@
 
                 <div class="tab-content">
                     <!--Scroll-down to select function-->
-                    <strong>Select Function: </strong>
-                            <select id="Select">
-                                <option value="main">Main Page</option>
-                                <option value="triangular">Triangular Function</option>
-                                <option value="square">Square Function</option>
-                                <option value="sawtooth">Sawtooth Function</option>
-                                <option value="dirac">Dirac-Delta Function</option>
-                                <option value="parabola">Parabola Function</option>
-                                <option value="linear">Linear Function</option>
-                                <option value="mode">|x| Function</option>
-                            </select>
+                    <div id="scroll1">
+                        <strong>Select Function: </strong>
+                                <select id="Select">
+                                    <option value="main">Main Page</option>
+                                    <option value="triangular">Triangular Function</option>
+                                    <option value="square">Square Function</option>
+                                    <option value="sawtooth">Sawtooth Function</option>
+                                    <option value="dirac">Dirac-Delta Function</option>
+                                    <option value="parabola">Parabola Function</option>
+                                    <option value="linear">Linear Function</option>
+                                    <option value="mode">|x| Function</option>
+                                </select>
+                    </div>
 
                     <!--Scroll-down to select between a_n b_n and alpha_n theta_n-->
                     <div class="tab-content">
-                        <strong>Select Coefficient: </strong>
-                        <select id="Coefficient">
-                            <option value="an&bn">a and b</option>
-                            <option value="powerSpectrum">α and θ</option>
-                        </select>
+                        <!--Scroll-down to select coefficient-->
+                        <div id="scroll2">
+                            <strong>Select Coefficient: </strong>
+                            <select id="Coefficient">
+                                <option value="an&bn">a and b</option>
+                                <option value="powerSpectrum">α and θ</option>
+                            </select>
+                        </div>
 
                     </div>
 
@@ -130,45 +147,52 @@
                     <div class="allSliders" >
                     <!--These Sliders are shared among all tabs-->
                     <!--NB: Be careful with classes and types-->
+
                     <!--BEGIN Slider A-->
-                        <h5 style="border-left: solid 5px rgb(225,0,0); padding-left: 8px;">Amplitude:</h5><!--Just Text-->
-                    <!--Slider Display A-->
-                        <label class="sliderTitle"  style="padding-bottom:20px;">A:<!--Amplitude-->
-                            <span id="AControllerDisplay" data-unit="">1</span> <!--default: 1-->
-                        </label>
-                    <!--Slider A-->
-                        <label class="slider"  >
-                            <span class="sliderMin">-5</span>
-                            <input id="AController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
-                            <span class="sliderMax">5</span></label>
+                        <div id="A">
+                            <h5 style="border-left: solid 5px rgb(225,0,0); padding-left: 8px;">Amplitude:</h5><!--Just Text-->
+                        <!--Slider Display A-->
+                            <label class="sliderTitle"  style="padding-bottom:20px;">A:<!--Amplitude-->
+                                <span id="AControllerDisplay" data-unit="">1</span> <!--default: 1-->
+                            </label>
+                        <!--Slider A-->
+                            <label class="slider"  >
+                                <span class="sliderMin">-5</span>
+                                <input id="AController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
+                                <span class="sliderMax">5</span></label>
+                        </div>
                     <!--END Slider A-->
 
                     <!--BEGIN Slider N-->
-                        <h5 style="border-left: solid 5px rgb(0,225,0); padding-left: 8px;">Number of terms:</h5>
-                    <!--Slider Display N-->
-                        <label class="sliderTitle"  style="padding-bottom:20px;">N:
-                            <span id="NControllerDisplay" data-unit="">1</span>
-                        </label>
-                    <!--Slider N-->
-                        <label class="slider"  >
-                            <span class="sliderMin">0</span>
-                            <input id="NController" class="inputs" type="range" value="1" min="0" max="50" step="1"/>
-                            <span class="sliderMax">50</span>
-                        </label>
+                        <div id="N">
+                            <h5 style="border-left: solid 5px rgb(0,225,0); padding-left: 8px;">Number of terms:</h5>
+                        <!--Slider Display N-->
+                            <label class="sliderTitle"  style="padding-bottom:20px;">N:
+                                <span id="NControllerDisplay" data-unit="">1</span>
+                            </label>
+                        <!--Slider N-->
+                            <label class="slider"  >
+                                <span class="sliderMin">0</span>
+                                <input id="NController" class="inputs" type="range" value="1" min="0" max="50" step="1"/>
+                                <span class="sliderMax">50</span>
+                            </label>
+                        </div>
                     <!--END Slider N-->
 
                     <!--BEGIN Slider L-->
-                        <h5 style="border-left: solid 5px rgb(0,0,225); padding-left: 8px;">Period:</h5>
-                    <!--Slider Display L-->
-                        <label class="sliderTitle"  style="padding-bottom:20px;">L:
-                            <span id="LControllerDisplay" data-unit="">1</span>
-                        </label>
-                    <!--Slider L-->
-                        <label class="slider"  >
-                            <span class="sliderMin">-5</span>
-                            <input id="LController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
-                            <span class="sliderMax">5</span>
-                        </label>
+                        <div id="L">
+                            <h5 style="border-left: solid 5px rgb(0,0,225); padding-left: 8px;">Period:</h5>
+                        <!--Slider Display L-->
+                            <label class="sliderTitle"  style="padding-bottom:20px;">L:
+                                <span id="LControllerDisplay" data-unit="">1</span>
+                            </label>
+                        <!--Slider L-->
+                            <label class="slider"  >
+                                <span class="sliderMin">-5</span>
+                                <input id="LController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
+                                <span class="sliderMax">5</span>
+                            </label>
+                        </div>
                     <!--END Slider L-->
                     </div>
 

@@ -61,7 +61,7 @@ function selection(n,A,L,x,type){
             formula=A*((4*L**2)/(n*Math.PI)**2)*(-1)**n*Math.cos(n*Math.PI*x/L);
         }
     } else if (type===5){
-        formula = A*(2*L/(n*Math.PI)*(-1)**(n+1)*Math.sin(n*Math.PI*x/L));
+        formula = 2*A*(-1)**(n+1) /(n*Math.PI) * Math.sin(n *Math.PI* x/L);
     } else if (type===6){
         if (n===0){
             formula=A*L;
@@ -104,16 +104,14 @@ function a_zero(shape,A,L){
     }else if (shape ===2){
         a = 0;
     }else if (shape ===3){
-        a = 0;
+        a = 1.0/L;
     }else if (shape ===4){
-        a = 1/L;
-    }else if (shape ===5){
         a = (2.0/3)*A*L**2;
+    }else if (shape ===5){
+        a = 0;//(2.0/3)*A*L**2;
     }else if (shape ===6){
-        a = 0;
-    }else if(shape ===7){
-        a = A*L
-        }
+        a = A*L;
+    }
     return a
 }
 
@@ -125,21 +123,6 @@ function c_intercept(shape, N,A,L) {
 
     return number
 }
-
-function problem_fix(shape){
-    //Only purpose is to fix a second c intercept error we got, had no time to look through properly so just did this
-    var manual_correction = 0;
-    if (shape === 5){
-        manual_correction -= 0.509952 - 0.163
-    }else if (shape === 6 ){
-        manual_correction += 0.7213282 - 0.240
-    }else if (shape === 4){
-        manual_correction -= 0.167
-    }
-    return manual_correction
-}
-
-
 
 
 
@@ -161,7 +144,7 @@ function computePlot(x){
         x_values.push(x[i]);
     }
     for (var i = 0; i< y_values.length; ++i){
-        y_values_cheat.push(-y_values[y_values.length/2]+y_values[i] + c_intercept(shape, N,A,L) + problem_fix(shape));
+        y_values_cheat.push(-y_values[y_values.length/2]+y_values[i] + c_intercept(shape, N,A,L));
 
         //The part "-y_values[y_values.length/2] +y_values[i]" centres
         //the equation so that the y value is equal to zero at x = 0
@@ -286,6 +269,6 @@ function main() {
 */
     //The First Initialisation - I use 's' rather than 'z' :p
     initFourier();
-    initGuidance([[30, 30],[48, 7], [51, 25], [51,43],[51,62],[30,30]]);
+    initGuidance(["heading","scroll","graph","A", "N", "L"]);
 }
 $(document).ready(main); //Load main when document is ready.

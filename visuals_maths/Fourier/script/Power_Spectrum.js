@@ -88,13 +88,13 @@ function a_n (shape, n){
         if (n===0){
             amplitude = 2*L**2/3;
         } else {
-            amplitude = (4*L**2/(n*Math.PI)**2)*(-1)**n;
+            amplitude = A*(4*L**2/(n*Math.PI)**2)*(-1)**n;
         }
     } else if (shape === 5){
         amplitude = 0;
     } else if (shape === 6){
         if (n===0){
-            amplitude = L;
+            amplitude = A*L;
         } else {
             amplitude = (2*A*L/(n*Math.PI)**2)*((-1)**n - 1);
         }
@@ -163,7 +163,7 @@ function coefficient (N){
 
 // plot the bar charts to visualize the amplitude of a_n
 function plot_an(){
-    var N = parseFloat(document.getElementById('NController').value);
+    var N = parseFloat(document.getElementById('NController').value)+1;
     [n, an, bn, alpha_n, theta_n] = coefficient(N);
     var data =
     [{
@@ -182,7 +182,7 @@ function plot_an(){
 
 // plot the bar charts to visualize the amplitude of b_n
 function plot_bn(){
-    var N = parseFloat(document.getElementById('NController').value);
+    var N = parseFloat(document.getElementById('NController').value)+1;
     [n, an, bn, alpha_n, theta_n] = coefficient(N);
     var data =
     [{
@@ -201,7 +201,7 @@ function plot_bn(){
 
 // plot the bar charts to visualize the amplitude of alpha_n
 function plot_alpha(){
-    var N = parseFloat(document.getElementById('NController').value);
+    var N = parseFloat(document.getElementById('NController').value)+1;
     [n, an, bn, alpha_n, theta_n] = coefficient(N);
 
     var data =
@@ -222,7 +222,7 @@ function plot_alpha(){
 
 // plot the bar charts to visualize the amplitude of theta_n
 function plot_theta(){
-    var N = parseFloat(document.getElementById('NController').value);
+    var N = parseFloat(document.getElementById('NController').value)+1;
 
     [n, an, bn, alpha_n, theta_n] = coefficient(N);
 
@@ -369,6 +369,6 @@ function main() {
 */
     //The First Initialisation - I use 's' rather than 'z' :p
     initFourier();
-    initGuidance([[30, 30],[48, 7],[48,15],[51,70],[30,30]]);
+    initGuidance(["heading","scroll1","scroll2","graph","A", "N", "L"]);
 }
 $(document).ready(main); //Load main when document is ready.
