@@ -287,6 +287,12 @@ class Wave{//class handles the creation of waves
         let Reflected = Incident.reflect(refractive_ratio);//create reflected wave
         let Transmitted = Incident.transmit(refractive_ratio);//create transmitted wave
 
+        if (isNaN(Math.asin(refractive_ratio))=== true){//update value of citical angle
+            $("#critical_angle-display").html("No Total Internal Reflection possible");
+        }else{
+            $("#critical_angle-display").html(((180*Math.asin(refractive_ratio))/Math.PI).toFixed(2).toString()+"°");
+        }
+
         let opacity_1;
         let opacity_2;
 

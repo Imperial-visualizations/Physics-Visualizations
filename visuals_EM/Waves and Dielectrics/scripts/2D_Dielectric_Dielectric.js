@@ -117,14 +117,20 @@ $(window).on('load', function() {//main
         angle_of_incidence = parseFloat($("input#angle").val());
         n2 = parseFloat($("input#refractive-index-ratio").val());
 
+        if (isNaN(Math.asin(n2))=== true){//update value of citical angle
+            $("#critical_angle-display").html("No Total Internal Reflection possible");
+        }else{
+            $("#critical_angle-display").html(((180*Math.asin(n2))/Math.PI).toFixed(2).toString()+"°");
+        }
+
         let rad_angle = Math.PI * (angle_of_incidence / 180);
         let data = [];
 
         if (condition === "incident") {//creates trace dependent of the conditions of the system
             let incident_wave = {
                 opacity: 1,
-                x: x_data,
-                y: y_data,
+                x: x_points,
+                y: y_points,
                 z: getData_wave_incident(x_points, y_points, rad_angle,E_0),
                 type: 'surface',
                 name: "Incident"
@@ -134,28 +140,8 @@ $(window).on('load', function() {//main
         else if(condition === "reflected") {
             let reflected_wave = {
                 opacity: 1,
-                x: x_data,
-                y: y_data,
-                z: getData_wave_reflected(x_points, y_points, -rad_angle, reflect(rad_angle)),
-                type: 'surface',
-                name: "Reflected"
-            };
-            data.push(reflected_wave);
-        }
-        else if (condition === "reflected and incident"){
-            let incident_wave = {
-                opacity: 1,
-                x: x_data,
-                y: y_data,
-                z: getData_wave_incident(x_points, y_points, rad_angle,E_0),
-                type: 'surface',
-                name: "Incident"
-            };
-            data.push(incident_wave);
-            let reflected_wave = {
-                opacity: 1,
-                x: x_data,
-                y: y_data,
+                x: x_points,
+                y: y_points,
                 z: getData_wave_reflected(x_points, y_points, -rad_angle, reflect(rad_angle)),
                 type: 'surface',
                 name: "Reflected"
@@ -165,8 +151,8 @@ $(window).on('load', function() {//main
         else{
             let incident_plus_reflected_wave = {
                 opacity: 1,
-                x: x_data,
-                y: y_data,
+                x: x_points,
+                y: y_points,
                 z: math.add(getData_wave_incident(x_points,y_points,rad_angle,E_0),getData_wave_reflected(x_points,y_points,2*Math.PI - rad_angle,reflect(rad_angle))),
                 type: 'surface',
                 name:"Reflected and Incident combined"
@@ -176,8 +162,8 @@ $(window).on('load', function() {//main
 
         let transmitted_wave = {
             opacity: 1,
-            x: math.add(-2,x_data),
-            y: y_data,
+            x: math.add(-2,x_points),
+            y: y_points,
             z: getData_wave_incident(math.add(-2,x_points),y_points,snell(rad_angle),transmit(rad_angle)),
             type: 'surface',
             name:"Transmitted"

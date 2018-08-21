@@ -19,12 +19,14 @@
 <div class="container">
     <h1> Dielectric Dispersion - 2D Plane Waves</h1>
 
-    <div class="six columns">
-            <div id="graph"></div>
-            Refractive index ratio:<span id="refractive_index_ratio-display">1</span>
+    <div class="eight columns">
+            <div id="graph" style="width: 30vw,height: 30vh"></div>
+            Refractive index ratio \(n_{2}/n_{1}\):<span id="refractive_index_ratio-display">1.00</span>
+            <br>
+            Critical Angle:<span id = "critical_angle-display">1.57&deg;</span>
     </div>
 
-    <div class="six columns">
+    <div class="four columns">
         <input type="button" id="playButton" value="Play">
         <div id="wave-switch" name = "wave-switch" class="switch">
             <label class="radioTitle">Wave</label>
@@ -37,11 +39,6 @@
             <label for="reflected" class="radio">
               <input type="radio" id="reflected" value="reflected" name="wave-switch" >
               <span>Reflected</span>
-            </label>
-
-            <label for="reflected and incident" class="radio">
-              <input type="radio" id="reflected and incident" value="reflected and incident" name="wave-switch">
-              <span>Reflected and Incident</span>
             </label>
 
             <label for="reflected plus incident" class="radio">

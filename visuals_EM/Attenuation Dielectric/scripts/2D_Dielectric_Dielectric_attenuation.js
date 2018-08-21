@@ -5,10 +5,11 @@ $(window).on('load', function() {//main
             afSlider: $("input#angular_frequency"),
     };
 
-    let layout = {
+    let plt = {
+        layout: {
             showlegend: false,
-            autosize: true,
-            margin: {},
+            showscale: false,
+            colorbar: false,
             scene: {
                 aspectmode: "cube",
                 xaxis: {range: [-2, 2]},
@@ -18,6 +19,7 @@ $(window).on('load', function() {//main
                     eye: {x: 0, y: 0, z: -2}//adjust camera starting view
                 }
             },
+        }
     };
 
     let size = 100;
@@ -161,6 +163,13 @@ $(window).on('load', function() {//main
 
         $("#refractive_index_ratio-display").html(n2.toFixed(2));//update value of refractive index
 
+        if (isNaN(Math.asin(n2))=== true){//update value of citical angle
+            $("#critical_angle-display").html("No Total Internal Reflection possible");
+        }else{
+            $("#critical_angle-display").html(((180*Math.asin(n2))/Math.PI).toFixed(2).toString()+"°");
+        }
+
+
         let x_data = numeric.linspace(2, 0, size);
         let y_data = numeric.linspace(-2, 2, size);
         let rad_angle = Math.PI * (angle_of_incidence / 180);
@@ -179,26 +188,6 @@ $(window).on('load', function() {//main
         }
         else if(condition === "reflected") {
             let reflected_wave = { //multiple traces
-                opacity: 1,
-                x: x_data,
-                y: y_data,
-                z: getData_wave_reflected(x_data, y_data, -rad_angle, reflect(rad_angle)),
-                type: 'surface',
-                name: "Reflected"
-            };
-            data.push(reflected_wave);
-        }
-        else if (condition === "reflected and incident"){
-            let incident_wave = { //multiple traces
-                opacity: 1,
-                x: x_data,
-                y: y_data,
-                z: getData_wave_incident(x_data, y_data, rad_angle,E_0),
-                type: 'surface',
-                name: "Incident"
-            };
-            data.push(incident_wave);
-            let reflected_wave = { //multiple traces#
                 opacity: 1,
                 x: x_data,
                 y: y_data,
@@ -322,7 +311,7 @@ $(window).on('load', function() {//main
 
     function initial() {
         Plotly.purge("graph");
-        Plotly.newPlot('graph', plot_data(),layout);//create animation
+        Plotly.newPlot('graph', plot_data(),plt.layout);//create animation
 
         dom.tswitch.on("change", update_graph);
         dom.aSlider.on("input", update_graph);

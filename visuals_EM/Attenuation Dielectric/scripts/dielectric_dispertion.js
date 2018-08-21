@@ -15,7 +15,7 @@ $(window).on('load', function() {
                 aspectmode: "cube",
                 xaxis: {range: [-1, 1]},
                 yaxis: {range: [-1, 1]},
-                zaxis: {range: [-1, 2]},
+                zaxis: {range: [-1, 1]},
 
                 camera: {
                     up: {x:1, y: 0, z: 0},//sets which way is up
@@ -247,64 +247,6 @@ class Wave{//wave object used to produce em wave
     return [E_trace_atten,B_trace_atten,E_end_amp,B_end_amp,shift,n_im]
     };
 
-
-    create_sinusoids_transmitted(E_end_amp,B_end_amp,shift)//create transmitted wave
-    {
-        let z_range = numeric.linspace(1, 2, size);
-        let z_range_shift = math.add(-1,z_range);
-
-        let o_cos = math.multiply(this.k,z_range_shift);
-        let c_input = math.add(shift,o_cos);//add shift to transmitted wave
-
-        let k_z_cos = this.element_cos(math.add(-w_t,c_input),size);
-
-        let E_cos,B_cos;
-
-        if (this.polarisation === "s-polarisation") {
-            E_cos = [zero, math.multiply(E_end_amp, k_z_cos), z_range];
-            B_cos = [math.multiply(B_end_amp,k_z_cos), zero, z_range];
-            }
-        else{
-            E_cos = [math.multiply(E_end_amp, k_z_cos), zero, z_range];
-            B_cos = [zero, math.multiply(B_end_amp, k_z_cos), z_range];
-            }
-
-        let E_trace = [];
-
-        E_trace.push(
-            {
-            type: "scatter3d",
-            mode: "lines",
-            name: "e field transmitted",
-            x: E_cos[0],
-            y: E_cos[1],
-            z: E_cos[2],
-            opacity: 1,
-            line: {
-                width: 4,
-                color: "#02893B",
-                reversescale: false}
-            }
-        );
-
-        let B_trace = [];
-        B_trace.push(
-            {
-            type: "scatter3d",
-            mode: "lines",
-            name: "b field transmitted",
-            x: B_cos[0],
-            y: B_cos[1],
-            z: B_cos[2],
-            opacity: 1,
-            line: {
-                width: 4,
-                color: "#A51900",
-                reversescale: false}
-            }
-        );
-        return [E_trace, B_trace]//return traces
-    };
 };
     
     function computeData() {
@@ -317,7 +259,6 @@ class Wave{//wave object used to produce em wave
         let Incident = new Wave(amplitude,polarisation_value,angular_frequency_ratio,n1);//create wave
     
         let dielectric_bit = Incident.attenuation(angular_frequency_ratio);//create attenuated wave
-        let Transmitted = Incident.create_sinusoids_transmitted(dielectric_bit[2],dielectric_bit[3],dielectric_bit[4]);//create transmitted wave
     
         let n_im_max = (w_d_squared*w_0*gamma)/(Math.pow((Math.pow(w_0,2) - Math.pow(w_0,2)),2)+Math.pow(w_0,2)*Math.pow(gamma,2));
     
@@ -338,7 +279,7 @@ class Wave{//wave object used to produce em wave
                 k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
             }
             );
-        let data = Incident.sinusoids[0].concat(Incident.sinusoids[1], dielectric_bit[0],dielectric_bit[1],Transmitted[0],Transmitted[1],material_1);
+        let data = Incident.sinusoids[0].concat(Incident.sinusoids[1], dielectric_bit[0],dielectric_bit[1],material_1);
         //add all traces to one variable
     return data
     };
