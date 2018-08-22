@@ -581,9 +581,8 @@ $(function() {
             $(this).addClass('active');
             $('.tab-pane.active', $(href).parent()).removeClass('active');
             $(href).addClass('active');
-            initPlot(); //This is re-plot depends on the href!!!!!!!!!!!!!!
             return false;
         });
     });
-initial();//run the initial loading
+initial();
 });
