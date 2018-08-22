@@ -26,57 +26,83 @@
 </head>
 
 <body>
-    <div class="leftnav">◀ </div>   
+  
+  <div class="leftnav">◀ </div>   
+  <div class="rightnav"> ▶ </div>
 
-    <div id='spinner'>
-      <span class="loading-message">Loading</span>
-      <div>
-          <div class="spinner-mask"></div>
-          <div id="spinner-bar"></div>
-          <div class="spinner-mask"></div>
-      </div>
+  <div id='spinner'>
+    <span class="loading-message">Loading</span>
+    <div>
+      <div class="spinner-mask"></div>
+      <div id="spinner-bar"></div>
+      <div class="spinner-mask"></div>
     </div>
+  </div>
 
 <div class="container">
 
-    <h1>Spin Coupling</h1>
+    <h1>2. Spin Coupling</h1>
     <div class="row">
         <div class="six columns">
             <p>
               The electron's spin gives rise to a magnetic moment \( \mathbf{\mu}_s=-\mu_B\mathbf{\hat{s}} \). Now the electron is moving in the electric field of the nucleus, so it experiences a magnetic field in its moving frame hich interacts with \( \mathbf{\mu}_s \). Also, since there is no external torque on the atom, a coupling between \( \mathbf{l} \) and \( \mathbf{s} \) must result in a constant total angular momentum \( \mathbf{j} \). The individual angular momenta \( \mathbf{l} \) and \( \mathbf{s} \) must be precessing around \( \mathbf{j} \) because the interaction \( -\mathbf{\mu}_s\cdot\mathbf{B} \) gives rise to a torque acting on each of them.
             </p>
 
-            <!--dropdown menu to select different spin quantum numbers-->
-            <select id="spin_number">
-              <option value="1">1</option>
-              <option value="0.5" selected>1/2</option>
-              <option value="-0.5">-1/2</option>
-            </select>
-
-            <select id="magnetic_number">
-              <option value="0">0</option>
-              <option value="1" selected>1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-            </select>
-
-            <!--
-            <select id='azimuthal_number'>
-              <option value="0">0</option>
-              <option value="1" selected>1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-            </select>
-            -->
-
             <div>
               <button id="startAnimation">Start</button>
               <button id="stopAnimation">Stop</button>
             </div>
+
+            <p>
+              <b>PRIORITY: Js throws a gazilion "Uncaught Errors" when you change \(s\) or \(l\), and stops when you stop the animation. Maybe it's because plotly can't catch up with the amount of animation updates... <br><br>
+              Things to fix: mesh3d does not support legendgroups, so need to add a button that shows/hides all the cones.
+              Bug regarding the cone mesh. The cone 'face' isn't completely covered for some reason - maybe only have a circle instead?
+              For some reason the rotation speed for the vectors increases over time, and speeds up when you change the quantum numbers... 
+              Need to add a featured view for two-electron systems - possibly also an option to view jj-coupling?
+              Need to add 3D annotations for the different vectors.<br><br>
+              NOTE: Plotly scatter3d animations seem to reset the camera every frame, so you can only rotate the view when animation is stopped. </b>
+            </p>
         </div>
 
         <!--put animation of capacitor here-->
         <div class="six columns">
+          <p align="center">
+              \( s =\ \)
+              <select id="s">
+                <option value="1" id="s1">1</option>
+                <option value="0.5" id="s1/2" selected>1/2</option>
+              </select>
+              \( \qquad l =\ \)
+              <select id="l">
+                <option value="0" id="l0">0</option>
+                <option value="1" id="l1" selected>1</option>
+                <option value="2" id="l2">2</option>
+                <option value="3" id="l3">3</option>
+              </select>
+              <br>
+              \( m_j =\ \)
+              <select id="mj">
+                <option value="4" id="mj4" disabled>4</option>
+                <option value="3.5" id="mj3.5" disabled>7/2</option>
+                <option value="3" id="mj3" disabled>3</option>
+                <option value="2.5" id="mj2.5" disabled>5/2</option>
+                <option value="2" id="mj2" disabled>2</option>
+                <option value="1.5" id="mj1.5">3/2</option>
+                <option value="1" id="mj1" disabled>1</option>
+                <option value="0.5" id="mj0.5" selected>1/2</option>
+                <option value="0" id="mj0" disabled>0</option>
+                <option value="-0.5" id="mj-0.5">-1/2</option>
+                <option value="-1" id="mj-1" disabled>-1</option>
+                <option value="-1.5" id="mj-1.5">-3/2</option>
+                <option value="-2" id="mj-2" disabled>-2</option>
+                <option value="-2.5" id="mj-2.5" disabled>-5/2</option>
+                <option value="-3" id="mj-3" disabled>-3</option>
+                <option value="-3.5" id="mj-3.5" disabled>-7/2</option>
+                <option value="-4" id="mj-4" disabled>-4</option>
+              </select>
+              \( \qquad j = \) <span id="j_variable_text"></span>
+            </p>
+
             <div id = "graph_container">
             <div id = "graph" style="width: 45vw; height: 63vh;"></div>
             </div>
