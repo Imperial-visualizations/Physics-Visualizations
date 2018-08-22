@@ -16,7 +16,7 @@ var playID, sliderID;
  * @param {float} setDuration - frame transition duration (ms).
  * @param {list} stopValues - stopping points (limit: upto 2 stops can be introduced)
  */
-function initAnimation(playButtonID, allFrames, extra=[], layout={}, setDuration = 50, stopValues=[0, 0]) {
+function initAnimation(playButtonID, allFrames, extra=[], layout={}, setDuration = 50, stopValues=[]) {
     Plotly.purge("graph");
     playID = playButtonID;
     sliderID = "#" + playID.slice() + "Slider";
@@ -36,7 +36,7 @@ function initAnimation(playButtonID, allFrames, extra=[], layout={}, setDuration
     for (var i = 0, n = extra.length; i < n; ++i){
         data.push(extra[i]);
     }
-    Plotly.newPlot("graph", data = data, layout = layout);
+    Plotly.newPlot("graph", data, layout);
     reset();
 }
 
@@ -45,7 +45,7 @@ function reset() {
     isPaused = true;
     animationIndex = 0;
     historyPlot(animationIndex);
-    document.getElementById(playID).value = (isPaused) ? "Play":"Pause";
+    document.getElementById(playID).value = "Play";
     updateSlider();
     return;
 }
@@ -60,70 +60,54 @@ function historyPlot(index) {
     for (var i = 0, n = animationFrames[index].data.length; i < n; ++i) {
         data.push(animationFrames[index].data[i]);
     }
-    Plotly.animate(
-        'graph',
+    Plotly.animate('graph',
         {data: data},
-        {
-            fromcurrent: true,
+        {   fromcurrent: true,
             transition: {duration: 0,},
-            frame: {duration: 0, redraw: false,},
-        }
+            frame: {duration: 0, redraw: false,},},
     );
     isPaused = true;
-    document.getElementById(playID).value = (isPaused) ? "Play":"Pause";
+    document.getElementById(playID).value = "Play";
     return;
 }
 
 /** Updates animation. */
 function update() {
-    animationIndex++;
-    if (animationIndex === animationLimit) {
+    if (++animationIndex === animationLimit) {
         isPaused = true;
         document.getElementById(playID).value = "Reset";
-        return;
+        return 0;
     }
     if (!isPaused) {
         var data = [];
         for (var i = 0, n = animationFrames[animationIndex].data.length; i < n; ++i) {
             data.push(animationFrames[animationIndex].data[i]);
         }
-        Plotly.animate(
-            'graph',
+        Plotly.animate('graph',
             {data: data},
-            {
-                fromcurrent: true,
+            {   fromcurrent: true,
                 transition: {duration: duration,},
                 frame: {duration: duration, redraw: false,},
-                mode: "next"
-            }
+                mode: "next"},
         );
-        pauseComp(duration + 5);
-        requestAnimationFrame(update);
-        updateSlider();
-        //Add stopping functionality here!!!
-        if (animationIndex === stops[0] || animationIndex === stops[1] || animationIndex === stops[2]){
-            isPaused = !isPaused;
-            animationIndex--;
-            document.getElementById(playID).value = "Continue";
+        for (var i=0; i<stops.length; ++i) {
+            if (animationIndex === stops[i]){
+                isPaused = !isPaused;
+                document.getElementById(playID).value = "Continue";
+                return 0;
+            }
         }
+        updateSlider();
+        requestAnimationFrame(update);
     }
-    return;
-}
-
-/**
- * pauses the computation.
- * @param {float} - time duration to pause the computation. (ms)
- */
-function pauseComp(ms) {
-    ms +=new Date().getTime();
-    while (new Date() < ms){}
-    return;
+    return 0;
 }
 
 /** updates linked frame slider value and position. */
 function updateSlider() {
     $(sliderID).val(animationIndex);
     $(sliderID + "Display").text(animationIndex);
+    return 0;
 }
 
 /** Starts the animation. */
@@ -135,7 +119,7 @@ function startAnimation() {
     } else {
         reset();
     }
-    return;
+    return 0;
 }
 
 function addEmptyObjects3d(data, numberObj){

@@ -307,7 +307,6 @@ function computeFrames(frames, extra){
         data.push(qSphere.gObjectY(cyan, 1));
         data.push(qSphere.gObjectZ(cyan, 1));
         addFrame(frames, data, maxDataSize);
-        stops.push(frames.length - 1);
     } else if(activeTab === 'cylin') {
         maxDataSize = 15;
 
@@ -388,7 +387,6 @@ function computeFrames(frames, extra){
         data.push(qSphere.gObjectY(cyan, 1));
         data.push(qSphere.gObjectZ(cyan, 1));
         addFrame(frames, data, maxDataSize);
-        stops.push(frames.length - 1);
     } else if(activeTab === 'spher') {
         maxDataSize = 15;
 
@@ -469,7 +467,6 @@ function computeFrames(frames, extra){
         data.push(qSphere.gObjectY(cyan, 1));
         data.push(qSphere.gObjectZ(cyan, 1));
         addFrame(frames, data, maxDataSize);
-        stops.push(frames.length - 1);
     }
 
     return stops;
@@ -483,7 +480,7 @@ function initPlot(){
     var stops = computeFrames(frames, extra);
 
     $("#animateSlider").attr("max", frames.length - 1);
-    initAnimation("animate", frames, extra, layout, 10, stops, true);
+    initAnimation("animate", frames, extra, layout, 0, stops);
     return 0;
 }
 
