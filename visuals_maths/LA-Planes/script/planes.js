@@ -35,21 +35,21 @@ function addEmptyObjects3d(data, numberObj){
 function addPlane(data, a, b, c, d, color) {
     var x, y, z;
 
-    if (c > 1e-10) {
+    if (Math.abs(c) > 1e-10) {
         x = [-50, 50, 50, -50],
         y = [-50, -50, 50, 50];
         z = [];
         for (var i=0; i<4; ++i) {
             z.push(-( d + a*x[i] + b*y[i] )/c );
         }
-    } else if (b > 1e-10) {
+    } else if (Math.abs(b) > 1e-10) {
         x = [-50, 50, 50, -50],
         z = [-50, -50, 50, 50];
         y = [];
         for (var i=0; i<4; ++i) {
             y.push(-( d + a*x[i] + c*z[i] )/b );
         }
-    } else if (a > 1e-10) {
+    } else if (Math.abs(a) > 1e-10) {
         y = [-50, 50, 50, -50],
         z = [-50, -50, 50, 50];
         x = [];

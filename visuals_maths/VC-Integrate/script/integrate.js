@@ -502,7 +502,7 @@ function main() {
             $(this).addClass('active');
             $('.tab-pane.active', $(href).parent()).removeClass('active');
             $(href).addClass('active');
-            initPlot();
+            initPlot(); //This is re-plot depends on the href!!!!!!!!!!!!!!
             return false;
         });
     });
