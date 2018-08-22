@@ -18,24 +18,16 @@
 </head>
 
 <body>
-<!-- Navigation elements -->
-<div class="rightnav">▶ </div>
-<div class="leftnav">◀ </div>
-
-    <div id="loading-spinner">
-        <span class="loading-message">Loading</span>
-        <div>
-            <div class="spinner-mask"></div>
-            <div id="spinner-bar"></div>
-            <div class="spinner-mask"></div>
-        </div>
-    </div>
 
 <div class="container">
-    <h1>2. Snell's Law</h1>
     <div class="row">
+        <!-- Div containing graph-->
+        <div class="seven columns flexyHold">
+            <div id="graph" class = "flexy"></div>
+        </div>
         <!-- Div containing writing and sliders -->
         <div class="five columns">
+            <br>
             <p>Next all we have to do is incorporate Snell's Law of refraction. This law states that
                 $$\frac{sin(\theta_{i})}{sin(\theta_{t})} = \frac{n_{t}}{n_{i}} $$
                 From this we can see that given a certain refractive index ratio, the outgoing direction of a wave can be determined if the incoming direction is known.
@@ -59,13 +51,10 @@
             </div>
 
         </div>
-        <!-- Div containing graph-->
-        <div class="seven columns">
-            <div id="graph" style="height: 75vh"></div>
-        </div>
+
     </div>
 </div>
-<script> let pages = ["1Boundry Conditions.html", "2Snell's Law.html", "3Single Wave.html", "4Continuous Wavefronts.html", "5Plane Wave.html"]</script>
+<script> let pages = ["1Boundry Conditions.html", "2Snell's Law.html", "3Single Wave.html", "4Continuous Wavefronts.html", "5Plane Wave.html","6Evanescent Waves.html"]</script>
 <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
 
 </body>

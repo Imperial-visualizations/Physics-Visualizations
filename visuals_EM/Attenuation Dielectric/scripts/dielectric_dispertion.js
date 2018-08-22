@@ -67,7 +67,7 @@ $(window).on('load', function() {
         }
     };
 let isPlay = false;
-let w_t = 0;
+let t = 0;
 
 let w_conversion = 7e5; // Factor to make plot wavelength reasonable
 let w_0 = 2e10;//gives properties of material
@@ -77,6 +77,7 @@ let w_d_squared = wd**2;
 
 let polarisation_value = $("input[name = polarisation-switch]:checked").val();//set variables based on value of polarisation
 let angular_frequency_ratio   = parseFloat($("input#angular_frequency").val())* w_0;//set variable based on angular frequency input
+let w_r = parseFloat($("input#angular_frequency").val());
 
 let n1 = 1;//material before input dielectric
 let amplitude = 0.8;//amplitude of em wave
@@ -122,7 +123,7 @@ class Wave{//wave object used to produce em wave
     {
         let z_range = numeric.linspace(-1, 0, size);
 
-        let k_z_cos = this.element_cos(math.add(-w_t,math.multiply(this.k,z_range)),size);
+        let k_z_cos = this.element_cos(math.add(-w_r*t,math.multiply(this.k,z_range)),size);
         let E_cos,B_cos;
 
         if (this.polarisation === "s-polarisation") {
@@ -188,7 +189,7 @@ class Wave{//wave object used to produce em wave
 
     let exp_E = this.element_exponential(math.multiply(-k_im,z_range),size);//exponential decay of amplitude
 
-    let k_z_cos = this.element_cos(math.add(-w_t,math.multiply(k_real,z_range)),size);
+    let k_z_cos = this.element_cos(math.add(-w_r*t,math.multiply(k_real,z_range)),size);
 
     let decayed_cos = math.dotMultiply(exp_E,k_z_cos);
 
@@ -254,8 +255,9 @@ class Wave{//wave object used to produce em wave
         $("#angular_frequency-display").html($("input#angular_frequency").val().toString());//update value of display
     
         angular_frequency_ratio = parseFloat($("input#angular_frequency").val())*(w_0);//update variable values
+        w_r = parseFloat($("input#angular_frequency").val());
         polarisation_value = $("input[name = polarisation-switch]:checked").val();
-    
+
         let Incident = new Wave(amplitude,polarisation_value,angular_frequency_ratio,n1);//create wave
     
         let dielectric_bit = Incident.attenuation(angular_frequency_ratio);//create attenuated wave
@@ -391,7 +393,7 @@ class Wave{//wave object used to produce em wave
     
     function play_loop(){
         if(isPlay === true) {
-            w_t++;
+            t++;
             Plotly.animate("graph",
                 {data: computeData()},
                 {
@@ -440,7 +442,7 @@ class Wave{//wave object used to produce em wave
         $('#playButton').on('click', function() {
             document.getElementById("playButton").value = (isPlay) ? "Play" : "Stop";
             isPlay = !isPlay;
-            w_t = 0;
+            t = 0;
             requestAnimationFrame(play_loop);
         });
     

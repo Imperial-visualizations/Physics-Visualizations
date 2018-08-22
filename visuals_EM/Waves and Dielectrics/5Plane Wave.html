@@ -22,56 +22,56 @@
 
 
 <div class="container">
-    <h1> 2D Plane Waves at a Dielectric Boundary</h1>
+    <div class = "row">
 
-    <div class="nine columns">
-        <div id="graph" style="width: 55vw; height: 75vh;"></div>
-        Critical Angle:<span id = "critical_angle-display">1.57&deg;</span>
+    <div class="eight columns flexyHold">
+        <div id="graph" class = "flexy"></div>
     </div>
 
-    <div class="three columns">
+    <div class="four columns">
+        <br>
         <input type="button" id="playButton" value="Play">
         <div id="wave-switch" name = "wave-switch" class="switch">
             <label class="radioTitle">Wave</label>
 
             <label for="incident" class="radio">
-              <input type="radio" id="incident" value="incident" name="wave-switch" checked="checked">
+              <input type="radio" id="incident" value="incident" name="wave-switch">
               <span>Incident</span>
             </label>
-            <br>
             <label for="reflected" class="radio">
               <input type="radio" id="reflected" value="reflected" name="wave-switch" >
               <span>Reflected</span>
             </label>
-            <br>
             <label for="reflected plus incident" class="radio">
-              <input type="radio" id="reflected plus incident" value="reflected plus incident" name="wave-switch" >
+              <input type="radio" id="reflected plus incident" value="reflected plus incident" name="wave-switch" checked="checked" >
               <span>Combined</span>
             </label>
-            <br>
         </div>
 
-        <br>
         <div id="angle-slider">
             <label for="angle" class="sliderTitle">Angle of incidence:
               <span id="angle-display">0&deg;</span>
-            </label>
+            </label><span class="sliderMin">0&deg;</span>
             <input type="range" id="angle" name="angle" min="0" max="85" value="0">
-            <span class="sliderMin">0&deg;</span><span class="sliderMax">85&deg;</span>
+            <span class="sliderMax">85&deg;</span>
         </div>
 
         <div id="refractive-index-ratio-slider">
                 <label for="refractive-index-ratio" class="sliderTitle">Refractive Index ratio of second to first material:
                   <span id="refractive-index-ratio-display">2.5</span>
-                </label>
+                </label><span class="sliderMin">0.2</span>
                 <input type="range" id="refractive-index-ratio" name="refractive-index-ratio" min="0.2" max="5" step = "0.01" value="2">
-                <span class="sliderMin">0.2</span><span class="sliderMax">5</span>
+                <span class="sliderMax">5</span>
         </div>
+        <div class = "cabinet green">
+            Critical Angle: <span id = "critical_angle-display">1.57&deg;</span>
+        </div>
+    </div>
     </div>
 </div>
 
 <script src="scripts/2D_Dielectric_Dielectric.js"></script>
-<script> let pages = ["1Boundry Conditions.html", "2Snell's Law.html", "3Single Wave.html", "4Continuous Wavefronts.html", "5Plane Wave.html"]</script>
+<script> let pages = ["1Boundry Conditions.html", "2Snell's Law.html", "3Single Wave.html", "4Continuous Wavefronts.html", "5Plane Wave.html","6Evanescent Waves.html"]</script>
 <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
 </body>
 </html>

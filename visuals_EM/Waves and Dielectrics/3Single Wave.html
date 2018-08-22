@@ -21,23 +21,22 @@
 <body>
 
 <div class="container">
-    <h1>Plane Waves at a Dielectric Boundary</h1>
-
     <div class="row">
        <div class="six columns">
-            <div id="graph" style="width: 50vw; height:49vh;"></div>
-            <input type="button" id="playButton" value="Play">
-            Critical Angle:<span id = "critical_angle-display">1.57&deg;</span>
-        </div>
-        <div class="six columns">
-            <div id="graph_fresnel" style="width: 40vw; height: 49vh;"></div>
-        </div>
-
+            <div id="graph" style="width: 50vw; height:60vh;"></div>
+       </div>
+       <div class="six columns">
+            <div id="graph_fresnel" style="width: 40vw; height: 60vh;"></div>
+       </div>
     </div>
+    <br>
 
     <div class="row">
-      <div id="interface">
-        <div class="two columns">
+        <div class = "one columns">
+            <br>
+            <input type="button" id="playButton" value="Play">
+        </div>
+        <div class="one columns">
             <div id="polarisation-switch" class="switch">
                 <label class="radioTitle">Polarisation:</label>
 
@@ -52,8 +51,13 @@
                 </label>
             </div>
         </div>
+        <div class = "four columns">
+            <div class = "cabinet green">
+                Critical Angle: <span id = "critical_angle-display">1.57&deg;</span>
+            </div>
+        </div>
 
-        <div class="ten columns">
+        <div class="six columns">
             <div id="angle-slider">
                 <label for="angle" class="sliderTitle">Angle of incidence:
                   <span id="angle-display">50&deg;</span>
@@ -70,13 +74,11 @@
                 <span class="sliderMin">0.5</span><span class="sliderMax">2</span>
             </div>
         </div>
-
-      </div>
     </div>
 </div>
 
 <script src="scripts/Dielectric_Dielectric.js"></script>
-<script> let pages = ["1Boundry Conditions.html", "2Snell's Law.html", "3Single Wave.html", "4Continuous Wavefronts.html", "5Plane Wave.html"]</script>
+<script> let pages = ["1Boundry Conditions.html", "2Snell's Law.html", "3Single Wave.html", "4Continuous Wavefronts.html", "5Plane Wave.html","6Evanescent Waves.html"]</script>
 <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
 </body>
 </html>
