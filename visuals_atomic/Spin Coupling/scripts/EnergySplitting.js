@@ -18,7 +18,7 @@ $(window).on('load', function() {//main
             },
             xaxis: {
                 autorange: true,
-                showgrid: true,
+                showgrid: false,
                 zeroline: false,
                 showline: false,
                 autotick: true,
@@ -27,13 +27,13 @@ $(window).on('load', function() {//main
             },
             yaxis: {
                 autorange: false,
-                showgrid: true,
+                showgrid: false,
                 zeroline: false,
                 showline: false,
                 autotick: true,
                 ticks: '',
                 showticklabels: false,
-                range: [-2,12],
+                range: [-1,13],
             },
             margin: {
                 l: 0, r: 0, b: 0, t: 0, pad: 0,
@@ -174,9 +174,21 @@ $(window).on('load', function() {//main
             };
         };
 
-        data.push({mode: "text", x: [1.5], y: [-1], text: "Fine splitting", textfont: {family: "Fira Sans", size: 20}, showlegend: false});
-        data.push({mode: "text", x: [2.5], y: [-1], text: "Hyperfine splitting", textfont: {family: "Fira Sans", size: 20}, showlegend: false});
-        data.push({mode: "text", x: [3.5], y: [-1], text: "Zeeman splitting", textfont: {family: "Fira Sans", size: 20}, showlegend: false});
+        if (fine == true) {
+            data.push({mode: "text", x: [1.5], y: [12], text: "Fine splitting", textfont: {family: "Fira Sans", size: 20}, showlegend: false});
+        } else {
+            data.push({mode: "text", x: [1.5], y: [18], text: "Fine splitting", textfont: {family: "Fira Sans", size: 20}, showlegend: false});
+        };
+        if (hyperfine == true) {
+            data.push({mode: "text", x: [2.5], y: [12], text: "Hyperfine splitting", textfont: {family: "Fira Sans", size: 20}, showlegend: false});
+        } else {
+            data.push({mode: "text", x: [2.5], y: [18], text: "Hyperfine splitting", textfont: {family: "Fira Sans", size: 20}, showlegend: false});
+        };
+        if (zeeman == true) {
+            data.push({mode: "text", x: [3.5], y: [12], text: "Zeeman splitting", textfont: {family: "Fira Sans", size: 20}, showlegend: false});
+        } else {
+            data.push({mode: "text", x: [3.5], y: [18], text: "Zeeman splitting", textfont: {family: "Fira Sans", size: 20}, showlegend: false});        
+        };
 
         return data;
     };

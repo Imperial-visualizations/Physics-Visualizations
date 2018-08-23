@@ -32,6 +32,7 @@ $(window).on('load', function() {//main
             margin: {
                 l: 70, r: 100, b: 0, t: 30, pad: 5,
             },
+            hovermode: false,
         }
     };
 

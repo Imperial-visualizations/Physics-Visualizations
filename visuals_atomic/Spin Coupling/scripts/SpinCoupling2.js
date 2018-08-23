@@ -46,6 +46,7 @@ $(window).on('load', function() {//main
     });
 
     var t = 0;
+    var cones = false;
 
     function get_rot_matrix(angle, vector){//Returns rotation matrix about an arbitrary axis
     	let [x,y,z] = vector.unit().toArray()
@@ -118,19 +119,9 @@ $(window).on('load', function() {//main
         let [Lx,Ly,Lz] = L.linearTransform(Q);
         let [Sx,Sy,Sz] = S.linearTransform(Q);
         
-        let data = [
-            {//J vector
-                name: 'J',
-                type: 'scatter3d',
-                mode: 'lines',
-                line: {width: 10, dash: 'solid', color: '#9400D3'},
-                legendgroup: 'j',
-                x: [0, Jx],
-                y: [0, Jy],
-                z: [0, Jz],
-            },
+        var data = [
             {//L vector
-            	name: 'L',
+            	name: 'Angular momentum',
             	type: 'scatter3d',
             	mode: 'lines',
             	line: {width: 10, dash: 'solid', color: '#0080FF'},
@@ -150,7 +141,7 @@ $(window).on('load', function() {//main
             	z: [Sz, Jz],
             },            
             {//S vector
-            	name: 'S',
+            	name: 'Spin',
             	type: 'scatter3d',
             	mode: 'lines',
             	line: {width: 10, dash: 'solid', color: '#50C878'},
@@ -169,40 +160,80 @@ $(window).on('load', function() {//main
             	y: [Ly, Jy],
             	z: [Lz, Jz],
             },
-        //];
-
+            {//J vector
+                name: 'Total angular momentum',
+                type: 'scatter3d',
+                mode: 'lines',
+                line: {width: 10, dash: 'solid', color: '#9400D3'},
+                legendgroup: 'j',
+                x: [0, Jx],
+                y: [0, Jy],
+                z: [0, Jz],
+            },
+        ];
+        draw_arrow(data, [0, Lx], [0, Ly], [0, Lz], '#0080FF');
+        draw_arrow(data, [0, Sx], [0, Sy], [0, Sz], '#50C878');
+        draw_arrow(data, [0, Jx], [0, Jy], [0, Jz], '#9400D3');
         /* 
         mesh3d does not support legendgroup!
         Need to add a scatter data set with name "Cones", and have get_data
         check for getElementByID('graph').data["Cones"].visible == true or false
         and depending on the result push the following Cones data: */
-            {//L vector cone
-            	type: 'mesh3d',
-            	color: '#0080FF',
-            	opacity: 0.4,
-            	x: L_cone.x,
-            	y: L_cone.y,
-            	z: L_cone.z,
-            },
-            {//S vector cone
-            	type: 'mesh3d',
-            	color: '#50C878',
-            	opacity: 0.4,
-            	x: S_cone.x,
-            	y: S_cone.y,
-            	z: S_cone.z,
-            },
-            {//J vector cone
-            	type: 'mesh3d',
-            	color: '#9400D3',
-            	opacity: 0.4,
-            	x: J_cone.x,
-            	y: J_cone.y,
-            	z: J_cone.z,
-            },
-        ];
+        if (cones == true) {
+	        data.push([    
+	            {//L vector cone
+	            	type: 'mesh3d',
+	            	color: '#0080FF',
+	            	opacity: 0.4,
+	            	x: L_cone.x,
+	            	y: L_cone.y,
+	            	z: L_cone.z,
+	            },
+	            {//S vector cone
+	            	type: 'mesh3d',
+	            	color: '#50C878',
+	            	opacity: 0.4,
+	            	x: S_cone.x,
+	            	y: S_cone.y,
+	            	z: S_cone.z,
+	            },
+	            {//J vector cone
+	            	type: 'mesh3d',
+	            	color: '#9400D3',
+	            	opacity: 0.4,
+	            	x: J_cone.x,
+	            	y: J_cone.y,
+	            	z: J_cone.z,
+	            },
+	        ]);
+	    };
 
         return data;
+    };
+
+    function draw_arrow(obj, pointsx, pointsy, pointsz, color) {//return data required to construct field line arrows
+        /** Returns an arrowhead based on an inputted line */
+        var x = pointsx[1],
+            y = pointsy[1],
+            z = pointsz[1],
+            u = 0.2*(pointsx[1] - pointsx[0]),
+            v = 0.2*(pointsy[1] - pointsy[0]),
+            w = 0.2*(pointsz[1] - pointsz[0]);
+        obj.push({
+        	type: "cone",
+        	colorscale: [[0, color],[1,color]],
+        	x: [x],
+        	y: [y],
+        	z: [z],
+        	u: [u],
+        	v: [v],
+        	w: [w],
+        	sizemode: "absolute",
+        	sizeref: 0.3*Math.sqrt(Vector.fromArray([x,y,z]).length()),
+        	showscale: false,
+        	legendgroup: 's',
+        });
+        //return [x, y, z, u, v, w]
     };
 
     function select_disable() {//Enables/disables the different options in the selecters

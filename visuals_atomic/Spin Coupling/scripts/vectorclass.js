@@ -1,5 +1,5 @@
 //Source: https://evanw.github.io/lightgl.js/docs/vector.html
-//NOTE: Added custom functions .horNormal(), .linearTransform()
+//NOTE: Added custom functions .vecToMatrix(), .linearTransform()
 function Vector(x, y, z) {
   this.x = x || 0;
   this.y = y || 0;
@@ -71,10 +71,6 @@ Vector.prototype = {
     return this;
   },
   //Custom functions, not in original file!
-  //Returns the horizontal normal unit vector
-  horNormal: function() {
-	return new Vector(-this.y/this.length(), this.x/this.length(), 0).unit();
-  },
   vecToMatrix: function() {
   	return math.matrix([[this.x], [this.y], [this.z]]);
   },
