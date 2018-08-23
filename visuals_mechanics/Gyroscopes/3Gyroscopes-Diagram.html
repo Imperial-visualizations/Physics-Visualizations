@@ -1,0 +1,47 @@
+
+<!---html-->
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css"> <!-- top two lines are importing the navbars-->
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <link rel = "icon" href = "images/favicon.ico" type="image/x-icon">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script> <!-- importing jquery: note: MUST import jQuery in order for navigation bar to work-->
+   <title> Gyroscope Diagram and Energies </title>
+</head>
+<body>
+<div class = "container">
+<div class = "row">
+         <h4 class="titleKE"> Gyroscope Vector Diagram </h4> <div id = "test" class = "seven columns"> <!---plotting the image with the id = "test" -->
+</div> <div class = "five columns"> <button id="playPauseButton">Start</button> <button id="resetButton">Reset</button> </div><!---entire container is 12 containers long-->
+     <button id="speedupButton">Slow Down</button> <!--<button id="slowdownButton">Speed up</button> </div>-->
+    <div class="five columns">
+
+       <!--graph for the first graph drop down-->
+        <div class="graphSlider row" class = "five columns" label = "Graph of energies against time" id = "Energy graph">
+	<svg width="38" height="32">
+		<polygon points="0,0 38,0 18,32" ></polygon>
+	</svg>
+	<span>Show</span>
+	<div class="showhide" id="energygraph" label="Energy graph"></div> <!--change labe oin -->
+    </div>
+</div>
+
+       <!---<<label class="slider"> <input id="slowmo" class="inputs" title="Vib KE" type="range" value="1" min="1" max="2" step="0.1"/> <span class="sliderMin">Slow down</span><span class="sliderMax">Speed up</span> </label> <!--- slider title--> <!--<<label class="sliderTitle" style="padding-bottom: 10px" id ="sliderr">Angle to horizontal /degrees <span class="txtInputs" id="DIFFERENT Display" data-change data-unit="degrees">degrees</span> </label> <!--- slier -->
+       <label class="sliderTitle" style="margin-bottom: 0">Moment of Inertia of gyroscope wheel (about the rod)<span class="txtInputs" id="inertiatitle" data-unit=" " data-change></span> </label>
+       <label class="slider"> <input id="inertia" class="inputs" title="Vib KE" type="range" value="15" min="10" max="25" step="0.5"/> <span class="sliderMin"></span><span class="sliderMax"></span> </label> <!--- slider title--> <!--<<label class="sliderTitle" style="padding-bottom: 10px" id ="sliderr">Angle to horizontal /degrees <span class="txtInputs" id="DIFFERENT Display" data-change data-unit="degrees">degrees</span> </label> <!--- slier -->
+        <!---kinetic energy/gravitational potential energy slider-->
+
+       <!--<label class="sliderTitle" style="margin-bottom: 0">KE:GPE<span class="txtInputs" id="gpetokeslider" data-unit=" " data-change></span> </label>
+       <label class="slider"> <input id="gpetoke" class="inputs" title="Vib KE" type="range" value="10" min="6" max="25" step="0.25"/> <span class="sliderMin">1</span><span class="sliderMax">2</span> </label> <!--- slider title--> <!--<<label class="sliderTitle" style="padding-bottom: 10px" id ="sliderr">Angle to horizontal /degrees <span class="txtInputs" id="DIFFERENT Display" data-change data-unit="degrees">degrees</span> </label> <!--- slier -->
+        <!--<label class="slider"> <input id = "slowmo" class="inputs" title="azimuth" type="range" value="0" min="0" max="0.3333333" step="0.05"/> <span class="sliderMin">0.00</span><span class="sliderMax">100%</span> </label>-->
+    </div>
+    </div>
+
+</div>
+<script src= "gyroscopes_vector_diagram2.js" ></script>
+<script src=https://cdn.plot.ly/plotly-latest.min.js></script>
+<script> let pages = ["1Gyroscopes-Theory.html", "2Gyroscopes.html", "3Gyroscopes-Vector-Diagram.html"]</script> <!--last two lines are the gyroscope pages and the navigator-->
+<script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+</body>
+</html>

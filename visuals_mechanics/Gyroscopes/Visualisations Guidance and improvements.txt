@@ -1,0 +1,46 @@
+This is a visualisation to help students visualise and understand the movement of the gyroscope. 
+There are 3 pages: A theory page, a simple gyroscope movement page, and a page where the student 
+can play around with the parameters affecting the motion. 
+
+Instructions (functions and decisions):
+
+Theory page:
+
+initPlot_gyro : plotting the vector diagram in the theory section
+
+2nd page:
+
+reset: resets all the variables and draws the gyroscope at its initial position  
+toggle: changing the button name and calls play() function every 10 milliseconds to draw the gyrocope
+play: function that makes a plot of the gyroscope that changes every time it is called (because parameters are t dependent and the variable t is changed every loop)
+calc: generates the positions of the points which are passed into the handle_slider function to be plotted
+handle_slider: plots the points of the gyroscope whenever the value of the slider is changed
+initialize: makes the first plot of the gyroscope when the page is loaded.
+
+3rd page:
+inertia_decision: if played = true the inertia is changed during the animation
+reset: resets all parameters to their initial values and plots the gyro in its initial position
+speed_toggle: this is a button to speed up/slow down
+toggle: changing the button text and starting/stopping the gyro
+play: plots the gyroscope (with a parameter t that changes, so the gyroscope position changes with time)
+handle_slider: plots the new points of the gyroscope whenever the value of the slider is changed
+initial: initially plotting the gyroscope when the page is loaded
+
+
+Possible improvements for the gyroscope visualisations:
+
+Future:
+-Addition of user visualisation guidance (if judged relevant)
+-Addition of A graph of PE, KE and total energy over time - 
+-Tracking the other graphs over time
+-Addition of friction slider
+
+Ones I can feasibly do within this week/next:
+-formatting the website
+-adding vectors
+-Developing of the theory - addition of more preceding pages with simpler theory
+ e.g a gif of the gyroscope
+- adding a friction and non-friction gyroscope
+ 
+Possible outstanding bugs:
+
