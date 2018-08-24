@@ -9,11 +9,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
     <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
-    <link rel="stylesheet" href="rotating-stylesheet.css">
+    <link rel="stylesheet" href="css/rotating-stylesheet.css">
     <style> body {padding: 5px; margin: 5px;} </style>
 
 
   </head>
+
   <div>
     <div id='spinner'>
     <span class="loading-message">Loading</span>
@@ -30,20 +31,18 @@
         <div id="spin"></div>
       </div>
       <div class="five columns">
-        <p>The Centrifugal Force (given by \(-m\boldsymbol{\omega} \times (\boldsymbol{\omega} \times \mathbf{r}\))) is one of the three inertial forces that arise from a rotating frame.
-           This force <span class="emphasis">always points out away from the Earth </span> and so acts against gravity. In fact it acts as a small correction to it, changing both the magnitude and the direction.
+        <p class="padding5">The Centrifugal Force (given by \(-m\boldsymbol{\omega} \times (\boldsymbol{\omega} \times \mathbf{r}\))) is another of the inertial forces.
+           This force <span class="emphasis">always points out away from the Earth </span> and so acts as a correction to gravity.
         </p>
-        <p>
-          The Earth's rotation distorts it to an oblate spheroid (like a squashed orange). This causes a plumb-line to appear as if it hangs vertically because the normal to the Earth's surface does not point <span style="font-style:italic;font-size:medium">exactly</span> to the centre of the Earth. As a result, the centrifugal term does not lead
-          to any deviations in the plane of the Earth's surface. Therefore, the centrifugal term <span class="emphasis"> is negligible </span> for many experiments on Earth.
+        <p class="padding5">
+         It does not cause any deviations in the plane of the Earth's surface, but is accounted for by a slightly changed value of g which changes the shape of the Earth to an oblate spheroid (squashed orange).
         </p>
-        <p>
-          However, it is important to know how it can have a meaningful impact. In our case, the rotation speed only leads to a difference in diameter of \(22km\) between the poles and the equator.
-          How would increasing the speed affect the shape?
+        <p class="padding5">
+          At our rotation speed, there is a difference a difference in diameter of \(22km\) between the poles and the equator. Use this animation to visualise how a slightly higher \(\boldsymbol{\omega}\) would change the Earth.
         </p>
-        <p>
-          <span style="font-weight:bold">Slider</span>: This controls \(\omega\) and visualises the flattening as the speed increases.
-          <span style="font-weight:bold">Show Original</span>: Hover your mouse over this button to show the sphere that would be there if there was no rotation.
+        <p style="padding-top: 60px">
+          <span class="boldNormal">Slider</span>: This controls \( \boldsymbol{\omega} \) which ranges between 0 and 0.8. <br/>
+          <span class="boldNormal">Show Original</span>: Hover your mouse over this button to show the sphere that would be there if there was no rotation.
         </p>
       </div>
     </div>
@@ -51,11 +50,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
   <script language = 'javascript' type = 'text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.min.js"></script>
   <script>
-      let pages = ["1CentrifugalForce.html", "2CoriolisForce.html", "3EulerForce.html"]
+      let pages = ["1Derivation.html", "1Euler Force.html", "1Centrifugal Force.html"]
   </script>
   <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
-  <script src="EarthFlattening.js"></script>
+  <script src="scripts/EarthFlattening.js"></script>
   <script>
+    // Causes the main body of the page to hide until everything is loaded and then hides spinner and shows content
     $('.container').hide();
 
     $(window).on('load', setTimeout(function() {
