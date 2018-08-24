@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title> Dielectric Dispertion - Imperial Visualisations</title>
+    <title> Waves in Plasma - Imperial Visualisations</title>
     <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
-    <!--<link rel="stylesheet" href="Style2.css"> -->
     <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
     <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
     <script src="lib/plotly-latest.min.js"></script>
@@ -15,8 +14,8 @@
     <script type="text/javascript" async
         src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
+     <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-
 </head>
 
 <body>
@@ -26,13 +25,13 @@
         <div class="six columns">
         <div id="graph_disp" style="height: 40vh;width: 30vw" >
         </div>
-        <div>
-            <p id="Refr_box">Effective Refractive Index of Plasma:</p>
-            <p>
-                Real: <a id="refr_index_real" ></a>
-                Imaginary: <a id ="refr_index_imaginary" ></a>
-            </p>
+            <br>
+            <h6>Effective Refractive Index of Plasma, \(n_{p}\).</h6>
+        <div class = "cabinet red">
+            Real:  <span id="refr_index_real"></span>;
+            Imaginary: <span id="refr_index_imaginary"></span>
         </div>
+
         <div id="angular_frequency-slider">
             <label for="angular_frequency" class="sliderTitle"> Wave Angular frequency \(\omega \times 10^{10}\):
               <span id="angular_frequency-display">1.1</span>
@@ -84,10 +83,8 @@
     </div>
     </div>
 </div>
-<script>
-  $('.container').hide();
-</script>
 <script src="scripts/plasma.js"></script>
+<script> let pages = ["1Theory.html", "2Plasma.html"];</script>
 <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
 </body>
 </html>

@@ -284,13 +284,13 @@ function computeData() {
 
     if (angular_frequency>w_p) {
         let n = math.sqrt(1 - (w_p / angular_frequency) ** 2); //real
-        $("#refr_index_real").html(n);
+        $("#refr_index_real").html(Math.round(n*100)/100);
         $("#refr_index_imaginary").html(0);
     }
     else {
         let n = math.sqrt(((w_p / angular_frequency) ** 2)-1); //imaginary made real
         $("#refr_index_real").html(0);
-        $("#refr_index_imaginary").html(n);
+        $("#refr_index_imaginary").html(Math.round(n*100)/100);
     }
 
 
@@ -344,6 +344,7 @@ function compute_data_disp() {//produces data for dispersion relationship graph
     let y = []; // w
     let k_actual = [];
     let y_straight = [];
+    let y_imaginary = [];
     electron_density = parseFloat($("input#electron_density").val())*1e17;
     let w_p = get_w_plasma(electron_density);
     let w_p_scaled = w_p/1e9;
@@ -352,8 +353,10 @@ function compute_data_disp() {//produces data for dispersion relationship graph
         k_actual.push(Math.sqrt(kc_squared[i]/c**2));
         y.push(Math.sqrt(kc_squared[i]/1e16 + w_p_scaled**2));
         y_straight.push(k_actual[i]*c/1e8);
+        y_imaginary.push(Math.sqrt(w_p_scaled**2 - kc_squared[i]/1e16));
     }
     let data = [k_actual, y];
+    let data_i = [k_actual, y_imaginary];
     let data_s = [k_actual,y_straight];
     let y_marker;
     let k_marker;
@@ -372,6 +375,14 @@ function compute_data_disp() {//produces data for dispersion relationship graph
         name: 'vacuum dispersion',
     };
 
+    let imag = {
+        x: data_i[0],
+        y: data_i[1],
+        type:'scatter',
+        name: 'imaginary k',
+        colour: '#F00',
+    };
+
     if (angular_frequency >= w_p){
         k_marker = Math.sqrt((angular_frequency**2/1e18 - w_p_scaled**2)/c**2)*1e8;
         y_marker = angular_frequency/1e9;
@@ -386,8 +397,8 @@ function compute_data_disp() {//produces data for dispersion relationship graph
         };
     }
     else {
-        k_marker = NaN;
-        y_marker = NaN;
+        k_marker = Math.sqrt((w_p_scaled**2 - angular_frequency**2/1e18)/c**2)*1e8;
+        y_marker = angular_frequency/1e9;
         let message = {
             x: [12.5],
             y: [15],
@@ -407,7 +418,7 @@ function compute_data_disp() {//produces data for dispersion relationship graph
         name: 'dispersion relation',
         marker: {color: "#002147", size: 12}
     };
-    return [plasma_disp, straight, marker]
+    return [plasma_disp, straight, marker, imag]
 }
 
 function compute_data_planewave() {

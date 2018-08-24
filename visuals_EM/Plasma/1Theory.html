@@ -3,53 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title> Dielectric Dispertion - Imperial Visualisations</title>
+    <title> Waves in Plasma - Imperial Visualisations</title>
     <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
-    <link rel="stylesheet" href="Style2.css">
-    <script src="lib/plotly-latest.min.js"></script>
-    <script src="lib/numeric-1.2.6.js"></script>
-    <script src="lib/jquery-3.3.1.min.js"></script>
-    <script src="lib/math.min.js"></script>
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
     <script type="text/javascript" async
         src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 
-    <style>
-    #spinner{
-      text-align: center;
-      position: absolute;
-      top:50%;
-      width:100%;
-
-    }
-    </style>
-
 </head>
 
 <body>
-  <div id='spinner'>
-      <span class="loading-message">Loading</span>
-      <div>
-          <div class="spinner-mask"></div>
-          <div id="spinner-bar"></div>
-          <div class="spinner-mask"></div>
-      </div>
-  </div>
-
 <div class="container">
-   <h1>Waves in Plasmas</h1>
-   <div class="twelve columns">
-        <p>
-            Theory (coming soon...)
-        </p>
-   </div>
+    <br>
+    <div class="row">
+    <div class="twelve columns">
+         <p>
+             When Electromagnetic waves are incident on plasma various depending on the angular frequency of the incident wave, $$\omega$$, and the electron density of plasma, $$\N_e$$, the wave either propagates or gets reflected.        </p>
+    </div>
+    </div>
 </div>
-
-<script>
-  $('.container').hide();
-</script>
-
-
+<script> let pages = ["1Theory.html", "2Plasma.html"];</script>
+<script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
 </body>
 </html>
