@@ -4,10 +4,10 @@ function setup() {
   noSmooth();
 }
 var x1, y1, x2, y2;
-x1 = 0.05;
-y1 = 0.01;
+x1 = 0.0543;
+y1 = 0.05;
 x2 = 0.03;
-y2 = 0.01;
+y2 = 0.03;
 matrix = [[x1, y1], [x2, y2]];
 
 eigLines = numeric.eig(matrix).E;
