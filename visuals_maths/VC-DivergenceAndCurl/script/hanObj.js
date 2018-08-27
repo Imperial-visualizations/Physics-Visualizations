@@ -188,14 +188,16 @@ function Point(position) {
     }
 }
 /**
- * Represents a sphere.
+ * Represents a cube with arrows pointing out on each side.
  * @constructor
- * @param {float} radius - radius of the sphere.
+ * @param {float} x - x position of the centre of the cube.
+ * @param {float} y - y position of the centre of the cube.
+ * @param {float} z - z position of the centre of the cube.
+ * @param {float} a - half length of the sides of the cube.
  */
-function Sphere(x,y,z,a) {
-    var sphere = []
-    this.x = x;
-    sphere.push({
+function outerCube(x,y,z,a) {
+    var cube = []
+    cube.push({
             type: "mesh3d",
             x: [x-a, x-a, x+a, x+a, x-a, x-a, x+a, x+a],
             y: [y-a, y+a, y+a, y-a, y-a, y+a, y+a, y-a],
@@ -203,9 +205,9 @@ function Sphere(x,y,z,a) {
             i : [0, 0, 3, 4, 4, 4, 4, 4, 5, 6, 6, 7],
             j : [2, 3, 4, 3, 6, 7, 1, 5, 2, 2, 7, 3],
             k : [1, 2, 0, 7, 5, 6, 0, 1, 1, 5, 2, 2],
-            opacity: 0.3,
-            colorscale: [['0', white], ['1', white]],
-            intensity: [0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2],
+            opacity: 0.8,
+            colorscale: [['0', orange], ['1', white]],
+            intensity: [0, 0.1, 0.3, 0.5, 0.7, 0.8, 0.9, 1],
             showscale: false
         }
     )
@@ -221,19 +223,19 @@ function Sphere(x,y,z,a) {
     var arr55 = new Line([[x,y,z+a-1],[x,y,z+a+1.5]])
     var arr6 = new Line([[x,y,z-a],[x,y,z-a-1.5]])
     var arr66 = new Line([[x,y,z-a+1],[x,y,z-a-1.5]])
-    sphere.push(arr1.gObject(magenta,7))
-    sphere.push(arr11.arrowHead(magenta,7))
-    sphere.push(arr2.gObject(magenta,7))
-    sphere.push(arr22.arrowHead(magenta,7))
-    sphere.push(arr3.gObject(magenta,7))
-    sphere.push(arr33.arrowHead(magenta,7))
-    sphere.push(arr4.gObject(magenta,7))
-    sphere.push(arr44.arrowHead(magenta,7))
-    sphere.push(arr5.gObject(magenta,7))
-    sphere.push(arr55.arrowHead(magenta,7))
-    sphere.push(arr6.gObject(magenta,7))
-    sphere.push(arr66.arrowHead(magenta,7))
-    return sphere
+    cube.push(arr1.gObject(magenta,7))
+    cube.push(arr11.arrowHead(magenta,7))
+    cube.push(arr2.gObject(magenta,7))
+    cube.push(arr22.arrowHead(magenta,7))
+    cube.push(arr3.gObject(magenta,7))
+    cube.push(arr33.arrowHead(magenta,7))
+    cube.push(arr4.gObject(magenta,7))
+    cube.push(arr44.arrowHead(magenta,7))
+    cube.push(arr5.gObject(magenta,7))
+    cube.push(arr55.arrowHead(magenta,7))
+    cube.push(arr6.gObject(magenta,7))
+    cube.push(arr66.arrowHead(magenta,7))
+    return cube
 }
 /**
  * Represents a cylinder.
@@ -328,6 +330,128 @@ function Cuboid(x, y, z){
         return cuboid
     }
 }
+/**
+ * Represents a cuboid.
+ * @constructor
+ * @param {float} x - x position of the centre of the cube.
+ * @param {float} y - y position of the centre of the cube.
+ * @param {float} z - z position of the centre of the cube.
+ * @param {float} a - half length of cuboid in x-direction.
+ * @param {float} b - half length of cuboid in y-direction.
+ * @param {float} c - half length of cuboid in z-direction.
+ */
+function Cube(x, y, z, a, b, c){
+
+    this.gObject = function(color1,color2, opacity) {
+        var cuboid = {
+            type: "mesh3d",
+            x: [x-a, x-a, x+a, x+a, x-a, x-a, x+a, x+a],
+            y: [y-b, y+b, y+b, y-b, y-b, y+b, y+b, y-b],
+            z: [z-c, z-c, z-c, z-c, z+c, z+c, z+c, z+c],
+            i : [0, 0, 3, 4, 4, 4, 4, 4, 5, 6, 6, 7],
+            j : [2, 3, 4, 3, 6, 7, 1, 5, 2, 2, 7, 3],
+            k : [1, 2, 0, 7, 5, 6, 0, 1, 1, 5, 2, 2],
+            opacity: 0.5,
+            colorscale: [['0', color1], ['1', color2]],
+            intensity: [0, 0.1, 0.3, 0.5, 0.7, 0.8, 0.9, 1],
+            showscale: false,
+            opacity: opacity
+        }
+        return cuboid
+    }
+}
+
+/**
+ * Represents a 3d pringle shaped loop with an arrow pointing anticlockwise.
+ * @constructor
+ * @param {float} radius - radius of the loop.
+ * @param {array} centre - central point of the loop.
+ * @param {float} height - distance of the centre of the loop away from the z=0 plane
+ * @param {float} wave - number of periods of the sin wave on the loop, has to be even to close the loop smoothly, >= 2
+ */
+function Pringles(radius, center) {
+    this.radius = radius;
+    this.center = center;
+
+
+    this.gObject = function(color=black, width=7, dash="solid", height=1, wave=4,opacity=0.5) {
+        var meshSize = 40; //multiple of 4!
+        var phi = numeric.linspace(0, 2*Math.PI, meshSize);
+        var theta = numeric.linspace(0,wave*Math.PI, meshSize);
+        var x = [], y = [], z = [];
+
+        for (var i=0, n=phi.length; i<n; ++i) {
+            x.push(this.radius*Math.cos(phi[i]) + this.center[0]);
+            y.push(this.radius*Math.sin(phi[i]) + this.center[1]);
+            z.push(height*(height*Math.sin(theta[i]) + this.center[2])+height);
+        }
+        var line2 = new Line([[x[0],y[0],z[0]],[x[7],y[7],z[7]]])
+        var lineObject = [{
+            type: "scatter3d",
+            mode: "lines",
+            x: x,
+            y: y,
+            z: z,
+            line: {color: color, width: width, dash:dash},
+            surfaceaxis: 2,
+            surfacecolor: green,
+            opacity: opacity
+            },
+            line2.arrowHead(magenta,5)
+        ]
+
+
+        return lineObject;
+    }
+
+}
+/**
+ * Represents a hemisphere bounded by the pringle loop and an arrow pointing upwards.
+ * @constructor
+ * @param {float} radius - radius of the loop.
+ */
+
+function Sphere(radius) {
+    this.radius = radius;
+    this.gObject = function(color1,color2, width=7, dash="solid",size, height=1, wave=4) {
+        var meshSize = 40;
+        var phi = numeric.linspace(0, 2*Math.PI, meshSize);
+        var theta= numeric.linspace(0, 0.5*Math.PI, meshSize);
+        var beta = numeric.linspace(0,wave*Math.PI, meshSize);
+
+        this.x = [], this.y = [], this.z = [];
+        for(var i = 0; i < meshSize; ++i) {
+            this.x[i] = [], this.y[i] = [], this.z[i] = [];
+            for(var j = 0; j < meshSize; ++j) {
+                this.x[i].push(this.radius*Math.cos(phi[i])*Math.sin(theta[j])+1);
+                this.y[i].push(this.radius*Math.sin(phi[i])*Math.sin(theta[j])+1);
+                this.z[i].push((size* this.radius*Math.cos(theta[j])+height*(Math.sin(theta[j])*Math.sin(theta[j])*Math.sin(theta[j]))*(height*Math.sin(beta[i]) + 1)*(Math.sin(theta[j]))+height));
+            }
+        }
+        var x1 = 1;
+        var y1 = 1;
+        var z1 = height*(Math.sin(0.5*Math.PI)*Math.sin(0.5*Math.PI)*Math.sin(0.5*Math.PI))*(height*Math.sin(beta[0]) + 1)*(Math.sin(0.5*Math.PI));
+        var x2 = this.radius*Math.cos(phi[0])*Math.sin(theta[0])+1;
+        var y2 = this.radius*Math.sin(phi[0])*Math.sin(theta[0])+1;
+        var z2 =this.radius*Math.cos(theta[0])+(Math.sin(theta[0])*Math.sin(theta[0])*Math.sin(theta[0]))*(Math.sin(beta[0]) + 1)*(Math.sin(theta[0]))+6;
+        var line1 = new Line([[x1,y1,z1],[x2,y2,z2]])
+        var sphere = [{
+            type: "surface",
+            x: this.x,
+            y: this.y,
+            z: this.z,
+            showscale: false,
+            opacity: 0.6,
+            colorscale: [[0.0, color1], [1.0, color2]]
+        },
+        line1.gObject(black,3),
+        line1.arrowHead(magenta,5)
+        ]
+
+        return sphere;
+    }
+}
+
 //2D Objects:
 /**
  * Represents a circle.
@@ -407,45 +531,10 @@ function Line2d(points) {
         return wings;
     }
 }
-function Cube(x, y, z, a, b, c){
-    this.width = x,
-    this.length = y,
-    this.height = z,
-    this.gObject = function(color1,color2, opacity) {
-        var cuboid = {
-            type: "mesh3d",
-            x: [x-a, x-a, x+a, x+a, x-a, x-a, x+a, x+a],
-            y: [y-b, y+b, y+b, y-b, y-b, y+b, y+b, y-b],
-            z: [z-c, z-c, z-c, z-c, z+c, z+c, z+c, z+c],
-            i : [0, 0, 3, 4, 4, 4, 4, 4, 5, 6, 6, 7],
-            j : [2, 3, 4, 3, 6, 7, 1, 5, 2, 2, 7, 3],
-            k : [1, 2, 0, 7, 5, 6, 0, 1, 1, 5, 2, 2],
-            opacity: 0.5,
-            colorscale: [['0', color1], ['1', color2]],
-            intensity: [0, 0.1, 0.3, 0.5, 0.7, 0.8, 0.9, 1],
-            showscale: false,
-            opacity: opacity
-        }
-        return cuboid
-    }
-}
-function Square(a) {
-    this.a = a;
 
-    this.gObject = function(color1, color2) {
-        var square = {
-            x: [-a, a],
-            y: [-a, a],
-            z: [[0, 0],
-                [0, 0]],
-            colorscale: [[0.0, color1], [1.0, color2]],
-            opacity: 0.7,
-            showscale: false,
-            type: "surface"
-        }
-        return square;
-    }
-}
+
+
+
 
 
 

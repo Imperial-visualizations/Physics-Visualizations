@@ -1,4 +1,3 @@
-var currentHref = window.location.href;
 var layout = {
     width: 450, "height": 500,
     margin: {l:30, r:30, t:30, b:30},
@@ -13,19 +12,18 @@ var layout = {
 var isBlackText = false;
 var blackTextType = "lines";
 
-//Plot
-/**
- * Resets and plots initial area element or basis vectors of plane polar.
- * @param {string} type - basis vectors or area element
- */
 
+//represents 1/4 of the entire arbitrary shape
+//sep_x and sep_y are the distance of this 1/4 shape away from x axis and y axis
 function initArbitraryShape(phi1, phi2, sep_x, sep_y, x, y, innerArrow = true) {
     var Curve = []
     var xTemp = [], yTemp = [];
+    //when combine the four parts, let innerArrow = false so the inner arrows can be hidden
     var innerColor = magenta;
     if(!innerArrow){
         innerColor = orange;
     }
+    //add the side with straight lines
     var side ={
          type: "scatter",
          mode: "lines",
@@ -37,7 +35,9 @@ function initArbitraryShape(phi1, phi2, sep_x, sep_y, x, y, innerArrow = true) {
          opacity: 0.9
     };
     Curve.push(side)
-        var Phi = numeric.linspace(phi1,phi2,20)
+
+    //add the curly side
+    var Phi = numeric.linspace(phi1,phi2,20)
     for (var i=0; i<20; ++i){
         var radius = 1 - 0.7*(Math.cos(Phi[i]-Math.PI*0.25)*Math.sin(Phi[i]-Math.PI*0.25));
         xTemp.push(2*radius*Math.cos(Phi[i])+sep_x);
@@ -55,6 +55,8 @@ function initArbitraryShape(phi1, phi2, sep_x, sep_y, x, y, innerArrow = true) {
 
     }
     Curve.push(curve)
+
+    //add arrows on each side use if blocks to identify which 1/4 of the arbitrary shape is being drawn
     var half_x = (2*sep_x + x)*0.5
     var half_y = (2*sep_y + y)*0.5
     if (sep_x*sep_y>0){
@@ -100,18 +102,22 @@ function blank(data1, number){
     return 0;
 }
 
+
+//plot
 function updatePlot(){
     var frames = [];
+    //first frame -- four pieces being combined as an entire arbitrary shape
     var Curve1 = new initArbitraryShape(0, 0.5*Math.PI, 0.02, 0.02, 2.7, 1.3, false),
         Curve2 = new initArbitraryShape(0.5*Math.PI, Math.PI, -0.02, 0.02, -2.7, 1.3, false),
         Curve3 = new initArbitraryShape(Math.PI, 1.5*Math.PI, -0.02, -0.02, -2.7, -1.3, false),
         Curve4 = new initArbitraryShape(1.5*Math.PI, 2*Math.PI, 0.02, -0.02, 2.7, -1.3, false),
         curve = Curve4.concat(Curve2);
-    curve = curve.concat(Curve1);
-    curve = curve.concat(Curve3);
+        curve = curve.concat(Curve1);
+        curve = curve.concat(Curve3);
 
     frames.push({data: curve});
 
+    //second stage -- separate the four part gradually
     for (var i=2; i<11; ++i){
         Curve1 = new initArbitraryShape(0, 0.5*Math.PI, 0.02*i, 0.02*i, 2.7, 1.3,true)
         Curve2 = new initArbitraryShape(0.5*Math.PI, Math.PI, -0.02*i, 0.02*i, -2.7, 1.3,true)
@@ -123,14 +129,13 @@ function updatePlot(){
 
         frames.push({data: curve});
     }
-    console.log(frames)
-
+    //load animation
     initAnimation("animate", frames, [], layout, 10)
 }
 
 
 
-
+//load main
 function main() {
 
     $("input[type=submit]").click(function () {
@@ -138,30 +143,7 @@ function main() {
         startAnimation();
     });
     updatePlot()
-
-    $(".rightnav").on('click',function(){
-        window.location.href =
-            currentHref.slice(0,-6)
-            +(parseInt(currentHref.slice(-6,-5))+1) + ".html";
-    });
-
-    $(".rightnav").on("mouseenter", function() {
-        $(".rightnav").css({"color":"#1a0433","font-size":"55px"});
-    }).on('mouseleave', function(){
-        $(".rightnav").css({"color":"#330766","font-size":"50px"});
-    });
-
-    $(".leftnav").on('click',function(){
-        window.location.href =
-            currentHref.slice(0,-6)
-            +(parseInt(currentHref.slice(-6,-5))-1) + ".html";
-    });
-
-    $(".leftnav").on("mouseenter", function() {
-        $(".leftnav").css({"color":"#1a0433","font-size":"55px"})
-    }).on('mouseleave', function(){
-        $(".leftnav").css({"color":"#330766","font-size":"50px"})
-    });
+    initGuidance(["graph","ani","green"]);
 
 }
 

@@ -1,4 +1,3 @@
-var currentHref = window.location.href;
 var layout = {
     width: 450, "height": 500,
     margin: {l:30, r:30, t:30, b:30},
@@ -13,11 +12,13 @@ var layout = {
 var isBlackText = false;
 var blackTextType = "lines";
 
+//plot
 function plotData(){
     Plotly.newPlot("graph", circulation(), layout)
     return;
 }
 
+//create a square with arrows going anticlockwise on each side
 function circulation(){
 
     var data = []
@@ -31,36 +32,23 @@ function circulation(){
     data.push(arr2.arrowHead(black,3))
     data.push(arr3.arrowHead(black,3))
     data.push(arr4.arrowHead(black,3))
+    data.push({
+        x: [1.5],
+        y: [1.4],
+        mode: 'text',
+        text: ['D'],
+        type: 'scatter',
+        showlegend: true,
+        font: {size: 30}
+        })
+
     return data;
 }
-
+//load main
 function main() {
 
-    $(".rightnav").on('click',function(){
-        window.location.href =
-            currentHref.slice(0,-6)
-            +(parseInt(currentHref.slice(-6,-5))+1) + ".html";
-    });
-
-    $(".rightnav").on("mouseenter", function() {
-        $(".rightnav").css({"color":"#1a0433","font-size":"55px"});
-    }).on('mouseleave', function(){
-        $(".rightnav").css({"color":"#330766","font-size":"50px"});
-    });
-
-    $(".leftnav").on('click',function(){
-        window.location.href =
-            currentHref.slice(0,-6)
-            +(parseInt(currentHref.slice(-6,-5))-1) + ".html";
-    });
-
-    $(".leftnav").on("mouseenter", function() {
-        $(".leftnav").css({"color":"#1a0433","font-size":"55px"})
-    }).on('mouseleave', function(){
-        $(".leftnav").css({"color":"#330766","font-size":"50px"})
-    });
-
     plotData();
+    initGuidance(["graph","text"]);
 }
 
 $(document).ready(main);

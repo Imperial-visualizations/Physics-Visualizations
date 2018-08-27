@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+
+<head>
+    <!--Page Info-->
+    <title>Stoke's Theorem</title>
+    <!--css link-->
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <link rel="stylesheet" href="../util/navigation.css">
+    <link rel="stylesheet" href="../styles/guidance.css">
+    <!--Required JS resources--> <!--NB: better to have resources before the main body but still works even if they are not-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+    <!-- Guidance -->
+    <div class="guide">
+        Instructions for use
+    </div>
+    <div class="guideModal">
+        <div class="guideTest"></div>
+        <button class="backBtn">◀ Back</button> <button class="nextBtn">Next ▶</button>
+        <div class="modalContent">
+            <p id="modal_0">
+                This is the guidance for the Stoke's Theorem visualisation.
+            </p>
+            <p id="modal_1" hidden>
+                The graph shows an open surface bounded by a loop.
+            </p>
+            <p id="modal_2" hidden>
+                Click on the "Play" button to start the animation. The open surface then can be squashed down to the area bounded by the loop.
+            </p>
+            <p id="modal_3" hidden>
+                The size of the surface can be changed by this slider. After changing the slider, play the animation again to see the value of the integral
+                will NOT be affected by the shape of the open surface.
+            </p>
+            <p id="modal_4" hidden>
+                The shape of the loop can be changed by this slider. After changing the slider, play the animation again to see the value of the integral
+                will be affected by the shape of the loop.
+            </p>
+            <p id="modal_5" hidden>
+                More details are shown here.
+            </p>
+            <p id="modal_6" hidden>
+                You can zoom in the graph by turning your mouse wheel, and you can also view the graph from different viewpoints by click on the graph and rotate it with your mouse.
+            </p>
+            <p id="modal_7" hidden>
+                Have fun!
+            </p>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <h1>Stoke's Theorem</h1>
+        <div class="row">
+
+            <!-- Graph -->
+            <div class="six columns">
+                <div id="graph" style="width:450px; height:450px;"></div>
+            </div>
+
+            <!-- text content -->
+            <div class = "six columns">
+
+                <div id="text">
+                    <p>
+                        Stoke's theorem relates the integral of the curl of a vector field, <strong>V</strong>, over an open surface <strong>S</strong> to the path integral of the vector field around a loop <strong>C</strong> defining the surface boundary.
+                     </p>
+                    <p>
+                        Mathematically, this can be written as
+                        $$ \iint_{S} \nabla \times \vec{V} \cdot \vec{dS} = \oint_C \vec{V} \cdot \vec{dr}$$
+                        Where dS is the surface normal vector and dr is the path tangent vector.
+                    </p>
+
+                    <p>
+                        As the right hand side of the equation is independent of the surface, the integral of the curl of a vector field over a surface is independent of the surface itself, but is only determined by the curve bounding it.
+                    </p>
+
+                    <p>
+                        Therefore, changing the surface by moving the first slider doesn't change the value of the integral, however, modifying the loop by moving the second slider does.
+                    </p>
+                </div>
+                <!-- slider -->
+                <div id="slider1">
+                    <label class="sliderTitle">Size of the Surface:&nbsp;
+                        <span id="xControllerDisplay" data-unit="">2</span>
+                    </label>
+
+
+                    <label class="slider">
+                        <input id="xController" class="inputs" type="range" value="5" min="0" max="2" step="0.1"/>
+                    </label>
+                </div>
+                <!-- slider -->
+                <div id="slider2">
+                    <label class="sliderTitle">Shape of the Loop:&nbsp;
+                        <span id="yControllerDisplay" data-unit="">2</span>
+                    </label>
+
+                    <label class="slider">
+                        <input id="yController" class="inputs" type="range" value="5" min="2" max="8" step="2"/>
+                    </label>
+                </div>
+                <!-- animation button -->
+                <div id = "ani">
+                    <input id="animate" class="button-primary" type="submit" value="Play">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../util/guidance.js"></script>
+    <script>
+        let pages=[" Divergence.html"," Curl.html"," Circulation.html", " GreenTheorem.html", " GeneralizedGreenTheorem.html", " StokeTheorem.html"];
+    </script>
+    <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+    <script src=script/ani.js></script>
+    <script src=script/hanObj.js></script>
+    <script src=script/stoke_theorem.js></script>
+</body>
+
+</html>

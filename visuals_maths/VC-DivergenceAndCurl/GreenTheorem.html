@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Green's Theorem</title>
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <link rel="stylesheet" href="../util/navigation.css">
+    <link rel="stylesheet" href="../styles/guidance.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+    <!-- Guidance -->
+    <div class="guide">
+        Instructions for use
+    </div>
+    <div class="guideModal">
+        <div class="guideTest"></div>
+        <button class="backBtn">◀ Back</button> <button class="nextBtn">Next ▶</button>
+        <div class="modalContent">
+            <p id="modal_0">
+                This is the guidance for the Green Theorem visualisation.
+            </p>
+            <p id="modal_1" hidden>
+                The graph shows the relationship between microscopic circulation and macroscopic circulation.
+                From the graph you can see by adding up the microscopic circulations, the inner arrows will cancel with each other.
+                Hence the sole effect of piling up the microscopic circulations will be the macroscopic circulation.
+            </p>
+            <p id="modal_2" hidden>
+                By changing the slider, more microscopic circulations will be added in the graph.
+            </p>
+            <p id="modal_3" hidden>
+                More details are shown here.
+            </p>
+            <p id="modal_4" hidden>
+                Have fun!
+            </p>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <h1>Green's Theorem</h1>
+        <div class="row">
+            <!-- Graph -->
+            <div class="six columns">
+                <div id="graph" style="width:450px; height:450px;"></div>
+            </div>
+
+            <!-- text content-->
+            <div class="six columns">
+                <div id="green">
+                    <p>
+                        The arrows for microscopic circulation is colour-coded.
+                        <br>
+                        From the diagram, we can see that every arrows inside the grid is paired with an arrow with opposite
+                        direction. In other words, all the <span style="color:#FF00FF"><b>magenta</b></span> arrows will
+                        cancel each other and we are left with <span style="color:#008000"><b>green</b></span> arrows
+                        <br>
+                        The relationship between macroscopic and microscopic circulation becomes apparent. After the
+                        cancellation, we are left with macroscopic circulation. This link is named <b>Green's Theorem</b>:
+                        \[
+                            \oint_C \mathbf{A} \cdot \, d\mathbf{r}
+                            = \iint_D (\nabla \times \mathbf{A}) \cdot \mathbf{\hat{k}} \, dS.
+                        \]
+                        where \(\mathbf{A}\) is the vector field defined for the area inside the closed curve, \(D\).
+
+                        <br>
+
+                        For \(\mathbf{A} = (P,Q,R) \), Green's Theorem is reduced to,
+                        \[
+                            \oint_C \,P(x,y(x))\,dx + Q(x,x(y))\,dy
+                            =   \iint_D \left[ \frac{\partial Q}{\partial x}(x,\,y)
+                                - \frac{\partial P}{\partial y}(x,\,y) \right] \,dx\,dy
+                        \]
+                    </p>
+                </div>
+                <!-- slider -->
+                <div id="slider">
+                    <label class="sliderTitle">Number of micro circulations:&nbsp;
+                        <span id="curlSliderDisplay" data-unit="">2</span>
+                    </label>
+                    <label class="slider">
+                        <input id="curlSlider" class="inputs" type="range" value="2" min="2" max="7" step="1"/>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../util/guidance.js"></script>
+    <script>
+        let pages=[" Divergence.html"," Curl.html"," Circulation.html", " GreenTheorem.html", " GeneralizedGreenTheorem.html", " StokeTheorem.html"];
+    </script>
+    <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+    <script src=../util/objects.js></script>
+    <script src=script/green_theorem.js></script>
+</body>
+
+</html>

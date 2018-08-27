@@ -1,6 +1,5 @@
 "use strict";
 //Global Initial Parameters:
-var currentHref = window.location.href;
 var maxArrowNum = 7;
 var layout = {
     width: 400, height: 400,
@@ -12,6 +11,8 @@ var layout = {
     aspectratio: {x:1, y:1}
 };
 
+//This is Dom's work, I think it's quite clear
+//He's trying to loop the three functions below to create a set of arrow made squares
 function arrowRect(vertices, numberOfArrows, color1, color2) {
     var rectLength = Math.abs(vertices[1][0] - vertices[0][0]);
     var arrowLength = rectLength/numberOfArrows;
@@ -69,6 +70,7 @@ function addArrowsY(data, numberOfArrows, fixedX, rectY, color, direction=1){
     return;
 }
 
+//A function that adds empty objects to the frame
 function addEmptyObjects2d(data, numberObj){
     for (var i=0; i < numberObj; ++i){
         data.push({
@@ -80,7 +82,7 @@ function addEmptyObjects2d(data, numberObj){
     return 0;
 }
 
-//Plots
+//initial plots
 function initPlot() {
     Plotly.purge("graph");
 
@@ -89,6 +91,7 @@ function initPlot() {
     return;
 }
 
+//slider animation
 function updatePlot() {
     var data = [];
     var numberOfArrows = parseFloat(document.getElementById('curlSlider').value);
@@ -105,6 +108,7 @@ function updatePlot() {
     );
 }
 
+//load main
 function main() {
     $("input[type=range]").each(function () {
         $(this).on('input', function(){
@@ -113,30 +117,9 @@ function main() {
         });
     });
 
-    $(".rightnav").on('click',function(){
-        window.location.href =
-            currentHref.slice(0,-6)
-            +(parseInt(currentHref.slice(-6,-5))+1) + ".html";
-    });
-
-    $(".rightnav").on("mouseenter", function() {
-        $(".rightnav").css({"color":"#1a0433","font-size":"55px"});
-    }).on('mouseleave', function(){
-        $(".rightnav").css({"color":"#330766","font-size":"50px"});
-    });
-
-    $(".leftnav").on('click',function(){
-        window.location.href =
-            currentHref.slice(0,-6)
-            +(parseInt(currentHref.slice(-6,-5))-1) + ".html";
-    });
-
-    $(".leftnav").on("mouseenter", function() {
-        $(".leftnav").css({"color":"#1a0433","font-size":"55px"})
-    }).on('mouseleave', function(){
-        $(".leftnav").css({"color":"#330766","font-size":"50px"})
-    });
 
     initPlot();
+    initGuidance(["graph","slider","green"]);
+
 }
 $(document).ready(main);
