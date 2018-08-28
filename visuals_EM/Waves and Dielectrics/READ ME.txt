@@ -21,3 +21,10 @@ Evanescent Waves:
 This demonstrates how even beyond the critical angle, some wave propagates into the second material, but with an exponential
 decay and only moves along the boundry line, not perpendicular to it. This visulisation could be moved to the Attenuation suite
 due to the dependance on angular frequency for the strength of the exponential decay of the evanescent waves.
+
+To do:
+1. clean up the current visulisation and decide which should stay/go as there are too many
+2. Revise the physics 
+3. More sliders?? amplitude of waves etc
+4. Plane waves only show oscilisations prependicular to plane of incidence, need a visulisation for oscillations parallel
+though I am not sure what that would look like.

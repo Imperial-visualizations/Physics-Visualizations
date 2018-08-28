@@ -6,3 +6,9 @@ whilst the shape of the field lines are determined by the switches.
 The field lines are constructed from a line and an arrowhead, thus consitute two traces per field line.
 As the plotly animate function requires a constant number of traces in the plot, a number of empty traces are created and
 then filled depending on the conditions of the visulisation.
+
+To do:
+
+1. Check that the fields are correct.
+2. Make the visulisation faster, currently the large number of traces makes it slow
+3. Add visulisation with continous field lines/field line density
