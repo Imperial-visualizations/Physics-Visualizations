@@ -2,7 +2,7 @@ $(window).on('load', function() {//main
     const dom = {
             tswitch: $("#wave-switch input"),
             aSlider: $("input#angle"),//angle slider
-            afSlider: $("input#angular_frequency"),
+            afSlider: $("input#angular_frequency"),//angular frequency slider
     };
 
     let plt = {
@@ -22,9 +22,10 @@ $(window).on('load', function() {//main
         }
     };
 
-    let size = 100;
+    let size = 100;//number of points
+
     let t = 0;
-    let isPlay = false;
+    let isPlay = false;//dont play visulisation
     let E_0 = 1;
     let w_0 = 6e9;//gives properties of material
     let gamma = 0.1*w_0;
@@ -39,7 +40,7 @@ $(window).on('load', function() {//main
     let x_data_t =  math.add(-2,x_data);
     let y_data = numeric.linspace(-2, 2, size);
 
-    let condition =  $("input[name = wave-switch]:checked").val();
+    let condition =  $("input[name = wave-switch]:checked").val();//sets conditions of visulisation
     let angle_of_incidence = parseFloat($("input#angle").val());
     let angular_frequency_ratio = parseFloat($("input#angular_frequency").val())* w_0;
     let w_r = parseFloat($("input#angular_frequency").val());
@@ -56,7 +57,7 @@ $(window).on('load', function() {//main
     return matrix
     }
 
-    function getData_wave_incident(){//produce daa of incident wave
+    function getData_wave_incident(){//produce data of incident wave
 
         let z,z_square = [];
         let k_x = Math.cos(theta_i)*k_1;
@@ -73,17 +74,17 @@ $(window).on('load', function() {//main
         return z_square
     }
 
-    function getData_wave_reflected(){//produce data of reflected
+    function getData_wave_reflected(){//produce data of reflected wave
 
         let z,z_square = [];
-        let k_x = Math.cos(-theta_i)*k_1;
+        let k_x = Math.cos(-theta_i)*k_1;//-theta as reflected wave
         let k_y = Math.sin(-theta_i)*k_1;
         let E_0_r = reflect();
 
         for (let v=0;v < y_data.length ;v++) {
             let z_row = [];
             for (let i = 0; i < x_data.length ; i++) {
-                z = E_0_r*Math.sin(k_x* x_data[i]+k_y*y_data[v]-w_r*t);
+                z = E_0_r*Math.sin(k_x* x_data[i]+k_y*y_data[v]-w_r*t);//note the different sign for the time evolution
                 z_row.push(z);
             }
             z_square.push(z_row);
@@ -91,12 +92,12 @@ $(window).on('load', function() {//main
         return z_square
     }
 
-    function getData_wave_transmitted(){//produce data of transmitted
+    function getData_wave_transmitted(){//produce data of transmitted wave
         let z,z_square = [];
         let E_0_t = transmit();
         let k_y = Math.sin(theta_i)*k_1;
 
-        if (isNaN(theta_t)=== true){
+        if (isNaN(theta_t)=== true){//evanescent waves produced
             let k_x = (angular_frequency_ratio*Math.sqrt((n1*Math.sin(theta_i))^2-(n2)^2))/c;
             console.log(k_x);
             let decay = element_exponential(math.multiply(k_x/10, numeric.linspace(0, -2, size)), size);//exponential decay of amplitude
@@ -111,27 +112,25 @@ $(window).on('load', function() {//main
             z_square.push(math.dotMultiply(decay,z_row));//Not entirelly sure the physics is correct need to review
             }
         }
-        else{
-
+        else{//same as in snells law visulisation
             let k_x = Math.cos(theta_t)*k_2;
-
             for (let v=0;v < y_data.length ;v++) {
                 let z_row = [];
                 for (let i = 0; i < x_data_t.length ; i++) {
                     z = E_0_t*Math.sin(k_x*x_data_t[i]+k_y*y_data[v]+w_r*t);
                     z_row.push(z);
                 }
-            z_square.push(z_row);//Not entirelly sure the physics is correct need to review
+            z_square.push(z_row);
             }
         }
         return z_square
     }
 
-    function transmit(){
+    function transmit(){//find amplitude of transmitted wave
         let E_t0;
 
-        if (isNaN(theta_t) === true){//if snells law return not a number this means total internal refection is occurring hence no transmitted wave
-                return E_t0 = E_0
+        if (isNaN(theta_t) === true){//if snells law return not a number this means total internal refection is occurring hence evanescent waves
+                return E_t0 = E_0//not sure this is correct NEED TO CHECK PHYSICS, what would be the intial amplitude even if its decaying exponentially
         }
         else {
                 E_t0 = E_0 * (2. * n1 * Math.cos(theta_i)) / (n1 * Math.cos(theta_i) + n2 * Math.cos(theta_t))
@@ -139,7 +138,7 @@ $(window).on('load', function() {//main
         }
     };
 
-    function reflect() {
+    function reflect() {//find amplitude of reflected wave
         if (n1 === n2) {//if both materials have same refractive index then there is no reflection
             return 0
         }
@@ -165,6 +164,7 @@ $(window).on('load', function() {//main
         angular_frequency_ratio = parseFloat($("input#angular_frequency").val())* w_0;
         w_r = parseFloat($("input#angular_frequency").val());
 
+        //calculate the real refractive index in second material
         n2 = 1 - (w_d_squared * (Math.pow(angular_frequency_ratio, 2) - Math.pow(w_0, 2)) / (Math.pow((Math.pow(angular_frequency_ratio, 2) - Math.pow(w_0, 2)), 2) + Math.pow(angular_frequency_ratio, 2) * Math.pow(gamma, 2)));
 
         k_1 = (n1*angular_frequency_ratio)/c;
@@ -184,7 +184,7 @@ $(window).on('load', function() {//main
         let data = [];
 
         if (condition === "incident") {
-            let incident_wave = { //multiple traces
+            let incident_wave = {
                 opacity: 1,
                 x: x_data,
                 y: y_data,
@@ -195,7 +195,7 @@ $(window).on('load', function() {//main
             data.push(incident_wave);
         }
         else if(condition === "reflected") {
-            let reflected_wave = { //multiple traces
+            let reflected_wave = {
                 opacity: 1,
                 x: x_data,
                 y: y_data,
@@ -228,7 +228,7 @@ $(window).on('load', function() {//main
 
         let opacity_1;//opacity is based off the refractive index gives qualatative representation
         let opacity_2;
-        if((1 < n2) && (n2 <= 15)){//decide opacity dependant on refractive index
+        if((1 < n2) && (n2 <= 15)){
             opacity_1 = 0;
             opacity_2 = n2/5
         }
@@ -285,7 +285,7 @@ $(window).on('load', function() {//main
         );
     };
 
-    function play_loop(){
+    function play_loop(){//adds time evolution
         if(isPlay === true) {
             t++;
             Plotly.animate("graph",

@@ -1,14 +1,12 @@
 $(window).on('load', function() {//main
     const dom = {
-            tSlider: $("input#thickness"),//angle slider
-            rfSlider: $("input#refractive_index"),
+            tSlider: $("input#thickness"),//Thickness slider
+            rfSlider: $("input#refractive_index"),//refractive index slider
     };
-    let spacing = 2;
 
-    let offset = 2;
+    let spacing = 2;//spacing between terms on the individual terms graph
+    let offset = 2;//offset of the first term from the incident wave
     let offset_reset = offset;
-
-
     let data_left = 0,data_center = 0,data_right = 0;
 
     let size = 100;
@@ -20,13 +18,14 @@ $(window).on('load', function() {//main
     let w = w_0;
     let c = 3e8; // Speed of light
 
-    let n1 = 1;//material before input dielectric
+    let n1 = 1;//material before dielectric
     let E_0 = 1;
-    let width = 10;
+    let width = 10;//width of the graph
 
-    let terms = 7;
-    let thickness = parseFloat($("input#thickness").val());
-    let n2 = parseFloat($("input#refractive_index").val());
+    let terms = 7;//number of terms shown , balence between accuracy of visulisation and not clarity and too many becomes confusing to look at
+
+    let thickness = parseFloat($("input#thickness").val());//set value of thicknes of dielectric
+    let n2 = parseFloat($("input#refractive_index").val());//set value of the refractive index of dielectric
 
     let offset_max = offset + spacing * terms;
 
@@ -39,19 +38,19 @@ $(window).on('load', function() {//main
     let Z_vac = math.sqrt(mu_0/ep_0)/n1;
     let Z_diel = math.sqrt(mu_0/ep_0)/n2;
 
-    let rf_v_d = (1-(Z_vac/Z_diel))/(1+(Z_vac/Z_diel));
-    let rf_d_v = (1-(Z_diel/Z_vac))/(1+(Z_diel/Z_vac));
-    let tr_v_d = 2/(1+ Z_vac/Z_diel);
-    let tr_d_v = 2/(1+ Z_diel/Z_vac);
+    let rf_v_d = (1-(Z_vac/Z_diel))/(1+(Z_vac/Z_diel));//reflection ampitude coefficient of vacuum to dielectric
+    let rf_d_v = (1-(Z_diel/Z_vac))/(1+(Z_diel/Z_vac));//reflection ampitude coefficient of dielectric to vacuum
+    let tr_v_d = 2/(1+ Z_vac/Z_diel);//transmission ampitude coefficient of vacuum to dielectric
+    let tr_d_v = 2/(1+ Z_diel/Z_vac);//transmission ampitude coefficient of dielectric to vacuum
 
     let x_data = numeric.linspace(0,width,size);
     let side = (width-thickness)/2;
 
-    let x_data_left = numeric.linspace(0,side,size);
+    let x_data_left = numeric.linspace(0,side,size);//x data from edge to dielectric left hand side
     let x_data_center = numeric.linspace(side,side+thickness,size);
-    let x_data_right = numeric.linspace(side+thickness,width,size);
+    let x_data_right = numeric.linspace(side+thickness,width,size);//x data from dielectric right hand side to edge
 
-    let plt = {
+    let plt = {//layout of graphs
         layout_sum:{
           title: 'Sum of individual terms',
           showlegend: false,
@@ -123,7 +122,7 @@ $(window).on('load', function() {//main
         }
     };
 
-    function wave_data_one(){
+    function wave_data_one(){//create incident, reflected and transmitted waves
         let y_data_i = [],y_data_r=[],y_data_t=[];
         for (let i = 0; i < x_data.length; i++) {
             y_data_i.push(E_0 * Math.sin(k_1*x_data_left[i]+ (w*t/t_ad)))//add in time
@@ -136,8 +135,8 @@ $(window).on('load', function() {//main
         return[[x_data_left,y_data_i],[x_data_left,y_data_r.reverse()],[x_data_center,y_data_t]]
     }
 
-    function create_waves(){
-        let direction = 1;
+    function create_waves(){//creates the waves once they are inside the dielectric, hence can have as many terms as we like as only direction and amplitude of waves changes
+        let direction = 1;//moving to the right
         let data = [];
         let x_data_r,x_data_t;
 
@@ -157,7 +156,7 @@ $(window).on('load', function() {//main
             x_data_r = x_data_center;
             if(direction === 1){
                 x_data_t = x_data_right;
-                y_data_r = y_data_r.reverse();
+                y_data_r = y_data_r.reverse();//reverse the data as it must be plotted from left to right (not calculated like this originally due to phase shift at origin of wave)
                 data_right = math.add(data_right,math.add(-offset,y_data_t));
                 data_center = math.add(data_center,math.add(-offset,y_data_r));
             }else{
@@ -166,8 +165,8 @@ $(window).on('load', function() {//main
                 data_left =  math.add(data_left,math.add(-offset,y_data_t));
                 data_center = math.add(data_center,math.add(-offset,y_data_r));
             }
-            direction = direction*-1;
-            offset = offset + spacing ;
+            direction = direction*-1; //flip the direction
+            offset = offset + spacing ;//add shift up to speparate out the individual terms
             data.push([[x_data_r,y_data_r],[x_data_t,y_data_t]]);
         }
         return [data,[data_left,data_center,data_right]]
@@ -181,7 +180,7 @@ $(window).on('load', function() {//main
         let results = create_waves();
 
         //INDIVIDUAL
-        data_individual.push(
+        data_individual.push(//trace of dielectric boundry
             {
                 type: "scatter",
                 mode: "lines",
@@ -194,7 +193,7 @@ $(window).on('load', function() {//main
                     reversescale: false}
 
             });
-        data_individual.push(
+        data_individual.push(//trace of dielectric boundry
             {
                 type: "scatter",
                 mode: "lines",
@@ -209,7 +208,7 @@ $(window).on('load', function() {//main
             });
         let colour;
 
-        for (let v = 0;v<3;v++){
+        for (let v = 0;v<3;v++){//traces of first three waves
             if(v === 0){
                 colour = "#A51900"
             }else if(v === 1){
@@ -231,7 +230,7 @@ $(window).on('load', function() {//main
                 })
         }
 
-        for(let i = 0; i < terms;i++){
+        for(let i = 0; i < terms;i++){//traces of reflections and tranmission from inside the dielectric
             data_individual.push({
                     type: "scatter",
                     mode: "lines",
@@ -257,7 +256,7 @@ $(window).on('load', function() {//main
         }
 
         //SUM
-        data_sum.push(
+        data_sum.push(//traces for sum of the left/center/right indivdual terms
             {
                 type: "scatter",
                 mode: "lines",
@@ -330,15 +329,15 @@ $(window).on('load', function() {//main
     function plot_data_transmission(){
         let transmission = [];
         let x_input = numeric.linspace(0,parseFloat($("#thickness").attr("max")),1000);
-        let R = Math.pow(rf_v_d,2);//THIS IS WRONG SHOUDL ADD TO ONE
-        $("#energy_reflection_coefficient-display").html(R.toFixed(2));
+        let R = Math.pow(rf_v_d,2);
+        $("#energy_reflection_coefficient-display").html(R.toFixed(2));//Display new value of R
 
         for(let i = 0;i<x_input.length;i++){
             transmission.push(1/(1+(Math.pow(Math.sin(x_input[i]*k_2),2)*((4*R))/((1-R)^2))));
         }
 
-        let T = 1/(1+(Math.pow(Math.sin(thickness*k_2),2)*(4*R))/((1-R)^2));//PHYSICS NOT CORRECT
-        $("#energy_transmission_coefficient-display").html(T.toFixed(2));
+        let T = 1/(1+(Math.pow(Math.sin(thickness*k_2),2)*(4*R))/((1-R)^2));
+        $("#energy_transmission_coefficient-display").html(T.toFixed(2));//Display new value of T
 
         let transmission_line = {
               x: x_input,
@@ -347,7 +346,7 @@ $(window).on('load', function() {//main
               name: 'Energy Transmission Coefficient',
         };
 
-        let marker = {
+        let marker = {//marks the current thickness selected
                 x: [thickness],
                 y: [T],
                 showlegend: false,
@@ -359,7 +358,7 @@ $(window).on('load', function() {//main
         return [transmission_line,marker]
     }
 
-    function plot_data_amplitude(){
+    function plot_data_amplitude(){//creates data for amplitude of individual transmitted waves, showing their rapid decay in magnitude
         let amplitude = [];
         let x_input = numeric.linspace(0,terms);
         let even = [];
@@ -451,7 +450,7 @@ $(window).on('load', function() {//main
 
     };
 
-    function play_loop(){
+    function play_loop(){//adds in time to visulisation
 
         if(isPlay === true) {
 
