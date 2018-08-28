@@ -2,7 +2,11 @@
 $(window).on('load', function() {//main
     const
     dom = {//assigning switches and slider
-
+        sSwitch:            $("#switch-s input"),
+        lSwitch:            $("#switch-l input"),
+        mjSwitch:           $("#switch-mj input"),
+        animationButton:    $("#animationButton"),
+        coneButton:         $("#coneButton"),
     },
     plt = {//layout of graph
         layout : {
@@ -26,27 +30,35 @@ $(window).on('load', function() {//main
     };
 
     //Starts and stops the animation when button is pushed
-    var playAnimation = true;
-    var startButton = $("#startAnimation")
-    var stopButton = $("#stopAnimation")
-
-    startButton.hide();
-    startButton.click(function() {
-        $(this).hide();
-        stopButton.show();
-
-        playAnimation = true;
-        update_graph();
-    });
-    stopButton.click(function() {
-        $(this).hide();
-        startButton.show();
-
-        playAnimation = false;
-    });
-
     var t = 0;
-    var cones = false;
+    var playAnimation = false;
+    dom.animationButton[0].addEventListener('click', pause_play);
+
+    //Button to hide/show cones
+    var cones = true;
+    dom.coneButton[0].addEventListener('click', display_cones);
+
+    function pause_play() {
+        if (playAnimation == false) {//starts animation
+            dom.animationButton[0].textContent = "Stop";
+            playAnimation = true;
+        } else {//stops animation
+            dom.animationButton[0].textContent = "Start";
+            playAnimation = false;
+        };
+        update_graph();
+    };
+
+    function display_cones() {
+        if (cones == false) {//shows cones
+            dom.coneButton[0].textContent = "Hide";
+            cones = true;
+        } else {//hides cones
+            dom.coneButton[0].textContent = "Show";
+            cones = false;
+        };
+        update_graph();
+    };
 
     function get_rot_matrix(angle, vector){//Returns rotation matrix about an arbitrary axis
     	let [x,y,z] = vector.unit().toArray()
@@ -78,9 +90,9 @@ $(window).on('load', function() {//main
     };
 
     function get_data() {
-        let s = +$('#s').val();
-        let l = +$('#l').val();
-        let mj = +$('#mj').val();
+        let s = +$("input[name = 'switch-s']:checked").val();
+        let l = +$("input[name = 'switch-l']:checked").val();
+        let mj = +$("input[name = 'switch-mj']:checked").val();
         document.getElementById("j_variable_text").innerHTML = l + s;
 
         let [J,L,S] = angular_momentum(Math.sqrt((s+l)*(s+l+1)), Math.sqrt(l*(l+1)), Math.sqrt(s*(s+1)), mj, t/50);
@@ -90,29 +102,6 @@ $(window).on('load', function() {//main
         plt.layout.scene.zaxis.range = [-J.length(), J.length()];
 
         let [Jx,Jy,Jz] = J.toArray(3);
-
-        let L_cone = {x: [], y: [], z: []};
-        let S_cone = {x: [], y: [], z: []};
-        let J_cone = {x: [], y: [], z: []};
-        let Z = new Vector(0,0,1);
-
-        for (let i=0; i<50; i++) {
-        	L_cone.x.push(0); L_cone.y.push(0); L_cone.z.push(0);
-        	S_cone.x.push(0); S_cone.y.push(0); S_cone.z.push(0);
-			J_cone.x.push(0); J_cone.y.push(0); J_cone.z.push(0);
-
-        	L_cone.x.push(L.linearTransform(get_rot_matrix(i,J))[0]);
-        	L_cone.y.push(L.linearTransform(get_rot_matrix(i,J))[1]);
-        	L_cone.z.push(L.linearTransform(get_rot_matrix(i,J))[2]);
-
-        	S_cone.x.push(S.linearTransform(get_rot_matrix(i,J))[0]);
-        	S_cone.y.push(S.linearTransform(get_rot_matrix(i,J))[1]);
-        	S_cone.z.push(S.linearTransform(get_rot_matrix(i,J))[2]);
-
-        	J_cone.x.push(J.linearTransform(get_rot_matrix(i,Z))[0]);
-        	J_cone.y.push(J.linearTransform(get_rot_matrix(i,Z))[1]);
-        	J_cone.z.push(J.linearTransform(get_rot_matrix(i,Z))[2]);
-        };
 
         let Q = get_rot_matrix(t/20, J);
         
@@ -174,44 +163,72 @@ $(window).on('load', function() {//main
         draw_arrow(data, [0, Lx], [0, Ly], [0, Lz], '#0080FF');
         draw_arrow(data, [0, Sx], [0, Sy], [0, Sz], '#50C878');
         draw_arrow(data, [0, Jx], [0, Jy], [0, Jz], '#9400D3');
+        
         /* 
         mesh3d does not support legendgroup!
         Need to add a scatter data set with name "Cones", and have get_data
         check for getElementByID('graph').data["Cones"].visible == true or false
         and depending on the result push the following Cones data: */
         if (cones == true) {
-	        data.push([    
-	            {//L vector cone
-	            	type: 'mesh3d',
-	            	color: '#0080FF',
-	            	opacity: 0.4,
-	            	x: L_cone.x,
-	            	y: L_cone.y,
-	            	z: L_cone.z,
-	            },
-	            {//S vector cone
-	            	type: 'mesh3d',
-	            	color: '#50C878',
-	            	opacity: 0.4,
-	            	x: S_cone.x,
-	            	y: S_cone.y,
-	            	z: S_cone.z,
-	            },
-	            {//J vector cone
-	            	type: 'mesh3d',
-	            	color: '#9400D3',
-	            	opacity: 0.4,
-	            	x: J_cone.x,
-	            	y: J_cone.y,
-	            	z: J_cone.z,
-	            },
-	        ]);
-	    };
+            var cone_opacity = 0.4;
+        } else {
+            var cone_opacity = 0;
+        };
+
+        let L_cone = {x: [], y: [], z: []};
+        let S_cone = {x: [], y: [], z: []};
+        let J_cone = {x: [], y: [], z: []};
+        let Z = new Vector(0,0,1);
+
+        for (let i=0; i<50; i++) {
+            L_cone.x.push(0); L_cone.y.push(0); L_cone.z.push(0);
+            S_cone.x.push(0); S_cone.y.push(0); S_cone.z.push(0);
+            J_cone.x.push(0); J_cone.y.push(0); J_cone.z.push(0);
+
+            L_cone.x.push(L.linearTransform(get_rot_matrix(i,J))[0]);
+            L_cone.y.push(L.linearTransform(get_rot_matrix(i,J))[1]);
+            L_cone.z.push(L.linearTransform(get_rot_matrix(i,J))[2]);
+
+            S_cone.x.push(S.linearTransform(get_rot_matrix(i,J))[0]);
+            S_cone.y.push(S.linearTransform(get_rot_matrix(i,J))[1]);
+            S_cone.z.push(S.linearTransform(get_rot_matrix(i,J))[2]);
+
+            J_cone.x.push(J.linearTransform(get_rot_matrix(i,Z))[0]);
+            J_cone.y.push(J.linearTransform(get_rot_matrix(i,Z))[1]);
+            J_cone.z.push(J.linearTransform(get_rot_matrix(i,Z))[2]);
+        };
+
+        data.push(    
+            {//L vector cone
+            	type: 'mesh3d',
+            	color: '#0080FF',
+            	opacity: cone_opacity,
+            	x: L_cone.x,
+            	y: L_cone.y,
+            	z: L_cone.z,
+            },
+            {//S vector cone
+            	type: 'mesh3d',
+            	color: '#50C878',
+            	opacity: cone_opacity,
+            	x: S_cone.x,
+            	y: S_cone.y,
+            	z: S_cone.z,
+            },
+            {//J vector cone
+            	type: 'mesh3d',
+            	color: '#9400D3',
+            	opacity: cone_opacity,
+            	x: J_cone.x,
+            	y: J_cone.y,
+            	z: J_cone.z,
+            },
+        );
 
         return data;
     };
 
-    function draw_arrow(obj, pointsx, pointsy, pointsz, color) {//return data required to construct field line arrows
+    function draw_arrow(obj, pointsx, pointsy, pointsz, color) {
         /** Returns an arrowhead based on an inputted line */
         var x = pointsx[1],
             y = pointsy[1],
@@ -233,22 +250,27 @@ $(window).on('load', function() {//main
         	showscale: false,
         	legendgroup: 's',
         });
-        //return [x, y, z, u, v, w]
     };
 
     function select_disable() {//Enables/disables the different options in the selecters
-        let s = +$('#s').val();
-        let l = +$('#l').val();
+        let s = +$("input[name = 'switch-s']:checked").val();
+        let l = +$("input[name = 'switch-l']:checked").val();
+        let mj = +$("input[name = 'switch-mj']:checked").val();
         let j = s+l;
 
         for (let i = -8; i <= 8; i++) {
             if ((Math.abs(0.5*i % 1) == (j % 1)) && (Math.abs(0.5*i) <= j)) {
                 document.getElementById("mj"+ 0.5*i).disabled=false;
+                document.getElementById("mj"+0.5*i).classList.remove('hidden');
             } else {
                 document.getElementById("mj"+ 0.5*i).disabled=true;
+                document.getElementById("mj"+0.5*i).classList.add('hidden');
             };
         };
-        document.getElementById("mj").selectedIndex = 8-2*j;
+
+        if (Math.abs(mj)>j || (Math.abs(mj)%1)!=(j%1)) {
+            document.getElementById('mj'+j).checked = true;
+        };
 
         update_graph();
     };
@@ -277,8 +299,8 @@ $(window).on('load', function() {//main
         };	
     };
 
-    $("#s").on("change", select_disable);
-    $("#l").on("change", select_disable);
+    $("input[id ^= 'm']").change(update_graph);
+    $("input:not([id ^= 'm'])").change(select_disable);
 
     initial();
     update_graph();

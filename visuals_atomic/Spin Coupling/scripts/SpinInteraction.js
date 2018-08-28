@@ -46,8 +46,8 @@ $(window).on('load', function() {//main
         let s = +$("input[name = 'switch-s']:checked").val();
         let l = +$("input[name = 'switch-l']:checked").val();
 
-        let xs = Math.sqrt(s*(+s+1)-Math.pow(ms, 2));
-        let xl = Math.sqrt(l*(+l+1)-Math.pow(ml, 2));
+        let xs = Math.sqrt(s*(s+1)-Math.pow(ms, 2));
+        let xl = Math.sqrt(l*(l+1)-Math.pow(ml, 2));
         let mj = ms + ml;
         let j = s + l;
 
@@ -113,7 +113,7 @@ $(window).on('load', function() {//main
         if (Math.abs($("input[name='switch-ml']:checked").val()) > l) {
             document.getElementById('ml'+l).checked = true;
         };
-
+        
         update_graph();
     };
 
@@ -129,10 +129,10 @@ $(window).on('load', function() {//main
     };
 
     function rescale_range() {
-        let s = $("input[name = 'switch-s']:checked").val();
-        let l = $("input[name = 'switch-l']:checked").val();
-        let ms = $("input[name = 'switch-ms']:checked").val();
-        let ml = $("input[name = 'switch-ml']:checked").val();      
+        let s = +$("input[name = 'switch-s']:checked").val();
+        let l = +$("input[name = 'switch-l']:checked").val();
+        let ms = +$("input[name = 'switch-ms']:checked").val();
+        let ml = +$("input[name = 'switch-ml']:checked").val();      
 
         let xs = Math.sqrt(s*(+s+1)-Math.pow(ms, 2));
         let xl = Math.sqrt(l*(+l+1)-Math.pow(ml, 2));
