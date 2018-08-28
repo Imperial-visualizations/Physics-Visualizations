@@ -23,10 +23,10 @@
 <div class="container">
     <div class="row">
        <div class="six columns">
-            <div id="graph" style="width: 50vw; height:60vh;"></div>
+            <div id="graph" style="width: 50vw; height:53vh;"></div>
        </div>
        <div class="six columns">
-            <div id="graph_fresnel" style="width: 40vw; height: 60vh;"></div>
+            <div id="graph_fresnel" style="width: 40vw; height: 53vh;"></div>
        </div>
     </div>
     <br>
@@ -52,26 +52,29 @@
             </div>
         </div>
         <div class = "four columns">
+            <div class = "cabinet red">
+                Critical Angle: <span id = "critical_angle-display"></span>
+            </div>
             <div class = "cabinet green">
-                Critical Angle: <span id = "critical_angle-display">1.57&deg;</span>
+                Brewster Angle: <span id = "brewster_angle-display"></span>
             </div>
         </div>
 
         <div class="six columns">
             <div id="angle-slider">
                 <label for="angle" class="sliderTitle">Angle of incidence:
-                  <span id="angle-display">50&deg;</span>
-                </label>
+                  <span id="angle-display"></span>
+                </label><span class="sliderMin">0&deg;</span>
                 <input type="range" id="angle" name="angle" min="0" max="85" value="50">
-                <span class="sliderMin">0&deg;</span><span class="sliderMax">85&deg;</span>
+                <span class="sliderMax">85&deg;</span>
             </div>
 
             <div id="refractive-index-ratio-slider">
                 <label for="refractive-index-ratio" class="sliderTitle">Refractive Index ratio of second to first material:
-                  <span id="refractive-index-ratio-display">1.5</span>
-                </label>
-                <input type="range" id="refractive-index-ratio" name="refractive-index-ratio" min="0.5" max="2" step = "0.01" value="1.5">
-                <span class="sliderMin">0.5</span><span class="sliderMax">2</span>
+                  <span id="refractive-index-ratio-display"></span>
+                </label><span class="sliderMin">0.5</span>
+                <input type="range" id="refractive-index-ratio" name="refractive-index-ratio" min="0.5" max="3" step = "0.01" value="1.5">
+                <span class="sliderMax">3</span>
             </div>
         </div>
     </div>

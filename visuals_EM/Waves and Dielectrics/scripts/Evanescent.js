@@ -76,8 +76,8 @@ $(window).on('load', function() {//main
     function getData_wave_reflected(){//produce data of reflected
 
         let z,z_square = [];
-        let k_x = Math.cos(theta_i)*k_1;
-        let k_y = Math.sin(theta_i)*k_1;
+        let k_x = Math.cos(-theta_i)*k_1;
+        let k_y = Math.sin(-theta_i)*k_1;
         let E_0_r = reflect();
 
         for (let v=0;v < y_data.length ;v++) {
@@ -95,8 +95,6 @@ $(window).on('load', function() {//main
         let z,z_square = [];
         let E_0_t = transmit();
         let k_y = Math.sin(theta_i)*k_1;
-        console.log("transmitted");
-        console.log(k_y);
 
         if (isNaN(theta_t)=== true){
             let k_x = (angular_frequency_ratio*Math.sqrt((n1*Math.sin(theta_i))^2-(n2)^2))/c;
@@ -157,14 +155,6 @@ $(window).on('load', function() {//main
         }
     };
 
-    function find_conditions() {//produces the conditions of the wave given the input angular frequency
-            let w = angular_frequency_ratio;
-            let n_real = 1 - (w_d_squared * (Math.pow(w, 2) - Math.pow(w_0, 2)) / (Math.pow((Math.pow(w, 2) - Math.pow(w_0, 2)), 2) + Math.pow(w, 2) * Math.pow(gamma, 2)));
-            let k_real = (w * n_real) / c;
-
-        return [n_real,k_real]
-    }
-
     function plot_data() {//plot traces
 
         $("#angle-display").html($("input#angle").val().toString()+"°");//update display
@@ -175,12 +165,10 @@ $(window).on('load', function() {//main
         angular_frequency_ratio = parseFloat($("input#angular_frequency").val())* w_0;
         w_r = parseFloat($("input#angular_frequency").val());
 
-        let properties = find_conditions();
+        n2 = 1 - (w_d_squared * (Math.pow(angular_frequency_ratio, 2) - Math.pow(w_0, 2)) / (Math.pow((Math.pow(angular_frequency_ratio, 2) - Math.pow(w_0, 2)), 2) + Math.pow(angular_frequency_ratio, 2) * Math.pow(gamma, 2)));
 
         k_1 = (n1*angular_frequency_ratio)/c;
-
-        n2 = properties[0];
-        k_2 = properties[1];
+        k_2 = (n2*angular_frequency_ratio) / c;
 
         theta_i = Math.PI * (angle_of_incidence / 180);
         theta_t = snell(theta_i);

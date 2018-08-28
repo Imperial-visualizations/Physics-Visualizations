@@ -21,21 +21,22 @@
 <body>
 
 <div class="container">
-    <h1>Electric, Polarisation and D Fields in a Capacitor</h1>
     <div class="row">
         <div class="six columns" >
+            <br>
             <p>
-                A capacitor constructed from two parallel plates when considering the electric field will have a constant electric field between the two plates.
+                A capacitor constructed from two parallel plates will have a constant electric field between the two plates.
                 The <span style="color:#02893B; font-weight:bold">Electric field </span>magnitude in the vacuum is given by \( E = V/d\), where the separation between plates \(d\), is much smaller than the plate size as to avoid edge effects.
 
-                When a Dielectric material is introduced between the two plates the fields change. Inside the dielectric a <span style ="color:#D24000;font-weight:bold">Polarisation
-            field</span> will be created given by
+                When a Dielectric material is introduced between the two plates the fields change. Inside the dielectric, a <span style ="color:#D24000;font-weight:bold">Polarisation
+            field</span> will be created given by,
                 $$\mathbf{P} = \chi_{e}\varepsilon_{0}\mathbf{E_{Dielectric}}$$
                 where \(\chi_{e}\) is the electric susptability of the dielectric. The relative permittivity of the dielectric is given by \( \varepsilon_{r}= 1 + \chi_{e} \). The <span style="color:#9F004E;font-weight:bold">D Field</span>, "electric displacement", is defined as
                 $$\mathbf{D} = \varepsilon_{0}\mathbf{E} + \mathbf{P} = \varepsilon_{r}\mathbf{E}$$
             </p>
-
+            <div class = "row">
             <!--buttons to switch between vaccume and dielectic in capacitor-->
+            <div class = "three columns">
             <div id="material-switch" name = "material-switch" class="switch">
             <label class="radioTitle">Material</label>
 
@@ -50,8 +51,10 @@
               <span>HIL Dielectric</span>
             </label>
             </div>
+            </div>
 
             <!--buttons to switch between fields-->
+            <div class = "four columns">
             <div id="field-switch" name = "field-switch" class="switch">
             <label class="radioTitle">Field Type</label>
 
@@ -71,39 +74,38 @@
             </label>
             </div>
             <br>
+            </div>
+            </div>
             <p>Note: The units of the E-field are different to those of the P and D fields, hence field line density only provides a qualitative representation of field strength</p>
+
         </div>
 
         <!--put animation of capacitor here-->
-        <div class="six columns" style="padding-left: 1vw">
-            <div id = "graph_container">
-            <div id = "graph" style="width: 45vw; height: 63vh;"></div>
-            </div>
+        <div class="six columns flexyHold" >
+            <div id = "graph" class = "flexy"></div>
             <div id="voltage-slider">
                 <label for="voltage" class="sliderTitle">Voltage:
-                    <span id="voltage-display">0V</span>
-                </label>
+                    <span id="voltage-display"></span>
+                </label><span class="sliderMin">0V</span>
                 <input type="range" id="voltage" name="voltage" min="0" max="50" value="0">
-                <span class="sliderMin">0V</span><span class="sliderMax">50V</span>
+                <span class="sliderMax">50V</span>
             </div>
 
             <div id="relative_permitivity-slider">
-                <label for="relative_permitivity" class="sliderTitle">Relative Permitivity:
-                    <span id="relative_permitivity-display">2</span>
-                </label>
+                <label for="relative_permitivity" class="sliderTitle">Relative Permittivity of Dielectric:
+                    <span id="relative_permitivity-display"></span>
+                </label><span class="sliderMin">2</span>
                 <input type="range" id="relative_permitivity" name="relative_permitivity" step= "0.1" min="2" max="5" value="2">
-                <span class="sliderMin">2</span><span class="sliderMax">5</span>
+                <span class="sliderMax">5</span>
             </div>
 
             <div id="dielectric_height-slider">
                 <label for="dielectric_height" class="sliderTitle">Dielectric Width:
-                    <span id=dielectric_height-display">0.5</span>
-                </label>
+                    <span id=dielectric_height-display"></span>
+                </label><span class="sliderMin">0.2</span>
                 <input type="range" id="dielectric_height" name="dielectric_height" step = "0.1" min="0.2" max="0.7" value="0.5">
-                <span class="sliderMin">0.2</span><span class="sliderMax">0.7</span>
+                <span class="sliderMax">0.7</span>
             </div>
-
-
         </div>
     </div>
 </div>

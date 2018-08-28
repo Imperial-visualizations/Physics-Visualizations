@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> Transmission in Dielectrics - Imperial Visualisations</title>
+    <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+</head>
+
+<div class="container">
+    <div class="twelve columns">
+        <br>
+        <p>
+            At normal incident from a vacuum (medium 1) to a dielectric (medium 2), the amplitude reflection coefficient and amplitude transmission coefficient are given by $$ r = \frac{1-\frac{Z_{1}}{Z_{2}}}{1+\frac{Z_{1}}{Z_{2}}} \quad \text{and} \quad t = \frac{2}{1+\frac{Z_{1}}{Z_{2}}}$$ respectively.
+            Where \(Z\) is dependant on the refractive index \(n\) via $$ Z = \frac{1}{n}\sqrt{\frac{\mu_{0}}{\varepsilon_{0}}}$$
+
+            The Energy reflection coefficient of a wave is given by $$ R = \frac{{\mid E_{0}^{t} \mid}^2}{ {\mid E_{0}^{i} \mid}^2} = r^2 $$ and the Total Energy reflection coefficient is $$ T_{layer} = \frac{{\mid E_{total}^{t} \mid}^2}{ {\mid E_{0}^{i} \mid}^2} $$ The dependence of T on the thickness of the dielectric
+            is calculated through $$ T_{layer} = {( 1 + \frac{4R}{{(1-R)}^2}\sin^2(k_{2}d))}^{-1}$$
+            Therefore when \(d\) is and integer multiple of \(\lambda/2\) where \(\lambda\) is the wavelength of the wave in the dielectric, then \(T_{layer} = 1\) for any value of \(R\).
+
+            The visulisation shows the <span style="color:#A51900; font-weight:bold">incident</span>, <span style="color:#0F8291; font-weight:bold">reflected </span> and <span style="color:#02893B; font-weight:bold">transmitted </span> waves.
+
+
+
+
+        </p>
+    </div>
+</div>
+<script> let pages = ["1Theory.html", "2Problem Sheet 9.html"]</script>
+<script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+
+</body>
+</html>

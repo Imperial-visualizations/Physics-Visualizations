@@ -1,0 +1,16 @@
+Attenuation in Dielectrics:
+
+The visulistion suite aims to show the exponential decay of the amplitude of waves in dielectrics as a function of their 
+angular frequency, specifically how an increasing imaginary componant of the refractive index produces a larger exponential
+decay.
+
+Single Wave:
+
+The Wave class used to produce the waves is adapted from a previous visulisation created in Python, which has been translated
+with an attenuation method introduced to produc the required decay.
+
+Plane Wave:
+
+The surface plot within plotly requires a square matrix for the z-axis, hence sine waves along a specific y-axis value are 
+created with the wavelength of these determined by the angle of incidence/reflection/refraction. The opacity of the dielctric
+material provides a qualatative visulisation of the real refractive index of the material.

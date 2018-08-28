@@ -19,13 +19,18 @@ $(window).on('load', function() {//main
     };
     //define constants
     let size = 100;
-    let w_t = 0;
+    let t = 0;
     let isPlay = false;
     let E_0 = 0.5;
-    let wavelength = 0.7;
+    let w_r =  2e9;
+    let c = 3e8; // Speed of light
     let n1 = 1;
-    let x_points = numeric.linspace(2, 0, size);//x and y data is always the same and just change z
-    let y_points = numeric.linspace(-2, 2, size);
+    let k_1 = (n1*w_r)/c;
+    let k_2,theta_i,theta_t;
+
+    let x_data = numeric.linspace(2, 0, size);//x and y data is always the same and just change z
+    let x_data_t =  math.add(-2,x_data);
+    let y_data = numeric.linspace(-2, 2, size);
 
     //constants based of of inputs
     let condition =  $("input[name = wave-switch]:checked").val();
@@ -39,16 +44,16 @@ $(window).on('load', function() {//main
 
     };
 
-    function getData_wave_incident(x_data,y_data,theta,E_0){//produces data for the incident wave on the boundry
+    function getData_wave_incident(){//produces data for the incident wave on the boundry
 
         let z,z_square = [];
-        let k_x = (2*Math.PI*Math.cos(theta))/wavelength;
-        let k_y = (2*Math.PI*Math.sin(theta))/wavelength;
+        let k_x = Math.cos(theta_i)*k_1;
+        let k_y = Math.sin(theta_i)*k_1;
 
         for (let v=0;v < y_data.length ;v++) {
             let z_row = [];
             for (let i = 0; i < x_data.length ; i++) {
-                z = E_0* Math.sin(k_x* x_data[i]+k_y*y_data[v]+w_t);
+                z = E_0* Math.sin(k_x* x_data[i]+k_y*y_data[v]+w_r*t);
                 z_row.push(z);
             }
             z_square.push(z_row);
@@ -56,16 +61,17 @@ $(window).on('load', function() {//main
         return z_square
     }
 
-    function getData_wave_reflected(x_data,y_data,theta,E_0){//produces data for the reflected wave on the boundry
+    function getData_wave_reflected(){//produces data for the reflected wave on the boundry
 
         let z,z_square = [];
-        let k_x = (2*Math.PI*Math.cos(theta))/wavelength;
-        let k_y = (2*Math.PI*Math.sin(theta))/wavelength;
+        let k_x = Math.cos(-theta_i)*k_1;
+        let k_y = Math.sin(-theta_i)*k_1;
+        let E_0_r = reflect();
 
         for (let v=0;v < y_data.length ;v++) {
             let z_row = [];
             for (let i = 0; i < x_data.length ; i++) {
-                z = E_0* Math.sin(k_x* x_data[i]+k_y*y_data[v]-w_t);
+                z = E_0_r* Math.sin(k_x* x_data[i]+k_y*y_data[v]-w_r*t);
                 z_row.push(z);
             }
             z_square.push(z_row);
@@ -73,9 +79,24 @@ $(window).on('load', function() {//main
         return z_square
     }
 
-    function transmit(theta){//gives the new amplitude of the transmitted wave
-        let theta_i = theta;
-        let theta_t = snell(theta_i);
+    function getData_wave_transmitted(){//produces data for the incident wave on the boundry
+        let z,z_square = [];
+        let E_0_t = transmit();
+        let k_y = Math.sin(theta_i)*k_1;
+        let k_x = Math.cos(theta_t)*k_2;
+
+        for (let v=0;v < y_data.length ;v++) {
+            let z_row = [];
+            for (let i = 0; i < x_data_t.length ; i++) {
+                z = E_0_t*Math.sin(k_x*x_data_t[i]+k_y*y_data[v]+w_r*t);
+                z_row.push(z);
+            }
+        z_square.push(z_row);//Not entirelly sure the physics is correct need to review
+        }
+        return z_square
+    }
+
+    function transmit(){//gives the new amplitude of the transmitted wave
         let E_t0;
 
         if (isNaN(theta_t) === true){//if snells law return not a number this means total internal refection is occurring hence no transmitted wave(no attenuation accounted for)
@@ -87,23 +108,18 @@ $(window).on('load', function() {//main
         }
        };
 
-    function reflect(theta) {//gives the amplitude of the refected wave
+    function reflect() {//gives the amplitude of the refected wave
         if (n1 === n2) {//if both materials have same refractive index then there is no reflection
             return 0
         }
         else {
-            let theta_i = theta;
-            let theta_t = snell(theta_i);
-            console.log(theta_t);
             let E_r0;
             if (isNaN(theta_t) === true){
                 E_r0 = E_0;
-                console.log("TIR")
             }
             else {
                 E_r0 = E_0 * (n1 * Math.cos(theta_i) - n2 * Math.cos(theta_t)) / (n1 * Math.cos(theta_i) + n2 * Math.cos(theta_t))
             }
-            console.log(E_r0);
             return E_r0
         }
     };
@@ -117,21 +133,25 @@ $(window).on('load', function() {//main
         angle_of_incidence = parseFloat($("input#angle").val());
         n2 = parseFloat($("input#refractive-index-ratio").val());
 
+        k_2 = (n2*w_r)/c;
+
+        theta_i = Math.PI * (angle_of_incidence / 180);
+        theta_t = snell(theta_i);
+
         if (isNaN(Math.asin(n2))=== true){//update value of citical angle
             $("#critical_angle-display").html("No Total Internal Reflection possible");
         }else{
             $("#critical_angle-display").html(((180*Math.asin(n2))/Math.PI).toFixed(2).toString()+"°");
         }
 
-        let rad_angle = Math.PI * (angle_of_incidence / 180);
         let data = [];
 
         if (condition === "incident") {//creates trace dependent of the conditions of the system
             let incident_wave = {
                 opacity: 1,
-                x: x_points,
-                y: y_points,
-                z: getData_wave_incident(x_points, y_points, rad_angle,E_0),
+                x: x_data,
+                y: y_data,
+                z: getData_wave_incident(),
                 type: 'surface',
                 name: "Incident"
             };
@@ -140,9 +160,9 @@ $(window).on('load', function() {//main
         else if(condition === "reflected") {
             let reflected_wave = {
                 opacity: 1,
-                x: x_points,
-                y: y_points,
-                z: getData_wave_reflected(x_points, y_points, -rad_angle, reflect(rad_angle)),
+                x: x_data,
+                y: y_data,
+                z: getData_wave_reflected(),
                 type: 'surface',
                 name: "Reflected"
             };
@@ -151,9 +171,9 @@ $(window).on('load', function() {//main
         else{
             let incident_plus_reflected_wave = {
                 opacity: 1,
-                x: x_points,
-                y: y_points,
-                z: math.add(getData_wave_incident(x_points,y_points,rad_angle,E_0),getData_wave_reflected(x_points,y_points,2*Math.PI - rad_angle,reflect(rad_angle))),
+                x: x_data,
+                y: y_data,
+                z: math.add(getData_wave_incident(),getData_wave_reflected()),
                 type: 'surface',
                 name:"Reflected and Incident combined"
             };
@@ -162,9 +182,9 @@ $(window).on('load', function() {//main
 
         let transmitted_wave = {
             opacity: 1,
-            x: math.add(-2,x_points),
-            y: y_points,
-            z: getData_wave_incident(math.add(-2,x_points),y_points,snell(rad_angle),transmit(rad_angle)),
+            x: x_data_t,
+            y: y_data,
+            z: getData_wave_transmitted(),
             type: 'surface',
             name:"Transmitted"
         };
@@ -244,7 +264,7 @@ $(window).on('load', function() {//main
 
     function play_loop(){//handles the play button
         if(isPlay === true) {
-            w_t++;//keeps time ticking
+            t++;//keeps time ticking
             Plotly.animate("graph",
                 {data: plot_data()},
                 {
