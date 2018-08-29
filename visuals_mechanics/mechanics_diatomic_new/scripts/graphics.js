@@ -254,7 +254,6 @@ const visualisation = function (p) {
             legend: {x: 0.67, y: 1, orientation: "h"},
             showlegend: true
         };
-
         KE_V_T = {x: arrTime, y: arrVibKE, mode: "lines", line: {width: 2, color: "#FFDD00"}, name: "KE" + "vib".sub()};
         KE_V_slider = {
             x: [-1, 5 + 2], y: arrVibKESlider,

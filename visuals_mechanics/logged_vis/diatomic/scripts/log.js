@@ -51,12 +51,12 @@ function log(object) {
     sessHistory[count] = action;
 
     if (count > COMMAND_LIMIT) sendLog();
-    // console.log(action);
+    console.log(action);
 }
 
 // TODO: Configure DB path.
-function sendLog() {
-    $.post("db.php", sessHistory);                 // jQuery AJAX POST
-    count = 0;                                                  // Resetting command count.
-    sessHistory = {branch: BRANCH};                             // Resetting session history JSON.
-}
+// function sendLog() {
+//     $.post("db.php", sessHistory);                 // jQuery AJAX POST
+//     count = 0;                                                  // Resetting command count.
+//     sessHistory = {branch: BRANCH};                             // Resetting session history JSON.
+// }

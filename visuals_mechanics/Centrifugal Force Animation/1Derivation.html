@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mathematical Derivation of Inertial Forces</title>
+    <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+    <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+    <link rel="stylesheet" href="css/rotating-stylesheet.css">
+</head>
+
+<body>
+  <div id='spinner'>
+    <span class="loading-message">Loading</span>
+    <div>
+        <div class="spinner-mask"></div>
+        <div id="spinner-bar"></div>
+        <div class="spinner-mask"></div>
+    </div>
+  </div>
+
+  <div class="container pad-top">
+    <div class="row">
+      <div class="four columns">
+        <div class="derivationButton row clickable">
+          <svg width="38" height="32">
+            <polygon points ="0,0 38,16 0,32"></polygon>
+          </svg>
+          <span class="center">Fixed in rotating frame</span>
+        </div>
+        <div class="hide-on-click hidden">
+            <p class="center">
+          <span class="hint"> Vector has no angular speed in the rotating frame </span>
+          \(\mathbf{V_{Rotating}} = 0\)
+          <br/>
+          <br/>
+          <span class="hint">Using the standard equation \(v = \omega r\)</span>
+          \(V_{Inertial} = \rho \omega = r \sin \theta * \omega = \omega r \sin \theta\)
+          <br/>
+          <br/>
+          \(\mathbf{V_{Inertial}} = \boldsymbol{\omega} \times \mathbf{r}\)
+          <!--SVG that defines a lot of terms used and clears up possible confusion for fixed vector derivation-->
+          <svg
+             xmlns:dc="http://purl.org/dc/elements/1.1/"
+             xmlns:cc="http://creativecommons.org/ns#"
+             xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+             xmlns:svg="http://www.w3.org/2000/svg"
+             xmlns="http://www.w3.org/2000/svg"
+             xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+             xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+             width="210mm"
+             height="175mm"
+             viewBox="0 0 210 297"
+             version="1.1"
+             id="svg_element"
+             sodipodi:docname="Fixed_vector.svg"
+             inkscape:version="0.92.3 (2405546, 2018-03-11)">
+            <defs
+               id="defs2">
+              <inkscape:path-effect
+                 effect="bspline"
+                 id="path-effect1079"
+                 is_visible="true"
+                 weight="33.333333"
+                 steps="2"
+                 helper_size="0"
+                 apply_no_weight="true"
+                 apply_with_weight="true"
+                 only_selected="false" />
+              <inkscape:path-effect
+                 effect="bspline"
+                 id="path-effect983"
+                 is_visible="true"
+                 weight="33.333333"
+                 steps="2"
+                 helper_size="0"
+                 apply_no_weight="true"
+                 apply_with_weight="true"
+                 only_selected="false" />
+              <inkscape:path-effect
+                 effect="bspline"
+                 id="path-effect1909"
+                 is_visible="true"
+                 weight="33.333333"
+                 steps="2"
+                 helper_size="0"
+                 apply_no_weight="true"
+                 apply_with_weight="true"
+                 only_selected="false" />
+              <marker
+                 inkscape:stockid="Arrow1Mend"
+                 orient="auto"
+                 refY="0.0"
+                 refX="0.0"
+                 id="marker1575"
+                 style="overflow:visible;"
+                 inkscape:isstock="true">
+                <path
+                   id="path1573"
+                   d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+                   style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+                   transform="scale(0.4) rotate(180) translate(10,0)" />
+              </marker>
+              <inkscape:path-effect
+                 effect="bspline"
+                 id="path-effect1429"
+                 is_visible="true"
+                 weight="33.333333"
+                 steps="2"
+                 helper_size="0"
+                 apply_no_weight="true"
+                 apply_with_weight="true"
+                 only_selected="false" />
+              <marker
+                 inkscape:isstock="true"
+                 style="overflow:visible"
+                 id="marker1163"
+                 refX="0.0"
+                 refY="0.0"
+                 orient="auto"
+                 inkscape:stockid="Arrow1Lstart">
+                <path
+                   transform="scale(0.8) translate(12.5,0)"
+                   style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+                   d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+                   id="path1161" />
+              </marker>
+              <marker
+                 inkscape:stockid="Arrow1Lstart"
+                 orient="auto"
+                 refY="0.0"
+                 refX="0.0"
+                 id="Arrow1Lstart"
+                 style="overflow:visible"
+                 inkscape:isstock="true"
+                 inkscape:collect="always">
+                <path
+                   id="path819"
+                   d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+                   style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+                   transform="scale(0.8) translate(12.5,0)" />
+              </marker>
+              <inkscape:path-effect
+                 effect="bspline"
+                 id="path-effect817"
+                 is_visible="true"
+                 weight="33.333333"
+                 steps="2"
+                 helper_size="0"
+                 apply_no_weight="true"
+                 apply_with_weight="true"
+                 only_selected="false" />
+            </defs>
+            <sodipodi:namedview
+               id="base"
+               pagecolor="#ffffff"
+               bordercolor="#666666"
+               borderopacity="1.0"
+               inkscape:pageopacity="0.0"
+               inkscape:pageshadow="2"
+               inkscape:zoom="0.6"
+               inkscape:cx="582.96588"
+               inkscape:cy="560"
+               inkscape:document-units="mm"
+               inkscape:current-layer="layer2"
+               showgrid="false"
+               inkscape:window-width="1920"
+               inkscape:window-height="1051"
+               inkscape:window-x="-9"
+               inkscape:window-y="-9"
+               inkscape:window-maximized="1" />
+            <metadata
+               id="metadata5">
+              <rdf:RDF>
+                <cc:Work
+                   rdf:about="">
+                  <dc:format>image/svg+xml</dc:format>
+                  <dc:type
+                     rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+                  <dc:title />
+                </cc:Work>
+              </rdf:RDF>
+            </metadata>
+            <g
+               inkscape:groupmode="layer"
+               id="layer2"
+               inkscape:label="Layer 2">
+              <g
+                 id="g1038"
+                 transform="matrix(1.3055675,0,0,1.0872558,-61.984612,-2.8457108)">
+                <path
+                   inkscape:original-d="m 73.409071,53.020025 c 2.65e-4,33.570524 0,100.712365 0,100.712365"
+                   inkscape:path-effect="#path-effect817"
+                   inkscape:connector-curvature="0"
+                   id="path815"
+                   d="m 73.409071,53.020025 c 0,33.570524 0,67.141575 0,100.712365"
+                   style="fill:none;stroke:#000000;stroke-width:0.75;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow1Lstart)" />
+                <g
+                   id="g1026">
+                  <path
+                     style="fill:none;stroke:#000000;stroke-width:0.4871389;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-mid:url(#marker1163)"
+                     d="M 148.93483,78.203842 C 136.43795,91.221366 123.94081,104.23916 111.35429,116.82673 98.767777,129.4143 86.092328,141.5712 73.416389,153.72857"
+                     id="path1427"
+                     inkscape:connector-curvature="0"
+                     inkscape:path-effect="#path-effect1429"
+                     inkscape:original-d="M 148.93483,78.203842 C 136.43802,91.221436 123.94088,104.23923 111.4434,117.25723 98.767837,129.41436 86.092387,141.57126 73.416389,153.72857" />
+                  <path
+                     style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                     d="m 73.206934,128.16389 c 2.052634,-0.17684 4.104958,-0.35366 6.157038,-5e-5 2.05208,0.35361 4.104712,1.23783 5.76229,2.03348 1.657578,0.79566 2.920644,1.50298 4.025644,2.38699 1.105,0.884 2.052309,1.945 2.999569,3.00595"
+                     id="path981"
+                     inkscape:connector-curvature="0"
+                     inkscape:path-effect="#path-effect983"
+                     inkscape:original-d="m 73.206934,128.16389 c 2.052608,-0.17714 4.104933,-0.35395 6.156974,-0.53045 2.052308,0.88363 4.104937,1.76786 6.156978,2.65227 1.263159,0.7069 2.526223,1.41423 3.788907,2.12182 0.947428,1.0605 1.89474,2.1215 2.841682,3.18273" />
+                </g>
+              </g>
+              <text
+                 xml:space="preserve"
+                 style="font-style:normal;font-weight:normal;font-size:15.22231197px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.38055778"
+                 x="43.043446"
+                 y="154.33118"
+                 id="text1075"
+                 transform="scale(1.1391424,0.87785339)"><tspan
+                   sodipodi:role="line"
+                   x="-36.001133"
+                   y="13.887776"
+                   id="tspan1069"
+                   style="stroke-width:0.38055778"><tspan
+                     x="43.043446"
+                     y="154.33118"
+                     id="tspan1067"
+                     style="stroke-width:0.38055778" /></tspan><tspan
+                   sodipodi:role="line"
+                   x="31.802372"
+                   y="173.35909"
+                   id="tspan1073"
+                   style="stroke-width:0.38055778"><tspan
+                     x="31.802372"
+                     y="173.35909"
+                     id="tspan1071"
+                     style="stroke-width:0.38055778">θ</tspan></tspan></text>
+              <path
+                 style="fill:none;stroke:#000000;stroke-width:0.71485305;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1575)"
+                 d="m 132.45985,82.181869 c 0.82489,-7.715291 1.64974,-15.430218 -1.2401,-20.365388 -2.88983,-4.935171 -9.84528,-7.205514 -15.75362,-8.21989 -5.90835,-1.014377 -10.94483,-0.829956 -15.981817,-0.645517"
+                 id="path1077"
+                 inkscape:connector-curvature="0"
+                 inkscape:path-effect="#path-effect1079"
+                 inkscape:original-d="m 132.45985,82.181869 c 0.8252,-7.715258 1.65004,-15.430186 2.47455,-23.144774 -6.5857,-2.21333 -13.5598,-4.42653 -20.34022,-6.639298 -5.03641,0.184096 -10.07289,0.368518 -15.109867,0.553277" />
+              <text
+                 xml:space="preserve"
+                 style="font-style:normal;font-weight:normal;font-size:12.60921288px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.31523031"
+                 x="85.813942"
+                 y="44.905552"
+                 id="text1796"
+                 transform="scale(1.0958063,0.91257003)"><tspan
+                   sodipodi:role="line"
+                   x="nan"
+                   y="inf"
+                   id="tspan1794"
+                   style="stroke-width:0.31523031"><tspan
+                     x="85.813942"
+                     y="44.905552"
+                     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.60921288px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.31523031"
+                     id="tspan1790">V</tspan><tspan
+                     x="95.443237"
+                     y="44.905552"
+                     style="font-size:8.19598866px;baseline-shift:sub;stroke-width:0.31523031"
+                     id="tspan1792">Inertial</tspan></tspan></text>
+            </g>
+            <g
+               inkscape:label="Layer 1"
+               inkscape:groupmode="layer"
+               id="layer1">
+              <text
+                 xml:space="preserve"
+                 style="font-style:normal;font-weight:normal;font-size:12.60921288px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.31523031"
+                 x="24.286423"
+                 y="52.000996"
+                 id="text1149"
+                 transform="scale(1.0958063,0.91257003)"><tspan
+                   sodipodi:role="line"
+                   x="24.286423"
+                   y="52.000996"
+                   id="tspan1147"
+                   style="stroke-width:0.31523031"><tspan
+                     x="24.286423"
+                     y="52.000996"
+                     style="font-size:16.81228447px;stroke-width:0.31523031"
+                     id="tspan1145">ω</tspan></tspan></text>
+              <text
+                 xml:space="preserve"
+                 style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.60921288px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.31523031"
+                 x="81.23111"
+                 y="153.41302"
+                 id="text1905"
+                 transform="scale(1.0958063,0.91257003)"><tspan
+                   sodipodi:role="line"
+                   x="81.23111"
+                   y="153.41302"
+                   id="tspan1903"
+                   style="stroke-width:0.31523031"><tspan
+                     x="81.23111"
+                     y="153.41302"
+                     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.60921288px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.31523031"
+                     id="tspan1901">r</tspan></tspan></text>
+              <path
+                 style="fill:none;stroke:#000000;stroke-width:0.59571087;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.59571087, 1.19142174;stroke-dashoffset:0;stroke-opacity:1"
+                 d="M 132.45985,82.181869 C 99.406507,82.643772 66.352442,83.105685 33.298738,83.567593"
+                 id="path1907"
+                 inkscape:connector-curvature="0"
+                 inkscape:path-effect="#path-effect1909"
+                 inkscape:original-d="m 132.45985,82.181869 c -33.053347,0.46162 -99.161112,1.385724 -99.161112,1.385724" />
+              <flowRoot
+                 xml:space="preserve"
+                 id="flowRoot1911"
+                 style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+                 transform="matrix(0.26458333,0,0,0.26458333,-20.902083,-1.5875)"><flowRegion
+                   id="flowRegion1913"><rect
+                     id="rect1915"
+                     width="141.93549"
+                     height="41.935482"
+                     x="411.29031"
+                     y="246.71323" /></flowRegion><flowPara
+                   id="flowPara1917">ρ</flowPara></flowRoot>    <flowRoot
+                 xml:space="preserve"
+                 id="flowRoot1927"
+                 style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+                 transform="matrix(0.26458333,0,0,0.26458333,-20.902083,-1.5875)"><flowRegion
+                   id="flowRegion1929"><rect
+                     id="rect1931"
+                     width="166.12903"
+                     height="61.290321"
+                     x="404.83871"
+                     y="233.81001" /></flowRegion><flowPara
+                   id="flowPara1933" /></flowRoot>    <text
+                 xml:space="preserve"
+                 style="font-style:normal;font-weight:normal;font-size:14.68379879px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.36709493"
+                 x="38.646626"
+                 y="75.30764"
+                 id="text1949"
+                 transform="scale(1.0020371,0.99796705)"><tspan
+                   sodipodi:role="line"
+                   x="38.646626"
+                   y="75.30764"
+                   id="tspan1947"
+                   style="stroke-width:0.36709493"><tspan
+                     x="38.646626"
+                     y="75.30764"
+                     id="tspan1945"
+                     style="stroke-width:0.36709493"><tspan
+             style="font-size:6.85243988px;stroke-width:0.36709493"
+             id="tspan1951">Perpendicular distance </tspan>ρ</tspan></tspan></text>
+              <ellipse
+                 style="fill:#e41b1b;fill-opacity:1;stroke:none;stroke-width:0.29354915;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.29354915, 0.58709831;stroke-dashoffset:0;stroke-opacity:0.98431373"
+                 id="path1958"
+                 cx="131.44028"
+                 cy="82.31794"
+                 rx="2.7801557"
+                 ry="2.4374416" />
+              <flowRoot
+                 xml:space="preserve"
+                 id="flowRoot1960"
+                 style="font-style:normal;font-weight:normal;font-size:29.33333397px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+                 transform="matrix(0.26458333,0,0,0.26458333,-20.902083,-1.5875)"><flowRegion
+                   id="flowRegion1962"
+                   style="font-size:29.33333397px"><rect
+                     id="rect1964"
+                     width="137"
+                     height="130"
+                     x="654"
+                     y="274.51968"
+                     style="font-size:29.33333397px" /></flowRegion><flowPara
+                   id="flowPara1966" /></flowRoot>    <text
+                 xml:space="preserve"
+                 style="font-style:normal;font-weight:normal;font-size:9.80028057px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.24500702"
+                 x="123.10218"
+                 y="100.34972"
+                 id="text2248"
+                 transform="scale(1.0039732,0.99604253)"><tspan
+                   sodipodi:role="line"
+                   x="143.36124"
+                   y="0"
+                   id="tspan2242"
+                   style="stroke-width:0.24500702"><tspan
+                     x="123.10218"
+                     y="100.34972"
+                     style="font-size:5.88016891px;stroke-width:0.24500702"
+                     id="tspan2234">Point </tspan><tspan
+                     x="139.81244"
+                     y="100.34972"
+                     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.72491407px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#e41b1b;fill-opacity:1;stroke-width:0.24500702"
+                     id="tspan2236">P</tspan><tspan
+                     x="143.36124"
+                     y="100.34972"
+                     style="font-size:5.88016891px;stroke-width:0.24500702"
+                     id="tspan2238"
+                     dx="0 0 0 0"> - </tspan></tspan><tspan
+                   sodipodi:role="line"
+                   x="123.10218"
+                   y="0"
+                   id="tspan2246"
+                   style="stroke-width:0.24500702"><tspan
+                     x="123.10218"
+                     y="112.60008"
+                     style="font-size:5.88016891px;stroke-width:0.24500702"
+                     id="tspan2244">Fixed in the rotating frame</tspan></tspan></text>
+            </g>
+          </svg>
+        </p>
+        </div>
+      </div>
+
+      <div class="four columns">
+        <div class="derivationButton row clickable">
+          <svg width="38" height="32">
+            <polygon points ="0,0 38,16 0,32"></polygon>
+          </svg>
+            <span class="center">Moving in rotating frame</span>
+        </div>
+        <div class="hide-on-click hidden">
+            <p class="center">
+                $$\mathbf{V_{Rotating}} \neq 0$$
+                <br/>
+              <span class ="hint">This means there are now two contributions to the velocity in the inertial frame: one from the vector rotating in the frame and one from the frame itself rotating relative to the inertial frame.
+                $$\mathbf{V_{I}} = \mathbf{V_{R}} + \boldsymbol{\omega} \times \mathbf{r}$$
+              where I and R refer to the inertial and rotating frames respectively. </span>
+                <br/>
+                <br/>
+                 This is a general result and (written in terms of derivatives) can relate any vector in the inertial frame to one in the rotating frame:
+
+                $$\frac{d\boldsymbol{r}}{dt}|_{I} = \frac{d\boldsymbol{r}}{dt}|_{R} + \boldsymbol{\omega} \times \mathbf{r}$$
+                <br/>
+                which reduces to formula for a fixed point in rotating frame if \(\frac{d\boldsymbol{r}}{dt}|_{R} = 0\).
+            </p>
+        </div>
+      </div>
+
+      <div class="four columns ">
+        <div class="derivationButton row clickable">
+          <svg width="38" height="32" class="click-to-hide">
+            <polygon points ="0,0 38,16 0,32"></polygon>
+          </svg>
+          <span class="center">Accelerating in rotating frame</span>
+        </div>
+        <div class="hide-on-click hidden">
+            <p class="center">
+              \(\mathbf{a|_{I}} = \frac{d\mathbf{V_{I}}}{dt}|_{I} = \frac{d}{dt} (\mathbf{V_R} + \boldsymbol{\omega} \times \mathbf{r})|_{I} \)
+              <br/>
+              <span class="hint">using the expression relating speeds between the frames. </span>
+              $$ = \color{hsl(200, 80%, 50%)}{\frac{d}{dt}(\boldsymbol{V_{R}})|_{I}} + \color{hsl(20,80%,50%}{\frac{d}{dt}(\boldsymbol{\omega} \times \mathbf{r})|_{I}}$$
+              Using the formula given previously relating derivatives in the rotating and inertial frames:
+              $$ = \color{hsl(200, 80%, 50%)}{\frac{d}{dt}(\boldsymbol{V_{R}})|_{R} + \boldsymbol{\omega} \times \mathbf{V_{R}}} + \color{hsl(20,80%,50%}{\boldsymbol{\omega} \times \frac{d\boldsymbol{r}}{dt}|_{I} + \frac{d \boldsymbol{\omega}}{dt}|_{I} \times \mathbf{r}}$$
+              $$ = \color{hsl(200, 80%, 50%)}{\mathbf{a_{R}} + \boldsymbol{\omega} \times \mathbf{V_{R}}} + \color{hsl(20,80%,50%}{\boldsymbol{\omega} \times \mathbf{V_{I}} + \boldsymbol{\dot{\omega}} \times \mathbf{r}}$$
+              Once again using the formula relating the velocities, we can substitute \(\mathbf{V_{I}}\) for \(\mathbf{V_{R}} + \boldsymbol{\omega} \times \boldsymbol{r}\)
+              $$ = \color{hsl(200, 80%, 50%)}{\mathbf{a_{R}} + \boldsymbol{\omega} \times \mathbf{V_{R}}} + \color{hsl(20,80%,50%)}{\boldsymbol{\omega} \times (\mathbf{V_{R}} + \boldsymbol{\omega} \times \mathbf{r}) + \boldsymbol{\dot{\omega}} \times \mathbf{r}}$$
+              $$ = \mathbf{a_{R}} + 2\boldsymbol{\omega} \times \mathbf{V_{R}} + \boldsymbol{\omega} \times (\boldsymbol{\omega} \times \mathbf{r}) + \boldsymbol{\dot{\omega}} \times \mathbf{r}$$
+              <span class="hint">where the brackets are necessary otherwise </span> \(\boldsymbol{\omega} \times \boldsymbol{\omega} = 0\).
+              <br/>
+              Using \(\mathbf{F} = m \mathbf{a}\) and the relation above, we find that the force in the rotating frame is the sum of the force in the inertial frame and 3 other <span class="hint"> inertial forces.</span>
+              $$ \mathbf{F_{R}} = \mathbf{F_{I}} \color{green}{-2m\boldsymbol{\omega} \times \mathbf{V_{R}}} \color{blue}{-m\boldsymbol{\omega} \times (\boldsymbol{\omega} \times \mathbf{r})} \color{red}{-m\boldsymbol{\dot{\omega}} \times \mathbf{r}}$$
+              and these are the forces we give names to, being labelled as:
+              $$ \mathbf{F_{Rotating}} = {\mathbf{F_{Inertial}}} + \color{green}{\mathbf{F_{Coriolis}}} + \color{blue}{\mathbf{F_{Centrifugal}}} + \color{red}{\mathbf{F_{Euler}}} $$
+            </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+      $('.container').hide();
+
+      $(window).on('load', function() {
+          $('#spinner').hide();
+          $('.container').show();//show container after loading finishes
+      })
+      // Changes svg arrow depending on whether div is being hidden or shown
+      $('.derivationButton.row').on('click', function() {
+          $(this).siblings('.hide-on-click').toggle()
+
+          if ($(this).find("polygon").attr("points") === "0,0 38,16 0,32") {
+              $(this).find("polygon").attr("points", "0,0 38,0 18,32")
+          } else {
+              $(this).find("polygon").attr("points", "0,0 38,16 0,32")
+          }
+      })
+  </script>
+  <script>
+      let pages = ["1Derivation.html", "1Euler Force.html", "1Centrifugal Force.html"]
+  </script>
+  <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+
+</body>
+</html>
