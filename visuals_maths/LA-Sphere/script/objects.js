@@ -217,6 +217,7 @@ function Sphere(radius) {
         }
         return sphere;
     }
+
 }
 /**
  * Represents a cylinder.

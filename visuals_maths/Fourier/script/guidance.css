@@ -1,0 +1,90 @@
+* {box-sizing:border-box}
+
+/* Fading animation */
+.fade {
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+    from {opacity: .4}
+    to {opacity: 1}
+}
+
+@keyframes fade {
+    from {opacity: .4}
+    to {opacity: 1}
+}
+
+.guideModal{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modalContent{
+    background-color: #f4f4f4;
+    width: 30%;
+    padding: 15px 10px 10px 10px;
+    box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2), 0 7px 20px 0 rgba(0,0,0,0.17);
+    animation: modalOpen 1s;
+    position: relative;
+    left: 30vw;
+    top: 30vh;
+}
+
+.closeBtn{
+    margin-top: -15px;
+    color: #ccc;
+    float: right;
+    font-size: 30px;
+}
+
+.closeBtn:hover, .closeBtn:focus{
+    color: #000;
+    text-decoration: none;
+    cursor:pointer;
+}
+
+.nextBtn{
+    height: 34px;
+    width: 110px;
+    padding: 0px;
+    position:relative;
+    right: -220px;
+}
+
+@keyframes modalOpen {
+    from{opacity: 0}
+    to{opacity: 1}
+}
+
+/* Guidance */
+.guide {
+    width: 164px;
+    height: 50px;
+    position: fixed;
+    z-index: 1;
+    top: 50vh;
+    left: 97vw;
+    background-color: #003E74;
+    color: white;
+    overflow-x: hidden;
+    padding: 6px 10px;
+    border-radius: 8px 8px;
+    transform: rotate(270deg);
+	transform-origin: left top 0;
+}
+
+.guide:hover, .guide:focus{
+    cursor:pointer;
+    background-color: #006EAF;
+}

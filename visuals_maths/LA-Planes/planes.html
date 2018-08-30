@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>LA: Plane Intersection</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="../styles/guidance.css">
+    <script src="../lib/plotly-1.39.3.min.js"></script>
+    <script src="../lib/jquery-3.3.1.min.js"></script>
+    <script src="../lib/numeric-1.2.6.min.js"></script>
+    <script src="../lib/math-5.0.4.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+    <div class="guide">
+        Instructions for use
+    </div>
+
+    <div class="guideModal">
+        <div class="guideTest"></div>
+        <button class="backBtn">◀ Back</button> <button class="nextBtn">Next ▶</button>
+        <div class="modalContent">
+            <p id="modal_0">
+                This is the guidance for the Plane Intersection visualisation.
+            </p>
+            <p id="modal_1" hidden>
+                This is the graph that plots all the planes.
+            </p>
+            <p id="modal_2" hidden>
+                You can add plane, lines and points with these buttons.
+            </p>
+            <p id="modal_3" hidden>
+                This display shows the equation of the planes, lines and points and you can change the values.
+            </p>
+            <p id="modal_4" hidden>
+                This shows the equations of the intersections lines.
+            </p>
+            <p id="modal_5" hidden>
+                Have fun!
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <!-- Graph -->
+            <div class="six columns">
+                <div id='graph' style="width:500px; height:500px;"></div>
+                <br>
+                <div style="padding-left:50px">
+                    <input id="showIntersection" class="button-primary" type="submit"
+                           value="Show Equations of Intersection Lines">
+                </div>
+            </div>
+
+            <!--Bottons-->
+            <div class="six columns" style="padding-top: 0px;">
+                <div id="addButtons">
+                    <input id="addPlane" type="button" value="Add Plane">
+                    <input id="addLine" type="button" value="Add Line">
+                    <input id="addPoint" type="button" value="Add Point">
+                    <p id="inputError" style="color:#ff0000" hidden></p>
+                </div>
+                <p id="intersection1" style="color:rgb(0,255,0)" hidden>Mark Sucks!</p>
+                <p id="intersection2" style="color:rgb(255,0,0)" hidden>Yes He does</p>
+                <p id="intersection3" style="color:rgb(0,0,255)" hidden>Yup</p>
+                <div id="equations">
+                    <div id="plane1">
+                        <label style="border-left: solid 20px rgb(0,146,146); padding-left: 1px;">Plane 1:</label>
+                        <input id="a1Input" type="number" value="1" style="width: 70px"> x +
+                        <input id="b1Input" type="number" value="0" style="width: 70px"> y +
+                        <input id="c1Input" type="number" value="0" style="width: 70px"> z =
+                        <input id="d1Input" type="number" value="3" style="width: 70px">
+                    </div>
+                    <div id="plane2" hidden>
+                        <label style="border-left: solid 20px rgb(219,209,0); padding-left: 1px;">Plane 2:</label>
+                        <input id="a2Input" type="number" value="0" style="width: 70px"> x +
+                        <input id="b2Input" type="number" value="1" style="width: 70px"> y +
+                        <input id="c2Input" type="number" value="0" style="width: 70px"> z =
+                        <input id="d2Input" type="number" value="3" style="width: 70px">
+                        <span id="plane2Close" class="closeBtn closeBtnH">×</span>
+                    </div>
+                    <div id="plane3" hidden>
+                        <label style="border-left: solid 20px rgb(182,109,255); padding-left: 1px;">Plane 3:</label>
+                        <input id="a3Input" type="number" value="0" style="width: 70px"> x +
+                        <input id="b3Input" type="number" value="0" style="width: 70px"> y +
+                        <input id="c3Input" type="number" value="1" style="width: 70px"> z =
+                        <input id="d3Input" type="number" value="3" style="width: 70px">
+                        <span id="plane3Close" class="closeBtn closeBtnH">×</span>
+                    </div>
+                    <br>
+                    <div id="line01" hidden>
+                        <label style="border-left: solid 4px rgb(0,0,0); padding-left: 17px;">Line 1:</label>
+                        <table class='matrixWrapper'><tbody>
+                            <tr>
+                                <td>Point:&nbsp</td>
+                                <td>(&nbsp
+                                    <input id="e1Input" type="number" value="0" style="width: 70px; line-height: 0;">,&nbsp
+                                    <input id="f1Input" type="number" value="0" style="width: 70px; line-height: 0;">,&nbsp
+                                    <input id="g1Input" type="number" value="0" style="width: 70px; line-height: 0;">&nbsp)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Direction Vector:&nbsp</td>
+                                <td>(&nbsp
+                                    <input id="i1Input" type="number" value="-1" style="width: 70px">,&nbsp
+                                    <input id="j1Input" type="number" value="1" style="width: 70px">,&nbsp
+                                    <input id="k1Input" type="number" value="1" style="width: 70px">&nbsp)
+                                </td>
+                            </tr>
+                        </tbody></table>
+                        <span id="line01Close" class="closeBtn closeBtnH" style="margin-top: -90px;">×</span>
+                    </div>
+                    <div id="line02" hidden>
+                        <label style="border-left: solid 4px #7ec0ee; padding-left: 17px;">Line 2:</label>
+                        <table class='matrixWrapper'><tbody>
+                            <tr>
+                                <td>Point:&nbsp</td>
+                                <td>(&nbsp
+                                    <input id="e2Input" type="number" value="0" style="width: 70px; line-height: 0;">,&nbsp
+                                    <input id="f2Input" type="number" value="0" style="width: 70px; line-height: 0;">,&nbsp
+                                    <input id="g2Input" type="number" value="0" style="width: 70px; line-height: 0;"> &nbsp)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Direction Vector:&nbsp</td>
+                                <td>(&nbsp
+                                    <input id="i2Input" type="number" value="1" style="width: 70px">,&nbsp
+                                    <input id="j2Input" type="number" value="-1" style="width: 70px">,&nbsp
+                                    <input id="k2Input" type="number" value="1" style="width: 70px"> &nbsp)
+                                </td>
+                            </tr>
+                        </tbody></table>
+                        <span id="line02Close" class="closeBtn closeBtnH" style="margin-top: -90px;">×</span>
+                    </div>
+                    <br>
+                    <div id="point1" hidden>
+                        <label>• &nbsp Point 1:</label>
+                        (
+                        <input id="xInput" type="number" value="0" style="width: 70px"> ,&nbsp
+                        <input id="yInput" type="number" value="0" style="width: 70px"> ,&nbsp
+                        <input id="zInput" type="number" value="0" style="width: 70px">
+                        )
+                        <span id="point1Close" class="closeBtn closeBtnH">×</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <link rel="stylesheet" href="script/plane.css">
+    <script src="../util/guidance.js"></script>
+    <script src=../util/objects.js></script>
+    <script src=script/planes.js></script>
+</body>
+
+</html>

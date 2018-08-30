@@ -15,9 +15,9 @@ Titles = ["f(x) = Triangle", "f(x) = Square", "f(x) = Sawtooth", "f(x) = ?", "f(
 
 A = 5
 L = 12.03
-N = 10
+N = 1000
 histogram_accuracy = 1000 #Suggest 1000
-shape = 8
+shape = 5
 axis_length = 5 #Number of periods visualized
 resolution = 10**4
 x = np.linspace(-L*axis_length,L*axis_length,resolution)
@@ -25,6 +25,7 @@ decay = 0.9
 
 
 spacing = 6*A #Suggest either spacing = 0 or =3, spacing separates x=0 part of cosines on cosine graph
+
 
 
 def amplitude(n,number,x):
@@ -64,19 +65,38 @@ def summation(N,x,number):
         certain_x_value_height.append(amplitude(n[i],number,x))
     certain_x_value = sum(certain_x_value_height)
     return certain_x_value
+
+
+
+
+
         
+def sum_an(N,number):
+    a = []
+    for n in range(0, N):
+        a.append(amplitude(0,number, 0))
+    return sum(a)
+    
+        
+
+
+
+
+
 
 
 def plot(N,x,number):
     x_values = []
     y_values = []
     y_values_cheat = []
+    intercept = sum_an(N,number)
+    """CHECK OUT THIS LINE AND Y_VALUES CHEAT"""
     for i in x:
         y_values.append(summation(N,i,number))
         x_values.append(i)
     """ LOOK HERE, THIS IS THE IMPORTANT BIT THAT FIXES THE Y VALUE OF X=0 TO 0"""
     for i in y_values:
-        y_values_cheat.append(-y_values[len(y_values)/2]+i)
+        y_values_cheat.append(-y_values[len(y_values)/2]+i + intercept)
         
     return x_values , y_values_cheat
         
@@ -310,8 +330,8 @@ if (b_n[N-2])**2 + (b_n[N-2])**2 + (b_n[N-1])**2 + (b__n[N-1])**2 != 0:
     plt.title(r'$b_n$' +"as a function of n", fontsize = 20)
     plt.axhline(y = 0, color = 'k', linestyle = '--')
     plt.legend(loc = 1, fontsize = 10)
-    for position in bar_breaks_an:
-        plt.axvline(x = position , color = 'k', linestyle = ':')
+    #for position in bar_breaks_an:
+    #    plt.axvline(x = position , color = 'k', linestyle = ':')
     plt.xlim(0.5, len(n)-0.5)
     plt.xticks(np.arange(0, len(n), step=1))
     plt.xlabel(r'$n$', fontsize = 20)
@@ -321,9 +341,9 @@ fig_5 = plt.figure(5)
 fig_5.set_size_inches(7,3)
 plt.bar(n, alpha_n_set, width = 1, color = 'r' )
 plt.title(r'$\alpha_{n}$' +"as a function of n", fontsize = 20)
-for position in bar_breaks_an:
-    plt.axvline(x = position , color = 'k', linestyle = ':')
-    plt.xlim(-0.5, len(n)-0.5)
+#for position in bar_breaks_an:
+#    plt.axvline(x = position , color = 'k', linestyle = ':')
+#    plt.xlim(-0.5, len(n)-0.5)
 plt.xticks(np.arange(0, len(n), step=1))
 plt.xlabel(r'$n$', fontsize = 20)
 plt.ylabel(r'$\alpha_n$', fontsize = 20)

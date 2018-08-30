@@ -1,0 +1,200 @@
+
+<!doctype html>
+<html>
+
+<head>
+    <!--Page Info-->
+    <title>Fourier Series Combined</title>
+    <!--css link-->
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <link rel="stylesheet" href="../styles/guidance.css">
+    <!--Required JS resources--> <!--NB: better to have resources before the main body but still works even if they are not-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+
+<body>
+
+    <!--instruction guidance-->
+    <div class="guide">
+        Instructions for use
+    </div>
+
+    <div class="guideModal">
+        <div class="guideTest"></div>
+        <button class="backBtn">◀ Back</button> <button class="nextBtn">Next ▶</button>
+        <div class="modalContent">
+            <p id="modal_0">
+                Welcome to Imperial Fourier Visualisation: Combination Part.
+            </p>
+            <p id="modal_1" hidden>
+                This is the title and name of the Fourier Series.
+            </p>
+            <p id="modal_2" hidden>
+                You can select the function you want to visualize from here.
+            </p>
+            <p id="modal_3" hidden>
+                Here, the Fourier Series plot will be displayed. The upper one plots the Fourier Series Function. The bottom plots the each of its Component. By having two graphs together, you can see how each components add up and contribute to the Fourier Series Function.
+            </p>
+            <p id="modal_4" hidden>
+                This is the Amplitude Slider that allows you to change the Amplitude.
+            </p>
+            <p id="modal_5" hidden>
+                This is the Number Slider that allows you to change the Number of Terms. When N=0, it displays a_0; when N=1, it displays a_1 and b_1
+            </p>
+            <p id="modal_6" hidden>
+                This is the Period Slider that allows you to change the Period.
+            </p>
+            <p id="modal_7" hidden>
+                Try play with it.
+            </p>
+        </div>
+    </div>
+
+    <!-- If you want to have navigator to change the page, check the commented code below-->
+    <!-- chaging page
+    <div class="leftnav">◀</div>
+    -->
+
+    <!--Main body contents-->
+    <div class="container">
+        <div class="row">
+
+            <!-- Title & Graph -->
+            <div class="six columns">
+
+                <!-- Title -->
+                <div id="heading">
+                    <div class="title" id="mainTitle">
+                        <h4>Main Page and Guidance:</h4>
+                    </div>
+                    <div class="title" id="triangularTitle" hidden>
+                        <h4>Fourier Series of Triangular Function:</h4>
+                    </div>
+                    <div class="title" id="squareTitle" hidden>
+                        <h4>Fourier Series of Square Function:</h4>
+                    </div>
+                    <div class="title" id="sawtoothTitle" hidden>
+                        <h4>Fourier Series of Sawtooth Function:</h4>
+                    </div>
+                    <div class="title" id="diracTitle" hidden>
+                        <h4>Fourier Series of Dirac-Delta Function:</h4>
+                    </div>
+                    <div class="title" id="parabolaTitle" hidden>
+                        <h4>Fourier Series of Parabola Function:</h4>
+                    </div>
+                    <div class="title" id="linearTitle" hidden>
+                        <h4>Fourier Series of Linear Function:</h4>
+                    </div>
+                    <div class="title" id="modeTitle" hidden>
+                        <h4>Fourier Series of |x| Function:</h4>
+                    </div>
+                </div>
+
+                <!--Graph-->
+                <div id="graph">
+                    <div id='graph3' style="width:450px; height:250px;" ></div>
+                    <div id='graph4' style="width:450px; height:250px;" ></div>
+                </div>
+            </div>
+
+            <!--Scroll-down & Sliders-->
+            <div class="six columns">
+
+                <div class="tab-content">
+
+                    <!--Scroll-down Option-->
+                    <div id="scroll">
+                        <strong>Select Function: </strong>
+                                <select id="Select">
+                                    <option value="main">Main Page</option>
+                                    <option value="triangular">Triangular Function</option>
+                                    <option value="square">Square Function</option>
+                                    <option value="sawtooth">Sawtooth Function</option>
+                                    <option value="dirac">Dirac-Delta Function</option>
+                                    <option value="parabola">Parabola Function</option>
+                                    <option value="linear">Linear Function</option>
+                                    <option value="mode">|x| Function</option>
+                                </select>
+                    </div>
+
+                    <!--Sliders-->
+                    <div class="allSliders" >
+                    <!--NB: Be careful with classes and types-->
+
+                    <!--BEGIN Slider A-->
+                        <div id="A">
+                            <h5 style="border-left: solid 5px rgb(225,0,0); padding-left: 8px;">Amplitude:</h5><!--Just Text-->
+                        <!--Slider Display A-->
+                            <label class="sliderTitle"  style="padding-bottom:20px;">A:<!--Amplitude-->
+                                <span id="AControllerDisplay" data-unit="">1</span> <!--default: 1-->
+                            </label>
+                        <!--Slider A-->
+                            <label class="slider"  >
+                                <span class="sliderMin">-5</span>
+                                <input id="AController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
+                                <span class="sliderMax">5</span></label>
+                        </div>
+                    <!--END Slider A-->
+
+                    <!--BEGIN Slider N-->
+                        <div id="N">
+                            <h5 style="border-left: solid 5px rgb(0,225,0); padding-left: 8px;">Number of terms:</h5>
+                        <!--Slider Display N-->
+                            <label class="sliderTitle"  style="padding-bottom:20px;">N:
+                                <span id="NControllerDisplay" data-unit="">1</span>
+                            </label>
+                        <!--Slider N-->
+                            <label class="slider"  >
+                                <span class="sliderMin">0</span>
+                                <input id="NController" class="inputs" type="range" value="1" min="0" max="20" step="1"/>
+                                <span class="sliderMax">20</span>
+                            </label>
+                        </div>
+                    <!--END Slider N-->
+
+                    <!--BEGIN Slider L-->
+                        <div id="L">
+                            <h5 style="border-left: solid 5px rgb(0,0,225); padding-left: 8px;">Period:</h5>
+                        <!--Slider Display L-->
+                            <label class="sliderTitle" style="padding-bottom:20px;" >L:
+                                <span id="LControllerDisplay" data-unit="">1</span>
+                            </label>
+                        <!--Slider L-->
+                            <label class="slider"  >
+                                <span class="sliderMin">-5</span>
+                                <input id="LController" class="inputs" type="range" value="1" min="-5" max="5" step="0.1"/>
+                                <span class="sliderMax">5</span>
+                            </label>
+                        </div>
+                    <!--END Slider L-->
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--THE BRAINS-->
+    <script>
+        let pages=[" Math_Derivation.html"," Plot.html"," Component.html", " Combination.html", " Power_Spectrum.html", " Generalised_Fourier.html"];
+    </script>
+    <script src="../util/guidance.js"></script>
+    <script src=script/Combination.js></script>
+    <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+
+</body>
+
+</html>

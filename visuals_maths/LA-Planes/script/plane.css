@@ -1,0 +1,49 @@
+.top{
+}
+
+.bottom{
+    display: block;
+    margin: 0 0 0 0;
+}
+
+table {
+    border-collapse: collapse;
+}
+table td, table th {
+    border: 1px solid black;
+}
+table tr:first-child th {
+    border-top: 0;
+}
+table tr:last-child td {
+    border-bottom: 0;
+}
+table tr td:first-child,
+table tr th:first-child {
+    border-left: 0;
+}
+table tr td:last-child,
+table tr th:last-child {
+    border-right: 0;
+}
+
+.closeBtn{
+    margin-top: -16px;
+    color: #ccc;
+    float: right;
+    font-size: 45px;
+}
+
+.closeBtnH{
+    margin-top: -16px;
+}
+
+.closeBtn:hover, .closeBtn:focus{
+    color: #000;
+    text-decoration: none;
+    cursor:pointer;
+}
+
+.closeBtnH:hover, .closeBtnH:focus{
+    color: #000;
+}

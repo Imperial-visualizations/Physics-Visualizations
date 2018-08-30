@@ -1,0 +1,93 @@
+* {box-sizing:border-box}
+
+.guideModal{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-color: transparent;
+}
+
+.whitened{
+    animation: hideFeature 1s;
+    opacity: 0.1;
+}
+
+.guideTest{
+    background-color: rgb(255,0,0);
+    overflow: auto;
+    display: none;
+    opacity: 0.8;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.modalContent{
+    background-color: #f4f4f4;
+    width: 30%;
+    padding: 15px 10px 10px 10px;
+    box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2), 0 7px 20px 0 rgba(0,0,0,0.17);
+    animation: modalOpen 1s;
+    position: relative;
+    left: 35vw;
+    top: 25vh;
+}
+
+.nextBtn{
+    background-color: #f4f4f4;
+    width: 12rem;
+    position:relative;
+    animation: modalOpen 1s;
+    left: 81vw;
+    top: 80vh;
+}
+
+.backBtn{
+    background-color: #f4f4f4;
+    width: 12rem;
+    position:relative;
+    animation: modalOpen 1s;
+    left: 80vw;
+    top: 80vh;
+}
+
+@keyframes modalOpen {
+    from{opacity: 0}
+    to{opacity: 1}
+}
+
+@keyframes hideFeature {
+    from{opacity: 1}
+    to{opacity: 0.1}
+}
+
+/* Guidance */
+.guide {
+    width: 16rem;
+    height: 10rem;
+    position: fixed;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    z-index: 1;
+    top: 50vh;
+    left: 97vw;
+    background-color: #003E74;
+    color: white;
+    overflow-x: hidden;
+    padding: 6px 10px;
+    border-radius: 8px 8px;
+    transform: rotate(270deg);
+	transform-origin: left top 0;
+}
+
+.guide:hover, .guide:focus{
+    cursor:pointer;
+    background-color: #006EAF;
+}
