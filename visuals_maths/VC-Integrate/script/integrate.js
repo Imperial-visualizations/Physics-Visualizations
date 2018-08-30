@@ -309,31 +309,59 @@ function computeFrames(frames, extra){
         addFrame(frames, data, maxDataSize);
     } else if(activeTab === 'cylin') {
         maxDataSize = 15;
-
+        interval = 1/Math.sqrt(8);
         // 1st Volume Elements
         x2 = 0.5; y2 = 0.5; z2 = c/3;
-        x1 = 0; y1 = 0; z1 = z2 - interval;
+        x1 = interval; y1 = interval; z1 = z2 - 0.5;
 
-        initY = [y1, y2, y2, y1, y1, y2, y2, y1];
+        initX = [interval, 0, interval, 2*interval, interval, 0, interval, 2*interval];
+        initY = [0, interval, 2*interval, interval, 0, interval, 2*interval, interval];
         initZ = [z1, z1, z1, z1, z2, z2, z2, z2];
+
+        data = [];
+        carteVolume1(data, initX, initY, initZ, black);
+        addFrame(frames, data, maxDataSize);
+
+
+        initX = [interval, 0, 2*interval, 3*interval, interval, 0, 2*interval, 3*interval];
+        initY = [0, interval, 3*interval, 2*interval, 0, interval, 3*interval, 2*interval];
+        initZ = [z1, z1, z1, z1, z2, z2, z2, z2];
+
+        data = [];
+        carteVolume1(data, initX, initY, initZ, black);
+        addFrame(frames, data, maxDataSize);
+
+        newX1 = a*Math.sqrt(0.5*(1 - (z1/c)**2));
+        newX2 = a*Math.sqrt(0.5*(1 - (z2/c)**2));
+        newY1 = b*Math.sqrt(0.5*(1 - (z1/c)**2));
+        newY2 = b*Math.sqrt(0.5*(1 - (z2/c)**2));
+
+        initX = [interval, 0, newX1-interval/2, newX1+interval/2, interval, 0, newX2-interval/2, newX2+interval/2];
+        initY = [0, interval, newY1+interval/2, newY1-interval/2, 0, interval, newY2+interval/2, newY2-interval/2];
+        initZ = [z1, z1, z1, z1, z2, z2, z2, z2];
+
+        data = [];
+        carteVolume1(data, initX, initY, initZ, black);
+        addFrame(frames, data, maxDataSize);
 
         var zTemp1 = 1 - (z1/c)**2; zTemp2 = 1 - (z2/c)**2;
         var yTemp1, yTemp2 = (0.5/b)**2;
         x3 = a*Math.sqrt(zTemp2);
 
+        /*
         while (x2 < x3) {
             data = [];
-            carteVolume1(data, [0, 0, x2, x2, 0, 0, x2, x2], initY, initZ, cyan, 0.8);
-            carteVolume1(data, [x1, x1, x2, x2, x1, x1, x2, x2], initY, initZ, black);
-            carteVolume1(data, [0, 0, a*Math.sqrt(zTemp1 - yTemp2), a*Math.sqrt(zTemp1), 0, 0, a*Math.sqrt(zTemp2 - yTemp2), a*Math.sqrt(zTemp2)], initY, initZ, cyan, 0.2);
-            x1 += interval; x2 += interval;
+            //carteVolume1(data, [0, 0, x2, x2, 0, 0, x2, x2], initY, initZ, cyan, 0.8);
+            //carteVolume1(data, [x1, x1, x2, x2, x1, x1, x2, x2], initY, initZ, black);
+            //carteVolume1(data, [0, 0, a*Math.sqrt(zTemp1 - yTemp2), a*Math.sqrt(zTemp1), 0, 0, a*Math.sqrt(zTemp2 - yTemp2), a*Math.sqrt(zTemp2)], initY, initZ, cyan, 0.2);
+            //x1 += interval; x2 += interval;
 
             addText(data, [-1, y1, z1], "ρ = 0");
             addText(data, [a, y1, z1], "ρ = ab((1 - (z/c)²)/((b cos(φ))² + (a sin(φ))²))^0.5");
 
-            addFrame(frames, data, maxDataSize);
+            //addFrame(frames, data, maxDataSize);
         }
-
+        */
         data = [];
         carteVolume1(data, [0, 0, a*Math.sqrt(zTemp1 - yTemp2), a*Math.sqrt(zTemp1), 0, 0, a*Math.sqrt(zTemp2 - yTemp2), a*Math.sqrt(zTemp2)], initY, initZ, cyan, 0.8);
         addFrame(frames, data, maxDataSize);
