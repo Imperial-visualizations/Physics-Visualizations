@@ -316,12 +316,15 @@ function computeFrames(frames, extra){
 
         initZ = [z1, z1, z1, z1, z2, z2, z2, z2];
 
-        maxX1 = a*Math.sqrt(0.5*(1 - (z1/c)**2)); maxX2 = a*Math.sqrt(0.5*(1 - (z2/c)**2));
-        maxY1 = b*Math.sqrt(0.5*(1 - (z1/c)**2)); maxY2 = b*Math.sqrt(0.5*(1 - (z2/c)**2));
+        sinTheta1 = 0.5*(1 - (z1/c)**2);
+        sinTheta2 = 0.5*(1 - (z2/c)**2);
 
-        initX = [interval, 0, maxX1-interval/2, maxX1+interval/2, interval, 0, maxX2-interval/2, maxX2+interval/2];
-        initY = [0, interval, maxY1+interval/2, maxY1-interval/2, 0, interval, maxY2+interval/2, maxY2-interval/2];
-        while ( x1 + interval < maxX1 ){
+        maxX1 = a*Math.sqrt(b*sinTheta1/a); maxX2 = a*Math.sqrt(b*sinTheta2/a);
+        maxY1 = b*Math.sqrt(a*sinTheta1/b); maxY2 = b*Math.sqrt(a*sinTheta2/b);
+
+        initX = [interval, 0, maxX1-a*0.5*interval/b, maxX1+b*0.5*interval/a, interval, 0, maxX2-a*0.5*interval/b, maxX2+b*0.5*interval/a];
+        initY = [0, interval, maxY1+b*0.5*interval/a, maxY1-a*0.5*interval/b, 0, interval, maxY2+b*0.5*interval/a, maxY2-a*0.5*interval/b];
+        while ( x1 + interval < maxX1 && y1 + interval < maxY1 ){
             data = [];
             carteVolume1(data, [interval, 0, x1, x2, interval, 0, x1, x2], [0, interval, y2, y1, 0, interval, y2, y1], initZ, cyan, 0.8);
             carteVolume1(data, initX, initY, initZ, cyan, 0.2);
@@ -390,23 +393,25 @@ function computeFrames(frames, extra){
         maxDataSize = 15;
         interval = 1/Math.sqrt(8);
         // 1st Volume Elements
-        x1 = 0; y1 = 0; z1 = c/3 - 0.5;
-        x2 = interval; y2 = interval; z2 = c/3;
+        x1 = 0; y1 = 0;;
+        x2 = interval; y2 = interval;
 
-        initZ = [z1, z1, z1, z1, z2, z2, z2, z2];
+        maxZ2 = c; maxZ1 = maxZ2 - 0.5;
+        maxX1 = a*Math.sqrt(0.5*(1 - (maxZ1/c)**2)); maxX2 = a*Math.sqrt(0.5*(1 - (maxZ2/c)**2));
+        maxY1 = b*Math.sqrt(0.5*(1 - (maxZ1/c)**2)); maxY2 = b*Math.sqrt(0.5*(1 - (maxZ2/c)**2));
 
-        maxX1 = a*Math.sqrt(0.5*(1 - (z1/c)**2)); maxX2 = a*Math.sqrt(0.5*(1 - (z2/c)**2));
-        maxY1 = b*Math.sqrt(0.5*(1 - (z1/c)**2)); maxY2 = b*Math.sqrt(0.5*(1 - (z2/c)**2));
+        angle = Math.atan2(maxZ1, Math.sqrt(maxX1**2 + maxY1**2));
 
+        /*
         initX = [interval, 0, maxX1-interval/2, maxX1+interval/2, interval, 0, maxX2-interval/2, maxX2+interval/2];
         initY = [0, interval, maxY1+interval/2, maxY1-interval/2, 0, interval, maxY2+interval/2, maxY2-interval/2];
-        while ( x1 + interval < maxX1 ){
+        while ( x1 + interval < maxX1 || y1 + interval < maxY1 || z1 + interval < maxZ1){
             data = [];
             carteVolume1(data, [interval, 0, x1, x2, interval, 0, x1, x2], [0, interval, y2, y1, 0, interval, y2, y1], initZ, cyan, 0.8);
             carteVolume1(data, initX, initY, initZ, cyan, 0.2);
             carteVolume1(data, [x2, x1, x1+interval, x2+interval, x2, x1, x1+interval, x2+interval], [y1, y2, y2+interval, y1+interval, y1, y2, y2+interval, y1+interval], initZ, black);
-            addText(data, [-1, y1, z1], "ρ = 0");
-            addText(data, [a, y1, z1], "ρ = ((a² + b²)(1 - (z/c)²))^0.5");
+            addText(data, [-1, 0, -1], "ρ = 0");
+            addText(data, [a, b, z1], "ρ = ((a² + b²)(1 - (z/c)²))^0.5");
             addFrame(frames, data, maxDataSize);
             x1+=interval; x2+=interval;
             y1+=interval; y2+=interval;
@@ -468,6 +473,7 @@ function computeFrames(frames, extra){
         data.push(qSphere.gObjectY(cyan, 1));
         data.push(qSphere.gObjectZ(cyan, 1));
         addFrame(frames, data, maxDataSize);
+        */
     }
 
     return stops;
