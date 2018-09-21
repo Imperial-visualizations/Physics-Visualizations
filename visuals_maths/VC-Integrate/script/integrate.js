@@ -16,6 +16,7 @@ var layout = {
         zaxis: {range: [-1, 11], autorange: false, zeroline: true,},
     }
 }
+var stops;
 
 function addFrame(frames, data, maxDataSize){
     addEmptyObjects3d(data, maxDataSize - data.length);
@@ -203,10 +204,8 @@ function limitSurface3(data, a, b, c, verticesY, verticesZ=[], color="rgb(0,0,0)
 }
 
 function computeFrames(frames, extra){
-    const
-        a = parseFloat($("#aInput").val()),
-        b = parseFloat($("#bInput").val()),
-        c = parseFloat($("#cInput").val());
+    const // Decided these parameters are quite trivial so they are fixed.
+        a = 10.0, b = 10.0, c = 10.0;
     var stops = [0];
     var maxDataSize = 0;
 
@@ -319,11 +318,11 @@ function computeFrames(frames, extra){
         sinTheta1 = 0.5*(1 - (z1/c)**2);
         sinTheta2 = 0.5*(1 - (z2/c)**2);
 
-        maxX1 = a*Math.sqrt(b*sinTheta1/a); maxX2 = a*Math.sqrt(b*sinTheta2/a);
-        maxY1 = b*Math.sqrt(a*sinTheta1/b); maxY2 = b*Math.sqrt(a*sinTheta2/b);
+        maxX1 = a*Math.sqrt(sinTheta1); maxX2 = a*Math.sqrt(sinTheta2);
+        maxY1 = b*Math.sqrt(sinTheta1); maxY2 = b*Math.sqrt(sinTheta2);
 
-        initX = [interval, 0, maxX1-a*0.5*interval/b, maxX1+b*0.5*interval/a, interval, 0, maxX2-a*0.5*interval/b, maxX2+b*0.5*interval/a];
-        initY = [0, interval, maxY1+b*0.5*interval/a, maxY1-a*0.5*interval/b, 0, interval, maxY2+b*0.5*interval/a, maxY2-a*0.5*interval/b];
+        initX = [interval, 0, maxX1-interval/2, maxX1+interval/2, interval, 0, maxX2-interval/2, maxX2+interval/2];
+        initY = [0, interval, maxY1+interval/2, maxY1-interval/2, 0, interval, maxY2+interval/2, maxY2-interval/2];
         while ( x1 + interval < maxX1 && y1 + interval < maxY1 ){
             data = [];
             carteVolume1(data, [interval, 0, x1, x2, interval, 0, x1, x2], [0, interval, y2, y1, 0, interval, y2, y1], initZ, cyan, 0.8);
@@ -391,80 +390,82 @@ function computeFrames(frames, extra){
         addFrame(frames, data, maxDataSize);
     } else if(activeTab === 'spher') {
         maxDataSize = 15;
-        interval = 1/Math.sqrt(8);
+        var intervalZ = 0, sq8 = 1/Math.sqrt(8);
+        interval = 0;
         // 1st Volume Elements
-        x1 = 0; y1 = 0;;
-        x2 = interval; y2 = interval;
+        x1 = 1/Math.sqrt(32); y1 = x1; z1 = 2*x1;
+        x2 = 0.25; y2 = 0.25; z2 = 2*z1;
 
-        maxZ2 = c; maxZ1 = maxZ2 - 0.5;
+        maxZ1 = c/Math.sqrt(2) - z1/2; maxZ2 = maxZ1 + z1;
         maxX1 = a*Math.sqrt(0.5*(1 - (maxZ1/c)**2)); maxX2 = a*Math.sqrt(0.5*(1 - (maxZ2/c)**2));
         maxY1 = b*Math.sqrt(0.5*(1 - (maxZ1/c)**2)); maxY2 = b*Math.sqrt(0.5*(1 - (maxZ2/c)**2));
 
-        angle = Math.atan2(maxZ1, Math.sqrt(maxX1**2 + maxY1**2));
+        //initX = [x2, 0, 0.25, x2+0.25, x2-0.25, -0.25, 0, x2];
+        //initY = [0, y2, y2+0.25, 0.25, -0.25, y2-0.25, y2, 0];
+        //initZ = [0, 0, z2, z2, z2, z2, 2*z2, 2*z2];
 
-        /*
-        initX = [interval, 0, maxX1-interval/2, maxX1+interval/2, interval, 0, maxX2-interval/2, maxX2+interval/2];
-        initY = [0, interval, maxY1+interval/2, maxY1-interval/2, 0, interval, maxY2+interval/2, maxY2-interval/2];
-        while ( x1 + interval < maxX1 || y1 + interval < maxY1 || z1 + interval < maxZ1){
+        var firstX = [z1, 0, maxX1-x1, maxX1+x1, z1-0.25, -0.25, maxX2-x1, maxX2+x1],
+            firstY = [0, z1, maxY1+y1, maxY1-y1, -0.25, z1-0.25, maxY2+y1, maxY2-y1],
+            firstZ = [0, 0, maxZ1, maxZ1, z1, z1, maxZ2, maxZ2];
+
+        while ( z1 + interval < maxX1 ){ // Since the shape is symmetrical, only check for one ie 'x'.
             data = [];
-            carteVolume1(data, [interval, 0, x1, x2, interval, 0, x1, x2], [0, interval, y2, y1, 0, interval, y2, y1], initZ, cyan, 0.8);
-            carteVolume1(data, initX, initY, initZ, cyan, 0.2);
-            carteVolume1(data, [x2, x1, x1+interval, x2+interval, x2, x1, x1+interval, x2+interval], [y1, y2, y2+interval, y1+interval, y1, y2, y2+interval, y1+interval], initZ, black);
-            addText(data, [-1, 0, -1], "ρ = 0");
-            addText(data, [a, b, z1], "ρ = ((a² + b²)(1 - (z/c)²))^0.5");
+            carteVolume1(data,
+                [z1, 0, 0.25+interval, z1+0.25+interval, z1-0.25, -0.25, interval, z1+interval],
+                [0, z1, z1+0.25+interval, 0.25+interval, -0.25, z1-0.25, z1+interval, interval],
+                [0, 0, z1+intervalZ, z1+intervalZ, z1, z1, z2+intervalZ, z2+intervalZ], cyan, 0.8);
+            carteVolume1(data, firstX, firstY, firstZ, cyan, 0.2);
+            carteVolume1(data,
+                [z1+interval, interval, 0.25+interval, z1+0.25+interval, z1-0.25+interval, interval-0.25, interval, z1+interval],
+                [interval, z1+interval, z1+0.25+interval, 0.25+interval, interval-0.25, interval+z1-0.25, z1+interval, interval],
+                [intervalZ, intervalZ, z1+intervalZ, z1+intervalZ, z1+intervalZ, z1+intervalZ, z2+intervalZ, z2+intervalZ], black);
+            addText(data, [-1, -1, -1], "ρ = 0");
+            addText(data, [maxX1, maxY1, maxZ1], "ρ = ((a² + b²)(1 - (z/c)²))^0.5");
             addFrame(frames, data, maxDataSize);
-            x1+=interval; x2+=interval;
-            y1+=interval; y2+=interval;
+            interval+=0.25; intervalZ+=sq8;
         }
 
         data = [];
-        carteVolume1(data, initX, initY, initZ, black);
+        carteVolume1(data, firstX, firstY, firstZ, black);
         addFrame(frames, data, maxDataSize);
         stops.push(frames.length - 1);
 
-
-
-
         //2nd Volume Elements
-        var y3 = b*Math.sin(Math.acos(z2/c));
-        y2 = 0.5;
+        var y3 = b*Math.sin(Math.acos(maxZ2/c));
+        y2 = 0.25;
         while(y2 < y3){
             data = [];
-            spherVolume(data, a, b, c, [y2], [z1+1, z2+1], cyan);
-            spherVolume2(data, a, b, c, [], [z1+1, z2+1], cyan, 0.2, orange, 1, cyan, 0.2, orange2, 1);
-            limitSurface3(data, a, b, c, y2, [z1+1, z2+1])
+            spherVolume(data, a, b, c, [y2], [maxZ1, maxZ2], cyan);
+            spherVolume2(data, a, b, c, [], [maxZ1, maxZ2], cyan, 0.2, orange, 1, cyan, 0.2, orange2, 1);
+            limitSurface3(data, a, b, c, y2, [maxZ1, maxZ2]) //black bars
 
-            addText(data, [a, 0, z1], "φ = 0", orange);
-            addText(data, [0, b, z1], "φ = π/2", orange2);
+            addText(data, [maxX1, 0, maxZ1], "φ = 0", orange);
+            addText(data, [0, maxY1, maxZ1], "φ = π/2", orange2);
 
             addEmptyObjects3d(data, maxDataSize - data.length);
             frames.push({data: data});
-            y2 += interval;
+            y2 += 0.25;
         }
 
         data = [];
-        carteVolume2(data, a, b, c, [], [z1, z2], cyan);
+        spherVolume2(data, a, b, c, [], [maxZ1, maxZ2], cyan);
         addFrame(frames, data, maxDataSize);
         stops.push(frames.length - 1);
 
         //3rd Volume Elements
-        data = [];
-        carteVolume2(data, a, b, c, [], [0, 0.5], black);
-        addFrame(frames, data, maxDataSize);
         var zPoints = [0];
         z2 = 0.5;
         while (z2 + 0.5 < c) {
             zPoints.push(z2);
             data = [];
-            carteVolume2(data, a, b, c, [], zPoints, cyan);
-            carteVolume2(data, a, b, c, [], [z2, z2 + 0.5], black);
+            spherVolume2(data, a, b, c, [], zPoints, cyan);
+            spherVolume2(data, a, b, c, [], [z2, z2 + 0.5], black);
 
-            addText(data, [a/1.2, b/1.2, -1], "z = 0");
-            addText(data, [a/7, b/7, c+.5], "z = c");
+            addText(data, [a/1.2, b/1.2, -1], "θ = π/2");
+            addText(data, [a/7, b/7, c+.5], "θ = 0");
 
             addFrame(frames, data, maxDataSize);
-            z2 += interval;
-
+            z2 += 0.5;
         }
 
         data = [];
@@ -473,10 +474,24 @@ function computeFrames(frames, extra){
         data.push(qSphere.gObjectY(cyan, 1));
         data.push(qSphere.gObjectZ(cyan, 1));
         addFrame(frames, data, maxDataSize);
-        */
+
     }
 
     return stops;
+}
+
+function updateText(number){
+    var activeTab = $('.tab-pane.active').attr('id');
+    $("#" + activeTab + 1).hide();
+    $("#" + activeTab + 2).hide();
+    $("#" + activeTab + 3).hide();
+    if (number > stops[2]){
+        $("#" + activeTab + 3).show();
+    } else if (number > stops[1]){
+        $("#" + activeTab + 2).show();
+    } else {
+        $("#" + activeTab + 1).show();
+    }
 }
 
 function initPlot(){
@@ -484,7 +499,7 @@ function initPlot(){
     var frames = [],
         extra = [];
 
-    var stops = computeFrames(frames, extra);
+    stops = computeFrames(frames, extra);
 
     $("#animateSlider").attr("max", frames.length - 1);
     initAnimation("animate", frames, extra, layout, 0, stops);
@@ -494,8 +509,11 @@ function initPlot(){
 function main() {
     $("input[type=range]").each(function () {
         $(this).on('input', function(){
-            $("#"+$(this).attr("id") + "Display").text( $(this).val() + $("#"+$(this).attr("id") + "Display").attr("data-unit") );
-            historyPlot(parseFloat($(this).val()));
+            var slideNumber = $(this).val();
+            var activeTab = $('.tab-pane.active').attr('id');
+            $("#"+$(this).attr("id") + "Display").text( slideNumber + $("#"+$(this).attr("id") + "Display").attr("data-unit") );
+            historyPlot(parseFloat(slideNumber));
+            updateText(slideNumber);
         });
     });
 
@@ -533,12 +551,12 @@ function main() {
     });
 
     $("input[type=submit]").click(function () {
-        var idName = $(this).attr("id");
         startAnimation();
+        var slideNumber = parseFloat($("#" + "animateSlider").val());
+        updateText(slideNumber + 2);
     });
 
     $("input[type=button]").click(function () {
-        var idName = $(this).attr("id");
         initPlot();
     });
 
