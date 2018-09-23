@@ -253,13 +253,9 @@ function computeFrames(frames, extra){
         // 2nd Volume Elements
         var zTemp1 = 1 - (z1/c)**2; zTemp2 = 1 - (z2/c)**2;
         var yTemp1, yTemp2 = (0.5/b)**2;
-        data = [];
-        carteVolume1(data, [0, 0, a*Math.sqrt(zTemp1 - yTemp2), a*Math.sqrt(zTemp1), 0, 0, a*Math.sqrt(zTemp2 - yTemp2), a*Math.sqrt(zTemp2)], [0, 0.5, 0.5, 0, 0, 0.5, 0.5, 0], initZ, black);
-        carteVolume2(data, a, b, c, [], [z1, z2], cyan, 0.2);
-        addFrame(frames, data, maxDataSize);
 
         y3 = b*Math.sin(Math.acos(z2/c));
-        y2 = 0.5;
+        y2 = 0.1;
         while(y2 < y3){
             data = [];
             yTemp1 = (y2/b)**2; yTemp2 = ((y2+0.5)/b)**2;
@@ -272,7 +268,7 @@ function computeFrames(frames, extra){
             addText(data, [a/3, b, c/3], "y = b(1 - (z/c)²)^0.5", orange2);
 
             addFrame(frames, data, maxDataSize);
-            y2 += interval;
+            y2 += 0.4;
         }
 
         data = [];
@@ -336,7 +332,7 @@ function computeFrames(frames, extra){
         }
 
         data = [];
-        carteVolume1(data, initX, initY, initZ, black);
+        carteVolume1(data, initX, initY, initZ, cyan);
         addFrame(frames, data, maxDataSize);
         stops.push(frames.length - 1);
 
@@ -525,28 +521,9 @@ function main() {
             $('.tab-pane.active', $(href).parent()).removeClass('active');
             $(href).addClass('active');
             initPlot(); //This is re-plot depends on the href!!!!!!!!!!!!!!
+            var slideNumber = parseFloat($("#" + "animateSlider").val());
+            updateText(slideNumber + 2);
             return false;
-        });
-    });
-
-    $("input[type=box]").each(function () {
-        $(this).on('keyup',function () {
-            if(event.keyCode == 13) {
-                let n = $(this).val();
-                if( n.match(/^-?\d*(\.\d+)?$/) && !isNaN(parseFloat(n)) ){
-                    $("#"+$(this).attr("id") + "Error").hide();
-                    if( parseFloat(n) > 2 && parseFloat(n) < 11){
-                        initPlot();
-                    } else{
-                        $("#"+$(this).attr("id") + "Error").text("Invalid input: min = 3, max = 10");
-                        $("#"+$(this).attr("id") + "Error").show();
-                    }
-                }
-                else{
-                    $("#"+$(this).attr("id") + "Error").text("Invalid input: the input needs to be a number");
-                    $("#"+$(this).attr("id") + "Error").show();
-                }
-            }
         });
     });
 
@@ -558,17 +535,8 @@ function main() {
 
     $("input[type=button]").click(function () {
         initPlot();
-    });
-
-    $("select").click(function () {
-        var idName = $(this).attr("id");
-        if (idName === "") {
-           var value = $(this).val();
-           if( value === "1") {
-           } else if ( value === "2") {
-           } else {
-           }
-       }
+        var slideNumber = parseFloat($("#" + "animateSlider").val());
+        updateText(slideNumber + 2);
     });
 
     initPlot();

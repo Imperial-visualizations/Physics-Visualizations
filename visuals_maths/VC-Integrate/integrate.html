@@ -49,7 +49,7 @@
                 </label>
             </div>
 
-            <div class = "six columns">
+            <div class="six columns">
                 <br>
                 <ul class="tab-nav">
                     <li><a class="button active" href="#carte">Cartesian</a></li>
@@ -58,48 +58,97 @@
                 </ul>
 
                 <div class="tab-content">
+                    The mass of the Quarter-Hemisphere is given by:
                     <div class="tab-pane active" id="carte">
-                        Cartesian
                         <p id="carte1">
-                            first.
+                            \begin{align*}
+                                M   &=  \iiint_V f_1(x,y,z) \,dx\,dy\,dz \\
+                                    &=  \int_{z=0}^{c}
+                                        \int_{y = 0}^{b\left[1- \left(\frac{z}{c}\right)^2\right]}
+                                        \color{red}{ \int_{x=0}^{a\left[1-\left(\frac{y}{b}\right)^2 - \left(\frac{z}{c}\right)^2\right]} }
+                                        f_1(x,y,z) \,\color{red}{dx}\,dy \,dz
+                            \end{align*}
                         </p>
                         <p id="carte2" hidden>
-                            second.
+                            \begin{align*}
+                                M   &=  \iint_{V'} f_2(y,z) \,dy\,dz \\
+                                    &=  \int_{z=0}^{c}
+                                        \color{red}{ \int_{y = 0}^{b\left[1- \left(\frac{z}{c}\right)^2\right]} }
+                                        f_2(y,z) \,\color{red}{dy} \,dz
+                            \end{align*}
                         </p>
                         <p id="carte3" hidden>
-                            third.
+                            \begin{align*}
+                                M   &=  \int_{V''} f_3(z) \,dz \\
+                                    &=  \color{red}{ \int_{z=0}^{c} }
+                                        f_3(z) \,\color{red}{dz}
+                            \end{align*}
                         </p>
                     </div>
 
                     <div class="tab-pane" id="cylin">
-                        Cylindrical
                         <p id="cylin1">
-                            first.
+                            \begin{align*}
+                                M   &=  \iiint_V f(\rho,\phi,z) \rho \,d\rho\,d\phi\,dz \\
+                                    &=  \int_{z=0}^{c}
+                                        \int_{\phi=0}^{\frac{\pi}{2}}
+                                        \color{red}{ \int_{\rho=0}^{ab\sqrt{\frac{1 - \left(\frac{z}{c}\right)^2}{\left(bcos(\phi)\right)^2 + \left(asin(\phi)\right)^2}}} }
+                                        f_1(\rho,\phi,z) \,\color{red}{d\rho}\,d\phi \,dz
+                            \end{align*}
+                            Note: \( \rho f \equiv f_1 \)
                         </p>
                         <p id="cylin2" hidden>
-                            second.
+                            \begin{align*}
+                                M   &=  \iint_{V'} f_2(\phi,z) \,d\phi\,dz \\
+                                    &=  \int_{z=0}^{c}
+                                        \color{red}{ \int_{\phi=0}^{\frac{\pi}{2}} }
+                                        f_2(\phi,z) \,\color{red}{d\phi} \,dz
+                            \end{align*}
                         </p>
                         <p id="cylin3" hidden>
-                            third.
+                            \begin{align*}
+                                M   &=  \int_{V''} f_3(z) \,dz \\
+                                    &=  \color{red}{ \int_{z=0}^{c} }
+                                        f_3(z) \,\color{red}{dz}
+                            \end{align*}
                         </p>
                     </div>
 
                     <div class="tab-pane" id="spher">
-                        Spherical
                         <p id="spher1">
-                            first.
+                            \begin{align*}
+                                M   &=  \iiint_V f(\rho,\phi,\theta) \rho^2 sin(\theta) \,d\rho\,d\phi\,d\theta \\
+                                    &=  \int_{\theta=\frac{\pi}{2}}^{0}
+                                        \int_{\phi=0}^{\frac{\pi}{2}}
+                                        \color{red}{ \int_{\rho=0}^{ \sqrt{\left[ a^2\cos^2{(\phi)} + b^2\sin^2{(\phi)} \right] \sin^2{(\theta)} + c^2\cos^2{(\theta)}} } }
+                                        f_1(\rho,\phi,\theta) \,\color{red}{d\rho}\,d\phi \,d\theta
+                            \end{align*}
+                            Note:<br>
+                                - \( \rho^2 sin(\theta) f \equiv f_1 \)<br>
+                                - If \(a = b = c \), then the first set of limit can be simplified.<br>
+                                    &nbsp&nbsp -> from \(\rho = 0\) to ( \(a\) or \(b\) or \(c\) )
                         </p>
                         <p id="spher2" hidden>
-                            second.
+                            \begin{align*}
+                                M   &=  \iint_{V'} f_2(\phi,\theta) \,d\phi\,d\theta \\
+                                    &=  \int_{\theta=\frac{\pi}{2}}^{0}
+                                        \color{red}{ \int_{\phi=0}^{\frac{\pi}{2}} }
+                                        f_2(\phi,\theta) \,\color{red}{d\phi} \,d\theta
+                            \end{align*}
                         </p>
                         <p id="spher3" hidden>
-                            third.
+                            \begin{align*}
+                                M   &=  \int_{V''} f_3(\theta) \,d\theta \\
+                                    &=  \color{red}{ \int_{\theta=\frac{\pi}{2}}^{0} }
+                                        f_3(\theta) \,\color{red}{d\theta}
+                            \end{align*}
                         </p>
                     </div>
                     <br>
-                    <input id="animate" class="button-primary" type="submit" value="Play">
-                    <input id="reset" type="button" value="Reset">
                 </div>
+                <br>
+                <input id="animate" class="button-primary" type="submit" value="Play" style="position:absolute; left:43vw; top:73vh;">
+                <input id="reset" type="button" value="Reset" style="position:absolute; left:35vw; top:73vh;">
             </div>
         </div>
     </div>
