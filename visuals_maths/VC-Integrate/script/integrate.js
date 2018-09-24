@@ -11,9 +11,9 @@ var layout = {
             center: {x: 0, y: 0, z: -0.15}
         },
         aspectratio: {x:1, y:1, z:1},
-        xaxis: {range: [-1, 11], autorange: false, zeroline: true,},
-        yaxis: {range: [-1, 11], autorange: false, zeroline: true,},
-        zaxis: {range: [-1, 11], autorange: false, zeroline: true,},
+        xaxis: {range: [-1, 11], autorange: false, zeroline: true, showline: false, showticklabels: true},
+        yaxis: {range: [-1, 11], autorange: false, zeroline: true, showline: false, showticklabels: true},
+        zaxis: {range: [-1, 11], autorange: false, zeroline: true, showline: false, showticklabels: true},
     }
 }
 var stops;
@@ -540,6 +540,6 @@ function main() {
     });
 
     initPlot();
-    initGuidance();
+    initGuidance(["graph", "coor", "equations", "buttons", "slider"]);
 }
 $(document).ready(main);

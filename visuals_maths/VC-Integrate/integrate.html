@@ -21,15 +21,24 @@
         <button class="backBtn">◀ Back</button> <button class="nextBtn">Next ▶</button>
         <div class="modalContent">
             <p id="modal_0">
-                This is the guidance for the #name visualisation.
+                This is the guidance for the Plane Intersection visualisation.
             </p>
             <p id="modal_1" hidden>
-                This is modal 1.
+                This is the graph where the animation plays out.
             </p>
             <p id="modal_2" hidden>
-                This is modal 2.
+                Choose the coordinate system to integrate in.
             </p>
             <p id="modal_3" hidden>
+                This display shows the integrands step by step with their limits.
+            </p>
+            <p id="modal_4" hidden>
+                Play/Reset the animation.
+            </p>
+            <p id="modal_5" hidden>
+                This slider controls the frames of the animation.
+            </p>
+            <p id="modal_6" hidden>
                 Have fun!
             </p>
         </div>
@@ -38,27 +47,31 @@
     <div class="container">
         <div class="row">
             <div class="six columns">
-                <h1>3D Integration</h1>
+                <br><br><br>
                 <div id="graph" style="width:450px; height:450px;"></div>
-
-                <label class="sliderTitle">Frame #:
-                    <span id="animateSliderDisplay" data-unit="">1</span>
-                </label>
-                <label class="slider">
-                    <input id="animateSlider" class="inputs" type="range" value="0" min="0" max="24" step="1"/>
-                </label>
+                <div id="slider">
+                    <label class="sliderTitle">Frame #:
+                        <span id="animateSliderDisplay" data-unit="">1</span>
+                    </label>
+                    <label class="slider">
+                        <input id="animateSlider" class="inputs" type="range" value="0" min="0" max="24" step="1"/>
+                    </label>
+                </div>
             </div>
 
             <div class="six columns">
                 <br>
-                <ul class="tab-nav">
-                    <li><a class="button active" href="#carte">Cartesian</a></li>
-                    <li><a class="button" href="#cylin">Cylindrical</a></li>
-                    <li><a class="button" href="#spher">Spherical</a></li>
-                </ul>
+                <div id="coor">
+                    <ul class="tab-nav">
+                        <li><a class="button active" href="#carte">Cartesian</a></li>
+                        <li><a class="button" href="#cylin">Cylindrical</a></li>
+                        <li><a class="button" href="#spher">Spherical</a></li>
+                    </ul>
+                </div>
 
-                <div class="tab-content">
-                    The mass of the Quarter-Hemisphere is given by:
+                <div id="equations" class="tab-content" style="height:70vh">
+                    <br>
+                    The mass of the Quarter-Hemisphere is given by: <br><br>
                     <div class="tab-pane active" id="carte">
                         <p id="carte1">
                             \begin{align*}
@@ -95,7 +108,8 @@
                                         \color{red}{ \int_{\rho=0}^{ab\sqrt{\frac{1 - \left(\frac{z}{c}\right)^2}{\left(bcos(\phi)\right)^2 + \left(asin(\phi)\right)^2}}} }
                                         f_1(\rho,\phi,z) \,\color{red}{d\rho}\,d\phi \,dz
                             \end{align*}
-                            Note: \( \rho f \equiv f_1 \)
+                            Note:<br>
+                                - \( \rho f(\rho,\phi,z) \equiv f_1(\rho,\phi,z) \)
                         </p>
                         <p id="cylin2" hidden>
                             \begin{align*}
@@ -124,7 +138,7 @@
                                         f_1(\rho,\phi,\theta) \,\color{red}{d\rho}\,d\phi \,d\theta
                             \end{align*}
                             Note:<br>
-                                - \( \rho^2 sin(\theta) f \equiv f_1 \)<br>
+                                - \( \rho^2 sin(\theta) f(\rho,\phi,\theta) \equiv f_1(\rho,\phi,\theta) \)<br>
                                 - If \(a = b = c \), then the first set of limit can be simplified.<br>
                                     &nbsp&nbsp -> from \(\rho = 0\) to ( \(a\) or \(b\) or \(c\) )
                         </p>
@@ -147,8 +161,11 @@
                     <br>
                 </div>
                 <br>
-                <input id="animate" class="button-primary" type="submit" value="Play" style="position:absolute; left:43vw; top:73vh;">
-                <input id="reset" type="button" value="Reset" style="position:absolute; left:35vw; top:73vh;">
+                <div id="buttons">
+                    <input id="animate" class="button-primary" type="submit" value="Play" style="position:absolute; left:45vw; top:73vh;">
+                    <input id="reset" type="button" value="Reset" style="position:absolute; left:37vw; top:73vh;">
+                </div>
+
             </div>
         </div>
     </div>
