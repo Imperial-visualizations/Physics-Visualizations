@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Divergence</title>
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <link rel="stylesheet" href="../util/navigation.css">
+    <link rel="stylesheet" href="../styles/guidance.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+    <!-- Guidance -->
+    <div class="guide">
+        Instructions for use
+    </div>
+    <div class="guideModal">
+        <div class="guideTest"></div>
+        <button class="backBtn">◀ Back</button> <button class="nextBtn">Next ▶</button>
+        <div class="modalContent">
+            <p id="modal_0">
+                This is the guidance for the Divergence visualisation.
+            </p>
+            <p id="modal_1" hidden>
+                The initial graph shows an object sitting in a vector field with flux coming out from each side.
+            </p>
+            <p id="modal_2" hidden>
+                Click on the "Play" button to start the animation.
+            </p>
+            <p id="modal_3" hidden>
+                The initial object can be sliced into small volume elements, with each of them having flux coming out from each side.
+            </p>
+            <p id="modal_4" hidden>
+                After the animation stops playing, click on the "Continue" button to continue play.
+            </p>
+            <p id="modal_5" hidden>
+                The process will be reversed. By adding a small volume element that contains a source each time, the flux flowing through the adjacent sides of two neighbour elements will cancel each other.
+                Keep playing you will see the overall outcome of piling up all the volume elements will be the flux coming out of the entire surface.
+            </p>
+            <p id="modal_6" hidden>
+                The slider controls the frames of the animation, you can play with it to see each frame.
+            </p>
+            <p id="modal_7" hidden>
+                You can zoom in the graph by turning your mouse wheel, and you can also view the graph from different viewpoints by click on the graph and rotate it with your mouse.
+            </p>
+            <p id="modal_8" hidden>
+                More details are shown here.
+            </p>
+            <p id="modal_9" hidden>
+                Have fun!
+            </p>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <h1>Divergence</h1>
+        <div class="row">
+            <!-- Graph -->
+            <div class="six columns">
+                <div id="graph" style="width:450px; height:450px;"></div>
+            </div>
+
+            <div class="six columns">
+                <!-- text content -->
+                <div id = "text">
+                    <p>
+                        The divergence of a vector field \(\mathbf{A}\) is:
+                        \[
+                            \text{divergence}\,\mathbf{A} = \nabla \cdot \mathbf{A}
+                        \]
+                        It describes the strength of the source or sink for a given point.
+                        <br>
+                        The Divergence Theorem states that the divergence of a vector field inside a region is equal to the
+                        flux of the vector field flowing through the region. Suppose \(V\) is the volume bounded by region \(S\).
+                        If \(\mathbf{A}\) is a continuously differentiable vector field defined on a neighborhood of \(v\), we have:
+                        \[
+                            \iiint_V (\nabla \cdot \mathbf{A})\ dV = \bigcirc \!\!\!\!\!\!\!\!\!\iint_S (\mathbf{A} \cdot \mathbf{\hat{n}})\ dS
+                        \]
+                        Where \(\mathbf{\hat{n}}\) is the out pointing normal of the surface element \(dS\).
+                        <br>
+                        A simple demonstration is shown in the animation on the left hand side. Each unit volume element \(dV\) can be considered
+                        as a small cube containing a source, with flux coming out on each side of the cube. When placing two
+                        neighbouring volume elements together, the flux flowing through the adjacent sides will cancel each other. Hence
+                        the overall outcome of piling up all the volume elements will be the flux coming out of the entire surface. Since the volume elements
+                        are small enough to be considered as a point source, this total flux is therefore equal to the vector sum of the total strength of each source,
+                        which is the total divergence.
+                    </p>
+                </div>
+                <!-- animation button -->
+                <div id="ani">
+                    <input id="animate" class="button-primary" type="submit" value="Play">
+                </div>
+                <!-- slider -->
+                <div id="sli">
+                    <label class="sliderTitle">Frame #:
+                        <span id="animateSliderDisplay" data-unit="">1</span>
+                    </label>
+                    <label class="slider">
+                        <input id="animateSlider" class="inputs" type="range" value="0" min="0" max="177" step="1"/>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../util/guidance.js"></script>
+    <script>
+        let pages=[" Divergence.html"," Curl.html"," Circulation.html", " GreenTheorem.html", " GeneralizedGreenTheorem.html", " StokeTheorem.html"];
+    </script>
+    <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+    <script src=script/ani.js></script>
+    <script src=script/hanObj.js></script>
+    <script src=script/divergence.js></script>
+
+</body>
+
+</html>

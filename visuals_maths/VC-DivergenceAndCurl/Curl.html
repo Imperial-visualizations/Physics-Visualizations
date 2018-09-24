@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Curl</title>
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <link rel="stylesheet" href="../util/navigation.css">
+    <link rel="stylesheet" href="../styles/guidance.css">
+    <!--Required JS resources--> <!--NB: better to have resources before the main body but still works even if they are not-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+    <!-- Guidance -->
+    <div class="guide">
+        Instructions for use
+    </div>
+    <div class="guideModal">
+        <div class="guideTest"></div>
+        <button class="backBtn">◀ Back</button> <button class="nextBtn">Next ▶</button>
+        <div class="modalContent">
+            <p id="modal_0">
+                This is the guidance for the Circulation visualisation.
+            </p>
+            <p id="modal_1" hidden>
+                The graph shows two vector fields pointing to the opposite direction. By putting your mouse anywhere on the graph,
+                you can see the rotation of the paddle wheel under the effect of the vector field.
+            </p>
+            <p id="modal_2" hidden>
+                More details are shown here.
+            </p>
+            <p id="modal_3" hidden>
+                Have fun!
+            </p>
+        </div>
+    </div>
+
+
+
+    <div class="container">
+        <h1>Curl</h1>
+        <div class="row">
+            <!-- Graph -->
+            <div class="five columns">
+                <div id="graph" style="width:450px; height:450px;"></div>
+            </div>
+
+            <!-- text content -->
+            <div class="seven columns">
+                <div id="curl">
+                    <p>
+                        The curl of a vector field, \(\mathbf{A}\) is:
+                        \[
+                            \text{curl}\,\mathbf{A} = \nabla \times \mathbf{A}
+                        \]
+                        <b>N.B.</b> The curl can be thought of as a measure of "spinning per unit area".
+                        <br>
+                        Consider a 2D field \(\mathbf{A} = (P,Q,0) \), we have the following definition:
+                        \[
+                            \iint_D (\nabla \times \mathbf{A}) \cdot \mathbf{\hat{k}} \, dS = \iint_D \Big( \frac{\partial Q}{\partial x}
+                                (x,\,y)-\frac{\partial P}{\partial y}(x,\,y) \Big) \, dxdy
+                        \]
+                        This is known as <b>microscopic circulation</b>.
+                        <br>
+                        The graph on the left hand side shows the spin of a small paddle wheel in two vector fields pointing in opposite directions.
+                        The speed and the direction of its spin depends on the strength and direction of the field where it is placed.
+                        <br>
+                        <b>N.B.</b> Within the integrand, \( \mathbf{\hat{k}}\) is the normal vector for the vector field
+                        and its direction is determined by the orientation of the closed curve, \(C\).
+                        Commonly known as the <b>right hand rule</b>. A pictoral representation is shown below:
+                    <
+                    </p>
+                    <!-- image -->
+                    <center><img src=asset/rhr_thumb.png width=250 height=230></center>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../util/guidance.js"></script>
+    <script>
+        let pages=[" Divergence.html"," Curl.html"," Circulation.html", " GreenTheorem.html", " GeneralizedGreenTheorem.html", " StokeTheorem.html"];
+    </script>
+    <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+    <script src=script/p5.min.js></script>
+    <script src=script/curl.js></script>
+
+</body>
+</html>

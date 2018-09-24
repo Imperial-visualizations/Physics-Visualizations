@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Circulation</title>
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <link rel="stylesheet" href="../util/navigation.css">
+    <link rel="stylesheet" href="../styles/guidance.css">
+    <!--Required JS resources--> <!--NB: better to have resources before the main body but still works even if they are not-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+    <!-- Guidance -->
+    <div class="guide">
+        Instructions for use
+    </div>
+    <div class="guideModal">
+        <div class="guideTest"></div>
+        <button class="backBtn">◀ Back</button> <button class="nextBtn">Next ▶</button>
+        <div class="modalContent">
+            <p id="modal_0">
+                This is the guidance for the Circulation visualisation.
+            </p>
+            <p id="modal_1" hidden>
+                The graph for circulation is shown here.
+            </p>
+            <p id="modal_2" hidden>
+                More details are shown here.
+            </p>
+            <p id="modal_3" hidden>
+                Have fun!
+            </p>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <h1>Circulation</h1>
+        <div class="row">
+            <!-- Graph -->
+            <div class="five columns">
+                <div id="graph" style="width:450px; height:450px;"></div>
+            </div>
+            <!-- text content -->
+            <div class="seven columns">
+                <div id="text">
+                    <p>
+                        Consider an arbitrary curve, \(C\),
+                        <ul>
+                            <li>Simple, piecewise-smooth and Closed,</li>
+                            <li>Positive (Anti-Clockwise) Orientation,</li>
+                            <li>\(D\) is an area enclosed by the curve, \(C\).</li>
+                        </ul>
+                        Then, for a vector field, \(\mathbf{A}\), the circulation, \(\Gamma\) is defined to be the line integral,
+                        \[
+                            \Gamma = \oint_C \mathbf{A} \cdot \, d\mathbf{r}.
+                        \]
+                        Therefore, for
+                        \(
+                            \mathbf{A} = P(x,\,y)\mathbf{\hat{i}} + Q(x,\,y)\mathbf{\hat{j}},
+                        \)
+                        the circulation, \(\Gamma\), is
+                        \[
+                            \Gamma = \oint_C P(x,\;y(x))\;dx + Q(x(y),\;y)\;dy,
+                        \]
+                        where \(d\mathbf{r}=dx\mathbf{\hat{i}} + dy\mathbf{\hat{j}}\).<br>
+
+                        <b>N.B.</b> When integrating \(P\) and \(Q\), remember to convert \(P\) as a function of \(x\) <b>only</b>
+                                and \(Q\) as a function of \(y\) <b>only</b>. <br>
+                                Circulation is a measure of how much the vector
+                                field is "spinning" overall, it is called the <b>macroscopic circulation</b>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../util/guidance.js"></script>
+    <script>
+        let pages=[" Divergence.html"," Curl.html"," Circulation.html", " GreenTheorem.html", " GeneralizedGreenTheorem.html", " StokeTheorem.html"];
+    </script>
+    <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js">
+    </script><script src=../util/objects.js></script>
+    <script src=script/circulation.js></script>
+</body>
+
+</html>

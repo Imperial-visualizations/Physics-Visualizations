@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Generalized Green's Theorem</title>
+     <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <link rel="stylesheet" href="../util/navigation.css">
+    <link rel="stylesheet" href="../styles/guidance.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+    <!-- Guidance -->
+    <div class="guide">
+        Instructions for use
+    </div>
+    <div class="guideModal">
+        <div class="guideTest"></div>
+        <button class="backBtn">◀ Back</button> <button class="nextBtn">Next ▶</button>
+        <div class="modalContent">
+            <p id="modal_0">
+                This is the guidance for the Green Theorem visualisation.
+            </p>
+            <p id="modal_1" hidden>
+                The graph shows a 2D arbitrary surface bounded by an anticlockwise oriented loop.
+            </p>
+            <p id="modal_2" hidden>
+                By click on the "Play" button, the surface will be sliced into several smaller pieces, each bounded by an anticlockwise oriented loop.
+                The inner arrows will cancel with each other. And hence the sole effect of piling up the microscopic circulations will be the macroscopic circulation.
+            </p>
+            <p id="modal_3" hidden>
+                More details are shown here.
+            </p>
+            <p id="modal_4" hidden>
+                Have fun!
+            </p>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <h1>Curl</h1>
+        <div class="row">
+            <!-- Graph -->
+            <div class="six columns">
+                <div id="graph" style="width:450px; height:450px;"></div>
+            </div>
+
+            <!-- text content -->
+            <div class="six columns">
+                <div id="green">
+                    <p>
+                        Similarly, any arbitrary shape can be cut in to small pieces, with microscopic circulation existing on each of them.
+                        <br><br>
+                        From the animation on the right hand side, every arrows inside the grid will cancel with an arrow with opposite
+                        direction. In other words, all the <span style="color:#FF00FF"><b>magenta</b></span> arrows will
+                        cancel each other and we are left with <span style="color:#000000"><b>black</b></span> arrows.
+                        <br><br>
+                        This again demonstrates the relationship between the microscopic circulation and the macroscopic circulation. Therefore Green's theorem can
+                        be apply on any positively oriented, piecewise smooth, simple closed arbitrary curves.
+                    </p>
+                </div>
+                <!-- animation button -->
+                <div id="ani">
+                    <input id="animate" class="button-primary" type="submit" value="Play">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../util/guidance.js"></script>
+    <script>
+        let pages=[" Divergence.html"," Curl.html"," Circulation.html", " GreenTheorem.html", " GeneralizedGreenTheorem.html", " StokeTheorem.html"];
+    </script>
+    <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+    <script src=script/ani.js></script>
+    <script src=../util/objects.js></script>
+    <script src=script/generalized_green_theorem.js></script>
+</body>
+
+</html>
