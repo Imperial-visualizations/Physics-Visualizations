@@ -345,16 +345,16 @@ function spherVolume2(
         zeroes.push(0, 0);
     }
 
-    var zTemp1 = verticesZ.slice(), zTemp2 = verticesZ.slice();
-    zTemp2.reverse();
+    var zTemp1 = verticesZ.slice(), zTemp2 = [0];
     var zTemp = zTemp2.concat(zTemp1);
+    zTemp.push(0);
+
     var xTemp = zeroes.slice(), yTemp = zeroes.slice();
-    console.log(x, y);
+
     for (var i=0; i < zLength; ++i){
         xTemp[i + 1] = x[i][0];
         yTemp[i + 1] = y[i][meshSize - 1];
     }
-    console.log(zLength, zTemp, yTemp);
     data.push({// x = 0 plane
         type: "scatter3d",
         mode: "lines",
