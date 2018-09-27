@@ -1,5 +1,18 @@
-{% extends 'vis_layout.html'%}
-{% block content %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+	<meta charset="utf-8">
+	<title>Diatomic Molecule</title>
+	<link rel="stylesheet" href="css/skeleton.css" />
+	<link rel="stylesheet" href="css/visualisation.css" />
+	<link rel="stylesheet" href="css/diatomic.css" />
+</head>
+
+<body>
+	<nav>
+Diatomic Molecule
+</nav>
 <div id='spinner'>
       <span class="loading-message">Loading</span>
       <div>
@@ -59,4 +72,13 @@
 			</div>
 		</div>
 	</div>
-{% endblock %}
+	<script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
+	<script type="text/javascript" src="./scripts/navigation.js"></script>
+	<script type="text/javascript" src="./scripts/graphics.js"></script>
+
+
+</body>
+
+</html>
