@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+    <!--Page Info-->
+    <title>similarity transform</title>
+    <!--css link-->
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
+    <!--Required JS resources--> <!--NB: better to have resources before the main body but still works even if they are not-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="six columns">
+                <h1>similarity transformation</h1>
+                <div id="graph" style="width:450px; height:450px;"></div>
+
+            </div>
+
+            <div class = "three columns">
+                <br>
+
+                <div class="tab-content">
+                    <label>x1:
+                        <input id = "x1Input" type="box" value = "1">
+                        <p id= "xoInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>y1:
+                        <input id = "y1Input" type="box" value = "0">
+                        <p id= "yoInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>z1:
+                        <input id = "z1Input" type="box" value = "0">
+                        <p id= "zoInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>x2:
+                        <input id = "x2Input" type="box" value = "0">
+                        <p id= "xInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>y2:
+                        <input id = "y2Input" type="box" value = "1">
+                        <p id= "yInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>z2:
+                        <input id = "z2Input" type="box" value = "0">
+                        <p id= "zInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>x3:
+                        <input id = "x3Input" type="box" value = "0">
+                        <p id= "xInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>y3:
+                        <input id = "y3Input" type="box" value = "0">
+                        <p id= "yInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>z3:
+                        <input id = "z3Input" type="box" value = "1">
+                        <p id= "zInputError" style="color:#ff0000" hidden></p>
+                    </label>
+
+
+
+                    <br>
+                    <input id="animate" class="button-primary" type="submit" value="Play">
+                </div>
+            </div>
+
+            <div class = "three columns">
+                <br>
+
+                <div class="tab-content">
+                    <label>X1:
+                        <input id = "X1Input" type="box" value = "4">
+                        <p id= "xoInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>Y1:
+                        <input id = "Y1Input" type="box" value = "1">
+                        <p id= "yoInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>Z1:
+                        <input id = "Z1Input" type="box" value = "3">
+                        <p id= "zoInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>X2:
+                        <input id = "X2Input" type="box" value = "2">
+                        <p id= "xInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>Y2:
+                        <input id = "Y2Input" type="box" value = "2">
+                        <p id= "yInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>Z2:
+                        <input id = "Z2Input" type="box" value = "1">
+                        <p id= "zInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>X3:
+                        <input id = "X3Input" type="box" value = "5">
+                        <p id= "xInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>Y3:
+                        <input id = "Y3Input" type="box" value = "2">
+                        <p id= "yInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                    <label>Z3:
+                        <input id = "Z3Input" type="box" value = "2">
+                        <p id= "zInputError" style="color:#ff0000" hidden></p>
+                    </label>
+
+
+                    <br>
+                    <input id="reset" type="button" value="Apply">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src=script/ani.js></script>
+    <script src=script/han1.js></script>
+    <script src=script/simi.js></script>
+</body>
+</html>
