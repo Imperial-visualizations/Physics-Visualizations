@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <title>Centrifugal Force</title>
     <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
@@ -13,55 +14,60 @@
     <style> body {padding: 5px; margin: 5px;} </style>
 
 
-  </head>
+</head>
 
-  <div>
-    <div id='spinner'>
-    <span class="loading-message">Loading</span>
+<body>
     <div>
-        <div class="spinner-mask"></div>
-        <div id="spinner-bar"></div>
-        <div class="spinner-mask"></div>
-    </div>
-  </div>
+        <div id='spinner'>
+            <span class="loading-message">Loading</span>
+            <div>
+                <div class="spinner-mask"></div>
+                <div id="spinner-bar"></div>
+                <div class="spinner-mask"></div>
+            </div>
+        </div>
 
-  <div class="container" style="padding-top: 100px;>
-    <div class="row">
-      <div class="seven columns" style="position:sticky;top: 50px;" id="animation">
-        <div id="spin"></div>
-      </div>
-      <div class="five columns">
-        <p class="padding5">The Centrifugal Force (given by \(-m\boldsymbol{\omega} \times (\boldsymbol{\omega} \times \mathbf{r}\))) is another of the inertial forces.
-           This force <span class="emphasis">always points out away from the Earth </span> and so acts as a correction to gravity.
-        </p>
-        <p class="padding5">
-         It does not cause any deviations in the plane of the Earth's surface, but is accounted for by a slightly changed value of g which changes the shape of the Earth to an oblate spheroid (squashed orange).
-        </p>
-        <p class="padding5">
-          At our rotation speed, there is a difference a difference in diameter of \(22km\) between the poles and the equator. Use this animation to visualise how a slightly higher \(\boldsymbol{\omega}\) would change the Earth.
-        </p>
-        <p style="padding-top: 60px">
-          <span class="boldNormal">Slider</span>: This controls \( \boldsymbol{\omega} \) which ranges between 0 and 0.8. <br/>
-          <span class="boldNormal">Show Original</span>: Hover your mouse over this button to show the sphere that would be there if there was no rotation.
-        </p>
-      </div>
+        <div class="container" style="padding-top: 100px" ;>
+            <div class="row">
+                <div class="seven columns" style="position:sticky;top: 50px;" id="animation">
+                    <div id="spin"></div>
+                </div>
+                <div class="five columns">
+                    <p class="padding5">The Centrifugal Force (given by \(-m\boldsymbol{\omega} \times (\boldsymbol{\omega} \times \mathbf{r}\))) is another of the inertial forces.
+                        This force <span class="emphasis">always points out away from the Earth </span> and so acts as a correction to gravity.
+                    </p>
+                    <p class="padding5">
+                        It does not cause any deviations in the plane of the Earth's surface, but is accounted for by a slightly changed value of g which changes the shape of the Earth to an oblate spheroid (squashed orange).
+                    </p>
+                    <p class="padding5">
+                        At our rotation speed, there is a difference a difference in diameter of \(22km\) between the poles and the equator. Use this animation to visualise how a slightly higher \(\boldsymbol{\omega}\) would change the Earth.
+                    </p>
+                    <p style="padding-top: 60px">
+                        <span class="boldNormal">Slider</span>: This controls \( \boldsymbol{\omega} \) which ranges between 0 and 0.8. <br />
+                        <span class="boldNormal">Show Original</span>: Hover your mouse over this button to show the sphere that would be there if there was no rotation.
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
-  <script language = 'javascript' type = 'text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.min.js"></script>
-  <script>
-      let pages = ["1Derivation.html", "1Euler Force.html", "1Centrifugal Force.html"]
-  </script>
-  <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
-  <script src="scripts/EarthFlattening.js"></script>
-  <script>
-    // Causes the main body of the page to hide until everything is loaded and then hides spinner and shows content
-    $('.container').hide();
+    </body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
+        <script language='javascript' type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.min.js"></script>
+        <script>
+            let pages = ["1Derivation.html", "1Euler Force.html", "1Centrifugal Force.html"]
 
-    $(window).on('load', setTimeout(function() {
-        $('#spinner').hide();
-        $('.container').show();
-    }, 1500))
-  </script>
-  </body>
+        </script>
+        <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+        <script src="scripts/EarthFlattening.js"></script>
+        <script>
+            // Causes the main body of the page to hide until everything is loaded and then hides spinner and shows content
+            $('.container').hide();
+
+            $(window).on('load', setTimeout(function() {
+                $('#spinner').hide();
+                $('.container').show();
+            }, 1500))
+
+        </script>
+
 </html>
