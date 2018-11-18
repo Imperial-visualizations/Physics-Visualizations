@@ -1,6 +1,5 @@
 $(window).on('load',function() {
 
-    //initializing variables
     let p1, p2, p3;
     let t = 0;
     let r = 12.5;
@@ -139,10 +138,10 @@ $(window).on('load',function() {
     }
 
     function play() { // function that makes a plot of the gyroscope that changes every time it is called (because parameters are t dependent and the variable t is changed every loop)
-        let azimuth = t**1.24*(3.14159265359 / 180) * 14.4;
+        let azimuth = t*(3.14159265359 / 180) * 24;
         let theta = parseFloat($("input#theta").val());//converts slider value into float, converts that into a decimal and then back into a float to be added;//parsefloat converts string into number but rounds also..
-        theta += (3.14159265359 / 6000)*(t*1.01); //num.toFixed function is used otherwise parsefloat rounds the value up
-        let phi = -0.012*t**2 + 15*t ; //doesn't seem to be changing whenever i change the power of i????
+        //theta += (3.14159265359 / 6000)*(t*1.01); //num.toFixed function is used otherwise parsefloat rounds the value up
+        let phi = 15*t; // -0.012*t**2; ; //doesn't seem to be changing whenever i change the power of i????
         let costheta = Math.cos(theta);
         let sintheta = Math.sin(theta);
         let cosphi = Math.cos(phi);
@@ -193,17 +192,16 @@ $(window).on('load',function() {
                     }
                 }
             )
-        } else {
-        }
-        if (t < 60)
-        {t += 1/3;} //tells the azimuthal and polar angles to keep changing in the for loop
+        };
+
+        //if (t < 60)
+        t += 1/3; //tells the azimuthal and polar angles to keep changing in the for loop
             // }
-        else{
-            $("input#theta").val(0);
-            t=0; //when the time variable reaches a certain value, then it starts again
+        //else{
+         //   $("input#theta").val(0);
+          //  t=0; //when the time variable reaches a certain value, then it starts again
         }
-      return t
-    }
+      return t ;
 
     function calc() {// generates the positions of the points which are passed into the handle_slider function to be plotted
         let theta = parseFloat($("input#theta").val());
@@ -265,3 +263,40 @@ $(window).on('load',function() {
 
 
 });
+/*
+
+        if (frictiontoggle === true) {
+            if (t < 60) {
+                t += 1/3;
+                console.log("wtf")
+            }
+            else {
+                $("input#theta").val(0);
+                t = 0; //when the time variable reaches a certain value, then it starts again
+            }
+        }
+        else {
+            t += 1 / 3
+        }
+
+
+    $("button#FrictionToggleButton").on('click', frictiontoggler);
+
+
+
+    function frictiontoggler() {
+        if (frictiontoggle === true) {
+            $("#FrictionToggleButton").html("Friction on");
+            console.log("frictionon");
+            frictiontoggle = false;
+            //clearInterval(anim); //the clear interval means that it only stops at the end of the animation
+            //$("div#test").stop(true, true);
+        }
+        else {
+            $("#FrictionToggleButton").html("Friction off");
+            frictiontoggle = true;
+            //anim = setInterval(play, 10); // calls the play function every 10 milliseconds
+        }
+
+    }
+*/
