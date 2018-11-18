@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Euler Force</title>
+    <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <link rel="stylesheet" href="css/rotating-stylesheet.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+    <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+    <style> body {padding: 5px; margin: 5px;} </style>
+  </head>
+
+  <body>
+  <div id='spinner'>
+    <span class="loading-message">Loading</span>
+    <div>
+        <div class="spinner-mask"></div>
+        <div id="spinner-bar"></div>
+        <div class="spinner-mask"></div>
+    </div>
+  </div>
+
+  <div class="container pad-top">
+    <div class="row">
+        <div class="six columns" style="padding-top:100px">
+            <div class="diagram-container" style="position:sticky;top: 50px;" id="animation">
+            <!--SVG element, allows seperate arrows to be controlled using JQuery-->
+            <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+            <svg
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
+               xmlns:cc="http://creativecommons.org/ns#"
+               xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:svg="http://www.w3.org/2000/svg"
+               xmlns="http://www.w3.org/2000/svg"
+               xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+               xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+               id="svg51"
+               version="1.1"
+               viewBox="0 0 210 297"
+               height="297mm"
+               width="210mm"
+               sodipodi:docname="Euler_force.svg"
+               inkscape:version="0.92.3 (2405546, 2018-03-11)">
+              <sodipodi:namedview
+                 pagecolor="#ffffff"
+                 bordercolor="#666666"
+                 borderopacity="1"
+                 objecttolerance="10"
+                 gridtolerance="10"
+                 guidetolerance="10"
+                 inkscape:pageopacity="0"
+                 inkscape:pageshadow="2"
+                 inkscape:window-width="1920"
+                 inkscape:window-height="1051"
+                 id="namedview130"
+                 showgrid="false"
+                 inkscape:zoom="1"
+                 inkscape:cx="140.7433"
+                 inkscape:cy="761.32805"
+                 inkscape:window-x="-9"
+                 inkscape:window-y="-9"
+                 inkscape:window-maximized="1"
+                 inkscape:current-layer="svg51" />
+              <defs
+                 id="defs45">
+                <marker
+                   inkscape:stockid="Arrow2Mend"
+                   orient="auto"
+                   refY="0.0"
+                   refX="0.0"
+                   id="marker2108"
+                   style="overflow:visible;"
+                   inkscape:isstock="true">
+                  <path
+                     id="path2106"
+                     style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#000000;stroke-opacity:1;fill:#000000;fill-opacity:1"
+                     d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+                     transform="scale(0.6) rotate(180) translate(0,0)" />
+                </marker>
+                <marker
+                   inkscape:stockid="Arrow2Lend"
+                   orient="auto"
+                   refY="0.0"
+                   refX="0.0"
+                   id="marker1486"
+                   style="overflow:visible;"
+                   inkscape:isstock="true">
+                  <path
+                     id="path1484"
+                     style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#000000;stroke-opacity:1;fill:#000000;fill-opacity:1"
+                     d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+                     transform="scale(1.1) rotate(180) translate(1,0)" />
+                </marker>
+                <inkscape:path-effect
+                   effect="bspline"
+                   id="path-effect1470"
+                   is_visible="true"
+                   weight="33.333333"
+                   steps="2"
+                   helper_size="0"
+                   apply_no_weight="true"
+                   apply_with_weight="true"
+                   only_selected="false" />
+                <marker
+                   inkscape:stockid="Arrow2Mend"
+                   orient="auto"
+                   refY="0.0"
+                   refX="0.0"
+                   id="Arrow2Mend"
+                   style="overflow:visible;"
+                   inkscape:isstock="true">
+                  <path
+                     id="path1059"
+                     style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#000000;stroke-opacity:1;fill:#000000;fill-opacity:1"
+                     d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+                     transform="scale(0.6) rotate(180) translate(0,0)" />
+                </marker>
+                <marker
+                   inkscape:stockid="Arrow2Lend"
+                   orient="auto"
+                   refY="0.0"
+                   refX="0.0"
+                   id="Arrow2Lend"
+                   style="overflow:visible;"
+                   inkscape:isstock="true">
+                  <path
+                     id="path1053"
+                     style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#000000;stroke-opacity:1;fill:#000000;fill-opacity:1"
+                     d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+                     transform="scale(1.1) rotate(180) translate(1,0)" />
+                </marker>
+                <marker
+                   inkscape:stockid="Arrow1Lend"
+                   orient="auto"
+                   refY="0.0"
+                   refX="0.0"
+                   id="Arrow1Lend"
+                   style="overflow:visible;"
+                   inkscape:isstock="true">
+                  <path
+                     id="path1035"
+                     d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+                     style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+                     transform="scale(0.8) rotate(180) translate(12.5,0)" />
+                </marker>
+                <marker
+                   inkscape:isstock="true"
+                   style="overflow:visible"
+                   id="marker1008"
+                   refX="0.0"
+                   refY="0.0"
+                   orient="auto"
+                   inkscape:stockid="Arrow2Lstart">
+                  <path
+                     transform="scale(1.1) translate(1,0)"
+                     d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+                     style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#000000;stroke-opacity:1;fill:#000000;fill-opacity:1"
+                     id="path1006" />
+                </marker>
+                <inkscape:path-effect
+                   effect="bspline"
+                   id="path-effect952"
+                   is_visible="true"
+                   weight="33.333333"
+                   steps="2"
+                   helper_size="0"
+                   apply_no_weight="true"
+                   apply_with_weight="true"
+                   only_selected="false" />
+                <inkscape:path-effect
+                   effect="spiro"
+                   id="path-effect948"
+                   is_visible="true" />
+                <marker
+                   inkscape:stockid="Arrow2Lstart"
+                   orient="auto"
+                   refY="0.0"
+                   refX="0.0"
+                   id="Arrow2Lstart"
+                   style="overflow:visible"
+                   inkscape:isstock="true"
+                   inkscape:collect="always">
+                  <path
+                     id="path1335"
+                     style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#000000;stroke-opacity:1;fill:#000000;fill-opacity:1"
+                     d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+                     transform="scale(1.1) translate(1,0)" />
+                </marker>
+                <marker
+                   style="overflow:visible"
+                   id="TriangleInM-0"
+                   refX="0"
+                   refY="0"
+                   orient="auto">
+                  <path
+                     transform="scale(-0.4)"
+                     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:1.00000003pt;stroke-opacity:1"
+                     d="M 5.77,0 -2.88,5 V -5 Z"
+                     id="path4669-3" />
+                </marker>
+                <marker
+                   style="overflow:visible"
+                   id="TriangleInM-5"
+                   refX="0"
+                   refY="0"
+                   orient="auto">
+                  <path
+                     transform="scale(-0.4)"
+                     style="fill:#858585;fill-opacity:0.98039216;fill-rule:evenodd;stroke:#858585;stroke-width:1.00000003pt;stroke-opacity:0.98039216"
+                     d="M 5.77,0 -2.88,5 V -5 Z"
+                     id="path4669-1" />
+                </marker>
+                <marker
+                   style="overflow:visible"
+                   id="TriangleInM"
+                   refX="0"
+                   refY="0"
+                   orient="auto">
+                  <path
+                     transform="scale(-0.4)"
+                     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+                     d="M 5.77,0 -2.88,5 V -5 Z"
+                     id="path4669" />
+                </marker>
+              </defs>
+              <metadata
+                 id="metadata48">
+                <rdf:RDF>
+                  <cc:Work
+                     rdf:about="">
+                    <dc:format>image/svg+xml</dc:format>
+                    <dc:type
+                       rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+                    <dc:title />
+                  </cc:Work>
+                </rdf:RDF>
+              </metadata>
+              <g
+                 id="layer1"
+                 transform="matrix(0.73973749,0,0,0.63834425,0.97641679,3.9821335)" />
+              <ellipse
+                 ry="35.15633"
+                 rx="74.135544"
+                 cy="98.207916"
+                 cx="79.167664"
+                 id="path1501"
+                 style="fill:#3b3b3b;fill-opacity:1;stroke:#949494;stroke-width:0.51114631;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.98431373" />
+              <rect
+                 y="90.360939"
+                 x="6.0563469"
+                 height="12.4971"
+                 width="146.33659"
+                 id="rect2313"
+                 style="fill:#3b3b3b;fill-opacity:1;stroke:none;stroke-width:1.18976462;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:2.37952949, 4.75905901;stroke-dashoffset:0;stroke-opacity:1" />
+              <ellipse
+                 ry="34.959393"
+                 rx="75.261261"
+                 cy="92.390289"
+                 cx="79.330009"
+                 id="path1499"
+                 style="fill:#464646;fill-opacity:1;stroke:#ffffff;stroke-width:0.52147859;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+              <text
+                 xml:space="preserve"
+                 style="font-style:normal;font-weight:normal;font-size:11.88987923px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.3780185;stroke-miterlimit:4;stroke-dasharray:none"
+                 x="63.689003"
+                 y="32.704063"
+                 id="text144"
+                 transform="scale(1.140685,0.87666624)"><tspan
+                   sodipodi:role="line"
+                   x="63.689003"
+                   y="32.704063"
+                   id="tspan142"
+                   style="stroke-width:1.3780185"><tspan
+                     x="63.689003"
+                     y="32.704063"
+                     style="font-size:11.6361351px;stroke-width:1.3780185;stroke-miterlimit:4;stroke-dasharray:none"
+                     id="tspan138">ω</tspan><tspan
+                     dx="0"
+                     x="73.166084"
+                     y="32.704063"
+                     style="font-size:11.6361351px;stroke-width:1.3780185;stroke-miterlimit:4;stroke-dasharray:none"
+                     id="tspan140" /></tspan></text>
+              <flowRoot
+                 style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+                 id="flowRoot7839"
+                 xml:space="preserve"
+                 transform="matrix(0.73973749,0,0,0.63834425,1.2324798,6.412752)"><flowRegion
+                   id="flowRegion7841"><rect
+                     y="48.539158"
+                     x="490.33862"
+                     height="212.41389"
+                     width="430.78333"
+                     id="rect7843" /></flowRegion><flowPara
+                   id="flowPara7845" /></flowRoot>  <g
+                 id="Coriolis_force" class="hidden"
+                 transform="matrix(0.73973749,0,0,0.63834425,0.97641679,3.9821335)">
+                <path
+                   inkscape:connector-curvature="0"
+                   id="path5667"
+                   d="m 53.776778,144.45807 c 52.655802,27.69229 0,0 0,0 z"
+                   style="fill:none;stroke:#000000;stroke-width:1.29710555;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInM)" />
+                <text
+                   transform="scale(0.954963,1.047161)"
+                   id="text158"
+                   y="132.90338"
+                   x="63.447865"
+                   style="font-style:normal;font-weight:normal;font-size:12.78448391px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.31961209"
+                   xml:space="preserve"><tspan
+                     style="stroke-width:0.31961209"
+                     id="tspan156"
+                     y="0"
+                     x="70.788956"
+                     sodipodi:role="line"><tspan
+                       style="stroke-width:0.31961209"
+                       id="tspan152"
+                       y="132.90338"
+                       x="63.447865">F</tspan><tspan
+                       id="tspan154"
+                       style="font-size:8.30991459px;baseline-shift:sub;stroke-width:0.31961209"
+                       y="132.90338"
+                       x="70.788956">C</tspan></tspan></text>
+              </g>
+              <g
+                 id="Centrifugal_force" class="hidden"
+                 transform="matrix(0.73973749,0,0,0.63834425,0.97641679,3.9821335)">
+                <path
+                   inkscape:connector-curvature="0"
+                   id="path5667-7"
+                   d="m 57.505092,177.32745 c 44.446608,-30.49535 0,0 0,0 z"
+                   style="fill:none;stroke:#858585;stroke-width:1.78220558;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.98039216;marker-start:url(#TriangleInM-5)" />
+                <text
+                   transform="scale(0.88956089,1.1241501)"
+                   id="text172"
+                   y="147.63283"
+                   x="53.727627"
+                   style="font-style:normal;font-weight:normal;font-size:11.8972559px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#838383;fill-opacity:1;stroke:none;stroke-width:0.29743138"
+                   xml:space="preserve"><tspan
+                     style="stroke-width:0.29743138"
+                     id="tspan170"
+                     y="0"
+                     x="60.559254"
+                     sodipodi:role="line"><tspan
+                       style="stroke-width:0.29743138"
+                       id="tspan166"
+                       y="147.63283"
+                       x="53.727627">F</tspan><tspan
+                       id="tspan168"
+                       style="font-size:7.73321629px;baseline-shift:sub;fill:#838383;fill-opacity:1;stroke-width:0.29743138"
+                       y="147.63283"
+                       x="60.559254">ω</tspan></tspan></text>
+              </g>
+              <g
+                 id="Euler_force" class="hidden"
+                 transform="matrix(0.73973749,0,0,0.63834425,0.97641679,3.9821335)">
+                <path
+                   inkscape:connector-curvature="0"
+                   id="path5667-1"
+                   d="m 113.58304,176.75448 c -50.564271,-27.6293 0,0 0,0 z"
+                   style="fill:none;stroke:#ffffff;stroke-width:1.31556642;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInM-0)" />
+                <text
+                   transform="scale(1.005767,0.9942661)"
+                   id="text186"
+                   y="170.61554"
+                   x="121.20207"
+                   style="font-style:normal;font-weight:normal;font-size:13.58958721px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.33973968"
+                   xml:space="preserve"><tspan
+                     style="stroke-width:0.33973968"
+                     id="tspan184"
+                     y="0"
+                     x="129.00546"
+                     sodipodi:role="line"><tspan
+                       style="stroke-width:0.33973968"
+                       id="tspan180"
+                       y="170.61554"
+                       x="121.20207">F</tspan><tspan
+                       id="tspan182"
+                       style="font-size:8.83323193px;baseline-shift:sub;fill:#ffffff;fill-opacity:1;stroke-width:0.33973968"
+                       y="170.61554"
+                       x="129.00546">E</tspan></tspan></text>
+              </g>
+              <ellipse
+                 style="fill:#e41b1b;fill-opacity:1;stroke:none;stroke-width:0.85896659;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:3.43586666, 3.43586666;stroke-dashoffset:0;stroke-opacity:0.98431373"
+                 id="path10821"
+                 cx="63.39938"
+                 cy="105.97646"
+                 rx="3.8854318"
+                 ry="2.5146518" />
+              <flowRoot
+                 xml:space="preserve"
+                 id="flowRoot322"
+                 style="font-style:normal;font-weight:normal;font-size:29.33333397px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+                 transform="matrix(0.2110628,0,0,0.21567777,0.77196787,1.9540973)"><flowRegion
+                   id="flowRegion324"
+                   style="font-size:29.33333397px"><rect
+                     id="rect326"
+                     width="358.47366"
+                     height="243.34343"
+                     x="430.43005"
+                     y="28.782553"
+                     style="font-size:29.33333397px" /></flowRegion><flowPara
+                   id="flowPara328" /></flowRoot>  <flowRoot
+                 xml:space="preserve"
+                 id="flowRoot330"
+                 style="font-style:normal;font-weight:normal;font-size:29.33333397px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+                 transform="matrix(0.79771769,0,0,0.81516008,0.77196787,1.9540973)"><flowRegion
+                   id="flowRegion332"
+                   style="font-size:29.33333397px"><rect
+                     id="rect334"
+                     width="334.92429"
+                     height="197.55299"
+                     x="435.66324"
+                     y="30.090851"
+                     style="font-size:29.33333397px" /></flowRegion><flowPara
+                   id="flowPara336" /></flowRoot>  <text
+                 xml:space="preserve"
+                 style="font-style:normal;font-weight:normal;font-size:9.40169811px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.23504245"
+                 x="92.484711"
+                 y="15.690045"
+                 id="text460"
+                 transform="scale(0.98973542,1.010371)"><tspan
+                   sodipodi:role="line"
+                   x="109.56732"
+                   y="0"
+                   id="tspan454"
+                   style="stroke-width:0.23504245"><tspan
+                     x="92.484711"
+                     y="15.690045"
+                     style="font-size:6.8274498px;stroke-width:0.23504245"
+                     id="tspan444">F</tspan><tspan
+                     x="96.405151"
+                     y="15.690045"
+                     style="font-size:6.11110353px;baseline-shift:sub;stroke-width:0.23504245"
+                     id="tspan446">ω </tspan><tspan
+                     x="101.57974"
+                     y="15.690045"
+                     style="font-size:6.8274498px;stroke-width:0.23504245"
+                     id="tspan448">= </tspan><tspan
+                     x="109.56732"
+                     y="15.690045"
+                     style="font-size:6.8274498px;stroke-width:0.23504245"
+                     id="tspan450">Centrifugal Force</tspan><tspan
+                     dx="0"
+                     x="168.0407"
+                     y="15.690045"
+                     style="font-size:6.8274498px;stroke-width:0.23504245"
+                     id="tspan452" /></tspan><tspan
+                   sodipodi:role="line"
+                   x="109.56732"
+                   y="0"
+                   id="tspan458"
+                   style="stroke-width:0.23504245"><tspan
+                     x="92.484711"
+                     y="27.442169"
+                     id="tspan456"
+                     style="stroke-width:0.23504245" /></tspan></text>
+              <flowRoot
+                 xml:space="preserve"
+                 id="flowRoot352"
+                 style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+                 transform="matrix(0.79771769,0,0,0.81516008,0.77196787,1.9540973)"><flowRegion
+                   id="flowRegion354"><rect
+                     id="rect356"
+                     width="24.857662"
+                     height="61.490005"
+                     x="775.82074"
+                     y="230.26045" /></flowRegion><flowPara
+                   id="flowPara358" /></flowRoot>  <flowRoot
+                 xml:space="preserve"
+                 id="flowRoot360"
+                 style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+                 transform="matrix(0.79771769,0,0,0.81516008,0.77196787,1.9540973)"><flowRegion
+                   id="flowRegion362"><rect
+                     id="rect364"
+                     width="121.67171"
+                     height="60.181709"
+                     x="406.88068"
+                     y="149.14597" /></flowRegion><flowPara
+                   id="flowPara366" /></flowRoot>  <flowRoot
+                 xml:space="preserve"
+                 id="flowRoot370"
+                 style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+                 transform="matrix(0.79771769,0,0,0.81516008,0.77196787,1.9540973)"><flowRegion
+                   id="flowRegion372"><rect
+                     id="rect374"
+                     width="91.580864"
+                     height="43.173836"
+                     x="433.04663"
+                     y="65.414894" /></flowRegion><flowPara
+                   id="flowPara376" /></flowRoot>  <text
+                 xml:space="preserve"
+                 style="font-style:normal;font-weight:normal;font-size:9.40169811px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.23504245"
+                 x="91.926704"
+                 y="26.023201"
+                 id="text442"
+                 transform="scale(0.98973543,1.010371)"><tspan
+                   sodipodi:role="line"
+                   x="98.950172"
+                   y="0"
+                   id="tspan436"
+                   style="stroke-width:0.23504245"><tspan
+                     x="91.926704"
+                     y="26.023201"
+                     style="font-size:6.8274498px;stroke-width:0.23504245"
+                     id="tspan428">F</tspan><tspan
+                     x="95.847153"
+                     y="26.023201"
+                     style="font-size:6.11110353px;baseline-shift:sub;stroke-width:0.23504245"
+                     id="tspan430">C</tspan><tspan
+                     x="98.950172"
+                     y="26.023201"
+                     style="font-size:6.8274498px;stroke-width:0.23504245"
+                     id="tspan432"> = Coriolis Force</tspan><tspan
+                     dx="0"
+                     x="155.38332"
+                     y="26.023201"
+                     style="font-size:6.8274498px;stroke-width:0.23504245"
+                     id="tspan434" /></tspan><tspan
+                   sodipodi:role="line"
+                   x="98.950172"
+                   y="0"
+                   id="tspan440"
+                   style="stroke-width:0.23504245"><tspan
+                     x="91.926704"
+                     y="37.775322"
+                     id="tspan438"
+                     style="stroke-width:0.23504245" /></tspan></text>
+              <text
+                 xml:space="preserve"
+                 style="font-style:normal;font-weight:normal;font-size:9.49750137px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.23743753"
+                 x="90.433533"
+                 y="37.008945"
+                 id="text426"
+                 transform="scale(0.99982088,1.0001792)"><tspan
+                   sodipodi:role="line"
+                   x="97.230873"
+                   y="0"
+                   id="tspan420"
+                   style="stroke-width:0.23743753"><tspan
+                     x="90.433533"
+                     y="37.008945"
+                     style="font-size:6.89702177px;stroke-width:0.23743753"
+                     id="tspan412">F</tspan><tspan
+                     x="94.393929"
+                     y="37.008945"
+                     style="font-size:6.17337608px;baseline-shift:sub;stroke-width:0.23743753"
+                     id="tspan414">E</tspan><tspan
+                     x="97.230873"
+                     y="37.008945"
+                     style="font-size:6.89702177px;stroke-width:0.23743753"
+                     id="tspan416"> = Euler Force</tspan><tspan
+                     dx="0"
+                     x="146.47992"
+                     y="37.008945"
+                     style="font-size:6.89702177px;stroke-width:0.23743753"
+                     id="tspan418" /></tspan><tspan
+                   sodipodi:role="line"
+                   x="97.230873"
+                   y="0"
+                   id="tspan424"
+                   style="stroke-width:0.23743753"><tspan
+                     x="90.433533"
+                     y="48.880825"
+                     id="tspan422"
+                     style="stroke-width:0.23743753" /></tspan></text>
+              <path
+                 style="fill:none;stroke:#000000;stroke-width:0.6688667;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#Arrow2Lstart)"
+                 d="m 78.090829,32.172917 c 0.261045,126.673873 0,0 0,0 z"
+                 id="path1687"
+                 inkscape:connector-curvature="0" />
+              <path
+                 style="fill:none;stroke:#000000;stroke-width:0.92031074;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker2108)"
+                 d="m 76.668297,82.949687 c -2.887608,0.20998 -5.775533,0.419983 -7.219657,2.152542 -1.444124,1.732559 -1.444124,4.987247 2.141485,6.459559 3.585609,1.472312 10.953923,1.15303 14.2526,-0.320254 3.298676,-1.473284 2.576391,-4.302013 0.98329,-5.92938 -1.593102,-1.627367 -4.082891,-2.152416 -6.572705,-2.677471"
+                 id="path1468"
+                 inkscape:connector-curvature="0"
+                 inkscape:path-effect="#path-effect1470"
+                 inkscape:original-d="m 76.668297,82.949687 c -2.887629,0.209687 -5.775554,0.419691 -8.663781,0.63001 2.98e-4,3.255091 2.98e-4,6.509779 0,9.765144 7.171018,-0.315351 14.539519,-0.630324 21.80883,-0.945014 C 89.11659,89.774585 88.419471,86.93943 87.722088,84.209707 85.23299,83.684423 82.743201,83.159374 80.25331,82.634683" />
+            </svg>
+            </div>
+        </div>
+      <div class="six columns" style="position:relative;top: 50px;">
+        <p>The Euler Force (given by \(-m\boldsymbol{\dot{\omega}} \times \mathbf{r}\)) is the first inertial force we look at. It is rather unique because it <span class="emphasis"> depends on the angular acceleration rather than speed </span>.
+            <br/><br/>
+            \(\boldsymbol{\dot{\omega}}\) doesn't change much for the Earth (the length of a day can be considered constant) and so for us the Euler force is not important.<span class="emphasis">We will neglect the Euler force</span> and focus on the other two which dominate.
+        </p>
+            It is still important to recognise it exists and its relation to the other forces. Looking back at the expressions for the forces (<span class="boldNormal">click on the force name to show the direction</span>)
+            <br/>
+            <br/>
+            <span id="Centrifugal_text" class="clickable bold">Centrifugal Force:</span> \(-m\boldsymbol{\omega} \times (\boldsymbol{\omega} \times \mathbf{r}\))
+            <br/>
+            <span id ="Coriolis_text" class="clickable bold">Coriolis Force:</span> \(-2m\boldsymbol{\omega} \times \mathbf{v}\)
+            <br/>
+            <span id="Euler_text" class="clickable bold">Euler Force:</span> \(-m\boldsymbol{\dot{\omega}} \times \mathbf{r}\)
+            <br/>
+            <br/>
+          tells us that Centrifugal and Euler force will always be perpendicular to each other (since \(\boldsymbol{\dot{\omega}}\) and \(\boldsymbol{\omega}\) are parallel) and the direction relative to Coriolis force depends on velocity in the rotating frame.
+        </p>
+        <p>
+            <span class="bold">Note:</span>
+            <ul class="hint" style="list-style-type: disc">
+                <li>\(\mathbf{v}\) is in the same direction as \(\mathbf{r}\)</li>
+                <li>The rotating frame is <span class="emphasis">decelerating</span></li>
+                <li>Remember how the negative sign affects the direction of forces</li>
+
+            </ul>
+        </p>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
+  <script language = 'javascript' type = 'text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.min.js"></script>
+  <script>
+      let pages = ["1Derivation.html", "1Euler Force.html", "1Centrifugal Force.html"]
+  </script>
+  <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+  <script>
+      $('.container').hide();
+
+      $(window).on('load', function() {
+          $('#spinner').hide();
+          $('.container').show();//show container after loading finishes
+      })
+      // JQuery functionality to allow hiding/showing vectors and also causes text to glow to draw user's attention to the interactive element
+      $( "#Centrifugal_text" ).click(function() {
+        $( "#Centrifugal_force" ).fadeToggle("slow", "linear");
+        });
+      $( "#Centrifugal_text" ).hover(function() {
+        $("#Centrifugal_text").addClass("glow")
+        }, function() {
+          $("#Centrifugal_text").removeClass("glow")
+      });
+
+      $( "#Coriolis_text" ).click(function() {
+        $( "#Coriolis_force").fadeToggle(500, "linear");
+        });
+      $( "#Coriolis_text" ).hover(function() {
+        $("#Coriolis_text").addClass("glow")
+        },function() {
+        $("#Coriolis_text").removeClass("glow")
+      });
+
+      $( "#Euler_text" ).click(function() {
+        $( "#Euler_force" ).fadeToggle(500, "linear");
+        });
+      $( "#Euler_text" ).hover(function() {
+        $("#Euler_text").addClass("glow")
+        },
+      function() {
+        $("#Euler_text").removeClass("glow");
+      });
+  </script>
+  </body>
+</html>

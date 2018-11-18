@@ -1,0 +1,88 @@
+.euler-diagram {
+    position: absolute;
+}
+
+.hidden {
+    display: none;
+}
+
+.bold {
+    font-weight:bold;
+    font-size: large;
+}
+
+.boldNormal {
+    font-weight: bold;
+}
+
+.hint {
+    font-style: italic;
+}
+
+.emphasis {
+    color:red;
+    font-size:medium;
+}
+
+#spinner {
+    text-align: center;
+    position: absolute;
+    top: 10%;
+    width: 100%;
+}
+
+#svg_element {
+    width: 100%;
+
+}
+
+.clickable {
+    cursor:pointer;
+}
+
+.pad-top {
+    padding-top: 75px
+}
+
+.glow {
+
+    box-shadow: 0px 0px 15px 5px rgba(12,161,205, 0.25);
+}
+
+.sliderText{
+    position:absolute;
+    font-size: large;
+    font-weight: bold;
+}
+
+.center {
+    text-align: center;
+}
+
+body {
+    overflow-y:hidden;
+}
+
+.derivationButton{
+    border-radius:3px;
+    margin:2vh 0.5vw;
+    background-color: #006EAF;
+    padding: 0.5rem;
+    text-align: right;
+    padding: 0.5em;
+    font-size: 15pt;
+    font-weight: bolder;
+    color:white;
+    box-shadow: 0px 2px 5px 0.7px lightgray;
+}
+.derivationButton svg{
+    float:left;
+    fill:white;
+}
+.derivationButton div{
+    margin-top: 1em;
+}
+
+.padding5 {
+    padding: 5px 0px;
+}

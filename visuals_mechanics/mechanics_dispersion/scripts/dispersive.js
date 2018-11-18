@@ -157,7 +157,7 @@ $("#kend_input").on('keyup',function () {
 
 
 // Dispersion relation
-$("#function").on('keyup', function () {
+$("#function").on('keyup', function (event) {
     if(event.keyCode == 13) {
         try {
             // All the characters allowed are in the square brackets

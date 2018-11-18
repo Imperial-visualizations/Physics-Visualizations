@@ -1,0 +1,17 @@
+Ideas for improvement
+
+
+Euler Force:
+Make Euler force svg rotate with an arrow showing which direction the Euler force is in as it accelerates/decceclerates
+Change it so the arrows can be dragged and dropped into their correct position (adds interactivity and enforces teaching element of the page)
+     -> Shouldn't be impossible since Cyd has already done dragging and moving objects in his electrostatics module
+
+Derivation:
+Add a little p5.grafica animation to each column with two arrows, one showing an example of the vector in the rotating frame and the other in the intertial frame
+     -> Page is already crowded so would need a layout change (e.g. dedicating an entire page to each column and having a button switch between pages)
+
+
+Centrifugal Force:
+Add stars to the background of the p5 canvas (just to fill up blank space and also make it look nicer)
+Add a page discussing another interesting feature of the Earth (changing direction of g so straight down isn't centre of Earth)
+Design-wise it looks like its missing something but not quite sure, someone more talented creatively could probably figure it out
