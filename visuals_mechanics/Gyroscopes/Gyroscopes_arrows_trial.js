@@ -34,55 +34,67 @@ $(window).on('load',function() {
     let anim; // animation variable for gyroscope
     let speedup = false; //initially playing at normal speed
     let rate;
-
+    let frictiontoggle;
     $("#speedupButton").html("Speed up");// the speed up / slow down button initially shows speed up
     $("input#inertia").on('input', inertia_decision);
     $("button#playPauseButton").on('click', toggle);  // if the website is interacted with, the button name is changed/ pause occurs
     $("button#resetButton").on('click', reset);
     $("input#slowmo").on('input', play);
     $("button#speedupButton").on('click', speed_toggle);
+    $("button#FrictionToggleButton").on('click', frictiontoggler);
 
+    function frictiontoggler() {
+        if (frictiontoggle === true) {
+            $("#FrictionToggleButton").html("Friction on");
+           // console.log("frictionon");
+            frictiontoggle = false;
+            //clearInterval(anim); //the clear interval means that it only stops at the end of the animation
+            //$("div#test").stop(true, true);
+        }
+        else {
+            $("#FrictionToggleButton").html("Friction off");
+            frictiontoggle = true;
+            //anim = setInterval(play, 10); // calls the play function every 10 milliseconds
+        }
+
+    }
     //generating and plotting a graph of gyroscope precession rate
 
     var graphlayout1 = {
-        title: 'Plot of wheel angular speed against time',
+        title: 'Plot of energies against time',
         xaxis: {
             title: 'Time/s'
         },
         yaxis: {
-            title: 'Wheel angular speed/ Initial speed'
+            title: 'Energy as a fraction of the total energy'
         }
     };
 
-    let wheelrotationrate = {
+    let totalke = {
+        mode: "scatter",
+        x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        y: [1,1,1,1,1,1,1,1,1,1],//let phi = -0.0065*t**2 + 15*t+25 ; //doesn't seem to be changing whenev
+        name: 'Total Energy of the gyroscope'
+    };
+
+    let gpe = {
         mode: "scatter",
         x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         y: [1,0.3678794412,0.1353352832,0.04978706837,0.0183156,0.006737946,0.0024787521,0.000911882,0.0003354626,0.0001234098041],
         //let phi = -0.0065*t**2 + 15*t+25 ; //doesn't seem to be changing whenev
-        name: "Wheel rotation rate"
+        name: "Gyroscope GPE"
     };
 
-    Plotly.plot("wheelrotationgraph", [wheelrotationrate], graphlayout1);
-
-    var graphlayout2 = {
-        title: 'Plot of precession rate against time',
-        xaxis: {
-            title: 'Time/s'
-        },
-        yaxis: {
-            title: 'Precession rate/Final precession rate'
-        }
-    };
-
-    let precessionrate = {
+    let ke = {
         mode: "scatter",
         x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         y: [0, 0.6321205589, 0.8646647168, 0.9502129316, 0.9816843611, 0.993262053, 0.9975212478, 0.999088118, 0.9996645374, 0.9998765902, 0.9999546001],//let phi = -0.0065*t**2 + 15*t+25 ; //doesn't seem to be changing whenev
-        name: "Gyroscope precession rate"
+        name: "Gyroscope KE"
     };
 
-    Plotly.plot("precessionrategraph", [precessionrate], graphlayout2);
+    //Plotly.plot("energygraph", [totalke,gpe,ke], graphlayout1);
 
+    // graph slider show and hide
     $('.graphSlider').on('click', function () {
         let text = $($(this).children('.showhide')[0]).is(":hidden") ? ["Hide " + $($(this).children('.showhide')).attr('label'), 180] : ["Show " + $($(this).children('.showhide')).attr('label'), 0];
         //$($(this).children('.showhide')[0]).slideToggle(400);
@@ -178,6 +190,32 @@ $(window).on('load',function() {
         return played
     }
 
+
+    function draw_arrow(obj, pointsx, pointsy, pointsz, color) {
+        /* Returns an arrowhead based on an inputted line */
+        var x = pointsx[1],
+            y = pointsy[1],
+            z = pointsz[1],
+            u = 0.2*(pointsx[1] - pointsx[0]),
+            v = 0.2*(pointsy[1] - pointsy[0]),
+            w = 0.2*(pointsz[1] - pointsz[0]);
+        obj.push({
+            type: "cone",
+            colorscale: [[0, color],[1,color]],
+            x: [x],
+            y: [y],
+            z: [z],
+            u: [u],
+            v: [v],
+            w: [w],
+            sizemode: "absolute",
+            sizeref: 30,//0.3*Math.sqrt(Vector.fromArray([x,y,z]).length()),
+            showscale: false,
+            legendgroup: 's',
+        });
+    };
+
+
     function play() { //plots the gyroscope (with a parameter t that changes, so the gyroscope position changes with time)
         if (speedup === true) {
             rate = 1.6
@@ -186,15 +224,25 @@ $(window).on('load',function() {
             rate = 1
         }
         let r = $("input#inertia").val(); //taking the value of radius from the slider
-        let azimuth = t ** 1.45 * (3.14159265359 / 180) * 400 / r;   //how the azimuthal angle that the gyro makes with the x axis
-        let theta = (3.14159265359 / 80) * t; //how theta changes over time
-        let phi;
-        if (t < 18.75) { //phi changes over time, until it stops
-            phi = -0.12 * t ** 2 + 4.5 * t
-        }
-        else
-            phi = 42.1875
-            ;
+        if (frictiontoggle === true) {
+            azimuth = t ** 1.45 * (3.14159265359 / 180) * 400 / r;   //how the azimuthal angle that the gyro makes with the x axis
+            theta = (3.14159265359 / 80) * t; //how theta changes over time
+            if (t < 18.75){ //phi changes over time, until it stops
+                phi = -0.12 * t ** 2 + 4.5 * t
+            }
+            else
+                {
+                    phi = 42.1875;
+
+                }
+            }
+        else{
+             azimuth = t * (3.14159265359 / 180) * 800 / r;   //how the azimuthal angle that the gyro makes with the x axis
+             theta = (0.25*3.14159265359); //how theta changes over time
+             phi =  18 * t
+           //phi changes over time, until it stops
+            }
+
         let gpetoke = 6 + 0.5 * t ** 1.05; // how the value of the slider value changes over time
         let costheta = Math.cos(theta);
         let sintheta = Math.sin(theta);
@@ -234,7 +282,7 @@ $(window).on('load',function() {
         } //p3 stays the same, because it's a rotation about the z axis.
 
         if (played === true) {
-              let data_plotted = [];
+            let data_plotted = [];
             let points = {//add trace for line of field line
                         type: "scatter3d",
                         mode: "points",
@@ -244,10 +292,31 @@ $(window).on('load',function() {
                         y: p2,
                         z: p3
                     };
+
             data_plotted.push(points);
 
+            //console.log(data_plotted)
+            /*let lines = {//L vector
+                        name: 'Angular momentum',
+                        type: 'scatter3d',
+                        mode: 'lines',
+                        line: {width: 10, dash: 'solid', color: '#DC143C'},
+                        legendgroup: 'l',
+                            x: [1, 5,2],
+                            y: [1, 5,2],
+                            z: [1, 5,2],
+                    };
+            //data_plotted.push(lines);
+            data_plotted.push(points);
+
+           points.x.push(lines.x)
+           points.y.push(lines.y)
+           points.z.push(lines.z)
+
+            draw_arrow(data_plotted, [0,100], [0,100], [0,100]);*/
+
             Plotly.animate("test",
-                {data : data_plotted}, {
+                {data: data_plotted}, {
                     transition: {duration: 0},
                     frame: {
                         duration: 0,
@@ -255,6 +324,18 @@ $(window).on('load',function() {
                     }
                 }
             )
+              /*
+            Plotly.animate("test",
+                {data : lines,}, {
+                    transition: {duration: 0},
+                    frame: {
+                        duration: 0,
+                        redraw: true
+                    }
+                }
+            )
+            */
+
         } else {}
 
         if (t < 35) {
@@ -265,7 +346,6 @@ $(window).on('load',function() {
         }
         return t; // the "time" parameter is returned so it can be used in the reset function
     }
-
 
     function handle_slider() { // plots the new points of the gyroscope whenever the value of the slider is changed
 
@@ -354,9 +434,40 @@ $(window).on('load',function() {
             y: p2,
             z: p3,
         };
+
+        /*int2 = {
+            name: "Z axis",
+            type: "scatter3d",
+            x:[0,0,0],
+            y:[0,0,0],
+            z:[-10,10,0]
+        };*/
+
         Plotly.plot("test", [int], plt.layout); // shows the first plot when the page is loaded
+        //Plotly.plot("test", [int2], plt.layout);
     }
 
     initial();
 
 });
+
+/*
+    $("button#FrictionToggleButton").on('click', frictiontoggler);
+
+ function frictiontoggler() {
+        if (frictiontoggle === true) {
+            $("#FrictionToggleButton").html("Friction on");
+            console.log("frictionon");
+            frictiontoggle = false;
+            //clearInterval(anim); //the clear interval means that it only stops at the end of the animation
+            //$("div#test").stop(true, true);
+        }
+        else {
+            $("#FrictionToggleButton").html("Friction off");
+            frictiontoggle = true;
+            //anim = setInterval(play, 10); // calls the play function every 10 milliseconds
+        }
+
+    }
+
+ */
