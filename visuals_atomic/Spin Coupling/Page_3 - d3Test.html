@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Spin Coupling - Imperial Visualisations</title>
+  <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+  <!-- Import stylesheets -->
+  <link rel="stylesheet" href="https://rawgit.com/cydcowley/public-test-data/master/Style2.css">
+  <!-- Import js files -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <!--d3 bundle and multi-value syntax-->
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+</head>
+
+<style>
+  html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+  }
+
+  #container {
+    min-height: 100%; 
+    width: 100%;
+    height: 100%;
+  }
+  
+  .graph {
+    width: 100%;
+    height: 100%;
+  }
+
+  .svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    vertical-align: top;
+    overflow: hidden;
+  }
+  
+  .svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
+  }
+  
+  .bar {
+  fill: steelblue;
+  }
+   
+  .bar:hover {
+    fill: orange;
+  }
+  
+  .row {
+    width: 100%;
+    height: 100%;
+    display:table-row;
+  }
+
+  .column {
+    float: left;
+    padding: 10px;
+    height: 1000px;
+  }
+
+  .left {
+    width: 35%;
+  }
+
+  .right {
+    width: 65%;
+  }
+
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table-cell;
+    clear: both;
+  }
+
+</style>
+
+<body>
+
+<div class="leftnav">◀ </div> 
+
+    <div id='spinner'>
+      <span class="loading-message">Loading</span>
+      <div>
+          <div class="spinner-mask"></div>
+          <div id="spinner-bar"></div>
+          <div class="spinner-mask"></div>
+      </div>
+    </div>
+
+<div class="container">
+  
+  <h1>3. Energy splitting</h1>
+  <p>
+    Text to be replaced...
+    <b> Need to add: hovertext/notes with alle the quantum numbers for different lines. Labels for magnetic field slider. Popup pages to explain all steps and what the different quantum numbers are. </b>
+  </p>
+  
+  <div class="row">
+    <div class="column left">
+      <button id="fineSplit">Fine splitting</button>
+      <button id="fineUnsplit" style="display:none">Unsplit</button><button id="hyperfineSplit" style="display:none">Hyperfine splitting</button>
+      <button id="hyperfineUnsplit" style="display:none">Unsplit</button>
+      <button id="zeemanSplit" style="display:none">Zeeman splitting</button>
+      <button id="zeemanUnsplit" style="display:none">Unsplit</button>
+      <input type="range" min="0" max="10" value="5" class="slider" id="BFieldSlider" style="display:none">
+    </div>
+
+    <div class="column right">
+      <div id="graph"></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="scripts/EnergySplitting2.js"></script>
+<!-- Navigation script that allows movement between pages-->
+<script src="scripts/navigation.js"></script>
+</body>
+
+</html>

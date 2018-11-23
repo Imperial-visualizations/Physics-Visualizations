@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Spin Coupling - Imperial Visualisations</title>
+  <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://rawgit.com/cydcowley/public-test-data/master/Style2.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+  <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+</head>
+
+<style>
+  #spinner{
+    text-align: center;
+    position: absolute;
+    top:50%;
+    width:100%;
+  }
+
+  .switch-field {
+    font-family: "Fira Sans";
+    padding: 10px;
+    overflow: hidden;
+  }
+
+  .switch-title {
+    margin-right: 6px;
+    font-weight: bold;
+  }
+
+  .switch-field input {
+      position: absolute !important;
+      clip: rect(0, 0, 0, 0);
+      height: 1px;
+      width: 1px;
+      border: 0;
+      overflow: hidden;
+  }
+
+  .switch-field label {
+    float: left;
+  }
+
+  .switch-field label {
+    display: inline-block;
+    width: 20px;
+    background-color: #e4e4e4;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 14px;
+    font-weight: normal;
+    text-align: center;
+    text-shadow: none;
+    padding: 6px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition:    all 0.1s ease-in-out;
+    -ms-transition:     all 0.1s ease-in-out;
+    -o-transition:      all 0.1s ease-in-out;
+    transition:         all 0.1s ease-in-out;
+  }
+
+  .switch-field label:hover {
+    cursor: pointer;
+  }
+
+  .switch-field input:checked + label {
+    background-color: #006EAF;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+
+  .switch-field input:disabled + label {
+    background-color: #f7f7f7;
+    opacity: 0.4;
+  }
+
+  .switch-field label:first-of-type {
+    border-radius: 4px 0 0 4px;
+  }
+
+  .shifted label:first-of-type {
+    margin-left: 25px;
+  }
+  
+  .switch-field label:last-of-type {
+    border-radius: 0 4px 4px 0;
+  }
+
+</style>
+
+<body>
+  
+  <div class="leftnav">◀ </div>   
+  <div class="rightnav"> ▶ </div>
+
+  <div id='spinner'>
+    <span class="loading-message">Loading</span>
+    <div>
+      <div class="spinner-mask"></div>
+      <div id="spinner-bar"></div>
+      <div class="spinner-mask"></div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <h1>2. Spin Coupling</h1>
+    <p>
+      The electron's spin gives rise to a magnetic moment \( \mathbf{\mu}_s=-\mu_B\mathbf{\hat{s}} \). Now the electron is moving in the electric field of the nucleus, so it experiences a magnetic field in its moving frame hich interacts with \( \mathbf{\mu}_s \). Also, since there is no external torque on the atom, a coupling between \( \mathbf{l} \) and \( \mathbf{s} \) must result in a constant total angular momentum \( \mathbf{j} \). The individual angular momenta \( \mathbf{l} \) and \( \mathbf{s} \) must be precessing around \( \mathbf{j} \) because the interaction \( -\mathbf{\mu}_s\cdot\mathbf{B} \) gives rise to a torque acting on each of them.
+    </p>
+    <p>
+      <b>PRIORITY: Js throws a gazilion "Uncaught Errors" when you change \(s\) or \(l\), and stops when you stop the animation. Maybe it's because plotly can't catch up with the amount of animation updates... <br><br>
+      Things to fix: mesh3d does not support legendgroups, so need to add a button that shows/hides all the cones.
+      Bug regarding the cone mesh. The cone 'face' isn't completely covered for some reason - maybe only have a circle instead?
+      For some reason the rotation speed for the vectors increases over time, and speeds up when you change the quantum numbers... 
+      Need to add a featured view for two-electron systems - possibly also an option to view jj-coupling?
+      Need to add 3D annotations for the different vectors.<br><br>
+      NOTE: Plotly scatter3d animations seem to reset the camera every frame, so you can only rotate the view when animation is stopped. </b>
+    </p>
+    
+    <div>
+      <button id="animationButton">Start</button>
+      <button id="coneButton">Hide</button>
+    </div>
+
+    <div class="seven columns">
+      <div id = "graph" style="width: 43vw; height: 54vh;"></div>
+    </div>
+
+    <div class="five columns">
+      <div class="switch-field" name="switch-s" id="s">
+        <div class="switch-title">Spin quantum number, \( s \)</div>
+
+        <input type="radio" name="switch-s" id="s1/2" value=0.5 checked />
+        <label for="s1/2">1/2</label>
+        
+        <input type="radio" name="switch-s" id="s1" value=1 />
+        <label for="s1">1</label>
+      </div>
+
+      <div class="switch-field" name="switch-l" id="l">
+        <div class="switch-title">Azimuthal quantum number, \( l \)</div>
+
+        <input type="radio" name="switch-l" id="l0" value=0 />
+        <label for="l0">0</label>
+
+        <input type="radio" name="switch-l" id="l1" value=1 checked />
+        <label for="l1">1</label>
+
+        <input type="radio" name="switch-l" id="l2" value=2 />
+        <label for="l2">2</label>
+
+        <input type="radio" name="switch-l" id="l3" value=3 />
+        <label for="l3">3</label>
+      </div>
+
+      <div class="switch-field" style="background-color:rgba(148,0,211,0.3)">
+        <div class="switch-title">Total angular momentum quantum number, \( \quad j = \) 
+          <span id="j_variable_text"></span>
+        </div>
+      </div>
+
+      <div class="switch-field" name="switch-mj" id="mj">
+        <div class="switch-title">Secondary total angular momentum quantum number, \( m_j \)</div>
+
+        <input type="radio" name="switch-mj" id="mj-4" value=-4 disabled />
+        <label for="mj-4">-4</label>
+
+        <input type="radio" name="switch-mj" id="mj-3" value=-3 disabled />
+        <label for="mj-3">-3</label>
+
+        <input type="radio" name="switch-mj" id="mj-2" value=-2 disabled />
+        <label for="mj-2">-2</label>
+
+        <input type="radio" name="switch-mj" id="mj-1" value=-1 disabled />
+        <label for="mj-1">-1</label>
+
+        <input type="radio" name="switch-mj" id="mj0" value=0 disabled />
+        <label for="mj0">0</label>
+        
+        <input type="radio" name="switch-mj" id="mj1" value=1 disabled />
+        <label for="mj1">1</label>
+
+        <input type="radio" name="switch-mj" id="mj2" value=2 disabled />
+        <label for="mj2">2</label>        
+
+        <input type="radio" name="switch-mj" id="mj3" value=3 disabled />
+        <label for="mj3">3</label>
+
+        <input type="radio" name="switch-mj" id="mj4" value=4 disabled />
+        <label for="mj4">4</label>
+      </div>
+
+      <div class="switch-field shifted" name="switch-mj" id="mj">
+        <input type="radio" name="switch-mj" id="mj-3.5" value=-3.5 disabled />
+        <label for="mj-3.5">-7/2</label>
+
+        <input type="radio" name="switch-mj" id="mj-2.5" value=-2.5 disabled />
+        <label for="mj-2.5">-5/2</label>
+
+        <input type="radio" name="switch-mj" id="mj-1.5" value=-1.5 />
+        <label for="mj-1.5">-3/2</label>
+
+        <input type="radio" name="switch-mj" id="mj-0.5" value=-0.5 />
+        <label for="mj-0.5">-1/2</label>
+
+        <input type="radio" name="switch-mj" id="mj0.5" value=0.5 checked />
+        <label for="mj0.5">1/2</label>
+
+        <input type="radio" name="switch-mj" id="mj1.5" value=1.5 />
+        <label for="mj1.5">3/2</label>
+
+        <input type="radio" name="switch-mj" id="mj2.5" value=2.5 disabled />
+        <label for="mj2.5">5/2</label>
+
+        <input type="radio" name="switch-mj" id="mj3.5" value=3.5 disabled />
+        <label for="mj3.5">7/2</label>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+  $('.container').hide();
+</script>
+
+<!-- Class of functions for vector operations-->
+<script src="scripts/vectorclass.js"></script>
+
+<script src="scripts/SpinCoupling2.js"></script>
+<!-- Navigation script that allows movement between pages-->
+<script src="scripts/navigation.js"></script>
+</body>
+</html>
