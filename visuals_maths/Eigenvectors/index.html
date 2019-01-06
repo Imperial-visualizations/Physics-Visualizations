@@ -1,0 +1,128 @@
+<!doctype html>
+
+<html>
+
+
+
+<head>
+
+    <!--Page Info-->
+
+    <title>Eigenvectors</title>
+
+    <!--css link-->
+
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+
+    <!--Required JS resources-->
+    <!--NB: better to have resources before the main body but still works even if they are not-->
+    <script src=Script/numeric/src/numeric.js></script>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+</head>
+
+<body>
+
+
+
+    <div class="container">
+
+        <div class="row">
+
+        
+
+            <div class='four columns'>
+                <h5></h5>
+
+                <h5 style="border-left: solid 5px rgb(219,209,0); padding-left: 8px;">Eigenvectors?</h5>
+
+
+                <p>
+                    When you multiply a matrix by a vector, a new <em>transformed</em> vector is produced. In this visualisation, you can set your own 2x2 matrix and see how it transforms all points (i.e. position vectors) in 2D space.
+                    
+
+                </p>
+                <p>
+                The eigenvectors of a matrix are vectors whose direction do not change under the matrix transformation. Position vectors along the span (direction) of the eigenvectors always remain on the same line, i.e. they do not change direction, after they are transformed by a matrix.  
+                </p>
+<P>The eigenvalue is the scaling factor by which each position vector along the eigenvector span is stretched. 
+                </P>
+                
+                                <h5 style="border-left: solid 5px rgb(219,209,0); padding-left: 8px;">Set the Transformation Matrix:</h5>
+
+                <span id="blimp" data-unit=""></span>
+
+                <div class='two columnns' id='u'></div>
+                <div class="one column"></div>
+
+            </div>
+            <h5></h5>
+            
+                            <p>
+                <strong>
+                    Set your matrix, align the probe line with the eigenvector lines, then apply the transformation. Notice how then the position vectors always remain on the same line.</strong>
+                </p>
+
+                <!-- Graph -->
+
+            <div class="eight columns">
+
+                <div id="graph">
+                </div>
+                <div>
+                    <div>
+                        <label class="slider">
+
+                            <label class="sliderTitle">Rotate probe line to track the transformation of different position vectors:&nbsp;
+                                <span id="blimp" data-unit=""></span>
+                            </label>
+
+                            <input id="controller" class="inputs" type="range" value="0" min="0" max="6.28" step="0.01" />
+                            <span class="sliderMin">0</span><span class="sliderMax">6.28</span>
+                        </label>
+                    </div>
+
+
+                    <button onclick="javascript:startAnimation();">Apply Transformation to 2D Space!</button>
+                    <button title="Click to show/hide content" type="button" onclick="if(document.getElementById('spoiler') .style.display=='none') {document.getElementById('spoiler') .style.display=''}else{document.getElementById('spoiler') .style.display='none'}">Display/Hide Eigenvectors</button>
+
+                    <div id="spoiler" style="display:none">
+
+                        <div class='five columns'>
+                            <h5 style="border-left: solid 5px rgb(158,209,0); padding-left: 3px;">Eigenvector 1:</h5>
+                            <p id="eigenvector1"></p>
+                        </div>
+                        <div class="one column"></div>
+
+                        <div class='five columns'>
+                            <h5 style="border-left: solid 5px rgb(158,209,0); padding-left: 3px;">Eigenvector 2:</h5>
+                            <p id="eigenvector2"></p>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+        <!--THE BRAINS-->
+        <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+
+        <script src=script/sketch2.js> </script> </body> </html>
