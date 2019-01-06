@@ -1,0 +1,13 @@
+Problem Sheet 9:
+
+The visulisation aims to show the counter intuitive result that complete transmission of energy may occur with a very high
+reflection coefficient, if the dielectric thickness is of the correct width.
+
+The first wave (the incident reflected and tranmitted) are created seperatly initially as the rest of the waves are simply
+looped over as the reflected waves bounce inside the dielectric (with decreasing amplitude).
+
+To do:
+
+1. Revise the physics
+2. Perhaps change refractive index slider to R instead
+3. Add more theory? 

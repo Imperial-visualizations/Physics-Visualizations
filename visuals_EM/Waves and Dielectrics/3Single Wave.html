@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> Dielectric Boundary - Imperial Visualisations</title>
+    <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+   <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+</head>
+
+<body>
+
+<div class="container">
+    <div class="row">
+       <div class="six columns">
+            <div id="graph" style="width: 50vw; height:53vh;"></div>
+       </div>
+       <div class="six columns">
+            <div id="graph_fresnel" style="width: 40vw; height: 53vh;"></div>
+       </div>
+    </div>
+    <br>
+
+    <div class="row">
+        <div class = "one columns">
+            <br>
+            <input type="button" id="playButton" value="Play">
+        </div>
+        <div class="one columns">
+            <div id="polarisation-switch" class="switch">
+                <label class="radioTitle">Polarisation:</label>
+
+                <label for="s-polarisation" class="radio">
+                  <input type="radio" id="s-polarisation" value="s-polarisation" name="polarisation-switch" checked="checked">
+                  <span>s</span>
+                </label>
+
+                <label for="p-polarisation" class="radio">
+                  <input type="radio" id="p-polarisation" value="p-polarisation" name="polarisation-switch">
+                  <span>p</span>
+                </label>
+            </div>
+        </div>
+        <div class = "four columns">
+            <div class = "cabinet red">
+                Critical Angle: <span id = "critical_angle-display"></span>
+            </div>
+            <div class = "cabinet green">
+                Brewster Angle: <span id = "brewster_angle-display"></span>
+            </div>
+        </div>
+
+        <div class="six columns">
+            <div id="angle-slider">
+                <label for="angle" class="sliderTitle">Angle of incidence:
+                  <span id="angle-display"></span>
+                </label><span class="sliderMin">0&deg;</span>
+                <input type="range" id="angle" name="angle" min="0" max="85" value="50">
+                <span class="sliderMax">85&deg;</span>
+            </div>
+
+            <div id="refractive-index-ratio-slider">
+                <label for="refractive-index-ratio" class="sliderTitle">Refractive Index ratio of second to first material:
+                  <span id="refractive-index-ratio-display"></span>
+                </label><span class="sliderMin">0.5</span>
+                <input type="range" id="refractive-index-ratio" name="refractive-index-ratio" min="0.5" max="3" step = "0.01" value="1.5">
+                <span class="sliderMax">3</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="scripts/Dielectric_Dielectric.js"></script>
+<script> let pages = ["1Boundry Conditions.html", "2Snell's Law.html", "3Single Wave.html", "4Continuous Wavefronts.html", "5Plane Wave.html","6Evanescent Waves.html"]</script>
+<script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+Wave and Dielectrics:
+
+The aim of the suite is to visualisation the propagation of waves through dielectric boundries, starting with basic concepts
+that the student should be comfortable with already and working up to the last lecture of the second year EM course that introduces
+Evanescent waves.
+
+Single Wave:
+
+This visulisation was created to replace an almost identical visulisation but instead of using a JSON file the waves are 
+created in real time. The code was translated from the python used to create the original JSON file.
+
+Plane Wave:
+
+This aims to show how the "ray" view of snell's law is not quite complete and must be seen as part of a larger plane wave 
+incident on the boundry. The surface plot within plotly requires a square matrix for the z-axis, hence sine waves along a 
+specific y-axis value are created with the wavelength of these determined by the angle of incidence/reflection/refraction.
+This visulisation doesn't include any new physics versus the Single Wave visulisation.
+
+Evanescent Waves:
+
+This demonstrates how even beyond the critical angle, some wave propagates into the second material, but with an exponential
+decay and only moves along the boundry line, not perpendicular to it. This visulisation could be moved to the Attenuation suite
+due to the dependance on angular frequency for the strength of the exponential decay of the evanescent waves.
+
+To do:
+1. clean up the current visulisation and decide which should stay/go as there are too many
+2. Revise the physics 
+3. More sliders?? amplitude of waves etc
+4. Plane waves only show oscilisations prependicular to plane of incidence, need a visulisation for oscillations parallel
+though I am not sure what that would look like.

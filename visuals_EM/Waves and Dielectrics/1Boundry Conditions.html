@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dielectric Boundary - Imperial Visualisations</title>
+    <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+    <!-- Import stylesheets -->
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <!-- Import js files -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="scripts/boundary-conditions.js"></script>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+</head>
+<body>
+
+<!-- Div containing writing -->
+<div class = "container">
+    <div class="row">
+        <div class="twelve columns flexyHold">
+            <div id="graph" class = "flexy"></div>
+            <p>Electromagnetic waves interacting within media is a problem that can be roughly solved by considering two fundamental phenomena.
+            The first is boundary conditions; namely that the E and B fields must be continuous throughout all space, including at a dielectric boundary.
+            These conditions are summed up via:
+            $$\mathbf{E_{i}+E_{r}} = \mathbf{E_{t}}  $$
+            </p>
+            <p>$$\mathbf{B_{i}+B_{r}} = \mathbf{B_{t}}  $$</p>
+            <p>Continuity is a fundamental physical law derived from maxwell's equations, and is visually represented above.</p>
+
+        </div>
+    </div>
+</div>
+<!-- Navigation script that allows movement between pages-->
+
+<script> let pages = ["1Boundry Conditions.html", "2Snell's Law.html", "3Single Wave.html", "4Continuous Wavefronts.html", "5Plane Wave.html","6Evanescent Waves.html"]</script>
+<script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+</body>
+</html>

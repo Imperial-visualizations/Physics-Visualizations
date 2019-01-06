@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> Transmission in Dielectrics - Imperial Visualisations</title>
+    <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
+        <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+   <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="http://www.numericjs.com/lib/numeric-1.2.6.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+</head>
+
+<body>
+
+
+<div class="container">
+    <div class = "row">
+    <div class="six columns">
+        <div id="graph_sum" style = "height: 30vh"></div>
+        <div id="graph_individual" style = "height: 45vh"></div>
+    </div>
+
+    <div class="six columns">
+        <div id="graph transmission" style = "width: 40vw;height: 20vh;"></div>
+        <br>
+        <div id="graph amplitude" style = "width: 40vw;height: 20vh;"></div>
+        <br>
+        <input type="button" id="playButton" value="Play">
+        <br>
+        <div id="thickness-slider">
+            <label for="thickness" class="sliderTitle">Thickness of Dielectric:
+              <span id="thickness-display"></span>
+            </label><span class="sliderMin">0</span>
+            <input type="range" id="thickness" name="thickness" min="0" max="5" step = "0.01" value="2">
+            <span class="sliderMax">5</span>
+        </div>
+
+        <div id="refractive_index-slider">
+                <label for="refractive_index" class="sliderTitle">Refractive index of Dielectric:
+                  <span id="refractive_index-display"></span>
+                </label><span class="sliderMin">1</span>
+                <input type="range" id="refractive_index" name="refractive_index" min="1" max="20" step = "0.01" value="3">
+                <span class="sliderMax">10</span>
+        </div>
+    </div>
+
+    </div>
+    <div class = "row">
+        <div class = "six columns">
+            <div class = "cabinet red">
+                Energy reflection coefficient R: <span id = "energy_reflection_coefficient-display"></span>
+            </div>
+        </div>
+        <div class = "six columns">
+            <div class = "cabinet green">
+                Total Energy transmission coefficient T: <span id = "energy_transmission_coefficient-display"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="scripts/Problemsheet9.js"></script>
+<script> let pages = ["1Theory.html", "2Problem Sheet 9.html"]</script>
+<script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+</body>
+</html>
