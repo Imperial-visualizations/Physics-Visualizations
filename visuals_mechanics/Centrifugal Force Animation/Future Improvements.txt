@@ -15,3 +15,6 @@ Centrifugal Force:
 Add stars to the background of the p5 canvas (just to fill up blank space and also make it look nicer)
 Add a page discussing another interesting feature of the Earth (changing direction of g so straight down isn't centre of Earth)
 Design-wise it looks like its missing something but not quite sure, someone more talented creatively could probably figure it out
+
+
+Does this appear on Github
