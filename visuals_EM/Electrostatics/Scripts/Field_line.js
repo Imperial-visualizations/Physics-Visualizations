@@ -7,17 +7,17 @@ arrow_size=5;
 
 function handleposbutton(){
     if (activepoints.length<=6) {
-        let q = new charge(1, random(width), random(height))
-        activepospoints.push(q)
-        activepoints.push(q)
+        let q = new charge(1, random(width), random(height));
+        activepospoints.push(q);
+        activepoints.push(q);
     };
 }
 
 function handlenegbutton(){
     if(activepoints.length<=6) {
-        let q = new charge(-1, random(width), random(height))
-        activenegpoints.push(q)
-        activepoints.push(q)
+        let q = new charge(-1, random(width), random(height));
+        activenegpoints.push(q);
+        activepoints.push(q);
     };
 }
 
@@ -37,7 +37,7 @@ function draw() {
 
     for (let i = 0; i < activepoints.length; i++) {
         if(activepoints[i].clicked==true&&activepoints[i].intersect()==false){
-            activepoints[i].dragposition()
+            activepoints[i].dragposition();
         }
     }
     for (let i = 0; i <activepospoints.length; i++) {
@@ -48,7 +48,7 @@ function draw() {
 
             let [x0,y0]=initial_fieldpoints([activepospoints[i].x,activepospoints[i].y],activepospoints[i].r,n_lines);
             for (let j = 0; j < x0.length; j++) {
-                draw_fieldlines(x0[j],y0[j])
+                draw_fieldlines(x0[j],y0[j]);
             }
     }
         for (let i = 0; i <activenegpoints.length; i++) {
@@ -76,9 +76,9 @@ function draw() {
     };
 
     textSize(25);
-    textFont("Fira Sans")
-    textAlign(CENTER)
-    fill(1)
+    textFont("Fira Sans");
+    textAlign(CENTER);
+    fill(1);
     text("Drag to add", width/2, rect_height/1.5);
 };
 
@@ -87,8 +87,8 @@ function mousePressed() {
     for (let i = 0; i < activepoints.length; i++) {
         activepoints[i].pressed()
     }
-    selpos.pressed()
-    selneg.pressed()
+    selpos.pressed();
+    selneg.pressed();
 };
 
 function mouseReleased() {
@@ -120,27 +120,29 @@ function mouseReleased() {
 
 class charge {
     constructor(q,x,y){
-        this.q = q
-        this.x = x
-        this.y=y
-        this.r = R
-        this.clicked = false
+        this.q = q;
+        this.x = x;
+        this.y=y;
+        this.r = R;
+        this.clicked = false;
     if (q>0){
-        this.color = "#FF8900"
+        this.color = "#FF8900";
     }
-    else{ this.color = "#0091D4"}
+    else{ 
+        this.color = "#0091D4";
+    }
 }
 
     pressed(){
         if (dist(mouseX,mouseY,this.x,this.y)<this.r){
-            this.clicked = true
+            this.clicked = true;
         };
     }
     dragposition(mx,my){
         let pointsnearmouse = 0, thisFrameMouseX = mouseX, thisFrameMouseY = mouseY;
 
-                this.x=thisFrameMouseX
-                this.y=thisFrameMouseY
+                this.x=thisFrameMouseX;
+                this.y=thisFrameMouseY;
 
 }
 
@@ -149,7 +151,7 @@ class charge {
         for (let i = 0; i < activepoints.length; i++) {
             if(activepoints[i]!=this){
                 if (parseFloat(dist(mouseX,mouseY,activepoints[i].x,activepoints[i].y))<=R*2){
-                    areintersecting=true
+                    areintersecting=true;
             }
             }
         }
@@ -159,13 +161,13 @@ class charge {
 
 class charge_selector{
         constructor(q,x,y){
-        this.q = q
-        this.x = x
-        this.y=y
-        this.r = R
-        this.clicked = false
+        this.q = q;
+        this.x = x;
+        this.y=y;
+        this.r = R;
+        this.clicked = false;
     if (q>0){
-        this.color = "#FF8900"
+        this.color = "#FF8900";
     }
     else{ this.color = "#0091D4"}
 }
@@ -184,8 +186,8 @@ class charge_selector{
 
 }
 
-selpos = new charge_selector(1,width/3,rect_height/2)
-selneg = new charge_selector(-1,width*2/3,rect_height/2)
+selpos = new charge_selector(1,width/3,rect_height/2);
+selneg = new charge_selector(-1,width*2/3,rect_height/2);
 
 function initial_fieldpoints(Qposition,R,number_of_lines){
     let x0=[],y0=[];
@@ -194,7 +196,7 @@ function initial_fieldpoints(Qposition,R,number_of_lines){
         x0.push(Qposition[0]+R*Math.cos(theta));
         y0.push(Qposition[1]+R*Math.sin(theta));
     };
-    return([x0,y0])
+    return([x0,y0]);
     };
 
 function draw_fieldlines(initialx,initialy){
