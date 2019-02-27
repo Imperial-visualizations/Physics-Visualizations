@@ -364,6 +364,9 @@ const visualisation = function (p) {
         for (let i = 0; i < atoms.length; i++) {
             atoms[i].draw();
         }
+        for(let i =0; i < atoms.length; i++){
+            atoms[i].update();
+        }
     }
 
 };
