@@ -259,12 +259,12 @@ const visualisation = function (p) {
             x: [-1, 5 + 2], y: arrVibKESlider,
             line: {width: 1, color: "#ac8e00", dash: "2px, 2px"}, name: "KE" + "vib, slider".sub(), showlegend: false
         };
-        KE_R_T = {x: arrTime, y: arrRotKE, mode: "lines", line: {width: 2, color: "#66A40A"}, name: "KE" + "rot".sub()};
+        KE_R_T = {x: arrTime, y: arrRotKE, mode: "markers", marker: {size: 2, color: "#ff9030", symbol: "."}, name: "KE" + "rot".sub()};
         KE_R_slider = {
             x: [-1, 5 + 2], y: arrRotKESlider,
             line: {width: 1, color: "#49830a", dash: "2px, 2px"}, name: "KE" + "rot, slider".sub(), showlegend: false
         };
-        PE_T = {x: arrTime, y: arrPE, mode: "lines", line: {width: 2, color: "#003E74"}, name: "U" + "LJ".sub()};
+        PE_T = {x: arrTime, y: arrPE, mode: "markers",  mode: "markers", marker: {size: 2, color: "#ff9030", symbol: "."}, name: "U" + "LJ".sub()};
 
         Plotly.newPlot("energyGraph", [KE_V_T, KE_V_slider, KE_R_T, KE_R_slider, PE_T], layoutE, options);
     }
@@ -363,9 +363,6 @@ const visualisation = function (p) {
         drawBond(atoms[0], atoms[1]);
         for (let i = 0; i < atoms.length; i++) {
             atoms[i].draw();
-        }
-        for(let i =0; i < atoms.length; i++){
-            atoms[i].update();
         }
     }
 
