@@ -14,18 +14,9 @@
 
 
   </head>
-
-  <div>
-    <div id='spinner'>
-    <span class="loading-message">Loading</span>
-    <div>
-        <div class="spinner-mask"></div>
-        <div id="spinner-bar"></div>
-        <div class="spinner-mask"></div>
-    </div>
-  </div>
-
-  <div class="container" style="padding-top: 100px;>
+    
+<body>
+  <div class="container">
     <div class="row">
       <div class="seven columns" style="position:sticky;top: 50px;" id="animation">
         <div id="spin"></div>
@@ -47,21 +38,7 @@
       </div>
     </div>
   </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
-  <script language = 'javascript' type = 'text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.min.js"></script>
-  <script>
-      let pages = ["1Derivation.html", "1Euler Force.html", "1Centrifugal Force.html"]
-  </script>
-  <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
-  <script src="scripts/EarthFlattening.js"></script>
-  <script>
-    // Causes the main body of the page to hide until everything is loaded and then hides spinner and shows content
-    $('.container').hide();
 
-    $(window).on('load', setTimeout(function() {
-        $('#spinner').hide();
-        $('.container').show();
-    }, 1500))
-  </script>
-  </body>
+  <script src="scripts/EarthFlattening.js"></script>
+    </body>
 </html>

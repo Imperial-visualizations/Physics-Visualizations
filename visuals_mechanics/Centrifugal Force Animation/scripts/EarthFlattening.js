@@ -79,3 +79,6 @@ function draw() {
     ellipsoid(a, radius*flatteningFactor, a, 128);
 
 }
+
+let pages = ["1Derivation.html", "1Euler Force.html", "1Centrifugal Force.html"];
+
