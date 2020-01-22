@@ -1,11 +1,11 @@
 function flexAdjust() {
 	$('.flexyHold').each(function() {
 		let elemHeight = 0;
-		$($(this).children(':not(flexy)')).each(function() {
+		$($(this).children(':not(.flexy)')).each(function() {
 			elemHeight += parseFloat($(this).css('height').slice(0, -2));
 			elemHeight += parseFloat($(this).css('margin-top').slice(0, -2));
 			elemHeight += parseFloat($(this).css('margin-bottom').slice(0, -2));
-		})
+		});
 		$($(this).children('.flexy')).css('height', parseFloat($(this).css('height').slice(0, -2)) - elemHeight);
         $(this).attr('data-elemHeight',elemHeight);
 	})
